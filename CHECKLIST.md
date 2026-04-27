@@ -42,21 +42,21 @@ compatible with a Cloudflare rule like:
 
 ## Milestone 2: Astro Project Foundation
 
-- [ ] Install Astro and required build dependencies.
-- [ ] Add `astro.config.mjs` with `site`, static output, and trailing slash
+- [x] Install Astro and required build dependencies.
+- [x] Add `astro.config.mjs` with `site`, static output, and trailing slash
       behavior configured.
-- [ ] Add `src/` with initial `pages`, `components`, `layouts`, and `lib`
+- [x] Add `src/` with initial `pages`, `components`, `layouts`, and `lib`
       directories.
-- [ ] Add `public/` for static files copied directly into the build output.
-- [ ] Replace Jekyll-oriented package scripts with Bun/Astro scripts:
+- [x] Add `public/` for static files copied directly into the build output.
+- [x] Replace Jekyll-oriented package scripts with Bun/Astro scripts:
       `dev`, `build`, `preview`, and `check`.
-- [ ] Add TypeScript configuration if Astro does not create one automatically.
-- [ ] Keep the initial Astro app minimal; no theme porting in this milestone.
-- [ ] Ensure the repo can run without Ruby or Bundler for the Astro build path.
+- [x] Add TypeScript configuration if Astro does not create one automatically.
+- [x] Keep the initial Astro app minimal; no theme porting in this milestone.
+- [x] Ensure the repo can run without Ruby or Bundler for the Astro build path.
 
-- [ ] `bun run build` succeeds with a minimal Astro page.
-- [ ] `bun run dev` starts an Astro dev server.
-- [ ] The Astro project structure is present and committed to the intended
+- [x] `bun run build` succeeds with a minimal Astro page.
+- [x] `bun run dev` starts an Astro dev server.
+- [x] The Astro project structure is present and committed to the intended
       source directories.
 
 ## Milestone 3: Static Assets

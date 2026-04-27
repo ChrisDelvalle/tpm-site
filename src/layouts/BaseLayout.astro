@@ -1,0 +1,29 @@
+---
+import "../styles/global.scss";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "The Philosopher's Meme",
+  description = "The philosophy of memes, cyberculture, and the Internet.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
