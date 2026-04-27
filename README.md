@@ -9,6 +9,7 @@ not be edited by hand.
 ## Requirements
 
 - Bun
+- Node.js `>=22.12.0`
 
 Install dependencies:
 
