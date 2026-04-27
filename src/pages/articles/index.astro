@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getArticles } from "../../lib/content";
+import {
+  articleUrl,
+  authorName,
+  entryDate,
+  entryTitle,
+  excerpt,
+  formatDate,
+  topicForEntry,
+  topicUrl,
+} from "../../lib/routes";
+
+const articles = await getArticles();
+---
+
+<BaseLayout
+  title="Articles | The Philosopher's Meme"
+  description="Complete article archive for The Philosopher's Meme."
+  canonicalPath="/articles/"
+>
+  <section class="page-heading">
+    <h1>Articles</h1>
+    <p>Essays and notes on memes, cyberculture, and the Internet.</p>
+  </section>
+
+  <ol class="archive-list" data-pagefind-ignore>
+    {
+      articles.map((article) => {
+        const topic = topicForEntry(article);
+        return (
+          <li>
+            <a class="archive-title" href={articleUrl(article.id)}>
+              {entryTitle(article)}
+            </a>
+            <div class="archive-meta">
+              <span>{formatDate(entryDate(article))}</span>
+              <span>{authorName(article)}</span>
+              {topic && (
+                <a href={topicUrl(topic.slug)}>
+                  {topic.label}
+                </a>
+              )}
+            </div>
+            {excerpt(article) && <p>{excerpt(article)}</p>}
+          </li>
+        );
+      })
+    }
+  </ol>
+</BaseLayout>

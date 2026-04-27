@@ -1,0 +1,19 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getAboutPage } from "../lib/content";
+
+const about = await getAboutPage();
+const rendered = about ? await render(about) : undefined;
+const Content = rendered?.Content;
+---
+
+<BaseLayout
+  title="About | The Philosopher's Meme"
+  description="About The Philosopher's Meme."
+  canonicalPath="/about/"
+>
+  <article class="article">
+    {Content ? <Content /> : <h1>About</h1>}
+  </article>
+</BaseLayout>

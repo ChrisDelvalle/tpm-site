@@ -1,0 +1,53 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import {
+  articleUrl,
+  authorName,
+  entryDate,
+  entryTitle,
+  excerpt,
+  formatDate,
+  imageUrl,
+  topicForEntry,
+  topicUrl,
+  type LegacyEntry,
+} from "../lib/routes";
+
+interface Props {
+  article: LegacyEntry;
+}
+
+const { article } = Astro.props;
+const topic = topicForEntry(article);
+const date = entryDate(article);
+const description = excerpt(article);
+const title = entryTitle(article);
+const canonicalPath = articleUrl(article.id);
+---
+
+<BaseLayout
+  title={`${title} | The Philosopher's Meme`}
+  description={description}
+  canonicalPath={canonicalPath}
+  image={imageUrl(article)}
+  type="article"
+>
+  <article class="article" data-pagefind-body>
+    {
+      topic && (
+        <a class="eyebrow" href={topicUrl(topic.slug)}>
+          {topic.label}
+        </a>
+      )
+    }
+    <h1>{title}</h1>
+    <div class="article-meta">
+      <span>{authorName(article)}</span>
+      {date && <span>{formatDate(date)}</span>}
+    </div>
+    {description && <p class="lede">{description}</p>}
+    <div class="content">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

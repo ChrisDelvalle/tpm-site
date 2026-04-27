@@ -1,15 +1,48 @@
 ---
 import "../styles/global.scss";
+import { getArticles } from "../lib/content";
+import {
+  articleUrl,
+  entryTitle,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  sourceFolder,
+  TOPICS,
+  topicUrl,
+} from "../lib/routes";
 
 interface Props {
   title?: string;
   description?: string;
+  canonicalPath?: string;
+  image?: string;
+  type?: "website" | "article";
 }
 
 const {
-  title = "The Philosopher's Meme",
-  description = "The philosophy of memes, cyberculture, and the Internet.",
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  canonicalPath = Astro.url.pathname,
+  image,
+  type = "website",
 } = Astro.props;
+const canonicalUrl = new URL(canonicalPath, Astro.site);
+const imageUrl = image ? new URL(image, Astro.site).toString() : undefined;
+const articles = await getArticles();
+const currentPath = Astro.url.pathname;
+const sidebarTopics = TOPICS.map((topic) => {
+  const topicArticles = articles.filter((article) => sourceFolder(article) === topic.source);
+  const isCurrentTopic = currentPath.startsWith(topicUrl(topic.slug));
+  const containsCurrentArticle = topicArticles.some((article) =>
+    currentPath.startsWith(articleUrl(article.id)),
+  );
+
+  return {
+    ...topic,
+    articles: topicArticles,
+    isOpen: isCurrentTopic || containsCurrentArticle,
+  };
+});
 ---
 
 <!doctype html>
@@ -18,12 +51,81 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${SITE_TITLE} RSS`}
+      href="/feed.xml"
+    />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
     <title>{title}</title>
   </head>
   <body>
-    <main>
-      <slot />
-    </main>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="header-left">
+          <a class="brand" href="/">
+            <span>{SITE_TITLE}</span>
+          </a>
+        </div>
+        <form class="search-box" action="/search/" role="search">
+          <label class="sr-only" for="site-search">Search</label>
+          <input id="site-search" type="search" name="q" placeholder="Search" />
+        </form>
+        <div class="header-right">
+          <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="/articles/">Articles</a>
+            <a href="/topics/">Topics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+          </nav>
+          <a class="button header-support" href="https://patreon.com/thephilosophersmeme">
+            Support Us
+          </a>
+        </div>
+      </header>
+      <div class="layout-grid">
+        <aside class="sidebar" aria-label="Topic navigation">
+          <strong>Topics</strong>
+          <nav class="topic-nav">
+            {
+              sidebarTopics.map((topic) => (
+                <details class="topic-group" open={topic.isOpen}>
+                  <summary>
+                    <span>{topic.label}</span>
+                  </summary>
+                  <ol>
+                    {topic.articles.map((article) => (
+                      <li>
+                        <a href={articleUrl(article.id)}>{entryTitle(article)}</a>
+                      </li>
+                    ))}
+                  </ol>
+                </details>
+              ))
+            }
+          </nav>
+        </aside>
+        <main id="content">
+          <slot />
+        </main>
+      </div>
+      <footer class="site-footer">
+        <span>Copyright &copy; {new Date().getFullYear()} {SITE_TITLE}</span>
+        <a href="https://patreon.com/thephilosophersmeme">Support Our Research</a>
+      </footer>
+    </div>
   </body>
 </html>

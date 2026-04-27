@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articlesForTopic, getArticles } from "../../lib/content";
+import {
+  articleUrl,
+  authorName,
+  entryDate,
+  entryTitle,
+  excerpt,
+  formatDate,
+  TOPICS,
+  topicUrl,
+} from "../../lib/routes";
+
+export async function getStaticPaths() {
+  return TOPICS.map((topic) => ({
+    params: { topic: topic.slug },
+    props: { topic },
+  }));
+}
+
+const { topic } = Astro.props;
+const articles = articlesForTopic(await getArticles(), topic.slug);
+---
+
+<BaseLayout
+  title={`${topic.label} | The Philosopher's Meme`}
+  description={`Articles filed under ${topic.label}.`}
+  canonicalPath={topicUrl(topic.slug)}
+>
+  <section class="page-heading">
+    <p class="eyebrow">Topic</p>
+    <h1>{topic.label}</h1>
+  </section>
+
+  <ol class="archive-list">
+    {
+      articles.map((article) => (
+        <li>
+          <a class="archive-title" href={articleUrl(article.id)}>
+            {entryTitle(article)}
+          </a>
+          <div class="archive-meta">
+            <span>{formatDate(entryDate(article))}</span>
+            <span>{authorName(article)}</span>
+          </div>
+          {excerpt(article) && <p>{excerpt(article)}</p>}
+        </li>
+      ))
+    }
+  </ol>
+</BaseLayout>
