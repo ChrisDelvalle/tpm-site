@@ -1,5 +1,6 @@
 ---
 import "../styles/global.scss";
+import { Menu, Moon, Sun, X } from "lucide-astro";
 import { getArticles } from "../lib/content";
 import {
   articleUrl,
@@ -48,6 +49,10 @@ const sidebarTopics = TOPICS.map((topic) => {
 <!doctype html>
 <html lang="en">
   <head>
+    <script is:inline>
+      const storedTheme = localStorage.getItem("theme");
+      document.documentElement.dataset.theme = storedTheme || "dark";
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
@@ -85,16 +90,71 @@ const sidebarTopics = TOPICS.map((topic) => {
           <input id="site-search" type="search" name="q" placeholder="Search" />
         </form>
         <div class="header-right">
-          <nav class="primary-nav" aria-label="Primary navigation">
-            <a href="/articles/">Articles</a>
-            <a href="/topics/">Topics</a>
-            <a href="/about/">About</a>
-            <a href="/feed.xml">RSS</a>
-          </nav>
+          <div class="header-nav-actions">
+            <nav class="primary-nav" aria-label="Primary navigation">
+              <a href="/articles/">Articles</a>
+              <a href="/topics/">Topics</a>
+              <a href="/about/">About</a>
+              <a href="/feed.xml">RSS</a>
+            </nav>
+            <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+              <Sun class="theme-toggle-light" size={18} aria-hidden="true" />
+              <Moon class="theme-toggle-dark" size={18} aria-hidden="true" />
+            </button>
+          </div>
           <a class="button header-support" href="https://patreon.com/thephilosophersmeme">
             Support Us
           </a>
         </div>
+        <details class="mobile-menu">
+          <summary aria-label="Open navigation menu">
+            <Menu class="mobile-menu-open" size={24} aria-hidden="true" />
+            <X class="mobile-menu-close" size={24} aria-hidden="true" />
+          </summary>
+          <div class="mobile-menu-panel">
+            <form class="mobile-search-box mobile-menu-search" action="/search/" role="search">
+              <label class="sr-only" for="mobile-site-search">Search</label>
+              <input id="mobile-site-search" type="search" name="q" placeholder="Search" />
+            </form>
+            <div class="mobile-menu-nav-actions">
+              <nav class="mobile-primary-nav" aria-label="Mobile primary navigation">
+                <a href="/articles/">Articles</a>
+                <a href="/topics/">Topics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+              </nav>
+              <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+                <Sun class="theme-toggle-light" size={18} aria-hidden="true" />
+                <Moon class="theme-toggle-dark" size={18} aria-hidden="true" />
+              </button>
+            </div>
+            <a
+              class="button mobile-menu-support"
+              href="https://patreon.com/thephilosophersmeme"
+            >
+              Support Us
+            </a>
+            <nav class="mobile-topic-nav" aria-label="Mobile topic navigation">
+              <strong>Topics</strong>
+              {
+                sidebarTopics.map((topic) => (
+                  <details class="topic-group" open={topic.isOpen}>
+                    <summary>
+                      <span>{topic.label}</span>
+                    </summary>
+                    <ol>
+                      {topic.articles.map((article) => (
+                        <li>
+                          <a href={articleUrl(article.id)}>{entryTitle(article)}</a>
+                        </li>
+                      ))}
+                    </ol>
+                  </details>
+                ))
+              }
+            </nav>
+          </div>
+        </details>
       </header>
       <div class="layout-grid">
         <aside class="sidebar" aria-label="Topic navigation">
@@ -127,5 +187,19 @@ const sidebarTopics = TOPICS.map((topic) => {
         <a href="https://patreon.com/thephilosophersmeme">Support Our Research</a>
       </footer>
     </div>
+    <script is:inline>
+      const themeToggles = document.querySelectorAll(".theme-toggle");
+      const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("theme", theme);
+      };
+
+      themeToggles.forEach((themeToggle) => {
+        themeToggle.addEventListener("click", () => {
+          const currentTheme = document.documentElement.dataset.theme || "dark";
+          setTheme(currentTheme === "dark" ? "light" : "dark");
+        });
+      });
+    </script>
   </body>
 </html>
