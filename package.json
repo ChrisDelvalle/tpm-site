@@ -9,7 +9,7 @@
   },
   "scripts": {
     "sync:content": "node scripts/sync-content.mjs",
-    "dev": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "dev": "bun run sync:content && astro dev",
     "build": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "check": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro check",
