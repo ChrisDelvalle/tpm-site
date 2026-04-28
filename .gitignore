@@ -9,3 +9,4 @@ node_modules
 dist
 .astro
 src/content/legacy
+.DS_Store

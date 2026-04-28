@@ -282,15 +282,34 @@ Avoid:
 Core reading, navigation, article pages, RSS, sitemap, and static content should
 work without client JavaScript.
 
+Prefer route-level JavaScript isolation. Search can load Pagefind on the search
+page. Article-specific MDX interactions should load only on articles that use
+them. Layout-level JavaScript should stay tiny enough to audit at a glance.
+
 ## Build Output And Minification
 
 Astro's production build should be the source of deployable output. Do not ship
 development assets or unbuilt source files.
 
+The production build contract is:
+
+- `bun run build` syncs content, runs `astro build`, and generates the Pagefind
+  search index.
+- `astro build` writes deployable static output to `dist/`.
+- Astro/Vite owns bundled CSS and processed client JavaScript from project
+  source.
+- Astro emits bundled project assets under `_astro/` with content-hashed
+  filenames for cacheability.
+- Pagefind owns its generated search files under `dist/pagefind/`.
+- Files in `public/` are copied as static files and should be treated as
+  already production-ready.
+
 The production build should:
 
 - Prerender static pages whenever possible.
-- Minify JavaScript, CSS, and HTML through the Astro/Vite production pipeline.
+- Minify and chunk CSS through the Astro/Vite production pipeline.
+- Process, bundle, deduplicate, and minify Astro-managed client JavaScript.
+- Keep generated HTML compact and static.
 - Tree-shake unused JavaScript.
 - Generate a small Tailwind CSS bundle by scanning only real source files.
 - Avoid importing large libraries into client-side code unless they are
@@ -298,6 +317,17 @@ The production build should:
 - Avoid duplicate client bundles caused by repeated framework islands.
 - Produce hashed immutable assets where the build tool supports them.
 - Keep `dist/` as the only directory intended for static hosting.
+
+Astro only optimizes assets that go through its build pipeline. Be deliberate
+with anything outside that path:
+
+- Use normal Astro component styles and scripts when Astro should bundle and
+  optimize them.
+- Use `is:inline` only for tiny boot scripts or code that intentionally must
+  appear exactly where authored.
+- Keep scripts loaded from `public/` or external URLs rare and intentionally
+  reviewed.
+- Keep Pagefind enhancement isolated to search pages.
 
 Compression is a hosting concern, but the site should assume production serves:
 
@@ -369,6 +399,11 @@ For article images, the pipeline should eventually detect:
 - Images without known dimensions.
 - Images likely to become LCP candidates.
 - Broken root-relative paths after content migration.
+
+For new non-article image components, prefer an explicit image API that requires
+alt text, dimensions, loading behavior, and responsive sizes. This makes the
+fast path the default path instead of relying on manual review to catch
+oversized or unstable media.
 
 ## Fonts
 
@@ -478,6 +513,9 @@ bar.
 ## Release Gates
 
 Use automated checks before release.
+
+The concrete tooling plan lives in `QUALITY_TOOLING.md`. This section defines
+the quality bar; that document defines the tools and scripts that enforce it.
 
 Required checks should include:
 

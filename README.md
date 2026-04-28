@@ -168,12 +168,28 @@ outside the site, currently through Cloudflare.
 `bun run build` generates:
 
 - static Astro pages in `dist/`
+- hashed Astro-managed assets, such as CSS and any processed JavaScript, under
+  `dist/_astro/`
 - Pagefind search index in `dist/pagefind/`
 - RSS feed at `/feed.xml`
 - sitemap output through `@astrojs/sitemap`
 
 The local dev server is for layout and content iteration. For a production-like
 search check, run `bun run build` and then `bun run preview`.
+
+## Production Output
+
+The deployable site is the `dist/` directory produced by `bun run build`.
+
+Astro and Vite process project CSS and normal client scripts for production:
+CSS is minified and chunked, processed scripts are bundled and minified, and
+emitted project assets use hashed filenames for cacheability.
+
+Files in `public/` are copied through unchanged. Treat images, downloads,
+favicons, and other public assets as production-ready before committing them.
+
+Pagefind search assets are generated after the Astro build and live under
+`dist/pagefind/`.
 
 ## Verification
 
