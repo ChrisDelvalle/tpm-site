@@ -1,0 +1,595 @@
+# Design Philosophy
+
+This project should be rebuilt as a modern Astro site composed from responsive
+design blocks and responsive components. The current Astro implementation is a
+working migration prototype: it is useful for tone, palette, content structure,
+and broad visual direction, but it is not an architectural contract.
+
+Content fidelity is strict. Layout and implementation details are allowed to
+change when a more professional, maintainable, accessible, or performant
+approach is available.
+
+## Core Standard
+
+The site should be:
+
+- Static-first.
+- Mobile-first.
+- Responsive all the way down.
+- Componentized all the way down.
+- Tailwind-first for styling.
+- Astro-first for rendering.
+- Accessible by default.
+- Designed to maximize Lighthouse scores.
+- Easy for authors to maintain without touching application code.
+
+The default implementation model is:
+
+```text
+Pages
+  compose responsive Blocks
+
+Blocks
+  compose responsive Components
+
+Components
+  compose responsive UI primitives
+
+UI primitives
+  consume Tailwind utilities and project design tokens
+```
+
+Every component should be correct by its own merits. A component should define
+its own spacing, wrapping, sizing constraints, focus states, dark mode behavior,
+and responsive behavior. Pages should compose components, not patch them.
+
+## Tech Stack
+
+Use this stack as the default:
+
+- Astro for pages, layouts, build-time rendering, and content collections.
+- Astro components for site UI, layout, navigation, article templates, and
+  reusable blocks.
+- Markdown for normal articles.
+- MDX for future articles that need custom content components.
+- Tailwind CSS for application styling.
+- `@tailwindcss/typography` for Markdown-rendered article bodies.
+- Bun for dependency management and local scripts.
+- Lighthouse CI for score tracking and release gates.
+- Playwright for viewport, navigation, menu, and no-overflow checks.
+- axe, preferably through Playwright, for accessibility checks.
+
+React and shadcn-style components may be used, but they are not the default
+runtime model. Use them when they improve maintainability or interaction quality
+without compromising the static-first architecture.
+
+## Tailwind Boundary
+
+Tailwind should be the default way to style the site.
+
+Use Tailwind for:
+
+- Layout.
+- Spacing.
+- Sizing.
+- Responsive behavior.
+- Typography.
+- Color.
+- Borders.
+- Radius.
+- Shadows.
+- Focus states.
+- Hover and active states.
+- Dark mode variants.
+- Component-level visual states.
+
+The non-Tailwind layer should be small and foundational. It exists mainly for
+things Tailwind consumes or cannot define alone:
+
+- Tailwind imports.
+- Design tokens and CSS variables.
+- Theme values for light and dark mode.
+- Font registration or Astro font configuration.
+- Base `html` and `body` styles.
+- Tailwind Typography customization.
+- Rare browser defaults such as `::selection`.
+- Rare keyframes or animation tokens.
+
+Do not build large handcrafted CSS or SCSS files. Do not use page-level CSS to
+repair component-level layout problems. Do not add one-off media query patches
+when the real issue is component design.
+
+## Responsive Design
+
+Responsive design is a component contract, not a final cleanup pass.
+
+Build mobile-first:
+
+- Start from the narrowest useful viewport.
+- Add complexity as space becomes available.
+- Prefer progressive disclosure over crowded layouts.
+- Let blocks stack naturally before introducing dense desktop layouts.
+
+Use Tailwind's responsive utilities for standard viewport changes. Use
+container-query thinking when component behavior depends on the component's own
+available width rather than the full viewport.
+
+Avoid brittle one-off pixel breakpoints such as:
+
+```css
+@media (max-width: 873px) {
+  /* layout patch */
+}
+```
+
+Prefer:
+
+- Tailwind breakpoint tiers.
+- `min-w-0` for flex/grid children that must shrink.
+- `w-full`, `max-w-*`, and `flex-1` for flexible sizing.
+- Grid and flex layouts that naturally adapt.
+- Explicit aspect ratios for fixed-format media.
+- `clamp()` only when fluid sizing is genuinely needed.
+- Measured behavior only for components whose layout depends on real rendered
+  width, such as complex priority navigation.
+
+The quality bar is simple: no horizontal overflow, no overlapping controls, no
+unreadable content, and no layout that only works at the viewport sizes where it
+was manually tested.
+
+## Component Architecture
+
+Prefer this directory shape:
+
+```text
+src/components/ui/
+src/components/layout/
+src/components/navigation/
+src/components/articles/
+src/components/blocks/
+```
+
+Suggested responsibilities:
+
+- `ui/`: buttons, links, inputs, badges, separators, icon buttons, containers.
+- `layout/`: base layout, site shell, page frame, header, footer.
+- `navigation/`: primary nav, mobile nav, topic navigation, breadcrumbs.
+- `articles/`: article header, metadata, article lists, cards, prose wrapper.
+- `blocks/`: homepage sections, support blocks, topic sections, about sections.
+
+Pages should read as composition:
+
+```astro
+<BaseLayout title={title}>
+  <HomeHero />
+  <LatestArticles articles={articles} />
+  <TopicOverview topics={topics} />
+  <SupportBlock />
+</BaseLayout>
+```
+
+Components should have stable public props and should not reach across the
+application for unrelated data. Shared data normalization belongs in `src/lib/`,
+not in visual components.
+
+## Content Authoring
+
+Article authors should only need to add Markdown or MDX files.
+
+Adding an article should not require editing:
+
+- Routes.
+- Index pages.
+- Navigation code.
+- RSS code.
+- Sitemap code.
+- Search code.
+- Build scripts, except when intentionally changing the content model.
+
+The content system should derive or validate mechanical metadata wherever
+reasonable. Author-facing frontmatter should remain small and meaningful.
+
+Plain Markdown is the default for articles. MDX is available when an article
+needs custom content blocks.
+
+The article shell is componentized:
+
+```astro
+<ArticleLayout article={article}>
+  <ArticleHeader article={article} />
+  <ArticleProse>
+    <Content />
+  </ArticleProse>
+</ArticleLayout>
+```
+
+Plain Markdown body content is rendered by Astro and styled through
+`ArticleProse` using Tailwind Typography. Future MDX articles may use explicit
+custom components such as callouts, figures, annotations, or interactive
+examples.
+
+Do not build a complicated Markdown transformation layer unless there is a
+specific content need that cannot be handled by Markdown, MDX, or Tailwind
+Typography.
+
+## Astro Rendering Model
+
+Prefer static Astro output.
+
+Astro components should render to HTML at build time unless there is a specific
+interactive requirement. Framework components can also be prerendered when they
+are not given a `client:*` directive.
+
+Use Astro content collections for article data. Prefer build-time collections
+for this site because articles are mostly static, benefit from build-time type
+checking, and should produce fast static pages.
+
+Avoid runtime content fetching unless a future feature truly needs live data.
+
+Use Astro layouts for page shells and article templates. Do not use Markdown
+`layout` frontmatter as an authoring requirement for articles in collections.
+
+## Islands And Hydration
+
+Hydration is an exception, not the default.
+
+Every hydrated component spends Lighthouse budget through JavaScript transfer,
+parse time, execution time, hydration work, and possible layout work. Minifying
+helps, but it does not remove runtime cost.
+
+Default rule:
+
+- Render static HTML with Astro.
+- Add browser JavaScript only at the smallest useful interactive boundary.
+- Prefer zero-JS or low-JS solutions when they provide the same user experience.
+- Hide low-level behavior inside reusable components so authors never deal with
+  implementation details.
+
+Use client directives intentionally:
+
+- `client:load`: only for above-the-fold UI that must be interactive
+  immediately.
+- `client:idle`: for lower-priority UI that can hydrate after initial load.
+- `client:visible`: for below-the-fold or heavier components.
+- `client:media`: for components only useful at certain viewport sizes.
+- Avoid `client:only` unless server rendering is impossible or actively wrong.
+
+React, Radix, and shadcn-style components are acceptable when they are the right
+tool, but do not hydrate a whole interaction system for a simple static visual.
+Static shadcn-style primitives are fine. Interactive shadcn/Radix components
+need a clear reason.
+
+## JavaScript Budget
+
+Keep client JavaScript small and deliberate.
+
+Expected client-side behavior may include:
+
+- Theme toggle persistence.
+- Mobile or responsive navigation behavior.
+- Search enhancement.
+- Optional future MDX article interactions.
+
+Avoid:
+
+- Hydrating large layout regions.
+- Shipping React for static content.
+- Loading third-party scripts by default.
+- Adding client-side routing unless there is a strong reason.
+- Adding animation libraries for simple transitions.
+- Making article reading depend on JavaScript.
+
+Core reading, navigation, article pages, RSS, sitemap, and static content should
+work without client JavaScript.
+
+## Build Output And Minification
+
+Astro's production build should be the source of deployable output. Do not ship
+development assets or unbuilt source files.
+
+The production build should:
+
+- Prerender static pages whenever possible.
+- Minify JavaScript, CSS, and HTML through the Astro/Vite production pipeline.
+- Tree-shake unused JavaScript.
+- Generate a small Tailwind CSS bundle by scanning only real source files.
+- Avoid importing large libraries into client-side code unless they are
+  necessary for a measured interaction.
+- Avoid duplicate client bundles caused by repeated framework islands.
+- Produce hashed immutable assets where the build tool supports them.
+- Keep `dist/` as the only directory intended for static hosting.
+
+Compression is a hosting concern, but the site should assume production serves:
+
+- Brotli when supported.
+- gzip as a fallback.
+- Long-lived cache headers for hashed assets.
+- Shorter cache headers for HTML, RSS, sitemap, and search index files that may
+  change between builds.
+
+Do not rely on minification to justify shipping unnecessary runtime code. The
+best byte is the byte that is never sent.
+
+## Critical Resource Strategy
+
+Optimize the first viewport before optimizing decorative details.
+
+For each important page type, identify the likely Largest Contentful Paint
+element and protect it:
+
+- Do not lazy-load the LCP image or main text block.
+- Avoid hiding the LCP element behind client-side rendering.
+- Avoid layout shifts above the fold.
+- Keep above-the-fold fonts and CSS minimal.
+- Preload only resources that are truly critical for initial rendering.
+- Do not preload resources that are not needed immediately.
+- Use `fetchpriority="high"` only for a proven critical image.
+- Use `preconnect` only for unavoidable external origins.
+
+Prefer simple document navigation over client-side routing unless client-side
+navigation has a clear product reason. For this editorial site, fast static
+pages are more important than app-like route transitions.
+
+## Images And Media
+
+Images are a major Lighthouse risk. Treat image handling as architecture, not
+decoration.
+
+Use Astro image tooling where possible:
+
+- Use `<Image />` or `<Picture />` for layout images and component-controlled
+  images.
+- Prefer images stored where Astro can optimize them.
+- Avoid adding new optimizable assets directly to `public/` unless they must be
+  copied unchanged.
+- Provide useful `alt` text, or `alt=""` only for decorative images.
+- Provide stable width and height or an explicit aspect ratio.
+- Avoid cumulative layout shift.
+- Right-size images for their rendered container.
+- Generate responsive `srcset` and `sizes` values for images that vary by
+  viewport.
+- Lazy-load below-the-fold images.
+- Do not lazy-load a likely LCP image.
+- Compress oversized source images before committing when practical.
+- Prefer modern formats such as AVIF or WebP where Astro can generate them.
+- Avoid serving a full-resolution upload when the rendered slot is much smaller.
+- Avoid background images for meaningful content images, because they are harder
+  to optimize, size, and describe accessibly.
+- Keep animated media rare and intentionally compressed.
+
+Markdown images should continue to work, but the long-term goal should be a
+content pipeline that validates image existence, dimensions, and alt text where
+reasonable.
+
+For article images, the pipeline should eventually detect:
+
+- Missing files.
+- Missing or empty alt text where the image is meaningful.
+- Source images that are far larger than their maximum rendered size.
+- Images without known dimensions.
+- Images likely to become LCP candidates.
+- Broken root-relative paths after content migration.
+
+## Fonts
+
+Fonts should not damage performance or layout stability.
+
+Prefer:
+
+- Local or Astro-managed fonts.
+- A small number of font families and weights.
+- `font-display` behavior that avoids invisible text.
+- Optimized fallbacks where available.
+- Selective preloading only for truly critical font files.
+
+Avoid:
+
+- Loading many weights.
+- Loading multiple decorative families.
+- Remote font dependencies that block rendering.
+- Preloading fonts that are not needed above the fold.
+
+## Accessibility
+
+Accessibility is a release requirement.
+
+Every page should have:
+
+- One clear `h1`.
+- Semantic landmarks: `header`, `nav`, `main`, `article`, `aside`, `footer`
+  where appropriate.
+- Correct heading order.
+- Descriptive link text.
+- Keyboard-accessible controls.
+- Visible focus states.
+- Adequate color contrast in light and dark mode.
+- Accessible labels for icon-only buttons.
+- Valid `aria-expanded`, `aria-controls`, and related attributes for disclosure
+  UI.
+- Reduced-motion support for motion-heavy interactions.
+
+Do not use divs and click handlers where a semantic element exists. A component
+abstraction should produce good HTML, not hide poor semantics.
+
+## SEO And Metadata
+
+Every public page should have:
+
+- Unique `<title>`.
+- Useful meta description.
+- Canonical URL.
+- Appropriate Open Graph metadata when available.
+- Semantic document structure.
+
+Article pages should include:
+
+- Article title.
+- Publish date in a machine-readable `<time>`.
+- Author when available.
+- Topic metadata when available.
+- Description or excerpt.
+
+RSS, sitemap, search indexing, topic pages, and article archives should all come
+from the same published article source. Drafts must not appear in production
+pages, RSS, sitemap, or search indexes.
+
+## Lighthouse Strategy
+
+The target is 100 across Lighthouse categories:
+
+- Performance.
+- Accessibility.
+- Best Practices.
+- SEO.
+
+Perfect scores may not always be stable in CI, especially for performance, but
+the implementation should be designed as if 100 is the standard.
+
+Hard expectations:
+
+- Accessibility should be treated as a hard quality gate.
+- SEO should be treated as a hard quality gate.
+- Best Practices should be treated as a hard quality gate.
+- Performance should be protected through budgets and high thresholds.
+
+Use Lighthouse CI against representative pages, not just the homepage:
+
+- `/`
+- `/articles/`
+- A long article.
+- An article with images.
+- A topic page.
+- `/about/`
+
+Track category scores and concrete budgets:
+
+- JavaScript transfer size.
+- CSS transfer size.
+- Image transfer size.
+- Total request count.
+- Largest Contentful Paint.
+- Cumulative Layout Shift.
+- Total Blocking Time.
+
+Do not chase a Lighthouse score by making the site less maintainable or less
+accessible. The score is a measurement of the quality bar, not the only quality
+bar.
+
+## Release Gates
+
+Use automated checks before release.
+
+Required checks should include:
+
+- `astro check`.
+- Production build.
+- Content verification.
+- Lighthouse CI.
+- Playwright viewport tests.
+- No-horizontal-overflow assertions.
+- Mobile navigation tests.
+- Theme tests.
+- axe accessibility checks.
+- Internal link checks.
+- Draft exclusion checks.
+- RSS and sitemap checks.
+
+Representative viewport tests should include mobile, tablet, laptop, desktop,
+and wide desktop sizes. The goal is not to snapshot every pixel. The goal is to
+catch structural failures: overflow, overlap, unreadable content, broken menus,
+and missing interactive affordances.
+
+## Design System Rules
+
+Use shared tokens for:
+
+- Background.
+- Foreground.
+- Muted text.
+- Primary action.
+- Border.
+- Ring/focus color.
+- Card or surface.
+- Sidebar or navigation surface.
+- Radius.
+- Shadow.
+- Font family.
+
+Light and dark mode must both be first-class. Do not style only one mode and
+patch the other later.
+
+Use a restrained editorial visual language:
+
+- Clear typography.
+- Strong reading rhythm.
+- Calm spacing.
+- Stable navigation.
+- High contrast.
+- Few decorative effects.
+
+Do not use gradients unless the project explicitly re-approves them. The current
+direction is flat, readable, and editorial.
+
+## Shadcn And UI Primitives
+
+The site may borrow from shadcn's philosophy:
+
+- Tokenized design system.
+- Small composable primitives.
+- Tailwind-first styling.
+- Accessible interaction patterns.
+- Reusable blocks built from primitives.
+
+But shadcn components should not dictate the runtime architecture. For this
+Astro site:
+
+- Prefer `.astro` primitives for static UI.
+- Prerender React/shadcn components when they are static and useful.
+- Hydrate shadcn/Radix components only when their interaction quality justifies
+  the client-side cost.
+- Keep the final visual style aligned with the project's design tokens.
+
+The goal is not to use shadcn everywhere. The goal is to build a small, coherent
+component system with similar discipline.
+
+## Current Prototype Policy
+
+The current UI is a prototype, not a constraint.
+
+Preserve:
+
+- Content.
+- Broad editorial tone.
+- Approximate color direction.
+- Topic/article structure.
+- The idea of a readable essay-first site.
+
+Do not preserve by default:
+
+- Fragile header mechanics.
+- Large global stylesheet patterns.
+- One-off breakpoint fixes.
+- Legacy Jekyll-shaped routing logic.
+- Layout decisions that fight responsive design.
+- Implementation details that make authors care about the codebase.
+
+Prefer professional Astro, Tailwind, accessibility, and performance standards
+over matching earlier migration attempts.
+
+## Default Decision Rules
+
+When making implementation choices, use these defaults:
+
+- Use Astro components unless a framework component is clearly better.
+- Use Tailwind utilities unless styling belongs in foundational tokens.
+- Use static rendering unless interaction requires hydration.
+- Use build-time content collections unless live data is required.
+- Use Markdown for normal articles.
+- Use MDX only when article content needs components.
+- Use Tailwind Typography for Markdown-rendered prose.
+- Use semantic HTML even when wrapped by components.
+- Use responsive component contracts instead of page-level patches.
+- Use automated verification instead of visual guessing.
+
+The site should feel simple to author, simple to reason about, fast to load, and
+hard to break.
