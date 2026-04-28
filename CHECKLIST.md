@@ -336,3 +336,168 @@ on the chosen host and Cloudflare configuration.
 - [ ] The deployed output serves the new `/articles/:slug/` structure.
 - [ ] External redirect handling is confirmed separately from the repo.
 - [ ] Production smoke checks pass after cutover.
+
+## Milestone 15: Tooling Foundation And Script Contracts
+
+- [ ] Treat `QUALITY_TOOLING.md`, `DESIGN_PHILOSOPHY.md`, and `AGENTS.md` as
+      the source of truth for tooling decisions.
+- [ ] Use `Unrelated Project/gridgen` only as a reference example, not as a
+      source of truth.
+- [ ] Add or verify `packageManager` in `package.json` so Bun expectations are
+      explicit.
+- [ ] Add or verify `engines.node` in `package.json` so Astro's required Node
+      version is explicit.
+- [ ] Verify CI installs with `bun install --frozen-lockfile`.
+- [ ] Keep one direct Bun script per tool responsibility instead of hiding
+      behavior behind opaque wrapper scripts.
+- [ ] Rename or add script aliases so the normal gate is `check` and the heavy
+      pre-release gate is `check:release`.
+- [ ] Add `fix` as the safe automatic repair entrypoint.
+- [ ] Split formatting into `format` for checks and `format:write` for writes.
+- [ ] Split typechecking into `typecheck`, with `check` calling it.
+- [ ] Keep `build`, `preview`, `verify`, and `sync:content` explicit and
+      boring.
+- [ ] Ensure scripts are quiet on success and action-oriented on failure.
+- [ ] Document any non-obvious script flag close to the script or in the
+      relevant config.
+- [ ] Ensure generated paths such as `dist/`, `.astro/`,
+      `src/content/legacy/`, coverage output, Playwright output, and Pagefind
+      output are ignored where appropriate.
+
+## Milestone 16: Formatting, TypeScript, And ESLint
+
+- [ ] Add `.editorconfig` for baseline editor behavior.
+- [ ] Update Prettier config to load `prettier-plugin-astro`.
+- [ ] Install and configure Tailwind CSS as the styling foundation before
+      relying on Tailwind-specific formatting or linting.
+- [ ] Install and configure `@tailwindcss/typography` for Markdown-rendered
+      article prose.
+- [ ] Add `prettier-plugin-tailwindcss` after Tailwind is installed and ensure
+      it is listed last in Prettier's plugin order.
+- [ ] Scope `.prettierignore` so project docs are formatted but migrated
+      article bodies are not autoformatted.
+- [ ] Add `sort-package-json` if package ordering is adopted as a checked
+      invariant.
+- [ ] Add Markdown linting for project docs while excluding migrated article
+      bodies during the content-fidelity phase.
+- [ ] Add JSON and YAML linting for config files if the selected plugins work
+      cleanly with the repo's configs.
+- [ ] Validate GitHub workflow YAML as part of config linting.
+- [ ] Move TypeScript toward `astro/tsconfigs/strictest` if practical.
+- [ ] Add explicit strict TypeScript compiler flags not already covered by the
+      Astro preset.
+- [ ] Add `tsconfig.tools.json` for scripts, tests, Playwright, and tooling
+      config files.
+- [ ] Add MDX support and MDX-aware linting once future component-enabled
+      articles become part of the active content model.
+- [ ] Install ESLint flat-config dependencies for Astro, TypeScript, import
+      sorting, accessibility, complexity, unsafe DOM sinks, regexp checks, and
+      modern JavaScript correctness.
+- [ ] Add `eslint.config.*` with ignores for generated output, legacy mirrors,
+      copied assets, and local reference directories.
+- [ ] Configure type-aware `typescript-eslint` strict and stylistic rules.
+- [ ] Configure `eslint-plugin-astro` for Astro files.
+- [ ] Configure accessibility linting for Astro and future JSX/MDX components.
+- [ ] Configure `simple-import-sort`, `sonarjs`, `unicorn`, `regexp`,
+      `no-unsanitized`, and scoped `jsdoc` rules where they fit this project.
+- [ ] Ban focused tests in lint rules.
+- [ ] Ban unexpected `console` usage in `src/` while allowing deliberate script
+      output where needed.
+- [ ] Ban direct imports from generated content mirrors.
+- [ ] Configure `lint` with `--max-warnings=0`.
+- [ ] Configure `lint:fix` for deterministic safe fixes.
+- [ ] Ensure `bun run fix` can repair formatting/import/lint issues without
+      touching migrated article bodies.
+
+## Milestone 17: Content, Build, And Unit Validation
+
+- [ ] Expand source content validation so drafts and unpublished entries cannot
+      leak into production routes, RSS, sitemap, search, topics, or archives.
+- [ ] Validate required frontmatter for the chosen final content model.
+- [ ] Validate topic derivation and reject unknown topic folders.
+- [ ] Validate duplicate article slugs before route generation.
+- [ ] Validate article image paths where practical.
+- [ ] Preserve `legacyPermalink` as metadata without letting it drive core
+      routing after migration cleanup.
+- [ ] Keep old dated URLs out of generated routes unless a future isolated
+      redirect fallback explicitly adds them.
+- [ ] Expand `scripts/verify-build.mjs` or split focused validators for source
+      content, generated routes, built output, RSS/sitemap/search, and assets.
+- [ ] Add build-output validation for `dist/`, expected routes, `_astro`
+      assets, Pagefind output, missing local assets, and Liquid/Jekyll
+      artifacts.
+- [ ] Add a check that static reading pages do not unexpectedly gain Astro
+      client JavaScript.
+- [ ] Add static HTML validation for built pages, scoped to catch invalid markup
+      without producing noisy diagnostics for known legacy article HTML.
+- [ ] Add internal link validation that distinguishes true broken links from
+      externally managed legacy redirect candidates.
+- [ ] Add Bun unit tests for slug derivation, topic derivation, draft filtering,
+      frontmatter normalization, route helpers, duplicate slug detection, RSS
+      filtering, sitemap filtering, search filtering, and migration helpers.
+- [ ] Add coverage reporting to `check:release`.
+- [ ] Add `knip` configuration for dead code and dependency hygiene.
+- [ ] Configure `knip` exceptions for Astro route files, generated content,
+      tool-discovered config files, and any future generated UI components.
+
+## Milestone 18: Browser, Accessibility, And Performance Gates
+
+- [ ] Install and configure Playwright.
+- [ ] Configure Playwright with `forbidOnly: true`.
+- [ ] Run Playwright against built output using `bun run build` and a production
+      preview/static server.
+- [ ] Add smoke tests for `/`, `/articles/`, a representative article, an
+      article with images, a topic page, `/about/`, `/feed.xml`, and `/404/`.
+- [ ] Add responsive viewport tests for mobile, tablet, laptop, desktop, and
+      wide desktop.
+- [ ] Add no-horizontal-overflow assertions across the viewport matrix.
+- [ ] Add mobile navigation tests.
+- [ ] Add theme toggle tests.
+- [ ] Add search tests against built Pagefind output.
+- [ ] Add `@axe-core/playwright` accessibility tests for representative pages.
+- [ ] Fail accessibility tests on serious and critical axe violations.
+- [ ] Install and configure Lighthouse CI.
+- [ ] Add committed Lighthouse CI configuration and budgets.
+- [ ] Run Lighthouse CI against production output, not the dev server.
+- [ ] Audit representative pages, including the homepage, archive, a long
+      article, an article with images, a topic page, and `/about/`.
+- [ ] Add Lighthouse budgets for JavaScript transfer, Pagefind JavaScript on the
+      search page, CSS transfer, image transfer, request count, LCP, CLS, TBT,
+      render-blocking resources, and third-party requests.
+- [ ] Set high Lighthouse thresholds and move accessibility, SEO, and Best
+      Practices toward hard 100 gates once stable.
+
+## Milestone 19: CI, Security, And Repository Hygiene
+
+- [ ] Update `.github/workflows/ci.yml` to call repository Bun scripts rather
+      than duplicating long command logic.
+- [ ] Ensure baseline CI runs install, `bun run check`, `bun run build`, and
+      `bun run verify`.
+- [ ] Pin CI Node and Bun versions to match the documented local environment.
+- [ ] Split heavier CI jobs as tooling lands: unit/type/lint/format/deadcode,
+      build/verify, Playwright, axe, Lighthouse CI, security audit, secrets,
+      Dependency Review, and CodeQL.
+- [ ] Upload Playwright traces, screenshots, coverage, and Lighthouse reports
+      as CI artifacts only on failure or where the report is needed for review.
+- [ ] Configure required branch protection checks after CI jobs are stable.
+- [ ] Add CodeQL for JavaScript/TypeScript.
+- [ ] Add Dependency Review for pull requests.
+- [ ] Update Dependabot or Renovate for the final Bun/Astro dependency model.
+- [ ] Remove legacy Bundler dependency tracking once Ruby/Jekyll is fully out of
+      the active build path.
+- [ ] Add `bun audit --audit-level=high` to release checks.
+- [ ] Add gitleaks to release checks.
+- [ ] Ensure local hooks, if added, only call existing Bun scripts and are not
+      the source of truth.
+- [ ] Verify `.DS_Store`, screenshots, traces, temporary output, coverage, and
+      generated build artifacts are ignored.
+- [ ] Keep `Unrelated Project/gridgen` available until the tooling setup is
+      complete.
+- [ ] After tooling setup is complete, stop referencing
+      `Unrelated Project/gridgen` in project docs and configs.
+- [ ] Check whether `Unrelated Project/` was ever tracked with `git ls-files`
+      and `git log --all -- "Unrelated Project"`.
+- [ ] Remove `Unrelated Project/` from the worktree after it is no longer
+      needed as a reference.
+- [ ] If `Unrelated Project/` was committed, perform a deliberate history scrub
+      in a separate maintenance operation and coordinate any required force push.
