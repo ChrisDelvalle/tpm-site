@@ -9,7 +9,7 @@ tags:
 legacyPermalink: 2020/07/05/postnaturalism/
 ---
 
-# Introduction
+## Introduction
 
 "Ontogeny recapitulates phylogeny."
 —Ernst Haeckel
@@ -22,7 +22,7 @@ legacyPermalink: 2020/07/05/postnaturalism/
 
 In this article, I introduce _postnaturalism_, a philosophical lineage uniquely suited for adopting and developing digital methods for philosophical research. I do this by discussing three examples of postnaturalist strategies from classical philosophy.
 
-# Philosophers are not against technology
+## Philosophers are not against technology
 
 In 2007, National Science Foundation called for what was nothing short of an industrial revolution for education. This "Cyberinfrastructure Vision for 21st Century Discovery" [^1] is being realised all around us: the online is the dominant operating mode for most students, and pervasive cyberinfrastructures have indeed extended our awareness of the physical and social environment. Philosophers are still fighting over armchairs [^2][^3][^4].
 
@@ -30,7 +30,7 @@ This is not to characterise philosophers as antitechnological. On the contrary, 
 
 Automated reasoning has developed to the point of surpassing human researchers at certain tasks and has been adopted by a significant number of specialised researchers including philosophers as well as mathematicians. It has not yet been widely accepted by mathematicians partly due to scepticism about bugs, the length and excess of detail of automated proofs, and the fact that mathematics is an enjoyable activity that mathematicians are hesitant to automate away [^5]. Bugs can be minimised, independent verification can be provided, and "as important theorems requiring larger and larger proofs emerge, mathematics faces a dilemma: either these theorems must be ignored or computers must be used to assist with their proofs."[^6]
 
-# Digital philosophy has not happened
+## Digital philosophy has not happened
 
 For all the tradition of methodological naturalism and the availability of digital technologies that philosophers already make use of in everyday life, philosophers outside of logic are peculiarly neglectful about the concept of digital methods in philosophical research. This is probably due to a different kind of scepticism than those of mathematicians regarding automated reasoning. The most obvious formulation of this criticism is that philosophers love the armchair too much, favouring a priori knowledge over a posteriori knowledge. This disregard for a posteriori knowledge, the criticism suggests, is the cause of their "metametaphilosophical" reluctance to take on an impure or eclectic methodology that takes advantage of both reason and technology. "And why do philosophers think they have to start from scratch?"[^7]
 
@@ -38,13 +38,13 @@ I disagree with this sweeping accusation of an antiexperimentalist attitude or t
 
 One possibility is that philosophy is fundamentally incompatible with digital methods, and that the metaphilosophical naturalists are mistaken in their assumption that naturalistic methodologies are compatible with philosophy. Even though there is an apparent critical mass of philosophers with both the correct basic metaphilosophical assumptions and access to the necessary technology required for a new paradigm, if philosophy is, say, a pursuit of knowledge about an immaterial realm of truths accessible only via philosophical intuition, digital methods might not do us any good. It is also possible that digital methods simply failed to take hold in philosophical research because philosophers have an incomplete or incorrect picture of what philosophy is, what philosophers do, and therefore what tools philosophers can use.
 
-# The problem is entirely practical
+## The problem is entirely practical
 
 The success of automated reasoning in formalised forms of philosophy shows that at least some of philosophy is compatible with not just digital methods that mechanise certain activities, but total automation. Taking at face value the claim that formal logic is a representative example of philosophy, this fact alone is sufficient to conclude that philosophy is not fundamentally incompatible with scientific methodologies and, as a corollary, digital methods.
 
 This means that the lack of a comprehensive digital methodology in philosophy is the consequence of current practical limitations. The digitisation challenge is a practical problem, not a theoretical one. For instance, digital methods are new, and the available technology is not widely taught in the humanities. Coupled with the reluctance of professional philosophers to use digital methods, this means that most philosophy students do not even hear about the possibility of making use of such tools in the first place. The institutional feedback loop confines digital methods to the position of field trips in special topics in the philosophy of the digital. The cyclical structure of this practical challenge means that it’s difficult to reason your way out of it from within, as one problem is always the consequence of another. The same structure makes it easy to approach it from a lower or higher level perspective, since any point is a good place to start cutting in a Gordian knot.
 
-# The solution is metametaphilosophical and technological
+## The solution is metametaphilosophical and technological
 
 How can the rest of philosophy as a discipline take advantage of digital technology in the way that logicians and the philosophers of logic have done through automated reasoning?
 
@@ -52,7 +52,7 @@ This challenge is available to every philosopher. All philosophers already deal 
 
 Many philosophers probably hate having to work on a computer and navigate electronic bureaucracies instead of going for a walk with Socrates. Numerous superior alternatives to the frustrating process of adopting new research methodologies are (in principle) physically possible. Perhaps life extension and simulation technologies, or a radically different social and political environment that allows all philosophers to work on philosophy without other concerns at their own pace, or a cultural shift against productivity in all forms, will make the notion of efficiency in philosophical research irrelevant. Such alternatives should be preferred as the ideal over the plausible but prosaic solution for the problem I have outlined. Therefore, I mean the following "ought" in the weak sense: "if one takes each philosopher’s normative beliefs implied by their behaviour at face value, then it follows that they ought to adopt digital methods."
 
-# Philosophers ought to adopt digital methods
+## Philosophers ought to adopt digital methods
 
 Philosophers are already convinced about the usefulness of digital technology, at least enough to use it as a part of their work environment. This is not an epistemological position but rather an epistemic choice made by the philosophers. Since I have stated that the challenge is practical rather than theoretical, this is sufficient as a foundation for my case for digital philosophy.
 
@@ -66,7 +66,7 @@ Digital methods will probably benefit most philosophers. They will probably have
 
 This is an empirically verifiable hypothesis for which I have no data. Instead, I present a caricature of three classical philosophers in order to make an indirect argument based on the apparent causal links between postnaturalism, rough analogical equivalents for digital methods, and philosophical productivity. Although caricatures are generally epistemically defective[^10], they can be illuminating in the correct contexts, as I have shown in the exercising physicist example above.
 
-# Plato, Aristotle, and Mozi
+## Plato, Aristotle, and Mozi
 
 The Sophists were variously "rehabilitated" by Hegel, Grote, and Nietzsche[^11][^12]. Schiller also attempted a similar rehabilitation for the purposes of integrating Protagoras into his pragmatic ("Humanist") philosophy[^13]. In the same way that the pioneers of new philosophical lineages recruited the Sophists, I will recruit Plato, Aristotle, and Mozi as the ancestors of postnaturalism.
 
@@ -94,7 +94,7 @@ The Mohists did not have clear distinctions about different types of knowledge. 
 
 Unfortunately, Confucianism won out over Mohism in China as the preferred ideology of the ruling classes. As an ideological framework used to justify rigid hierarchies and absolutism, Confucianism was far more useful to the rulers than the protosocialism that Mohism offered. Considering that the majority of the Mohists’ efforts were concentrated on practical matters, their success in the theoretical spheres is impressive enough as a favourable example of postnaturalist tendencies. Confucians adopted a considerable number of Mohist ideas, and the two groups were considered on equal footing as theorists in their time. Mozi’s egalitarian epistemology, which did not privilege a priori knowledge over a posteriori knowledge, included abductive reasoning and social knowledge[^21].
 
-# The post-Mozi condition
+## The post-Mozi condition
 
 Thus far, I have made a case for postnaturalism and the reliance on tools and technology for making metaphilosophical and methodological decisions. But what kind of digital methods should be selected? If the decisions are simply to be relegated to lower level facts about which tools one finds useful, there is, at face value, a risk of infinite regress. Luckily, reality has a bottom. Mozi had his life as a carpenter during the political reality of the Warring States period to force his hand about which tools he must use. The current intellectual climate may not live up to the urgency of actual warfare, but it will do as a forcing function for most philosophers.
 
@@ -107,7 +107,7 @@ However, this received view of contemporary philosophy as a battleground between
 
 This is not cause for cyberoptimism or a purely technological solution. The visible results of the digitally mediated, participatory philosophy are underwhelming. In fact, the Internet as the primary site of philosophical engagement has led to the siloing and proliferation of purportedly incommensurate worldviews, amplified the narcissism of small differences to the point where bikeshedding and splintering have become staple components in the life cycle of communities. The typical structure of self-organising digital communities are reminiscent of Plato’s criticism of the Sophists peddling lessons in rhetoric as wisdom, and of the naive democratic citizens who support them. Lippmann’s criticism of democracy as founded on an illusion of an "omnicompetent" citizenry, as well as Dewey’s response that the experts are themselves biased and must be kept in check, both ring true[^24].
 
-# Postnaturalism is not a philosophical argument
+## Postnaturalism is not a philosophical argument
 
 The postnaturalist believes, or behaves as though they believe, at least the following:
 
@@ -121,7 +121,7 @@ It might even be the case that all philosophical arguments are a shorthand that 
 
 In other words, a postnaturalist is at face value indistinguishable from any other philosopher when they philosophise. This is a problem common to a reflexive, sociological vision of metaphilosophies. Whereas Rorty’s ironism[^25] and Deleuze’s deterritorialisation[^26] can be described and used distinctively, their practitioners may not be recognisable as philosophers[^27].
 
-# Digital philosophy
+## Digital philosophy
 
 Digital methods could make postnaturalism efficient enough to be useful. Berry[^28] characterises digital humanities as consisting of the first wave, in which the requisite infrastructures were constructed; the second wave, in which the "notional limits" of the humanities were correspondingly expanded to include born-digital materials; the tentative third wave, in which the focus of digital humanities shifts from the "humanities" to the "digital", "thinking about how medial changes produce epistemic changes."
 
@@ -129,11 +129,11 @@ One promise of philosophising digitally is that there is already a shared techno
 
 Digital methods from digital humanities could be used to automate the reflexive analysis that has been the work of a minority of radical philosophers in the past. This automated reflexive analysis, based on information like emergent patterns in a philosopher’s arguments based on metadata, can provide the foundations for a positive postnaturalist programme. The resulting positive programme would resemble Haack’s crossword puzzle[^31]. Foundations would come in the form of shared technologies, and coherence would guide the process of collective inquiry.
 
-# Conclusion
+## Conclusion
 
 Stephen Wolfram argues that the universe comprises of simple rules whose equivalents appear repetitively[^32]. For instance, the growth pattern of slime moulds can solve problems about using the lowest amount of energy to get from one point to another through a continuous network of cells[^33]. Postnaturalist digital methods will make entire worlds accessible to philosophers as a source of useful knowledge, and reduce waste by making each exchange count for more. Philosophical incommensurability would no longer be an issue. In effect, we would be creating an automatic translation engine for philosophies.
 
-# Appendix: a useful timeline of the past 200 years in philosophy
+## Appendix: a useful timeline of the past 200 years in philosophy
 
 The following is a list of some important works in modern and contemporary philosophy relevant to the present discussion, sorted in chronological order. They were selected primarily on the grounds of being good examples of thinkers taking conceptual or scientific technologies and frameworks from outside of their domain and reapplying them to their own, to varying degrees of success.
 
@@ -174,7 +174,7 @@ The following is a list of some important works in modern and contemporary philo
 - 2005: Busa and collaborators publish a web-based version of the _Index_. _The Journal of Memetics_ is terminated the same year.
 - 2009: _PhilPapers_ is established.
 
-# References
+## References
 
 [^1]: [https://www.nsf.gov/pubs/2007/nsf0728/nsf0728.pdf](https://www.nsf.gov/pubs/2007/nsf0728/nsf0728.pdf)
 
