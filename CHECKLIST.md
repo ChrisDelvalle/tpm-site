@@ -341,8 +341,6 @@ on the chosen host and Cloudflare configuration.
 
 - [x] Treat `QUALITY_TOOLING.md`, `DESIGN_PHILOSOPHY.md`, and `AGENTS.md` as
       the source of truth for tooling decisions.
-- [x] Use `Unrelated Project/gridgen` only as a reference example, not as a
-      source of truth.
 - [x] Add or verify `packageManager` in `package.json` so Bun expectations are
       explicit.
 - [x] Add or verify `engines.node` in `package.json` so Astro's required Node
@@ -495,15 +493,11 @@ on the chosen host and Cloudflare configuration.
       the source of truth.
 - [x] Verify `.DS_Store`, screenshots, traces, temporary output, coverage, and
       generated build artifacts are ignored.
-- [x] Keep `Unrelated Project/gridgen` available until the tooling setup is
-      complete.
-- [x] Stop referencing `Unrelated Project/gridgen` as a tooling source in
-      project docs.
-- [ ] Remove temporary ignore references to `Unrelated Project/` after the
+- [x] Remove temporary ignore references to `Unrelated Project/` after the
       directory is deleted.
 - [x] Check whether `Unrelated Project/` was ever tracked with `git ls-files`
       and `git log --all -- "Unrelated Project"`.
-- [ ] Remove `Unrelated Project/` from the worktree after it is no longer
+- [x] Remove `Unrelated Project/` from the worktree after it is no longer
       needed as a reference.
 - [x] Confirm no history scrub is needed for `Unrelated Project/` because it was
       not tracked and has no matching commit history.

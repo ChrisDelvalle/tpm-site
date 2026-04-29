@@ -13,7 +13,6 @@
   "ignore": [
     ".astro/**",
     ".lighthouseci/**",
-    "Unrelated Project/**",
     "coverage/**",
     "dist/**",
     "docs/**",

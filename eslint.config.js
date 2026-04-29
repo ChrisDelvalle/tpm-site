@@ -39,7 +39,6 @@ export default tseslint.config(
     ignores: [
       ".astro/",
       ".lighthouseci/",
-      "Unrelated Project/",
       "_config.yml",
       "_site/",
       "assets/js/vendor/",
