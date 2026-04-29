@@ -4,6 +4,11 @@ description: "It seems to me that 'quotes' such as these which become canon in t
 date: 2015-08-19 01:01:23 +13:00
 author: "Seong-Young Her"
 image: "/uploads/11896173_1679964772237142_4577427319780722645_n.png"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- philosophy
+- memes
+- history
 legacyPermalink: 2015/08/19/misattributed-plato-quote-is-real-now/
 ---
 

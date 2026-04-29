@@ -6,6 +6,12 @@ description: Tracing back techniques used in memes to modern art is a safe bet, 
 date: 2017-12-04 07:52:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/loss_art_simplified-only.png"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- art
+- memes
+- loss
+- aesthetics
 legacyPermalink: 2017/12/04/kandinsky-and-loss/
 ---
 

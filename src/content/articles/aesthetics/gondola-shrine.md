@@ -4,6 +4,13 @@ description: I think of every gondola post as a shrine, for people to come toget
 date: 2019-12-23 10:43:00 +12:00
 author: "Seong-Young Her"
 image: "/uploads/2019-12-02_ghost-puppy_resized.png"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- art
+- Gondola
+- memes
+- philosophy
+- aesthetics
 legacyPermalink: 2019/12/23/gondola-shrine/
 ---
 

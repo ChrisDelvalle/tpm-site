@@ -5,6 +5,11 @@ description: "Joshua Citarella's meme infiltration project turns memetic literac
 date: 2022-04-20 13:49:00 +13:00
 author: "Seong-Young Her"
 draft: true
+tags:
+# TODO(Seong): Review these migration-added tags.
+- memes
+- politics
+- internet culture
 legacyPermalink: /2022/04/20/joshua-citarella-astroturfing/
 ---
 

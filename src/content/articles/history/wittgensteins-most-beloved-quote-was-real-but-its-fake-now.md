@@ -4,6 +4,11 @@ description: "A serious and good philosophical work could be written consisting 
 date: 2022-04-06 23:58:10 +13:00
 author: "Seong-Young Her"
 image: "/uploads/71B5gzMlcnL.jpg"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- philosophy
+- memes
+- history
 legacyPermalink: 2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/
 ---
 <img src="/uploads/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg">

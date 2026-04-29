@@ -4,6 +4,14 @@ description: 'Who owns the memes? How dare we ask such a laughable question?'
 date: 2022-04-04 23:07:34 +13:00
 author: "Seong-Young Her"
 image: "/uploads/2020-06-24_fossilised-bug_resized.png"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- memes
+- memetics
+- philosophy
+- 4chan
+- memepages
+- internet culture
 legacyPermalink: 2022/04/04/homesteading-the-memeosphere/
 ---
 

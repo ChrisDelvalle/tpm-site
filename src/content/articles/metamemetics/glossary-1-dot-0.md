@@ -4,6 +4,16 @@ title: Glossary 1.0
 description: "A working glossary for ironic meme theory, from normies and autists to meta-irony, normification, and the phylomemetic tree."
 date: 2016-01-18 13:50:00 +13:00
 author: "The Philosopher's Meme"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- memes
+- memetics
+- metamemetics
+- irony
+- meta-irony
+- post-irony
+- normie
+- autist
 legacyPermalink: 2016/01/18/glossary-1-dot-0/
 ---
 

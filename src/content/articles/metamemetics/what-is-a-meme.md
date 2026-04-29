@@ -4,6 +4,14 @@ description: 'A cluster definition of memes, taking into account memographic pra
 date: 2021-11-30 18:46:00 +13:00
 author: "Claudia Vulliamy"
 image: "/uploads/vulliamy-12.jpg"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- memes
+- meme studies
+- philosophy
+- definition
+- humor
+- internet culture
 legacyPermalink: 2021/11/30/what-is-a-meme
 ---
 

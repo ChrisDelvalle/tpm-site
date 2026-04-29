@@ -4,6 +4,14 @@ description: 'The logic of capitalism is reproduced in online communities as cir
 date: 2021-12-18 18:46:00 +13:00
 author: "Chicago School of Countercultural Inquiry"
 image: "/uploads/circlejerk_chart_of_terms-01.png"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- politics
+- internet culture
+- Facebook
+- memes
+- economics
+- shitposting
 legacyPermalink: 2021/12/18/on-circlejerk-part-1/
 ---
 

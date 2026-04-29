@@ -5,6 +5,12 @@ description: The meme means different things to different viewers as a matter of
   or not.
 date: 2017-09-10 12:00:00 +12:00
 author: "Seong-Young Her"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- memes
+- games
+- philosophy
+- semantics
 legacyPermalink: 2017/09/10/memes-are-not-jokes-they-are-diagram-games/
 ---
 

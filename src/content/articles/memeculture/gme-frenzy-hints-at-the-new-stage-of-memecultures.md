@@ -7,6 +7,12 @@ description: 'A central theme of post-2015 memecultures was the gamification of 
 date: 2021-02-02 18:51:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/1612244326105.jpg"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- memes
+- memeculture
+- games
+- politics
 legacyPermalink: 2021/02/02/gme-frenzy-hints-at-the-new-stage-of-memecultures/
 ---
 

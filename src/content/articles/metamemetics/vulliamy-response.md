@@ -4,6 +4,13 @@ description: "Simon Evnine responds to Vulliamy's recent article on the definiti
 date: 2021-12-30 22:42:08 +13:00
 author: "Simon J. Evnine"
 image: "/uploads/batmanmeme.jpg"
+tags:
+# TODO(Seong): Review these migration-added tags.
+- memes
+- meme studies
+- philosophy
+- definition
+- humor
 legacyPermalink: 2021/12/30/vulliamy-response/
 ---
 In her very interesting essay for this website, ["What is a Meme?"](http://thephilosophersmeme.com/2021/11/30/what-is-a-meme/), Claudia Vulliamy critiques a definition of the concept meme that I gave in my paper ["The Anonymity of a Murmur: Internet (and Other) Memes"](https://simonevnine.files.wordpress.com/2018/12/ayy021.pdf) and replaces it with what she argues is an improvement. I maintained that for something to be a meme it is necessary and sufficient that it be "made, as part of memographic practice, out of norms for producing things as part of that memographic practice." This is intended as a definition of a type of meme, such as Batman Slapping Robin – what Vulliamy calls a meme trend – and not of the individual things that manifest a trend or instantiate a type. Defining a meme as being constituted by norms gets at the idea that a meme is basically just some instructions that tell you to use a certain image, put a certain kind of text on it in a certain position, and so on. By "memographic practice" I mean a particular, historical phenomenon that began around the end of the 20th century on internet message boards and gradually migrated to the internet at large and even, arguably, to the non-digital world. The reference to memographic practice distinguishes memes from, say, sonnets. The sonnet is also to be identified with some instructions, instructions that prescribe number of lines, rhyme scheme, etc. But it is not a meme, in the relevant sense, since it operates in a totally different socio-cultural-historical context. 
