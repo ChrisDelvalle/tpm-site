@@ -1,36 +1,130 @@
 # Migration Completion Plan
 
 This document tracks the remaining work to finish the Jekyll-to-Astro migration
-and remove compatibility code that exists only to support the first migration
-pass.
+and remove files, scripts, metadata, and compatibility code that are not part of
+the final Astro project.
 
-The desired end state is simple:
+The goal is not a permanent compatibility layer. The goal is a simple Astro site
+where article authors only add Markdown or MDX files and the codebase remains
+small, typed, and predictable.
 
-- Add `docs/<topic>/<slug>.md` to publish a plain Markdown article.
-- Add `docs/<topic>/<slug>.mdx` to publish an article that uses components.
-- Add a new top-level folder under `docs/` to create a new topic.
-- Keep article authors out of the codebase unless they are intentionally adding
+## Desired End State
+
+- Add `src/content/articles/<slug>.md` to publish a plain Markdown article.
+- Add `src/content/articles/<slug>.mdx` to publish an article that uses
+  components.
+- Add `src/content/topics/<topic>.json` or `src/content/topics/<topic>.md` only
+  when a topic needs explicit display metadata such as label, order, or
+  description.
+- Keep article authors out of `src/pages`, `src/layouts`, `src/lib`, and
+  `src/components` unless they are intentionally changing site code or adding
   reusable components.
+- Keep public article URLs as `/articles/:slug/`.
+- Keep topic URLs as `/topics/:topic/`.
+- Prefer frontmatter metadata for article semantics. Astro's reserved `slug`
+  frontmatter field is allowed as an explicit route override, and `topic`
+  frontmatter is the topic source of truth.
+- Use `entry.id` as the article slug after configuring Astro's loader so the
+  default fallback is the exact filename stem instead of a slugified filename.
+- Treat folders under `src/content/articles/` as optional organization only, not
+  routing or topic data.
+- Keep static public assets under `public/`.
+- Keep optimized component-only images under `src/assets/` if Astro image
+  processing is desired.
+- Remove root-level Jekyll files and duplicate static asset roots once the
+  Astro equivalents are authoritative.
+
+`docs/` is the current source tree inherited from Jekyll. The preferred final
+source tree is `src/content/articles/`, matching the most recognizable Astro
+content collection convention.
+
+## Astro Conventions Cross-Check
+
+Astro's content collection `glob()` loader can load Markdown and MDX from local
+directories using a configured `base`, and generated entry IDs can come from
+filenames by default. That means the final site does not need a sync script or a
+legacy mirror just to read article files.
+
+The intended convention for this project is:
+
+- define content collections in `src/content.config.ts`;
+- load local Markdown/MDX with a `glob()` loader whose base is
+  `./src/content/articles` and whose pattern is `**/*.{md,mdx}`;
+- use Astro's reserved `slug` frontmatter field when present, otherwise use the
+  exact filename stem as the article slug;
+- do not include `slug` in the Zod schema because Astro reserves it for entry ID
+  generation;
+- validate slug and topic values instead of silently slugifying user input;
+- use `topic` frontmatter as the topic source of truth;
+- keep folder names out of routing and topic semantics;
+- use Zod schemas to validate frontmatter and make invalid content fail before
+  production;
+- render articles with Astro layouts and `render(entry)`;
+- keep static files that must be served by URL in `public/`.
+
+Astro's built-in `glob()` loader returns slugified IDs by default, and Astro
+also reserves the `slug` frontmatter field as a per-entry ID override. Because
+this project wants exact filename fallback behavior, final routing should
+configure `generateId` intentionally so `entry.id` becomes the single route
+source of truth. This is not legacy logic; it is a small explicit project
+convention that makes the authoring model predictable.
+
+## Conventional Astro Target Structure
+
+The final structure should look like a regular Astro content site:
+
+```text
+src/
+  components/          Reusable UI/components used by pages, layouts, and MDX.
+  content.config.ts    Content collections and Zod schemas.
+  content/
+    articles/          Author-facing Markdown and MDX article source.
+    topics/            Optional topic metadata collection.
+  layouts/             Shared page and article shells.
+  lib/                 Small typed helpers for content queries and URLs.
+  pages/               File-based routes and dynamic collection routes.
+    articles/
+      index.astro
+      [...slug].astro
+    topics/
+      index.astro
+      [topic].astro
+public/                Static files served exactly by URL.
+```
+
+Conventional Astro behavior to preserve:
+
+- `src/pages` creates routes.
+- `src/content` stores related content collections and does not create routes by
+  itself.
+- Dynamic routes under `src/pages` generate article and topic pages from
+  collections.
+- Markdown/MDX articles use frontmatter for metadata and the shared article
+  layout for rendering.
+- Normal article authoring should not require editing route files, layout files,
+  helper code, generated mirrors, or topic registries.
 
 ## Non-Negotiable Invariants
 
 - Article body content must remain intact.
-- Existing article metadata must remain intact unless a field is explicitly
-  legacy-only and no longer used by Astro.
-- Legacy `permalink` metadata must be preserved as data, but it must not drive
-  Astro routing or article classification.
-- Existing unpublished content must remain unpublished during and after the
-  cleanup.
+- Existing article metadata values must remain intact, even when legacy field
+  names are normalized.
+- Legacy `permalink` values must be preserved as data, preferably under
+  `legacyPermalink`, but they must not drive Astro routing or article
+  classification.
+- Existing unpublished content must remain unpublished during and after cleanup.
 - Public article URLs must remain `/articles/:slug/`.
 - Topic URLs must remain `/topics/:topic/`.
 - Redirect handling for old dated URLs belongs outside core article rendering.
-  The primary owner is Cloudflare. Any in-repo fallback must be isolated from
-  the article/topic/content logic.
+  Cloudflare is the primary owner. Any in-repo fallback must be isolated from
+  article, topic, and content-source logic.
+- New article authors should not need to understand Astro internals, route
+  helpers, generated mirrors, or legacy Jekyll fields.
 
 ## Current Legacy Support Inventory
 
-These items were added or retained to make the first Astro migration work with
-Jekyll-shaped content.
+These items currently exist because the first Astro migration preserved
+Jekyll-shaped content before normalizing the project.
 
 - `scripts/sync-content.mjs`
   - Copies `docs/` into generated `src/content/legacy/`.
@@ -40,11 +134,13 @@ Jekyll-shaped content.
 - `src/content/legacy/`
   - Generated content mirror used by Astro content collections.
   - Ignored by git.
-  - Exists only because the first migration did not load directly from `docs/`.
+  - Exists only because the first migration did not load directly from the
+    source article tree.
 
 - `package.json`
   - `sync:content` script.
-  - `dev`, `build`, and `check` all run `sync:content` first.
+  - `dev`, `build`, `typecheck`, `verify:content`, and `check` run
+    `sync:content` before using content.
 
 - `src/content.config.ts`
   - Collection is named `legacyMarkdown`.
@@ -55,7 +151,7 @@ Jekyll-shaped content.
 
 - `src/lib/routes.ts`
   - `LegacyEntry` type name.
-  - `sourceFolder()` parses paths under `/src/content/legacy/`.
+  - `sourceFolder()` parses generated paths under `src/content/legacy/`.
   - `articleSlug()` prefers legacy dated `permalink` slug.
   - `articleSlug()` strips date prefixes from legacy filenames.
   - `isDatedPermalink()` classifies articles by old Jekyll permalink shape.
@@ -64,60 +160,313 @@ Jekyll-shaped content.
   - `TOPICS` hard-codes all topic folders, labels, slugs, and order.
 
 - `src/lib/content.ts`
-  - `getLegacyEntries()` exposes the legacy collection name.
-  - Article lookup compares against `entry.id`, which currently depends on
-    custom legacy ID generation.
+  - Queries `legacyMarkdown`.
+  - Article lookup and sorting depend on legacy-normalized entries.
 
 - Page and layout files
   - Several files use `article.id` as the public slug because IDs are currently
     massaged by legacy slug logic.
-  - These should use a purpose-built `articleSlug(entry)` helper after IDs
-    become direct content paths.
+  - These should use explicit route helpers after IDs become direct source
+    paths.
 
 - `astro.config.mjs`
   - Markdown/rehype transforms remove `{{ site.baseurl }}` at render time.
   - Markdown/rehype transforms rewrite legacy `/glossary/` links to the current
     glossary article.
+  - Raw HTML cleanup exists to tolerate Jekyll-era content.
+
+- `scripts/verify-content.mjs`
+  - Validates generated `src/content/legacy/`.
+  - Treats dated `permalink` as article classification.
+  - Hard-codes current topic folder names.
 
 - `scripts/verify-build.mjs`
   - Allows old dated internal links as redirect candidates.
   - Checks for Liquid artifacts in built output.
-  - Hard-codes current expected article count.
+  - Hard-codes the current expected article count.
 
 - `README.md`
-  - Still documents dated filenames and legacy `permalink` as part of adding an
-    article.
+  - Still describes the temporary legacy workflow.
+  - Still tells authors to create dated filenames and legacy `permalink`
+    metadata.
 
-- `docs/**/*.markdown`
-  - Existing article files use Jekyll-era dated filenames and `.markdown`
+- Current source content
+  - `docs/**/*.markdown` files use Jekyll-era dated filenames and `.markdown`
     extensions.
+  - Topic index pages such as `docs/history/history.md` are Jekyll-era topic
+    pages and need a final topic metadata decision.
+  - `docs/tree.txt` is migration/reference output, not article content.
 
-- Root-level Jekyll leftovers
-  - `_config.yml`
-  - `index.md`
-  - `script/build`
-  - root `CNAME`
-  - root `favicon.ico`
-  - root `assets/`
-  - root `uploads/`
-  - `package-lock.json`
-  - `bundler` entry in `.github/dependabot.yml`
+## Current Content Survey
+
+This survey describes what must be normalized before the project can follow
+plain Astro conventions.
+
+- Source files:
+  - 71 Markdown-like source files under `docs/`.
+  - 61 `.markdown` files are article-era files with dated filenames.
+  - 10 `.md` files are section/static pages, not normal articles.
+  - 1 `docs/tree.txt` file is reference output, not content.
+  - 0 current article files use `.mdx`.
+
+- Article classification:
+  - 61 files have dated legacy `permalink` values and are currently treated as
+    articles.
+  - 10 Markdown files are non-article pages:
+    `docs/*/<topic>.md`, `docs/dialogues/dialogues.md`, and
+    `docs/notes/about.md`.
+  - Article classification must move from dated `permalink` to the
+    `src/content/articles/` collection itself.
+
+- Article frontmatter keys currently present:
+  - Present on all 61 articles: `title`, `date`, `author`, `nav_order`,
+    `permalink`.
+  - Present on most articles: `layout` 60, `parent` 60, `excerpt` 57,
+    `image` 51.
+  - Legacy/mixed-source fields: `tags` 46, `fbpreview` 33, `status` 21,
+    `type` 21, `categories` 14, `meta` 13, `banner` 5, `grand_parent` 3,
+    `facebook` 2, `published` 2, `has_children` 1.
+  - Duplicate top-level `layout` keys appear in 10 files and are currently
+    papered over by the sync script.
+
+- Publishing state:
+  - One known unpublished article exists:
+    `docs/politics/2022-04-20-joshua-citarella-astroturfing.markdown`.
+  - It must become `draft: true`.
+  - Legacy `published: false` and `status: draft` must not survive as the final
+    publishing model.
+
+- Topic metadata:
+  - Current topic comes from folder names and/or Jekyll `parent`.
+  - Final topic should come from `topic` frontmatter.
+  - Existing topic labels map to canonical topic slugs:
+    `memeculture`, `metamemetics`, `aesthetics`, `irony`, `game-studies`,
+    `history`, `philosophy`, and `politics`.
+  - `The Post-Pepe Manifesto` has a legacy `parent: 2016` value and should get
+    explicit `topic: "politics"`.
+
+- Slug preservation:
+  - Most article slugs can be produced by removing the leading date from the
+    filename.
+  - Two known files need explicit slug preservation when renamed:
+    `misattributed-plato-quote-is-real-now` and
+    `wittgensteins-most-beloved-quote-was-real-but-its-fake-now`.
+
+- Body markup:
+  - 17 files contain `{{ site.baseurl }}`.
+  - 15 files contain WordPress-era classes or alignment markup.
+  - 11 files contain raw `<img>` elements without `alt`.
+  - Raw HTML is common: `<p>`, `<a>`, `<span>`, `<sub>`, `<img>`, `<i>`,
+    `<h2>`, `<div>`, `<li>`, `<br>`, `<b>`, `<iframe>`, `<figure>`, and tables.
+  - No Kramdown attribute syntax was found in the current scan.
+
+## Target Author Frontmatter
+
+Article frontmatter should converge to a small Astro-oriented shape:
+
+```yaml
+---
+title: "Example Article"
+date: 2026-04-28
+topic: "metamemetics"
+slug: "example-article"
+author: "Author Name"
+excerpt: "Optional summary."
+image: "/uploads/example.png"
+draft: false
+legacyPermalink: "/2026/04/28/example-article/"
+---
+```
+
+Required:
+
+- `title`
+- `date`
+- `topic`
+
+Optional:
+
+- `slug`
+- `author`
+- `excerpt`
+- `image`
+- `draft`
+- `legacyPermalink`
+
+Rules:
+
+- `topic` is required for articles and is the only source of topic grouping.
+- `slug` is optional author-facing metadata, but it is an Astro-reserved field
+  and must not be listed in the content collection Zod schema.
+- If `slug` is omitted, the exact filename stem is used.
+- The final article route is `entry.id`, after Astro applies any `slug`
+  override and the configured exact-filename fallback.
+- Explicit `slug` values and fallback filename stems must be URL-safe and
+  unique across all articles.
+- `legacyPermalink` is inert metadata. It must not affect article routing,
+  topic grouping, sorting, RSS, sitemap, search, or publishing.
+- `draft: true` is the only final unpublished marker.
+- `layout`, `parent`, `grand_parent`, `nav_order`, `has_children`,
+  `permalink`, `published`, `status`, `type`, `fbpreview`, `facebook`, and
+  tool-specific `meta` should be removed or migrated to one of the final fields.
+
+Topic metadata, if needed, should live in a separate collection:
+
+```text
+src/content/topics/metamemetics.json
+```
+
+```json
+{
+  "title": "Metamemetics",
+  "order": 2,
+  "description": "Optional topic description."
+}
+```
+
+The content collection Zod schema should validate every normal field in this
+frontmatter shape except `slug`. Slug validation belongs in the content verifier
+or loader-level checks because Astro handles `slug` before schema validation.
+
+## Root And Project File Audit
+
+This section tracks subtle files that can otherwise linger after the code paths
+are migrated.
+
+### Keep
+
+- `package.json`, `bun.lock`
+  - Bun is the package manager.
+
+- `.node-version`
+  - Useful because Astro requires Node `>=22.12.0`.
+
+- `.editorconfig`, `.prettierrc`, `.prettierignore`,
+  `.markdownlint-cli2.jsonc`, `.htmlvalidate.json`, `eslint.config.js`,
+  `knip.json`, `lighthouserc.cjs`, `playwright.config.ts`,
+  `tsconfig.json`, `tsconfig.tools.json`
+  - Current Astro/Bun/tooling configuration.
+
+- `.codex/config.toml`
+  - Project-level Astro Docs MCP config for agent-assisted development.
+  - Keep only if the project wants this repository to carry Codex-specific
+    tooling. It is not required by Astro.
+
+- `.github/workflows/ci.yml`, `.github/workflows/security.yml`, and
+  `.github/dependabot.yml`
+  - Keep as shared repository quality/security automation if GitHub remains the
+    project host.
+
+- `.github/ISSUE_TEMPLATE/` and `.github/release-drafter.yml`
+  - Keep only if issue templates and release drafting are part of active
+    project maintenance.
+
+- `.vscode/tasks.json`
+  - Optional editor convenience. Current tasks target Bun/Astro scripts.
+  - Keep only if the project wants editor task configuration in git.
+
+- `public/assets/` and `public/uploads/`
+  - Required while article Markdown references `/assets/...` and `/uploads/...`.
+
+- `public/favicon.svg`
+  - Current browser tab icon.
+
+- `public/robots.txt`
+  - Keep if the deploy should publish this robots policy.
+
+- `public/CNAME`
+  - Keep only if the static host reads a `CNAME` file from built output, such as
+    a GitHub Pages style deploy.
+  - If hosting is fully configured through Cloudflare Pages or another host UI,
+    `public/CNAME` is optional and can be removed after deploy behavior is
+    confirmed.
+
+### Remove During Cleanup
+
+- `_config.yml`
+  - Jekyll configuration; not used by Astro.
+
+- `index.md`
+  - Legacy Jekyll homepage; Astro uses `src/pages/index.astro`.
+
+- `script/build`
+  - Legacy build helper; Bun scripts are authoritative.
+
+- root `CNAME`
+  - Astro does not copy root `CNAME` to `dist/`.
+  - Use `public/CNAME` if a deploy-time CNAME file is needed.
+  - Do not keep both root `CNAME` and `public/CNAME` long term.
+
+- root `assets/`
+  - Legacy static asset source.
+  - Remove after every required public URL asset exists under `public/assets/`
+    and any `astro:assets` imports are moved to `src/assets/` or replaced with
+    public URLs.
+
+- root `uploads/`
+  - Legacy static upload source.
+  - Remove after every required public URL upload exists under `public/uploads/`
+    and any `astro:assets` imports are moved to `src/assets/` or replaced with
+    public URLs.
+
+- `public/.gitkeep`
+  - No longer needed because `public/` contains real files.
+
+- `.env`
+  - Currently only contains `ASTRO_TELEMETRY_DISABLED`.
+  - Do not track environment files for this project. Put non-secret defaults in
+    scripts or documentation, and ignore `.env*` except for an intentional
+    `.env.example`.
+
+- `.DS_Store`
+  - Local macOS artifact. Remove from the worktree; keep ignored.
+
+- `.devcontainer/`
+  - The tracked Jekyll devcontainer files have been removed.
+  - Remove any empty leftover directory from the worktree.
+
+- `package-lock.json`
+  - Removed. Do not reintroduce npm lockfiles while Bun is the package manager.
+
+- `.stylelintrc.json`
+  - Removed. Current styling checks are through Tailwind, Prettier, ESLint, and
+    build/browser gates.
+
+- Bundler/Ruby/Jekyll dependency tracking
+  - Removed from active CI/dependency management. Do not reintroduce unless a
+    non-Astro tool explicitly requires Ruby.
+
+### Decide At Final Cleanup
+
+- `LICENSE.txt`
+  - Keep if it is the project license.
+
+- `AGENTS.md`, `QUALITY_TOOLING.md`, `DESIGN_PHILOSOPHY.md`
+  - Keep as active project guidance if agents/developers will use them.
+  - Otherwise move durable guidance into `README.md` and remove migration-only
+    commentary.
+
+- `CHECKLIST.md`, `MIGRATION_INVENTORY.md`, `MIGRATION_COMPLETION_PLAN.md`
+  - Keep until migration completion.
+  - After completion, either remove them or archive a concise migration record
+    under a maintenance/docs location.
 
 ## Target Content Model
 
 ### Articles
 
-Article files live in topic folders:
+Article files live in Astro's conventional content directory:
 
 ```text
-docs/<topic>/<slug>.md
-docs/<topic>/<slug>.mdx
+src/content/articles/<slug>.md
+src/content/articles/<slug>.mdx
 ```
 
-The filename stem is the article slug. For example:
+The frontmatter `slug` is preferred when present. If `slug` is absent, the exact
+filename stem is the article slug. For example:
 
 ```text
-docs/metamemetics/vulliamy-response.md
+src/content/articles/vulliamy-response.md
 ```
 
 publishes:
@@ -132,65 +481,72 @@ Article frontmatter controls metadata only:
 ---
 title: "Example Article"
 date: 2026-04-28
+topic: "metamemetics"
 author: "Author Name"
-topic: "Metamemetics"
 excerpt: "Optional summary."
-draft: true
-permalink: /2026/04/28/example-article/
+image: "/uploads/example.png"
+draft: false
+legacyPermalink: "/2026/04/28/example-article/"
 ---
 ```
 
-`permalink` is preserved for historical reference and redirect generation, but
-it does not decide the article slug, route, topic, or published status.
+`legacyPermalink` is preserved for historical reference and redirect
+generation, but it does not decide the article slug, route, topic, or published
+status.
 
-Use `draft: true` for unpublished articles. This follows Astro's documented
-content collection pattern: the site filters draft entries out when generating
-production routes. Legacy `published: false` and `status: draft` values should
-be migrated or supported during transition so no existing draft is accidentally
-published.
+Normal article authors can omit `slug` when the filename is already the desired
+URL slug. They should set `slug` only when the public URL intentionally differs
+from the filename.
+
+In implementation, use `entry.id` as the route slug. The collection loader
+should make `entry.id` equal to Astro's reserved `slug` frontmatter value when
+provided, otherwise the exact filename stem.
+
+Use `draft: true` for unpublished articles. Legacy `published: false` and
+`status: draft` values must be migrated or supported during transition so no
+existing draft is accidentally published.
 
 ### Topics
 
-Topic folders live directly under `docs/`:
-
-```text
-docs/metamemetics/
-docs/history/
-docs/new-topic/
-```
-
-The folder name determines the default topic slug. The default topic label can
-be derived from the folder name.
-
-Optional topic metadata can live in a reserved file such as:
-
-```text
-docs/<topic>/index.md
-```
-
-That file is not an article. It can provide label/order/description without
-requiring code changes:
+Article topics come from frontmatter, not folders:
 
 ```yaml
----
-title: "Meme Culture"
-order: 1
-description: "Optional topic description."
----
+topic: "metamemetics"
 ```
 
-This lets maintainers add a topic by adding a folder, while still allowing
-curated labels and ordering when needed.
+The topic value is a canonical slug. It is used for filtering, topic pages, RSS
+metadata, search metadata, and navigation.
+
+Optional topic metadata can live in a separate collection:
+
+```text
+src/content/topics/metamemetics.json
+```
+
+```json
+{
+  "title": "Metamemetics",
+  "order": 2,
+  "description": "Optional topic description."
+}
+```
+
+If no topic metadata file exists, the site can derive a display label from the
+topic slug. If curated ordering matters, topic metadata should be required for
+all public topics.
 
 ### Reserved Content Areas
 
-Some top-level folders are not article topics and should be explicitly reserved:
+Reserved folders are mostly a migration concern. In the final flat article
+collection, `notes` and `dialogues` should not sit beside article files unless
+they are separate collections.
 
 - `docs/notes/`
-- `docs/dialogues/` if it remains non-article content
+- `docs/dialogues/`
 
-Reserved folders should be documented in one place and excluded from topic
-generation.
+If these remain public, migrate them to explicit pages under `src/pages/` or to
+dedicated content collections. If they are not public, remove them from the
+active content model.
 
 ## Redirect Separation
 
@@ -202,16 +558,10 @@ Cloudflare owns the canonical one-time redirect configuration:
 
 The Astro app should not let old URL handling complicate article routing.
 
-If in-repo fallback redirect pages are added, they should be generated in a
-dedicated module or script, for example:
+If in-repo fallback redirect pages are added, they must live in a dedicated
+module or script. That fallback must:
 
-```text
-src/pages/[year]/[month]/[day]/[slug].astro
-```
-
-or a generated redirects artifact. That fallback must:
-
-- read legacy `permalink` metadata separately from article routing;
+- read `legacyPermalink` metadata separately from article routing;
 - emit redirects only;
 - not affect article slug generation;
 - not affect topic discovery;
@@ -219,82 +569,101 @@ or a generated redirects artifact. That fallback must:
 
 ## Work Tracker
 
-### Milestone 1: Add MDX And React Support
+### Milestone 1: Finish MDX And Component Support
 
-- [ ] Add `@astrojs/mdx`.
+- [x] Add `@astrojs/mdx`.
+- [x] Register `mdx()` in `astro.config.mjs`.
 - [ ] Add `@astrojs/react`, `react`, `react-dom`, `@types/react`, and
-      `@types/react-dom`.
-- [ ] Register `mdx()` and `react()` in `astro.config.mjs`.
-- [ ] Update `tsconfig.json` for React JSX.
+      `@types/react-dom` if MDX articles need React components rather than
+      Astro-only components.
+- [ ] Register `react()` in `astro.config.mjs` if React is added.
+- [ ] Update TypeScript config for React JSX only if React is added.
 - [ ] Add or document a small example MDX article using an Astro or React
       component.
 - [ ] Verify `.md` and `.mdx` articles render through the same article layout.
 
 ### Milestone 2: Normalize Existing Content Files
 
+- [ ] Create `src/content/articles/` as the final article collection.
+- [ ] Move article files from `docs/` into `src/content/articles/`.
+- [ ] Keep `docs/` only until all non-article pages have a final destination.
 - [ ] Rename existing article files from dated `.markdown` filenames to clean
       `.md` filenames.
-- [ ] Preserve current public slugs when filename slug differs from legacy
-      `permalink` slug.
+- [ ] Preserve current public slugs with explicit `slug` frontmatter only when
+      filename fallback would otherwise change the public URL.
 - [ ] Keep article body content unchanged.
-- [ ] Keep legacy `permalink` frontmatter intact as metadata.
-- [ ] Add explicit `topic` frontmatter derived from the current topic folder if
-      articles move into a flat `src/content/articles/` collection.
+- [ ] Rename legacy `permalink` frontmatter to `legacyPermalink` without losing
+      values.
+- [ ] Add explicit canonical `topic` frontmatter to every article.
 - [ ] Normalize unpublished article metadata to `draft: true`.
 - [ ] Confirm any legacy `published: false` or `status: draft` article remains
       excluded from production output.
 - [ ] Clean duplicate frontmatter keys once so the sync script is no longer
       needed.
-- [ ] Decide whether topic metadata files become `docs/<topic>/index.md`.
-- [ ] Remove or regenerate `docs/tree.txt`.
+- [ ] Remove Jekyll/Siteleaf/WordPress-only frontmatter fields after their data
+      has either been migrated or intentionally dropped.
+- [ ] Convert author objects to the final author representation.
+- [ ] Decide whether topic metadata files become `src/content/topics/*.json` or
+      `src/content/topics/*.md`.
+- [ ] Move `docs/notes/about.md` to an explicit page or page content source.
+- [ ] Decide whether `docs/dialogues/dialogues.md` is public content, a future
+      section, or removable legacy content.
+- [ ] Remove or regenerate `docs/tree.txt`; it is not final article content.
 
 Known slug-preservation exceptions:
 
 ```text
 docs/history/2015-08-19_misattributed-plato-quote.markdown
--> docs/history/misattributed-plato-quote-is-real-now.md
+-> src/content/articles/misattributed-plato-quote.md
+   slug: "misattributed-plato-quote-is-real-now"
 ```
 
 ```text
 docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-now.markdown
--> docs/history/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md
+-> src/content/articles/wittgensteins-most-beloved-quote-was-fake-but-its-real-now.md
+   slug: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now"
 ```
 
-### Milestone 3: Load Content Directly From `docs/`
+### Milestone 3: Load Content Directly From The Article Source Tree
 
 - [ ] Change the content collection base from `./src/content/legacy` to
-      `./docs`.
-- [ ] Rename the collection from `legacyMarkdown` to a neutral name such as
-      `content` or `documents`.
-- [ ] Load `**/*.{md,mdx}`.
+      `./src/content/articles`.
+- [ ] Rename the collection from `legacyMarkdown` to `articles`.
+- [ ] Load `**/*.{md,mdx}` directly.
 - [ ] Remove custom ID generation based on dated `permalink`.
-- [ ] Make collection IDs reflect source paths under `docs/`.
-- [ ] Keep schema loose enough to preserve old metadata, but make the future
-      required fields clear for authors.
+- [ ] Implement loader ID generation so `entry.id` resolves as Astro's reserved
+      `slug` value when present, otherwise the exact filename stem.
+- [ ] Confirm `slug` frontmatter overrides still work with the chosen
+      `generateId` implementation before bulk-renaming articles.
+- [ ] Validate slug uniqueness across all articles.
+- [ ] Validate slug and fallback filename stems as URL-safe values.
+- [ ] Require `topic` frontmatter for every article.
+- [ ] Add an optional `topics` content collection if curated topic display data
+      is needed.
+- [ ] Replace the loose legacy schema with the final Zod schema, excluding
+      Astro's reserved `slug` field.
+- [ ] Define the final author-facing required fields clearly: `title`, `date`,
+      `topic`, and optional `slug`, `author`, `excerpt`, `image`, `draft`,
+      `legacyPermalink`.
 
 ### Milestone 4: Simplify Article And Topic Logic
 
-- [ ] If articles move to a flat `src/content/articles/` folder, derive topic
-      pages from `topic` frontmatter instead of folder paths.
-- [ ] If topic folders remain, replace hard-coded `TOPICS` with topic discovery
-      from content folders.
-- [ ] Add one reserved-folder list only if folder-based topics remain.
-- [ ] Derive topic slug from `topic` frontmatter or folder name, depending on
-      the chosen content structure.
-- [ ] Derive topic label from `topic` frontmatter, optional metadata, or folder
-      name.
-- [ ] Derive article slug from filename stem.
-- [ ] Define `isArticle()` as "content file under a topic folder, excluding
-      reserved topic metadata files."
+- [ ] Replace hard-coded `TOPICS` with topic discovery from article frontmatter
+      plus optional topic metadata.
+- [ ] Derive topic slug from article `topic` frontmatter.
+- [ ] Derive topic label from topic metadata or from the topic slug.
+- [ ] Derive article slug from `entry.id`, with loader behavior documented as
+      reserved `slug` frontmatter or exact filename stem.
+- [ ] Define `isArticle()` as "entry from the `articles` collection."
 - [ ] Stop using `permalink` for article detection.
 - [ ] Filter production articles with `draft !== true`.
 - [ ] Keep temporary compatibility for legacy `published: false` and
-      `status: draft` until content frontmatter is normalized.
+      `status: draft` until frontmatter is normalized.
 - [ ] Stop stripping dates from filenames in runtime logic.
-- [ ] Stop parsing `/src/content/legacy/` paths.
+- [ ] Stop parsing `src/content/legacy/` paths.
 - [ ] Rename `LegacyEntry` and `getLegacyEntries()` to neutral names.
-- [ ] Update all page/layout references to use `articleSlug(entry)` instead of
-      assuming `entry.id` is the URL slug.
+- [ ] Update all page/layout references to use route helpers rather than
+      assuming legacy-normalized IDs.
 - [ ] Keep global slug uniqueness checks because article URLs are
       `/articles/:slug/`.
 
@@ -302,47 +671,77 @@ docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-n
 
 - [ ] Delete `scripts/sync-content.mjs`.
 - [ ] Remove `sync:content` from `package.json`.
-- [ ] Remove `sync:content` from `dev`, `build`, and `check` scripts.
+- [ ] Remove `sync:content` from `dev`, `build`, `typecheck`,
+      `verify:content`, and `check` scripts.
 - [ ] Remove `src/content/legacy` from active documentation.
-- [ ] Keep `src/content/legacy` ignored if desired, but it should no longer be
-      generated or referenced.
+- [ ] Remove `src/content/legacy` ignore entries once it is no longer generated.
 
 ### Milestone 6: Clean Legacy Markup At The Source
 
-- [ ] Replace `{{ site.baseurl }}` references in `docs/` with root-relative
-      paths.
-- [ ] Replace legacy `/glossary/` links in `docs/` with
-      `/articles/glossary-1-dot-0/`.
+- [ ] Replace `{{ site.baseurl }}` references in article source with
+      root-relative paths.
+- [ ] Replace legacy `/glossary/` links with `/articles/glossary-1-dot-0/`.
+- [ ] Convert simple raw HTML paragraphs, emphasis, bold text, lists, headings,
+      blockquotes, and links to Markdown where doing so is mechanically safe.
+- [ ] Keep complex raw HTML only where it expresses behavior Markdown cannot
+      express cleanly, such as iframes, complex tables, or intentional custom
+      image/link structures.
+- [ ] Add missing `alt` text or convert raw `<img>` tags to Markdown image
+      syntax where safe.
+- [ ] Remove WordPress-era classes and alignment markup when equivalent
+      Markdown or site-level prose styling can replace it.
 - [ ] Remove render-time Jekyll/Liquid cleanup transforms from
       `astro.config.mjs` after source cleanup is complete.
 - [ ] Keep the build verifier checking for Liquid artifacts.
 
-### Milestone 7: Remove Jekyll And Tooling Leftovers
+### Milestone 7: Normalize Static Assets
+
+- [ ] Decide the final source of truth for static URL assets:
+      `public/assets/` and `public/uploads/`.
+- [ ] Verify `public/assets/` contains every referenced `/assets/...` file.
+- [ ] Verify `public/uploads/` contains every referenced `/uploads/...` file.
+- [ ] Move homepage/design images currently imported from root `assets/` and
+      root `uploads/` into `src/assets/` if they should be optimized by
+      `astro:assets`.
+- [ ] Replace any remaining root `assets/` or root `uploads/` imports.
+- [ ] Remove root `assets/`.
+- [ ] Remove root `uploads/`.
+- [ ] Remove `public/.gitkeep`.
+- [ ] Keep `public/favicon.svg` as the authoritative favicon unless replaced.
+- [ ] Decide whether `public/CNAME` is required by the deploy host.
+- [ ] Remove root `CNAME`.
+
+### Milestone 8: Remove Jekyll And Non-Astro Leftovers
 
 - [ ] Remove root `_config.yml`.
 - [ ] Remove root `index.md`.
 - [ ] Remove `script/build`.
-- [ ] Remove root `CNAME` after confirming `public/CNAME` is authoritative.
-- [ ] Remove root `favicon.ico` after confirming `public/favicon.ico` or
-      `public/favicon.svg` is authoritative.
-- [ ] Remove root `assets/` after confirming `public/assets/` contains every
-      referenced asset.
-- [ ] Remove root `uploads/` after confirming `public/uploads/` contains every
-      referenced upload.
-- [ ] Remove `package-lock.json` if Bun is the only supported package manager.
-- [ ] Remove the `bundler` block from `.github/dependabot.yml`.
+- [ ] Remove tracked `.env`; encode non-secret defaults in scripts/docs instead.
+- [ ] Add `.env*` to `.gitignore`, with an exception only for an intentional
+      `.env.example`.
+- [ ] Remove local `.DS_Store`.
+- [ ] Remove any empty `.devcontainer/` directory from the worktree.
+- [ ] Confirm `package-lock.json` stays removed.
+- [ ] Confirm `.stylelintrc.json` stays removed.
+- [ ] Confirm Bundler/Ruby/Jekyll dependency tracking stays removed.
+- [ ] Decide whether `.codex/config.toml` and `.vscode/tasks.json` are desired
+      project tooling or should remain local-only.
 
-### Milestone 8: Update Verification And Documentation
+### Milestone 9: Update Verification And Documentation
 
-- [ ] Update `scripts/verify-build.mjs` for the new content model.
+- [ ] Update `scripts/verify-content.mjs` for the final content model.
+- [ ] Update `scripts/verify-build.mjs` for the final route and asset model.
 - [ ] Keep checks for expected article count, required representative pages,
       broken internal links, and Liquid artifacts.
 - [ ] Separate redirect-candidate reporting from core link checking.
 - [ ] Update `README.md` so article authors only see the simple workflow.
 - [ ] Document MDX usage and where reusable components should live.
-- [ ] Document topic creation through `docs/<topic>/`.
-- [ ] Document reserved folders.
+- [ ] Document topic assignment through `topic` frontmatter.
+- [ ] Document topic metadata under `src/content/topics/` if that collection is
+      added.
+- [ ] Document reserved folders or confirm none remain.
 - [ ] Document deploy output as `dist/`.
+- [ ] Remove or archive migration-only docs after the migration is complete.
 
 ## Files To Review During Completion
 
@@ -353,6 +752,7 @@ package.json
 bun.lock
 astro.config.mjs
 tsconfig.json
+tsconfig.tools.json
 src/content.config.ts
 src/lib/routes.ts
 src/lib/content.ts
@@ -365,50 +765,99 @@ src/pages/topics/index.astro
 src/pages/feed.xml.ts
 src/pages/index.astro
 src/pages/about.astro
+scripts/verify-content.mjs
 scripts/verify-build.mjs
+tests/
 ```
 
-Content and docs:
+Content and public assets:
 
 ```text
 docs/
-docs/tree.txt
-README.md
-CHECKLIST.md
-MIGRATION_INVENTORY.md
+src/content/articles/
+src/content/topics/
+src/content/legacy/
+public/assets/
+public/uploads/
+public/CNAME
+public/favicon.svg
+public/robots.txt
+src/assets/
 ```
 
-Legacy cleanup:
+Root and hidden cleanup:
 
 ```text
-scripts/sync-content.mjs
+.codex/config.toml
+.devcontainer/
+.DS_Store
+.env
+.gitignore
+.node-version
+.vscode/tasks.json
 _config.yml
 index.md
 script/build
 CNAME
-favicon.ico
 assets/
 uploads/
-public/assets/
-public/uploads/
+public/.gitkeep
 package-lock.json
+.stylelintrc.json
+.github/ISSUE_TEMPLATE/
+.github/release-drafter.yml
 .github/dependabot.yml
+```
+
+Documentation:
+
+```text
+README.md
+AGENTS.md
+CHECKLIST.md
+DESIGN_PHILOSOPHY.md
+QUALITY_TOOLING.md
+MIGRATION_INVENTORY.md
+MIGRATION_COMPLETION_PLAN.md
 ```
 
 ## Validation Checklist
 
+- [ ] `bun run fix` makes no unintended article body changes.
 - [ ] `bun run check` passes.
 - [ ] `bun run build` passes.
 - [ ] `bun run verify` passes.
+- [ ] `bun run validate:html` passes.
+- [ ] Browser tests pass when a preview server can bind locally.
 - [ ] Article count remains correct.
+- [ ] All final article source files live under `src/content/articles/`.
+- [ ] No final article source files use `.markdown` extensions.
+- [ ] No final article source filenames contain legacy date prefixes unless the
+      date is intentionally part of the title slug.
+- [ ] No final article frontmatter contains `layout`, `parent`,
+      `grand_parent`, `nav_order`, `has_children`, `permalink`, `published`,
+      `status`, `type`, `fbpreview`, `facebook`, or tool-specific `meta`.
+- [ ] The Zod schema validates final article metadata and intentionally excludes
+      Astro's reserved `slug` field.
+- [ ] `slug` frontmatter overrides work for the two known historical slug
+      exceptions.
+- [ ] `draft: true` articles are excluded from article indexes, topics, RSS,
+      sitemap, search, and generated pages.
 - [ ] Existing public `/articles/:slug/` routes remain stable.
 - [ ] Topic pages render the same article groupings.
+- [ ] Topic groupings come from `topic` frontmatter, not folder names or
+      Jekyll `parent`.
 - [ ] RSS uses `/articles/:slug/` URLs.
 - [ ] Sitemap uses `/articles/:slug/` URLs.
 - [ ] Pagefind indexes article bodies.
 - [ ] No `{{ site.baseurl }}` or Liquid syntax appears in built output.
+- [ ] Runtime route/content helpers do not inspect `legacyPermalink`.
+- [ ] `scripts/sync-content.mjs` and `src/content/legacy/` are gone.
 - [ ] Old dated URLs are either covered by Cloudflare or by an isolated fallback
       redirect layer.
+- [ ] No root Jekyll files remain.
+- [ ] No duplicate root/public asset trees remain.
+- [ ] No tracked local environment or OS artifact files remain.
 
 ## Current Assumptions
 
@@ -417,17 +866,32 @@ package-lock.json
   content routing.
 - Existing articles should become `.md`, not `.mdx`.
 - Future articles can use `.mdx` when they need components.
+- The final author-facing article source is `src/content/articles/`.
+- The final article route slug is `entry.id`, with Astro's reserved `slug`
+  frontmatter as an override and exact filename stem as the default.
+- `slug` is not included in the Zod schema because Astro reserves it.
 - New unpublished articles should use `draft: true`.
-- The maintainer should never edit `src/` to add a normal article.
+- The maintainer should never edit route, layout, helper, or app component code
+  to add a normal article. Normal article work should stay in
+  `src/content/articles/`.
 - A new topic should not require editing a hard-coded topic list.
+- Topics come from article `topic` frontmatter. Optional topic metadata is only
+  for labels, order, and descriptions.
+- Root `CNAME` should be removed; `public/CNAME` is deploy-host dependent.
+- Root `assets/` and `uploads/` should not survive as permanent duplicates.
 
 ## Open Decisions
 
-- Whether topic metadata should use `docs/<topic>/index.md`,
-  `docs/<topic>/_topic.md`, or no explicit metadata file.
-- Whether articles should live in a flat `src/content/articles/` collection with
-  explicit `topic` frontmatter, or continue using topic folders.
+- Whether optional topic metadata should use JSON or Markdown files under
+  `src/content/topics/`.
+- Whether authors should be a simple string field, a structured object, or a
+  separate collection.
+- Whether legacy HTML cleanup should be mostly scripted, mostly manual, or a
+  scripted pass followed by review.
 - Whether the site should keep an in-repo fallback redirect route in addition to
   Cloudflare.
-- Whether `docs/dialogues/` should become a normal topic, remain reserved, or be
-  removed from active content.
+- Whether `docs/dialogues/` should become a normal topic, a static page section,
+  reserved non-public content, or be removed from active content.
+- Whether `.codex/config.toml` and `.vscode/tasks.json` are desired shared
+  project tooling or local-only preferences.
+- Whether `public/CNAME` is required by the final host.
