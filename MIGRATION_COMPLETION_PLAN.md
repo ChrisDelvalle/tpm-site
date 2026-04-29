@@ -839,6 +839,13 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
       behavior.
 - [x] Finish canonical frontmatter `image` metadata migration to Astro
       `image()` paths.
+- [x] Move unused `public/assets/` and `public/uploads/` files to
+      `unused-assets/public/` so they no longer ship in `dist/`.
+- [x] Add `scripts/find-duplicate-images.mjs` and
+      `scripts/prune-unused-duplicate-images.mjs` for exact byte duplicate
+      detection and safe unused legacy duplicate removal.
+- [x] Remove exact duplicate files from root `assets/`, root `uploads/`, and
+      `unused-assets/` where an active or retained copy exists.
 - [ ] Keep `public/` only for files that intentionally need stable root URLs or
       must be copied unchanged.
 - [ ] Replace any remaining root `assets/` or root `uploads/` imports.
@@ -855,6 +862,11 @@ Remaining asset cleanup after the MDX image migration:
   not moved by the local asset migration script.
 - Homepage/design imports still reference root `assets/` or `uploads/`; move
   them into `src/assets/site/` before removing those root directories.
+- `bun run assets:duplicates` should now report only intentional active
+  duplicates: article-local shared image copies and the temporary homepage
+  import from root `uploads/`.
+- `public/` now keeps only `CNAME`, `favicon.svg`, `robots.txt`, and `.gitkeep`;
+  decide whether `public/CNAME` and `.gitkeep` should remain.
 - `legacyBanner` remains inert historical metadata and can keep legacy-looking
   paths until a future design chooses to use or remove it.
 

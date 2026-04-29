@@ -22,7 +22,6 @@ const requiredPaths = [
   "feed.xml",
   "sitemap-index.xml",
   "pagefind/pagefind.js",
-  "assets/images/2022-04-05_tpm-header_trnp_dm.png",
 ];
 const staticReadingPages = [
   "index.html",

@@ -5,6 +5,8 @@
   "description": "Astro site for The Philosopher's Meme.",
   "type": "module",
   "scripts": {
+    "assets:duplicates": "bun scripts/find-duplicate-images.mjs",
+    "assets:duplicates:prune": "bun scripts/prune-unused-duplicate-images.mjs",
     "audit": "bun audit --audit-level=high",
     "build": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
     "check": "bun run verify:content && bun run typecheck && bun run lint && bun run lint:docs && bun run lint:packages && bun run format && bun run deadcode && bun run test",
