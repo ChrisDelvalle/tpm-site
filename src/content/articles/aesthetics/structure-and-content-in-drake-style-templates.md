@@ -8,23 +8,23 @@ date: 2018-09-11 10:43:00 +12:00
 author: "Seong-Young Her"
 image: "/uploads/41513611_10215207403570323_3806778085953503232_n.jpg"
 tags:
-- template
-- memeing
-- structure
-- comics
+  - template
+  - memeing
+  - structure
+  - comics
 legacyPermalink: 2018/09/11/structure-and-content-in-drake-style-templates/
 ---
 
 ![41412464_10215198568029440_6155454791125303296_n.jpg](/uploads/41412464_10215198568029440_6155454791125303296_n.jpg)
 
-The joke here is obviously that the two templates are 'the same meme' with different styles, and that the Kanye-style template is about to overtake the Drake-style template. I think it's made funnier by the excited expression on Kanye's face in the third panel which makes him look like he's imagining how cool it would be to have his own template just like Drake's. 
+The joke here is obviously that the two templates are 'the same meme' with different styles, and that the Kanye-style template is about to overtake the Drake-style template. I think it's made funnier by the excited expression on Kanye's face in the third panel which makes him look like he's imagining how cool it would be to have his own template just like Drake's.
 
 Two dimensions stand out that make the two templates the same:
 
 1. the structure (aversion/affirmation)
 2. the content (rappers in music videos)
 
-But templates with the aversion/affirmation structure is one of the oldest templates around. It goes back at least to the Gaijin4Koma, a four-panel comic from around 2004 with IGN reporters sitting on a couch. In the meme, the reporters react with boredom to whatever is in the first panel and with excitement to whatever is in the third panel. 
+But templates with the aversion/affirmation structure is one of the oldest templates around. It goes back at least to the Gaijin4Koma, a four-panel comic from around 2004 with IGN reporters sitting on a couch. In the meme, the reporters react with boredom to whatever is in the first panel and with excitement to whatever is in the third panel.
 
 ![2a7.jpg](/uploads/2a7.jpg)
 
@@ -39,15 +39,15 @@ One reason for the shift from the comics model to the diagram model might be tha
 
 ### Thread 1
 
-*Conner Schultz*:
+_Conner Schultz_:
 
 sorry, what exactly is the difference between the comic structure and diagram structure? just the addition of more panels beyond 4?
 
-*Daniel Mourad*:
+_Daniel Mourad_:
 
 A comic reads like a comic (with a specific panel order) while a diagram reads like a diagram (which you can dissect starting from wherever you want)
 
-*Seong-Young Her*:
+_Seong-Young Her_:
 
 Daniel has it right. A diagram's meaning doesn't necessarily change as the viewer progresses through from the start to the end, although I can think of plenty of examples that expressly achieve this, such as flow charts. Comics are 'sequential art' and their panel order matters a lot.
 
@@ -55,21 +55,21 @@ Daniel has it right. A diagram's meaning doesn't necessarily change as the viewe
 
 ### Thread 2
 
-*Beau Horenberger*:
+_Beau Horenberger_:
 
 I also feel like illustrated panel memes are more liable to be interpreted as comics, whereas I don't know of many screenshot-based memes that are intuitively comic-like
 
-*Beau Horenberger*:
+_Beau Horenberger_:
 
 Oh but on googling I guess Gaijin 4koma is a direct counterexample
 
-*Seong-Young Her*:
+_Seong-Young Her_:
 
 I can't say for certain but older screenshot memes tended to be more comics-like. Screenshot based memes became a lot more prevalent since screenshotting and rapid image captioning (not necessarily editing) became convenient. Think about how new Spongebob memes are usually single-screenshot but older (or older style) Spongebob memes are often multiple screenshots put together in a comics arrangement.
 
 ### Thread 3
 
-*Leandro Vieira Steffen*:
+_Leandro Vieira Steffen_:
 
 for real though... good thinking
 ![71144987_10219351074664957_7701413498927972352_n.jpg](/uploads/71144987_10219351074664957_7701413498927972352_n.jpg)

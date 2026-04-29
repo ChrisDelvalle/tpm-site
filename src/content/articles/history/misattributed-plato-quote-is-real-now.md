@@ -5,10 +5,10 @@ date: 2015-08-19 01:01:23 +13:00
 author: "Seong-Young Her"
 image: "/uploads/11896173_1679964772237142_4577427319780722645_n.png"
 tags:
-# TODO(Seong): Review these migration-added tags.
-- philosophy
-- memes
-- history
+  # TODO(Seong): Review these migration-added tags.
+  - philosophy
+  - memes
+  - history
 legacyPermalink: 2015/08/19/misattributed-plato-quote-is-real-now/
 ---
 
@@ -25,4 +25,4 @@ It seems to me that 'quotes' such as these which become canon in the public psyc
 
 It's as if there exists a Plato quite different from one whom we know from his books, a folk hero who loved music and wrote in flowery prose that our world is made up of something beautiful, and that hope exists as an intrinsic component of reality. And isn't that charming!
 
-*(Originally posted to the [page](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178/1679964772237142/))*
+_(Originally posted to the [page](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178/1679964772237142/))_

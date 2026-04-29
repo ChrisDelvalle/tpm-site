@@ -1,12 +1,13 @@
 ---
 title: All Memes Are From the Future
-description: 'All memes are from the future: the literate memer anticipates that the meme
-  will spread and change in meaning depending on where it gets reposted.'
+description:
+  "All memes are from the future: the literate memer anticipates that the meme
+  will spread and change in meaning depending on where it gets reposted."
 date: 2019-10-12 16:13:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/000000000.jpeg"
 tags:
-- memetics
+  - memetics
 legacyPermalink: 2019/10/12/all-memes-are-from-the-future/
 ---
 

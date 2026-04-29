@@ -1,16 +1,15 @@
 ---
 title: We Can Have Retrieval-Inference Synthesis
-description: 'A Modern Synthesis of art criticism is possible.'
+description: "A Modern Synthesis of art criticism is possible."
 date: 2021-07-21 13:21:00 +12:00
 author: "Seong-Young Her"
 tags:
-# TODO(Seong): Review these migration-added tags.
-- aesthetics
-- art
-- philosophy
+  # TODO(Seong): Review these migration-added tags.
+  - aesthetics
+  - art
+  - philosophy
 legacyPermalink: 2021/07/21/we-can-have-retrieval-inference-synthesis
 ---
-
 
 <table>
     <thead>
@@ -45,7 +44,7 @@ legacyPermalink: 2021/07/21/we-can-have-retrieval-inference-synthesis
 
 Inferential criticism is an art-critical methodology introduced by Baxandall (1985). The purpose of art criticism, according to inferential criticism, is to explain the design of the artwork in light of the problems addressed by the artist through the work. Although Baxandall explicitly denies that he is addressing the question "What is art?" (Baxandall, 1985, viii), his account of inferential criticism is nonetheless based on his ontology of artworks as embodied solutions to particular aesthetic problems.
 
-Wollheim's (1968) attempt at answering the same question, in *Art and Its Objects*, and his own theory of "Criticism as Retrieval" (Wollheim, 1980), based on his ontology of art as type-token pairs, provide an ideal point of comparison. Wollheim characterises inference as diametrically opposed to retrieval, and criticises it on methodological grounds as well as purposive grounds (1984). Wollheim's attack on inference is devastating in that it threatens to render it either tautological or totally detached from truthfulness.
+Wollheim's (1968) attempt at answering the same question, in _Art and Its Objects_, and his own theory of "Criticism as Retrieval" (Wollheim, 1980), based on his ontology of art as type-token pairs, provide an ideal point of comparison. Wollheim characterises inference as diametrically opposed to retrieval, and criticises it on methodological grounds as well as purposive grounds (1984). Wollheim's attack on inference is devastating in that it threatens to render it either tautological or totally detached from truthfulness.
 
 Despite Wollheim's strong opposition to inference (Wollheim, 1984), I find that Baxandall's sense of inference escapes the criticisms, and instead a powerful synthesis of the two methodologies is possible. If art is problem solving, then explaining the solutions would be perhaps the most efficient means of encouraging further production of art. Inferential criticism promises to be the most productive method of art criticism.
 

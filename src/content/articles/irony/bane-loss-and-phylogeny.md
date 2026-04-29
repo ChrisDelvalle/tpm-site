@@ -1,6 +1,7 @@
 ---
 title: Bane, Loss and Phylogeny
-description: I have been developing a theory of Internet Memes, through which I hope to
+description:
+  I have been developing a theory of Internet Memes, through which I hope to
   operationalize memetics for the scientific analysis of Internet Meme culture. Here
   is a case study I used to test and develop some of my models.
 date: 2015-11-25 11:39:58 Z

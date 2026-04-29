@@ -1,20 +1,21 @@
 ---
 title: When You Drink [water]
-description: Post-ironic memes are great because they are meaningful. Meaningful memes
+description:
+  Post-ironic memes are great because they are meaningful. Meaningful memes
   bring us closer to the dream of the timeless meme, just like early comics artists
   who aspired towards serious literature with an ostensibly unserious medium.
 date: 2017-11-14 12:05:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/23472012_2053909424842673_2720000468904660127_n.jpg"
 tags:
-- meme criticism
-- post-irony
+  - meme criticism
+  - post-irony
 legacyPermalink: 2017/11/13/when-you-drink-water/
 ---
 
 ![23472012_2053909424842673_2720000468904660127_n.jpg](/uploads/23472012_2053909424842673_2720000468904660127_n.jpg)
 
-*Meme by TPM community member Sándor Szekeres, 2016.*
+_Meme by TPM community member Sándor Szekeres, 2016._
 
 The first time I saw the source image for this meme was two years ago. The caption read: "When you drink water". It was revolutionary for the time, when post-ironic memes were just beginning to develop. It's very simple from today's point of view, but that made it easier to understand how the meme works. The same image became popular in two niches:
 

@@ -1,20 +1,21 @@
 ---
 title: Trash Dove Is A Normie Meme
-description: Normies are users with low memetic literacy or fluency. Trash Dove is a normie
+description:
+  Normies are users with low memetic literacy or fluency. Trash Dove is a normie
   meme. That might very well change in the future.
 date: 2017-02-15 18:41:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/16684179_1161814753936213_2457291586701613901_n.jpg"
 tags:
-- normie
-- definition
-- semantics
-- context
-- Facebook
-- Trash Dove
-- 4chan
-- "/pol/"
-- ironist
+  - normie
+  - definition
+  - semantics
+  - context
+  - Facebook
+  - Trash Dove
+  - 4chan
+  - "/pol/"
+  - ironist
 legacyPermalink: 2017/02/15/early-trash-dove/
 ---
 
@@ -58,7 +59,7 @@ What will be interesting will be when Trash Dove eventually becomes less "hot" a
 
 **Kallan Phillips**: Given the meme emerged out of Thailand, could categorising it as normie be from a somewhat Eurocentric perspective?
 
-> **TPM**:  I think that kind of historicist approach is definitely valuable, although I find that focusing on platforms (viz. Facebook) rather than linguistic/national groupings is usually more insightful. The fact that the use of Pepe in non-anglosphere communities is largely limited to reaction faces without political connotations should tick us off to the fact that Pepe on the Korean website DCinside is not the same Pepe as on Krautchan or 8ch /pol/. Naturally we could apply the same logic to any other meme when appropriate.
+> **TPM**: I think that kind of historicist approach is definitely valuable, although I find that focusing on platforms (viz. Facebook) rather than linguistic/national groupings is usually more insightful. The fact that the use of Pepe in non-anglosphere communities is largely limited to reaction faces without political connotations should tick us off to the fact that Pepe on the Korean website DCinside is not the same Pepe as on Krautchan or 8ch /pol/. Naturally we could apply the same logic to any other meme when appropriate.
 
 [Thread 3](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1914910985409185/?type=3&comment_id=1914970042069946&comment_tracking=%7B%22tn%22%3A%22R9%22%7D)
 

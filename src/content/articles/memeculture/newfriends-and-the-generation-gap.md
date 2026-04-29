@@ -1,6 +1,7 @@
 ---
 title: Newfriends and the Generation Gap
-description: I was walking home from a friend's place yesterday when I saw a few children
+description:
+  I was walking home from a friend's place yesterday when I saw a few children
   chasing each other and play fighting. As I walked past, I heard one tell the other,
   'get wrecked!' I wondered whether they learned it from video games they play (my
   guess was either LoL or DotA, but it could be one of those FPSs) or from older kids
@@ -45,6 +46,3 @@ legacyPermalink: 2016/05/12/newfriends-and-the-generation-gap/
 <p><span style="font-weight:400;">This challenge of ambiguity became increasingly significant as the normie-autist habitats overlapped further and further. Facebook's ironic meme community played the central role in accelerating the process of selection for memes which could withstand the extreme volatility of the dualistic habitat. As an integral aspect of the autist subculture, ironic memes must maintain their ritualistic function of signaling membership to survive. Normification is the dilution of meaning through the introduction of ambiguity. Once the normies “steal” the memes, their power to convey unique meaning whither. It's not just the surface level meaning of “this meme is for oldfags” that is damaged, but the ability for the meme to convey the deeper and implicit sentiments associated with the subculture as a whole, such as “say no to normie consumerism!” or “the Internet is srs bsns!”</span></p>
 
 <p><span style="font-weight:400;">And you're goddamn right the Internet is serious business. </span></p>
-
-
-

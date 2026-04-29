@@ -1,18 +1,19 @@
 ---
 title: Twitch Plays Pokemon, the Meme Scene, & the Project of Hyperspace
-description: 'I stayed up all night, again, playing Pokemon Red with the Internet hivemind;
+description:
+  "I stayed up all night, again, playing Pokemon Red with the Internet hivemind;
   ~60,000 monkeys banging on keyboards: up/down/left/right/a/b/start. The 3rd Millennium
   has brought with it endless possibilities for collective experience and, therefore,
   endless experiments in mass-politics. Each new project offers a different method
   for the users to organize their world through action, and each new project propels
-  itself by bringing order to those actions'
+  itself by bringing order to those actions"
 date: 2016-10-26 12:00:00 Z
 author: "Anonymous"
 image: "/assets/2016-10-27-twitch-plays-pokemon/1_thumb.gif"
 tags:
-- politics
-- twitch plays pokemon
-- algorithmic ideology
+  - politics
+  - twitch plays pokemon
+  - algorithmic ideology
 legacyPermalink: 2016/10/26/twitch-plays-pokemon/
 ---
 

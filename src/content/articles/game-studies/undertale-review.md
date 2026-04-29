@@ -1,6 +1,7 @@
 ---
 title: Undertale Review
-description: Undertale is a game that's very difficult to convince people to play, which
+description:
+  Undertale is a game that's very difficult to convince people to play, which
   is a huge shame because it's probably one of the most affecting games produced in
   the last 10 years.
 date: 2015-11-29 12:17:16 Z

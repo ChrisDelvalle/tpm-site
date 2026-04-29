@@ -1,13 +1,14 @@
 ---
 title: Jjalbang (짤방), the Korean Meme
-description: 'Fundamental Concepts In International Meme Studies: Jjalbang, the Korean
-  Meme'
+description:
+  "Fundamental Concepts In International Meme Studies: Jjalbang, the Korean
+  Meme"
 date: 2020-01-07 08:32:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/291.jpg"
 tags:
-- concept
-- Korea
+  - concept
+  - Korea
 legacyPermalink: 2020/01/07/concept-jjalbang/
 legacyBanner: "/uploads/291.jpg"
 ---
@@ -33,6 +34,7 @@ When the users began using the site for general socialisation, moderators aggres
 However, the jjalbang was first and foremost a material object, and by no means the same thing as a meme. The term does not refer to the genre itself as a collective in the way "meme" can. Purists among contemporary users still refuse to apply the term to anything other than image files, making exception for animated jjalbangs called oomjjal (움짤, lit. "moving jjalbang").
 
 ## RESOURCES
+
 - [Namuwiki entry for jjalbang](https://namu.wiki/w/%EC%A7%A4%EB%B0%A9)
 - [News article about Gaejoogi](https://news.mt.co.kr/mtview.php?no=2009042416153570569&outlink=1&ref=%3A%2F%2F)
 - [The original post made in International Meme Studies](https://www.facebook.com/groups/intmeme/permalink/554498085403987/)

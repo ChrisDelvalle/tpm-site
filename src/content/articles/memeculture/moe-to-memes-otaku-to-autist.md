@@ -1,6 +1,7 @@
 ---
 title: Moe to Memes, Otaku to Autists
-description: The archetypal online community is specialised in its collective interests,
+description:
+  The archetypal online community is specialised in its collective interests,
   hostile to outsiders, particular about its tastes and difficult for normies to get
   into. Knowledge and skill, especially when useful for creating relevant content
   for the community, is highly valued; "otaku" is the Japanese equivalent of the "autist".
@@ -8,12 +9,12 @@ date: 2017-11-23 13:50:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/23843224_10212994224282224_7561053404699120313_n.jpg"
 tags:
-- memes
-- otaku
-- moe
-- anime
-- autist
-- subculture
+  - memes
+  - otaku
+  - moe
+  - anime
+  - autist
+  - subculture
 legacyPermalink: 2017/11/23/moe-to-memes-otaku-to-autist/
 ---
 

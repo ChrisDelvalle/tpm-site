@@ -1,6 +1,7 @@
 ---
 title: A Short Note On Gondola
-description: There's a new meme becoming popular in the Anglosphere called Gondola. It's
+description:
+  There's a new meme becoming popular in the Anglosphere called Gondola. It's
   a derivative of Spurdo Sparde with no arms or dialogue, generally walking around
   in various scenes from classic artworks to everyday life. I think they could be
   most easily characterized in opposition to Pepe or Spurdo, both of whom are subversive
@@ -12,20 +13,20 @@ date: 2015-11-28 17:20:00 Z
 author: "Seong-Young Her"
 image: "/assets/2015-11-28-a-short-note-on-gondola/d83.jpg"
 tags:
-- art
-- beauty
-- Gondola
-- Ironic meme
-- irony
-- Know Your Meme
-- memes
-- new sincerity
-- normie
-- Pepe
-- philosophy
-- post-irony
-- rare pepe
-- Spurdo
+  - art
+  - beauty
+  - Gondola
+  - Ironic meme
+  - irony
+  - Know Your Meme
+  - memes
+  - new sincerity
+  - normie
+  - Pepe
+  - philosophy
+  - post-irony
+  - rare pepe
+  - Spurdo
 legacyPermalink: 2015/11/29/a-short-note-on-gondola/
 ---
 

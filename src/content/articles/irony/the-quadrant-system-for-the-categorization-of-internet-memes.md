@@ -1,6 +1,7 @@
 ---
 title: The Quadrant System for the Categorization of Internet Memes
-description: Memes are not just art they are art-concepts, necessarily materialized cybernetically.
+description:
+  Memes are not just art they are art-concepts, necessarily materialized cybernetically.
   This means their analysis must always be two-tiered, firstly, memetic; secondly,
   aesthetic.
 date: 2015-11-02 11:25:13 Z

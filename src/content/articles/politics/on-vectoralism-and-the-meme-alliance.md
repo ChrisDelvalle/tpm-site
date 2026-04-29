@@ -1,6 +1,7 @@
 ---
 title: On Vectoralism & the Meme Alliance's General Strike
-description: We have seen in recent months the blossoming of a protest movement in Weird
+description:
+  We have seen in recent months the blossoming of a protest movement in Weird
   Facebook, a Meme Alliance of users and memepages wearing pink profile-pictures --
   Facebook flags upside-down, signaling S.O.S. -- demanding satisfaction for Zuckerberg’s
   censorship of their content via automated moderation systems. Though their efforts
@@ -11,11 +12,11 @@ date: 2016-10-26 12:00:00 Z
 author: "Anonymous"
 image: "/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/1_thumb.jpg"
 tags:
-- memepages
-- politics
-- zucc
-- Meme Alliance
-- vectoralism
+  - memepages
+  - politics
+  - zucc
+  - Meme Alliance
+  - vectoralism
 legacyPermalink: 2016/10/26/on-vectoralism-and-the-meme-alliance/
 ---
 

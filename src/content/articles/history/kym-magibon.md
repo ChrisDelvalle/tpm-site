@@ -1,14 +1,15 @@
 ---
-title: 'Know Your Meme: Magibon'
-description: The notion of authenticity in online celebrities is concurrent with the notion
+title: "Know Your Meme: Magibon"
+description:
+  The notion of authenticity in online celebrities is concurrent with the notion
   of authenticity in Internet memes (cf. forced memes) mimics the notion of authenticity
   in fictional characters (cf. fanon).
 date: 2017-12-04 12:01:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/magibon.jpg"
 tags:
-- Know Your Meme
-- Magibon
+  - Know Your Meme
+  - Magibon
 legacyPermalink: 2017/12/04/kym-magibon/
 ---
 

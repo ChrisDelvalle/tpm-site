@@ -1,21 +1,22 @@
 ---
 title: A Short Note On the Death of Pepe
-description: Honestly, I miss this meme. I guarantee that Pepe the Frog is going to become
+description:
+  Honestly, I miss this meme. I guarantee that Pepe the Frog is going to become
   the biggest 'normie' meme of all time. It's popular with high school kids, who are
   basically the equivalent of university activists in the world of internet culture.
 date: 2015-09-14 09:29:10 Z
 author: "Seong-Young Her"
 image: "/assets/2015-09-14-a-short-note-on-the-death-of-pepe/10881565_870360753004673_4747543608770201737_n.jpg"
 tags:
-- aesthetics
-- art
-- digital art
-- irony
-- memes
-- metamodernism
-- Pepe
-- post-irony
-- Wojak
+  - aesthetics
+  - art
+  - digital art
+  - irony
+  - memes
+  - metamodernism
+  - Pepe
+  - post-irony
+  - Wojak
 legacyPermalink: 2015/09/14/a-short-note-on-the-death-of-pepe/
 ---
 

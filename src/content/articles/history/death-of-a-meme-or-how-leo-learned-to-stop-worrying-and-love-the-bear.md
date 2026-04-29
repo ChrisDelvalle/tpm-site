@@ -1,6 +1,7 @@
 ---
 title: Death of a Meme?
-description: If you have an Internet connection, then you must have noticed how Leonardo
+description:
+  If you have an Internet connection, then you must have noticed how Leonardo
   DiCaprio’s face and name have infected your computer like some celebratory virus.
   Everyone is talking about Leo.
 date: 2016-03-02 22:25:14 Z

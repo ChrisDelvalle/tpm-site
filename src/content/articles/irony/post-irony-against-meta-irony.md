@@ -1,6 +1,7 @@
 ---
 title: Post-Irony against Meta-Irony
-description: The Ironic Meme Movement was a reaction against the mainstream co-option
+description:
+  The Ironic Meme Movement was a reaction against the mainstream co-option
   of the subcultural products of the underground; an attempt to create incorruptible
   inside jokes. The Ironics employed defensive strategies which paralleled that of
   the punks against the commercialization of their own subculture. Like the punks,
@@ -9,12 +10,12 @@ date: 2017-03-10 10:10:00 +13:00
 author: "Seong-Young Her & Masha Zharova"
 image: "/uploads/memetically%20assured%20destruction%20writeup_thumb.jpg"
 tags:
-- memes
-- history
-- theory
-- post-irony
-- meta-irony
-- gondola
+  - memes
+  - history
+  - theory
+  - post-irony
+  - meta-irony
+  - gondola
 legacyPermalink: /2017/03/10/post-irony-against-meta-irony/
 ---
 

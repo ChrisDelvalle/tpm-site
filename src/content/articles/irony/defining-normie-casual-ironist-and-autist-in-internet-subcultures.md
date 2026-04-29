@@ -1,6 +1,7 @@
 ---
 title: Defining ‘Normie’, ‘Casual’, ‘Ironist’ and ‘Autist’ In Internet Subcultures
-description: The following is my take on doing the same for online subcultures. I do this
+description:
+  The following is my take on doing the same for online subcultures. I do this
   by clarifying the definitions of three highly popular terms used on the Internet
   to describe different kinds of subcultural participants, and clarifying the concept
   of the ironist in the context of online subcultures.
@@ -8,12 +9,12 @@ date: 2017-03-27 15:47:00 +13:00
 author: "Seong-Young Her"
 image: "/uploads/four%20types%20of%20users%20in%20internet%20subcultures.png"
 tags:
-- subculture
-- users
-- internet culture
-- sociology
-- normie
-- autist
+  - subculture
+  - users
+  - internet culture
+  - sociology
+  - normie
+  - autist
 legacyPermalink: 2017/03/27/defining-normie-casual-ironist-and-autist-in-internet-subcultures/
 ---
 
@@ -52,7 +53,7 @@ It is most important to consider users online in the same light. The general tre
 >
 > **Pe Ter:** I thought of this concept in Richard Rorty's body of work (which I am neither stumping for, or opposing, but raising as an example of a preexisting definition and use of the term "ironist" in a different context.): [https://en.m.wikipedia.org/wiki/Ironism](https://l.facebook.com/l.php?u=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FIronism&h=ATOyjOokzKCvik4xb7XM2O4HlkH-w2Om1009XIP7Rq5UvYZNaNlZWf-RI9fnnbsg9Bw5g6LQuDrZ60HwQRk6QhF6-VS4FLdQUjWvvVXT9u7Exr3LEnhF4HTUMsHHiuRuIlRnWnwXJw)
 >
-> **Nino Lyons:** as much as i found the term "ironist" odd too at first, I'm not sure if naming the category after common practises of the members would fare any better. i feel it conflates the motivations and causes for the ironists irony beyond what is reasonable. Although many of these funky memetic terms do exactly that anyway, and we just grin and bear with it, but that problem just diverts attention away from meaningful discussion and into the pit of lame semantics, so i guess its w/e ¯\\*(ツ)*/¯
+> **Nino Lyons:** as much as i found the term "ironist" odd too at first, I'm not sure if naming the category after common practises of the members would fare any better. i feel it conflates the motivations and causes for the ironists irony beyond what is reasonable. Although many of these funky memetic terms do exactly that anyway, and we just grin and bear with it, but that problem just diverts attention away from meaningful discussion and into the pit of lame semantics, so i guess its w/e ¯\\_(ツ)_/¯
 
 [Thread 2: ](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1937024236531193/?type=3&comment_id=1937223179844632&comment_tracking=%7B%22tn%22%3A%22R9%22%7D)
 

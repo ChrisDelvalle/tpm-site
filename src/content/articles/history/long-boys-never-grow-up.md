@@ -1,6 +1,7 @@
 ---
 title: long boys never grow up
-description: Where have all the Long Boys gone? (Plus an exclusive interview with Special
+description:
+  Where have all the Long Boys gone? (Plus an exclusive interview with Special
   Meme Fresh)
 date: 2016-03-23 08:33:00 +13:00
 author: "Isaac van Bakel & Ulysses King"

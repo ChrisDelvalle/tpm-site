@@ -5,16 +5,16 @@ date: 2016-01-18 10:10:21 Z
 author: "Seong-Young Her"
 image: "/uploads/2x2-meme-table.png"
 tags:
-- art
-- digital art
-- internet art
-- memes
-- memetics
-- philosophy
-- irony
-- post-irony
-- meta-irony
-- layers of irony
+  - art
+  - digital art
+  - internet art
+  - memes
+  - memetics
+  - philosophy
+  - irony
+  - post-irony
+  - meta-irony
+  - layers of irony
 legacyPermalink: 2016/01/18/the-revised-quadrant-model/
 ---
 

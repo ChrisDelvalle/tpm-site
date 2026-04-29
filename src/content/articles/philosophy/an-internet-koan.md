@@ -1,6 +1,7 @@
 ---
 title: An Internet Koan
-description: I just found a really strange website where a guy claims Zen is a scam and
+description:
+  I just found a really strange website where a guy claims Zen is a scam and
   that he's figured out how to solve any koan. He even provides a Free Zen Riddle
   and Koan Service through which you can email him a koan and receive an answer.
 date: 2016-05-13 03:09:00 +12:00

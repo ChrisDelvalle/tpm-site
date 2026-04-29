@@ -31,15 +31,16 @@ An example of a uniting interest for all those disparate online subcultures and 
 What do you guys think about this?
 
 ## Selected Comments
+
 ### Thread 1
 
-**Cristian Gutierrez**: I think your point about Facebook being some kind of 'no-man's land' where all of these somewhat disparate groups come together is really spot-on and I've had my finger on it for a while. 
+**Cristian Gutierrez**: I think your point about Facebook being some kind of 'no-man's land' where all of these somewhat disparate groups come together is really spot-on and I've had my finger on it for a while.
 
 Obviously Facebook has an extraordinarily large exposure base, but to me it seems there's something about the way various communities are using the platform that really kicks the development of memes and subcultures into high gear if they make it outside of some of the more insular websites.
 
 **Seong-Young Her**: I agree, and I think it's kind of like how many 'mongrel languages' like English developed through the turmoil of competing tongues (e.g. the thousands of words English took from French a thousand years ago)
 
-**Cristian Gutierrez**: Another great point! 
+**Cristian Gutierrez**: Another great point!
 
 To further the analogy, Middle English inevitably had a lot in common with the Norman French of the time -but it's obviously developed a whole bunch since then! How much of an 'upper-bound' does Facebook have for this kind of development, I wonder?Perhaps we'll eventually see the divide widen such that people are treated as being 'from Facebook' as an internet community rather than 'on Facebook' (almost like a representative of some other demographic) as they arguably are now.
 
@@ -47,19 +48,18 @@ To further the analogy, Middle English inevitably had a lot in common with the N
 
 I feel like Facebook is really succeeding at becoming the Internet in that people don't tend to think of someone being from Facebook in the same way they might even pejoratively accuse people of being from 9gag or Reddit. Maybe sub-communities on Facebook might become something like that (e.g. from leftbook)?
 
-**Cristian Gutierrez**: I think you're right, and it really speaks to how personal FB is and tries to be; pejoratively saying someone is from leftbook doesn't seem too far divorced from just outright calling them a leftie or damn commie anyway. 
+**Cristian Gutierrez**: I think you're right, and it really speaks to how personal FB is and tries to be; pejoratively saying someone is from leftbook doesn't seem too far divorced from just outright calling them a leftie or damn commie anyway.
 
-This would be opposed to calling someone a Redditor in a negative sense, which is a more generalised comment on their cultural literacy/normie status/whatever regardless of what communities they actually engage with on that website. 
+This would be opposed to calling someone a Redditor in a negative sense, which is a more generalised comment on their cultural literacy/normie status/whatever regardless of what communities they actually engage with on that website.
 
 There's a level of distinction there that Facebook seems to demand at the moment (or in the future).
 
 ### Thread 2
 
-**Beau Perkins**: The chicken-and-egg analogy creates a false dichotomy for this problem, I think. Ardent, radical views have always been rewarded, whether presented by speech or script, shown from Horace's warning against poets making mountains labor to beget mice to yellow journalism. 
+**Beau Perkins**: The chicken-and-egg analogy creates a false dichotomy for this problem, I think. Ardent, radical views have always been rewarded, whether presented by speech or script, shown from Horace's warning against poets making mountains labor to beget mice to yellow journalism.
 
 Written discourse associates itself with feelings of frustration and closed-mindedness. This is because the left hemisphere, in charge of language and abstraction, also is the source of the desire for power and control. When the left hemisphere can put things in its boxes, it can control them, and it won't want to move its boxes. When the left hemisphere can't fit something into its box, its natural reaction is "That's stupid, why does this person not fucking understand?" Writing, above irl conversation and telephone calls, is the baby who looks most like her arrogant father. As Heidigger said, it is language that speaks in us, not we who speak it.
 
 We can't attribute the origin of all subcultures to that dynamic, of course. As others have already said, much more goes into it, and many groups have just been the result of people connecting their same thoughts. So the Internet philosophy culture has its roots pre-Internet, but the detached, immediate animosity that writing creates has made the web a rewarding home for weird subcultures.
-
 
 [(Originally posted to /tpmg/, a closed group)](https://www.facebook.com/groups/sophismo/permalink/1423828097639046/)

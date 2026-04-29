@@ -1,6 +1,7 @@
 ---
 title: The Ironic Normie
-description: On some parts of the Internet the term ‘normie’ is used to define anyone
+description:
+  On some parts of the Internet the term ‘normie’ is used to define anyone
   who does not fully comprehend the humour and language of certain communities. A
   normie is usually seen as someone who has a social life outside of the Internet,
   and who does not know, or care, about its obscure customs. In this particular case,
