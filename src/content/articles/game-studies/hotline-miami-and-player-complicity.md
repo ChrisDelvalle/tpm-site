@@ -15,28 +15,13 @@ tags:
 legacyPermalink: 2015/12/01/hotline-miami-and-player-complicity/
 ---
 
-import { Image } from "astro:assets";
-import articleImage01 from "../../../assets/articles/hotline-miami-and-player-complicity/1.jpg";
-import articleImage02 from "../../../assets/articles/hotline-miami-and-player-complicity/2.jpg";
-import articleImage03 from "../../../assets/articles/hotline-miami-and-player-complicity/3.jpg";
-
-<blockquote>
-  <em>"Do you like hurting other people?"</em>
-</blockquote>
+> _"Do you like hurting other people?"_
 
 I.
 
 Hotline Miami is top-down pixel-graphics game set in 1980s Miami. The setting and graphics create a vibrant and psychedelic environment which is further energised by the fantastic electro-disco soundtrack. The player controls a character that fans of the game have named 'Jacket'. The game begins in Jacket's apartment when he finds a message on his answering phone that tells him about a package that has been delivered. Outside the apartment is a box containing a mask and an address with some vaguely-worded instructions. From there, the player gets in Jacket's car and drives to the address, finding it full of armed enemies. Jacket dons the mask and proceeds to infiltrate the building, violently contending with the people inside. Each stage follows this same situation: a closed space that Jacket must clear by defeating every enemy on every floor of the building before leaving and being given a performance grade.
 
-<p>
-  <Image
-    src={articleImage01}
-    alt=""
-    class="irc_mi aligncenter"
-    width={350}
-    height={197}
-  />
-</p>
+![](../../../assets/articles/hotline-miami-and-player-complicity/1.jpg)
 
 To state it lightly, Hotline Miami is an incredibly violent game. When enemies are dispatched (which can be done with a variety of weapons scattered around the stages), their deaths are accompanied by vast and improbable fountains of blood splattering over the screen. Downed foes can even be finished off with grizzly 'coup de grace' executions. All of the killing is rewarded in the form of a grade and a score, with a greater score awarded for consecutive and/or especially gruesome kills. Levels are not completed until every last enemy is killed.
 
@@ -54,15 +39,7 @@ III.
 
 The uneasiness is catalysed by the cutscenes that occur between missions where the player learns that Jacket's motivation for killing is rather... nebulous. Jacket never talks and simply accepts the rewards he is offered after successfully carrying out his missions (rewards that are often as anodyne as free pizza). Other characters actually become hostile to Jacket, berating him and refusing to reward him later in the game, despite him still carrying out the missions he receives through his answering machine. The game begins to directly criticise Jacket and his lack of resistance to the killing, openly questioning him as to why he is complying with the anonymous voices in his answering machine, with the point perhaps being made that the player themselves are displaying the same dispassionate compliance by continuing to play the game. Jacket isn't getting any rewards any more yet he continues to kill... what exactly is the player getting out of this?
 
-<p>
-  <Image
-    src={articleImage02}
-    alt=""
-    class="irc_mi aligncenter"
-    width={350}
-    height={213}
-  />
-</p>
+![](../../../assets/articles/hotline-miami-and-player-complicity/2.jpg)
 
 This interrogative is made most clear early on in the game when the game  characters intentionally ask Jacket several questions that seem to break the fourth wall, in dialogues that could well be directly addressing the player. These questions "Do you like hurting other people?" and "Where are you right now?", go unanswered as the player and Jacket have no way of responding to their interrogators. The characters who ask these questions all seem to have animal faces similar to the masks that Jacket wears before starting his rampages, and as such some fans have even theorised that they are projections of his personality, the different animals representing different aspects of him. The question being rather unsubtly asked is "What nature of beast is man?", as none of the animal personas are able to fully identify with or relate to Jacket (in fact, the owl-faced character seems to detest him), and Jacket makes no attempt to answer their probing questions, or even dialogue with them at all.
 
@@ -72,8 +49,9 @@ After the end of the game and after the credits, the player is given the opportu
 
 The silent Jacket asks no questions and as such ends up spiralling into ever more violent confrontations. Biker, who is consistently running his mouth off and asking questions about who he is being ordered to kill (and why), is able to break away from the violence and stop the madness. Jacket wears many animal masks and kills without question, he eventually ends up killing even without instruction embarking on a violent rampage against the mafia who have killed his girlfriend. Jacket has become a beast, the animalistic masks mimicking his departure from humanity and towards the violence and chaos of the predatory world. Biker on the other hand takes off his motorcycle helmet and engages in dialogues with other characters. While he is still an ultraviolent killer at the beginning, his quest to find answers ultimately leads him to be able to conclude the game somewhat peacefully (although this is optional). Through embracing his uniquely human abilities of speech and intellect, Biker is able to indirectly question the morality of his actions and confront his own motivations and ultimately choose his own outcome.
 
-<Image src={articleImage03} alt="" class="irc_mi" width={350} height={197} />
-<div class="caption">Took a wild guess?</div>
+![](../../../assets/articles/hotline-miami-and-player-complicity/3.jpg)
+
+_Took a wild guess?_
 
 The violence that occurs within the game is not just an obstacle to progress, in fact the player contending with violence and being willing to take part in it IS the narrative, hence one might call it 'narrative violence'. This kind of narrative relies on the violence and the player/audiences interaction with violence on a personal level to actually tell the story and convey the message. Violence isn't just part of the plot... somehow it IS the plot, and it uses it's mechanics to advance that plot.
 

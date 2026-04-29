@@ -25,85 +25,23 @@ tags:
 legacyPermalink: 2015/11/26/bane-loss-and-phylogeny/
 ---
 
-import { Image } from "astro:assets";
-import articleImage01 from "../../../assets/articles/bane-loss-and-phylogeny/purified-loss1.png";
-import articleImage02 from "../../../assets/articles/bane-loss-and-phylogeny/phylomemetic-tree.png";
-import articleImage03 from "../../../assets/articles/bane-loss-and-phylogeny/phylomemetic-tree-iii1.png";
-
 I have been developing a theory of Internet Memes, through which I hope to operationalize memetics for the scientific analysis of Internet Meme culture. Here is a case study I used to test and develop some of my models.
 
-<p>
-  An ‘Internet Meme’ is a particular kind of meme which spreads through networks
-  of people connected by the Internet, as opposed to directly between person to
-  person (or machine to machine). Just what a ‘meme’ might be
-  <span class="s1">—</span>whether a it is literally ‘an abiological gene’
-  analogous to DNA or simply a useful unit of human behaviour for the discussion
-  of the flow of culture—is not within the scope of this article and will be
-  discussed in the forthcoming article on the operationalization of Internet
-  Memes. Insofar as an Internet Meme exists only on the Internet, it is composed
-  entirely of digitally stored information and exist as pictures, music, phrases
-  or videos. The aim of this exercise is to argue that we have good reason to
-  believe the best approach to understanding Internet Memes is not a cultural
-  analysis but a biological one, the abiological nature of Internet Memes
-  notwithstanding.
-</p>
+An ‘Internet Meme’ is a particular kind of meme which spreads through networks of people connected by the Internet, as opposed to directly between person to person (or machine to machine). Just what a ‘meme’ might be—whether a it is literally ‘an abiological gene’ analogous to DNA or simply a useful unit of human behaviour for the discussion of the flow of culture—is not within the scope of this article and will be discussed in the forthcoming article on the operationalization of Internet Memes. Insofar as an Internet Meme exists only on the Internet, it is composed entirely of digitally stored information and exist as pictures, music, phrases or videos. The aim of this exercise is to argue that we have good reason to believe the best approach to understanding Internet Memes is not a cultural analysis but a biological one, the abiological nature of Internet Memes notwithstanding.
 
 My current hypothesis is that Internet Memes are a natural experiment involving entire ecosystems of ‘art-organisms’ simulated in silico. Here I present several evolutionary models for the study and classification of these art-organisms, outlining the limitations of simple Darwinian models prevalent in memetics and presenting a superior alternative. I suggest that the tension between Mainstream Internet Meme culture and Underground Internet Meme culture is at the basis of the evolutionary history of Internet Memes: the Mainstream exerted a pressure towards normalization and conservation while the Underground exerted a pressure towards subversion and mutation. I believe that this dynamic of selective pressures has remained consistent through the entire history of Internet Memes, only varying in their relative magnitudes.
 
-<p>
-  The two memes we will examine here are{" "}
-  <a href="http://knowyourmeme.com/memes/baneposting" target="_blank">
-    Baneposts
-  </a>{" "}
-  and{" "}
-  <a href="http://knowyourmeme.com/memes/cadbortion-loss-edits" target="_blank">
-    Loss Edits
-  </a>
-  . Baneposting is a genus of references and parodies for the opening scene of
-  movie The Dark Knight Rises; Loss Edits are a species of parodies based on a
-  comic by Ctrl+Alt+Del. The former utilized many aspects of the original video
-  such as the dialogue and filmography to create various and numerous
-  derivatives, while the latter focused on simply referencing the overdramatic
-  nature of the comic, resulting in increasingly minimalistic and obscure
-  recreations of the original. As we shall examine here, Baneposting experienced
-  far greater evolutionary success both in number and spread (into various
-  habitats) while Loss Edits became antiquated and met with resistance whenever
-  revivalism was attempted.
-</p>
+The two memes we will examine here are [Baneposts](http://knowyourmeme.com/memes/baneposting) and [Loss Edits](http://knowyourmeme.com/memes/cadbortion-loss-edits). Baneposting is a genus of references and parodies for the opening scene of movie The Dark Knight Rises; Loss Edits are a species of parodies based on a comic by Ctrl+Alt+Del. The former utilized many aspects of the original video such as the dialogue and filmography to create various and numerous derivatives, while the latter focused on simply referencing the overdramatic nature of the comic, resulting in increasingly minimalistic and obscure recreations of the original. As we shall examine here, Baneposting experienced far greater evolutionary success both in number and spread (into various habitats) while Loss Edits became antiquated and met with resistance whenever revivalism was attempted.
 
 The Exploitable stage of Loss Edits (in which its characters were replaced with humorous substitutes) was pre-ironic, as they remained unaltered in their formalist approach as well as the one-dimensional narrative of 'making fun of Loss'. The comic was always about the original versus the edits, with the initial intent of Ctrl+Alt+Delete at the outset and the punchline at the end of the meme.
 
-<p>
-  I briefly mentioned in a{" "}
-  <a href="https://www.facebook.com/thephilosophersmouth/photos/pb.1652760244957595.-2207520000.1445942562./1700625880171031/?type=3">
-    <u>post</u>
-  </a>{" "}
-  on the page that Loss Edits will only survive through the same 'postmodern'
-  adaptation as Baneposts. Loss Edits—even the most clever, minimalist
-  examples—are a manifestation of the same singular concept of what a Loss Edit
-  is. They bare the visual essence of the original comic.
-</p>
+I briefly mentioned in a [post](https://www.facebook.com/thephilosophersmouth/photos/pb.1652760244957595.-2207520000.1445942562./1700625880171031/?type=3) on the page that Loss Edits will only survive through the same 'postmodern' adaptation as Baneposts. Loss Edits—even the most clever, minimalist examples—are a manifestation of the same singular concept of what a Loss Edit is. They bare the visual essence of the original comic.
 
 Here is a 'pure', minimalist variant of Loss which can be expressed as (3, 4) (6, 3) (-5,5) (-6, -3) (-4, -3) (3, -2) (6, -4).
 
-<p>
-  <Image
-    src={articleImage01}
-    alt="purified loss"
-    class="alignnone wp-image-372 size-full"
-    width={639}
-    height={632}
-  />
-</p>
-<p>
-  The transformation of the meme into the coordinates is the exposure of the
-  conceptual nature of Loss Edits<span class="s1">—n</span>ote how conceptual
-  art still relies on materiality for its full expression. All Loss Edits are a
-  single meme-concept variously expressed but ultimately all belong to a single
-  species with little memetic variance. Their art-concept is to be constructed
-  'Loss-wise'. This perhaps applies to all Narratologically Conservative memes
-  (Pre-Ironic Memes to Ironic Memes).
-</p>
+![purified loss](../../../assets/articles/bane-loss-and-phylogeny/purified-loss1.png)
+
+The transformation of the meme into the coordinates is the exposure of the conceptual nature of Loss Edits—note how conceptual art still relies on materiality for its full expression. All Loss Edits are a single meme-concept variously expressed but ultimately all belong to a single species with little memetic variance. Their art-concept is to be constructed 'Loss-wise'. This perhaps applies to all Narratologically Conservative memes (Pre-Ironic Memes to Ironic Memes).
 
 The transition from the Pre-Ironic form of the original Loss comic into Ironic form of Loss Edits was the rejection of the original author's intent and the re-establishment of the seven plot point, '1;11/11;1\_' layout of the four panel comic as a found art object qua conceptual 'object' (contra subject). All that which superficially resembles anything other than the intentionally created art object is an accident of misperception, as represented by comments from 'normies' not getting the joke.
 
@@ -113,37 +51,13 @@ The abundance of exploitable components in the original canon of Baneposting is 
 
 Consider the Lamarckian spread of Proto-Ironic and Ironic memes against the Darwinian, audience-artist interactive co-evolution of Pre-Ironic memes. The Darwinian co-evolution model works so well with Pre-Ironic memes because their sociotypical identity remains stable, persisting throughout each punctuated equilibrium between two distinct Internet memes. It works very well when we consider memes (especially traditional kinds) historically, and might look something like this:
 
-<p>
-  <Image
-    src={articleImage02}
-    alt="phylomemetic tree.png"
-    class="alignnone wp-image-324 size-full"
-    width={652}
-    height={334}
-  />
-  The Lamarckian model on the other hand posits that the use and disuse of
-  traits determine inheritance. Ironic memes evolve essentially so, with
-  increased use increasing the survivability of the constituent meme-concepts
-  expressed sociotypically as an Internet Meme. The various iterations of the
-  'same meme' (even minute mutations such as reposts with compression, new
-  captions or even a new platform) make up, in monophyly, a gradual progression
-  towards the emergence of new memotypical species. Such acquired traits are
-  passed onto the next 'generation' or copy; we have access, as memetic
-  engineers, to the very fabric of an Internet Meme art-organism, whose memetic
-  makeup we may manipulate through image editing in just a few clicks.
-</p>
+![phylomemetic tree.png](../../../assets/articles/bane-loss-and-phylogeny/phylomemetic-tree.png)
+
+The Lamarckian model on the other hand posits that the use and disuse of traits determine inheritance. Ironic memes evolve essentially so, with increased use increasing the survivability of the constituent meme-concepts expressed sociotypically as an Internet Meme. The various iterations of the 'same meme' (even minute mutations such as reposts with compression, new captions or even a new platform) make up, in monophyly, a gradual progression towards the emergence of new memotypical species. Such acquired traits are passed onto the next 'generation' or copy; we have access, as memetic engineers, to the very fabric of an Internet Meme art-organism, whose memetic makeup we may manipulate through image editing in just a few clicks.
 
 The result is a tendency and demand for increasing complexity, in classic Lamarckian fashion. Loss Edits were crippled by their skewed reliance on the Darwinian mode of brute competition which focused on an economy of proliferation and high fidelity, losing out to the low-fi strategy of Baneposting which satisfied the evolutionary demands of both the Mainstream (for consistency; through the reliance on a canonical blueprint of the original scene) and the Underground (for novelty; through a wider variety of creative interpretations). As such, the Darwinian model doesn't work very well when it comes to the infidelitous, Ironic memes of the Underground. Here is a model I propose instead:
 
-<p>
-  <Image
-    src={articleImage03}
-    alt="phylomemetic tree iii"
-    class="alignnone wp-image-412 size-full"
-    width={1063}
-    height={714}
-  />
-</p>
+![phylomemetic tree iii](../../../assets/articles/bane-loss-and-phylogeny/phylomemetic-tree-iii1.png)
 
 The externalist theory of memes, which posits that memes exist independently of minds, becomes much more relevant as the focus of Internet Meme culture moves on from Pre-Irony into Irony and beyond. The memotypes spread cybernetically; their constituent memes ideated by brains, encoded and spread through the Internet as objects, to be decoded by other brains. The internalist theory (that memes exist only as features within human brains which spread from person to person via cultural exchange) quickly loses ground. For memes to spread, it is not necessary that everybody is in on the joke—hence the disparity in the dominant evolutionary strategies and pattern in the Mainstream and the Underground (Darwinian and Lamarckian, respectively) as shown in the Neo-Lamarckian model.
 

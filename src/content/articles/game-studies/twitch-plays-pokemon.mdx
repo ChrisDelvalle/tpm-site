@@ -17,7 +17,7 @@ tags:
 legacyPermalink: 2016/10/26/twitch-plays-pokemon/
 ---
 
-import { Image } from "astro:assets";
+import HoverImageLink from "../../../components/article/HoverImageLink.astro";
 import articleImage01 from "../../../assets/articles/twitch-plays-pokemon/h1.png";
 import articleImage02 from "../../../assets/articles/twitch-plays-pokemon/h2.jpg";
 import articleImage03 from "../../../assets/articles/twitch-plays-pokemon/h3.jpg";
@@ -26,11 +26,8 @@ _Originally published 24 February 2014._
 
 ![](../../../assets/articles/twitch-plays-pokemon/1.png)
 
-<p>
-  I stayed up all night, again, playing Pokemon Red with the Internet hivemind,
-  <br />
-  ~60,000 monkeys banging on keyboards: up/down/left/right/a/b/start.
-</p>
+I stayed up all night, again, playing Pokemon Red with the Internet hivemind,\
+~60,000 monkeys banging on keyboards: up/down/left/right/a/b/start.
 
 Over the past twelve days 600,000 unique users have participated in a live-stream playthrough of the b&w Gameboy classic, controlling the actions of protagonist Red by entering commands into a chat window. Our hero is a schizoid: guided by many voices, all screaming at once.
 
@@ -50,23 +47,7 @@ If we are to take hyperspace seriously, we must understand that those platforms 
 
 _Twitch Plays Pokemon_ is a unique case study as it is explicitly aware of its own entanglement in politics, offering users the choice between two different methods of organizing their activities: Anarchy and Democracy.
 
-<p>
-  The game was originally programmed to execute every command given, and the
-  hivemind advanced, but incredibly slowly with a seemingly ‘directed
-  randomness.’ With over 10 inputs per second controlling the action, moving Red
-  and navigating menus becomes comedically erratic: doorways are overshot again
-  & again, key Pokemon are accidentally released into the wild and the simplest
-  puzzles must be brute-forced for hours.. and of course, the trolls keep{" "}
-  <a class="hover" href={articleImage01.src}>
-    <Image src={articleImage01} alt="" />
-    opening the Pokedex
-  </a>
-  . As the hivemind grew to 50,000 on Monday, progression required Red’s careful
-  navigation through a maze in which one false step would force him to begin
-  again. Over the next 24 hours the collective reached 100,000 users, increasing
-  the rate of input and thus increasing the difficulty of the task at hand. They
-  continued to fail … over & over & over.
-</p>
+The game was originally programmed to execute every command given, and the hivemind advanced, but incredibly slowly with a seemingly ‘directed randomness.’ With over 10 inputs per second controlling the action, moving Red and navigating menus becomes comedically erratic: doorways are overshot again & again, key Pokemon are accidentally released into the wild and the simplest puzzles must be brute-forced for hours.. and of course, the trolls keep <HoverImageLink image={articleImage01} label="opening the Pokedex" />. As the hivemind grew to 50,000 on Monday, progression required Red’s careful navigation through a maze in which one false step would force him to begin again. Over the next 24 hours the collective reached 100,000 users, increasing the rate of input and thus increasing the difficulty of the task at hand. They continued to fail … over & over & over.
 
 As progress seemed practically impossible, the project’s anonymous designer implemented a voting system: commands would be tallied over the course of 20 seconds and the winner processed as input. As this would only allow three commands each minute, the programmer allowed for the chaining of commands -- e.g ‘down3right2a’ -- in order to accelerate activity. The more complex the chain, however, the less likely it is to win the vote. Democracy thus progresses methodically with a regulated execution of simple actions.
 
@@ -74,49 +55,9 @@ Shortly after the update this feature was used to stage a virtual protest. Those
 
 In response to the protest came two new commands, Anarchy and Democracy, which are used to fight a ‘tug-of-war’ to determine which method of input is selected. Users must now spam their choice of government between commands to Red, and it is this explicit battle of ideologies that offers an opportunity to contrast these two political systems.
 
-<p>
-  Though it has accomplished several difficult tasks in{" "}
-  <i>Twitch Plays Pokemon</i>, Democracy has been used sparingly since its
-  implementation -- at <i>most</i> 5% of playtime. The Democrats have championed
-  the slogan, “
-  <a class="hover" href={articleImage02.src}>
-    <Image src={articleImage02} alt="" />
-    Order is Progress
-  </a>
-  ,” but many users have decried its excruciatingly slow activity and it has met
-  fierce resistance. There have been accusations of cheating on both sides --
-  fake users running automated scripts -- but, more often than not, when the bar
-  gets close to Democracy the Anarchists step in to prevent the switch. The
-  interesting part, of course, is when and why the hivemind chooses to use each
-  system.
-</p>
+Though it has accomplished several difficult tasks in _Twitch Plays Pokemon_, Democracy has been used sparingly since its implementation -- at _most_ 5% of playtime. The Democrats have championed the slogan, “<HoverImageLink image={articleImage02} label="Order is Progress" />,” but many users have decried its excruciatingly slow activity and it has met fierce resistance. There have been accusations of cheating on both sides -- fake users running automated scripts -- but, more often than not, when the bar gets close to Democracy the Anarchists step in to prevent the switch. The interesting part, of course, is when and why the hivemind chooses to use each system.
 
-<p>
-  The project was initially anarchic, so there is something to be said for it
-  being the constitutive constraint of the ‘social experiment’ -- the addition
-  of Democracy as <i>defeat</i> -- but this is superficial, seeing necessity
-  where there none. Indeed, progression is not the only measure of value: “
-  <a href="https://www.reddit.com/r/twitchplayspokemon/comments/1yir32/i_was_a_diehard_supporter_of_democracy_but_now_i/">
-    If the game was being played with only the ‘correct’ button presses, then
-    all of the memes we've been enjoying would never have come into existence.
-  </a>
-  ” As a platform for interaction, <i>Twitch Plays Pokemon</i> has spawned
-  innumerable creative productions, from image macros to videos to a{" "}
-  <a class="hover" href={articleImage03.src}>
-    <Image src={articleImage03} alt="" />
-    complex mythology
-  </a>{" "}
-  (with its own{" "}
-  <a href="http://knowyourmeme.com/forums/just-for-fun/topics/25807-the-bible-of-helix">
-    biblical
-  </a>{" "}
-  <a href="https://www.reddit.com/r/twitchplayspokemon/comments/1y6s6j/the_bible_of_helix_book_of_genesis/">
-    texts
-  </a>
-  ); it is thus clear that participation in a collective experience is the
-  primary motivation of the users, not merely a desire to complete an 18
-  year-old videogame.
-</p>
+The project was initially anarchic, so there is something to be said for it being the constitutive constraint of the ‘social experiment’ -- the addition of Democracy as _defeat_ -- but this is superficial, seeing necessity where there none. Indeed, progression is not the only measure of value: “[If the game was being played with only the ‘correct’ button presses, then all of the memes we've been enjoying would never have come into existence.](https://www.reddit.com/r/twitchplayspokemon/comments/1yir32/i_was_a_diehard_supporter_of_democracy_but_now_i/)” As a platform for interaction, _Twitch Plays Pokemon_ has spawned innumerable creative productions, from image macros to videos to a <HoverImageLink image={articleImage03} label="complex mythology" /> (with its own [biblical](http://knowyourmeme.com/forums/just-for-fun/topics/25807-the-bible-of-helix) [texts](https://www.reddit.com/r/twitchplayspokemon/comments/1y6s6j/the_bible_of_helix_book_of_genesis/)); it is thus clear that participation in a collective experience is the primary motivation of the users, not merely a desire to complete an 18 year-old videogame.
 
 Although there have been brief periods of Democracy when progress has been frustrated, it has been used most prominently to accomplish highly technical tasks. The initial use of Democracy to navigate the maze was a divisive issue and the opposition felt a lessened sense of accomplishment, but the collective seemed mostly comfortable using it to complete the Safari Zone which was [highly improbable](https://www.reddit.com/r/twitchplayspokemon/comments/1yjmyx/math_let_me_explain_to_you_why_anarchy_can_never/cfl462z/) (it must be completed in a limited number of steps).
 
@@ -127,7 +68,7 @@ Though democratic modes of production can offer directed progress towards a part
   <br />
   We must take this conflict of ideologies seriously!
   <br />
-  The meme-machine scene sees it: <i>“the paradigm of the era.”</i>
+  The meme-machine scene sees it: <em>“the paradigm of the era.”</em>
 </div>
 
 ![](../../../assets/articles/twitch-plays-pokemon/4.png)
@@ -137,12 +78,13 @@ Indeed it is the paradigm of the era if, perhaps, eras are now just the briefest
 Do 4chan and reddit still require an introduction? Everyone seems to be in on the meme-culture game, so maybe make it mythical .. “The two hiveminds of the recent era are caricatures of Dionysus and Apollo,” if anyone is still into that _Birth of Tragedy_ stuff. The two for(u)ms will always be, for me, wholly opposite each other: one is the cacophony of ‘sort-by-newest’ algorithms where any and all activity is thrust upon the collective consciousness -- a few million people in a room, screaming; the other is the efficient organization of ‘sort-by-popular’ algorithms which organize by upvote, +1, Like, & Digg -- those which, by definition, only value the center, the norm. They are both streams, but of different natures: one the extreme subjectivity of "fiction and falsehoods" and the other the strict objectivity of /r/AskScience.
 
 <div class="caption">
-  Does Democracy not require “that conquered & sectioned & unitized --{" "}
-  <i>Chronos</i>”<br />
+  Does Democracy not require “that conquered & sectioned & unitized --
+  <em>Chronos</em>”
+  <br />
   to measure the collective’s single action in and of a particular present?
   <br />
-  Our stream speaks, now, not with each mouth -- <i>all for one</i> -- but as
-  the Mouth -- <i>one for all.</i>
+  Our stream speaks, now, not with each mouth -- <em>all for one</em> -- but as
+  the Mouth -- <em>one for all.</em>
 </div>
 
 ![](../../../assets/articles/twitch-plays-pokemon/5.png)
@@ -178,29 +120,15 @@ _Twitch Plays Pokemon_ is an ideological weapon, demonstrating at a fundamental 
 
 At the risk of being at once 2srs and “not serious enough” (ibid.), I want to propose that we are participating in a new geopolitics wherein the ‘geography’ is made of 1s and 0s -- _wholly contingent_. The radical left, in the era of hyperspatial politics, is tasked with producing experiments which test new systems of organization and discover the limits of old ones. If there is any egalitarian solution to the grand project that is Politics it will be proved in hyperspace first.
 
-<p>
-  tl;dr
-  <br />
-  A techno-revolutionary politics is about harnessing low-art,
-  <br />
-  shit-post, circle-jerk, Large Memetic Colliders.
-  <br />
-  It's the robber baron era of Internet culture-machines
-  <br />
-  and we're all proles, caught in the gears!
-  <br />
-  Politically speaking, it is a question of how information is ordered
-  <br />
-  & there is only one tenant of the New Religion:
-  <br />
-  "When people receive similar sets of information people act similarly."
-  <br />
-  Hegemony in the 3rd Millennium will, as always, be enacted by baptism.
-  <br />
-  Hegemony in the 3rd Millennium is, as always, a drowning in The Stream.
-  <br />
-  Philosophically speaking, it is a question of faithmen and rockbeds, and
-  _natura naturans._
-  <br />
-  (it should be pronounced to rhyme with 'cream')
-</p>
+tl;dr\
+A techno-revolutionary politics is about harnessing low-art,\
+shit-post, circle-jerk, Large Memetic Colliders.\
+It's the robber baron era of Internet culture-machines\
+and we're all proles, caught in the gears!\
+Politically speaking, it is a question of how information is ordered\
+& there is only one tenant of the New Religion:\
+"When people receive similar sets of information people act similarly."\
+Hegemony in the 3rd Millennium will, as always, be enacted by baptism.\
+Hegemony in the 3rd Millennium is, as always, a drowning in The Stream.\
+Philosophically speaking, it is a question of faithmen and rockbeds, and _natura naturans._\
+(it should be pronounced to rhyme with 'cream')

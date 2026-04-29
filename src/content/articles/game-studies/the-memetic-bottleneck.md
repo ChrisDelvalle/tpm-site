@@ -27,9 +27,6 @@ tags:
 legacyPermalink: 2019/04/05/the-memetic-bottleneck/
 ---
 
-import { Image } from "astro:assets";
-import articleImage01 from "../../../assets/articles/the-memetic-bottleneck/2019-04-05 12_31_47-catgirl meme - Google Search.png";
-
 ## I. Simplifying Memes for Impact
 
 One of my favourite techniques whenever I make a meme, take a screenshot, or edit anything else I make, is simplification. Simplification in these contexts usually means reducing redundancy and the number of steps required to get the intended meaning across. With memes, this usually means:
@@ -46,7 +43,7 @@ Here are some examples:
 
 ![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-03.png)
 
-<Image src={articleImage01} alt="" />
+![](<../../../assets/articles/the-memetic-bottleneck/2019-04-05 12_31_47-catgirl meme - Google Search.png>)
 
 ![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-05.png)
 
@@ -104,7 +101,7 @@ Memes as characterised above are a form of what I call _non-linear sequential ar
 
 A game player can go down one particular narrative pathway or another, making choices that sometimes constrain their future choices. This is called a branching narrative. As Claussen unhelpfully points out, each branch of a narrative is linear because it presents one scene after the next. Humans experience time in a linear way, with one thing happening after another. Therefore, she argues, all narrative is linear.
 
-But not only are narratives experienced in linear time, they are always contextualised by the _headspace_ of the player. This depends on the preceding experience of the player, such as a narrative branch played through before beginning the current one. When multiple narrative branches converge at one point, this is called a narrative bottleneck. This can be seen in games like <a href="https://en.wikipedia.org/wiki/Deus_Ex_(video_game)">Deus Ex</a>.
+But not only are narratives experienced in linear time, they are always contextualised by the _headspace_ of the player. This depends on the preceding experience of the player, such as a narrative branch played through before beginning the current one. When multiple narrative branches converge at one point, this is called a narrative bottleneck. This can be seen in games like [Deus Ex](<https://en.wikipedia.org/wiki/Deus_Ex_(video_game)>).
 
 Note that traditional branching narratives are different from non-linear sequential narratives. A non-linear sequential narrative is what happens when the player reloads a save file. The player's choice of save files is about what can or can't happen next in the game as the consequence. Inherent in this choice is the choice of what has happened in the game up to the savepoint. The choice of which save file to load is the choice of what has happened in the past, for the purpose of making certain choices possible in the future.
 

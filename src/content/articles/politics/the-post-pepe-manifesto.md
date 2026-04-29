@@ -28,20 +28,7 @@ legacyPermalink: 2016/01/29/the-post-pepe-manifesto/
 legacyBanner: "/uploads/gondola_wave_banner.jpg"
 ---
 
-import { Image } from "astro:assets";
-import articleImage01 from "../../../assets/articles/the-post-pepe-manifesto/postpepe1.jpg";
-import articleImage02 from "../../../assets/articles/the-post-pepe-manifesto/post pepe 2.png";
-import articleImage03 from "../../../assets/articles/the-post-pepe-manifesto/post pepe 3.jpg";
-import articleImage04 from "../../../assets/articles/the-post-pepe-manifesto/post pepe 4.jpg";
-
-<p>
-  <Image
-    src={articleImage01}
-    alt="he is risen"
-    class="alignnone wp-image-691 size-full"
-    width={720}
-  />
-</p>
+![he is risen](../../../assets/articles/the-post-pepe-manifesto/postpepe1.jpg)
 
 Plagiarism is necessary. Progress implies it.
 
@@ -51,43 +38,15 @@ Our name for this kind of reinvention and reuse of memes is détournement; as in
 
 But the normies came once more and 'ironic memes' became the new normal, with only soccer-mom Garfields and rural-American Jesus-posting left behind. But this time they came branded, watermarked with links to their Instagram and studded with emojis -- or did they? Was that how it happened?
 
-<p>
-  <Image
-    src={articleImage02}
-    alt="gondola and calvin and hobbes"
-    class="wp-image-688 aligncenter size-full"
-    width={497}
-  />
-</p>
+![gondola and calvin and hobbes](<../../../assets/articles/the-post-pepe-manifesto/post pepe 2.png>)
 
 We remember the Great Meme War of 2014: the history books of KnowYourMeme will not mention the numerous fallen who endured deletions from Facebook in the name of spicy memes, among them the first wave of “historical alliteration” pages. It was not the normies who caused admins to rally followers to mass-report other pages posting 9/11 memes, nor threaten to doxx each other for reposting without credit.
 
-<p>
-  Was it that the normies stole our memes? Or did we simply lose sight of
-  something important, the very thing 4chan tried to explain to us that October
-  by way of a Pepe-Market metaphor? It was our Internet-hipster, Pepe-capitalist
-  valuation --{" "}
-  <span class="_5yl5">
-    keep it rare &amp; keep it ours; if it isn't rare it isn't dank
-  </span>{" "}
-  --{" "}
-  <span class="_5yl5">
-    which led us to cast Pepe to the normies, relinquishing hegemony over
-  </span>{" "}
-  use and meaning as we stopped producing, as we stopped distributing. Were we
-  the normies?
-</p>
+Was it that the normies stole our memes? Or did we simply lose sight of something important, the very thing 4chan tried to explain to us that October by way of a Pepe-Market metaphor? It was our Internet-hipster, Pepe-capitalist valuation -- keep it rare & keep it ours; if it isn't rare it isn't dank -- which led us to cast Pepe to the normies, relinquishing hegemony over use and meaning as we stopped producing, as we stopped distributing. Were we the normies?
 
 Normies produce a culture in their own image, a culture of the meme as private property, the author as sole proprietor of a work of genius. Détournement sifts through the memetic remnants of past and present culture for memes whose untimeliness can be utilized against normie culture. Détournement offers an ease of production far surpassing -- in quantity, variety and quality -- the normie content that has bored us for so long. Rather than further elaborate normie memetics, détournement exploits it.
 
-<p>
-  <Image
-    src={articleImage03}
-    alt="gondola and pedobear reflection"
-    class="wp-image-689 aligncenter size-full"
-    width={497}
-  />
-</p>
+![gondola and pedobear reflection](<../../../assets/articles/the-post-pepe-manifesto/post pepe 3.jpg>)
 
 Our aim is the subversion of the culture of predatory meme-pages through a sincere repurposing of normie productions. We claim that meaning is the result of use, and so we move to use anything and everything.
 
@@ -97,11 +56,4 @@ All culture is derivative.
 
 The revolution will be reposted.
 
-<p>
-  <Image
-    src={articleImage04}
-    alt="pepe and wojak skyline silhouette"
-    class="aligncenter size-large wp-image-693"
-    width={1024}
-  />
-</p>
+![pepe and wojak skyline silhouette](<../../../assets/articles/the-post-pepe-manifesto/post pepe 4.jpg>)

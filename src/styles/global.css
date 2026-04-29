@@ -606,12 +606,6 @@ li {
   padding: 0.55rem 0.7rem;
 }
 
-.content .hover img,
-.content .hoverexpanded img {
-  display: block;
-  margin-bottom: 0.35rem;
-}
-
 .archive-list {
   list-style: none;
   padding: 0;
