@@ -1,5 +1,7 @@
 ---
 title: Joshua Citarella Astroturfing
+# TODO(Seong): Review and update this migration-added description.
+description: "Joshua Citarella's meme infiltration project turns memetic literacy into astroturfing, and shows how little distance remains between subculture, strategy, and politics."
 date: 2022-04-20 13:49:00 +13:00
 author: "Seong-Young Her"
 draft: true

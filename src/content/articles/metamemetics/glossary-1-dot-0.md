@@ -1,5 +1,7 @@
 ---
 title: Glossary 1.0
+# TODO(Seong): Review and update this migration-added description.
+description: "A working glossary for ironic meme theory, from normies and autists to meta-irony, normification, and the phylomemetic tree."
 date: 2016-01-18 13:50:00 +13:00
 author: "The Philosopher's Meme"
 legacyPermalink: 2016/01/18/glossary-1-dot-0/

@@ -1,5 +1,7 @@
 ---
 title: A Golden Age of Meme Pages and the Microcosm of Art History
+# TODO(Seong): Review and update this migration-added description.
+description: "How Facebook meme pages briefly became a new artistic medium, pushing ironic memes from curation and shitposting toward meta-irony."
 date: 2015-11-02 01:01:10 Z
 author: "Seong-Young Her"
 legacyPermalink: 2015/11/02/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history/
