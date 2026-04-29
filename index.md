@@ -1,10 +1,11 @@
 ---
 layout: titleless
-title: 
+title:
 nav_order: -10
 description: "The Philosopher's Meme"
 permalink:
 ---
+
 <img src="/assets/images/2022-04-05_tpm-header_trnp_dm.png" style="width:100%;">
 The philosophy of memes, cyberculture, and the Internet.
 {: .fs-6 .fw-300 }
@@ -22,8 +23,8 @@ We've set up a <a href="https://patreon.com/thephilosophersmeme">Patreon</a>. Th
 
 <img src="/uploads/2020-06-24_fossilised-bug_resized.png">
 
-[Homesteading the Memeosphere](/2022/04/04/homesteading-the-memeosphere) by Seong-Young Her. 
+[Homesteading the Memeosphere](/2022/04/04/homesteading-the-memeosphere) by Seong-Young Her.
 
-*"Who owns the memes? How dare we ask such a laughable question?"*
+_"Who owns the memes? How dare we ask such a laughable question?"_
 
 Check out [Notes](/notes) and [Irony](/irony) for stuff I've been thinking about recently (i.e. articles on their way).

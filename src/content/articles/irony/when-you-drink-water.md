@@ -13,7 +13,7 @@ tags:
 legacyPermalink: 2017/11/13/when-you-drink-water/
 ---
 
-![23472012_2053909424842673_2720000468904660127_n.jpg](<@assets/articles/when-you-drink-water/23472012_2053909424842673_2720000468904660127_n.jpg>)
+![23472012_2053909424842673_2720000468904660127_n.jpg](../../../assets/articles/when-you-drink-water/23472012_2053909424842673_2720000468904660127_n.jpg)
 
 _Meme by TPM community member Sándor Szekeres, 2016._
 

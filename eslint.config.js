@@ -6,6 +6,7 @@ import astro from "eslint-plugin-astro";
 import jsdoc from "eslint-plugin-jsdoc";
 import jsonc from "eslint-plugin-jsonc";
 import jsxA11y from "eslint-plugin-jsx-a11y";
+import * as mdx from "eslint-plugin-mdx";
 import noUnsanitized from "eslint-plugin-no-unsanitized";
 import regexp from "eslint-plugin-regexp";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
@@ -58,6 +59,31 @@ export default tseslint.config(
   js.configs.recommended,
   ...astro.configs["flat/recommended"],
   ...astro.configs["flat/jsx-a11y-recommended"],
+  {
+    ...mdx.flat,
+    files: ["**/*.mdx"],
+    processor: mdx.createRemarkProcessor({
+      lintCodeBlocks: true,
+    }),
+    rules: {
+      ...mdx.flat.rules,
+      "mdx/remark": "error",
+      "no-irregular-whitespace": "off",
+      "no-unused-vars": "off",
+    },
+    settings: {
+      "mdx/code-blocks": true,
+    },
+  },
+  {
+    ...mdx.flatCodeBlocks,
+    files: ["**/*.mdx/**"],
+    rules: {
+      ...mdx.flatCodeBlocks.rules,
+      "no-var": "error",
+      "prefer-const": "error",
+    },
+  },
   ...jsonc.configs["flat/recommended-with-jsonc"],
   ...yml.configs["flat/recommended"],
   regexp.configs["flat/recommended"],

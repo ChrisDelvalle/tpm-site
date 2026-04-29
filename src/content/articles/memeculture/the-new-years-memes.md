@@ -25,7 +25,7 @@ legacyPermalink: 2019/01/03/the-new-years-memes/
 
 The new year mood is bringing in new memes, aside from the obvious memes about things that usually happen during new years. Here's an example of a meme with that new year mood which doesn't directly mention the new year.
 
-![49121023_10215984413395083_3710986489752977408_n.jpg](<@assets/articles/the-new-years-memes/49121023_10215984413395083_3710986489752977408_n.jpg>)
+![49121023_10215984413395083_3710986489752977408_n.jpg](../../../assets/articles/the-new-years-memes/49121023_10215984413395083_3710986489752977408_n.jpg)
 
 The age of the ex-doomer Wojak has been changed from 23 to 24, as the character develops with the shitposters IRL from 2018 to 2019. Memes are made by shitposters that live in the meatspace, which makes them affected by human schedules. It's a trivial point, but the schema of memes as semi-independent entities that float around on the sea of the Internet is too popular for this point not to be insightful.
 

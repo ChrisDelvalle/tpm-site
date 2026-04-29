@@ -111,8 +111,9 @@ Auto-fix should not be used to hide semantic problems. If a fix changes behavior
 or touches content whose exact text must be preserved, inspect the diff before
 continuing.
 
-Do not autoformat migrated article bodies while content fidelity remains a
-migration invariant.
+Article Markdown and MDX are now formatted by Prettier. Treat those changes as
+mechanical formatting only: inspect diffs when touching content, and do not use
+formatting as a reason to rewrite article prose.
 
 ## Adopted Tooling Patterns
 
@@ -122,7 +123,7 @@ These patterns define the local quality loop:
 - `check:release` for the heavier pre-release gate.
 - `fix` as the safe automatic repair command.
 - ESLint flat config.
-- `eslint . --max-warnings=0`.
+- `eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --max-warnings=0`.
 - `--report-unused-disable-directives-severity error`.
 - Type-aware `typescript-eslint` strict configs.
 - Separate TypeScript configs for app/source code and scripts/tests.
@@ -251,6 +252,8 @@ Core config approach:
 - Apply `eslint-plugin-astro` recommended rules.
 - Apply Astro-compatible strict accessibility rules from `eslint-plugin-astro`
   and `eslint-plugin-jsx-a11y`.
+- Apply `eslint-plugin-mdx` to `.mdx` files so MDX parser errors fail in the
+  normal lint gate before production build.
 - Apply project-specific overrides for config files, scripts, tests, generated
   files, and Astro files.
 
@@ -358,11 +361,11 @@ Important project-specific decision:
 
 - Format repository docs such as `README.md`, `CHECKLIST.md`,
   `DESIGN_PHILOSOPHY.md`, and `QUALITY_TOOLING.md`.
-- Do not automatically reformat migrated article bodies while exact content
-  preservation remains a requirement.
+- Format article Markdown and MDX with Prettier, while keeping article wording
+  and meaning unchanged unless content edits are explicitly requested.
 
-That likely means `.prettierignore` should ignore article source folders, not
-all Markdown files globally.
+`.prettierignore` should ignore generated output and legacy build artifacts, not
+the active article source tree.
 
 ## Tailwind
 
@@ -657,9 +660,9 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
 
   "format": "prettier --check . --log-level warn",
-  "format:write": "prettier --write .",
-  "lint": "eslint . --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
-  "lint:fix": "eslint . --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
+  "format:write": "prettier --write --list-different .",
+  "lint": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
+  "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "fix": "bun run lint:fix && bun run format:write",
 
   "typecheck": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro check",

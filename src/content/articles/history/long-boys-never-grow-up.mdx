@@ -5,7 +5,7 @@ description:
   Meme Fresh)
 date: 2016-03-23 08:33:00 +13:00
 author: "Isaac van Bakel & Ulysses King"
-image: "/assets/2016-03-22-long-boys-never-grow-up/what.jpg"
+image: "../../../assets/articles/long-boys-never-grow-up/what.jpg"
 tags:
   - "irony"
   - "long boy"
@@ -18,6 +18,15 @@ tags:
 legacyPermalink: 2016/03/23/long-boys-never-grow-up/
 ---
 
+import { Image } from "astro:assets";
+import articleImage01 from "../../../assets/articles/long-boys-never-grow-up/what.jpg";
+import articleImage02 from "../../../assets/articles/long-boys-never-grow-up/what2.jpg";
+import articleImage03 from "../../../assets/articles/long-boys-never-grow-up/bannedme.jpg";
+import articleImage04 from "../../../assets/articles/long-boys-never-grow-up/wipethismeme.png";
+import articleImage05 from "../../../assets/articles/long-boys-never-grow-up/leg.jpg";
+import articleImage06 from "../../../assets/articles/long-boys-never-grow-up/normiesironics.png";
+import articleImage07 from "../../../assets/articles/long-boys-never-grow-up/smf.png";
+
 ## 1. Introduction
 
 “Long boy” is the colloquial name for two connected memes: a way of referring to any cylinder or cylindrical object, and a specific image of an orange cylinder, based off the first meme. Both were established by a throwaway line in a Special Meme Fresh [image](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1143369555707155/?type=3) that categorised sending images of cylinders to your friends and saying "haha long boy" as the 5th layer of irony. A combination of audience response to this line and [further](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1147653308612113/?type=3) [Special](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1147657231945054/?type=3) [Meme](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1147505661960211/?type=3&theater) [Fresh](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1146789278698516/?type=3) [posts](https://www.facebook.com/permalink.php?story_fbid=1146182678759176&id=756598251050956) on the same topic would serve to cement both the name and the iconic orange cylinder as the archetypal long boys.
@@ -28,9 +37,19 @@ The chronology of the long boy meme can be split into three large stages on the 
 
 The first was the genesis, beginning with the posting of the levels of irony on the 24th of February. This marked the inception of the meme, as well as its first iteration, when in the comments section of the same post someone posted [an image of a cylinder along with the text "haha long boy"](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1143369555707155/?type=3&comment_id=1143371059040338&comment_tracking=%7B%22tn%22%3A%22R1%22%7D). This comment would later gain 169 likes. SMF would continue the meme several hours later with [the second seminal image](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1143609709016473/?type=3&theater), which showed the later-famous orange cylinder being sent on a mobile, followed by the message "haha long boy", met with the response of "What?".
 
-<p><img class="aligncenter" src="/assets/2016-03-22-long-boys-never-grow-up/what.jpg" alt="what" />The second stage was the integration, wherein the long boy was used in implementations of other memes. The first, by SMF, was the <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1143622052348572/?type=3&amp;theater">"wew lad" face imposed on a cylindrical shape</a>, with the caption "wew long lad", posted on the same day as the very first levels post. Later images would include: a <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1144149308962513/?type=3&amp;theater">"loss" made of cylinders</a> on the 25th; "don't talk to me or my long boy ever again" on the 26th; and <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1144842455559865/?type=3">"i'm you but longer”</a> on the 26th again. These three posts, combining the absurdity of the long boy with well-established meme templates, proved incredibly successful with the community, garnering 1k, 1.1k, and 1.9k reactions respectively: each was larger than the last.</p>
-<p><img class="aligncenter" src="/assets/2016-03-22-long-boys-never-grow-up/what2.jpg" alt="What?" />The third is the regret stage, which can be traced to two posts on SMF made early in the morning of the 28th of February. The first, a text post, tells of the author's self-loathing after posting "The meme", which may or may not have been long boy. The second, an hour later, was a share of a user post of "for really big mistakes" with the long boy orange cylinder. While SMF would continue to make positive long boy memes for several days, this can be seen as the start of sentiments which culminated in a post on the 1st of March which damned long boy as "FINISHED / DONE". It would become clear that long boy was having an adverse effect on the admin of SMF, who received <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1148191975224913/?type=3">a large influx of messages</a> of the long boy meme from page visitors. SMF effectively <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1149722985071812/?type=3&amp;theater">declared war</a> on long boy on March 3rd, when the admin posted that anyone commenting or messaging long boy or its variations would be banned.</p>
-<p><img class="aligncenter" src="/assets/2016-03-22-long-boys-never-grow-up/bannedme.jpg" alt="*sound of meme page crumbling after Brandon Scott stops holding it up with his big giant strong arms*" /></p>
+<Image src={articleImage01} alt="what" class="aligncenter" />
+
+The second stage was the integration, wherein the long boy was used in implementations of other memes. The first, by SMF, was the <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1143622052348572/?type=3&theater">"wew lad" face imposed on a cylindrical shape</a>, with the caption "wew long lad", posted on the same day as the very first levels post. Later images would include: a <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1144149308962513/?type=3&theater">"loss" made of cylinders</a> on the 25th; "don't talk to me or my long boy ever again" on the 26th; and <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1144842455559865/?type=3">"i'm you but longer”</a> on the 26th again. These three posts, combining the absurdity of the long boy with well-established meme templates, proved incredibly successful with the community, garnering 1k, 1.1k, and 1.9k reactions respectively: each was larger than the last.
+
+<Image src={articleImage02} alt="What?" class="aligncenter" />
+
+The third is the regret stage, which can be traced to two posts on SMF made early in the morning of the 28th of February. The first, a text post, tells of the author's self-loathing after posting "The meme", which may or may not have been long boy. The second, an hour later, was a share of a user post of "for really big mistakes" with the long boy orange cylinder. While SMF would continue to make positive long boy memes for several days, this can be seen as the start of sentiments which culminated in a post on the 1st of March which damned long boy as "FINISHED / DONE". It would become clear that long boy was having an adverse effect on the admin of SMF, who received <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1148191975224913/?type=3">a large influx of messages</a> of the long boy meme from page visitors. SMF effectively <a href="https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1149722985071812/?type=3&theater">declared war</a> on long boy on March 3rd, when the admin posted that anyone commenting or messaging long boy or its variations would be banned.
+
+<Image
+  src={articleImage03}
+  alt="*sound of meme page crumbling after Brandon Scott stops holding it up with his big giant strong arms*"
+  class="aligncenter"
+/>
 
 ## 3. Reaction and Analysis
 
@@ -44,30 +63,98 @@ Moreover, the meme authors were failing to adopt the philosophy of Special Meme 
 
 In its great controversy, long boy has highlighted a major difference between Special Meme Fresh and large parts of its audience. The latter, as a growing subset of the general weird Facebook and meme communities, experiences memes in terms of running gags and cultural references - each meme is available for reuse, and is appreciated when it is applied to a new cultural context with the same method. SMF, by contrast, posts memes in a constant context with ever-developing jokes - every meme is disconnected from the one before it in all but name. For the page, nothing is as funny when said the same way twice; for the audience, everything can become funnier after the first time you say it.
 
-<p><img class="aligncenter" src="/assets/2016-03-22-long-boys-never-grow-up/wipethismeme.png" alt="It's like smallpox, only less enjoyable" /></p>
+<p>
+  <Image
+    src={articleImage04}
+    alt="It's like smallpox, only less enjoyable"
+    class="aligncenter"
+  />
+</p>
 
 ### 3.2 The Leg Counterculture
 
-<p>The most significant backfire from the long boy saga has been the introduction of “leg”, <a href="https://www.facebook.com/permalink.php?story_fbid=1149743548403089&amp;id=756598251050956">a fan-submitted image of a 3D model of a leg with the word "leg" next to it in crude word-art. </a>According to the text that accompanied its first posting, leg was intended to be a "more powerful meme" to drive out the long boy support on Special Meme Fresh; SMF has made a point of using leg as a symbol of the anti-long-boy: it is often connected to the idea of <a href="https://www.facebook.com/756598251050956/videos/1150913248286119/">divinity or utopia.</a></p>
+<p>
+  The most significant backfire from the long boy saga has been the introduction
+  of “leg”,{" "}
+  <a href="https://www.facebook.com/permalink.php?story_fbid=1149743548403089&id=756598251050956">
+    a fan-submitted image of a 3D model of a leg with the word "leg" next to it
+    in crude word-art.{" "}
+  </a>
+  According to the text that accompanied its first posting, leg was intended to
+  be a "more powerful meme" to drive out the long boy support on Special Meme
+  Fresh; SMF has made a point of using leg as a symbol of the anti-long-boy: it
+  is often connected to the idea of{" "}
+  <a href="https://www.facebook.com/756598251050956/videos/1150913248286119/">
+    divinity or utopia.
+  </a>
+</p>
 
 The rise of leg with the support of the page admin can be regarded as a major counterculture within the community against the mentality that made long boy so popular - a mentality which reduced any meme to simple, repeatable soundbites, while discarding more significant meaning. The normified _kultur-terror_ could not seize on leg in any reducible way, and to attempt to laugh at it in context would be to admit their own failure to connect with the page's originalist mentality. Instead, audience engagement has changed between the two memes, long boy's semi-mindless repetition being replaced with a deeper understanding and collaboration with the narrative of both the page itself and the cultural war it is fighting.
 
 But leg has not been alone in its stand against the long boy machine. Other memes, including [a crude lightning bolt called “crackler”](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1149722985071812/?type=3&comment_id=1149737068403737&comment_tracking=%7B%22tn%22%3A%22R%22%7D), have been incorporated into the page’s constantly-evolving narrative of purification and progression; these largely occupy the same niche as leg, representing the new and fresh ideas, applied in innovative ways, to drive away any traces of unoriginality. Each, in evidence of its message, appears totally disconnected from its counterparts, yet this has not prevented the page from including them in [various unified displays](https://www.facebook.com/756598251050956/photos/a.756603181050463.1073741828.756598251050956/1151226524921458/?type=3&theater) of supremacy over the baser long boy.
 
-<p><img class="aligncenter" src="/assets/2016-03-22-long-boys-never-grow-up/leg.jpg" alt="The many-leg" /></p>
+<p>
+  <Image src={articleImage05} alt="The many-leg" class="aligncenter" />
+</p>
 
 ## 4. Significance For The World
 
-<p>The long boy/leg dynamic, and the struggle of the artist against the audience for meaning and significance, are not restricted to Special Meme Fresh and this memetic cylinder. Rather, they reflect a growing issue within the post-ironic sphere: a community trying desperately to cope with the influx of members from the mainstream that comes with increased exposure. Recent media interest has only served to accelerate the process of normification that continues to affect post-ironic content creators; long boy is the symptom, not the cause, of the schism between SMF and its audience. This rapid demographic change has been so silent as to surprise even creators themselves, who cannot anticipate the undetected shift in consumer attitude until it makes itself known, forcefully, in a snap ideological conflict.<br />
-<img src="/assets/2016-03-22-long-boys-never-grow-up/normiesironics.png" alt="Lifecycle of the meme" /><br />
-Few of the current memetic methods employed by the normie have adapted to truly synergise with what is ultimately a media-form that eschews repetition. Post-irony has excelled in the simple share, which lacks any engagement with its content, but it cannot be similarly applied to other common channels for social flow. The depth and context involved in a joke are not easily separable from any of its physical or digital components, which travel best from mouth to mouth or screen to screen. Long boy had humour at its conception, perhaps, but what survived and evolved did not carry with it all that contributed to the original joke; the pathogen, that transportable version, was simpler in assumption and meaning. <em>The development of such a compressible meme favoured the normie, who was used to regurgitation and instant recognition - not so the ironic, who sought for originality and flavour.</em></p>
-<p>&nbsp;<br />
-What long boy tells us is something deeply important about ourselves, and to some it might be uncomfortable - the community is not quite ready for post-irony. The audience that consumes the content will never be exactly the audience that the content is produced for; the difference can be mitigated by small communities and insular policy, but it cannot be erased. The post-memetic society is loath to relinquish the crude tools that have brought it this far, in the punchline and the catchphrase, but it must accept that it can build better ones; otherwise, we will forever fail to get the joke, constantly grasping for familiar handles that are never there, until we chance on something recognisable, and in the process destroy it. Long boy is unsalvageable, but its lessons may be learnt: memes are rifles, not crutches. Stand on your own two damn leg.</p>
+<p>
+  The long boy/leg dynamic, and the struggle of the artist against the audience
+  for meaning and significance, are not restricted to Special Meme Fresh and
+  this memetic cylinder. Rather, they reflect a growing issue within the
+  post-ironic sphere: a community trying desperately to cope with the influx of
+  members from the mainstream that comes with increased exposure. Recent media
+  interest has only served to accelerate the process of normification that
+  continues to affect post-ironic content creators; long boy is the symptom, not
+  the cause, of the schism between SMF and its audience. This rapid demographic
+  change has been so silent as to surprise even creators themselves, who cannot
+  anticipate the undetected shift in consumer attitude until it makes itself
+  known, forcefully, in a snap ideological conflict.
+</p>
+<p>
+  <Image src={articleImage06} alt="Lifecycle of the meme" />
+</p>
+<p>
+  Few of the current memetic methods employed by the normie have adapted to
+  truly synergise with what is ultimately a media-form that eschews repetition.
+  Post-irony has excelled in the simple share, which lacks any engagement with
+  its content, but it cannot be similarly applied to other common channels for
+  social flow. The depth and context involved in a joke are not easily separable
+  from any of its physical or digital components, which travel best from mouth
+  to mouth or screen to screen. Long boy had humour at its conception, perhaps,
+  but what survived and evolved did not carry with it all that contributed to
+  the original joke; the pathogen, that transportable version, was simpler in
+  assumption and meaning.{" "}
+  <em>
+    The development of such a compressible meme favoured the normie, who was
+    used to regurgitation and instant recognition - not so the ironic, who
+    sought for originality and flavour.
+  </em>
+</p>
+<p>
+  What long boy tells us is something deeply important about ourselves, and to
+  some it might be uncomfortable - the community is not quite ready for
+  post-irony. The audience that consumes the content will never be exactly the
+  audience that the content is produced for; the difference can be mitigated by
+  small communities and insular policy, but it cannot be erased. The
+  post-memetic society is loath to relinquish the crude tools that have brought
+  it this far, in the punchline and the catchphrase, but it must accept that it
+  can build better ones; otherwise, we will forever fail to get the joke,
+  constantly grasping for familiar handles that are never there, until we chance
+  on something recognisable, and in the process destroy it. Long boy is
+  unsalvageable, but its lessons may be learnt: memes are rifles, not crutches.
+  Stand on your own two damn leg.
+</p>
 
 ---
 
-<h2><img src="/assets/2016-03-22-long-boys-never-grow-up/smf.png" alt="" /></h2>
-<h2><b>INTERVIEW WITH SPECIAL MEME FRESH</b></h2>
+<h2>
+  <Image src={articleImage07} alt="" />
+</h2>
+<h2>
+  <b>INTERVIEW WITH SPECIAL MEME FRESH</b>
+</h2>
 
 Author’s note: the following interview does not indicate the interviewee’s agreement with the totality of the above article. It has been used in reference in the previous piece of writing, and is supplied separately here. We are very grateful for the help that Special Meme Fresh provided in the creation of this article.
 

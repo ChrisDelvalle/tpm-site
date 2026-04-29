@@ -21,7 +21,7 @@ legacyPermalink: 2017/02/15/early-trash-dove/
 
 Trash Dove is a normie meme. That might very well change in the future. You can usually tell when a meme is destined to end up normie trash; you could with Dat Boi or Harambe. The tell-tale marker of a normie meme is its simplicity. There is little 'lore' or central theme that would allow for a richer development of the meme. In complex memes such as [Baneposting](http://thephilosophersmeme.com/2015/11/25/bane-loss-and-phylogeny/), complex permutations which do not result in speciation into a new meme is more feasible. In the case of simple, viral content, the most likely pathway is to be applied to a thousand Shitpostbot-style templates with no progress for the meme itself.
 
-![inevitable pol.JPG](<@assets/articles/early-trash-dove/inevitable pol.JPG>)
+![inevitable pol.JPG](<../../../assets/articles/early-trash-dove/inevitable pol.JPG>)
 
 Image source: 4chan /pol/
 
@@ -35,7 +35,7 @@ Normies are users with low memetic literacy or fluency. Most importantly, they a
 
 It will be interesting to see what happens to the Trash Dove meme. The worst, plausible scenario I can imagine at this point is Facebook falling for the Nazi meme and puling the sticker set from Messenger (if you can think up worse scenarios that are likely, let me know). The ideal would be for normies to learn something from the experience and raise the memetic literacy of the Internet as a result. Something similar happened with Birds Tho and the parentheses/echo meme; people just kept using the cute ((((birb)))) meme without regard for its alternative, antisemitic translations. Perhaps the fact that the sticker set is probably here to stay regardless of what happens on the ground will mean that the same will happen, serving as example of this inherent ambiguity of all memes. Regardless of what happens to Trash Dove, it will probably be interesting. Let's keep an eye out.
 
-![Trash Doves wiki.png](<@assets/articles/early-trash-dove/Trash Doves wiki.png>)
+![Trash Doves wiki.png](<../../../assets/articles/early-trash-dove/Trash Doves wiki.png>)
 
 Image source: [Everipedia](https://www.everipedia.com/trash-doves/) (archive: [http://archive.is/vvAPJ](http://archive.is/vvAPJ) )
 
@@ -99,6 +99,6 @@ The novelty of spamming it in comment sections will fade, and it will be replace
 
 **Special meme fresh**: how about you come down from your tower of cynical memE analysis and flop with the rest of us
 
-> **Special meme fresh**: ![Trash-dovesmeaning1.gif](<@assets/articles/early-trash-dove/Trash-dovesmeaning1.gif>)
+> **Special meme fresh**: ![Trash-dovesmeaning1.gif](../../../assets/articles/early-trash-dove/Trash-dovesmeaning1.gif)
 >
-> > **TPM**: ![investigatorb-44c597.png](<@assets/articles/early-trash-dove/investigatorb-44c597.png>)
+> > **TPM**: ![investigatorb-44c597.png](../../../assets/articles/early-trash-dove/investigatorb-44c597.png)

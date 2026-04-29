@@ -19,7 +19,7 @@ tags:
 legacyPermalink: /2017/03/10/post-irony-against-meta-irony/
 ---
 
-![memetically assured destruction writeup.jpg](<@assets/articles/post-irony-against-meta-irony/memetic destruction.png>)
+![memetically assured destruction writeup.jpg](<../../../assets/articles/post-irony-against-meta-irony/memetic destruction.png>)
 
 We first posted this image in [July of 2015](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1665894116977541/). The idea behind the mutually-assured-destruction dynamic between the two nerds in this image was that they are, themselves, part of a meme (i.e. the 'memes are dead' paranoia meme). The more they discuss it, the faster it will die.
 

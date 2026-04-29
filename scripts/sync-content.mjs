@@ -13,7 +13,7 @@ async function listMarkdownFiles(dir) {
 
     if (entry.isDirectory()) {
       files.push(...(await listMarkdownFiles(fullPath)));
-    } else if (/\.(?:md|markdown)$/i.test(entry.name)) {
+    } else if (/\.(?:md|mdx|markdown)$/i.test(entry.name)) {
       files.push(fullPath);
     }
   }

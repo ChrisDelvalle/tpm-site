@@ -82,9 +82,9 @@ bun run sync:content
 ```
 
 That script copies article files from `src/content/articles/` into
-`src/content/legacy/`. It also converts any remaining `.markdown` filenames to
-`.md` and normalizes duplicate top-level frontmatter keys for Astro
-compatibility.
+`src/content/legacy/`. It supports both `.md` and `.mdx` articles, converts any
+remaining `.markdown` filenames to `.md`, and normalizes duplicate top-level
+frontmatter keys for Astro compatibility.
 
 Do not edit `src/content/legacy/` directly. Any changes there will be replaced
 the next time content is synced.
@@ -162,11 +162,19 @@ src/assets/articles/example-article-title/
   diagram.png
 ```
 
-Use the `@assets` alias in Markdown:
+Use MDX when an article needs component-level image control, such as preserving
+an old linked image structure while using Astro image processing:
 
-```md
-![Alt text](@assets/articles/example-article-title/diagram.png)
+```mdx
+import { Image } from "astro:assets";
+import diagram from "../../../assets/articles/example-article-title/diagram.png";
+
+<Image src={diagram} alt="Alt text" />
 ```
+
+Do not add new local article images as root-relative `/assets/...` or
+`/uploads/...` paths. Those paths are legacy public-file paths and skip Astro's
+asset validation and processing.
 
 Use a relative source path for the frontmatter `image` field so Astro can
 process it through the content collection image schema:

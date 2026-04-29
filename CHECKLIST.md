@@ -372,8 +372,8 @@ on the chosen host and Cloudflare configuration.
       article prose.
 - [x] Add `prettier-plugin-tailwindcss` after Tailwind is installed and ensure
       it is listed last in Prettier's plugin order.
-- [x] Scope `.prettierignore` so project docs are formatted but migrated
-      article bodies are not autoformatted.
+- [x] Scope `.prettierignore` so generated output and legacy build artifacts
+      are ignored while article Markdown and MDX are formatted.
 - [x] Add `sort-package-json` if package ordering is adopted as a checked
       invariant.
 - [x] Add Markdown linting for project docs while excluding migrated article
@@ -387,7 +387,7 @@ on the chosen host and Cloudflare configuration.
 - [x] Add `tsconfig.tools.json` for scripts, tests, Playwright, and tooling
       config files.
 - [x] Add MDX support for future component-enabled articles.
-- [ ] Add MDX-aware linting once compatible tooling is selected and active MDX
+- [x] Add MDX-aware linting once compatible tooling is selected and active MDX
       articles exist.
 - [x] Install ESLint flat-config dependencies for Astro, TypeScript, import
       sorting, accessibility, complexity, unsafe DOM sinks, regexp checks, and
@@ -524,8 +524,13 @@ on the chosen host and Cloudflare configuration.
       transition.
 - [x] Execute safe frontmatter `image` moves with clean git diffs and rewrite
       migrated values to relative source asset paths.
-- [ ] Convert or otherwise handle manual raw HTML image references.
-- [ ] Finish remaining frontmatter image cases after raw HTML, code-import, and
-      other shared/public blockers are deliberately resolved.
+- [x] Add a dedicated MDX image migration script with dry-run and write modes
+      for remaining local raw HTML image references.
+- [x] Convert local raw HTML image tags and hover-image links to MDX
+      `<Image />` imports while preserving article text and link behavior.
+- [x] Move the converted raw-image assets into `src/assets/articles/` or
+      `src/assets/shared/` with clean git diffs.
+- [x] Finish canonical frontmatter `image` migration to Astro `image()` relative
+      source paths.
 - [ ] Remove obsolete root/public legacy asset duplicates after all references
       are migrated or deliberately classified as public URL files.

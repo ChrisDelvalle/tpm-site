@@ -8,8 +8,6 @@ playwright-report/
 test-results/
 tmp/
 
-src/content/articles/
-index.md
 _site/
 _config.yml
 assets/css/just-the-docs-default.scss

@@ -14,7 +14,7 @@ tags:
   - memepages
   - Facebook
 legacyPermalink: /2017/09/09/the-meta-ironic-era/
-legacyBanner: "<@assets/articles/the-meta-ironic-era/phylomemetic-tree-lamarckian.png>"
+legacyBanner: "<../../../assets/articles/the-meta-ironic-era/phylomemetic-tree-lamarckian.png>"
 ---
 
 I've been wrestling with the question of what makes a meme good for 3 years as a creator and memepage admin. It's a difficult question related to, but distinct from, questions like "what makes an artwork good?" and "what makes a game good?"
@@ -27,7 +27,7 @@ Large pages (~250,000 by 2017 standards; ~20,000 by 2014 standards) run into the
 
 A page must ride the wave of normie reach to become massive (~500,000 by 2017 standards; 50,000 by 2014 standards). The number of high-literacy users on Facebook that can find a page is restricted both by their scarcity and the algorithm. Even a page with a mixed audience will slow in its growth unless it caters to normies, who outnumber ironists in almost every case. Pages that reach this stage have little hope of establishing a high-literacy community without extreme measures. A textbook example of such a measure is Special Meme Fresh (a large page at the heart of its pagecluster) which bans anyone who tags a friend in the comments. This also helps promote post sharing instead of tagging, for extra reach.
 
-![no taggo](<@assets/articles/the-meta-ironic-era/15134582_201527606967415_8484454118822905078_n.jpg>)
+![no taggo](../../../assets/articles/the-meta-ironic-era/15134582_201527606967415_8484454118822905078_n.jpg)
 
 As such, the success of a post on a page signals different things about the quality of the post depending on the context. Despite its unreliability, viral success continues to inform meme creators' tastes. This is because the alternative of considering unquantified aspects of a meme is far more challenging. Although one of the most popular topics of discussion on the Internet, it has rarely been studied with aesthetically motivated creators in mind. Ironically, normies dominate this topic both academically (such as in virality studies and marketing) and in popular publications (often little more than listicles showcasing some "meme of the week") and even then rely on general popularity as the conclusive metric of quality.
 
@@ -35,7 +35,7 @@ Ironists and meme researchers alike need another framework. Although the viralis
 
 Irony in memes developed as the result of a clash of demographics between autists and normies.
 
-![phylomemetic-tree-lamarckian.png](<@assets/articles/the-meta-ironic-era/phylomemetic-tree-lamarckian.png>)
+![phylomemetic-tree-lamarckian.png](../../../assets/articles/the-meta-ironic-era/phylomemetic-tree-lamarckian.png)
 
 An increasing overlap in usership between mainstream social media such as Facebook or Reddit and underground sites such as 4chan (underground in a relative sense) makes the mainstream–underground distinction less and less useful. The immigration of underground users and culture to Facebook or Reddit resulted in the need for those users to spot other users like them. This need crystallised with the evolution of joke pages (Facebook pages with humorous names which were commonly used for profile decoration purposes) into memepages. Memepages were far more engaged with their audience and interacted frequently with other memepages, compared to their predecessors which were more independent and content focused. Memepages produced content by modifying and copying pre-existing content to make original content which fit with the themes advertised by their page names. In the same way the medium sized pages of today cluster for additional content, material and reach, these early memepages clustered densely and encouraged new pages to form. Contrary to the popular belief that ironic memes were invented to "keep the normies out", it mattered not whether they were able to participate so long as ironic memes were produced, spread and attracted new participants. In 2017, at the time of writing, most readers will find it difficult to imagine how different the dynamics of the meme community were in 2014. The sum of every memepage at the time, duplicates or no, was far smaller than a single large memepage active today.
 

@@ -139,6 +139,7 @@ Jekyll-shaped content before normalizing the project.
 - `scripts/sync-content.mjs`
   - Copies article files from `src/content/articles/` into generated
     `src/content/legacy/`.
+  - Supports both `.md` and `.mdx` article files during the transition.
   - Converts `.markdown` files to `.md` if any remain.
   - Removes duplicate top-level frontmatter keys by keeping the last key.
 
@@ -216,9 +217,11 @@ This survey describes what must be normalized before the project can follow
 plain Astro conventions.
 
 - Source files:
-  - 61 article `.md` files under `src/content/articles/`.
+  - 45 article `.md` files under `src/content/articles/`.
+  - 16 article `.mdx` files under `src/content/articles/`.
   - 1 page `.md` file under `src/content/pages/`.
-  - 0 current article files use `.mdx`.
+  - Current MDX articles are legacy raw-image migrations that need Astro
+    `<Image />` components.
 
 - Article classification:
   - 61 files have dated legacy `permalink` values and are currently treated as
@@ -227,15 +230,15 @@ plain Astro conventions.
     `src/content/articles/` collection itself.
 
 - Article frontmatter keys currently present:
-  - Present on all 61 articles: `title`, `date`, `author`, `nav_order`,
-    `permalink`.
-  - Present on most articles: `layout` 60, `parent` 60, `excerpt` 57,
-    `image` 51.
-  - Legacy/mixed-source fields: `tags` 46, `fbpreview` 33, `status` 21,
-    `type` 21, `categories` 14, `meta` 13, `banner` 5, `grand_parent` 3,
-    `facebook` 2, `published` 2, `has_children` 1.
-  - Duplicate top-level `layout` keys appear in 10 files and are currently
-    papered over by the sync script.
+  - Present on all 61 articles: `title`, `date`, `author`, `description`, and
+    `legacyPermalink`.
+  - Present on most articles: `tags` 60 and `image` 50.
+  - Legacy/no-op metadata intentionally preserved: `legacyBanner` 5.
+  - Publishing metadata: `draft` 1.
+  - Jekyll/Siteleaf/WordPress-only runtime fields such as `layout`, `parent`,
+    `nav_order`, `permalink`, `excerpt`, `fbpreview`, `status`, `type`,
+    `categories`, `meta`, `banner`, `grand_parent`, `facebook`, `published`,
+    and `has_children` have been removed or normalized in source articles.
 
 - Publishing state:
   - One known unpublished article exists:
@@ -263,7 +266,11 @@ plain Astro conventions.
 - Body markup:
   - 17 files contain `{{ site.baseurl }}`.
   - 15 files contain WordPress-era classes or alignment markup.
-  - 11 files contain raw `<img>` elements without `alt`.
+  - Local raw `<img>` and hover-image links have been converted to MDX
+    `<Image />` imports.
+  - 3 remaining raw `<img>` elements reference remote Discord CDN images and
+    should be handled separately if those files are later brought into
+    `src/assets/`.
   - Raw HTML is common: `<p>`, `<a>`, `<span>`, `<sub>`, `<img>`, `<i>`,
     `<h2>`, `<div>`, `<li>`, `<br>`, `<b>`, `<iframe>`, `<figure>`, and tables.
   - No Kramdown attribute syntax was found in the current scan.
@@ -688,7 +695,7 @@ module or script. That fallback must:
 - [ ] Update TypeScript config for React JSX only if React is added.
 - [ ] Add or document a small example MDX article using an Astro or React
       component.
-- [ ] Verify `.md` and `.mdx` articles render through the same article layout.
+- [x] Verify `.md` and `.mdx` articles render through the same article layout.
 
 ### Milestone 2: Normalize Existing Content Files
 
@@ -813,24 +820,25 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 
 ### Milestone 7: Normalize Static Assets
 
-- [ ] Keep `@assets/*` mapped to `src/assets/*` for Markdown and component
+- [x] Keep `@assets/*` mapped to `src/assets/*` for Markdown and component
       image references.
-- [ ] Use `scripts/plan-asset-migration.mjs` to inventory `/assets/...`,
+- [x] Use `scripts/plan-asset-migration.mjs` to inventory `/assets/...`,
       `/uploads/...`, root `assets/`, and root `uploads/` references before
       moving files.
-- [ ] Move every singly owned article image that is safe to rewrite into
+- [x] Move every singly owned article image that is safe to rewrite into
       `src/assets/articles/<article-slug>/`.
-- [ ] Move images referenced by multiple articles into `src/assets/shared/`,
+- [x] Move images referenced by multiple articles into `src/assets/shared/`,
       after resolving any filename conflicts deliberately.
 - [ ] Move homepage/design images into `src/assets/site/`.
 - [x] Track raw HTML image tags, hover-image links, frontmatter image metadata,
       query-string image references, missing files, and destination conflicts as
       manual migration cases.
-- [ ] Convert raw HTML image tags to Markdown or MDX where doing so preserves
-      article behavior.
-- [ ] Finish frontmatter image metadata migration to Astro `image()` paths after
-      raw HTML, code-import, and shared/public blockers are deliberately
-      resolved.
+- [x] Add `scripts/migrate-raw-images-to-mdx.mjs` for local raw HTML image tags
+      and hover-image links that need Astro `<Image />` imports.
+- [x] Convert local raw HTML image tags to MDX where doing so preserves article
+      behavior.
+- [x] Finish canonical frontmatter `image` metadata migration to Astro
+      `image()` paths.
 - [ ] Keep `public/` only for files that intentionally need stable root URLs or
       must be copied unchanged.
 - [ ] Replace any remaining root `assets/` or root `uploads/` imports.
@@ -840,6 +848,15 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 - [ ] Keep `public/favicon.svg` as the authoritative favicon unless replaced.
 - [ ] Decide whether `public/CNAME` is required by the deploy host.
 - [ ] Remove root `CNAME`.
+
+Remaining asset cleanup after the MDX image migration:
+
+- 3 raw `<img>` tags still point at remote Discord CDN URLs and are intentionally
+  not moved by the local asset migration script.
+- Homepage/design imports still reference root `assets/` or `uploads/`; move
+  them into `src/assets/site/` before removing those root directories.
+- `legacyBanner` remains inert historical metadata and can keep legacy-looking
+  paths until a future design chooses to use or remove it.
 
 ### Milestone 8: Remove Jekyll And Non-Astro Leftovers
 

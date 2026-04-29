@@ -12,7 +12,7 @@ tags:
 legacyPermalink: 2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/
 ---
 
-![](<@assets/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg>)
+![](../../../assets/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg)
 
 "A serious and good philosophical work could be written consisting entirely of jokes." This is possibly Wittgenstein's most popular line, alongside "the limits of my language mean the limits of my world" and "whereof one cannot speak, thereof one must be silent"; the kind of line that gets printed on mugs on Etsy.
 
@@ -37,7 +37,7 @@ As of right now, a Google search of the exact phrasing from Malcolm's 1958 memoi
 
 The last time I wrote about misattributed philosophy quotes, [I mused](/2015/08/19/misattributed-plato-quote-is-real-now) regarding a fake Plato quote that "It's as if there exists a Plato quite different from one whom we know from his books, a folk hero who loved music and wrote in flowery prose that our world is made up of something beautiful, and that hope exists as an intrinsic component of reality."
 
-![](<@assets/shared/11896173_1679964772237142_4577427319780722645_n.png>)
+![](@assets/shared/11896173_1679964772237142_4577427319780722645_n.png)
 
 So, did Rosenblatt create a different Wittgenstein? After all, the quote is hardly _incorrect_ in the sense of being a fabrication. Rosenblatt's books are by no means influential beyond this very specific contribution of an alternative phrasing of Malcolm's line (the book was published as a Print On Demand e-book on Amazon, and has a total of two reviews as of now). Wittgenstein did indeed say such a thing at some point, and the line is indeed attributed to _Wittgenstein the Philosopher_. Therefore, it seems commonsensically true that there is a one-to-one referential relation between the quotation and Wittgenstein's initial utterance.
 
