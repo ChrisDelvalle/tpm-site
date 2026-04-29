@@ -168,6 +168,14 @@ Use the `@assets` alias in Markdown:
 ![Alt text](@assets/articles/example-article-title/diagram.png)
 ```
 
+Use a relative source path for the frontmatter `image` field so Astro can
+process it through the content collection image schema:
+
+```yaml
+image: "../../../assets/articles/example-article-title/cover.png"
+imageAlt: "Brief description of the image."
+```
+
 The slug-matching asset folder is an organization convention, not an enforced
 rule. Authors can reference any asset under `src/assets/` when an image is
 shared or belongs somewhere else.

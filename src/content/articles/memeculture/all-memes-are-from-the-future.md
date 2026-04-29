@@ -5,7 +5,7 @@ description:
   will spread and change in meaning depending on where it gets reposted."
 date: 2019-10-12 16:13:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/000000000.jpeg"
+image: "../../../assets/articles/all-memes-are-from-the-future/000000000.jpeg"
 tags:
   - memetics
 legacyPermalink: 2019/10/12/all-memes-are-from-the-future/
@@ -17,7 +17,7 @@ Artists would often post their meme fan art with flavourtext like "why did I do 
 
 I find it intriguing that this gap between art and memes has narrowed so much in the past few years to the point where either could be successful on a memepage as well as a gallery. Literate shitposters produce complex memes of artistic value a lot more regularly now. Not graphically designed corporate memes, but memetically literate content that shows an understanding of its place among all other memes. This is the new norm expected by the audience.
 
-![000000000.jpeg](/uploads/000000000.jpeg)
+![000000000.jpeg](<@assets/articles/all-memes-are-from-the-future/000000000.jpeg>)
 
 I think this new norm comes from our shared sense of getting used to the future. Shitposters often improvise without planning out the meme, and are surprised by how the meme is influenced by the random Photoshop effect they picked out or some comment from another shitposter that saw it. The process is not fundamentally different from artistic experimentation or theatrical improvisation. What's different is that a meme is aimed at the future. All memes are from the future: the literate memer anticipates that the meme will spread and change in meaning depending on where it gets reposted.
 

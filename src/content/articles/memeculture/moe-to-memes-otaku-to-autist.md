@@ -7,7 +7,7 @@ description:
   for the community, is highly valued; "otaku" is the Japanese equivalent of the "autist".
 date: 2017-11-23 13:50:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/23843224_10212994224282224_7561053404699120313_n.jpg"
+image: "../../../assets/articles/moe-to-memes-otaku-to-autist/23843224_10212994224282224_7561053404699120313_n.jpg"
 tags:
   - memes
   - otaku

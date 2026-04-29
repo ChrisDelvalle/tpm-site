@@ -6,7 +6,7 @@ description:
   time; place; and, process."
 date: 2020-10-09 10:10:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/14237500_1830640707169547_2304204517625469747_n.jpg"
+image: "../../../assets/articles/2010-decade-review-part-2/14237500_1830640707169547_2304204517625469747_n.jpg"
 tags:
   - memes
   - meme history

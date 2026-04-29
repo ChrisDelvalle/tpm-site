@@ -6,7 +6,7 @@ description:
   and Koan Service through which you can email him a koan and receive an answer.
 date: 2016-05-13 03:09:00 +12:00
 author: "Seong-Young Her"
-image: "/assets/tpm_defaultpic.jpg"
+image: "../../../assets/shared/tpm_defaultpic.jpg"
 tags:
   - "generation gap"
   - "internet art"

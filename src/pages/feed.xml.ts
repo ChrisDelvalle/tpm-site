@@ -23,6 +23,8 @@ export async function GET(context: APIContext) {
     site,
     items: articles.map((article) => {
       const image = imageUrl(article);
+      const absoluteImage =
+        image === undefined ? undefined : new URL(image, site).toString();
 
       return {
         title: entryTitle(article),
@@ -31,9 +33,9 @@ export async function GET(context: APIContext) {
         link: articleUrl(article.id),
         author: authorName(article),
         customData:
-          image === undefined
+          absoluteImage === undefined
             ? undefined
-            : `<enclosure url="${image}" type="image/jpeg" />`,
+            : `<enclosure url="${absoluteImage}" type="image/jpeg" />`,
       };
     }),
     customData: "<language>en-us</language>",

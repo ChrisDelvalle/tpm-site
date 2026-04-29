@@ -6,7 +6,7 @@ description:
   in fictional characters (cf. fanon).
 date: 2017-12-04 12:01:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/magibon.jpg"
+image: "../../../assets/articles/kym-magibon/magibon.jpg"
 tags:
   - Know Your Meme
   - Magibon

@@ -3,7 +3,7 @@ title: Misattributed Plato Quote Is Real Now
 description: "It seems to me that 'quotes' such as these which become canon in the public psyche take on a special kind of force that highlights the close relationship between truth and beauty, as well as the fact that the two are not one and the same--although (I hope you will agree) truth is often beautiful, and there is always some truth in beauty."
 date: 2015-08-19 01:01:23 +13:00
 author: "Seong-Young Her"
-image: "/uploads/11896173_1679964772237142_4577427319780722645_n.png"
+image: "../../../assets/shared/11896173_1679964772237142_4577427319780722645_n.png"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - philosophy
@@ -12,7 +12,7 @@ tags:
 legacyPermalink: 2015/08/19/misattributed-plato-quote-is-real-now/
 ---
 
-![](/uploads/11896173_1679964772237142_4577427319780722645_n.png)
+![](<@assets/shared/11896173_1679964772237142_4577427319780722645_n.png>)
 
 > Music is a moral law. It gives a soul to the universe, wings to the mind, flight to the imagination, a charm to sadness, and life to everything. It is the essence of order, and leads to all that is good, just and beautiful, of which it is the invisible, but nevertheless dazzling, passionate, and eternal form.
 

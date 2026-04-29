@@ -21,6 +21,50 @@ function articleSlugFromEntry(entry: string, data: Record<string, unknown>) {
   return fallback;
 }
 
+function articleSchema({ image }: { image: () => z.ZodType }) {
+  const legacyImageUrl = z.string().regex(/^(?:\/|https?:\/\/)/);
+  const imageValue = z.union([image(), legacyImageUrl]);
+
+  return z
+    .object({
+      title: z.unknown().optional(),
+      date: z.unknown().optional(),
+      author: z.unknown().optional(),
+      parent: z.unknown().optional(),
+      grand_parent: z.unknown().optional(),
+      nav_order: z.unknown().optional(),
+      permalink: z.unknown().optional(),
+      legacyPermalink: z.unknown().optional(),
+      excerpt: z.unknown().optional(),
+      description: z.unknown().optional(),
+      image: imageValue.optional(),
+      imageAlt: z.unknown().optional(),
+      legacyBanner: z.unknown().optional(),
+      tags: z.unknown().optional(),
+      categories: z.unknown().optional(),
+      published: z.unknown().optional(),
+      draft: z.unknown().optional(),
+      status: z.unknown().optional(),
+      type: z.unknown().optional(),
+      banner: z.unknown().optional(),
+      fbpreview: z.unknown().optional(),
+      facebook: z.unknown().optional(),
+      meta: z.unknown().optional(),
+      has_children: z.unknown().optional(),
+      layout: z.unknown().optional(),
+    })
+    .loose();
+}
+
+const articles = defineCollection({
+  loader: glob({
+    base: "./src/content/articles",
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry, data }) => articleSlugFromEntry(entry, data),
+  }),
+  schema: articleSchema,
+});
+
 const legacyMarkdown = defineCollection({
   loader: glob({
     base: "./src/content/legacy",
@@ -71,6 +115,7 @@ const pages = defineCollection({
 });
 
 export const collections = {
+  articles,
   legacyMarkdown,
   pages,
 };

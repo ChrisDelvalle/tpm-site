@@ -12,13 +12,11 @@ const assetsDir = path.resolve("src/assets");
 const publicDir = path.resolve("public");
 const markdownExtensionPattern = /\.mdx?$/i;
 const imageExtensionPattern = /\.(?:avif|gif|jpe?g|png|svg|webp)$/i;
-const supportedReferenceKinds = new Set(["markdown-image"]);
-const frontmatterImageFields = new Set([
-  "banner",
-  "fbpreview",
-  "image",
-  "legacyBanner",
+const supportedReferenceKinds = new Set([
+  "frontmatter-image",
+  "markdown-image",
 ]);
+const frontmatterImageFields = new Set(["banner", "fbpreview", "image"]);
 
 async function listFiles(dir, predicate) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -557,6 +555,11 @@ function markdownAssetReference(destinationPath) {
   return `<@assets/${assetPath}>`;
 }
 
+function frontmatterAssetReference(file, destinationPath) {
+  const assetPath = toPosix(path.relative(path.dirname(file), destinationPath));
+  return assetPath.startsWith(".") ? assetPath : `./${assetPath}`;
+}
+
 function gitStatus(paths) {
   const result = spawnSync("git", ["status", "--porcelain", "--", ...paths], {
     encoding: "utf8",
@@ -579,18 +582,53 @@ function gitMv(from, to) {
   }
 }
 
-async function applyMarkdownReferenceUpdates(plans) {
+function replaceFrontmatterReference(text, reference, destinationPath) {
+  const newline = text.includes("\r\n") ? "\r\n" : "\n";
+  const lines = text.split(/\r?\n/);
+  const lineIndex = reference.line - 1;
+  const line = lines[lineIndex];
+
+  if (line === undefined) {
+    throw new Error(`${relative(reference.file)}:${reference.line} is missing`);
+  }
+
+  const colonIndex = line.indexOf(":");
+  const field = colonIndex === -1 ? "" : line.slice(0, colonIndex);
+
+  if (field !== reference.field) {
+    throw new Error(
+      `${relative(reference.file)}:${reference.line} expected ${reference.field} frontmatter field`,
+    );
+  }
+
+  lines[lineIndex] = `${field}: ${JSON.stringify(
+    frontmatterAssetReference(reference.file, destinationPath),
+  )}`;
+  return lines.join(newline);
+}
+
+async function applyReferenceUpdates(plans) {
   const replacementsByFile = new Map();
 
   for (const plan of plans) {
-    const replacement = markdownAssetReference(plan.destinationPath);
-
     for (const reference of plan.references) {
       const replacements = replacementsByFile.get(reference.file) ?? [];
-      replacements.push({
-        from: reference.targetToken,
-        to: replacement,
-      });
+
+      if (reference.kind === "markdown-image") {
+        replacements.push({
+          destinationPath: plan.destinationPath,
+          from: reference.targetToken,
+          kind: reference.kind,
+          to: markdownAssetReference(plan.destinationPath),
+        });
+      } else if (reference.kind === "frontmatter-image") {
+        replacements.push({
+          destinationPath: plan.destinationPath,
+          kind: reference.kind,
+          reference,
+        });
+      }
+
       replacementsByFile.set(reference.file, replacements);
     }
   }
@@ -599,7 +637,15 @@ async function applyMarkdownReferenceUpdates(plans) {
     let text = await readFile(file, "utf8");
 
     for (const replacement of replacements) {
-      text = text.replaceAll(replacement.from, replacement.to);
+      if (replacement.kind === "markdown-image") {
+        text = text.replaceAll(replacement.from, replacement.to);
+      } else {
+        text = replaceFrontmatterReference(
+          text,
+          replacement.reference,
+          replacement.destinationPath,
+        );
+      }
     }
 
     await writeFile(file, text);
@@ -679,11 +725,7 @@ if (movablePlans.length === 0) {
 
 const involvedPaths = [
   ...new Set(
-    movablePlans.flatMap((plan) => [
-      plan.sourcePath,
-      plan.destinationPath,
-      ...plan.references.map((reference) => reference.file),
-    ]),
+    movablePlans.flatMap((plan) => [plan.sourcePath, plan.destinationPath]),
   ),
 ];
 const status = gitStatus(involvedPaths);
@@ -700,7 +742,7 @@ for (const plan of movablePlans) {
   gitMv(plan.sourcePath, plan.destinationPath);
 }
 
-await applyMarkdownReferenceUpdates(movablePlans);
+await applyReferenceUpdates(movablePlans);
 
 console.log("");
 console.log(

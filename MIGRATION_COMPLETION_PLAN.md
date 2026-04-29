@@ -280,7 +280,7 @@ title: "Example Article"
 description: "Short summary used for social previews, search, RSS, and JSON-LD."
 date: 2026-04-28T00:00:00-04:00
 author: "Author Name"
-image: "/uploads/example.png"
+image: "../../../assets/articles/example-article/cover.png"
 imageAlt: "Optional description of the article image."
 tags:
   - philosophy
@@ -319,6 +319,9 @@ Rules:
   in final frontmatter.
 - `image` is the canonical article/social image field. It feeds Open Graph,
   Twitter cards, JSON-LD, RSS/search metadata, and optional article listing UI.
+  Prefer relative paths to files under `src/assets/` so Astro can validate and
+  process the image through the content collection image schema. Legacy
+  root-relative or remote URL strings are tolerated only during migration.
 - `imageAlt` should be used when an image is shown to users or exposed through
   metadata such as `og:image:alt` or `twitter:image:alt`.
 - `tags` are descriptive keywords. They are not the article category.
@@ -587,7 +590,7 @@ title: "Example Article"
 description: "Short summary used for social previews, search, RSS, and JSON-LD."
 date: 2026-04-28T00:00:00-04:00
 author: "Author Name"
-image: "/uploads/example.png"
+image: "../../../assets/articles/example-article/cover.png"
 imageAlt: "Optional description of the article image."
 tags:
   - philosophy
@@ -820,13 +823,14 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 - [ ] Move images referenced by multiple articles into `src/assets/shared/`,
       after resolving any filename conflicts deliberately.
 - [ ] Move homepage/design images into `src/assets/site/`.
-- [ ] Track raw HTML image tags, hover-image links, frontmatter image metadata,
+- [x] Track raw HTML image tags, hover-image links, frontmatter image metadata,
       query-string image references, missing files, and destination conflicts as
       manual migration cases.
 - [ ] Convert raw HTML image tags to Markdown or MDX where doing so preserves
       article behavior.
-- [ ] Migrate frontmatter image metadata to the final Astro content image model
-      before removing the corresponding public files.
+- [ ] Finish frontmatter image metadata migration to Astro `image()` paths after
+      raw HTML, code-import, and shared/public blockers are deliberately
+      resolved.
 - [ ] Keep `public/` only for files that intentionally need stable root URLs or
       must be copied unchanged.
 - [ ] Replace any remaining root `assets/` or root `uploads/` imports.

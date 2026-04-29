@@ -7,7 +7,7 @@ description:
   the two.
 date: 2020-01-04 11:01:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
+image: "../../../assets/articles/2010-decade-review-part-1/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
 tags:
   - memetics
   - Ironic meme

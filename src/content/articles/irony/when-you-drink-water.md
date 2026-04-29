@@ -6,14 +6,14 @@ description:
   who aspired towards serious literature with an ostensibly unserious medium.
 date: 2017-11-14 12:05:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/23472012_2053909424842673_2720000468904660127_n.jpg"
+image: "../../../assets/articles/when-you-drink-water/23472012_2053909424842673_2720000468904660127_n.jpg"
 tags:
   - meme criticism
   - post-irony
 legacyPermalink: 2017/11/13/when-you-drink-water/
 ---
 
-![23472012_2053909424842673_2720000468904660127_n.jpg](/uploads/23472012_2053909424842673_2720000468904660127_n.jpg)
+![23472012_2053909424842673_2720000468904660127_n.jpg](<@assets/articles/when-you-drink-water/23472012_2053909424842673_2720000468904660127_n.jpg>)
 
 _Meme by TPM community member Sándor Szekeres, 2016._
 

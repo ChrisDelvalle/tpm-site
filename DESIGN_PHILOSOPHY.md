@@ -375,6 +375,8 @@ Use Astro image tooling where possible:
   `src/assets/site/` for site UI images.
 - Use the `@assets/*` alias for source image references in Markdown and
   components.
+- Use relative `src/assets/` paths for frontmatter image fields that are parsed
+  by Astro's content collection `image()` helper.
 - Avoid adding new optimizable assets directly to `public/` unless they must be
   copied unchanged.
 - Provide useful `alt` text, or `alt=""` only for decorative images.

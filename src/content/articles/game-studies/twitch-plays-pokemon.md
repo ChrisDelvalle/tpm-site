@@ -9,7 +9,7 @@ description:
   itself by bringing order to those actions"
 date: 2016-10-26 12:00:00 Z
 author: "Anonymous"
-image: "/assets/2016-10-27-twitch-plays-pokemon/1_thumb.gif"
+image: "../../../assets/articles/twitch-plays-pokemon/1_thumb.gif"
 tags:
   - politics
   - twitch plays pokemon

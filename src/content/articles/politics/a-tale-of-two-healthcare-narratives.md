@@ -6,7 +6,7 @@ description:
   helped them contain the pandemic, not the lack of supply side regulation.
 date: 2020-03-16 20:27:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/kleinvitzthumcoronavirus.jpg"
+image: "../../../assets/articles/a-tale-of-two-healthcare-narratives/kleinvitzthumcoronavirus.jpg"
 tags:
   - covid-19
   - bioethics

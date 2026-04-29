@@ -9,7 +9,7 @@ description:
   norms?"
 date: 2016-04-14 12:00:00 Z
 author: "Anonymous"
-image: "/assets/2016-04-14-social-media-freedom/gae0.png"
+image: "../../../assets/articles/social-media-freedom/gae0.png"
 tags:
   - Twitter
   - moderation
@@ -19,7 +19,7 @@ tags:
 legacyPermalink: 2016/04/14/social-media-freedom/
 ---
 
-![](/assets/2016-04-14-social-media-freedom/gae0.png)
+![](<@assets/articles/social-media-freedom/gae0.png>)
 
 _At the 2015 [NetGain](https://www.fordfoundation.org/the-latest/ford-live-events/netgain-working-together-for-a-stronger-digital-society/) conference hosted by The Ford Foundation, Tim Berners-Lee spoke at a lunch discussion titled "Celebrating 25 Years of the World Wide Web." During the Q&A a representative from the Anti-Discrimination League asked a blunt question: did he wish he had never invented the Web, since it had been used to spread so much hate?_
 

@@ -9,7 +9,7 @@ description:
   older siblings.
 date: 2016-05-12 14:58:46 Z
 author: "Seong-Young Her"
-image: "/assets/tpm_defaultpic.jpg"
+image: "../../../assets/shared/tpm_defaultpic.jpg"
 tags:
   - "4chan"
   - "generation gap"

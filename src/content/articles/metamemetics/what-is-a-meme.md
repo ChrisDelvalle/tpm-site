@@ -3,7 +3,7 @@ title: What Is A Meme?
 description: "A cluster definition of memes, taking into account memographic practice, comedy, public shareability, use of images and/or text, digitality, appropriation, anonymity, ephemerality and stylistic resemblance to other memes."
 date: 2021-11-30 18:46:00 +13:00
 author: "Claudia Vulliamy"
-image: "/uploads/vulliamy-12.jpg"
+image: "../../../assets/articles/what-is-a-meme/vulliamy-12.jpg"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - memes
@@ -185,7 +185,7 @@ Morris Weitz argued that to make a closed definition of _art_, or its sub-concep
 
 However, to do this would be to discount the conditions of comedic intent, arising from memographic practice, and public shareability as part of memographic practice, as being necessary. This would leave us with a definition that massively over generates; any entity that is ephemeral, or any entity that is anonymous, could count as a meme. Therefore, the necessary conditions must be kept. My definition, then, will neither be the traditional list of jointly necessary and sufficient conditions, nor a completely loose 'cluster' concept; it will take elements of both.
 
-![](/uploads/vulliamy-12.jpg)
+![](<@assets/articles/what-is-a-meme/vulliamy-12.jpg>)
 
 _Figure 12 : A diagram illustrating the concept of a meme_
 

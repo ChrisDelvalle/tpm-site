@@ -7,7 +7,7 @@ description:
   a dead fictional being based off a real dead being inside of a living meme’."
 date: 2016-10-13 12:00:00 Z
 author: "Thomas Rososchansky"
-image: "/assets/2016-10-13-what-we-talk-about-harambe/header.png"
+image: "../../../assets/articles/what-we-talk-about-harambe/header.png"
 tags:
   - memes
   - Harambe
@@ -15,7 +15,7 @@ tags:
 legacyPermalink: 2016/10/13/what-we-talk-about-harambe/
 ---
 
-![](/assets/2016-10-13-what-we-talk-about-harambe/header.png)
+![](<@assets/articles/what-we-talk-about-harambe/header.png>)
 
 Harambe memes have come and gone. They lived out their natural cycle of shock, virality, ironic virality, and staleness. What is left is a residue of controversy, memes stemming from said controversy, and think pieces interpreting said memes. The think pieces, for the most part, seem fascinated with two things: the longevity of Harambe’s presence on the Internet and the surreal nature of several memes that mourn Harambe as a kind of dead celebrity or cultural icon. For better or worse, Harambe has left us with some of the most memorable images and phrases of the year. ‘R.I.P. Harambe’ no longer means ‘R.I.P. Harambe’, but rather, ‘we remember a dead fictional being based off a real dead being inside of a living meme’.
 

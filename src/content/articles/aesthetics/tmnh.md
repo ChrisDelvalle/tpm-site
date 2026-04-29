@@ -3,7 +3,7 @@ title: The Artist-Philosopher Manifesto
 description: We, the artists of the future, refuse to be the plaything of politics.
 date: 2015-06-18 07:42:19 Z
 author: "Seong-Young Her"
-image: "/assets/tpm_defaultpic.jpg"
+image: "../../../assets/shared/tpm_defaultpic.jpg"
 tags:
   - "aesthetics"
   - "art"

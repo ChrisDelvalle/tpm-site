@@ -199,11 +199,13 @@ Images need explicit care. New project-owned images should default to
 `src/assets/` so Astro can process them. Article-owned images should usually be
 organized under `src/assets/articles/<article-slug>/`, shared article images
 under `src/assets/shared/`, and site UI images under `src/assets/site/`. Use the
-`@assets/*` alias for source asset references. New component-controlled images
-should use Astro image tooling where possible, stable dimensions or aspect
-ratios, responsive sizes, useful alt text, and deliberate loading priority. Do
-not add oversized uploads or meaningful background images when a real image
-element would be more performant and accessible.
+`@assets/*` alias for Markdown and component source asset references. Use
+relative `src/assets/` paths for frontmatter image fields parsed by Astro's
+content collection `image()` helper. New component-controlled images should use
+Astro image tooling where possible, stable dimensions or aspect ratios,
+responsive sizes, useful alt text, and deliberate loading priority. Do not add
+oversized uploads or meaningful background images when a real image element
+would be more performant and accessible.
 
 ## Quality Gate
 

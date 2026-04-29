@@ -7,7 +7,7 @@ description:
   of creating new games with a loss condition. '
 date: 2021-02-02 18:51:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/1612244326105.jpg"
+image: "../../../assets/articles/gme-frenzy-hints-at-the-new-stage-of-memecultures/1612244326105.jpg"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - memes

@@ -4,7 +4,7 @@ title: President Park's Corruption Cult
 description: "On Park Geun-Hye, Choi Soon-Sil, Ilbe, meme magic, and the rage of watching Korean democracy dragged through another cult of power."
 date: 2016-11-02 11:33:00 Z
 author: "Seong-Young Her"
-image: "/uploads/14938145_1857739157793035_7741224145832509244_n.png"
+image: "../../../assets/articles/president-parks-corruption-cult/14938145_1857739157793035_7741224145832509244_n.png"
 tags:
   - Korea
   - politics

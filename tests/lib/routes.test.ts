@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  type ArticleEntry,
   articleSlug,
   articleUrl,
   assertUniqueArticleSlugs,
   decodeHtmlEntities,
   isPublishedArticle,
-  type LegacyEntry,
   normalizeSlug,
   topicForEntry,
   topicUrl,
@@ -16,12 +16,12 @@ function entry(
   id: string,
   data: Record<string, unknown>,
   filePath = "",
-): LegacyEntry {
+): ArticleEntry {
   return {
     id,
     data,
-    filePath: filePath || `/repo/src/content/legacy/history/${id}.md`,
-  } as LegacyEntry;
+    filePath: filePath || `/repo/src/content/articles/history/${id}.md`,
+  } as ArticleEntry;
 }
 
 describe("route helpers", () => {
@@ -89,7 +89,7 @@ describe("route helpers", () => {
     const politics = entry(
       "politics/2016-01-29-the-post-pepe-manifesto",
       { parent: 2016 },
-      "/repo/src/content/legacy/politics/2016-01-29-the-post-pepe-manifesto.md",
+      "/repo/src/content/articles/politics/2016-01-29-the-post-pepe-manifesto.md",
     );
 
     expect(topicForEntry(politics)?.slug).toBe("politics");

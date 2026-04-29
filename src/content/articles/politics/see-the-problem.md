@@ -5,16 +5,16 @@ description: 'The problem is causality. And no: shouting at me won’t make it l
 '
 date: 2016-04-08 23:22:00 +12:00
 author: "Mike M."
-image: "/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
+image: "../../../assets/articles/see-the-problem/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
 tags:
 - education
 - philosophy
 - politics
 legacyPermalink: 2016/04/23/see-the-problem/
-legacyBanner: "/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
+legacyBanner: "<@assets/articles/see-the-problem/150cb-10154401_10152793631042564_7941235616270583990_n.jpg>"
 ---
 
-![150cb-10154401_10152793631042564_7941235616270583990_n.jpg](/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg)
+![150cb-10154401_10152793631042564_7941235616270583990_n.jpg](<@assets/articles/see-the-problem/150cb-10154401_10152793631042564_7941235616270583990_n.jpg>)
 
 The problem is causality. And no: shouting at me won’t make it less true.
 

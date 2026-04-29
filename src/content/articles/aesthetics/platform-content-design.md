@@ -7,7 +7,7 @@ description: 'It''s a great example of how shaky the definition of ''Internet me
 '
 date: 2017-12-15 15:06:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/25289626_10213166218221965_5340695023336171185_n.jpg"
+image: "../../../assets/articles/platform-content-design/25289626_10213166218221965_5340695023336171185_n.jpg"
 tags:
 - memes
 - platform design
@@ -21,7 +21,7 @@ This has led to the development of a new format of sequential memeing: rather th
 It's a great example of how shaky the definition of 'Internet meme' as 'a funny image or video clip' really is. Are these photos each a meme, or do they compose a single meme through being viewed together?
 
 I made these Siphonaptera (the Flea) images with no intention of posting each one independently.
-![25289626_10213166218221965_5340695023336171185_n.jpg](/uploads/25289626_10213166218221965_5340695023336171185_n.jpg)
+![25289626_10213166218221965_5340695023336171185_n.jpg](<@assets/articles/platform-content-design/25289626_10213166218221965_5340695023336171185_n.jpg>)
 ![25157909_10213166218141963_763702513746986891_n.jpg](<@assets/articles/platform-content-design/25157909_10213166218141963_763702513746986891_n.jpg>)
 ![25442903_10213166218181964_7130385691842258542_n.jpg](<@assets/articles/platform-content-design/25442903_10213166218181964_7130385691842258542_n.jpg>)
 ![25299431_10213166218821980_5133043539185894239_n.jpg](<@assets/articles/platform-content-design/25299431_10213166218821980_5133043539185894239_n.jpg>)

@@ -6,7 +6,7 @@ description:
   don't contain any text.
 date: 2018-03-27 08:49:00 +13:00
 author: "Masha Zharova"
-image: "/uploads/meme-jokes-puns-chart.png"
+image: "../../../assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-chart.png"
 tags:
   - linguistics
   - puns
@@ -118,7 +118,7 @@ Through this notion of cell values, individual parts of a template contain diffe
 
 Here is a diagram summarizing the points:
 
-![meme-jokes-puns-chart.png](/uploads/meme-jokes-puns-chart.png)
+![meme-jokes-puns-chart.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-chart.png>)
 
 <div class="caption">Fig. 11: Structural Organization in Visual Collage Memes</div>
 

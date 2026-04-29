@@ -1,6 +1,6 @@
 import type { CollectionEntry } from "astro:content";
 
-export type LegacyEntry = CollectionEntry<"legacyMarkdown">;
+export type ArticleEntry = CollectionEntry<"articles">;
 
 export const SITE_TITLE = "The Philosopher's Meme";
 export const SITE_DESCRIPTION =
@@ -61,23 +61,27 @@ export function decodeHtmlEntities(value: string) {
     .replace(/&gt;/g, ">");
 }
 
-export function entryTitle(entry: LegacyEntry) {
+export function entryTitle(entry: ArticleEntry) {
   return typeof entry.data.title === "string"
     ? decodeHtmlEntities(entry.data.title)
     : "Untitled";
 }
 
-export function sourceFolder(entry: LegacyEntry) {
+export function sourceFolder(entry: ArticleEntry) {
   const filePath = entry.filePath ?? "";
-  const marker = "/src/content/legacy/";
-  const relativePath = filePath.includes(marker)
-    ? (filePath.split(marker)[1] ?? "")
-    : filePath.replace(/^src\/content\/legacy\//, "");
+  const markers = ["/src/content/articles/", "/src/content/legacy/"];
+  const marker = markers.find((item) => filePath.includes(item));
+  const relativePath =
+    marker === undefined
+      ? filePath
+          .replace(/^src\/content\/articles\//, "")
+          .replace(/^src\/content\/legacy\//, "")
+      : (filePath.split(marker)[1] ?? "");
 
   return relativePath.includes("/") ? (relativePath.split("/")[0] ?? "") : "";
 }
 
-export function articleSlug(entry: LegacyEntry) {
+export function articleSlug(entry: ArticleEntry) {
   const permalink = entry.data.legacyPermalink ?? entry.data.permalink;
   const permalinkMatch =
     typeof permalink === "string"
@@ -98,11 +102,11 @@ function isDatedPermalink(permalink: unknown) {
   );
 }
 
-function isArticle(entry: LegacyEntry) {
+function isArticle(entry: ArticleEntry) {
   return isDatedPermalink(entry.data.legacyPermalink ?? entry.data.permalink);
 }
 
-function isPublished(entry: LegacyEntry) {
+function isPublished(entry: ArticleEntry) {
   return (
     entry.data.draft !== true &&
     entry.data.published !== false &&
@@ -110,11 +114,11 @@ function isPublished(entry: LegacyEntry) {
   );
 }
 
-export function isPublishedArticle(entry: LegacyEntry) {
+export function isPublishedArticle(entry: ArticleEntry) {
   return isArticle(entry) && isPublished(entry);
 }
 
-export function entryDate(entry: LegacyEntry) {
+export function entryDate(entry: ArticleEntry) {
   const date = entry.data.date;
   if (date instanceof Date) {
     return date;
@@ -136,7 +140,7 @@ export function formatDate(date: Date | undefined) {
   }).format(date);
 }
 
-export function authorName(entry: LegacyEntry) {
+export function authorName(entry: ArticleEntry) {
   const author = entry.data.author;
   if (typeof author === "string") {
     return author;
@@ -147,17 +151,34 @@ export function authorName(entry: LegacyEntry) {
   return "The Philosopher's Meme";
 }
 
-export function excerpt(entry: LegacyEntry) {
+export function excerpt(entry: ArticleEntry) {
   const value = entry.data.description ?? entry.data.excerpt;
   return typeof value === "string" ? value : "";
 }
 
-export function imageUrl(entry: LegacyEntry) {
-  const value = entry.data.image ?? entry.data.fbpreview ?? entry.data.banner;
-  return typeof value === "string" ? value : undefined;
+function imageSource(value: unknown) {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (
+    typeof value === "object" &&
+    value !== null &&
+    "src" in value &&
+    typeof value.src === "string"
+  ) {
+    return value.src;
+  }
+
+  return undefined;
 }
 
-export function topicForEntry(entry: LegacyEntry) {
+export function imageUrl(entry: ArticleEntry) {
+  const value = entry.data.image ?? entry.data.fbpreview ?? entry.data.banner;
+  return imageSource(value);
+}
+
+export function topicForEntry(entry: ArticleEntry) {
   const source = sourceFolder(entry);
   const fromSource = TOPICS.find((topic) => topic.source === source);
   if (fromSource !== undefined) {
@@ -173,7 +194,7 @@ export function topicForEntry(entry: LegacyEntry) {
   );
 }
 
-export function sortNewestFirst(entries: LegacyEntry[]) {
+export function sortNewestFirst(entries: ArticleEntry[]) {
   return [...entries].sort((a, b) => {
     const bTime = entryDate(b)?.getTime() ?? 0;
     const aTime = entryDate(a)?.getTime() ?? 0;
@@ -184,7 +205,7 @@ export function sortNewestFirst(entries: LegacyEntry[]) {
   });
 }
 
-export function assertUniqueArticleSlugs(entries: LegacyEntry[]) {
+export function assertUniqueArticleSlugs(entries: ArticleEntry[]) {
   const seen = new Map<string, string>();
 
   for (const entry of entries.filter(isArticle)) {

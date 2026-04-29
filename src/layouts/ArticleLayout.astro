@@ -7,14 +7,14 @@ import {
   excerpt,
   formatDate,
   imageUrl,
-  type LegacyEntry,
+  type ArticleEntry,
   topicForEntry,
   topicUrl,
 } from "../lib/routes";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
-  article: LegacyEntry;
+  article: ArticleEntry;
 }
 
 const { article } = Astro.props;

@@ -6,7 +6,7 @@ description:
   This is about when memes act as images of human action.
 date: 2018-02-05 08:24:00 +13:00
 author: "Mikhail Conrad Nacua"
-image: "/uploads/1.jpg"
+image: "../../../assets/articles/the-interpretation-of-memes/1.jpg"
 tags:
   - narrative
   - Ironic meme
@@ -19,7 +19,7 @@ I often see analyses of memes focus on their objective dimensions and their theo
 
 To get a sense of this way of looking at memes, I would like us to do an exercise. What I have done is take a few memes that I intuitively associated with each other, and compared and contrasted them to highlight their features. I then constructed theoretical categories based on their narrative action. By focusing more on these conventional readings of these “images,” one could make more informed creative decisions; after all, these conventions act for creators as logical boundaries of what makes a meme good and what it could be.
 
-![1.jpg](/uploads/1.jpg)
+![1.jpg](<@assets/articles/the-interpretation-of-memes/1.jpg>)
 
 This is the chart I have constructed for the exercise. Let us see whether one could by demonstration make a convincing case at all for reading a meme like a scene.
 

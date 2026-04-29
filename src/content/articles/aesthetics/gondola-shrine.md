@@ -3,7 +3,7 @@ title: Every Gondola Is a Shrine
 description: I think of every gondola post as a shrine, for people to come together and appreciate them in a spiritual way.
 date: 2019-12-23 10:43:00 +12:00
 author: "Seong-Young Her"
-image: "/uploads/2019-12-02_ghost-puppy_resized.png"
+image: "../../../assets/articles/gondola-shrine/2019-12-02_ghost-puppy_resized.png"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - art

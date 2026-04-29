@@ -10,7 +10,7 @@ description:
   scenario editing of history, conditioned on current mood."
 date: 2019-04-05 06:00:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/2019-04-03_thephilosophersmeme.com_catgirl-01.png"
+image: "../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-01.png"
 tags:
   - aesthetics
   - philosophy
@@ -37,7 +37,7 @@ One of my favourite techniques whenever I make a meme, take a screenshot, or edi
 
 Here are some examples:
 
-![](/uploads/2019-04-03_thephilosophersmeme.com_catgirl-01.png)
+![](<@assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-01.png>)
 
 ![](<@assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-02.png>)
 

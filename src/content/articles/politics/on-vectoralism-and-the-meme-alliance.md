@@ -10,7 +10,7 @@ description:
   struggle.
 date: 2016-10-26 12:00:00 Z
 author: "Anonymous"
-image: "/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/1_thumb.jpg"
+image: "../../../assets/articles/on-vectoralism-and-the-meme-alliance/1_thumb.jpg"
 tags:
   - memepages
   - politics

@@ -5,7 +5,7 @@ description:
   meme. That might very well change in the future.
 date: 2017-02-15 18:41:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/16684179_1161814753936213_2457291586701613901_n.jpg"
+image: "../../../assets/articles/early-trash-dove/16684179_1161814753936213_2457291586701613901_n.jpg"
 tags:
   - normie
   - definition

@@ -1,25 +1,25 @@
 import { getCollection } from "astro:content";
 
 import {
+  type ArticleEntry,
   assertUniqueArticleSlugs,
   isPublishedArticle,
-  type LegacyEntry,
   sortNewestFirst,
   sourceFolder,
   TOPICS,
 } from "./routes";
 
-async function getLegacyEntries() {
-  return getCollection("legacyMarkdown");
+async function getArticleEntries() {
+  return getCollection("articles");
 }
 
 export async function getArticles() {
-  const entries = await getLegacyEntries();
+  const entries = await getArticleEntries();
   assertUniqueArticleSlugs(entries);
   return sortNewestFirst(entries.filter(isPublishedArticle));
 }
 
-export function articlesForTopic(entries: LegacyEntry[], topicSlug: string) {
+export function articlesForTopic(entries: ArticleEntry[], topicSlug: string) {
   const topic = TOPICS.find((item) => item.slug === topicSlug);
   if (!topic) {
     return [];

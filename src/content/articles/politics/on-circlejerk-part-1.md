@@ -3,7 +3,7 @@ title: On Circlejerk
 description: "The logic of capitalism is reproduced in online communities as circlejerks, where quantified affirmation supplants monetary profit. Like capitalism, democratized Internet culture is inadequate to its own promise of freedom. Originally published in 2017."
 date: 2021-12-18 18:46:00 +13:00
 author: "Chicago School of Countercultural Inquiry"
-image: "/uploads/circlejerk_chart_of_terms-01.png"
+image: "../../../assets/articles/on-circlejerk-part-1/circlejerk_chart_of_terms-01.png"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - politics
@@ -59,7 +59,7 @@ On almost all social media platforms, content is evaluated with one or more poin
 
 In terms of the circlejerk, the _thing_ being quantified in all point systems is affirmation. Qualitatively distinct responses such as enjoyment, empathy, agreement, or even polite disagreement are flattened into a single metric, and increasingly a single _feeling_, for all content producers. Quantified affirmation also allows for the accumulation of affirmation, which becomes an end-in-itself. On reddit, the net score of each post added to one’s overall _Karma_ score; on Youtube, these are one’s View and Subscriber counts. Where there is no explicit accumulation of points, such as on Facebook, affirmation appears subjective, but one still keeps a mental count of one’s average _Likes_ received per post per friend or group member.
 
-![](/uploads/circlejerk_chart_of_terms-01.png)
+![](<@assets/articles/on-circlejerk-part-1/circlejerk_chart_of_terms-01.png>)
 
 Since quantitative affirmation accumulates across different content in different circlejerks, the qualitative character specific to each piece of content and each circlejerk is subsumed. The production of content serves as an intermediary for quantitative incrementation. The concrete analysis and adaptation of content production to each circlejerk becomes a tactic used to receive more and more abstract affirmation.
 

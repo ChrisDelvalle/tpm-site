@@ -518,8 +518,14 @@ on the chosen host and Cloudflare configuration.
       cases such as raw HTML image tags, hover-image links, frontmatter image
       metadata, query-string image references, code imports, missing files, and
       destination conflicts.
-- [ ] Execute the safe asset moves with clean git diffs.
+- [x] Execute the safe Markdown image asset moves with clean git diffs.
+- [x] Add a first-class `articles` content collection that accepts Astro
+      `image()` metadata while preserving legacy URL strings during the
+      transition.
+- [x] Execute safe frontmatter `image` moves with clean git diffs and rewrite
+      migrated values to relative source asset paths.
 - [ ] Convert or otherwise handle manual raw HTML image references.
-- [ ] Migrate frontmatter image metadata to the final Astro content image model.
+- [ ] Finish remaining frontmatter image cases after raw HTML, code-import, and
+      other shared/public blockers are deliberately resolved.
 - [ ] Remove obsolete root/public legacy asset duplicates after all references
       are migrated or deliberately classified as public URL files.

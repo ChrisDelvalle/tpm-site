@@ -3,7 +3,7 @@ title: Jeremy Cahill (Metamer) Dismissed for Serious Misconduct
 description: JCC dismissed for serious misconduct
 date: 2021-06-14 13:05:00 +12:00
 author: "The Philosopher's Meme"
-image: "/uploads/UqzwM3u_400x400.jpg"
+image: "../../../assets/articles/jeremy-cahill-metamer-dismissed-for-serious-misconduct/UqzwM3u_400x400.jpg"
 legacyPermalink: 2021/06/14/jeremy-cahill-metamer-dismissed-for-serious-misconduct/
 ---
 

@@ -6,7 +6,7 @@ description:
   memes.
 date: 2017-12-04 07:52:00 +13:00
 author: "Seong-Young Her"
-image: "/uploads/loss_art_simplified-only.png"
+image: "../../../assets/articles/kandinsky-and-loss/loss_art_simplified-only.png"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - art

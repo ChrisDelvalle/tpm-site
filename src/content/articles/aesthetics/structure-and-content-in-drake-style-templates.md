@@ -6,7 +6,7 @@ description: |-
   2. the content (rappers in music videos)
 date: 2018-09-11 10:43:00 +12:00
 author: "Seong-Young Her"
-image: "/uploads/41513611_10215207403570323_3806778085953503232_n.jpg"
+image: "../../../assets/articles/structure-and-content-in-drake-style-templates/41513611_10215207403570323_3806778085953503232_n.jpg"
 tags:
   - template
   - memeing

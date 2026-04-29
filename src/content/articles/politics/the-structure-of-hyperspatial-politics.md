@@ -5,7 +5,7 @@ description:
   the terrain of political conflict in hyperspace.
 date: 2017-06-13 20:11:00 +12:00
 author: "Samuel Tannert"
-image: "/uploads/avatars-000304348876-0xi1aa-original.jpg"
+image: "../../../assets/articles/the-structure-of-hyperspatial-politics/avatars-000304348876-0xi1aa-original.jpg"
 tags:
   - GamerGate
   - 4chan

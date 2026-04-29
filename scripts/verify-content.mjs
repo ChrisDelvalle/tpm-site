@@ -3,8 +3,9 @@ import path from "node:path";
 
 import matter from "gray-matter";
 
-const contentDir = path.resolve("src/content/legacy");
+const contentDir = path.resolve("src/content/articles");
 const publicDir = path.resolve("public");
+const assetsDir = path.resolve("src/assets");
 const categorySources = new Set([
   "aesthetics",
   "game-studies",
@@ -77,9 +78,30 @@ function isValidDate(value) {
   return false;
 }
 
-async function publicAssetExists(url) {
-  if (typeof url !== "string" || !url.startsWith("/")) {
+async function pathExists(file) {
+  try {
+    await access(file);
     return true;
+  } catch {
+    return false;
+  }
+}
+
+async function assetReferenceExists(file, url) {
+  if (typeof url !== "string" || !url.startsWith("/")) {
+    if (typeof url !== "string") {
+      return true;
+    }
+
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return true;
+    }
+
+    if (url.startsWith("@assets/")) {
+      return pathExists(path.join(assetsDir, url.slice("@assets/".length)));
+    }
+
+    return pathExists(path.resolve(path.dirname(file), url));
   }
 
   const decoded = decodeURIComponent(url.split("#")[0].split("?")[0]).replace(
@@ -87,12 +109,7 @@ async function publicAssetExists(url) {
     "",
   );
 
-  try {
-    await access(path.join(publicDir, decoded));
-    return true;
-  } catch {
-    return false;
-  }
+  return pathExists(path.join(publicDir, decoded));
 }
 
 const files = await listMarkdownFiles(contentDir);
@@ -115,7 +132,7 @@ for (const file of files) {
   const isArticle = isDatedPermalink(data.legacyPermalink ?? data.permalink);
 
   for (const field of imageFields) {
-    if (!(await publicAssetExists(data[field]))) {
+    if (!(await assetReferenceExists(file, data[field]))) {
       issues.push(
         `${relativePath}: ${field} points to missing asset ${data[field]}`,
       );

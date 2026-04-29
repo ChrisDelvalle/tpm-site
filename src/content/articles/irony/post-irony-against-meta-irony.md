@@ -8,7 +8,7 @@ description:
   they failed.
 date: 2017-03-10 10:10:00 +13:00
 author: "Seong-Young Her & Masha Zharova"
-image: "/uploads/memetically%20assured%20destruction%20writeup_thumb.jpg"
+image: "../../../assets/articles/post-irony-against-meta-irony/memetically assured destruction writeup_thumb.jpg"
 tags:
   - memes
   - history
