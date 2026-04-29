@@ -21,20 +21,10 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "verbatimModuleSyntax": true
   },
-  "include": [
-    ".astro/types.d.ts",
-    "astro.config.mjs",
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "src/content/legacy"
-  ]
+  "include": [".astro/types.d.ts", "astro.config.mjs", "src/**/*"],
+  "exclude": ["dist", "node_modules", "src/content/legacy"]
 }

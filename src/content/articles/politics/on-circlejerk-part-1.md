@@ -29,7 +29,7 @@ The way in which _New Reenactment_ might still fit today is the way in which it 
 
 At the same time, CLMRS was never fully honest with itself – certainly, it _wished_ to change the world, and in many moments it acted as if it really could. In its satire it also embraced its satirized object. This ambivalence, symptomatic of the dead Left and common to many Leftists, is what persists beyond the death of Weird Facebook. It serves as a key connection between the world of _New Reenactment_ and our world today. We aim to walk the same line of self-ambivalence in our translation.
 
-![](../../../assets/articles/on-circlejerk-part-1/oncirclejerk_banner-01.png)
+![Banner for "On Circlejerk"](../../../assets/articles/on-circlejerk-part-1/oncirclejerk_banner-01.png)
 
 ### CHAPTER 1. THE CONCEPT OF THE CIRCLEJERK
 
