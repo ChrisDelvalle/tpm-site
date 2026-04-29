@@ -208,17 +208,17 @@ reason is documented.
 Current baseline scripts:
 
 - `bun run dev`: start Astro dev server after content sync.
-- `bun run check`: sync content and run `astro check`.
+- `bun run check`: run content validation, Astro typechecking, ESLint,
+  Markdown/config linting, package ordering, Prettier check, Knip, and unit
+  tests.
 - `bun run build`: sync content, build Astro, and generate Pagefind index.
 - `bun run verify`: verify built output.
-- `bun run format`: current Prettier write command.
-
-Target quality scripts are documented in `QUALITY_TOOLING.md`. As that tooling
-lands, the expected baseline becomes:
-
-- `bun run check` for normal code changes.
-- `bun run check:release` for pre-release validation.
-- `bun run fix` for safe automatic fixes.
+- `bun run validate:html`: validate shell/index HTML in built output.
+- `bun run test:e2e`: run Playwright smoke/responsive/search tests.
+- `bun run test:a11y`: run axe accessibility tests.
+- `bun run test:perf`: run Lighthouse CI.
+- `bun run check:release`: run the heavy pre-release validation gate.
+- `bun run fix`: run safe automatic fixes.
 
 For code, config, and formatted documentation changes, prefer running the safe
 automatic fixer before the normal check once `bun run fix` exists:

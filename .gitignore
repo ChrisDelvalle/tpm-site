@@ -10,3 +10,9 @@ dist
 .astro
 src/content/legacy
 .DS_Store
+coverage
+.lighthouseci
+playwright-report
+test-results
+tmp
+Unrelated Project/

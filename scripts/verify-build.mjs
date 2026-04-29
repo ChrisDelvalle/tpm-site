@@ -1,4 +1,4 @@
-import { access, readFile, readdir, stat } from "node:fs/promises";
+import { access, readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 const distDir = path.resolve("dist");
@@ -24,6 +24,13 @@ const requiredPaths = [
   "pagefind/pagefind.js",
   "assets/images/2022-04-05_tpm-header_trnp_dm.png",
   "uploads/2019-04-05 12_31_47-catgirl meme - Google Search.png",
+];
+const staticReadingPages = [
+  "index.html",
+  "about/index.html",
+  "articles/index.html",
+  "articles/gamergate-as-metagaming/index.html",
+  "topics/history/index.html",
 ];
 
 async function exists(relativePath) {
@@ -77,9 +84,15 @@ function isOldDatedRoute(url) {
 
 async function internalTargetExists(url) {
   const cleanUrl = withoutFragmentAndQuery(url);
-  if (!cleanUrl || cleanUrl.startsWith("#")) return true;
-  if (!cleanUrl.startsWith("/")) return true;
-  if (isOldDatedRoute(cleanUrl)) return true;
+  if (!cleanUrl || cleanUrl.startsWith("#")) {
+    return true;
+  }
+  if (!cleanUrl.startsWith("/")) {
+    return true;
+  }
+  if (isOldDatedRoute(cleanUrl)) {
+    return true;
+  }
 
   const decoded = decodeURIComponent(cleanUrl).replace(/^\//, "");
   const candidates = [
@@ -89,7 +102,9 @@ async function internalTargetExists(url) {
   ].filter(Boolean);
 
   for (const candidate of candidates) {
-    if (await exists(candidate)) return true;
+    if (await exists(candidate)) {
+      return true;
+    }
   }
 
   return false;
@@ -97,13 +112,20 @@ async function internalTargetExists(url) {
 
 const missingRequired = [];
 for (const requiredPath of requiredPaths) {
-  if (!(await exists(requiredPath))) missingRequired.push(requiredPath);
+  if (!(await exists(requiredPath))) {
+    missingRequired.push(requiredPath);
+  }
 }
 
 const files = await listFiles(distDir);
-const htmlAndXml = files.filter((file) => /\.(html|xml)$/i.test(file));
+const htmlAndXml = files.filter((file) => /\.(?:html|xml)$/i.test(file));
+const astroClientScripts = files.filter((file) =>
+  /\/_astro\/.+\.js$/i.test(file),
+);
 const liquidFiles = [];
 const brokenLinks = [];
+const unexpectedClientScripts = [];
+const unexpectedDatedPages = [];
 let oldDatedLinks = 0;
 
 for (const file of htmlAndXml) {
@@ -113,8 +135,22 @@ for (const file of htmlAndXml) {
   }
 
   if (file.endsWith(".html")) {
+    const relativeHtmlPath = path.relative(distDir, file);
+    if (/^\d{4}\/\d{2}\/\d{2}\/[^/]+\/index\.html$/.test(relativeHtmlPath)) {
+      unexpectedDatedPages.push(relativeHtmlPath);
+    }
+
+    if (
+      staticReadingPages.includes(relativeHtmlPath) &&
+      /<script[^>]+src=["']\/_astro\/[^"']+\.js["']/i.test(text)
+    ) {
+      unexpectedClientScripts.push(relativeHtmlPath);
+    }
+
     for (const target of linkTargets(text)) {
-      if (isExternal(target)) continue;
+      if (isExternal(target)) {
+        continue;
+      }
       const cleanTarget = withoutFragmentAndQuery(target);
       if (isOldDatedRoute(cleanTarget)) {
         oldDatedLinks += 1;
@@ -140,14 +176,35 @@ if (articlePages.length !== 60) {
   brokenLinks.push(`expected 60 article pages, found ${articlePages.length}`);
 }
 
-if (missingRequired.length || liquidFiles.length || brokenLinks.length) {
+if (
+  missingRequired.length ||
+  liquidFiles.length ||
+  brokenLinks.length ||
+  unexpectedClientScripts.length ||
+  unexpectedDatedPages.length
+) {
   console.error("Build verification failed.");
-  if (missingRequired.length) console.error("Missing:", missingRequired);
-  if (liquidFiles.length) console.error("Liquid artifacts:", liquidFiles);
-  if (brokenLinks.length) console.error("Broken links:", brokenLinks.slice(0, 50));
+  if (missingRequired.length) {
+    console.error("Missing:", missingRequired);
+  }
+  if (liquidFiles.length) {
+    console.error("Liquid artifacts:", liquidFiles);
+  }
+  if (brokenLinks.length) {
+    console.error("Broken links:", brokenLinks.slice(0, 50));
+  }
+  if (unexpectedClientScripts.length) {
+    console.error(
+      "Unexpected static-page client scripts:",
+      unexpectedClientScripts,
+    );
+  }
+  if (unexpectedDatedPages.length) {
+    console.error("Unexpected generated dated pages:", unexpectedDatedPages);
+  }
   process.exit(1);
 }
 
 console.log(
-  `Build verification passed: ${articlePages.length} articles, ${oldDatedLinks} old dated links classified as redirect candidates.`,
+  `Build verification passed: ${articlePages.length} articles, ${astroClientScripts.length} Astro client script assets, ${oldDatedLinks} old dated links classified as redirect candidates.`,
 );

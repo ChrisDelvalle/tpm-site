@@ -3,11 +3,9 @@
 This document defines the project tooling target for code quality, formatting,
 testing, security, performance, and release readiness.
 
-The Gridgen project under `Unrelated Project/gridgen` is a useful reference for
-strict local tooling. We should reuse its philosophy and several patterns, but
-not copy it blindly. This site has different constraints: Astro components,
-Markdown/MDX content, Tailwind, static output, Lighthouse goals, and an authoring
-model where article writers should not touch code.
+This site has specific constraints: Astro components, Markdown/MDX content,
+Tailwind, static output, Lighthouse goals, and an authoring model where article
+writers should not touch code.
 
 ## Tooling Philosophy
 
@@ -116,9 +114,9 @@ continuing.
 Do not autoformat migrated article bodies while content fidelity remains a
 migration invariant.
 
-## Gridgen Patterns To Adopt
+## Adopted Tooling Patterns
 
-These Gridgen patterns transfer well:
+These patterns define the local quality loop:
 
 - `check` for the normal PR loop.
 - `check:release` for the heavier pre-release gate.
@@ -142,9 +140,9 @@ These Gridgen patterns transfer well:
 - gitleaks.
 - `bun audit`.
 
-## Gridgen Patterns To Adapt Or Avoid
+## Project-Specific Constraints
 
-Some Gridgen choices need project-specific handling:
+Some common tooling choices need project-specific handling:
 
 - Do not copy React/Vite-only tooling unless React components are actually
   added.
@@ -256,7 +254,7 @@ Core config approach:
 - Apply project-specific overrides for config files, scripts, tests, generated
   files, and Astro files.
 
-Rules to carry forward from Gridgen where applicable:
+Rules to enforce where applicable:
 
 - `curly: ["error", "all"]`
 - `eqeqeq: ["error", "always"]`
@@ -398,7 +396,7 @@ Test:
 - migration helpers;
 - any custom Markdown/content transforms.
 
-Borrow from Gridgen:
+Use:
 
 - `bun test --randomize --concurrent` for normal logic tests.
 - `test:flake` for repeated randomized test runs when helper logic becomes
@@ -665,20 +663,22 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "fix": "bun run lint:fix && bun run format:write",
 
   "typecheck": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro check",
-  "deadcode": "knip",
-  "test": "bun test tests --randomize --concurrent",
-  "test:flake": "bun run scripts/check-flaky-tests.ts",
-  "test:e2e": "bun run build && playwright test",
+  "deadcode": "knip --no-config-hints",
+  "test": "bun test tests/lib --randomize --concurrent",
+  "test:flake": "bun run test -- --rerun-each 10",
+  "test:e2e": "bun run build && playwright test tests/e2e",
   "test:a11y": "bun run build && playwright test tests/a11y",
   "test:perf": "bun run build && lhci autorun",
-  "coverage": "bun run test --coverage --coverage-reporter=text --coverage-reporter=lcov",
+  "coverage": "bun test tests/lib --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",
 
   "verify": "node scripts/verify-build.mjs",
+  "verify:content": "bun run sync:content && node scripts/verify-content.mjs",
+  "validate:html": "html-validate dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/search/**/*.html\" \"dist/topics/**/*.html\"",
   "audit": "bun audit --audit-level=high",
   "secrets": "gitleaks git --redact --no-banner",
 
-  "check": "bun run typecheck && bun run lint && bun run format && bun run deadcode && bun run test",
-  "check:release": "bun run check && bun run build && bun run verify && bun run test:e2e && bun run test:a11y && bun run test:perf && bun run coverage && bun run audit && bun run secrets"
+  "check": "bun run verify:content && bun run typecheck && bun run lint && bun run lint:docs && bun run lint:packages && bun run format && bun run deadcode && bun run test",
+  "check:release": "bun run check && bun run build && bun run verify && bun run validate:html && bun run test:e2e && bun run test:a11y && bun run test:perf && bun run coverage && bun run audit && bun run secrets"
 }
 ```
 
@@ -714,13 +714,12 @@ As tooling lands, split heavier checks into separate jobs:
 
 Use branch protection so the required checks must pass before merge.
 
-Recommended GitHub configuration:
+Current GitHub configuration:
 
-- `.github/workflows/ci.yml` for normal PR checks.
-- `.github/workflows/codeql.yml` for GitHub CodeQL.
-- `.github/workflows/dependency-review.yml` for dependency review on pull
-  requests.
-- `.github/dependabot.yml` or `renovate.json` for dependency updates.
+- `.github/workflows/ci.yml` for quality, build verification, Playwright, axe,
+  Lighthouse, and dependency audit jobs.
+- `.github/workflows/security.yml` for Dependency Review, CodeQL, and gitleaks.
+- `.github/dependabot.yml` for dependency updates.
 
 Once Ruby/Jekyll is fully removed from the active build path, remove legacy
 Bundler dependency tracking from Dependabot.

@@ -6,7 +6,8 @@ import { sourceFolder, TOPICS, topicUrl } from "../../lib/routes";
 const articles = await getArticles();
 const topics = TOPICS.map((topic) => ({
   ...topic,
-  count: articles.filter((entry) => sourceFolder(entry) === topic.source).length,
+  count: articles.filter((entry) => sourceFolder(entry) === topic.source)
+    .length,
 }));
 ---
 

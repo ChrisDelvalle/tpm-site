@@ -13,7 +13,7 @@ async function listMarkdownFiles(dir) {
 
     if (entry.isDirectory()) {
       files.push(...(await listMarkdownFiles(fullPath)));
-    } else if (/\.(md|markdown)$/i.test(entry.name)) {
+    } else if (/\.(?:md|markdown)$/i.test(entry.name)) {
       files.push(fullPath);
     }
   }
@@ -22,19 +22,23 @@ async function listMarkdownFiles(dir) {
 }
 
 function normalizeFrontmatter(text) {
-  const match = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);
-  if (!match) return text;
+  const match = text.match(/^---[^\S\r\n]*\r?\n([\s\S]*?)\r?\n---[^\S\r\n]*/);
+  if (!match) {
+    return text;
+  }
 
   const lines = match[1].split("\n");
   const lastTopLevelKeyLine = new Map();
 
   lines.forEach((line, index) => {
-    const key = line.match(/^([A-Za-z0-9_-]+):(?:\s|$)/)?.[1];
-    if (key) lastTopLevelKeyLine.set(key, index);
+    const key = line.match(/^([\w-]+):(?:\s|$)/)?.[1];
+    if (key) {
+      lastTopLevelKeyLine.set(key, index);
+    }
   });
 
   const normalized = lines.filter((line, index) => {
-    const key = line.match(/^([A-Za-z0-9_-]+):(?:\s|$)/)?.[1];
+    const key = line.match(/^([\w-]+):(?:\s|$)/)?.[1];
     return !key || lastTopLevelKeyLine.get(key) === index;
   });
 

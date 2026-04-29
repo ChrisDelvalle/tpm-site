@@ -1,5 +1,4 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
 import {
   articleUrl,
   authorName,
@@ -8,10 +7,11 @@ import {
   excerpt,
   formatDate,
   imageUrl,
+  type LegacyEntry,
   topicForEntry,
   topicUrl,
-  type LegacyEntry,
 } from "../lib/routes";
+import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
   article: LegacyEntry;

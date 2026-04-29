@@ -1,49 +1,51 @@
-import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { defineCollection } from "astro:content";
 
 function articleSlugFromEntry(entry: string, data: Record<string, unknown>) {
-  const permalink = typeof data.permalink === "string" ? data.permalink : "";
-  const permalinkMatch = permalink.match(/^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/);
+  const permalink =
+    typeof data["permalink"] === "string" ? data["permalink"] : "";
+  const permalinkMatch = /^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/.exec(permalink);
+  const fallback = entry
+    .replace(/\.(?:md|mdx|markdown)$/i, "")
+    .replace(/(^|\/)\d{4}[-_]\d{2}[-_]\d{2}[-_]/, "$1");
 
-  if (permalinkMatch) {
+  if (permalinkMatch?.[1] !== undefined && permalinkMatch[1] !== "") {
     return permalinkMatch[1];
   }
 
-  return entry
-    .replace(/\.(md|markdown)$/i, "")
-    .replace(/(^|\/)\d{4}[-_]\d{2}[-_]\d{2}[-_]/, "$1");
+  return fallback;
 }
 
 const legacyMarkdown = defineCollection({
   loader: glob({
     base: "./src/content/legacy",
-    pattern: "**/*.md",
+    pattern: "**/*.{md,mdx}",
     generateId: ({ entry, data }) => articleSlugFromEntry(entry, data),
   }),
   schema: z
     .object({
-      title: z.any().optional(),
-      date: z.any().optional(),
-      author: z.any().optional(),
-      parent: z.any().optional(),
-      grand_parent: z.any().optional(),
-      nav_order: z.any().optional(),
-      permalink: z.any().optional(),
-      excerpt: z.any().optional(),
-      description: z.any().optional(),
-      image: z.any().optional(),
-      tags: z.any().optional(),
-      categories: z.any().optional(),
-      published: z.any().optional(),
-      status: z.any().optional(),
-      type: z.any().optional(),
-      banner: z.any().optional(),
-      fbpreview: z.any().optional(),
-      facebook: z.any().optional(),
-      meta: z.any().optional(),
-      has_children: z.any().optional(),
-      layout: z.any().optional(),
+      title: z.unknown().optional(),
+      date: z.unknown().optional(),
+      author: z.unknown().optional(),
+      parent: z.unknown().optional(),
+      grand_parent: z.unknown().optional(),
+      nav_order: z.unknown().optional(),
+      permalink: z.unknown().optional(),
+      excerpt: z.unknown().optional(),
+      description: z.unknown().optional(),
+      image: z.unknown().optional(),
+      tags: z.unknown().optional(),
+      categories: z.unknown().optional(),
+      published: z.unknown().optional(),
+      status: z.unknown().optional(),
+      type: z.unknown().optional(),
+      banner: z.unknown().optional(),
+      fbpreview: z.unknown().optional(),
+      facebook: z.unknown().optional(),
+      meta: z.unknown().optional(),
+      has_children: z.unknown().optional(),
+      layout: z.unknown().optional(),
     })
     .loose(),
 });

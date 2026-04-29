@@ -37,11 +37,7 @@ const articles = await getArticles();
             <div class="archive-meta">
               <span>{formatDate(entryDate(article))}</span>
               <span>{authorName(article)}</span>
-              {topic && (
-                <a href={topicUrl(topic.slug)}>
-                  {topic.label}
-                </a>
-              )}
+              {topic && <a href={topicUrl(topic.slug)}>{topic.label}</a>}
             </div>
             {excerpt(article) && <p>{excerpt(article)}</p>}
           </li>

@@ -37,7 +37,7 @@ Preview the built site locally:
 bun run preview
 ```
 
-Run the full local validation used before opening a PR:
+Run the normal local validation used before opening a PR:
 
 ```sh
 bun run check
@@ -45,11 +45,27 @@ bun run build
 bun run verify
 ```
 
-Format source files:
+Run safe automatic fixes before checking code or config changes:
+
+```sh
+bun run fix
+```
+
+Check formatting without writing files:
 
 ```sh
 bun run format
 ```
+
+Run the heavier pre-release gate:
+
+```sh
+bun run check:release
+```
+
+`check:release` includes browser, accessibility, Lighthouse, coverage, audit,
+and secrets checks. The secrets check expects the `gitleaks` binary to be
+available locally.
 
 ## How The Content Pipeline Works
 
@@ -214,7 +230,7 @@ Configure the host to:
 The production site origin is configured in `astro.config.mjs`:
 
 ```js
-site: "https://thephilosophersmeme.com"
+site: "https://thephilosophersmeme.com";
 ```
 
 `public/CNAME`, `public/robots.txt`, and `public/favicon.svg` are copied into

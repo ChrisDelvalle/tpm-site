@@ -1,14 +1,17 @@
 name: CI
 
 on:
-  pull_request:
+  pull_request: {}
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
-  astro:
-    name: Astro build
+  quality:
+    name: Quality
     runs-on: ubuntu-latest
 
     steps:
@@ -19,5 +22,91 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - run: bun run check
+
+  build:
+    name: Build and verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
       - run: bun run build
       - run: bun run verify
+      - run: bun run validate:html
+
+  browser:
+    name: Browser tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-browser-artifacts
+          path: |
+            playwright-report/
+            test-results/
+
+  accessibility:
+    name: Accessibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:a11y
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-a11y-artifacts
+          path: |
+            playwright-report/
+            test-results/
+
+  lighthouse:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run test:perf
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run audit

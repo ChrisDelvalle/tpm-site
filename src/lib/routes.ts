@@ -17,10 +17,10 @@ export const TOPICS = [
   { slug: "politics", label: "Politics", source: "politics" },
 ] as const;
 
-export type TopicSlug = (typeof TOPICS)[number]["slug"];
-
-export function withTrailingSlash(path: string) {
-  if (path === "") return "/";
+function withTrailingSlash(path: string) {
+  if (path === "") {
+    return "/";
+  }
   return path.endsWith("/") ? path : `${path}/`;
 }
 
@@ -41,12 +41,8 @@ export function normalizeSlug(value: string) {
     .replace(/^-|-$/g, "");
 }
 
-export function titleFromSlug(slug: string) {
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
 }
 
 export function decodeHtmlEntities(value: string) {
@@ -72,49 +68,41 @@ export function entryTitle(entry: LegacyEntry) {
 }
 
 export function sourceFolder(entry: LegacyEntry) {
-  const filePath = entry.filePath || "";
+  const filePath = entry.filePath ?? "";
   const marker = "/src/content/legacy/";
   const relativePath = filePath.includes(marker)
-    ? filePath.split(marker)[1]
+    ? (filePath.split(marker)[1] ?? "")
     : filePath.replace(/^src\/content\/legacy\//, "");
 
-  return relativePath.includes("/") ? relativePath.split("/")[0] : "";
+  return relativePath.includes("/") ? (relativePath.split("/")[0] ?? "") : "";
 }
 
 export function articleSlug(entry: LegacyEntry) {
   const permalink = entry.data.permalink;
   const permalinkMatch =
     typeof permalink === "string"
-      ? permalink.match(/^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/)
+      ? /^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/.exec(permalink)
       : null;
 
   if (permalinkMatch) {
-    return permalinkMatch[1];
+    return permalinkMatch[1] ?? entry.id;
   }
 
   return entry.id.replace(/(^|\/)\d{4}[-_]\d{2}[-_]\d{2}[-_]/, "$1");
 }
 
-export function isDatedPermalink(permalink: unknown) {
+function isDatedPermalink(permalink: unknown) {
   return (
     typeof permalink === "string" &&
     /^\/?\d{4}\/\d{2}\/\d{2}\/[^/]+\/?$/.test(permalink)
   );
 }
 
-export function isTopicEntry(entry: LegacyEntry) {
-  const permalink = entry.data.permalink;
-  if (typeof permalink !== "string") return false;
-
-  const topic = TOPICS.find((item) => item.source === sourceFolder(entry));
-  return Boolean(topic && withTrailingSlash(permalink) === `/${topic.source}/`);
-}
-
-export function isArticle(entry: LegacyEntry) {
+function isArticle(entry: LegacyEntry) {
   return isDatedPermalink(entry.data.permalink);
 }
 
-export function isPublished(entry: LegacyEntry) {
+function isPublished(entry: LegacyEntry) {
   return entry.data.published !== false && entry.data.status !== "draft";
 }
 
@@ -124,13 +112,19 @@ export function isPublishedArticle(entry: LegacyEntry) {
 
 export function entryDate(entry: LegacyEntry) {
   const date = entry.data.date;
-  if (date instanceof Date) return date;
-  if (typeof date === "string" || typeof date === "number") return new Date(date);
+  if (date instanceof Date) {
+    return date;
+  }
+  if (typeof date === "string" || typeof date === "number") {
+    return new Date(date);
+  }
   return undefined;
 }
 
 export function formatDate(date: Date | undefined) {
-  if (!date || Number.isNaN(date.getTime())) return "";
+  if (date === undefined || Number.isNaN(date.getTime())) {
+    return "";
+  }
   return new Intl.DateTimeFormat("en", {
     year: "numeric",
     month: "long",
@@ -140,36 +134,38 @@ export function formatDate(date: Date | undefined) {
 
 export function authorName(entry: LegacyEntry) {
   const author = entry.data.author;
-  if (typeof author === "string") return author;
-  if (
-    author &&
-    typeof author === "object" &&
-    "display_name" in author &&
-    typeof author.display_name === "string"
-  ) {
-    return author.display_name;
+  if (typeof author === "string") {
+    return author;
+  }
+  if (isRecord(author) && typeof author["display_name"] === "string") {
+    return author["display_name"];
   }
   return "The Philosopher's Meme";
 }
 
 export function excerpt(entry: LegacyEntry) {
-  return entry.data.excerpt || entry.data.description || "";
+  const value = entry.data.excerpt ?? entry.data.description;
+  return typeof value === "string" ? value : "";
 }
 
 export function imageUrl(entry: LegacyEntry) {
-  return entry.data.fbpreview || entry.data.image || entry.data.banner || undefined;
+  const value = entry.data.fbpreview ?? entry.data.image ?? entry.data.banner;
+  return typeof value === "string" ? value : undefined;
 }
 
 export function topicForEntry(entry: LegacyEntry) {
   const source = sourceFolder(entry);
   const fromSource = TOPICS.find((topic) => topic.source === source);
-  if (fromSource) return fromSource;
+  if (fromSource !== undefined) {
+    return fromSource;
+  }
 
   const parent = typeof entry.data.parent === "string" ? entry.data.parent : "";
   const normalizedParent = normalizeSlug(parent);
   return TOPICS.find(
     (topic) =>
-      topic.slug === normalizedParent || normalizeSlug(topic.label) === normalizedParent,
+      topic.slug === normalizedParent ||
+      normalizeSlug(topic.label) === normalizedParent,
   );
 }
 
@@ -177,7 +173,10 @@ export function sortNewestFirst(entries: LegacyEntry[]) {
   return [...entries].sort((a, b) => {
     const bTime = entryDate(b)?.getTime() ?? 0;
     const aTime = entryDate(a)?.getTime() ?? 0;
-    return bTime - aTime || articleSlug(a).localeCompare(articleSlug(b));
+    const dateSort = bTime - aTime;
+    return dateSort !== 0
+      ? dateSort
+      : articleSlug(a).localeCompare(articleSlug(b));
   });
 }
 
@@ -188,7 +187,7 @@ export function assertUniqueArticleSlugs(entries: LegacyEntry[]) {
     const slug = articleSlug(entry);
     const previous = seen.get(slug);
 
-    if (previous) {
+    if (previous !== undefined) {
       throw new Error(
         `Duplicate article slug "${slug}" for "${previous}" and "${entry.id}".`,
       );
