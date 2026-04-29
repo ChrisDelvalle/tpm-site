@@ -67,7 +67,8 @@ to the active milestone.
 - `CHECKLIST.md`: migration milestone tracking.
 - `MIGRATION_COMPLETION_PLAN.md`: cleanup and legacy removal plan.
 - `DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
-- `QUALITY_TOOLING.md`: target quality tooling and release checks.
+- `QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
+  release checks.
 - `ASTRO_GUIDANCE.md`: expanded Astro notes.
 - `TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
 
@@ -127,7 +128,7 @@ states hard to express:
 - Prefer composition over large configuration objects or boolean prop clusters.
 - Model mutually exclusive UI states as discriminated states, not scattered
   booleans.
-- Keep server/content data, URL state, form draft state, and local interaction
+- Keep build/content data, URL state, form draft state, and local interaction
   state separate unless combining them is deliberate.
 - Use semantic HTML first, then ARIA only when native semantics are not enough.
 - Design loading, empty, error, disabled, selected, expanded, and long-content
@@ -156,17 +157,17 @@ Suggested component responsibilities:
 Use React, shadcn, and Radix only when interaction complexity justifies them.
 Static primitives and layout blocks should usually be Astro components.
 
-Preferred component organization:
+Target component organization:
 
 - `src/components/ui/`: buttons, links, inputs, badges, separators, icon
   buttons, containers, and low-level primitives.
 - `src/components/layout/`: base layout, site shell, page frame, header,
   footer.
-- `src/components/navigation/`: primary nav, mobile nav, category/topic
-  navigation, breadcrumbs.
+- `src/components/navigation/`: primary nav, mobile nav, category navigation,
+  breadcrumbs.
 - `src/components/articles/`: article header, metadata, article lists, cards,
   prose wrapper.
-- `src/components/blocks/`: homepage sections, support blocks, category/topic
+- `src/components/blocks/`: homepage sections, support blocks, category
   sections, about sections.
 
 ## Responsive Design Standard
@@ -230,33 +231,22 @@ client JavaScript. Choose the least dynamic primitive:
 2. Build-time content collection.
 3. Small processed `<script>` or custom element.
 4. Hydrated framework island.
-5. On-demand server route.
-6. Client-only component only when SSR is impossible.
 
-Astro frontmatter runs on the server at render time. Template expressions are
-not reactive after HTML is sent. `window`, `document`, and `localStorage`
-belong in browser scripts or hydrated islands.
+This project is a static site deployed to GitHub Pages. Do not add SSR
+adapters, request-time routes, middleware, server islands, or Astro Actions
+unless the project explicitly stops being static.
+
+Astro frontmatter runs at build/render time. Template expressions are not
+reactive after HTML is sent. `window`, `document`, and `localStorage` belong in
+browser scripts or hydrated islands.
 
 Do not treat Astro like React, Next, or a Vite SPA. Pages are documents,
 components are templates, and hydration is opt-in.
 
-Astro requires Node.js `22.12.0` or newer. With Bun:
-
-- `bun install`
-- `bun run <script>`
-- `bunx astro add <integration>`
-- `bun create astro`
-
-Astro commands:
-
-- `astro dev`: dev server with HMR.
-- `astro build`: production build into `dist/`.
-- `astro preview`: preview built output.
-- `astro check`: Astro and TypeScript diagnostics.
-- `astro sync`: generate virtual module types for content, env, actions, etc.
-
-`dev`, `build`, and `check` run sync automatically, but run `astro sync` after
-schema/env changes when editor types are stale.
+Use the repo Bun scripts in the Quality Gate section for normal development and
+verification. Do not initialize a new Astro project or add Astro integrations
+unless the task explicitly requires it. Astro requires Node.js `22.12.0` or
+newer.
 
 Conventional structure:
 
@@ -267,8 +257,6 @@ src/layouts/            document and content shells
 src/content/            content collections
 src/assets/             processed source assets
 src/styles/             global CSS entry and tokens
-src/actions/            Astro Actions
-src/middleware.ts       request middleware
 src/env.d.ts            global app types
 src/content.config.ts   content collection config
 public/                 copied as-is to site root
@@ -283,7 +271,7 @@ only for files that must be copied untouched, such as `favicon.svg`,
 
 ## Astro Components
 
-An `.astro` file has optional server frontmatter and a template:
+An `.astro` file has optional frontmatter and a template:
 
 ```astro
 ---
@@ -374,10 +362,10 @@ Routing rules:
 - Prefix route files or directories with `_` to exclude them from routing.
 - Use `paginate()` in `getStaticPaths()` for paginated archives.
 
-`Astro` context is server-side and includes `Astro.props`, `Astro.params`,
-`Astro.url`, `Astro.site`, `Astro.generator`, `Astro.request`,
-`Astro.response`, `Astro.cookies`, `Astro.locals`, i18n helpers, and helpers
-such as `Astro.redirect()`, `Astro.rewrite()`, and `Astro.callAction()`.
+`Astro` context is available during rendering and includes `Astro.props`,
+`Astro.params`, `Astro.url`, `Astro.site`, `Astro.generator`,
+`Astro.request`, `Astro.response`, and helpers such as `Astro.redirect()` and
+`Astro.rewrite()`.
 
 Content collections are the default source for articles and pages. Use schemas
 to validate frontmatter and make invalid content fail early. Use
@@ -408,32 +396,23 @@ Content collection rules:
 
 Markdown and MDX rules:
 
-- Markdown is for normal articles.
-- MDX is for articles that need imported components.
-- Direct Markdown pages in `src/pages/` may use `layout` frontmatter; collection
-  entries should be rendered by route/layout code with `render(entry)`.
+- Authors use Markdown for normal articles and MDX when an article needs
+  imported components.
 - Keep article body rewrites out of incidental UI work.
 - Use Tailwind Typography for generated prose.
-- Pass custom MDX components through the content rendering path when needed.
-- Do not ship React for static Markdown content.
-- Keep Markdown/MDX plugins minimal and documented in Astro config.
-- Be careful rendering MDX into RSS because components may not translate
-  cleanly; sanitize full-content RSS and fix relative URLs if full-content RSS
-  is added.
+- Do not ship React for static Markdown prose.
+- Do not change Markdown/MDX plugins, MDX component mapping, or full-content RSS
+  rendering unless explicitly asked.
 
-Data, SSR, middleware, and actions:
+Static data rules:
 
-- Use static prerendering unless a route truly needs request-time behavior.
-- Use SSR/adapters only when static output cannot meet the requirement.
-- Use middleware for request-level concerns only.
-- Use Astro Actions for server-side form/mutation flows when the project needs
-  them.
-- Keep client state out of server-rendered content paths.
+- Use static prerendering and build-time content collections.
+- Use static endpoints for generated files such as RSS or feeds.
+- Keep client state out of static content rendering paths.
 
 Environment:
 
-- Use Astro env schema support for typed environment variables when adding env
-  requirements.
+- Avoid adding environment-variable requirements to the static site.
 - Do not read secrets in client-side code.
 - Never put secrets in `PUBLIC_*`.
 - `.env` is not automatically loaded in `astro.config.mjs`; use `process.env`
@@ -441,11 +420,11 @@ Environment:
 - Validate required variables during build/check.
 
 High-impact Astro config options include `site`, `base`, `trailingSlash`,
-`output`, `adapter`, `integrations`, `compressHTML`,
-`prerenderConflictBehavior`, `security`, `vite`, `build.*`, `image.*`,
-Markdown plugins, and prefetch strategy. Know what an option does before
-changing it; prefer `prerenderConflictBehavior: "error"` when route conflicts
-should fail loudly.
+`integrations`, `compressHTML`, `prerenderConflictBehavior`, `vite`, `build.*`,
+`image.*`, and Markdown plugins. Know what an option does before changing it;
+prefer `prerenderConflictBehavior: "error"` when route conflicts should fail
+loudly. Do not add `output: "server"` or an SSR adapter unless explicitly
+asked.
 
 If an Astro API detail is uncertain, verify it against the current Astro docs
 before changing code. This project has an Astro Docs MCP server available in
@@ -461,7 +440,7 @@ Allowed client behavior should be small and explicit:
 - mobile navigation;
 - theme toggle persistence;
 - search enhancement;
-- future article-specific MDX interactions.
+- article-specific MDX interactions.
 
 Do not hydrate large layout regions. Do not ship React for static content. If
 React or shadcn/Radix components are added, prerender static components and
@@ -473,7 +452,8 @@ Use client directives deliberately:
 - `client:idle` for lower-priority interaction.
 - `client:visible` for below-the-fold or heavy interaction.
 - `client:media` for viewport-specific interaction.
-- `client:only` only when server rendering is impossible.
+- Avoid `client:only` unless explicitly needed; it skips static prerendering for
+  that component.
 
 Processed component scripts are `<script>` tags with no attributes except an
 optional `src`; Astro bundles, deduplicates, and optimizes them. Extra
@@ -482,13 +462,13 @@ mainly for tiny boot scripts such as initial theme setup.
 
 Astro HTML does not support React-style `onClick={handler}` event props. For
 small interactions, use processed scripts, custom elements, or the smallest
-hydrated island. Pass server values to scripts with `data-*` attributes or JSON
-script data. Avoid `define:vars` on scripts unless inline duplication is
+hydrated island. Pass build-time values to scripts with `data-*` attributes or
+JSON script data. Avoid `define:vars` on scripts unless inline duplication is
 intentional.
 
 Astro components cannot be hydrated. Framework component files cannot import
 `.astro` components. Hydrated props must be serializable; functions cannot cross
-from Astro server code to client framework props.
+from Astro build-time code to client framework props.
 
 React island rules: prefer function components, explicit TypeScript props,
 local/minimal state, composition/hooks over HOCs, stable keys, valid ARIA,
@@ -497,44 +477,23 @@ semantic HTML, no `accessKey`, useful alt text, and filtered prop spreading.
 Useful Astro built-ins and directives:
 
 - `Image`, `Picture`, and `Font` from `astro:assets`.
-- `Code` and `Prism` from `astro:components`.
-- `ClientRouter` and transition helpers from `astro:transitions`.
 - `Fragment` in Astro templates.
 - Directives include `class:list`, `set:html`, `set:text`, `client:*`,
-  `server:defer`, `is:global`, `is:inline`, `define:vars`, `is:raw`, and
-  `transition:*`.
+  `is:global`, `is:inline`, `define:vars`, and `is:raw`.
 
-Default Astro navigation is multi-page document navigation. `<ClientRouter />`
-opts into enhanced client-side routing and view transitions; use it only when
-product value outweighs the extra lifecycle complexity.
+Default Astro navigation is multi-page document navigation. Do not add
+client-side routing or page-transition machinery without an explicit product
+decision.
 
 ## Tailwind Operating Model
 
-This project uses Tailwind CSS 4 with Astro and Vite:
+This project already uses Tailwind CSS 4, Tailwind Typography,
+`prettier-plugin-tailwindcss`, `clsx`, and `tailwind-merge`. Treat that setup as
+settled unless the task explicitly changes the styling toolchain.
 
-- `tailwindcss`
-- `@tailwindcss/vite`
-- `@tailwindcss/typography`
-- `prettier-plugin-tailwindcss`
-- `clsx`
-- `tailwind-merge`
-
-The setup is CSS-first:
-
-```css
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-@custom-variant dark (&:is([data-theme="dark"] *));
-
-@theme inline {
-  --color-background: var(--bg);
-}
-```
-
-`astro.config.mjs` should load `tailwindcss()` through Vite. There does not need
-to be a `tailwind.config.js` unless a tool specifically requires one. Prefer the
-CSS-first v4 APIs: `@theme`, `@source`, `@utility`, `@variant`,
-`@custom-variant`, and `@plugin`.
+Prefer Tailwind v4 CSS-first APIs when styling-system changes are required:
+`@theme`, `@source`, `@utility`, `@variant`, `@custom-variant`, and `@plugin`.
+Do not add `tailwind.config.js` unless a tool specifically requires it.
 
 Tailwind is a utility-first design-system API. Utilities are small,
 single-purpose classes selected from a constrained scale. They use shared
@@ -986,7 +945,11 @@ Avoid these:
 
 Article content fidelity is strict.
 
+- Do not edit files in `src/content/articles/` unless explicitly instructed.
 - Do not rewrite article bodies unless the user explicitly asks.
+- When article edits are requested, preserve the author's wording and make only
+  the precise requested change. Do not restyle prose, improve phrasing, adjust
+  tone, or otherwise change authorial language unless explicitly instructed.
 - Preserve existing meaningful metadata.
 - Keep legacy permalink data as metadata, but do not let it drive core routing
   once the cleanup plan is implemented.
@@ -1032,7 +995,7 @@ Astro image rules:
 - Use `priority` only on the likely LCP image. It sets eager loading,
   synchronous decoding, and high fetch priority.
 - Do not lazy-load the likely LCP image or main text block.
-- Use `getImage()` in server/frontmatter code when a generated image URL is
+- Use `getImage()` in Astro/frontmatter code when a generated image URL is
   needed.
 - Prefer modern formats such as AVIF or WebP where Astro can generate them.
 - Avoid serving a full-resolution upload when the rendered slot is much smaller.
@@ -1060,9 +1023,6 @@ accessible.
 Font rules:
 
 - Prefer Astro Fonts or local/build-managed font loading.
-- When using Astro Fonts, configure fonts in `astro.config.mjs`, render
-  `<Font />` in `<head>`, and expose variables to Tailwind through
-  `@theme inline`.
 - Avoid layout shift from late font swaps.
 - Keep body text readable before custom fonts load.
 - Do not add external font services without explicit approval.
@@ -1078,14 +1038,11 @@ Treat production output as the performance source of truth.
   are emitted as files.
 - Pagefind owns generated search assets under `dist/pagefind/`.
 - Files in `public/` are copied as-is and should already be production-ready.
-- Production hosting should serve Brotli when supported, gzip as a fallback,
-  long-lived cache headers for hashed assets, and shorter cache headers for
-  HTML, RSS, sitemap, and search files.
 
 Keep reading pages static by default. Avoid adding client JavaScript to article,
-topic, archive, RSS, sitemap, and ordinary content pages unless the feature
-requires it. Route-local interaction is preferred: search code should stay on
-search pages, and MDX interaction should stay on articles that use it.
+category/topic archive, RSS, sitemap, and ordinary content pages unless the
+feature requires it. Route-local interaction is preferred: search code should
+stay on search pages, and MDX interaction should stay on articles that use it.
 
 Performance rules:
 
@@ -1159,7 +1116,7 @@ Current baseline scripts:
   Markdown/config linting, package ordering, Prettier check, Knip, and unit
   tests.
 - `bun run build`: sync content, build Astro, and generate Pagefind index.
-- `bun run preview`: preview the built output locally.
+- `bun run preview`: preview built output locally after `bun run build`.
 - `bun run verify`: verify built output.
 - `bun run validate:html`: validate shell/index HTML in built output.
 - `bun run validate:links`: verify built output links.
@@ -1244,7 +1201,7 @@ only to make tests easier.
 Use unit tests for:
 
 - slug generation;
-- topic/category derivation;
+- category derivation;
 - draft filtering;
 - metadata normalization;
 - route helpers;
@@ -1258,7 +1215,7 @@ Use Playwright for user-visible browser behavior:
 - homepage;
 - article pages;
 - article archive;
-- topic/category pages;
+- category pages and current legacy topic routes;
 - mobile navigation;
 - theme toggle;
 - search;
@@ -1290,7 +1247,7 @@ Generated or disposable paths include:
 - `src/content/legacy/`
 - `.astro/`
 - Pagefind output under built `dist/`
-- coverage output once test coverage is enabled
+- coverage output
 
 Legacy files should be handled carefully during migration cleanup. Do not delete
 or rename legacy content, assets, or metadata unless the active task explicitly

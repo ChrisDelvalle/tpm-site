@@ -8,6 +8,17 @@ The goal is not a permanent compatibility layer. The goal is a simple Astro site
 where article authors only add Markdown or MDX files and the codebase remains
 small, typed, and predictable.
 
+Migration is complete when the repository behaves like a conventional Astro
+project and no active code path, script, route, verifier, or authoring
+instruction exists only to support the Jekyll migration. The only legacy data
+that should remain is inert article metadata preserved for posterity, such as
+`legacyPermalink` and `legacyBanner`, plus author-written article body content
+that Astro can render directly without migration-specific workarounds.
+
+Markdown, MDX, article frontmatter, and article-source asset decisions are
+tracked in `ARTICLE_CONTENT_CHECKLIST.md`. That checklist is the manual
+verification gate for content-source changes.
+
 ## Desired End State
 
 - Add `src/content/articles/<category>/<slug>.md` to publish a plain Markdown
@@ -143,6 +154,16 @@ Jekyll-shaped content before normalizing the project.
   - Converts `.markdown` files to `.md` if any remain.
   - Removes duplicate top-level frontmatter keys by keeping the last key.
 
+- One-shot migration scripts
+  - `scripts/rename-legacy-articles.mjs`
+  - `scripts/migrate-articles-to-categories.mjs`
+  - `scripts/normalize-article-metadata.mjs`
+  - `scripts/normalize-markdown-html.mjs`
+  - `scripts/plan-asset-migration.mjs`
+  - `scripts/migrate-raw-images-to-mdx.mjs`
+  - These should not remain in the normal authoring workflow after their
+    migrated output is final.
+
 - `src/content/legacy/`
   - Generated content mirror used by Astro content collections.
   - Ignored by git.
@@ -155,11 +176,14 @@ Jekyll-shaped content before normalizing the project.
     `sync:content` before using content.
 
 - `src/content.config.ts`
-  - Collection is named `legacyMarkdown`.
-  - Collection base points at `./src/content/legacy`.
-  - `generateId` derives IDs from old dated `permalink` values when possible.
-  - Fallback ID logic strips leading dates from filenames.
-  - Schema accepts many loose Jekyll-era frontmatter fields.
+  - The active article collection is now named `articles` and loads from
+    `./src/content/articles`.
+  - A temporary `legacyMarkdown` collection still points at
+    `./src/content/legacy`.
+  - Active `generateId` still derives IDs from old dated `legacyPermalink` or
+    `permalink` values when possible.
+  - Fallback ID logic still strips leading dates from filenames.
+  - The active schema still accepts many loose Jekyll-era frontmatter fields.
 
 - `src/lib/routes.ts`
   - `LegacyEntry` type name.
@@ -173,8 +197,9 @@ Jekyll-shaped content before normalizing the project.
     the UI still uses topic naming.
 
 - `src/lib/content.ts`
-  - Queries `legacyMarkdown`.
-  - Article lookup and sorting depend on legacy-normalized entries.
+  - Queries the active `articles` collection.
+  - Article lookup, filtering, and sorting still depend on legacy-shaped route
+    helpers and topic metadata.
 
 - Page and layout files
   - Several files use `article.id` as the public slug because IDs are currently
@@ -217,11 +242,11 @@ This survey describes what must be normalized before the project can follow
 plain Astro conventions.
 
 - Source files:
-  - 45 article `.md` files under `src/content/articles/`.
-  - 16 article `.mdx` files under `src/content/articles/`.
+  - 58 article `.md` files under `src/content/articles/`.
+  - 3 article `.mdx` files under `src/content/articles/`.
   - 1 page `.md` file under `src/content/pages/`.
-  - Current MDX articles are legacy raw-image migrations that need Astro
-    `<Image />` components.
+  - Current MDX articles are the small set that still needs components; plain
+    articles should remain Markdown.
 
 - Article classification:
   - 61 files have dated legacy `permalink` values and are currently treated as
@@ -243,7 +268,7 @@ plain Astro conventions.
 - Publishing state:
   - One known unpublished article exists:
     `src/content/articles/politics/joshua-citarella-astroturfing.md`.
-  - It must become `draft: true`.
+  - It is already represented as `draft: true`.
   - Legacy `published: false` and `status: draft` must not survive as the final
     publishing model.
 
@@ -264,8 +289,12 @@ plain Astro conventions.
     `wittgensteins-most-beloved-quote-was-real-but-its-fake-now`.
 
 - Body markup:
-  - 17 files contain `{{ site.baseurl }}`.
-  - 15 files contain WordPress-era classes or alignment markup.
+  - No `{{ site.baseurl }}` references currently remain in source content.
+    The render-time transform should be removed after the final verification
+    pass confirms this remains true.
+  - One old glossary URL remains inside article source and needs an explicit
+    decision before the glossary compatibility transform is removed.
+  - 12 files contain WordPress-era classes or alignment markup.
   - Local raw `<img>` and hover-image links have been converted to MDX
     `<Image />` imports.
   - 3 remaining raw `<img>` elements reference remote Discord CDN images and
@@ -447,6 +476,12 @@ are migrated.
 - `.node-version`
   - Useful because Astro requires Node `>=22.12.0`.
 
+- `.env`
+  - Keep tracked as the shared Bun-loaded project environment for non-secret
+    defaults such as `ASTRO_TELEMETRY_DISABLED=1`.
+  - Do not put secrets in `.env`; use ignored `.env.local` or
+    `.env.*.local` files for local-only values.
+
 - `.editorconfig`, `.prettierrc`, `.prettierignore`,
   `.markdownlint-cli2.jsonc`, `.htmlvalidate.json`, `eslint.config.js`,
   `knip.json`, `lighthouserc.cjs`, `playwright.config.ts`,
@@ -480,10 +515,11 @@ are migrated.
   - Shared article images should live under `src/assets/shared/`.
   - Site UI and homepage images should live under `src/assets/site/`.
 
-- `public/assets/` and `public/uploads/`
-  - Temporary legacy compatibility locations while article Markdown still
-    references `/assets/...` and `/uploads/...`.
-  - Treat these as migration input, not the final source of truth.
+- `public/`
+  - Keep only files that intentionally need stable root URLs or must be copied
+    unchanged.
+  - Current expected files are `public/CNAME`, `public/favicon.svg`, and
+    `public/robots.txt`.
 
 - `public/favicon.svg`
   - Current browser tab icon.
@@ -504,6 +540,7 @@ are migrated.
 
 - `script/build`
   - Legacy build helper; Bun scripts are authoritative.
+  - Currently absent. Do not reintroduce it.
 
 - root `CNAME`
   - Astro does not copy root `CNAME` to `dist/`.
@@ -512,30 +549,25 @@ are migrated.
 
 - root `assets/`
   - Legacy static asset source.
-  - Remove after referenced project-owned images have been moved into
-    `src/assets/` or explicitly classified as public URL files.
+  - Currently absent after asset migration. Do not reintroduce it.
 
 - root `uploads/`
   - Legacy static upload source.
-  - Remove after referenced project-owned images have been moved into
-    `src/assets/` or explicitly classified as public URL files.
+  - Currently absent after asset migration. Do not reintroduce it.
+
+- `public/assets/` and `public/uploads/`
+  - Removed after asset migration. Do not reintroduce them as legacy asset
+    mirrors.
 
 - `public/.gitkeep`
-  - No longer needed because `public/` contains real files.
-
-- `.env`
-  - Currently only contains `ASTRO_TELEMETRY_DISABLED`.
-  - Keep tracked as the shared Bun-loaded project environment for non-secret
-    defaults.
-  - Do not put secrets in `.env`; use ignored `.env.local` or
-    `.env.*.local` files for local-only values.
+  - Removed because `public/` contains real files.
 
 - `.DS_Store`
   - Local macOS artifact. Remove from the worktree; keep ignored.
 
 - `.devcontainer/`
   - The tracked Jekyll devcontainer files have been removed.
-  - Remove any empty leftover directory from the worktree.
+  - Currently absent. Do not reintroduce Jekyll devcontainer tooling.
 
 - `package-lock.json`
   - Removed. Do not reintroduce npm lockfiles while Bun is the package manager.
@@ -685,11 +717,11 @@ module or script. That fallback must:
 
 - [x] Add `@astrojs/mdx`.
 - [x] Register `mdx()` in `astro.config.mjs`.
-- [ ] Add `@astrojs/react`, `react`, `react-dom`, `@types/react`, and
+- [x] Add `@astrojs/react`, `react`, `react-dom`, `@types/react`, and
       `@types/react-dom` if MDX articles need React components rather than
       Astro-only components.
-- [ ] Register `react()` in `astro.config.mjs` if React is added.
-- [ ] Update TypeScript config for React JSX only if React is added.
+- [x] Register `react()` in `astro.config.mjs` if React is added.
+- [x] Update TypeScript config for React JSX only if React is added.
 - [ ] Add or document a small example MDX article using an Astro or React
       component.
 - [x] Verify `.md` and `.mdx` articles render through the same article layout.
@@ -714,7 +746,7 @@ module or script. That fallback must:
       excluded from production output.
 - [x] Clean duplicate frontmatter keys once so the sync script is no longer
       needed.
-- [ ] Remove Jekyll/Siteleaf/WordPress-only frontmatter fields after their data
+- [x] Remove Jekyll/Siteleaf/WordPress-only frontmatter fields after their data
       has either been migrated or intentionally dropped.
 - [x] Convert author objects to the final author representation.
 - [x] Preserve existing `tags` values and normalize them to a string array.
@@ -743,10 +775,11 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 
 ### Milestone 3: Load Content Directly From The Article Source Tree
 
-- [ ] Change the content collection base from `./src/content/legacy` to
+- [x] Change the content collection base from `./src/content/legacy` to
       `./src/content/articles`.
-- [ ] Rename the collection from `legacyMarkdown` to `articles`.
-- [ ] Load `**/*.{md,mdx}` directly.
+- [x] Rename the active collection from `legacyMarkdown` to `articles`.
+- [x] Load `**/*.{md,mdx}` directly for the active article collection.
+- [ ] Remove the temporary `legacyMarkdown` collection.
 - [ ] Remove custom ID generation based on dated `permalink`.
 - [ ] Implement loader ID generation so `entry.id` resolves to the exact
       filename stem.
@@ -797,23 +830,19 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 - [ ] Remove `src/content/legacy` from active documentation.
 - [ ] Remove `src/content/legacy` ignore entries once it is no longer generated.
 
-### Milestone 6: Clean Legacy Markup At The Source
+### Milestone 6: Isolate Article Content Work
 
-- [ ] Replace `{{ site.baseurl }}` references in article source with
-      root-relative paths.
-- [ ] Replace legacy `/glossary/` links with `/articles/glossary-1-dot-0/`.
-- [ ] Convert simple raw HTML paragraphs, emphasis, bold text, lists, headings,
-      blockquotes, and links to Markdown where doing so is mechanically safe.
-- [ ] Keep complex raw HTML only where it expresses behavior Markdown cannot
-      express cleanly, such as iframes, complex tables, or intentional custom
-      image/link structures.
-- [ ] Add missing `alt` text or convert raw `<img>` tags to Markdown image
-      syntax where safe.
-- [ ] Remove WordPress-era classes and alignment markup when equivalent
-      Markdown or site-level prose styling can replace it.
-- [ ] Remove render-time Jekyll/Liquid cleanup transforms from
-      `astro.config.mjs` after source cleanup is complete.
-- [ ] Keep the build verifier checking for Liquid artifacts.
+- [x] Track Markdown, MDX, article frontmatter, and article-source asset work in
+      `ARTICLE_CONTENT_CHECKLIST.md`.
+- [x] Complete or explicitly defer required items in
+      `ARTICLE_CONTENT_CHECKLIST.md` before removing content-compatibility
+      transforms.
+- [x] Remove render-time Jekyll/Liquid cleanup transforms from
+      `astro.config.mjs` only after the article content checklist confirms no
+      article source requires them.
+- [x] Keep the build verifier checking for Liquid artifacts.
+- [x] Preserve author wording during all source-content edits; only approved
+      mechanical markup changes are in scope.
 
 ### Milestone 7: Normalize Static Assets
 
@@ -850,7 +879,7 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 - [x] Remove root `assets/`.
 - [x] Remove root `uploads/`.
 - [x] Remove `public/.gitkeep`.
-- [ ] Keep `public/favicon.svg` as the authoritative favicon unless replaced.
+- [x] Keep `public/favicon.svg` as the authoritative favicon unless replaced.
 - [x] Keep `public/CNAME` as the authoritative deploy CNAME file.
 - [x] Remove root `CNAME`.
 
@@ -872,21 +901,28 @@ Remaining asset cleanup after the MDX image migration:
 
 - [x] Remove root `_config.yml`.
 - [x] Remove root `index.md`.
-- [ ] Remove `script/build`.
+- [x] Confirm `script/build` is absent.
 - [x] Keep tracked `.env` for non-secret Bun-loaded project defaults such as
       `ASTRO_TELEMETRY_DISABLED=1`.
 - [x] Ignore local-only environment overrides without ignoring the tracked base
       `.env`.
 - [ ] Remove local `.DS_Store`.
-- [ ] Remove any empty `.devcontainer/` directory from the worktree.
-- [ ] Confirm `package-lock.json` stays removed.
-- [ ] Confirm `.stylelintrc.json` stays removed.
-- [ ] Confirm Bundler/Ruby/Jekyll dependency tracking stays removed.
+- [x] Confirm `.devcontainer/` is absent.
+- [x] Confirm `package-lock.json` stays removed.
+- [x] Confirm `.stylelintrc.json` stays removed.
+- [x] Confirm Bundler/Ruby/Jekyll dependency tracking stays removed.
 - [x] Keep `.codex/config.toml` and `.vscode/tasks.json` as intentional shared
       project tooling.
 
 ### Milestone 9: Update Verification And Documentation
 
+- [ ] Review every `migrate:*` package script and one-shot migration helper in
+      `scripts/`.
+- [ ] Remove one-shot migration scripts after their output is final.
+- [ ] Decide whether duplicate/shared/asset-location scripts are ongoing QA
+      tools or migration-only helpers, then update `package.json`.
+- [ ] Decide whether `unused-assets/` remains as a temporary migration archive
+      or is removed before migration completion.
 - [ ] Update `scripts/verify-content.mjs` for the final content model.
 - [ ] Update `scripts/verify-build.mjs` for the final route and asset model.
 - [ ] Keep checks for expected article count, required representative pages,
@@ -926,6 +962,12 @@ src/pages/index.astro
 src/pages/about.astro
 scripts/verify-content.mjs
 scripts/verify-build.mjs
+scripts/rename-legacy-articles.mjs
+scripts/migrate-articles-to-categories.mjs
+scripts/normalize-article-metadata.mjs
+scripts/normalize-markdown-html.mjs
+scripts/plan-asset-migration.mjs
+scripts/migrate-raw-images-to-mdx.mjs
 tests/
 ```
 
@@ -968,6 +1010,7 @@ Documentation:
 ```text
 README.md
 AGENTS.md
+ARTICLE_CONTENT_CHECKLIST.md
 CHECKLIST.md
 DESIGN_PHILOSOPHY.md
 QUALITY_TOOLING.md
@@ -1023,8 +1066,9 @@ MIGRATION_COMPLETION_PLAN.md
 - Cloudflare will be the primary redirect layer for old dated URLs.
 - In-repo redirects, if added, are fallback infrastructure and not part of core
   content routing.
-- Existing articles should become `.md`, not `.mdx`.
-- Future articles can use `.mdx` when they need components.
+- Plain articles should use `.md`.
+- Existing or future articles should use `.mdx` only when they need
+  components.
 - The final author-facing article source is `src/content/articles/`.
 - The final article route slug is `entry.id`, configured to match the exact
   filename stem.

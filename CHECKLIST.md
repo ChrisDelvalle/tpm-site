@@ -5,8 +5,8 @@
 - `/` - homepage.
 - `/articles/` - complete article archive.
 - `/articles/:slug/` - canonical article route.
-- `/topics/` - topic index.
-- `/topics/:topic/` - filtered topic archive.
+- `/categories/` - category index.
+- `/categories/:category/` - filtered category archive.
 - `/about/` - about/static content.
 - `/feed.xml` - RSS feed.
 - `/404/` - not found page.
@@ -15,6 +15,39 @@ Redirect rules are handled outside this repo. The new route shape should stay
 compatible with a Cloudflare rule like:
 
 `/:year/:month/:day/:slug/ -> /articles/:slug/`
+
+Current `/topics/` and `/topics/:topic/` routes are migration-era names. They
+should be replaced by `/categories/` routes or explicitly documented as
+intentional before migration completion.
+
+## Migration Completion Standard
+
+Migration is complete when the repository behaves like a conventional Astro
+project and no active code path, script, route, verifier, or authoring
+instruction exists only to support the Jekyll migration.
+
+Allowed remaining legacy data:
+
+- inert article metadata preserved for posterity, such as `legacyPermalink` and
+  `legacyBanner`;
+- author-written article body content that still contains ordinary raw HTML
+  where Astro can render it directly and no migration-only transform is needed.
+
+Not allowed in the final project:
+
+- generated content mirrors;
+- sync scripts;
+- route logic based on dated Jekyll permalinks;
+- date-prefix slug stripping;
+- Jekyll/Liquid render transforms;
+- Jekyll topic/navigation concepts in active route or helper names;
+- one-shot migration scripts exposed as normal project commands;
+- documentation that describes migration-era behavior as the active workflow.
+
+Markdown, MDX, article frontmatter, and article-source asset decisions are
+tracked separately in `ARTICLE_CONTENT_CHECKLIST.md`. Treat that checklist as a
+manual verification gate before changing article source or removing
+content-compatibility transforms.
 
 ## Milestone 1: Migration Inventory And Rules
 
@@ -416,7 +449,7 @@ on the chosen host and Cloudflare configuration.
 - [x] Validate topic derivation and reject unknown topic folders.
 - [x] Validate duplicate article slugs before route generation.
 - [x] Validate article image paths where practical.
-- [ ] Rename legacy `permalink` metadata to `legacyPermalink` during migration
+- [x] Rename legacy `permalink` metadata to `legacyPermalink` during migration
       cleanup and keep it from driving core routing.
 - [x] Keep old dated URLs out of generated routes unless a future isolated
       redirect fallback explicitly adds them.
@@ -563,11 +596,12 @@ on the chosen host and Cloudflare configuration.
 
 ## Milestone 22: Final Article Collection
 
-- [ ] Change `src/content.config.ts` so the primary article collection loads
+- [x] Change `src/content.config.ts` so the primary article collection loads
       directly from `src/content/articles/`.
-- [ ] Rename the active collection from `legacyMarkdown` to `articles`.
-- [ ] Load both `**/*.md` and `**/*.mdx` article files without a generated
-      mirror.
+- [x] Rename the active collection from `legacyMarkdown` to `articles`.
+- [x] Load both `**/*.md` and `**/*.mdx` article files for the active article
+      collection.
+- [ ] Remove the temporary `legacyMarkdown` collection.
 - [ ] Configure collection IDs so each article ID is the exact filename stem,
       not the category folder and not `legacyPermalink`.
 - [ ] Validate that every article filename stem is URL-safe.
@@ -589,7 +623,7 @@ on the chosen host and Cloudflare configuration.
 
 ## Milestone 23: Article And Category Runtime Simplification
 
-- [ ] Update `src/lib/content.ts` to query the final `articles` collection.
+- [x] Update `src/lib/content.ts` to query the active `articles` collection.
 - [ ] Update `src/lib/routes.ts` to use final article and category domain names
       rather than legacy names.
 - [ ] Derive article URLs from the final article ID only.
@@ -601,6 +635,8 @@ on the chosen host and Cloudflare configuration.
 - [ ] Keep public article URLs as `/articles/:slug/`.
 - [ ] Move category pages to the final `/categories/:category/` route model, or
       document why `/topics/:topic/` remains intentional.
+- [ ] Update validation, HTML validation, Playwright, axe, Lighthouse, and
+      release checks from topic routes to final category routes.
 - [ ] Filter articles with `draft !== true` for pages, archives, categories,
       RSS, sitemap, search, and generated article routes.
 - [ ] Remove runtime article detection based on dated `legacyPermalink`.
@@ -619,6 +655,8 @@ on the chosen host and Cloudflare configuration.
       `verify:content`, `check`, and any other scripts.
 - [ ] Delete generated `src/content/legacy/`.
 - [ ] Remove `src/content/legacy` from `.gitignore`.
+- [ ] Confirm no active content collection, route helper, verifier, test, or
+      script still reads `src/content/legacy/`.
 - [ ] Remove `src/content/legacy` from `AGENTS.md`, `README.md`,
       `MIGRATION_COMPLETION_PLAN.md`, and other active documentation.
 - [ ] Confirm adding a normal `.md` or `.mdx` file under
@@ -640,25 +678,35 @@ on the chosen host and Cloudflare configuration.
 - [ ] Add focused unit tests or build assertions for RSS, sitemap, and search
       filtering after the final content model is active.
 
-## Milestone 26: Legacy Markup Source Cleanup
+## Milestone 26: Article Content Isolation Gate
 
-- [ ] Replace any remaining `{{ site.baseurl }}` references in source content.
-- [ ] Replace legacy `/glossary/` links with
-      `/articles/glossary-1-dot-0/`.
-- [ ] Convert mechanically safe raw HTML paragraphs, emphasis, bold text,
-      lists, headings, blockquotes, and links to Markdown.
-- [ ] Keep complex raw HTML only where it expresses behavior Markdown cannot
-      express cleanly.
-- [ ] Add missing image alt text where the intended description is clear.
-- [ ] Remove WordPress-era classes and alignment markup when Markdown or
-      site-level prose styling can replace it.
-- [ ] Remove render-time Jekyll/Liquid cleanup transforms from
-      `astro.config.mjs` after source cleanup is complete.
-- [ ] Keep the build verifier checking that Liquid artifacts do not reach
+- [x] Keep Markdown, MDX, article frontmatter, and article-source asset work in
+      `ARTICLE_CONTENT_CHECKLIST.md`.
+- [x] Complete or explicitly defer required items in
+      `ARTICLE_CONTENT_CHECKLIST.md` before removing content-compatibility
+      transforms.
+- [x] Remove render-time Jekyll/Liquid cleanup transforms from
+      `astro.config.mjs` only after the article content checklist confirms no
+      article source requires them.
+- [x] Keep the build verifier checking that Liquid artifacts do not reach
       built output.
+- [x] Do not perform article-body cleanup incidentally; every source-content
+      edit must be explicit and preserve author wording except for approved
+      mechanical markup removal.
 
 ## Milestone 27: Final Verification And Documentation
 
+- [ ] Review every `migrate:*` package script and migration helper under
+      `scripts/`; keep only scripts that are still useful as ongoing QA or
+      maintenance tools.
+- [ ] Remove one-shot migration scripts after their output is final:
+      `rename-legacy-articles.mjs`, `migrate-articles-to-categories.mjs`,
+      `normalize-article-metadata.mjs`, `normalize-markdown-html.mjs`,
+      `plan-asset-migration.mjs`, and `migrate-raw-images-to-mdx.mjs`.
+- [ ] Decide whether duplicate/shared/asset-location scripts are ongoing QA
+      tools or migration-only helpers, then update `package.json` accordingly.
+- [ ] Decide whether `unused-assets/` remains as a temporary migration archive
+      or is removed before migration completion.
 - [ ] Update `scripts/verify-content.mjs` for the final direct article
       collection model.
 - [ ] Update `scripts/verify-build.mjs` for final routes, categories, public
@@ -687,3 +735,8 @@ on the chosen host and Cloudflare configuration.
 - [ ] Confirm no root Jekyll files remain.
 - [ ] Confirm no duplicate root/public asset trees remain.
 - [ ] Confirm no tracked secret/local environment or OS artifact files remain.
+- [ ] Confirm `AGENTS.md`, `README.md`, and migration docs no longer describe
+      migration-only behavior as the active authoring workflow.
+- [ ] Remove or archive `MIGRATION_INVENTORY.md`,
+      `MIGRATION_COMPLETION_PLAN.md`, and this checklist after migration
+      completion if they are no longer active maintenance documents.
