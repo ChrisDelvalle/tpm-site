@@ -3,8 +3,8 @@ title: About
 description: "About The Philosopher's Meme."
 ---
 
-
 ## About
+
 We are an organization of users dedicated to Internet memes and all that relates to them. The Philosopher’s Meme is our experiment in distributed research into Internet culture — at once a series of projects, a network of users, and a community of contributors.
 
 ## History
