@@ -11,7 +11,7 @@ export const TOPICS = [
   { slug: "metamemetics", label: "Metamemetics", source: "metamemetics" },
   { slug: "aesthetics", label: "Aesthetics", source: "aesthetics" },
   { slug: "irony", label: "Irony", source: "irony" },
-  { slug: "game-studies", label: "Game Studies", source: "game studies" },
+  { slug: "game-studies", label: "Game Studies", source: "game-studies" },
   { slug: "history", label: "History", source: "history" },
   { slug: "philosophy", label: "Philosophy", source: "philosophy" },
   { slug: "politics", label: "Politics", source: "politics" },

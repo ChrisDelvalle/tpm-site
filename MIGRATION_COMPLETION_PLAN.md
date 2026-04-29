@@ -10,22 +10,23 @@ small, typed, and predictable.
 
 ## Desired End State
 
-- Add `src/content/articles/<slug>.md` to publish a plain Markdown article.
-- Add `src/content/articles/<slug>.mdx` to publish an article that uses
-  components.
-- Add `src/content/topics/<topic>.json` or `src/content/topics/<topic>.md` only
-  when a topic needs explicit display metadata such as label, order, or
-  description.
+- Add `src/content/articles/<category>/<slug>.md` to publish a plain Markdown
+  article.
+- Add `src/content/articles/<category>/<slug>.mdx` to publish an article that
+  uses components.
+- Add `src/content/categories/<category>.json` or
+  `src/content/categories/<category>.md` only when a category needs explicit
+  display metadata such as label, order, or description.
 - Keep article authors out of `src/pages`, `src/layouts`, `src/lib`, and
   `src/components` unless they are intentionally changing site code or adding
   reusable components.
 - Keep public article URLs as `/articles/:slug/`.
-- Keep topic URLs as `/topics/:topic/`.
-- Prefer frontmatter metadata for article topics and publishing state, but do
-  not use `slug` frontmatter.
+- Keep category URLs as `/categories/:category/` in the final route model.
+- Prefer frontmatter metadata for article-specific metadata and publishing
+  state, but do not use `slug` or `category` frontmatter.
 - Use the article filename stem as the article slug.
-- Treat folders under `src/content/articles/` as optional organization only, not
-  routing or topic data.
+- Treat the first folder under `src/content/articles/` as the article category,
+  but not as part of the public article URL.
 - Keep static public assets under `public/`.
 - Keep optimized component-only images under `src/assets/` if Astro image
   processing is desired.
@@ -50,9 +51,11 @@ The intended convention for this project is:
   `./src/content/articles` and whose pattern is `**/*.{md,mdx}`;
 - use the exact filename stem as the article slug;
 - avoid Astro's reserved `slug` frontmatter field entirely;
-- validate slug and topic values instead of silently slugifying user input;
-- use `topic` frontmatter as the topic source of truth;
-- keep folder names out of routing and topic semantics;
+- validate article slugs and category folder names instead of silently
+  slugifying user input;
+- use the first source folder under `src/content/articles/` as the category
+  source of truth;
+- keep category folder names out of public article URLs;
 - use Zod schemas to validate frontmatter and make invalid content fail before
   production;
 - render articles with Astro layouts and `render(entry)`;
@@ -76,16 +79,18 @@ src/
   content.config.ts    Content collections and Zod schemas.
   content/
     articles/          Author-facing Markdown and MDX article source.
-    topics/            Optional topic metadata collection.
+      history/
+        example.md
+    categories/        Optional category metadata collection.
   layouts/             Shared page and article shells.
   lib/                 Small typed helpers for content queries and URLs.
   pages/               File-based routes and dynamic collection routes.
     articles/
       index.astro
       [...slug].astro
-    topics/
+    categories/
       index.astro
-      [topic].astro
+      [category].astro
 public/                Static files served exactly by URL.
 ```
 
@@ -94,12 +99,12 @@ Conventional Astro behavior to preserve:
 - `src/pages` creates routes.
 - `src/content` stores related content collections and does not create routes by
   itself.
-- Dynamic routes under `src/pages` generate article and topic pages from
+- Dynamic routes under `src/pages` generate article and category pages from
   collections.
 - Markdown/MDX articles use frontmatter for metadata and the shared article
   layout for rendering.
 - Normal article authoring should not require editing route files, layout files,
-  helper code, generated mirrors, or topic registries.
+  helper code, generated mirrors, or category registries.
 
 ## Non-Negotiable Invariants
 
@@ -111,10 +116,10 @@ Conventional Astro behavior to preserve:
   classification.
 - Existing unpublished content must remain unpublished during and after cleanup.
 - Public article URLs must remain `/articles/:slug/`.
-- Topic URLs must remain `/topics/:topic/`.
+- Category URLs should use `/categories/:category/` in the final route model.
 - Redirect handling for old dated URLs belongs outside core article rendering.
   Cloudflare is the primary owner. Any in-repo fallback must be isolated from
-  article, topic, and content-source logic.
+  article, category, and content-source logic.
 - New article authors should not need to understand Astro internals, route
   helpers, generated mirrors, or legacy Jekyll fields.
 
@@ -124,8 +129,9 @@ These items currently exist because the first Astro migration preserved
 Jekyll-shaped content before normalizing the project.
 
 - `scripts/sync-content.mjs`
-  - Copies `docs/` into generated `src/content/legacy/`.
-  - Converts `.markdown` files to `.md`.
+  - Copies legacy non-article files from `docs/` and article files from
+    `src/content/articles/` into generated `src/content/legacy/`.
+  - Converts `.markdown` files to `.md` if any remain.
   - Removes duplicate top-level frontmatter keys by keeping the last key.
 
 - `src/content/legacy/`
@@ -150,11 +156,12 @@ Jekyll-shaped content before normalizing the project.
   - `LegacyEntry` type name.
   - `sourceFolder()` parses generated paths under `src/content/legacy/`.
   - `articleSlug()` prefers legacy dated `permalink` slug.
-  - `articleSlug()` strips date prefixes from legacy filenames.
+  - `articleSlug()` still contains fallback date-prefix stripping for old
+    filenames, even though article filenames are now clean.
   - `isDatedPermalink()` classifies articles by old Jekyll permalink shape.
   - `isArticle()` depends on dated `permalink`, not file location.
-  - `isTopicEntry()` identifies topic files by legacy permalink.
-  - `TOPICS` hard-codes all topic folders, labels, slugs, and order.
+  - `TOPICS` hard-codes all category folders, labels, slugs, and order while
+    the UI still uses topic naming.
 
 - `src/lib/content.ts`
   - Queries `legacyMarkdown`.
@@ -175,7 +182,7 @@ Jekyll-shaped content before normalizing the project.
 - `scripts/verify-content.mjs`
   - Validates generated `src/content/legacy/`.
   - Treats dated `permalink` as article classification.
-  - Hard-codes current topic folder names.
+  - Hard-codes current category folder names.
 
 - `scripts/verify-build.mjs`
   - Allows old dated internal links as redirect candidates.
@@ -184,14 +191,14 @@ Jekyll-shaped content before normalizing the project.
 
 - `README.md`
   - Still describes the temporary legacy workflow.
-  - Still tells authors to create dated filenames and legacy `permalink`
-    metadata.
+  - Must be updated after the final content loader lands so authors only see
+    the `src/content/articles/<category>/<slug>.md` or `.mdx` workflow.
 
 - Current source content
-  - `docs/**/*.markdown` files use Jekyll-era dated filenames and `.markdown`
-    extensions.
-  - Topic index pages such as `docs/history/history.md` are Jekyll-era topic
-    pages and need a final topic metadata decision.
+  - Article files now live under `src/content/articles/<category>/` with clean
+    `.md` filenames.
+  - Category index pages such as `docs/history/history.md` are Jekyll-era topic
+    pages and need a final category metadata or static page decision.
   - `docs/tree.txt` is migration/reference output, not article content.
 
 ## Current Content Survey
@@ -200,9 +207,9 @@ This survey describes what must be normalized before the project can follow
 plain Astro conventions.
 
 - Source files:
-  - 71 Markdown-like source files under `docs/`.
-  - 61 `.markdown` files are article-era files with dated filenames.
-  - 10 `.md` files are section/static pages, not normal articles.
+  - 61 article `.md` files under `src/content/articles/`.
+  - 10 `.md` files remain under `docs/` as section/static pages, not normal
+    articles.
   - 1 `docs/tree.txt` file is reference output, not content.
   - 0 current article files use `.mdx`.
 
@@ -210,7 +217,7 @@ plain Astro conventions.
   - 61 files have dated legacy `permalink` values and are currently treated as
     articles.
   - 10 Markdown files are non-article pages:
-    `docs/*/<topic>.md`, `docs/dialogues/dialogues.md`, and
+    `docs/*/<category>.md`, `docs/dialogues/dialogues.md`, and
     `docs/notes/about.md`.
   - Article classification must move from dated `permalink` to the
     `src/content/articles/` collection itself.
@@ -228,24 +235,24 @@ plain Astro conventions.
 
 - Publishing state:
   - One known unpublished article exists:
-    `docs/politics/2022-04-20-joshua-citarella-astroturfing.markdown`.
+    `src/content/articles/politics/joshua-citarella-astroturfing.md`.
   - It must become `draft: true`.
   - Legacy `published: false` and `status: draft` must not survive as the final
     publishing model.
 
-- Topic metadata:
-  - Current topic comes from folder names and/or Jekyll `parent`.
-  - Final topic should come from `topic` frontmatter.
-  - Existing topic labels map to canonical topic slugs:
+- Category metadata:
+  - Current category comes from the first folder below
+    `src/content/articles/`.
+  - Final category should continue to come from that first folder, not
+    frontmatter.
+  - Existing category labels map to canonical category slugs:
     `memeculture`, `metamemetics`, `aesthetics`, `irony`, `game-studies`,
     `history`, `philosophy`, and `politics`.
-  - `The Post-Pepe Manifesto` has a legacy `parent: 2016` value and should get
-    explicit `topic: "politics"`.
 
 - Slug preservation:
-  - Most article slugs can be produced by removing the leading date from the
-    filename.
-  - Two known files need explicit slug preservation when renamed:
+  - Article slugs now come from clean filename stems.
+  - Two files already received explicit slug-preserving filenames during the
+    source move:
     `misattributed-plato-quote-is-real-now` and
     `wittgensteins-most-beloved-quote-was-real-but-its-fake-now`.
 
@@ -265,7 +272,6 @@ Article frontmatter should converge to a small Astro-oriented shape:
 ---
 title: "Example Article"
 date: 2026-04-28
-topic: "metamemetics"
 author: "Author Name"
 excerpt: "Optional summary."
 image: "/uploads/example.png"
@@ -278,7 +284,6 @@ Required:
 
 - `title`
 - `date`
-- `topic`
 
 Optional:
 
@@ -290,29 +295,30 @@ Optional:
 
 Rules:
 
-- `topic` is required for articles and is the only source of topic grouping.
+- Category is not frontmatter. It is the first folder below
+  `src/content/articles/`.
 - `slug` frontmatter should not be used. Astro reserves that field for entry ID
   overrides, and this project does not need that behavior.
 - The exact filename stem is the article slug.
 - Filename stems must be URL-safe and unique across all articles.
 - `legacyPermalink` is inert metadata. It must not affect article routing,
-  topic grouping, sorting, RSS, sitemap, search, or publishing.
+  category grouping, sorting, RSS, sitemap, search, or publishing.
 - `draft: true` is the only final unpublished marker.
 - `layout`, `parent`, `grand_parent`, `nav_order`, `has_children`,
   `permalink`, `published`, `status`, `type`, `fbpreview`, `facebook`, and
   tool-specific `meta` should be removed or migrated to one of the final fields.
 
-Topic metadata, if needed, should live in a separate collection:
+Category metadata, if needed, should live in a separate collection:
 
 ```text
-src/content/topics/metamemetics.json
+src/content/categories/metamemetics.json
 ```
 
 ```json
 {
   "title": "Metamemetics",
   "order": 2,
-  "description": "Optional topic description."
+  "description": "Optional category description."
 }
 ```
 
@@ -450,14 +456,14 @@ are migrated.
 Article files live in Astro's conventional content directory:
 
 ```text
-src/content/articles/<slug>.md
-src/content/articles/<slug>.mdx
+src/content/articles/<category>/<slug>.md
+src/content/articles/<category>/<slug>.mdx
 ```
 
 The exact filename stem is the article slug. For example:
 
 ```text
-src/content/articles/vulliamy-response.md
+src/content/articles/metamemetics/vulliamy-response.md
 ```
 
 publishes:
@@ -472,7 +478,6 @@ Article frontmatter controls metadata only:
 ---
 title: "Example Article"
 date: 2026-04-28
-topic: "metamemetics"
 author: "Author Name"
 excerpt: "Optional summary."
 image: "/uploads/example.png"
@@ -482,10 +487,11 @@ legacyPermalink: "/2026/04/28/example-article/"
 ```
 
 `legacyPermalink` is preserved for historical reference and redirect generation,
-but it does not decide the article slug, route, topic, or published status.
+but it does not decide the article slug, route, category, or published status.
 
-Normal article authors should not use `slug` frontmatter. If the desired public
-URL changes, rename the file.
+Normal article authors should not use `slug` or `category` frontmatter. If the
+desired public URL changes, rename the file. If the article category changes,
+move the file to the correct category folder.
 
 In implementation, use `entry.id` as the route slug. The collection loader
 should make `entry.id` equal to the exact filename stem.
@@ -494,40 +500,41 @@ Use `draft: true` for unpublished articles. Legacy `published: false` and
 `status: draft` values must be migrated or supported during transition so no
 existing draft is accidentally published.
 
-### Topics
+### Categories
 
-Article topics come from frontmatter, not folders:
-
-```yaml
-topic: "metamemetics"
-```
-
-The topic value is a canonical slug. It is used for filtering, topic pages, RSS
-metadata, search metadata, and navigation.
-
-Optional topic metadata can live in a separate collection:
+Article categories come from the first source folder below
+`src/content/articles/`:
 
 ```text
-src/content/topics/metamemetics.json
+src/content/articles/metamemetics/vulliamy-response.md
+```
+
+The category folder name is a canonical slug. It is used for filtering,
+category pages, RSS metadata, search metadata, and navigation.
+
+Optional category metadata can live in a separate collection:
+
+```text
+src/content/categories/metamemetics.json
 ```
 
 ```json
 {
   "title": "Metamemetics",
   "order": 2,
-  "description": "Optional topic description."
+  "description": "Optional category description."
 }
 ```
 
-If no topic metadata file exists, the site can derive a display label from the
-topic slug. If curated ordering matters, topic metadata should be required for
-all public topics.
+If no category metadata file exists, the site can derive a display label from
+the category slug. If curated ordering matters, category metadata should be
+required for all public categories.
 
 ### Reserved Content Areas
 
 Reserved folders are mostly a migration concern. In the final flat article
-collection, `notes` and `dialogues` should not sit beside article files unless
-they are separate collections.
+collection, `notes` and `dialogues` should not sit beside article category
+folders unless they are separate collections.
 
 - `docs/notes/`
 - `docs/dialogues/`
@@ -552,7 +559,7 @@ module or script. That fallback must:
 - read `legacyPermalink` metadata separately from article routing;
 - emit redirects only;
 - not affect article slug generation;
-- not affect topic discovery;
+- not affect category discovery;
 - not affect authoring instructions.
 
 ## Work Tracker
@@ -572,16 +579,16 @@ module or script. That fallback must:
 
 ### Milestone 2: Normalize Existing Content Files
 
-- [ ] Create `src/content/articles/` as the final article collection.
-- [ ] Move article files from `docs/` into `src/content/articles/`.
+- [x] Create `src/content/articles/` as the final article collection.
+- [x] Move article files from `docs/` into `src/content/articles/`.
 - [ ] Keep `docs/` only until all non-article pages have a final destination.
-- [ ] Rename existing article files from dated `.markdown` filenames to clean
+- [x] Rename existing article files from dated `.markdown` filenames to clean
       `.md` filenames.
-- [ ] Use the final desired article URL slug as the filename stem.
-- [ ] Keep article body content unchanged.
+- [x] Use the final desired article URL slug as the filename stem.
+- [x] Keep article body content unchanged.
+- [x] Remove transitional `topic` frontmatter from article files.
 - [ ] Rename legacy `permalink` frontmatter to `legacyPermalink` without losing
       values.
-- [ ] Add explicit canonical `topic` frontmatter to every article.
 - [ ] Normalize unpublished article metadata to `draft: true`.
 - [ ] Confirm any legacy `published: false` or `status: draft` article remains
       excluded from production output.
@@ -590,8 +597,8 @@ module or script. That fallback must:
 - [ ] Remove Jekyll/Siteleaf/WordPress-only frontmatter fields after their data
       has either been migrated or intentionally dropped.
 - [ ] Convert author objects to the final author representation.
-- [ ] Decide whether topic metadata files become `src/content/topics/*.json` or
-      `src/content/topics/*.md`.
+- [ ] Decide whether category metadata files become
+      `src/content/categories/*.json` or `src/content/categories/*.md`.
 - [ ] Move `docs/notes/about.md` to an explicit page or page content source.
 - [ ] Decide whether `docs/dialogues/dialogues.md` is public content, a future
       section, or removable legacy content.
@@ -601,13 +608,11 @@ Known filename decisions where the legacy `permalink` slug is clearer than the
 old dated filename stem:
 
 ```text
-docs/history/2015-08-19_misattributed-plato-quote.markdown
--> src/content/articles/misattributed-plato-quote-is-real-now.md
+src/content/articles/history/misattributed-plato-quote-is-real-now.md
 ```
 
 ```text
-docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-now.markdown
--> src/content/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md
+src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md
 ```
 
 ### Milestone 3: Load Content Directly From The Article Source Tree
@@ -621,20 +626,20 @@ docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-n
       filename stem.
 - [ ] Validate slug uniqueness across all articles.
 - [ ] Validate filename stems as URL-safe values.
-- [ ] Require `topic` frontmatter for every article.
-- [ ] Add an optional `topics` content collection if curated topic display data
-      is needed.
+- [ ] Validate category folder names as URL-safe values.
+- [ ] Add an optional `categories` content collection if curated category
+      display data is needed.
 - [ ] Replace the loose legacy schema with the final Zod schema.
-- [ ] Define the final author-facing required fields clearly: `title`, `date`,
-      `topic`, and optional `author`, `excerpt`, `image`, `draft`,
+- [ ] Define the final author-facing fields clearly: required `title` and
+      `date`; optional `author`, `excerpt`, `image`, `draft`, and
       `legacyPermalink`.
 
-### Milestone 4: Simplify Article And Topic Logic
+### Milestone 4: Simplify Article And Category Logic
 
-- [ ] Replace hard-coded `TOPICS` with topic discovery from article frontmatter
-      plus optional topic metadata.
-- [ ] Derive topic slug from article `topic` frontmatter.
-- [ ] Derive topic label from topic metadata or from the topic slug.
+- [ ] Replace hard-coded `TOPICS` with category discovery from article source
+      folders plus optional category metadata.
+- [ ] Derive category slug from the first folder below `src/content/articles/`.
+- [ ] Derive category label from category metadata or from the category slug.
 - [ ] Derive article slug from `entry.id`, with loader behavior documented as
       exact filename stem only.
 - [ ] Define `isArticle()` as "entry from the `articles` collection."
@@ -649,6 +654,7 @@ docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-n
       assuming legacy-normalized IDs.
 - [ ] Keep global slug uniqueness checks because article URLs are
       `/articles/:slug/`.
+- [ ] Rename user-facing route and helper language from topics to categories.
 
 ### Milestone 5: Remove The Sync Layer
 
@@ -719,9 +725,10 @@ docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-n
 - [ ] Separate redirect-candidate reporting from core link checking.
 - [ ] Update `README.md` so article authors only see the simple workflow.
 - [ ] Document MDX usage and where reusable components should live.
-- [ ] Document topic assignment through `topic` frontmatter.
-- [ ] Document topic metadata under `src/content/topics/` if that collection is
-      added.
+- [ ] Document category assignment through the first folder below
+      `src/content/articles/`.
+- [ ] Document category metadata under `src/content/categories/` if that
+      collection is added.
 - [ ] Document reserved folders or confirm none remain.
 - [ ] Document deploy output as `dist/`.
 - [ ] Remove or archive migration-only docs after the migration is complete.
@@ -758,7 +765,7 @@ Content and public assets:
 ```text
 docs/
 src/content/articles/
-src/content/topics/
+src/content/categories/
 src/content/legacy/
 public/assets/
 public/uploads/
@@ -822,12 +829,13 @@ MIGRATION_COMPLETION_PLAN.md
       `status`, `type`, `fbpreview`, `facebook`, or tool-specific `meta`.
 - [ ] The Zod schema validates final article metadata.
 - [ ] No final article uses `slug` frontmatter.
-- [ ] `draft: true` articles are excluded from article indexes, topics, RSS,
+- [ ] No final article uses `category` or `topic` frontmatter.
+- [ ] `draft: true` articles are excluded from article indexes, categories, RSS,
       sitemap, search, and generated pages.
 - [ ] Existing public `/articles/:slug/` routes remain stable.
-- [ ] Topic pages render the same article groupings.
-- [ ] Topic groupings come from `topic` frontmatter, not folder names or
-      Jekyll `parent`.
+- [ ] Category pages render the same article groupings.
+- [ ] Category groupings come from the first folder below
+      `src/content/articles/`, not frontmatter or Jekyll `parent`.
 - [ ] RSS uses `/articles/:slug/` URLs.
 - [ ] Sitemap uses `/articles/:slug/` URLs.
 - [ ] Pagefind indexes article bodies.
@@ -855,24 +863,24 @@ MIGRATION_COMPLETION_PLAN.md
 - The maintainer should never edit route, layout, helper, or app component code
   to add a normal article. Normal article work should stay in
   `src/content/articles/`.
-- A new topic should not require editing a hard-coded topic list.
-- Topics come from article `topic` frontmatter. Optional topic metadata is only
-  for labels, order, and descriptions.
+- A new category should not require editing a hard-coded category list.
+- Categories come from article source folders. Optional category metadata is
+  only for labels, order, and descriptions.
 - Root `CNAME` should be removed; `public/CNAME` is deploy-host dependent.
 - Root `assets/` and `uploads/` should not survive as permanent duplicates.
 
 ## Open Decisions
 
-- Whether optional topic metadata should use JSON or Markdown files under
-  `src/content/topics/`.
+- Whether optional category metadata should use JSON or Markdown files under
+  `src/content/categories/`.
 - Whether authors should be a simple string field, a structured object, or a
   separate collection.
 - Whether legacy HTML cleanup should be mostly scripted, mostly manual, or a
   scripted pass followed by review.
 - Whether the site should keep an in-repo fallback redirect route in addition to
   Cloudflare.
-- Whether `docs/dialogues/` should become a normal topic, a static page section,
-  reserved non-public content, or be removed from active content.
+- Whether `docs/dialogues/` should become a normal category, a static page
+  section, reserved non-public content, or be removed from active content.
 - Whether `.codex/config.toml` and `.vscode/tasks.json` are desired shared
   project tooling or local-only preferences.
 - Whether `public/CNAME` is required by the final host.

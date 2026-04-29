@@ -1,8 +1,25 @@
-import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  readdir,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 
-const sourceDir = path.resolve("docs");
+const legacyDocsDir = path.resolve("docs");
+const articleSourceDir = path.resolve("src/content/articles");
 const targetDir = path.resolve("src/content/legacy");
+
+async function directoryExists(dir) {
+  try {
+    await access(dir);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 async function listMarkdownFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -47,12 +64,21 @@ function normalizeFrontmatter(text) {
 
 await rm(targetDir, { force: true, recursive: true });
 
-for (const file of await listMarkdownFiles(sourceDir)) {
-  const relativePath = path.relative(sourceDir, file);
-  const normalizedPath = relativePath.replace(/\.markdown$/i, ".md");
-  const target = path.join(targetDir, normalizedPath);
-  const source = await readFile(file, "utf8");
+async function copyMarkdownSource(sourceDir) {
+  if (!(await directoryExists(sourceDir))) {
+    return;
+  }
 
-  await mkdir(path.dirname(target), { recursive: true });
-  await writeFile(target, normalizeFrontmatter(source));
+  for (const file of await listMarkdownFiles(sourceDir)) {
+    const relativePath = path.relative(sourceDir, file);
+    const normalizedPath = relativePath.replace(/\.markdown$/i, ".md");
+    const target = path.join(targetDir, normalizedPath);
+    const source = await readFile(file, "utf8");
+
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, normalizeFrontmatter(source));
+  }
 }
+
+await copyMarkdownSource(legacyDocsDir);
+await copyMarkdownSource(articleSourceDir);

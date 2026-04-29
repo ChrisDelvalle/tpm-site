@@ -2,9 +2,10 @@
 
 Astro site for The Philosopher's Meme, migrated from the original Jekyll site.
 
-The source-of-truth article content remains in `docs/`. Astro reads a generated
-mirror in `src/content/legacy/`, which is recreated by the sync script and should
-not be edited by hand.
+The source-of-truth article content lives in
+`src/content/articles/<category>/`. During the migration, Astro still reads a
+generated mirror in `src/content/legacy/`, which is recreated by the sync script
+and should not be edited by hand.
 
 ## Requirements
 
@@ -69,7 +70,10 @@ available locally.
 
 ## How The Content Pipeline Works
 
-Legacy Markdown stays in `docs/`.
+Article Markdown and MDX live in `src/content/articles/<category>/`.
+
+Legacy non-article Markdown still lives in `docs/` until those pages have a
+final Astro destination.
 
 Before `dev`, `check`, and `build`, the project runs:
 
@@ -77,18 +81,21 @@ Before `dev`, `check`, and `build`, the project runs:
 bun run sync:content
 ```
 
-That script copies Markdown from `docs/` into `src/content/legacy/`, converts
-`.markdown` filenames to `.md`, and normalizes duplicate top-level frontmatter
-keys for Astro compatibility.
+That script copies article files from `src/content/articles/` and legacy
+non-article files from `docs/` into `src/content/legacy/`. It also converts any
+remaining `.markdown` filenames to `.md` and normalizes duplicate top-level
+frontmatter keys for Astro compatibility.
 
 Do not edit `src/content/legacy/` directly. Any changes there will be replaced
 the next time content is synced.
 
 ## Adding An Article
 
-1. Pick the topic folder under `docs/`.
-2. Add a dated Markdown file using the existing naming pattern.
-3. Add frontmatter with a dated legacy permalink.
+1. Pick the category folder under `src/content/articles/`.
+2. Add a URL-safe `.md` or `.mdx` file whose filename stem is the desired public
+   slug.
+3. Add frontmatter with `title`, `date`, and the current transitional
+   `permalink`.
 4. Put images or other static files under `public/assets/` or `public/uploads/`.
 5. Run the validation commands.
 
@@ -99,7 +106,6 @@ Example:
 title: "Example Article Title"
 date: 2026-04-27
 author: "Author Name"
-parent: Meme Culture
 permalink: /2026/04/27/example-article-title/
 excerpt: "Short summary for archive pages and feeds."
 ---
@@ -113,27 +119,33 @@ The public Astro URL will be:
 /articles/example-article-title/
 ```
 
-The slug is taken from the dated `permalink` when possible. If no dated
-permalink is present, the slug is derived from the filename with the leading date
-removed.
+During the current transition, the route slug is still read from the dated
+`permalink`; keep the last permalink segment equal to the filename stem. The
+planned final content loader will make the filename stem authoritative and will
+preserve legacy permalink data only as inert metadata.
 
-## Topic Folders
+Do not add `slug`, `topic`, or `category` frontmatter. The category comes from
+the first folder below `src/content/articles/`.
 
-The topic navigation is based on the folder-to-topic mapping in
+## Article Category Folders
+
+The current navigation is still routed as topics, but article grouping is based
+on the source category folder mapped in
 `src/lib/routes.ts`.
 
-Current topic folders:
+Current article category folders:
 
-- `docs/memeculture/` -> `/topics/meme-culture/`
-- `docs/metamemetics/` -> `/topics/metamemetics/`
-- `docs/aesthetics/` -> `/topics/aesthetics/`
-- `docs/irony/` -> `/topics/irony/`
-- `docs/game studies/` -> `/topics/game-studies/`
-- `docs/history/` -> `/topics/history/`
-- `docs/philosophy/` -> `/topics/philosophy/`
-- `docs/politics/` -> `/topics/politics/`
+- `src/content/articles/memeculture/` -> `/topics/meme-culture/`
+- `src/content/articles/metamemetics/` -> `/topics/metamemetics/`
+- `src/content/articles/aesthetics/` -> `/topics/aesthetics/`
+- `src/content/articles/irony/` -> `/topics/irony/`
+- `src/content/articles/game-studies/` -> `/topics/game-studies/`
+- `src/content/articles/history/` -> `/topics/history/`
+- `src/content/articles/philosophy/` -> `/topics/philosophy/`
+- `src/content/articles/politics/` -> `/topics/politics/`
 
-Topic index files such as `docs/history/history.md` are legacy source files.
+Topic index files such as `docs/history/history.md` are legacy non-article
+source files.
 Published article pages are generated from entries with dated permalinks.
 
 ## Images And Static Files

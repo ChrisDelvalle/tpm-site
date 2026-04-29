@@ -5,9 +5,10 @@ import matter from "gray-matter";
 
 const contentDir = path.resolve("src/content/legacy");
 const publicDir = path.resolve("public");
-const topicSources = new Set([
+const categorySources = new Set([
   "aesthetics",
   "game studies",
+  "game-studies",
   "history",
   "irony",
   "memeculture",
@@ -105,7 +106,7 @@ for (const file of files) {
   const relativePath = relativeContentPath(file);
   const folder = topLevelFolder(file);
 
-  if (!topicSources.has(folder) && !reservedFolders.has(folder)) {
+  if (!categorySources.has(folder) && !reservedFolders.has(folder)) {
     issues.push(
       `${relativePath}: unknown top-level content folder "${folder}"`,
     );
@@ -139,8 +140,10 @@ for (const file of files) {
     issues.push(`${relativePath}: article is missing a valid date`);
   }
 
-  if (!topicSources.has(folder)) {
-    issues.push(`${relativePath}: article is not inside a known topic folder`);
+  if (!categorySources.has(folder)) {
+    issues.push(
+      `${relativePath}: article is not inside a known category folder`,
+    );
   }
 
   const slug = articleSlug(file, data);
