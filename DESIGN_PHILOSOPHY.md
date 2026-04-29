@@ -17,6 +17,7 @@ The site should be:
 - Mobile-first.
 - Responsive all the way down.
 - Componentized all the way down.
+- Content-out rather than canvas-in.
 - Tailwind-first for styling.
 - Astro-first for rendering.
 - Accessible by default.
@@ -42,6 +43,13 @@ UI primitives
 Every component should be correct by its own merits. A component should define
 its own spacing, wrapping, sizing constraints, focus states, dark mode behavior,
 and responsive behavior. Pages should compose components, not patch them.
+
+The site should function like a small design system. Components and blocks
+should expose stable props, clear slots, consistent variants, and predictable
+responsive behavior. shadcn and Radix are useful references because they model
+composable primitives, explicit state, accessibility, and reusable styling
+contracts. Use those patterns when they fit, even when the implementation is a
+plain Astro component.
 
 ## Tech Stack
 
@@ -101,7 +109,10 @@ when the real issue is component design.
 
 ## Responsive Design
 
-Responsive design is a component contract, not a final cleanup pass.
+Responsive design is a component contract, not a final cleanup pass. The goal is
+not to maintain a few device-specific layouts. The goal is to build content
+systems that remain readable, usable, and aesthetically coherent across unknown
+screen sizes, input modes, network conditions, and user preferences.
 
 Build mobile-first:
 
@@ -110,9 +121,20 @@ Build mobile-first:
 - Prefer progressive disclosure over crowded layouts.
 - Let blocks stack naturally before introducing dense desktop layouts.
 
-Use Tailwind's responsive utilities for standard viewport changes. Use
-container-query thinking when component behavior depends on the component's own
-available width rather than the full viewport.
+Mobile-first is the implementation default, not a reason to ignore wide,
+tablet, short, or awkward states. During design and QA, inspect the component at
+multiple widths and heights. The most useful breakpoint is often where the
+component starts to lose its shape, not where a named device begins.
+
+Use Tailwind's responsive utilities for standard viewport changes. In Tailwind,
+unprefixed utilities define the default/narrow state, while `sm:`, `md:`,
+`lg:`, `xl:`, and `2xl:` layer on behavior at wider breakpoints. Use `max-*`
+and range variants only when they make the component clearer.
+
+Use container queries when component behavior depends on the component's own
+available width rather than the full viewport. This is especially important for
+reusable cards, media objects, navigation groups, sidebars, callouts, and article
+blocks that may appear in multiple contexts.
 
 Avoid brittle one-off pixel breakpoints such as:
 
@@ -125,6 +147,7 @@ Avoid brittle one-off pixel breakpoints such as:
 Prefer:
 
 - Tailwind breakpoint tiers.
+- Tailwind container queries for portable components.
 - `min-w-0` for flex/grid children that must shrink.
 - `w-full`, `max-w-*`, and `flex-1` for flexible sizing.
 - Grid and flex layouts that naturally adapt.
@@ -132,6 +155,21 @@ Prefer:
 - `clamp()` only when fluid sizing is genuinely needed.
 - Measured behavior only for components whose layout depends on real rendered
   width, such as complex priority navigation.
+
+Evaluate responsive components through five questions:
+
+- Width: does the layout still fit without overlap or overflow?
+- Hierarchy: does the most important content remain first and clear?
+- Interaction: does the control model still make sense for available space and
+  likely input methods?
+- Density: is extra information added only when it improves the experience?
+- Media: do images and videos preserve their meaning at each rendered size?
+
+Navigation deserves special care. Hiding navigation behind a menu can be right,
+but it should be a deliberate prioritization decision, not a way to avoid
+simplifying the information architecture. Prefer focused navigation, progressive
+disclosure, and a reliable all-items fallback over crowded rows that collide or
+menus that bury primary tasks.
 
 The quality bar is simple: no horizontal overflow, no overlapping controls, no
 unreadable content, and no layout that only works at the viewport sizes where it
@@ -171,6 +209,113 @@ Pages should read as composition:
 Components should have stable public props and should not reach across the
 application for unrelated data. Shared data normalization belongs in `src/lib/`,
 not in visual components.
+
+Build patterns before pages. A homepage, article page, topic archive, and search
+page should feel like different compositions of the same system, not unrelated
+templates. When a new design need appears, prefer extracting a reusable block or
+component over adding page-local markup that cannot be reused.
+
+Component APIs should be boring and predictable:
+
+- One primary reusable component per file.
+- PascalCase component filenames and references.
+- Explicit typed props.
+- Defaults for optional props.
+- Semantic variants such as `variant`, `size`, and `tone`.
+- No custom meanings for native names such as `class`, `style`, `href`, or
+  `disabled`.
+- Sparse prop spreading, with implementation-only props filtered out first.
+- Stable keys for repeated items.
+- Semantic HTML and valid ARIA before custom accessibility workarounds.
+
+React components are reserved for islands that need client state or complex
+accessible interactions. When React is used, prefer function components,
+composition, hooks, and narrow state boundaries. Do not use React as a styling
+or layout default when an Astro component can render static HTML.
+
+## UI Excellence Bar
+
+Excellent UI implementation is not just visual fidelity. It is a system where
+future changes are predictable, accessible, performant, and easy to compose.
+
+Use these practices as the default:
+
+- Treat component props as public APIs.
+- Prefer composition over broad configuration.
+- Prefer named variants over clusters of boolean props.
+- Make invalid states unrepresentable with typed unions or normalized state
+  objects.
+- Keep visual components free of parsing, migration, routing, and data cleanup
+  logic.
+- Normalize data at boundaries before passing it into UI.
+- Handle loading, empty, error, disabled, selected, expanded, and long-content
+  states deliberately.
+- Use semantic HTML before custom behavior.
+- Keep focus states, keyboard behavior, reduced motion, and color contrast part
+  of the component contract.
+- Test production-like behavior, not only the happy path in dev mode.
+
+Avoid these anti-patterns:
+
+- Page-first implementation where every route becomes a custom template.
+- God components that combine data loading, formatting, layout, interaction, and
+  presentation.
+- Leaky components that require parents to know internal selectors or wrapper
+  rules.
+- Prop dumping and broad spreading of unknown objects.
+- State soup made from duplicated or contradictory booleans.
+- Hydrating static content, page shells, article prose, or basic cards.
+- Dependency-as-design, where a package is added instead of understanding a
+  small UI problem.
+- Accessibility patches on top of incorrect HTML.
+- Unbounded assumptions about title length, label length, image size, or nav
+  item count.
+- CSS specificity wars, `!important`, and distant page-level overrides.
+- Premature abstraction before a real repeated pattern exists.
+- Copy-pasted markup after a real pattern has clearly emerged.
+
+## CSS And Tailwind Discipline
+
+Tailwind is valuable because it turns raw CSS values into a shared design
+language. Agents should prefer the shared scale before inventing values.
+
+Prefer:
+
+- Tailwind spacing, sizing, typography, color, radius, shadow, and breakpoint
+  tokens.
+- Flow, flex, grid, `minmax()`, `auto-fit`, `auto-fill`, intrinsic sizing, and
+  container queries.
+- `min-w-0`, `max-w-*`, `w-full`, `flex-1`, and grid tracks that let content
+  shrink and grow naturally.
+- `aspect-ratio` and `object-fit` for media constraints.
+- `clamp()` only when fluid sizing is intentional and clearer than breakpoint
+  steps.
+- Logical start/end thinking for spacing and alignment, especially for reusable
+  primitives.
+
+Avoid:
+
+- Raw pixel values without a design-system reason.
+- Magic numbers that merely hide a layout failure.
+- Arbitrary values such as `max-w-[873px]` unless a measured invariant demands
+  it.
+- Custom CSS media queries that duplicate Tailwind breakpoint or container-query
+  behavior.
+- Absolute positioning to force normal document flow.
+- Large handcrafted CSS for component behavior that Tailwind and modern CSS can
+  express directly.
+
+Good reasons for explicit values include icons, tap targets, borders, known
+image aspect ratios, stable media dimensions, and documented design tokens. If
+an arbitrary value appears more than once, strongly consider promoting it into a
+token, component variant, or named helper.
+
+Logical sizing means thinking in the inline and block axes rather than assuming
+every layout is left-to-right horizontal forever. For this project, normal
+Tailwind physical utilities are fine when they are clearer, but reusable
+components should prefer flow-aware thinking: start/end over left/right when it
+matters, available inline space over fixed viewport width, and container width
+over page width when the component may move between contexts.
 
 ## Content Authoring
 

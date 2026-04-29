@@ -538,3 +538,152 @@ on the chosen host and Cloudflare configuration.
       byte-identical image cleanup.
 - [x] Remove obsolete root/public legacy asset duplicates after all references
       are migrated or deliberately classified as public URL files.
+
+## Milestone 21: Final Repository Cleanup Decisions
+
+- [x] Keep tracked `.env` as the shared non-secret Bun environment file for
+      project defaults such as `ASTRO_TELEMETRY_DISABLED=1`.
+- [x] Ignore local-only environment overrides with `.env.local` and
+      `.env.*.local`.
+- [x] Keep `.codex/config.toml` as shared agent tooling.
+- [x] Keep `.vscode/tasks.json` as shared editor task tooling.
+- [x] Keep GitHub issue templates and release/dependency automation as shared
+      repository tooling.
+- [x] Keep `public/CNAME` as the authoritative deploy CNAME file.
+- [x] Remove root `CNAME`.
+- [x] Remove root `_config.yml`.
+- [x] Remove redundant `.gitkeep` files from directories that now contain real
+      files.
+- [x] Confirm `script/build` is absent.
+- [x] Confirm `.devcontainer/` is absent.
+- [x] Confirm `package-lock.json` is absent.
+- [x] Confirm `.stylelintrc.json` is absent.
+- [x] Confirm root `assets/` and root `uploads/` are absent.
+- [ ] Remove local `.DS_Store` from the worktree while keeping it ignored.
+
+## Milestone 22: Final Article Collection
+
+- [ ] Change `src/content.config.ts` so the primary article collection loads
+      directly from `src/content/articles/`.
+- [ ] Rename the active collection from `legacyMarkdown` to `articles`.
+- [ ] Load both `**/*.md` and `**/*.mdx` article files without a generated
+      mirror.
+- [ ] Configure collection IDs so each article ID is the exact filename stem,
+      not the category folder and not `legacyPermalink`.
+- [ ] Validate that every article filename stem is URL-safe.
+- [ ] Validate that article filename stems are globally unique because public
+      article URLs are `/articles/:slug/`.
+- [ ] Validate that the first folder under `src/content/articles/` is a
+      URL-safe category slug.
+- [ ] Replace the loose legacy frontmatter schema with the final author-facing
+      Zod schema.
+- [ ] Require final article metadata fields: `title`, `description`, `date`,
+      and `author`.
+- [ ] Keep optional final article metadata fields: `image`, `imageAlt`, `tags`,
+      `draft`, `legacyPermalink`, and `legacyBanner`.
+- [ ] Reject `slug`, `category`, and `topic` frontmatter in final articles.
+- [ ] Reject Jekyll/Siteleaf/WordPress-only frontmatter fields after their data
+      has been migrated or intentionally dropped.
+- [ ] Decide whether category display metadata belongs in
+      `src/content/categories/*.json` or `src/content/categories/*.md`.
+
+## Milestone 23: Article And Category Runtime Simplification
+
+- [ ] Update `src/lib/content.ts` to query the final `articles` collection.
+- [ ] Update `src/lib/routes.ts` to use final article and category domain names
+      rather than legacy names.
+- [ ] Derive article URLs from the final article ID only.
+- [ ] Derive category grouping from the first folder below
+      `src/content/articles/`.
+- [ ] Replace the hard-coded topic list with category discovery plus optional
+      category metadata.
+- [ ] Rename user-facing route/helper language from topics to categories.
+- [ ] Keep public article URLs as `/articles/:slug/`.
+- [ ] Move category pages to the final `/categories/:category/` route model, or
+      document why `/topics/:topic/` remains intentional.
+- [ ] Filter articles with `draft !== true` for pages, archives, categories,
+      RSS, sitemap, search, and generated article routes.
+- [ ] Remove runtime article detection based on dated `legacyPermalink`.
+- [ ] Remove runtime date-prefix stripping from article slug logic.
+- [ ] Remove runtime parsing of `src/content/legacy/` paths.
+- [ ] Rename `LegacyEntry`, `getLegacyEntries()`, and related legacy helper
+      names to neutral final names.
+- [ ] Update page, layout, feed, sitemap, and search code to use the final
+      route/content helpers.
+
+## Milestone 24: Remove The Generated Content Sync Layer
+
+- [ ] Delete `scripts/sync-content.mjs`.
+- [ ] Remove `sync:content` from `package.json`.
+- [ ] Remove `sync:content` from `dev`, `build`, `typecheck`,
+      `verify:content`, `check`, and any other scripts.
+- [ ] Delete generated `src/content/legacy/`.
+- [ ] Remove `src/content/legacy` from `.gitignore`.
+- [ ] Remove `src/content/legacy` from `AGENTS.md`, `README.md`,
+      `MIGRATION_COMPLETION_PLAN.md`, and other active documentation.
+- [ ] Confirm adding a normal `.md` or `.mdx` file under
+      `src/content/articles/<category>/` requires no generated mirror.
+
+## Milestone 25: Final Metadata, SEO, And Machine-Readable Output
+
+- [ ] Add shared SEO helpers for canonical URLs and absolute image URLs.
+- [ ] Add a `SiteHead.astro` component for title, description, canonical,
+      Open Graph, and Twitter card metadata.
+- [ ] Add an `ArticleJsonLd.astro` component that emits schema.org
+      `BlogPosting` JSON-LD from final article metadata.
+- [ ] Ensure article `image` values work for page images, Open Graph, Twitter
+      cards, RSS/search metadata, and JSON-LD.
+- [ ] Ensure `legacyPermalink` remains inert historical metadata and does not
+      affect routing, article detection, or category grouping.
+- [ ] Preserve `legacyBanner` only as inert historical metadata unless a future
+      design explicitly uses it.
+- [ ] Add focused unit tests or build assertions for RSS, sitemap, and search
+      filtering after the final content model is active.
+
+## Milestone 26: Legacy Markup Source Cleanup
+
+- [ ] Replace any remaining `{{ site.baseurl }}` references in source content.
+- [ ] Replace legacy `/glossary/` links with
+      `/articles/glossary-1-dot-0/`.
+- [ ] Convert mechanically safe raw HTML paragraphs, emphasis, bold text,
+      lists, headings, blockquotes, and links to Markdown.
+- [ ] Keep complex raw HTML only where it expresses behavior Markdown cannot
+      express cleanly.
+- [ ] Add missing image alt text where the intended description is clear.
+- [ ] Remove WordPress-era classes and alignment markup when Markdown or
+      site-level prose styling can replace it.
+- [ ] Remove render-time Jekyll/Liquid cleanup transforms from
+      `astro.config.mjs` after source cleanup is complete.
+- [ ] Keep the build verifier checking that Liquid artifacts do not reach
+      built output.
+
+## Milestone 27: Final Verification And Documentation
+
+- [ ] Update `scripts/verify-content.mjs` for the final direct article
+      collection model.
+- [ ] Update `scripts/verify-build.mjs` for final routes, categories, public
+      files, and asset expectations.
+- [ ] Separate old dated URL redirect-candidate reporting from core link
+      validation.
+- [ ] Update `README.md` so article authors only see the final simple workflow.
+- [ ] Document Markdown article authoring under
+      `src/content/articles/<category>/<slug>.md`.
+- [ ] Document MDX article authoring under
+      `src/content/articles/<category>/<slug>.mdx`.
+- [ ] Document source asset placement under `src/assets/articles/`,
+      `src/assets/shared/`, and `src/assets/site/`.
+- [ ] Document that deploy output is `dist/`.
+- [ ] Confirm no reserved author-facing folders remain beyond the documented
+      content and asset conventions.
+- [ ] Run `bun run fix` and verify it makes no unintended article body changes.
+- [ ] Run `bun run check`.
+- [ ] Run `bun run build`.
+- [ ] Run `bun run verify`.
+- [ ] Run `bun run validate:html`.
+- [ ] Run browser, accessibility, and Lighthouse checks when release
+      validation is in scope.
+- [ ] Confirm the final article count remains correct.
+- [ ] Confirm `scripts/sync-content.mjs` and `src/content/legacy/` are gone.
+- [ ] Confirm no root Jekyll files remain.
+- [ ] Confirm no duplicate root/public asset trees remain.
+- [ ] Confirm no tracked secret/local environment or OS artifact files remain.
