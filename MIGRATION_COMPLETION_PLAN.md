@@ -21,11 +21,9 @@ small, typed, and predictable.
   reusable components.
 - Keep public article URLs as `/articles/:slug/`.
 - Keep topic URLs as `/topics/:topic/`.
-- Prefer frontmatter metadata for article semantics. Astro's reserved `slug`
-  frontmatter field is allowed as an explicit route override, and `topic`
-  frontmatter is the topic source of truth.
-- Use `entry.id` as the article slug after configuring Astro's loader so the
-  default fallback is the exact filename stem instead of a slugified filename.
+- Prefer frontmatter metadata for article topics and publishing state, but do
+  not use `slug` frontmatter.
+- Use the article filename stem as the article slug.
 - Treat folders under `src/content/articles/` as optional organization only, not
   routing or topic data.
 - Keep static public assets under `public/`.
@@ -50,10 +48,8 @@ The intended convention for this project is:
 - define content collections in `src/content.config.ts`;
 - load local Markdown/MDX with a `glob()` loader whose base is
   `./src/content/articles` and whose pattern is `**/*.{md,mdx}`;
-- use Astro's reserved `slug` frontmatter field when present, otherwise use the
-  exact filename stem as the article slug;
-- do not include `slug` in the Zod schema because Astro reserves it for entry ID
-  generation;
+- use the exact filename stem as the article slug;
+- avoid Astro's reserved `slug` frontmatter field entirely;
 - validate slug and topic values instead of silently slugifying user input;
 - use `topic` frontmatter as the topic source of truth;
 - keep folder names out of routing and topic semantics;
@@ -64,10 +60,11 @@ The intended convention for this project is:
 
 Astro's built-in `glob()` loader returns slugified IDs by default, and Astro
 also reserves the `slug` frontmatter field as a per-entry ID override. Because
-this project wants exact filename fallback behavior, final routing should
-configure `generateId` intentionally so `entry.id` becomes the single route
-source of truth. This is not legacy logic; it is a small explicit project
-convention that makes the authoring model predictable.
+this project wants filename-only slug behavior and does not want to rely on a
+reserved frontmatter field, final routing should configure `generateId`
+intentionally so `entry.id` is always the exact filename stem. This is not legacy
+logic; it is a small explicit project convention that makes the authoring model
+predictable.
 
 ## Conventional Astro Target Structure
 
@@ -269,7 +266,6 @@ Article frontmatter should converge to a small Astro-oriented shape:
 title: "Example Article"
 date: 2026-04-28
 topic: "metamemetics"
-slug: "example-article"
 author: "Author Name"
 excerpt: "Optional summary."
 image: "/uploads/example.png"
@@ -286,7 +282,6 @@ Required:
 
 Optional:
 
-- `slug`
 - `author`
 - `excerpt`
 - `image`
@@ -296,13 +291,10 @@ Optional:
 Rules:
 
 - `topic` is required for articles and is the only source of topic grouping.
-- `slug` is optional author-facing metadata, but it is an Astro-reserved field
-  and must not be listed in the content collection Zod schema.
-- If `slug` is omitted, the exact filename stem is used.
-- The final article route is `entry.id`, after Astro applies any `slug`
-  override and the configured exact-filename fallback.
-- Explicit `slug` values and fallback filename stems must be URL-safe and
-  unique across all articles.
+- `slug` frontmatter should not be used. Astro reserves that field for entry ID
+  overrides, and this project does not need that behavior.
+- The exact filename stem is the article slug.
+- Filename stems must be URL-safe and unique across all articles.
 - `legacyPermalink` is inert metadata. It must not affect article routing,
   topic grouping, sorting, RSS, sitemap, search, or publishing.
 - `draft: true` is the only final unpublished marker.
@@ -324,9 +316,9 @@ src/content/topics/metamemetics.json
 }
 ```
 
-The content collection Zod schema should validate every normal field in this
-frontmatter shape except `slug`. Slug validation belongs in the content verifier
-or loader-level checks because Astro handles `slug` before schema validation.
+The content collection Zod schema should validate every field in this
+frontmatter shape. Filename slug validation belongs in the content verifier or
+loader-level checks.
 
 ## Root And Project File Audit
 
@@ -462,8 +454,7 @@ src/content/articles/<slug>.md
 src/content/articles/<slug>.mdx
 ```
 
-The frontmatter `slug` is preferred when present. If `slug` is absent, the exact
-filename stem is the article slug. For example:
+The exact filename stem is the article slug. For example:
 
 ```text
 src/content/articles/vulliamy-response.md
@@ -490,17 +481,14 @@ legacyPermalink: "/2026/04/28/example-article/"
 ---
 ```
 
-`legacyPermalink` is preserved for historical reference and redirect
-generation, but it does not decide the article slug, route, topic, or published
-status.
+`legacyPermalink` is preserved for historical reference and redirect generation,
+but it does not decide the article slug, route, topic, or published status.
 
-Normal article authors can omit `slug` when the filename is already the desired
-URL slug. They should set `slug` only when the public URL intentionally differs
-from the filename.
+Normal article authors should not use `slug` frontmatter. If the desired public
+URL changes, rename the file.
 
 In implementation, use `entry.id` as the route slug. The collection loader
-should make `entry.id` equal to Astro's reserved `slug` frontmatter value when
-provided, otherwise the exact filename stem.
+should make `entry.id` equal to the exact filename stem.
 
 Use `draft: true` for unpublished articles. Legacy `published: false` and
 `status: draft` values must be migrated or supported during transition so no
@@ -589,8 +577,7 @@ module or script. That fallback must:
 - [ ] Keep `docs/` only until all non-article pages have a final destination.
 - [ ] Rename existing article files from dated `.markdown` filenames to clean
       `.md` filenames.
-- [ ] Preserve current public slugs with explicit `slug` frontmatter only when
-      filename fallback would otherwise change the public URL.
+- [ ] Use the final desired article URL slug as the filename stem.
 - [ ] Keep article body content unchanged.
 - [ ] Rename legacy `permalink` frontmatter to `legacyPermalink` without losing
       values.
@@ -610,18 +597,17 @@ module or script. That fallback must:
       section, or removable legacy content.
 - [ ] Remove or regenerate `docs/tree.txt`; it is not final article content.
 
-Known slug-preservation exceptions:
+Known filename decisions where the legacy `permalink` slug is clearer than the
+old dated filename stem:
 
 ```text
 docs/history/2015-08-19_misattributed-plato-quote.markdown
--> src/content/articles/misattributed-plato-quote.md
-   slug: "misattributed-plato-quote-is-real-now"
+-> src/content/articles/misattributed-plato-quote-is-real-now.md
 ```
 
 ```text
 docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-now.markdown
--> src/content/articles/wittgensteins-most-beloved-quote-was-fake-but-its-real-now.md
-   slug: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now"
+-> src/content/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md
 ```
 
 ### Milestone 3: Load Content Directly From The Article Source Tree
@@ -631,19 +617,16 @@ docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-n
 - [ ] Rename the collection from `legacyMarkdown` to `articles`.
 - [ ] Load `**/*.{md,mdx}` directly.
 - [ ] Remove custom ID generation based on dated `permalink`.
-- [ ] Implement loader ID generation so `entry.id` resolves as Astro's reserved
-      `slug` value when present, otherwise the exact filename stem.
-- [ ] Confirm `slug` frontmatter overrides still work with the chosen
-      `generateId` implementation before bulk-renaming articles.
+- [ ] Implement loader ID generation so `entry.id` resolves to the exact
+      filename stem.
 - [ ] Validate slug uniqueness across all articles.
-- [ ] Validate slug and fallback filename stems as URL-safe values.
+- [ ] Validate filename stems as URL-safe values.
 - [ ] Require `topic` frontmatter for every article.
 - [ ] Add an optional `topics` content collection if curated topic display data
       is needed.
-- [ ] Replace the loose legacy schema with the final Zod schema, excluding
-      Astro's reserved `slug` field.
+- [ ] Replace the loose legacy schema with the final Zod schema.
 - [ ] Define the final author-facing required fields clearly: `title`, `date`,
-      `topic`, and optional `slug`, `author`, `excerpt`, `image`, `draft`,
+      `topic`, and optional `author`, `excerpt`, `image`, `draft`,
       `legacyPermalink`.
 
 ### Milestone 4: Simplify Article And Topic Logic
@@ -653,7 +636,7 @@ docs/history/2022-04-06_wittgensteins-most-beloved-quote-was-fake-but-its-real-n
 - [ ] Derive topic slug from article `topic` frontmatter.
 - [ ] Derive topic label from topic metadata or from the topic slug.
 - [ ] Derive article slug from `entry.id`, with loader behavior documented as
-      reserved `slug` frontmatter or exact filename stem.
+      exact filename stem only.
 - [ ] Define `isArticle()` as "entry from the `articles` collection."
 - [ ] Stop using `permalink` for article detection.
 - [ ] Filter production articles with `draft !== true`.
@@ -837,10 +820,8 @@ MIGRATION_COMPLETION_PLAN.md
 - [ ] No final article frontmatter contains `layout`, `parent`,
       `grand_parent`, `nav_order`, `has_children`, `permalink`, `published`,
       `status`, `type`, `fbpreview`, `facebook`, or tool-specific `meta`.
-- [ ] The Zod schema validates final article metadata and intentionally excludes
-      Astro's reserved `slug` field.
-- [ ] `slug` frontmatter overrides work for the two known historical slug
-      exceptions.
+- [ ] The Zod schema validates final article metadata.
+- [ ] No final article uses `slug` frontmatter.
 - [ ] `draft: true` articles are excluded from article indexes, topics, RSS,
       sitemap, search, and generated pages.
 - [ ] Existing public `/articles/:slug/` routes remain stable.
@@ -867,9 +848,9 @@ MIGRATION_COMPLETION_PLAN.md
 - Existing articles should become `.md`, not `.mdx`.
 - Future articles can use `.mdx` when they need components.
 - The final author-facing article source is `src/content/articles/`.
-- The final article route slug is `entry.id`, with Astro's reserved `slug`
-  frontmatter as an override and exact filename stem as the default.
-- `slug` is not included in the Zod schema because Astro reserves it.
+- The final article route slug is `entry.id`, configured to match the exact
+  filename stem.
+- `slug` frontmatter should not be used.
 - New unpublished articles should use `draft: true`.
 - The maintainer should never edit route, layout, helper, or app component code
   to add a normal article. Normal article work should stay in

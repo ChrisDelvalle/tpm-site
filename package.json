@@ -19,6 +19,7 @@
     "lint:docs": "markdownlint-cli2",
     "lint:fix": "eslint . --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
     "lint:packages": "sort-package-json --check --quiet package.json",
+    "migrate:articles:rename": "bun scripts/rename-legacy-articles.mjs",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "secrets": "gitleaks git --redact --no-banner",
     "sync:content": "node scripts/sync-content.mjs",
