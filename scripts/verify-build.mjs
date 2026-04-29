@@ -23,7 +23,6 @@ const requiredPaths = [
   "sitemap-index.xml",
   "pagefind/pagefind.js",
   "assets/images/2022-04-05_tpm-header_trnp_dm.png",
-  "uploads/2019-04-05 12_31_47-catgirl meme - Google Search.png",
 ];
 const staticReadingPages = [
   "index.html",

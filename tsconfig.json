@@ -16,9 +16,6 @@
     "noUncheckedSideEffectImports": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "paths": {
-      "@assets/*": ["./src/assets/*"]
-    },
     "strict": true,
     "verbatimModuleSyntax": true
   },

@@ -373,10 +373,8 @@ Use Astro image tooling where possible:
 - Use `src/assets/articles/<article-slug>/` by convention for article-owned
   images, `src/assets/shared/` for images shared across articles, and
   `src/assets/site/` for site UI images.
-- Use the `@assets/*` alias for source image references in Markdown and
-  components.
-- Use relative `src/assets/` paths for frontmatter image fields that are parsed
-  by Astro's content collection `image()` helper.
+- Use relative paths for source image references in Markdown, MDX,
+  frontmatter, and components.
 - Avoid adding new optimizable assets directly to `public/` unless they must be
   copied unchanged.
 - Provide useful `alt` text, or `alt=""` only for decorative images.

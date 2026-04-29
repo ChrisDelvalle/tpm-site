@@ -5,7 +5,6 @@ import matter from "gray-matter";
 
 const contentDir = path.resolve("src/content/articles");
 const publicDir = path.resolve("public");
-const assetsDir = path.resolve("src/assets");
 const categorySources = new Set([
   "aesthetics",
   "game-studies",
@@ -95,10 +94,6 @@ async function assetReferenceExists(file, url) {
 
     if (url.startsWith("http://") || url.startsWith("https://")) {
       return true;
-    }
-
-    if (url.startsWith("@assets/")) {
-      return pathExists(path.join(assetsDir, url.slice("@assets/".length)));
     }
 
     return pathExists(path.resolve(path.dirname(file), url));

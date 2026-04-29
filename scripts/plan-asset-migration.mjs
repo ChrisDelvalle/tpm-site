@@ -550,9 +550,11 @@ function printCounts(title, counts) {
   }
 }
 
-function markdownAssetReference(destinationPath) {
-  const assetPath = toPosix(path.relative(assetsDir, destinationPath));
-  return `<@assets/${assetPath}>`;
+function markdownAssetReference(file, destinationPath) {
+  const assetPath = toPosix(path.relative(path.dirname(file), destinationPath));
+  const relativePath = assetPath.startsWith(".") ? assetPath : `./${assetPath}`;
+
+  return `<${relativePath}>`;
 }
 
 function frontmatterAssetReference(file, destinationPath) {
@@ -619,7 +621,7 @@ async function applyReferenceUpdates(plans) {
           destinationPath: plan.destinationPath,
           from: reference.targetToken,
           kind: reference.kind,
-          to: markdownAssetReference(plan.destinationPath),
+          to: markdownAssetReference(reference.file, plan.destinationPath),
         });
       } else if (reference.kind === "frontmatter-image") {
         replacements.push({

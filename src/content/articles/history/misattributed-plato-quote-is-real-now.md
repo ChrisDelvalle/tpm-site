@@ -12,7 +12,7 @@ tags:
 legacyPermalink: 2015/08/19/misattributed-plato-quote-is-real-now/
 ---
 
-![](@assets/shared/11896173_1679964772237142_4577427319780722645_n.png)
+![](../../../assets/shared/11896173_1679964772237142_4577427319780722645_n.png)
 
 > Music is a moral law. It gives a soul to the universe, wings to the mind, flight to the imagination, a charm to sadness, and life to everything. It is the essence of order, and leads to all that is good, just and beautiful, of which it is the invisible, but nevertheless dazzling, passionate, and eternal form.
 

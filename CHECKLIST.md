@@ -506,8 +506,8 @@ on the chosen host and Cloudflare configuration.
 
 - [x] Establish `src/assets/articles/`, `src/assets/shared/`, and
       `src/assets/site/` as the target source asset structure.
-- [x] Add the `@assets/*` alias for Markdown and component references to
-      `src/assets/*`.
+- [x] Standardize source asset references on relative paths from the Markdown,
+      MDX, frontmatter, or component file.
 - [x] Document that new project-owned images should default to `src/assets/`,
       while `public/` is only for files that intentionally need stable root
       URLs or must be copied unchanged.

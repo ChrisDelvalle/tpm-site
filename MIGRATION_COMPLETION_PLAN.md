@@ -820,8 +820,8 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 
 ### Milestone 7: Normalize Static Assets
 
-- [x] Keep `@assets/*` mapped to `src/assets/*` for Markdown and component
-      image references.
+- [x] Keep Markdown, MDX, frontmatter, and component image references as
+      relative paths into `src/assets/`.
 - [x] Use `scripts/plan-asset-migration.mjs` to inventory `/assets/...`,
       `/uploads/...`, root `assets/`, and root `uploads/` references before
       moving files.
