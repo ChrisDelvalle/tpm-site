@@ -455,8 +455,8 @@ are migrated.
 
 - `.codex/config.toml`
   - Project-level Astro Docs MCP config for agent-assisted development.
-  - Keep only if the project wants this repository to carry Codex-specific
-    tooling. It is not required by Astro.
+  - Keep as intentional shared project tooling. It is not required by Astro,
+    but it is part of this repository's agent workflow.
 
 - `.github/workflows/ci.yml`, `.github/workflows/security.yml`, and
   `.github/dependabot.yml`
@@ -464,12 +464,12 @@ are migrated.
     project host.
 
 - `.github/ISSUE_TEMPLATE/` and `.github/release-drafter.yml`
-  - Keep only if issue templates and release drafting are part of active
-    project maintenance.
+  - Keep as intentional shared GitHub project tooling unless the maintenance
+    process changes.
 
 - `.vscode/tasks.json`
   - Optional editor convenience. Current tasks target Bun/Astro scripts.
-  - Keep only if the project wants editor task configuration in git.
+  - Keep as intentional shared project tooling.
 
 - `src/assets/`
   - Target home for project-owned images that should go through Astro's asset
@@ -492,11 +492,7 @@ are migrated.
   - Keep if the deploy should publish this robots policy.
 
 - `public/CNAME`
-  - Keep only if the static host reads a `CNAME` file from built output, such as
-    a GitHub Pages style deploy.
-  - If hosting is fully configured through Cloudflare Pages or another host UI,
-    `public/CNAME` is optional and can be removed after deploy behavior is
-    confirmed.
+  - Keep as the authoritative CNAME file for deploy output.
 
 ### Remove During Cleanup
 
@@ -848,15 +844,15 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
       detection and safe unused legacy duplicate removal.
 - [x] Remove exact duplicate files from root `assets/`, root `uploads/`, and
       `unused-assets/` where an active or retained copy exists.
-- [ ] Keep `public/` only for files that intentionally need stable root URLs or
+- [x] Keep `public/` only for files that intentionally need stable root URLs or
       must be copied unchanged.
 - [x] Replace any remaining root `assets/` or root `uploads/` imports.
 - [x] Remove root `assets/`.
 - [x] Remove root `uploads/`.
-- [ ] Remove `public/.gitkeep`.
+- [x] Remove `public/.gitkeep`.
 - [ ] Keep `public/favicon.svg` as the authoritative favicon unless replaced.
-- [ ] Decide whether `public/CNAME` is required by the deploy host.
-- [ ] Remove root `CNAME`.
+- [x] Keep `public/CNAME` as the authoritative deploy CNAME file.
+- [x] Remove root `CNAME`.
 
 Remaining asset cleanup after the MDX image migration:
 
@@ -868,14 +864,13 @@ Remaining asset cleanup after the MDX image migration:
   `src/assets/shared/`.
 - `bun run assets:duplicates` should now report no exact active-image
   duplicates.
-- `public/` now keeps only `CNAME`, `favicon.svg`, `robots.txt`, and `.gitkeep`;
-  decide whether `public/CNAME` and `.gitkeep` should remain.
+- `public/` now keeps only `CNAME`, `favicon.svg`, and `robots.txt`.
 - `legacyBanner` remains inert historical metadata and can keep legacy-looking
   paths until a future design chooses to use or remove it.
 
 ### Milestone 8: Remove Jekyll And Non-Astro Leftovers
 
-- [ ] Remove root `_config.yml`.
+- [x] Remove root `_config.yml`.
 - [x] Remove root `index.md`.
 - [ ] Remove `script/build`.
 - [x] Keep tracked `.env` for non-secret Bun-loaded project defaults such as
@@ -887,8 +882,8 @@ Remaining asset cleanup after the MDX image migration:
 - [ ] Confirm `package-lock.json` stays removed.
 - [ ] Confirm `.stylelintrc.json` stays removed.
 - [ ] Confirm Bundler/Ruby/Jekyll dependency tracking stays removed.
-- [ ] Decide whether `.codex/config.toml` and `.vscode/tasks.json` are desired
-      project tooling or should remain local-only.
+- [x] Keep `.codex/config.toml` and `.vscode/tasks.json` as intentional shared
+      project tooling.
 
 ### Milestone 9: Update Verification And Documentation
 
@@ -958,16 +953,12 @@ Root and hidden cleanup:
 .gitignore
 .node-version
 .vscode/tasks.json
-_config.yml
 index.md
 script/build
-CNAME
 assets/
 uploads/
-public/.gitkeep
 package-lock.json
 .stylelintrc.json
-.github/ISSUE_TEMPLATE/
 .github/release-drafter.yml
 .github/dependabot.yml
 ```
@@ -1045,7 +1036,8 @@ MIGRATION_COMPLETION_PLAN.md
 - A new category should not require editing a hard-coded category list.
 - Categories come from article source folders. Optional category metadata is
   only for labels, order, and descriptions.
-- Root `CNAME` should be removed; `public/CNAME` is deploy-host dependent.
+- Root `CNAME` has been removed; `public/CNAME` is the authoritative deploy
+  CNAME file.
 - Root `assets/` and `uploads/` should not survive as permanent duplicates.
 
 ## Open Decisions
@@ -1058,6 +1050,3 @@ MIGRATION_COMPLETION_PLAN.md
   scripted pass followed by review.
 - Whether the site should keep an in-repo fallback redirect route in addition to
   Cloudflare.
-- Whether `.codex/config.toml` and `.vscode/tasks.json` are desired shared
-  project tooling or local-only preferences.
-- Whether `public/CNAME` is required by the final host.
