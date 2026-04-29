@@ -25,7 +25,7 @@
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "secrets": "gitleaks git --redact --no-banner",
     "sync:content": "node scripts/sync-content.mjs",
-    "test": "bun test tests/lib --randomize --concurrent",
+    "test": "bun test tests/lib --reporter=dots --randomize --concurrent",
     "test:a11y": "bun run build && playwright test tests/a11y",
     "test:e2e": "bun run build && playwright test tests/e2e",
     "test:flake": "bun run test -- --rerun-each 10",
