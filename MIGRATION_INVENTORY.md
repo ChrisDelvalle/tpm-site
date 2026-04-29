@@ -2,7 +2,7 @@
 
 This file records the Jekyll content rules used by the Astro migration.
 
-## Source Content
+## Original Source Content
 
 - Markdown sources counted: 72.
 - Published dated articles: 60.
@@ -92,7 +92,7 @@ Jekyll implementation details, not content:
 - `docker-compose.yml`
 - legacy generated `feed.xml`
 
-Source content and required static files:
+Original source content and required static files:
 
 - `docs/`
 - `index.md`

@@ -72,8 +72,8 @@ available locally.
 
 Article Markdown and MDX live in `src/content/articles/<category>/`.
 
-Legacy non-article Markdown still lives in `docs/` until those pages have a
-final Astro destination.
+The only remaining legacy non-article Markdown is `docs/notes/about.md`, which
+feeds `/about/` until that page has a final Astro destination.
 
 Before `dev`, `check`, and `build`, the project runs:
 
@@ -81,8 +81,8 @@ Before `dev`, `check`, and `build`, the project runs:
 bun run sync:content
 ```
 
-That script copies article files from `src/content/articles/` and legacy
-non-article files from `docs/` into `src/content/legacy/`. It also converts any
+That script copies article files from `src/content/articles/` and the legacy
+about page from `docs/` into `src/content/legacy/`. It also converts any
 remaining `.markdown` filenames to `.md` and normalizes duplicate top-level
 frontmatter keys for Astro compatibility.
 
@@ -144,9 +144,9 @@ Current article category folders:
 - `src/content/articles/philosophy/` -> `/topics/philosophy/`
 - `src/content/articles/politics/` -> `/topics/politics/`
 
-Topic index files such as `docs/history/history.md` are legacy non-article
-source files.
-Published article pages are generated from entries with dated permalinks.
+Unused legacy topic index files and dialogue content have been removed.
+Published article pages are generated from entries with dated permalinks during
+the current transition.
 
 ## Images And Static Files
 

@@ -7,7 +7,6 @@ const contentDir = path.resolve("src/content/legacy");
 const publicDir = path.resolve("public");
 const categorySources = new Set([
   "aesthetics",
-  "game studies",
   "game-studies",
   "history",
   "irony",
@@ -16,7 +15,7 @@ const categorySources = new Set([
   "philosophy",
   "politics",
 ]);
-const reservedFolders = new Set(["dialogues", "notes"]);
+const reservedFolders = new Set(["notes"]);
 const imageFields = ["banner", "fbpreview", "image"];
 
 async function listMarkdownFiles(dir) {

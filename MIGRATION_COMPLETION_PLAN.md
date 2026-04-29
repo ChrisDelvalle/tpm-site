@@ -33,9 +33,9 @@ small, typed, and predictable.
 - Remove root-level Jekyll files and duplicate static asset roots once the
   Astro equivalents are authoritative.
 
-`docs/` is the current source tree inherited from Jekyll. The preferred final
-source tree is `src/content/articles/`, matching the most recognizable Astro
-content collection convention.
+`docs/` now only contains the legacy about page during the transition. The
+preferred final article source tree is `src/content/articles/`, matching the
+most recognizable Astro content collection convention.
 
 ## Astro Conventions Cross-Check
 
@@ -129,7 +129,7 @@ These items currently exist because the first Astro migration preserved
 Jekyll-shaped content before normalizing the project.
 
 - `scripts/sync-content.mjs`
-  - Copies legacy non-article files from `docs/` and article files from
+  - Copies the legacy about page from `docs/` and article files from
     `src/content/articles/` into generated `src/content/legacy/`.
   - Converts `.markdown` files to `.md` if any remain.
   - Removes duplicate top-level frontmatter keys by keeping the last key.
@@ -197,9 +197,10 @@ Jekyll-shaped content before normalizing the project.
 - Current source content
   - Article files now live under `src/content/articles/<category>/` with clean
     `.md` filenames.
-  - Category index pages such as `docs/history/history.md` are Jekyll-era topic
-    pages and need a final category metadata or static page decision.
-  - `docs/tree.txt` is migration/reference output, not article content.
+  - `docs/notes/about.md` remains temporarily because `/about/` still renders
+    from the generated legacy mirror.
+  - Unused Jekyll-era category index pages, the dialogues page, and
+    `docs/tree.txt` have been removed.
 
 ## Current Content Survey
 
@@ -208,17 +209,13 @@ plain Astro conventions.
 
 - Source files:
   - 61 article `.md` files under `src/content/articles/`.
-  - 10 `.md` files remain under `docs/` as section/static pages, not normal
-    articles.
-  - 1 `docs/tree.txt` file is reference output, not content.
+  - 1 `.md` file remains under `docs/` as temporary about page source.
   - 0 current article files use `.mdx`.
 
 - Article classification:
   - 61 files have dated legacy `permalink` values and are currently treated as
     articles.
-  - 10 Markdown files are non-article pages:
-    `docs/*/<category>.md`, `docs/dialogues/dialogues.md`, and
-    `docs/notes/about.md`.
+  - 1 Markdown file is non-article page source: `docs/notes/about.md`.
   - Article classification must move from dated `permalink` to the
     `src/content/articles/` collection itself.
 
@@ -533,11 +530,10 @@ required for all public categories.
 ### Reserved Content Areas
 
 Reserved folders are mostly a migration concern. In the final flat article
-collection, `notes` and `dialogues` should not sit beside article category
-folders unless they are separate collections.
+collection, `notes` should not sit beside article category folders unless it is
+a separate collection.
 
 - `docs/notes/`
-- `docs/dialogues/`
 
 If these remain public, migrate them to explicit pages under `src/pages/` or to
 dedicated content collections. If they are not public, remove them from the
@@ -581,7 +577,7 @@ module or script. That fallback must:
 
 - [x] Create `src/content/articles/` as the final article collection.
 - [x] Move article files from `docs/` into `src/content/articles/`.
-- [ ] Keep `docs/` only until all non-article pages have a final destination.
+- [ ] Keep `docs/` only until `docs/notes/about.md` has a final destination.
 - [x] Rename existing article files from dated `.markdown` filenames to clean
       `.md` filenames.
 - [x] Use the final desired article URL slug as the filename stem.
@@ -600,9 +596,9 @@ module or script. That fallback must:
 - [ ] Decide whether category metadata files become
       `src/content/categories/*.json` or `src/content/categories/*.md`.
 - [ ] Move `docs/notes/about.md` to an explicit page or page content source.
-- [ ] Decide whether `docs/dialogues/dialogues.md` is public content, a future
-      section, or removable legacy content.
-- [ ] Remove or regenerate `docs/tree.txt`; it is not final article content.
+- [x] Remove unused Jekyll-era category index pages.
+- [x] Remove unused legacy dialogues content.
+- [x] Remove `docs/tree.txt`; it is not final article content.
 
 Known filename decisions where the legacy `permalink` slug is clearer than the
 old dated filename stem:
@@ -879,8 +875,6 @@ MIGRATION_COMPLETION_PLAN.md
   scripted pass followed by review.
 - Whether the site should keep an in-repo fallback redirect route in addition to
   Cloudflare.
-- Whether `docs/dialogues/` should become a normal category, a static page
-  section, reserved non-public content, or be removed from active content.
 - Whether `.codex/config.toml` and `.vscode/tasks.json` are desired shared
   project tooling or local-only preferences.
 - Whether `public/CNAME` is required by the final host.
