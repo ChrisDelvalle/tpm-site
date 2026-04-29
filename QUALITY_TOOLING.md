@@ -656,8 +656,8 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
 {
   "dev": "bun run sync:content && astro dev",
   "sync:content": "node scripts/sync-content.mjs",
-  "build": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
-  "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+  "build": "bun run sync:content && astro build && pagefind --site dist",
+  "preview": "astro preview",
 
   "format": "prettier --check . --log-level warn",
   "format:write": "prettier --write --list-different .",
@@ -665,7 +665,7 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "fix": "bun run lint:fix && bun run format:write",
 
-  "typecheck": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro check",
+  "typecheck": "bun run sync:content && astro check",
   "deadcode": "knip --no-config-hints",
   "test": "bun test tests/lib --randomize --concurrent",
   "test:flake": "bun run test -- --rerun-each 10",

@@ -10,6 +10,8 @@ dist
 .astro
 src/content/legacy
 .DS_Store
+.env.local
+.env.*.local
 coverage
 .lighthouseci
 playwright-report

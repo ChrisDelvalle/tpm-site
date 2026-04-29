@@ -529,9 +529,10 @@ are migrated.
 
 - `.env`
   - Currently only contains `ASTRO_TELEMETRY_DISABLED`.
-  - Do not track environment files for this project. Put non-secret defaults in
-    scripts or documentation, and ignore `.env*` except for an intentional
-    `.env.example`.
+  - Keep tracked as the shared Bun-loaded project environment for non-secret
+    defaults.
+  - Do not put secrets in `.env`; use ignored `.env.local` or
+    `.env.*.local` files for local-only values.
 
 - `.DS_Store`
   - Local macOS artifact. Remove from the worktree; keep ignored.
@@ -877,9 +878,10 @@ Remaining asset cleanup after the MDX image migration:
 - [ ] Remove root `_config.yml`.
 - [x] Remove root `index.md`.
 - [ ] Remove `script/build`.
-- [ ] Remove tracked `.env`; encode non-secret defaults in scripts/docs instead.
-- [ ] Add `.env*` to `.gitignore`, with an exception only for an intentional
-      `.env.example`.
+- [x] Keep tracked `.env` for non-secret Bun-loaded project defaults such as
+      `ASTRO_TELEMETRY_DISABLED=1`.
+- [x] Ignore local-only environment overrides without ignoring the tracked base
+      `.env`.
 - [ ] Remove local `.DS_Store`.
 - [ ] Remove any empty `.devcontainer/` directory from the worktree.
 - [ ] Confirm `package-lock.json` stays removed.
@@ -951,7 +953,8 @@ Root and hidden cleanup:
 .codex/config.toml
 .devcontainer/
 .DS_Store
-.env
+.env.local
+.env.*.local
 .gitignore
 .node-version
 .vscode/tasks.json
@@ -1022,7 +1025,7 @@ MIGRATION_COMPLETION_PLAN.md
       redirect layer.
 - [ ] No root Jekyll files remain.
 - [ ] No duplicate root/public asset trees remain.
-- [ ] No tracked local environment or OS artifact files remain.
+- [ ] No tracked secret/local environment or OS artifact files remain.
 
 ## Current Assumptions
 
