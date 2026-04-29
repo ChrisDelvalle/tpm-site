@@ -20,14 +20,14 @@ While "meme" typically refers to a set of content as well as the individual vide
 The concept is founded on the notion that the basic unit of content online is the individual file. The practice of posting jjalbangs along with text posts was developed by users on the popular digital camera hobbyist website, [dcinside](https://www.dcinside.com/) (디씨인사이드, short for Digital Camera Inside).
 
 <figure>
-	<img src="https://cdn.discordapp.com/attachments/562443537673748480/663831698395627530/291.jpg">
+	<img src="https://cdn.discordapp.com/attachments/562443537673748480/663831698395627530/291.jpg" alt="">
 	<figcaption>Gaejoogi (개죽이, Bamboo Doggy), an iconic Korean jjal from 2001.</figcaption>
 </figure>
 
 When the users began using the site for general socialisation, moderators aggressively pruned off-topic posts in order to maintain quality. Since this was a camera and photography forum, the mods usually detected off-topic posts by whether they included a photo. Users began including random images on their shitposts in order to prevent them from being detected by moderators. Eventually these images became a genre.
 
 <figure>
-	<img src="https://cdn.discordapp.com/attachments/562443537673748480/663831483777286212/f68fdabc885ab2b83f749e23f773f9f939b9f9b1c015ee6b23f8c89c18735eeb.png">
+	<img src="https://cdn.discordapp.com/attachments/562443537673748480/663831483777286212/f68fdabc885ab2b83f749e23f773f9f939b9f9b1c015ee6b23f8c89c18735eeb.png" alt="">
 	<figcaption>An ASCII art version of Gaejoogi made in Japan.</figcaption>
 </figure>
 

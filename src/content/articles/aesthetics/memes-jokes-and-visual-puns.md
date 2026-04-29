@@ -51,7 +51,7 @@ But what about something like this?
 
 <div class="caption">Fig. 4: “Can Eye Fist Uranus” (2017)</div>
 
-This is what is called a “rebus,” from the Latin <i>non verbis, sed rebus</i>, which means "not by words but by things." In essence, a picture of something is substituted for something else when conveying a written message. A rebus can be a type of pun—instead of substituting a word with a similar sound but different meaning, you’re substituting a picture. It’s all the same thing basically, except that we are starting to depart from language in the conventional, words-and-letters sense. And that’s exactly where I’m headed!
+This is what is called a “rebus,” from the Latin _non verbis, sed rebus_, which means "not by words but by things." In essence, a picture of something is substituted for something else when conveying a written message. A rebus can be a type of pun—instead of substituting a word with a similar sound but different meaning, you’re substituting a picture. It’s all the same thing basically, except that we are starting to depart from language in the conventional, words-and-letters sense. And that’s exactly where I’m headed!
 
 ![meme-jokes-puns-5.png](/uploads/meme-jokes-puns-5.png)
 
@@ -114,7 +114,7 @@ Besides illustrating relationships between its components, the final function of
 
 <div class="caption">Fig. 10: Value Placeholders in Memes</div>
 
-Through this notion of cell values, individual parts of a template contain different meanings. Since it takes these values into consideration, Figure 8 moves beyond simple syntactical relations towards a semantically grounded structure. The individual values are actually meaningfully used and incorporated into the macro-structure of the image. The elements’ individual meanings are rooted in memetic literacy, background knowledge, established usage conventions, and not simply based on the gestalt or the syntax of a meme. The individual meanings of the subcomponents are separated and structured in a way that integrates them into the subcomponents of the <i>other</i> template elements of the meme.
+Through this notion of cell values, individual parts of a template contain different meanings. Since it takes these values into consideration, Figure 8 moves beyond simple syntactical relations towards a semantically grounded structure. The individual values are actually meaningfully used and incorporated into the macro-structure of the image. The elements’ individual meanings are rooted in memetic literacy, background knowledge, established usage conventions, and not simply based on the gestalt or the syntax of a meme. The individual meanings of the subcomponents are separated and structured in a way that integrates them into the subcomponents of the _other_ template elements of the meme.
 
 Here is a diagram summarizing the points:
 

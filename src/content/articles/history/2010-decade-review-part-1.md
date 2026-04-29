@@ -26,7 +26,7 @@ legacyBanner: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_
 The memetic history of the 2010's can be divided into six Eras, starting from the influences that precipitated into the ironic meme movement and arriving at the beginning of postirony.
 
 <figure>
-	<img src="https://cdn.discordapp.com/attachments/436415399379206144/845172062263836682/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png">
+	<img src="https://cdn.discordapp.com/attachments/436415399379206144/845172062263836682/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png" alt="">
 	<figcaption>The Six Eras of recent memetic history, based on our 2015 model (<a href="https://www.youtube.com/watch?v=fRdUG9LOJGA&list=PLbRNdtOn8CjOZYsLI13poGPnDqSeZIdAW&index=6">Her & Zharova, 2015</a>)</figcaption>
 </figure>
 
