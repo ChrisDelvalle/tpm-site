@@ -8,7 +8,6 @@ playwright-report/
 test-results/
 tmp/
 
-docs/
 src/content/articles/
 index.md
 _site/

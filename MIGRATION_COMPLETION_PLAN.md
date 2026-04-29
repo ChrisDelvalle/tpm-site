@@ -33,9 +33,9 @@ small, typed, and predictable.
 - Remove root-level Jekyll files and duplicate static asset roots once the
   Astro equivalents are authoritative.
 
-`docs/` now only contains the legacy about page during the transition. The
-preferred final article source tree is `src/content/articles/`, matching the
-most recognizable Astro content collection convention.
+`docs/` has been removed from the active content model. Article source lives in
+`src/content/articles/`, and Markdown page source lives in
+`src/content/pages/`.
 
 ## Astro Conventions Cross-Check
 
@@ -129,8 +129,8 @@ These items currently exist because the first Astro migration preserved
 Jekyll-shaped content before normalizing the project.
 
 - `scripts/sync-content.mjs`
-  - Copies the legacy about page from `docs/` and article files from
-    `src/content/articles/` into generated `src/content/legacy/`.
+  - Copies article files from `src/content/articles/` into generated
+    `src/content/legacy/`.
   - Converts `.markdown` files to `.md` if any remain.
   - Removes duplicate top-level frontmatter keys by keeping the last key.
 
@@ -197,10 +197,10 @@ Jekyll-shaped content before normalizing the project.
 - Current source content
   - Article files now live under `src/content/articles/<category>/` with clean
     `.md` filenames.
-  - `docs/notes/about.md` remains temporarily because `/about/` still renders
-    from the generated legacy mirror.
+  - The about page now lives under `src/content/pages/about.md`.
   - Unused Jekyll-era category index pages, the dialogues page, and
     `docs/tree.txt` have been removed.
+  - `docs/` has been removed.
 
 ## Current Content Survey
 
@@ -209,13 +209,12 @@ plain Astro conventions.
 
 - Source files:
   - 61 article `.md` files under `src/content/articles/`.
-  - 1 `.md` file remains under `docs/` as temporary about page source.
+  - 1 page `.md` file under `src/content/pages/`.
   - 0 current article files use `.mdx`.
 
 - Article classification:
   - 61 files have dated legacy `permalink` values and are currently treated as
     articles.
-  - 1 Markdown file is non-article page source: `docs/notes/about.md`.
   - Article classification must move from dated `permalink` to the
     `src/content/articles/` collection itself.
 

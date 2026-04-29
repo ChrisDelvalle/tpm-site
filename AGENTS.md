@@ -36,7 +36,8 @@ migration implementation details.
 
 ## Project Map
 
-- `docs/`: current source-of-truth legacy content during the migration.
+- `src/content/articles/`: current source-of-truth article content.
+- `src/content/pages/`: source-of-truth Markdown pages such as `/about/`.
 - `src/content/legacy/`: generated content mirror. Do not edit by hand.
 - `src/pages/`: Astro routes.
 - `src/layouts/`: shared page and article layouts.
@@ -126,8 +127,10 @@ Article content fidelity is strict.
 
 Current migration state:
 
-- Legacy content lives in `docs/`.
-- `scripts/sync-content.mjs` generates `src/content/legacy/`.
+- Article content lives in `src/content/articles/`.
+- Page content lives in `src/content/pages/`.
+- `scripts/sync-content.mjs` generates `src/content/legacy/` for the remaining
+  article compatibility layer.
 - `src/content/legacy/` is disposable generated output.
 
 Target content state is documented in `MIGRATION_COMPLETION_PLAN.md`.

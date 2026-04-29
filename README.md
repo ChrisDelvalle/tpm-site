@@ -72,8 +72,8 @@ available locally.
 
 Article Markdown and MDX live in `src/content/articles/<category>/`.
 
-The only remaining legacy non-article Markdown is `docs/notes/about.md`, which
-feeds `/about/` until that page has a final Astro destination.
+Static page Markdown lives in `src/content/pages/`. The about page is
+`src/content/pages/about.md`.
 
 Before `dev`, `check`, and `build`, the project runs:
 
@@ -81,13 +81,16 @@ Before `dev`, `check`, and `build`, the project runs:
 bun run sync:content
 ```
 
-That script copies article files from `src/content/articles/` and the legacy
-about page from `docs/` into `src/content/legacy/`. It also converts any
-remaining `.markdown` filenames to `.md` and normalizes duplicate top-level
-frontmatter keys for Astro compatibility.
+That script copies article files from `src/content/articles/` into
+`src/content/legacy/`. It also converts any remaining `.markdown` filenames to
+`.md` and normalizes duplicate top-level frontmatter keys for Astro
+compatibility.
 
 Do not edit `src/content/legacy/` directly. Any changes there will be replaced
 the next time content is synced.
+
+The `pages` content collection does not use the legacy mirror. Edit
+`src/content/pages/about.md` directly for `/about/`.
 
 ## Adding An Article
 

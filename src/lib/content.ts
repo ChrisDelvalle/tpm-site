@@ -19,11 +19,6 @@ export async function getArticles() {
   return sortNewestFirst(entries.filter(isPublishedArticle));
 }
 
-export async function getAboutPage() {
-  const entries = await getLegacyEntries();
-  return entries.find((entry) => entry.id === "notes/about");
-}
-
 export function articlesForTopic(entries: LegacyEntry[], topicSlug: string) {
   const topic = TOPICS.find((item) => item.slug === topicSlug);
   if (!topic) {

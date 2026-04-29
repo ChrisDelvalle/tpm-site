@@ -50,6 +50,19 @@ const legacyMarkdown = defineCollection({
     .loose(),
 });
 
+const pages = defineCollection({
+  loader: glob({
+    base: "./src/content/pages",
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
 export const collections = {
   legacyMarkdown,
+  pages,
 };

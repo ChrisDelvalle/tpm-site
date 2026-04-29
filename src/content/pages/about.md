@@ -1,11 +1,6 @@
 ---
 title: About
-layout: default
-nav_order: 20220405
-permalink: /about/
-author:
-  display_name: The Philosopher's Meme
-published: false
+description: "About The Philosopher's Meme."
 ---
 
 

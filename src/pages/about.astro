@@ -1,20 +1,24 @@
 ---
-import { render } from "astro:content";
+import { getEntry, render } from "astro:content";
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getAboutPage } from "../lib/content";
 
-const about = await getAboutPage();
-const rendered = about ? await render(about) : undefined;
-const Content = rendered?.Content;
+const about = await getEntry("pages", "about");
+
+if (!about) {
+  throw new Error("Missing about page content at src/content/pages/about.md.");
+}
+
+const { Content } = await render(about);
+const description = about.data.description ?? "About The Philosopher's Meme.";
 ---
 
 <BaseLayout
-  title="About | The Philosopher's Meme"
-  description="About The Philosopher's Meme."
+  title={`${about.data.title} | The Philosopher's Meme`}
+  description={description}
   canonicalPath="/about/"
 >
   <article class="article">
-    {Content ? <Content /> : <h1>About</h1>}
+    <Content />
   </article>
 </BaseLayout>

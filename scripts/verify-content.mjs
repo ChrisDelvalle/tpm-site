@@ -15,7 +15,6 @@ const categorySources = new Set([
   "philosophy",
   "politics",
 ]);
-const reservedFolders = new Set(["notes"]);
 const imageFields = ["banner", "fbpreview", "image"];
 
 async function listMarkdownFiles(dir) {
@@ -105,7 +104,7 @@ for (const file of files) {
   const relativePath = relativeContentPath(file);
   const folder = topLevelFolder(file);
 
-  if (!categorySources.has(folder) && !reservedFolders.has(folder)) {
+  if (!categorySources.has(folder)) {
     issues.push(
       `${relativePath}: unknown top-level content folder "${folder}"`,
     );
