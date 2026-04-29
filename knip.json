@@ -7,7 +7,7 @@
     "playwright.config.ts",
     "scripts/**/*.mjs",
     "src/content.config.ts",
-    "src/pages/**/*.{astro,ts}",
+    "src/pages/**/*.{astro,ts,tsx}",
     "tests/**/*.ts"
   ],
   "ignore": [
@@ -25,7 +25,8 @@
     "@tailwindcss/typography",
     "markdownlint-cli2",
     "sort-package-json",
-    "tailwindcss"
+    "tailwindcss",
+    "tw-animate-css"
   ],
   "ignoreBinaries": ["gitleaks"],
   "project": [
@@ -33,7 +34,7 @@
     "eslint.config.js",
     "playwright.config.ts",
     "scripts/**/*.mjs",
-    "src/**/*.{astro,ts}",
+    "src/**/*.{astro,ts,tsx}",
     "tests/**/*.ts"
   ]
 }

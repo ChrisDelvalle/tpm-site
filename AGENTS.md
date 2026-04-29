@@ -54,6 +54,17 @@ migration implementation details.
 - `DESIGN_PHILOSOPHY.md`: architecture and design principles.
 - `QUALITY_TOOLING.md`: target quality tooling and release checks.
 
+## Project-Local Skills
+
+Repo-local skills live in `.agents/skills/<skill-name>/SKILL.md`.
+
+- `shadcn`: use when working with shadcn/ui, component registries, presets,
+  Radix/shadcn components, or shadcn CLI workflows. Load
+  `.agents/skills/shadcn/SKILL.md` before making shadcn-related changes.
+
+When a project-local skill matches the task, read its `SKILL.md` and follow its
+workflow before making changes.
+
 ## Architecture Policy
 
 Build the site from responsive design blocks and responsive components.

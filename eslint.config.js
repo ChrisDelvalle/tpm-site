@@ -18,7 +18,11 @@ import tseslint from "typescript-eslint";
 
 const tsconfigRootDir = fileURLToPath(new URL(".", import.meta.url));
 
-const typedFiles = ["src/**/*.ts", "tests/**/*.ts", "playwright.config.ts"];
+const typedFiles = [
+  "src/**/*.{ts,tsx}",
+  "tests/**/*.{ts,tsx}",
+  "playwright.config.ts",
+];
 
 function scopeToTypedFiles(configs) {
   return configs.map((config) => ({
@@ -242,7 +246,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/**/*.{ts}"],
+    files: ["src/**/*.{ts,tsx}"],
     rules: {
       "no-console": "error",
     },
