@@ -1,6 +1,7 @@
 ---
 title: Twitch Plays Pokemon, the Meme Scene, & the Project of Hyperspace
 date: 2016-10-26 12:00:00 Z
+topic: "game-studies"
 parent: Game Studies
 permalink: 2016/10/26/twitch-plays-pokemon/
 nav_order: -20161026

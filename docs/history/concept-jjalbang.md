@@ -1,6 +1,7 @@
 ---
 title: Jjalbang (짤방), the Korean Meme
 date: 2020-01-07 08:32:00 +13:00
+topic: "history"
 layout: default
 nav_order: -20200107
 parent: History

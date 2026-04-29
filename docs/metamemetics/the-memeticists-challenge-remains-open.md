@@ -1,6 +1,7 @@
 ---
 title: The Memeticist's Challenge Remains Open
 date: 2018-11-15 22:12:00 +13:00
+topic: "metamemetics"
 parent: Metamemetics
 nav_order: -20181115
 permalink: 2018/11/15/the-memeticists-challenge-remains-open/

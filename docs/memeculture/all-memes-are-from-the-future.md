@@ -1,6 +1,7 @@
 ---
 title: All Memes Are From the Future
 date: 2019-10-12 16:13:00 +13:00
+topic: "memeculture"
 parent: Memeculture
 nav_order: -20191012
 grand_parent: Blog

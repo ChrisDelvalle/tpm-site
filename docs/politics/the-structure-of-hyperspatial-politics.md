@@ -1,6 +1,7 @@
 ---
 title: The Structures of Hyperspatial Politics
 date: 2017-06-13 20:11:00 +12:00
+topic: "politics"
 parent: Politics
 layout: default
 permalink: 2017/06/13/the-structure-of-hyperspatial-politics/

@@ -1,6 +1,7 @@
 ---
 title: Death of a Meme?
 date: 2016-03-02 22:25:14 Z
+topic: "history"
 parent: History
 nav_order: -20160302
 permalink: 2016/03/02/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/

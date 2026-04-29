@@ -1,6 +1,7 @@
 ---
 title: What Is A Meme?
 date: 2021-11-30 18:46:00 +13:00
+topic: "metamemetics"
 parent: Metamemetics
 nav_order: -20211130
 permalink: 2021/11/30/what-is-a-meme

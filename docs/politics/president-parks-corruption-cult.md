@@ -1,6 +1,7 @@
 ---
 title: President Park's Corruption Cult
 date: 2016-11-02 11:33:00 Z
+topic: "politics"
 parent: Politics
 permalink: 2016/11/02/president-parks-corruption-cult/
 nav_order: -11

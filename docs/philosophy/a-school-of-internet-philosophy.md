@@ -1,6 +1,7 @@
 ---
 title: A School of Internet Philosophy
 date: 2017-03-27 03:16:00 +13:00
+topic: "philosophy"
 parent: Philosophy
 layout: default
 nav_order: -4

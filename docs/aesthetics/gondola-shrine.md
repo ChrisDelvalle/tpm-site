@@ -1,6 +1,7 @@
 ---
 title: Every Gondola Is a Shrine
 date: 2019-12-23 10:43:00 +12:00
+topic: "aesthetics"
 parent: Aesthetics
 nav_order: -20191223
 layout: default

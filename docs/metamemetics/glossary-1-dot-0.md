@@ -1,6 +1,7 @@
 ---
 title: Glossary 1.0
 date: 2016-01-18 13:50:00 +13:00
+topic: "metamemetics"
 parent: Metamemetics
 author:
   display_name: The Philosopher's Meme

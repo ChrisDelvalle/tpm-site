@@ -1,6 +1,7 @@
 ---
 title: The Artist-Philosopher Manifesto
 date: 2015-06-18 07:42:19 Z
+topic: "aesthetics"
 categories:
 - The Artist-Philosopher Manifesto
 parent: Aesthetics

@@ -1,6 +1,7 @@
 ---
 title: Postnaturalism
 date: 2020-07-05 08:22:12 +13:00
+topic: "philosophy"
 parent: Philosophy
 nav_order: -3
 layout: default

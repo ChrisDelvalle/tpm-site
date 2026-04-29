@@ -1,6 +1,7 @@
 ---
 title: How to Digitally Coauthor Articles In Philosophy Class
 date: 2019-06-30 18:48:00 +13:00
+topic: "philosophy"
 parent: Philosophy
 nav_order: -3
 layout: default

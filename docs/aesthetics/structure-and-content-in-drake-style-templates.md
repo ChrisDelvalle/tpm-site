@@ -1,6 +1,7 @@
 ---
 title: Structure and Content in Drake-Style Templates
 date: 2018-09-11 10:43:00 +12:00
+topic: "aesthetics"
 parent: Aesthetics
 nav_order: -20180911
 layout: default

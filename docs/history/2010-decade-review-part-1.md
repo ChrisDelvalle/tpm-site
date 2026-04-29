@@ -1,6 +1,7 @@
 ---
 title: '2010''s Decade Review, Part 1: The Origin of 2010''s Memecultures'
 date: 2020-01-04 11:01:00 +13:00
+topic: "history"
 parent: History
 nav_order: -20200104
 layout: default

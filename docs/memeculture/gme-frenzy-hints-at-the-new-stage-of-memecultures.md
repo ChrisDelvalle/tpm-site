@@ -1,6 +1,7 @@
 ---
 title: GME Frenzy Hints At the New Stage of Memecultures
 date: 2021-02-02 18:51:00 +13:00
+topic: "memeculture"
 parent: Memeculture
 nav_order: -20210202
 permalink: 2021/02/02/gme-frenzy-hints-at-the-new-stage-of-memecultures/

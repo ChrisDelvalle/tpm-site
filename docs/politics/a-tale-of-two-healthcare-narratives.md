@@ -1,6 +1,7 @@
 ---
 title: A Tale of Two Healthcare Narratives
 date: 2020-03-16 20:27:00 +13:00
+topic: "politics"
 parent: Politics
 nav_order: -2
 layout: default

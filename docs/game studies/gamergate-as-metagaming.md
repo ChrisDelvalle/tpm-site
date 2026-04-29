@@ -1,6 +1,7 @@
 ---
 title: GamerGate As Metagaming
 date: 2021-05-16 06:00:00 +13:00
+topic: "game-studies"
 parent: Game Studies
 nav_order: -20210516
 layout: default

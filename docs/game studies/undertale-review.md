@@ -1,6 +1,7 @@
 ---
 title: Undertale Review
 date: 2015-11-29 12:17:16 Z
+topic: "game-studies"
 parent: Game Studies
 nav_order: -20151129
 permalink: 2015/11/29/undertale-review/

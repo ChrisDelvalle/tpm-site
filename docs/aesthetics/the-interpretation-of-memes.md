@@ -1,6 +1,7 @@
 ---
 title: The Interpretation of Memes
 date: 2018-02-05 08:24:00 +13:00
+topic: "aesthetics"
 parent: Aesthetics
 nav_order: -20180205
 layout: default

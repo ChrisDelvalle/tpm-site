@@ -1,6 +1,7 @@
 ---
 title: Memes Are Not Jokes, They Are Diagram-Games
 date: 2017-09-10 12:00:00 +12:00
+topic: "game-studies"
 parent: Game Studies
 layout: default
 permalink: 2017/09/10/memes-are-not-jokes-they-are-diagram-games/

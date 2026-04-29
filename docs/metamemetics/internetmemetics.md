@@ -1,6 +1,7 @@
 ---
 title: Internet Memetics
 date: 2016-11-15 23:04:00 +13:00
+topic: "metamemetics"
 parent: Metamemetics
 permalink: 2016/11/15/internetmemetics/
 nav_order: -20161115

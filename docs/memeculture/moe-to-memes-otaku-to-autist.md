@@ -1,6 +1,7 @@
 ---
 title: Moe to Memes, Otaku to Autists
 date: 2017-11-23 13:50:00 +13:00
+topic: "memeculture"
 parent: Memeculture
 nav_order: -20171123
 layout: default

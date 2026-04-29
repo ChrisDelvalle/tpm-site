@@ -2,6 +2,7 @@
 title: 'From Outrage to Dicks Out to Dead Celebrity: The Evolution of the Great Ape
   Harambe'
 date: 2016-10-13 12:00:00 Z
+topic: "history"
 parent: History
 permalink: 2016/10/13/what-we-talk-about-harambe/
 nav_order: -20161013

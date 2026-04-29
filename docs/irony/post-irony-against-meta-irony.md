@@ -1,6 +1,7 @@
 ---
 title: Post-Irony against Meta-Irony
 date: 2017-03-10 10:10:00 +13:00
+topic: "irony"
 parent: Irony
 permalink: /2017/03/10/post-irony-against-meta-irony/
 nav_order: -20170310

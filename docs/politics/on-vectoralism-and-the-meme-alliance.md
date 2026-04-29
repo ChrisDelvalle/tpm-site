@@ -1,6 +1,7 @@
 ---
 title: On Vectoralism & the Meme Alliance's General Strike
 date: 2016-10-26 12:00:00 Z
+topic: "politics"
 parent: Politics
 permalink: 2016/10/26/on-vectoralism-and-the-meme-alliance/
 nav_order: -9

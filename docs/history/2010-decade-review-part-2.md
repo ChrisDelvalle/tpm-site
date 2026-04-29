@@ -1,6 +1,7 @@
 ---
 title: '2010''s Decade Review, Part 2: Memetaphysics Through Three Lenses'
 date: 2020-10-09 10:10:00 +13:00
+topic: "history"
 parent: History
 nav_order: -20201009
 layout: default

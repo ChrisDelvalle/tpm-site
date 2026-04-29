@@ -1,6 +1,7 @@
 ---
 title: The Ironic Normie
 date: 2015-12-18 11:01:24
+topic: "irony"
 parent: Irony
 nav_order: -20151218
 permalink: 2015/12/18/the-ironic-normie/

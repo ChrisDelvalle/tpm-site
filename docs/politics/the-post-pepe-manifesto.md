@@ -1,6 +1,7 @@
 ---
 title: The Post-Pepe Manifesto
 date: 2016-01-29 03:30:00 Z
+topic: "politics"
 parent: 2016
 grand_parent: Blog
 nav_order: -2

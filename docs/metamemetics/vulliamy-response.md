@@ -1,6 +1,7 @@
 ---
 title: Memes and Humor&#58; Reply to Claudia Vulliamy's "What is a Meme?"
 date: 2021-12-30 22:42:08 +13:00
+topic: "metamemetics"
 layout: default
 nav_order: -20211230
 parent: Metamemetics

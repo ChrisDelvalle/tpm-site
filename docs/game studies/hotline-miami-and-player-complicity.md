@@ -1,6 +1,7 @@
 ---
 title: Hotline Miami and player complicity
 date: 2015-12-01 15:31:00 Z
+topic: "game-studies"
 parent: Game Studies
 nav_order: -20151201
 permalink: 2015/12/01/hotline-miami-and-player-complicity/

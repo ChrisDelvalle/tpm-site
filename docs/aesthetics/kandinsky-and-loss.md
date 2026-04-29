@@ -1,6 +1,7 @@
 ---
 title: Kandinsky and Loss
 date: 2017-12-04 07:52:00 +13:00
+topic: "aesthetics"
 parent: Aesthetics
 nav_order: -20171204
 layout: default

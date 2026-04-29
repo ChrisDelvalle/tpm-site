@@ -2,6 +2,7 @@
 layout: default
 title: Joshua Citarella Astroturfing
 date: 2022-04-20 13:49:00 +13:00
+topic: "politics"
 author:
   display_name: Seong-Young Her
 layout: default

@@ -1,6 +1,7 @@
 ---
 title: The design of a platform determines the kind of content produced
 date: 2017-12-15 15:06:00 +13:00
+topic: "aesthetics"
 layout: default
 parent: Aesthetics
 nav_order: -20171215

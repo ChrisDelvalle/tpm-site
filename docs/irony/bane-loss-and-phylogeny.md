@@ -1,6 +1,7 @@
 ---
 title: Bane, Loss and Phylogeny
 date: 2015-11-25 11:39:58 Z
+topic: "irony"
 parent: Irony
 nav_order: -20151125
 permalink: 2015/11/26/bane-loss-and-phylogeny/

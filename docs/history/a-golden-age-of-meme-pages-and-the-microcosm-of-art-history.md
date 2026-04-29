@@ -4,6 +4,7 @@ title: A Golden Age of Meme Pages and the Microcosm of Art History
 author:
   display_name: Seong-Young Her
 date: 2015-11-02 01:01:10 Z
+topic: "history"
 nav_order: -20151102
 parent: History
 permalink: 2015/11/02/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history/

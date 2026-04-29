@@ -1,6 +1,7 @@
 ---
 title: Newfriends and the Generation Gap
 date: 2016-05-12 14:58:46 Z
+topic: "memeculture"
 parent: Memeculture
 nav_order: -20160512
 permalink: 2016/05/12/newfriends-and-the-generation-gap/

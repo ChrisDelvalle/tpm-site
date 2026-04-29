@@ -1,6 +1,7 @@
 ---
 title: The Memetic Bottleneck
 date: 2019-04-05 06:00:00 +13:00
+topic: "game-studies"
 parent: Game Studies
 nav_order: -20190405
 layout: default

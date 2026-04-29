@@ -1,6 +1,7 @@
 ---
 title: Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now
 date: 2022-04-06 23:58:10 +13:00
+topic: "history"
 parent: History
 nav_order: -20220406
 layout: default

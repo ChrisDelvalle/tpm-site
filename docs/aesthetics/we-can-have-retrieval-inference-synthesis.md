@@ -1,6 +1,7 @@
 ---
 title: We Can Have Retrieval-Inference Synthesis
 date: 2021-07-21 13:21:00 +12:00
+topic: "aesthetics"
 parent: Aesthetics
 nav_order: -20210721
 layout: default

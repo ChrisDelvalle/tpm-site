@@ -1,6 +1,7 @@
 ---
 title: The Meta-Ironic Era
 date: 2017-09-09 09:45:00 +12:00
+topic: "history"
 parent: History
 layout: default
 permalink: /2017/09/09/the-meta-ironic-era/

@@ -1,6 +1,7 @@
 ---
 title: The Quadrant System for the Categorization of Internet Memes
 date: 2015-11-02 11:25:13 Z
+topic: "irony"
 layout: default
 nav_order: -20151102
 parent: Irony

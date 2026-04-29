@@ -1,6 +1,7 @@
 ---
 title: Misattributed Plato Quote Is Real Now
 date: 2015-08-19 01:01:23 +13:00
+topic: "history"
 parent: History
 nav_order: -20150819
 layout: default

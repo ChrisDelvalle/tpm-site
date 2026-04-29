@@ -1,6 +1,7 @@
 ---
 title: On Circlejerk
 date: 2021-12-18 18:46:00 +13:00
+topic: "politics"
 layout: default
 parent: Politics
 nav_order: -20211218

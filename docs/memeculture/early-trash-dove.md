@@ -1,6 +1,7 @@
 ---
 title: Trash Dove Is A Normie Meme
 date: 2017-02-15 18:41:00 +13:00
+topic: "memeculture"
 parent: Memeculture
 permalink: 2017/02/15/early-trash-dove/
 nav_order: -20170215

@@ -1,6 +1,7 @@
 ---
 title: See the Problem?
 date: 2016-04-08 23:22:00 +12:00
+topic: "politics"
 layout: default
 nav_order: -4
 parent: Politics

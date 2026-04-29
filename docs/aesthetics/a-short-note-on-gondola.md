@@ -1,6 +1,7 @@
 ---
 title: A Short Note On Gondola
 date: 2015-11-28 17:20:00 Z
+topic: "aesthetics"
 parent: Aesthetics
 nav_order: -20151128
 permalink: 2015/11/29/a-short-note-on-gondola/

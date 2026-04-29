@@ -1,6 +1,7 @@
 ---
 title: Jeremy Cahill (Metamer) Dismissed for Serious Misconduct
 date: 2021-06-14 13:05:00 +12:00
+topic: "history"
 layout: default
 parent: History
 nav_order: -20210614

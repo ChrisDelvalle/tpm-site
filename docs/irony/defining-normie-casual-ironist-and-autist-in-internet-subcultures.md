@@ -1,6 +1,7 @@
 ---
 title: Defining ‘Normie’, ‘Casual’, ‘Ironist’ and ‘Autist’ In Internet Subcultures
 date: 2017-03-27 15:47:00 +13:00
+topic: "irony"
 parent: Irony
 layout: default
 permalink: 2017/03/27/defining-normie-casual-ironist-and-autist-in-internet-subcultures/

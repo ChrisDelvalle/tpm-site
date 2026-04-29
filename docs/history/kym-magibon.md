@@ -1,6 +1,7 @@
 ---
 title: 'Know Your Meme: Magibon'
 date: 2017-12-04 12:01:00 +13:00
+topic: "history"
 layout: default
 nav_order: -20171204
 parent: History

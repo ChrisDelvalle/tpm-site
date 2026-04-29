@@ -1,6 +1,7 @@
 ---
 title: Memes, Jokes & Visual Puns
 date: 2018-03-27 08:49:00 +13:00
+topic: "aesthetics"
 parent: Aesthetics
 nav_order: -20180327
 layout: default

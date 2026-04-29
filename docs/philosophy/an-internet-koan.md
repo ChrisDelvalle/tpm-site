@@ -1,6 +1,7 @@
 ---
 title: An Internet Koan
 date: 2016-05-13 03:09:00 +12:00
+topic: "philosophy"
 parent: Philosophy
 permalink: 2016/05/13/an-internet-koan/
 nav_order: -7

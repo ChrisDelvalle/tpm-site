@@ -1,6 +1,7 @@
 ---
 title: long boys never grow up
 date: 2016-03-23 08:33:00 +13:00
+topic: "history"
 parent: History
 nav_order: -20160323
 permalink: 2016/03/23/long-boys-never-grow-up/

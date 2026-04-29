@@ -1,6 +1,7 @@
 ---
 title: A Short Note On the Death of Pepe
 date: 2015-09-14 09:29:10 Z
+topic: "memeculture"
 parent: Memeculture
 nav_order: -20150914
 permalink: 2015/09/14/a-short-note-on-the-death-of-pepe/

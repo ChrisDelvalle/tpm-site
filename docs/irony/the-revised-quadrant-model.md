@@ -1,6 +1,7 @@
 ---
 title: The Revised Quadrant Model
 date: 2016-01-18 10:10:21 Z
+topic: "irony"
 layout: default
 nav_order: -20160118
 parent: Irony

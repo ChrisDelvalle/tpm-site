@@ -1,6 +1,7 @@
 ---
 title: Homesteading the Memeosphere
 date: 2022-04-04 23:07:34 +13:00
+topic: "memeculture"
 parent: Memeculture
 nav_order: -20220404
 grand_parent: Blog
