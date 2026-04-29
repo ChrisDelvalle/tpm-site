@@ -35,7 +35,7 @@ It's intriguing to me that, just as with the ["Promiscuous Theory, Puritan Pract
 
 Compare this with Azuma Hiroki's argument that otaku economies consume metanarratives (rather than grand narratives, which are dead) which are constructed ad hoc based on a database of narrative materials provided by original works that instigate the subcultures. For instance, the anime series _Neon Genesis Evangelion_ provides the database of characters, world building, concepts, and so on; otakus can draw upon this database in order to produce fan fiction and fan art, which often deviate wildly from the original anime. In Azuma's model, otakus do not consume the work itself but rather the database which lays behind the work (both canonical and unofficial). Otaku culture involves puritan theory and promiscuous practice. In theory, all unofficial material is secondary to the canonical works. In practice, fan-made (or even canon-contradicting mediamix) is nonetheless welcomed and consumed.
 
-![](../../../assets/articles/homesteading-the-memeosphere/dialecticaldreams.jpg)
+![Hiroki Azuma: "More concretely, there is a desire to invade the system of a novel game itself and to extract the raw information before it is constituded on a playing screenshot, and to reconstitute an entirely different work with the material."](../../../assets/articles/homesteading-the-memeosphere/dialecticaldreams.jpg)
 
 _Meme by [Material Memes and Dialectical Dreams](https://www.facebook.com/permalink.php?story_fbid=540642679634365&id=382154135483221) (2018)._
 
@@ -45,7 +45,7 @@ Nevertheless, there are hidden assumptions of ownership and property within meme
 
 The memecultural esotericist taboo discourages being exoteric about your love for memes and meme culture, perhaps because "it's cringe" or because it ostensibly "will ruin them". This taboo is not only nonsensical, but dangerous too. It's too late for this kind of esotericism. The concept of memes as popular cultural products are now mainstream without a shred of doubt, but memecultures still vary wildly. That diversity is a good thing; the received wisdom of subcultural esotericism going unchecked is not. Without more memeculturalists themselves "stooping to the level of normies" and earnestly engaging with the philosophy of memes, the work of defining memes and meme culture will be left to outsiders.
 
-![](../../../assets/articles/homesteading-the-memeosphere/2020-06-24_fossilised-bug_resized.png)
+![Gondola looking into an fossilised bug trapped in amber.](../../../assets/articles/homesteading-the-memeosphere/2020-06-24_fossilised-bug_resized.png)
 
 I think that many memes have great value and significance, historically and culturally, as well as intrinsically, but only when they are healthy and alive. A meme folder is dead without the rest of the memetic ecosystem to express it. The outgroup-first perspectives provided by outsiders to memecultures will prioritise what makes all memecultures the same. It will focus on aspects that affect outsiders the most, namely money and politics, and pick out readily accessible parts of memecultures that can be conveniently archived and cited as exemplar specimen.
 

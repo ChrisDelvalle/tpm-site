@@ -17,13 +17,13 @@ legacyPermalink: 2021/11/30/what-is-a-meme
 
 _About the author: Claudia Vulliamy recently graduated in Philosophy at the University of Bristol, where she specialised in aesthetics. She is also a musician in the dream-pop band Oslo Twins._
 
-# Introduction
+## Introduction
 
 Internet memes, an increasingly popular phenomenon, are normally images that spread online. They are continuously shared and altered by internet users to form communal running jokes. Having first emerged in the 2000s and drastically changed in style over time, the digital nuggets of humour are now an inescapable part of youth culture. Although the first instances were basic, universally appealing pieces of online comedy, memes have become a unique artistic medium in which complex cultural experiences are conveyed through both form and content, layered with irony and intertextuality. Similar to the issue of defining art, identifying the essential properties of memes has become more challenging as memes have become more avant-garde. In my attempt to answer the question 'What is a meme?', I will focus primarily on Simon J Evnine's paper _Anonymity Of A Murmur_\[1\]. I will critique Evnine's definitions and argue that his conceptual definition of a meme over generates, allowing things to be called memes that should not be. I will then argue that a meme, like art, is a fuzzy concept and should be defined in a way that accounts for that. My descriptive account of memes bears similarities to a 'cluster' definition of art. I will analyse what I view to be the core properties of memes: memographic practice, comedy, public shareability, use of images and/or text, digitality, appropriation, anonymity, ephemerality and stylistic resemblance to other memes.
 
 There has been, so far, very little written on the subject that is specifically definition- focussed, so most of my sources for this paper have been personal research among my peers, from which I have gained insights into the varying ways in which people hold the concept of a meme.
 
-# Terminology
+## Terminology
 
 Firstly, I will make it clear that I am _not_ referring to memes in the sense used by Richard Dawkins. Dawkins' use of the word 'meme' is the etymological origin of the internet meme, since it describes an element of culture that spreads from person to person via imitation and mutates over time \[2\]. But although internet memes can be seen as a sub-category of Dawkinsian memes, these are distinct concepts and I do not see Dawkins' use of the term as useful in defining internet memes. Many theorists on internet memes (such as Shifman \[3\] and Milner \[4\]) have, more or less, taken the concept 'internet meme' to include almost any Dawkinsian meme that spreads via the internet. However, I will focus on the concept of an internet meme that is used most commonly among young internet users and meme enthusiasts today - something more specific than what these theorists are describing and something which Evnine attempts to define. This is a concept that does _not_ include, for example, a viral music video, but does include each of the following images, which are variations on the same meme-trend \[5\].
 
@@ -45,7 +45,7 @@ _Figure 3 : Distracted Boyfriend --solar eclipse / me / scientific evidence supp
 
 Where necessary, I will subscript the term 'meme' with CC or I, as Evnine has, to distinguish between common content (meme-trends) and instances.
 
-# Evnine's Definitions
+## Evnine's Definitions
 
 Evnine provides a very helpful description of how memes work, acknowledging the importance of the historical element (the context from which a meme has arisen), the affective element (their capacity to express emotions), implied narrative (the way that memes tell a story), and the self-aware nature of meme-making. Perhaps more than in any other art form, the practice and interactions surrounding a meme are key to what makes it a meme. Evnine calls this 'memographic practice', describing it as the 'meta-level of activity' in which memes are 'discussed, commented on, up-voted, down-voted, criticized, collected, replied to in kind, and so on'. **In short, memographic practice is the particular way in which memes are used, rapidly shared and interacted with.** It is such an essential factor of memes, Evnine argues, that 'one cannot tell that something is a meme<sub>I</sub> merely by looking at it'.
 
@@ -101,7 +101,7 @@ It is implicit in Evnine's definitions, and explicit in his paper as a whole, th
 
 [^5]: Most academic theorists on memes have provided an account of memes that is at least as broad as Evnine's. But in providing a descriptive account, rather than a prescriptive definition, I consider it crucial to consider, above anything, the opinions of those most involved in meme-making and memographic practice. On analytical meme discussion pages such as the Facebook group _/tpmg/ - TPM Meme Research and Development_, the artifacts discussed fall into a narrow category that would not include the likes of _Planking_ or _\#scalebackabook_. Colloquially, too, the word is applied in the narrower sense, although it appears to be used more loosely by the general public than by those deeply involved in memographic practice and analysis. On a survey conducted via the anonymous university confession platform Bristruths, 78% of the 382 who responded believed that _Planking_ is not a meme but merely a trend, since a meme is something more specific.
 
-# Problems with Evnine's Account
+## Problems with Evnine's Account
 
 1. Evnine neglects to provide an ontological definition of a meme<sub>I</sub>, leaving ambiguity as to whether a meme<sub>I</sub> is necessarily an abstract object.
 
@@ -129,7 +129,7 @@ For now, we can address problems 1 and 2 with the term 'media content', meaning 
 
 As a concise account of memes, this seems more accurate than Evnine's. However, there remain issues in this definition that are exemplified by borderline cases. The issue of public shareability is interwoven with other issues that I believe to be central properties of memes. In following section, I will discuss the properties of digitality, anonymity, ephemerality, appropriation, and use of images and/or text.
 
-# Other Central Properties of Memes
+## Other Central Properties of Memes
 
 Some of the most challenging borderline cases are of non-digital 'memes'. When a meme<sub>I</sub> that originated online is printed onto paper at home, it becomes intuitively less meme-like. This is partly because it is made static and local; it is bound to a physical space and cannot multiply across the world or be copied, appropriated and edited in the way that digital memes are. The memes<sub>CC</sub> from which it came could continue to evolve and be publicly engaged with, but the printed memes<sub>I</sub> would remain disconnected from memographic practice. However, the situation might be different if printed images were shared in a public context. Suppose that pupils of a large school pasted meme-like images on the walls. These could be commented on in graffiti and conversations, and their style could evolve via photocopying to become continuous, self-referential streaks of narrative humour. This could be meme-like enough to be considered by many as a case of memes. But how far can we extend the possibility of non-digital memes without over generating?
 
@@ -155,7 +155,7 @@ For Ryan Milner, appropriation is one of the fundamental logics central to memes
 
 However, these cases seem to follow a rule: the content created for the purpose of a meme must not resemble 'high art'. Even the 'God Has Left the Room' video is pushing this boundary; most images created for contemporary memes are low-skill, low-fi digital drawings with an anti-aesthetic or vulgar tone (such as _Wojak_ \[15\] and its variants). Even so, the first online appearances of these meme-drawings could certainly count as borderline cases due to their original content.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-10.jpg)
+![Wojak](../../../assets/articles/what-is-a-meme/vulliamy-10.jpg)
 _Figure 10 : Wojak, a character featuring in contemporary memes. Many characters have been created with this as an illustration template in the 'Wojak comics' genre of memes._
 
 There do not appear to be any online memes that do not use images and/or text. But seeing as memes span the media of text, photos, drawings and videos, no particular media format seems tied to the essence of memes. The use of images and/or text appears to be a practical limitation; memes would simply not be able to spread or be consumed and replicated as easily and anonymously if they existed in non-visual forms. There is an auditory trend in surreal, kitsch video memes of extreme bass boosting[^7]. In these videos, which often involve intentionally tasteless and incoherent graphics, the bass boost provides a level of distortion that makes the sound quality far enough from reality and everyday voice communication for the anonymity factor to be maintained. In theory, memes in this style could exist only in sound format. However, there would probably be less room for stylistic variation and evolution in purely auditory memes.
@@ -164,11 +164,11 @@ This brings us back to the issue of non-digital memes. Clearly the case of Mr Ch
 
 [^7]: E.g., <https://www.youtube.com/watch?v=SBI6uwUiGHE> \[16\]
 
-# Defining a meme
+## Defining a meme
 
 I have outlined what I view to be some central properties of memes. I will not, however, make the strict claim that they are necessary conditions. There are exceptions to the appropriation condition, as there are some memes that use original images or audio. There are at least quasi-exceptions to the anonymity condition, since some memes circulate in the form of text-based Tweets, for example. And I will not rule out the idea of exceptions to the ephemerality condition. There is also ambiguity as to the degree to which a case must meet these conditions since they are relative concepts. However, in cases where something that is intuitively a meme fails to meet one of these conditions, it is crucial that it sufficiently resemble a meme in other ways. Generally, a meme made from original (non-appropriated) images, for example, must meet the conditions of digitality, anonymity, ephemerality and use of images and/or text.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-11.jpg)
+![\[vibe surgery\], me: "im so nervous", friend with chill vibes: "don't worry bro it'll be ok". \[after vibe surgery\], me, waking up: "wait where's my friend with chill vibes?", surgeon: "who do you think gave you the vibes?". rt if you vibed <cry emoji>](../../../assets/articles/what-is-a-meme/vulliamy-11.jpg)
 _Figure 11: @goodbeanalt's Tweet about 'vibe surgery'_
 
 An example such as the above image will be commonly accepted as a meme<sub>I</sub>. The anonymity factor is slightly compromised by its being a text-based Tweet -- but this is true of many memes. What, then, makes this so much more meme-like than an instance of the _\#scalebackabook_ trend? The 'author' of the memes<sub>I</sub> is not speaking as themselves; they are speaking ironically within a narrative which takes the script-like format of many text-based memes. This narrative is a direct parody of a style of oft- copy-pasted blocks of text that spread around the internet in the 2000s, one of which described a girl going in for heart surgery, waking up afterwards and realising that her boyfriend has donated his heart to her. The original versions normally ended with a message along the lines of 'share if you cried', which has been parodied as '\[retweet\] if you vibed'. This Tweet invites users to play along by pretending to be moved by the surreal version of the narrative in which people can donate 'vibes' in that way that people donate organs. So, in this case, it is a meme because it has clearly arisen from memographic practice -- adopting the script-like meme format -- and used an appropriated text template. An instance of _\#scalebackabook_, however, does not use a format or style, or a variation on a format or style, that is used in memes, and only appropriates to the extent that it parodies a book title. Perhaps a similar trend could count as a meme<sub>CC</sub> if there were a character created by users, represented using appropriated images and low-skill, low-fi digital drawings, who was known for their scaled-back, feeble nature, and who was depicted holding a book whose cover were a digitally manipulated version of a real book cover, displaying the 'scaled-back' title. This would involve a lot more appropriation, anonymity (since the words used would be more separate from their writer by virtue of the image format) and, crucially, with its implied narrative, stylistic resemblance to other memes. Therefore, although style and content alone cannot make something a meme (as I have argued in an earlier section), it seems necessary to consider stylistic resemblance to other memes as one of the central properties, since it is a factor that could make an otherwise borderline case count as a meme.
@@ -191,7 +191,7 @@ _Figure 12 : A diagram illustrating the concept of a meme_
 
 As I have illustrated above, I will regard the necessary conditions as the nucleus of the concept of a meme, and the other central properties as closely surrounding it. Although I maintain as a general observation that memes meet at least five of the six central conditions, I will, in the spirit of Weitz and of creativity, refrain from stating this as a rule.
 
-# Conclusion
+## Conclusion
 
 I have responded to Evnine's ontological definitions, concluding that both memes<sub>CC</sub> and memes<sub>I</sub> are abstract objects. I have critiqued his conceptual definitions of memes, arguing that they over generate. I have provided a narrower in-depth account of the concept of memes, listing necessary conditions and 'central' conditions for something to be a meme, acknowledging ambiguity and leaving room for the creative flouting of norms. Therefore, I conclude with a description of memes consisting of three necessary conditions and six central properties. If my description, illustrated by the above diagram, is X, then M is a meme<sub>I</sub> if it is X, and M is a meme<sub>CC</sub> if it is made out of norms for producing X.
 
@@ -199,7 +199,7 @@ I have responded to Evnine's ontological definitions, concluding that both memes
 
 _This article was reproduced with the kind permission of University of Bristol._
 
-# Bibliography
+## Bibliography
 
 \[1\] Evnine, Simon J. “The Anonymity of a Murmur: Internet (and Other) Memes.” The British Journal of Aesthetics, 58(3), 2018, 303-318.
 

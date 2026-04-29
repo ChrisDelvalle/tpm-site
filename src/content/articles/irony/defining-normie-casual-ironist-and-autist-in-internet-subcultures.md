@@ -55,7 +55,7 @@ It is most important to consider users online in the same light. The general tre
 >
 > **Nino Lyons:** as much as i found the term "ironist" odd too at first, I'm not sure if naming the category after common practises of the members would fare any better. i feel it conflates the motivations and causes for the ironists irony beyond what is reasonable. Although many of these funky memetic terms do exactly that anyway, and we just grin and bear with it, but that problem just diverts attention away from meaningful discussion and into the pit of lame semantics, so i guess its w/e ¯\\_(ツ)_/¯
 
-[Thread 2: ](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1937024236531193/?type=3&comment_id=1937223179844632&comment_tracking=%7B%22tn%22%3A%22R9%22%7D)
+[Thread 2:](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1937024236531193/?type=3&comment_id=1937223179844632&comment_tracking=%7B%22tn%22%3A%22R9%22%7D)
 
 > **Adam D. Millson:** Is it really impossible to move from high expertise to low? I think that would happen very naturally to anyone who loses touch with the subculture while the subculture advances.
 

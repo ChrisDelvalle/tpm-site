@@ -15,13 +15,13 @@ tags:
 legacyPermalink: 2021/12/18/on-circlejerk-part-1/
 ---
 
-# **ON CIRCLEJERK (or, NEW REENACTMENT, PART 1)**
+## **ON CIRCLEJERK (or, NEW REENACTMENT, PART 1)**
 
 Original text by the Chicago Long March Reenactment Society (2017)
 
 Translated by the Chicago School of Countercultural Inquiry (2021) (counterculturalinquiry.com)
 
-## TRANSLATOR’S PREFACE
+### TRANSLATOR’S PREFACE
 
 _New Reenactment_ was the centerpiece of the Chicago Long March Reenactment Society (CLMRS), and CLMRS was embedded in the world of Weird Facebook. The various arguments and disappointments on Weird Facebook served as the connective tissue between _New Reenactment_’s disparate, contradictory parts. But Weird Facebook, more or less, no longer exists. To fit _New Reenactment_ into 2021 is to sever its tissue and render parts of it incomprehensible. So much is true of any translation.
 
@@ -31,9 +31,9 @@ At the same time, CLMRS was never fully honest with itself – certainly, it _wi
 
 ![](../../../assets/articles/on-circlejerk-part-1/oncirclejerk_banner-01.png)
 
-## CHAPTER 1. THE CONCEPT OF THE CIRCLEJERK
+### CHAPTER 1. THE CONCEPT OF THE CIRCLEJERK
 
-### I. Circlejerk as Alienated Form
+#### I. Circlejerk as Alienated Form
 
 Content, that is a single unit of cultural output in the language of the Internet, is never produced in and of itself, but always speaks to a specific social context, which leaves its particular imprint on all content produced therein. This dialectic forms the basis of our investigation: proceeding from Marx, the interplay of society and its products is part of a whole in which production is both determined by and, in turn, recreates society in ever-changing ways. Individuals, too, can recreate themselves via production. A person can produce art to become an artist, and an artist that reflects upon their own art can become a better artist. In other words, production is not necessarily a one-way process by which subjectivity is deprived; the object grants the subject its subjectivity and vice versa. Production in general, including cultural production specifically, bears this liberatory potential.
 
@@ -47,7 +47,7 @@ So, what of our society? It is no mistake that the word circlejerk conjures up o
 
 The circlejerk in capitalism is not just an objectified form of group relations, but is a blueprint to which group relations must conversely align. In the subjective view, an individual interacts with other members of the group by submitting content, receiving affirmation, and using the affirmation to improve upon their content as they see fit: we may call this the C-A-C’ (content-affirmation-further content) cycle. However, the circlejerk in an unfree society manifests most commonly as an A-C-A’ (affirmation-content-further affirmation) cycle. The purpose of production becomes the accumulation of affirmation, and the need for affirmation escalates ever higher. This is, after all, the origin of the term circlejerk: like a _literal_ circlejerk, it finishes in sensual gratification.
 
-### II. The Circlejerk for Affirmation
+#### II. The Circlejerk for Affirmation
 
 The circlejerk never operates as C-A-C’ or A-C-A’ exclusively; it is, after all, a cycle. There are surely some situations in which one produces content for affirmation, and some situations in which one produces content to build on existing content; most likely, though perhaps unconsciously and in uneven amounts, most people intend to do both. Neither is society at a standstill: even if it appears that the world is alienated, it is nevertheless shaped by the actions of subjects. The question should not be of which version of the circlejerk is _correct_, but of which is _dominant_. What do we mean, then, by the dominance of the A-C-A’ circlejerk?
 
@@ -59,7 +59,7 @@ On almost all social media platforms, content is evaluated with one or more poin
 
 In terms of the circlejerk, the _thing_ being quantified in all point systems is affirmation. Qualitatively distinct responses such as enjoyment, empathy, agreement, or even polite disagreement are flattened into a single metric, and increasingly a single _feeling_, for all content producers. Quantified affirmation also allows for the accumulation of affirmation, which becomes an end-in-itself. On reddit, the net score of each post added to one’s overall _Karma_ score; on Youtube, these are one’s View and Subscriber counts. Where there is no explicit accumulation of points, such as on Facebook, affirmation appears subjective, but one still keeps a mental count of one’s average _Likes_ received per post per friend or group member.
 
-![](../../../assets/articles/on-circlejerk-part-1/circlejerk_chart_of_terms-01.png)
+![Commodities, Memes, Circlejerk: A Simplified Chart](../../../assets/articles/on-circlejerk-part-1/circlejerk_chart_of_terms-01.png)
 
 Since quantitative affirmation accumulates across different content in different circlejerks, the qualitative character specific to each piece of content and each circlejerk is subsumed. The production of content serves as an intermediary for quantitative incrementation. The concrete analysis and adaptation of content production to each circlejerk becomes a tactic used to receive more and more abstract affirmation.
 
@@ -77,7 +77,7 @@ This is a simplified picture, however, and in many cases memes also resist unive
 
 Combining points (1) and (2), we find that the A-C-A’ circlejerk arises from forms of content defined by affirmation and continues to the end of quantitative affirmation accumulation. It is also characterized by the subjugation of quality to quantity, of Content to Form, and ultimately, of subject to object.
 
-### III. The Grand Circlejerk, or the Will to Circlejerk
+#### III. The Grand Circlejerk, or the Will to Circlejerk
 
 We have thus far revealed the character of the circlejerk in modern society. However, the question remains: what could this mean? Why do people produce content for affirmation? This is the central question of this work, and we will expand more on this topic as we develop our theory. For now, though, we will introduce the concept of the Grand Circlejerk, or synonymously the _will to circlejerk_, as the subjective factor driving the formation and continuation of circlejerks, which links every turn in each circlejerk into a coherent totality.
 
@@ -85,9 +85,9 @@ The will to circlejerk is not just a subjective force. It is the subjective forc
 
 Such an understanding of the will to circlejerk is important in a society in which the totality of the circlejerk is broken. As we shall see, the circlejerk cannot merely be avoided, and the problem of the circlejerk cannot be abolished directly. The path to human freedom viewed through the lens of circlejerk theory must instead be the sublation of a self-contradictory Grand Circlejerk; or, more generally, it must overcome the estrangement of humanity from itself.
 
-## CHAPTER 2. THE SOCIETY OF THE CIRCLEJERK
+### CHAPTER 2. THE SOCIETY OF THE CIRCLEJERK
 
-### I. Affirmation and the Commodity-Form
+#### I. Affirmation and the Commodity-Form
 
 It is often claimed that the development of Internet culture has transferred cultural production from the profit-motive of capitalists into the hands of the masses. Circlejerks can be forgiven if the Internet is a democratizing force. There is, of course, truth in this statement. Creating content on the Internet requires only basic Internet access, which is available to nearly everyone in industrialized countries. Almost everyone has a platform, with a far lower barrier to entry and far less bureaucratic oversight compared to older media like television, radio, or print. The defenders of this apparently democratic situation claim that it awakens the critical consciousness of the masses, as they engage in the open mockery of Mainstream culture. Advertisements and politicians are ruthlessly parodied, and those attempting to use Internet culture for their own benefit are called out as spammers or shills.
 
@@ -107,7 +107,7 @@ Monetized content is the intermediary between pure commodity and pure affirmatio
 
 An important insight should be made here that will be important later. Since affirmation is the basis and outcome of the circlejerk, the will to circlejerk is essentially an equivalent phenomenon to the fetishization of affirmation. Furthermore, since fetishization is displaced from commodities and money onto affirmation, the will to circlejerk is likewise a modified version of the profit-motive.
 
-### II. The Universality of the Circlejerk
+#### II. The Universality of the Circlejerk
 
 It is universally acknowledged that we live in the most culturally interconnected period in history. Save for the most remote islands and jungles that resist external contact, it is impossible to speak of a single enclosed community in the midst of other enclosed communities. Since a circlejerk is a set of objectified social relations within a community, and since an individual is simultaneously a member of a multitude of communities, any circlejerk in any particular community must be linked with all other circlejerks of each member in that community, and so forth. We discover that while it may be productive to speak of discrete circlejerks within society, there really exists a _world-circlejerk_ that permeates all of society.
 
@@ -115,7 +115,7 @@ Just as the 60s Counterculturalists failed to escape the commodification of main
 
 Insofar as the fetishization of affirmation is endemic to our society, any individual who lives in this society will find it impossible to not circlejerk. The society that ingrains in us the will to circlejerk must too be reflexively attached to that which it has ingrained in us. The result is a tailspin into an ever-conservative society.
 
-### III. Conservative Society
+#### III. Conservative Society
 
 Modern society is conservative, but not because it is ruled by oligarchs with conservative agendas. Democratized culture is in many ways more conservative than when there was actually an authority to subvert. The previous sections of this chapter have established that the circlejerk mirrors the commodity-form as a product of capitalist society. We will now explore the effects of the circlejerk on society.
 

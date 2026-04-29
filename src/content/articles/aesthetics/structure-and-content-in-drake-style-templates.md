@@ -35,9 +35,9 @@ The Drake template and its relatives are more commonly interpreted by today's vi
 
 One reason for the shift from the comics model to the diagram model might be that there was a gradual shift in general for meme culture from manga subcultures as the memetic techniques disseminated. Another reason might be that attaching multiple images to one post is common and easy to do on many platforms now, and so the experience of viewing a sequence of images is less closely associated with images divided by gutters and more with flicking through for the next image. Smartphones probably influenced this development too.
 
-# Selected Comments
+## Selected Comments
 
-### Thread 1
+## Thread 1
 
 _Conner Schultz_:
 
@@ -53,7 +53,7 @@ Daniel has it right. A diagram's meaning doesn't necessarily change as the viewe
 
 ![41426730_10215207366129387_7431534938211483648_n.jpg](../../../assets/articles/structure-and-content-in-drake-style-templates/41426730_10215207366129387_7431534938211483648_n.jpg)
 
-### Thread 2
+## Thread 2
 
 _Beau Horenberger_:
 
@@ -67,7 +67,7 @@ _Seong-Young Her_:
 
 I can't say for certain but older screenshot memes tended to be more comics-like. Screenshot based memes became a lot more prevalent since screenshotting and rapid image captioning (not necessarily editing) became convenient. Think about how new Spongebob memes are usually single-screenshot but older (or older style) Spongebob memes are often multiple screenshots put together in a comics arrangement.
 
-### Thread 3
+## Thread 3
 
 _Leandro Vieira Steffen_:
 
