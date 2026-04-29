@@ -1,16 +1,12 @@
 ---
 title: Postnaturalism
+description: "All technology exerts some epistemic influence on the observer, and this is often epistemologically relevant; the proper function of philosophy is to study the epistemic effect of technology, and to design and produce epistemically useful technology; localised agreements rather than shared beliefs, entailed by the use of common technology, are sufficient foundations for philosophical discourse."
 date: 2020-07-05 08:22:12 +13:00
-parent: Philosophy
-nav_order: -3
-layout: default
-permalink: 2020/07/05/postnaturalism/
+author: "Seong-Young Her"
 tags:
 - philosophy
 - digital humanities
-author:
-  display_name: Seong-Young Her
-excerpt: "All technology exerts some epistemic influence on the observer, and this is often epistemologically relevant; the proper function of philosophy is to study the epistemic effect of technology, and to design and produce epistemically useful technology; localised agreements rather than shared beliefs, entailed by the use of common technology, are sufficient foundations for philosophical discourse."
+legacyPermalink: 2020/07/05/postnaturalism/
 ---
 
 # Introduction

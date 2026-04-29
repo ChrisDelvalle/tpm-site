@@ -1,44 +1,27 @@
 ---
 title: Bane, Loss and Phylogeny
-date: 2015-11-25 11:39:58 Z
-parent: Irony
-nav_order: -20151125
-permalink: 2015/11/26/bane-loss-and-phylogeny/
-categories:
-- Editorials
-tags:
-- aesthetics
-- art
-- Baneposting
-- big guy
-- biology
-- cadbortion
-- genetics
-- Internet
-- loss
-- memes
-- memetics
-- philosophy
-- science
-layout: post
-type: post
-status: publish
-meta:
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _thumbnail_id: '352'
-  _publicize_job_id: '17188353725'
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: I have been developing a theory of Internet Memes, through which I hope to
+description: I have been developing a theory of Internet Memes, through which I hope to
   operationalize memetics for the scientific analysis of Internet Meme culture. Here
   is a case study I used to test and develop some of my models.
+date: 2015-11-25 11:39:58 Z
+author: "Seong-Young Her"
 image: "/assets/2015-11-25-bane-loss-and-phylogeny/purified-loss1.png"
-fbpreview: http://thephilosophersmeme.com/assets/2015-11-25-bane-loss-and-phylogeny/purified-loss1.png
+tags:
+  - "aesthetics"
+  - "art"
+  - "Baneposting"
+  - "big guy"
+  - "biology"
+  - "cadbortion"
+  - "genetics"
+  - "Internet"
+  - "loss"
+  - "memes"
+  - "memetics"
+  - "philosophy"
+  - "science"
+  - "editorials"
+legacyPermalink: 2015/11/26/bane-loss-and-phylogeny/
 ---
 
 <p>I have been developing a theory of Internet Memes, through which I hope to operationalize memetics for the scientific analysis of Internet Meme culture. Here is a case study I used to test and develop some of my models.</p>

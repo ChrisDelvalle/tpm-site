@@ -1,22 +1,15 @@
 ---
 title: When You Drink [water]
+description: Post-ironic memes are great because they are meaningful. Meaningful memes
+  bring us closer to the dream of the timeless meme, just like early comics artists
+  who aspired towards serious literature with an ostensibly unserious medium.
 date: 2017-11-14 12:05:00 +13:00
-parent: Irony
-nav_order: -20171114
-layout: default
-permalink: 2017/11/13/when-you-drink-water/
+author: "Seong-Young Her"
+image: "/uploads/23472012_2053909424842673_2720000468904660127_n.jpg"
 tags:
 - meme criticism
 - post-irony
-author:
-  display_name: Seong-Young Her
-  first_name: Seong
-  last_name: Her
-excerpt: Post-ironic memes are great because they are meaningful. Meaningful memes
-  bring us closer to the dream of the timeless meme, just like early comics artists
-  who aspired towards serious literature with an ostensibly unserious medium.
-image: "/uploads/23472012_2053909424842673_2720000468904660127_n.jpg"
-fbpreview: http://thephilosophersmeme.com/uploads/23472012_2053909424842673_2720000468904660127_n.jpg
+legacyPermalink: 2017/11/13/when-you-drink-water/
 ---
 
 ![23472012_2053909424842673_2720000468904660127_n.jpg](/uploads/23472012_2053909424842673_2720000468904660127_n.jpg)

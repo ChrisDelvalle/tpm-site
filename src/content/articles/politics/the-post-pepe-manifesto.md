@@ -1,50 +1,31 @@
 ---
 title: The Post-Pepe Manifesto
+description: Plagiarism is necessary. Progress implies it.
 date: 2016-01-29 03:30:00 Z
-parent: 2016
-grand_parent: Blog
-nav_order: -2
-permalink: 2016/01/29/the-post-pepe-manifesto/
-categories:
-- Internet Art
-tags:
-- aesthetics
-- art
-- autism
-- Facebook
-- Gondola
-- internet art
-- irony
-- manifesto
-- memepage
-- memes
-- meta-irony
-- normie
-- Pepe
-- philosophy
-- politics
-- post-irony
-- post-postmodernism
-- postmodernism
-- schizophrenia
-type: post
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: Plagiarism is necessary. Progress implies it.
-banner: "/uploads/gondola_wave_banner.jpg"
-status: publish
-meta:
-  _thumbnail_id: 691
-  _rest_api_published: 1
-  _rest_api_client_id: -1
-  _publicize_job_id: 19236171071
-layout: post
+author: "Seong-Young Her"
 image: "/assets/2016-01-29-the-post-pepe-manifesto/postpepe1.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2016-01-29-the-post-pepe-manifesto/postpepe1.jpg
+tags:
+  - "aesthetics"
+  - "art"
+  - "autism"
+  - "Facebook"
+  - "Gondola"
+  - "internet art"
+  - "irony"
+  - "manifesto"
+  - "memepage"
+  - "memes"
+  - "meta-irony"
+  - "normie"
+  - "Pepe"
+  - "philosophy"
+  - "politics"
+  - "post-irony"
+  - "post-postmodernism"
+  - "postmodernism"
+  - "schizophrenia"
+legacyPermalink: 2016/01/29/the-post-pepe-manifesto/
+legacyBanner: "/uploads/gondola_wave_banner.jpg"
 ---
 
 <p><img class="alignnone size-full wp-image-691" src="{{ site.baseurl }}/assets/2016-01-29-the-post-pepe-manifesto/postpepe1.jpg" alt="he is risen" width="720" height="auto" /></p>

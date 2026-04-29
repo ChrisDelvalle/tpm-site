@@ -1,28 +1,21 @@
 ---
 title: Creeps, Tweeps, & the Limits of Social Media Freedom
+description: 'We are faced not with a conflict of political affinity, but instead a problem
+  grounded in a disagreement over whether the design of platforms can substitute for
+  social norms: does digital freedom find its limits at the codework constraints of
+  social media sites, in their manmade spaces of programmed possibility, or can digital
+  freedom only exist in the presence of a robust, just, and enforced set of social
+  norms?'
 date: 2016-04-14 12:00:00 Z
-parent: Politics
-nav_order: -5
-permalink: 2016/04/14/social-media-freedom/
+author: "Anonymous"
+image: "/assets/2016-04-14-social-media-freedom/gae0.png"
 tags:
 - Twitter
 - moderation
 - Web politics
 - platform design
 - politics
-type: post
-author:
-  display_name: Anonymous
-excerpt: 'We are faced not with a conflict of political affinity, but instead a problem
-  grounded in a disagreement over whether the design of platforms can substitute for
-  social norms: does digital freedom find its limits at the codework constraints of
-  social media sites, in their manmade spaces of programmed possibility, or can digital
-  freedom only exist in the presence of a robust, just, and enforced set of social
-  norms?'
-status: publish
-layout: post
-image: "/assets/2016-04-14-social-media-freedom/gae0.png"
-fbpreview: http://thephilosophersmeme.com/assets/2016-04-14-social-media-freedom/gae0.png
+legacyPermalink: 2016/04/14/social-media-freedom/
 ---
 
  <img src="{{ site.baseurl }}/assets/2016-04-14-social-media-freedom/gae0.png">

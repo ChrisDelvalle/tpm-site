@@ -1,25 +1,15 @@
 ---
 title: Jjalbang (짤방), the Korean Meme
+description: 'Fundamental Concepts In International Meme Studies: Jjalbang, the Korean
+  Meme'
 date: 2020-01-07 08:32:00 +13:00
-layout: default
-nav_order: -20200107
-parent: History
-permalink: 2020/01/07/concept-jjalbang/
+author: "Seong-Young Her"
+image: "/uploads/291.jpg"
 tags:
 - concept
 - Korea
-author:
-  login: username
-  email: email@wherever.com
-  display_name:
-  - Seong-Young Her
-  first_name: Philosopher
-  last_name: Of The Meme
-excerpt: 'Fundamental Concepts In International Meme Studies: Jjalbang, the Korean
-  Meme'
-image: "/uploads/291.jpg"
-banner: "/uploads/291.jpg"
-fbpreview: "/uploads/291.jpg"
+legacyPermalink: 2020/01/07/concept-jjalbang/
+legacyBanner: "/uploads/291.jpg"
 ---
 
 # Fundamental Concepts In International Meme Studies: Jjalbang, the Korean Meme

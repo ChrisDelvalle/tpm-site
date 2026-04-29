@@ -1,11 +1,8 @@
 ---
 title: Glossary 1.0
 date: 2016-01-18 13:50:00 +13:00
-parent: Metamemetics
-author:
-  display_name: The Philosopher's Meme
-nav_order: -20160118
-permalink: 2016/01/18/glossary-1-dot-0/
+author: "The Philosopher's Meme"
+legacyPermalink: 2016/01/18/glossary-1-dot-0/
 ---
 
 *Last updated Jan 18, 2016. A new glossary is being prepared; much of the following material is outdated!*

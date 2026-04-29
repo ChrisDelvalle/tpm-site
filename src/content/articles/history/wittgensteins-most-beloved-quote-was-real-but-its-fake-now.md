@@ -1,17 +1,10 @@
 ---
 title: Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now
+description: "A serious and good philosophical work could be written consisting entirely of fake philosophy quotes."
 date: 2022-04-06 23:58:10 +13:00
-parent: History
-nav_order: -20220406
-layout: default
-permalink: 2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/
-author:
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: "A serious and good philosophical work could be written consisting entirely of fake philosophy quotes."
+author: "Seong-Young Her"
 image: "/uploads/71B5gzMlcnL.jpg"
-published: true
+legacyPermalink: 2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/
 ---
 <img src="/uploads/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg">
 

@@ -4,7 +4,11 @@ import { defineCollection } from "astro:content";
 
 function articleSlugFromEntry(entry: string, data: Record<string, unknown>) {
   const permalink =
-    typeof data["permalink"] === "string" ? data["permalink"] : "";
+    typeof data["legacyPermalink"] === "string"
+      ? data["legacyPermalink"]
+      : typeof data["permalink"] === "string"
+        ? data["permalink"]
+        : "";
   const permalinkMatch = /^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/.exec(permalink);
   const fallback = entry
     .replace(/\.(?:md|mdx|markdown)$/i, "")
@@ -32,12 +36,16 @@ const legacyMarkdown = defineCollection({
       grand_parent: z.unknown().optional(),
       nav_order: z.unknown().optional(),
       permalink: z.unknown().optional(),
+      legacyPermalink: z.unknown().optional(),
       excerpt: z.unknown().optional(),
       description: z.unknown().optional(),
       image: z.unknown().optional(),
+      imageAlt: z.unknown().optional(),
+      legacyBanner: z.unknown().optional(),
       tags: z.unknown().optional(),
       categories: z.unknown().optional(),
       published: z.unknown().optional(),
+      draft: z.unknown().optional(),
       status: z.unknown().optional(),
       type: z.unknown().optional(),
       banner: z.unknown().optional(),

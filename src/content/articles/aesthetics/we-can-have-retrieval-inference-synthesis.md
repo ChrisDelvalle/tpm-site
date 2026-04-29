@@ -1,14 +1,10 @@
 ---
 title: We Can Have Retrieval-Inference Synthesis
+description: 'A Modern Synthesis of art criticism is possible.'
 date: 2021-07-21 13:21:00 +12:00
-parent: Aesthetics
-nav_order: -20210721
-layout: default
-permalink: 2021/07/21/we-can-have-retrieval-inference-synthesis
-author:
-  display_name: Seong-Young Her
-excerpt: 'A Modern Synthesis of art criticism is possible.'
+author: "Seong-Young Her"
 image: 
+legacyPermalink: 2021/07/21/we-can-have-retrieval-inference-synthesis
 ---
 
 

@@ -1,44 +1,25 @@
 ---
 title: The Artist-Philosopher Manifesto
+description: We, the artists of the future, refuse to be the plaything of politics.
 date: 2015-06-18 07:42:19 Z
-categories:
-- The Artist-Philosopher Manifesto
-parent: Aesthetics
-nav_order: -20150618
-permalink: 2015/06/18/tmnh
-tags:
-- aesthetics
-- art
-- avant-garde
-- beauty
-- Dadaism
-- digital art
-- internet art
-- philosophy
-- politics
-- pop art
-- postmodernism
-- situationist international
-- stuckism
-layout: post
-type: 
-  - article
-status: publish
-meta:
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _thumbnail_id: '145'
-  _publicize_job_id: '11788266488'
-  _wp_old_slug: neurotic-heroism
-  _edit_last: '54618546'
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: We, the artists of the future, refuse to be the plaything of politics.
+author: "Seong-Young Her"
 image: "/assets/tpm_defaultpic.jpg"
+tags:
+  - "aesthetics"
+  - "art"
+  - "avant-garde"
+  - "beauty"
+  - "Dadaism"
+  - "digital art"
+  - "internet art"
+  - "philosophy"
+  - "politics"
+  - "pop art"
+  - "postmodernism"
+  - "situationist international"
+  - "stuckism"
+  - "the artist-philosopher manifesto"
+legacyPermalink: 2015/06/18/tmnh
 ---
 
 <p>Or, An Escape from the Infinite Regress of Art-for-Art’s-Sake and the Ego-Artist Ideal in the Age of Internet Art</p>

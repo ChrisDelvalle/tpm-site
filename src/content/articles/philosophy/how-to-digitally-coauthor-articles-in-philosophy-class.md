@@ -1,18 +1,12 @@
 ---
 title: How to Digitally Coauthor Articles In Philosophy Class
+description: 'A group assignment activity for philosophy students at the undergraduate level, which can be applied in tandem with existing curricula. Consists of a way to standardise the work of each individual student such that each student’s contributions to the group assignment fits in seamlessly with the other team members’ contributions, and a way to apply the system to the specific course material being assessed.'
 date: 2019-06-30 18:48:00 +13:00
-parent: Philosophy
-nav_order: -3
-layout: default
-permalink: 2019/06/30/how-to-digitally-coauthor-articles-in-philosophy-class/
+author: "Seong-Young Her"
 tags:
 - philosophy
 - digital humanities
-author:
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: 'A group assignment activity for philosophy students at the undergraduate level, which can be applied in tandem with existing curricula. Consists of a way to standardise the work of each individual student such that each student’s contributions to the group assignment fits in seamlessly with the other team members’ contributions, and a way to apply the system to the specific course material being assessed.'
+legacyPermalink: 2019/06/30/how-to-digitally-coauthor-articles-in-philosophy-class/
 ---
 
 # Introduction

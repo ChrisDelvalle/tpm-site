@@ -41,7 +41,7 @@ describe("route helpers", () => {
     expect(
       articleSlug(
         entry("history/2022-04-06-title-from-file", {
-          permalink:
+          legacyPermalink:
             "/2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
         }),
       ),
@@ -60,14 +60,14 @@ describe("route helpers", () => {
 
   test("filters unpublished and draft entries", () => {
     const published = entry("published", {
-      permalink: "/2022/04/06/published/",
+      legacyPermalink: "/2022/04/06/published/",
     });
     const unpublished = entry("unpublished", {
-      permalink: "/2022/04/06/unpublished/",
-      published: false,
+      draft: true,
+      legacyPermalink: "/2022/04/06/unpublished/",
     });
     const draft = entry("draft", {
-      permalink: "/2022/04/06/draft/",
+      legacyPermalink: "/2022/04/06/draft/",
       status: "draft",
     });
 
@@ -79,8 +79,8 @@ describe("route helpers", () => {
   test("detects duplicate article slugs", () => {
     expect(() => {
       assertUniqueArticleSlugs([
-        entry("a", { permalink: "/2022/04/06/same/" }),
-        entry("b", { permalink: "/2023/04/06/same/" }),
+        entry("a", { legacyPermalink: "/2022/04/06/same/" }),
+        entry("b", { legacyPermalink: "/2023/04/06/same/" }),
       ]);
     }).toThrow('Duplicate article slug "same"');
   });

@@ -1,22 +1,17 @@
 ---
 title: The Interpretation of Memes
+description: What I have here is a modest proposal to talk about the more obvious quality
+  of memes as microexpressions of how we think about character, narrative and imagery.
+  This is about when memes act as images of human action.
 date: 2018-02-05 08:24:00 +13:00
-parent: Aesthetics
-nav_order: -20180205
-layout: default
-permalink: 2018/02/05/the-interpretation-of-memes/
+author: "Mikhail Conrad Nacua"
+image: "/uploads/1.jpg"
 tags:
 - narrative
 - Ironic meme
 - linguistics
 - semantics
-author:
-  display_name: Mikhail Conrad Nacua
-excerpt: What I have here is a modest proposal to talk about the more obvious quality
-  of memes as microexpressions of how we think about character, narrative and imagery.
-  This is about when memes act as images of human action.
-image: "/uploads/1.jpg"
-fbpreview: http://thephilosophersmeme.com/uploads/1.jpg
+legacyPermalink: 2018/02/05/the-interpretation-of-memes/
 ---
 
 I often see analyses of memes focus on their objective dimensions and their theoretical qualities, e.g., semiotics, cultural ecosystem, and so on. What I have here is a modest proposal to talk about the more obvious quality of memes as microexpressions of how we think about character, narrative and imagery. This is about when memes act as images of human action.

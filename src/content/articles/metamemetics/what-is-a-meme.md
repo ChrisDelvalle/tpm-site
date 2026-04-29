@@ -1,14 +1,10 @@
 ---
 title: What Is A Meme?
+description: 'A cluster definition of memes, taking into account memographic practice, comedy, public shareability, use of images and/or text, digitality, appropriation, anonymity, ephemerality and stylistic resemblance to other memes.'
 date: 2021-11-30 18:46:00 +13:00
-parent: Metamemetics
-nav_order: -20211130
-permalink: 2021/11/30/what-is-a-meme
-layout: default
-author:
-  display_name: Claudia Vulliamy
-excerpt: 'A cluster definition of memes, taking into account memographic practice, comedy, public shareability, use of images and/or text, digitality, appropriation, anonymity, ephemerality and stylistic resemblance to other memes.'
+author: "Claudia Vulliamy"
 image: "/uploads/vulliamy-12.jpg"
+legacyPermalink: 2021/11/30/what-is-a-meme
 ---
 
 *About the author: Claudia Vulliamy recently graduated in Philosophy at the University of Bristol, where she specialised in aesthetics. She is also a musician in the dream-pop band Oslo Twins.*

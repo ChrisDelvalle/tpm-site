@@ -1,21 +1,17 @@
 ---
 title: A Tale of Two Healthcare Narratives
+description: Some conservatives claim that the free market saved Korea from COVID-19.
+  I argue that it was Korea's Confucian democracy and technological environment that
+  helped them contain the pandemic, not the lack of supply side regulation.
 date: 2020-03-16 20:27:00 +13:00
-parent: Politics
-nav_order: -2
-layout: default
-permalink: 2020/03/16/a-tale-of-two-healthcare-narratives/
+author: "Seong-Young Her"
+image: "/uploads/kleinvitzthumcoronavirus.jpg"
 tags:
 - covid-19
 - bioethics
 - politics
 - Korea
-author:
-  display_name: Seong-Young Her
-excerpt: Some conservatives claim that the free market saved Korea from COVID-19.
-  I argue that it was Korea's Confucian democracy and technological environment that
-  helped them contain the pandemic, not the lack of supply side regulation.
-image: "/uploads/kleinvitzthumcoronavirus.jpg"
+legacyPermalink: 2020/03/16/a-tale-of-two-healthcare-narratives/
 ---
 
 The author of [this article](https://archive.is/8koZz) argues that Italy is doing worse than South Korea because supply side regulation caused the Italian system to decay while the lack of regulation allowed the Korean system to expand. It's an obscene argument, because it sets the dichotomy as between a free market and a regulated market, when:

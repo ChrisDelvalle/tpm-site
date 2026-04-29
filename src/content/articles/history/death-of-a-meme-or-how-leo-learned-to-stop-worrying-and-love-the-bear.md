@@ -1,38 +1,20 @@
 ---
 title: Death of a Meme?
-date: 2016-03-02 22:25:14 Z
-parent: History
-nav_order: -20160302
-permalink: 2016/03/02/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/
-categories:
-- Editorials
-- Memetics
-tags:
-- ironic
-- Leonardo DiCaprio
-- memes
-- memetics
-- Oscars
-- Pre-ironic
-layout: post
-type: post
-status: publish
-meta:
-  _thumbnail_id: '1092'
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _publicize_job_id: '20377485751'
-author:
-  login: jiriteller
-  email: jiriteller@hotmail.com
-  display_name: Thomas Rososchansky
-  first_name: Thomas
-  last_name: Rososchansky
-excerpt: If you have an Internet connection, then you must have noticed how Leonardo
+description: If you have an Internet connection, then you must have noticed how Leonardo
   DiCaprio’s face and name have infected your computer like some celebratory virus.
   Everyone is talking about Leo.
+date: 2016-03-02 22:25:14 Z
+author: "Thomas Rososchansky"
 image: "/assets/2016-03-02-death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/leo-dicaprio-oscar-one1.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2016-03-02-death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/leo-dicaprio-oscar-one1.jpg
+tags:
+  - "ironic"
+  - "Leonardo DiCaprio"
+  - "memes"
+  - "memetics"
+  - "Oscars"
+  - "Pre-ironic"
+  - "editorials"
+legacyPermalink: 2016/03/02/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/
 ---
 
 <p><span style="font-weight:400;">If you have an Internet connection, then you must have noticed how Leonardo DiCaprio’s face and name have infected your computer like some celebratory virus. Everyone is talking about Leo. Even the media is </span><a href="http://www.dailymail.co.uk/tvshowbiz/article-3469076/Leo-DiCaprio-sends-wave-relief-internet-Oscar-memes-erupt.html"><span style="font-weight:400;">talking about how everyone is talking about Leo</span></a><span style="font-weight:400;"> (and here I am, responding to this ironically by talking about Leo). </span></p>

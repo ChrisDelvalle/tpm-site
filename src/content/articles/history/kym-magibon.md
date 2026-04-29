@@ -1,22 +1,15 @@
 ---
 title: 'Know Your Meme: Magibon'
+description: The notion of authenticity in online celebrities is concurrent with the notion
+  of authenticity in Internet memes (cf. forced memes) mimics the notion of authenticity
+  in fictional characters (cf. fanon).
 date: 2017-12-04 12:01:00 +13:00
-layout: default
-nav_order: -20171204
-parent: History
-permalink: 2017/12/04/kym-magibon/
+author: "Seong-Young Her"
+image: "/uploads/magibon.jpg"
 tags:
 - Know Your Meme
 - Magibon
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: The notion of authenticity in online celebrities is concurrent with the notion
-  of authenticity in Internet memes (cf. forced memes) mimics the notion of authenticity
-  in fictional characters (cf. fanon).
-image: "/uploads/magibon.jpg"
+legacyPermalink: 2017/12/04/kym-magibon/
 ---
 
 [This study](https://www.youtube.com/watch?v=E7ye0O3wlws) of Magibon from 2011 argues that these videos of a girl silently staring at the camera were able to repeatedly hit over a million views because the big eyes were moe. The researcher traces back the trend to lonelygirl15, a Youtuber who played a fictional vlogger on her channel. It's a pretty inane insight: people thought the big eyes are cute.

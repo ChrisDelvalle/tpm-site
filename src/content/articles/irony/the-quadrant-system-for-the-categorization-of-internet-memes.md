@@ -1,37 +1,19 @@
 ---
 title: The Quadrant System for the Categorization of Internet Memes
-date: 2015-11-02 11:25:13 Z
-layout: default
-nav_order: -20151102
-parent: Irony
-permalink: 2015/11/02/the-quadrant-system-for-the-categorization-of-internet-memes/
-categories:
-- Internet Art
-tags:
-- art
-- digital art
-- internet art
-- memes
-- memetics
-- philosophy
-layout: post
-type: post
-status: publish
-meta:
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _publicize_job_id: '16457127635'
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: Memes are not just art they are art-concepts, necessarily materialized cybernetically.
+description: Memes are not just art they are art-concepts, necessarily materialized cybernetically.
   This means their analysis must always be two-tiered, firstly, memetic; secondly,
   aesthetic.
+date: 2015-11-02 11:25:13 Z
+author: "Seong-Young Her"
 image: "/assets/2015-11-02-the-quadrant-system-for-the-categorization-of-internet-memes/table-of-meme.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2015-11-02-the-quadrant-system-for-the-categorization-of-internet-memes/table-of-meme.jpg
+tags:
+  - "art"
+  - "digital art"
+  - "internet art"
+  - "memes"
+  - "memetics"
+  - "philosophy"
+legacyPermalink: 2015/11/02/the-quadrant-system-for-the-categorization-of-internet-memes/
 ---
 
 <p><a href="{{ site.baseurl }}/assets/2015-11-02-the-quadrant-system-for-the-categorization-of-internet-memes/table-of-meme.jpg"><img class="alignnone size-full wp-image-294" src="{{ site.baseurl }}/assets/2015-11-02-the-quadrant-system-for-the-categorization-of-internet-memes/table-of-meme.jpg" alt="table of meme" width="660" height="555" /></a></p>

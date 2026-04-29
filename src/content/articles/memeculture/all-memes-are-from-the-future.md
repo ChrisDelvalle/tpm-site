@@ -1,20 +1,13 @@
 ---
 title: All Memes Are From the Future
+description: 'All memes are from the future: the literate memer anticipates that the meme
+  will spread and change in meaning depending on where it gets reposted.'
 date: 2019-10-12 16:13:00 +13:00
-parent: Memeculture
-nav_order: -20191012
-grand_parent: Blog
-layout: default
-permalink: 2019/10/12/all-memes-are-from-the-future/
+author: "Seong-Young Her"
+image: "/uploads/000000000.jpeg"
 tags:
 - memetics
-author:
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: 'All memes are from the future: the literate memer anticipates that the meme
-  will spread and change in meaning depending on where it gets reposted.'
-image: "/uploads/000000000.jpeg"
+legacyPermalink: 2019/10/12/all-memes-are-from-the-future/
 ---
 
 Looking at memes these days, I'm surprised by how natural memetic art feels, not only as artworks but as memes. It was only three or four years ago when memes with artistic merit or polish were treated as effortporn by most viewers. They would frequently go viral because "high definition" versions of memes were a bit of novelty, since fewer artists were interested in memes at the time.

@@ -1,11 +1,16 @@
 ---
 title: A Short Note On Gondola
+description: There's a new meme becoming popular in the Anglosphere called Gondola. It's
+  a derivative of Spurdo Sparde with no arms or dialogue, generally walking around
+  in various scenes from classic artworks to everyday life. I think they could be
+  most easily characterized in opposition to Pepe or Spurdo, both of whom are subversive
+  in the classically Ironic Meme style of inappropriateness. Pepe will murder Wojak
+  over and over while Spurdo will spout every satirizable position in misspelled and
+  poorly drawn way possible. As usual, everyone's worry is about how normies will
+  ruin Gondola. Not if or when; it's taken for granted that Gondola will become corrupted.
 date: 2015-11-28 17:20:00 Z
-parent: Aesthetics
-nav_order: -20151128
-permalink: 2015/11/29/a-short-note-on-gondola/
-categories:
-- note
+author: "Seong-Young Her"
+image: "/assets/2015-11-28-a-short-note-on-gondola/d83.jpg"
 tags:
 - art
 - beauty
@@ -21,30 +26,7 @@ tags:
 - post-irony
 - rare pepe
 - Spurdo
-type: post
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: There's a new meme becoming popular in the Anglosphere called Gondola. It's
-  a derivative of Spurdo Sparde with no arms or dialogue, generally walking around
-  in various scenes from classic artworks to everyday life. I think they could be
-  most easily characterized in opposition to Pepe or Spurdo, both of whom are subversive
-  in the classically Ironic Meme style of inappropriateness. Pepe will murder Wojak
-  over and over while Spurdo will spout every satirizable position in misspelled and
-  poorly drawn way possible. As usual, everyone's worry is about how normies will
-  ruin Gondola. Not if or when; it's taken for granted that Gondola will become corrupted.
-status: publish
-meta:
-  _thumbnail_id: 388
-  _rest_api_published: 1
-  _rest_api_client_id: -1
-  _publicize_job_id: 17256119503
-layout: post
-image: "/assets/2015-11-28-a-short-note-on-gondola/d83.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2015-11-28-a-short-note-on-gondola/d83.jpg
+legacyPermalink: 2015/11/29/a-short-note-on-gondola/
 ---
 
 <p>There's a new meme becoming popular in the Anglosphere called Gondola. It's a derivative of Spurdo Sparde with no arms or dialogue, generally walking around in various scenes from classic artworks to everyday life. I think they could be most easily characterized in opposition to Pepe or Spurdo, both of whom are subversive in the classically Ironic Meme style of inappropriateness: Pepe will murder Wojak over and over while Spurdo will spout every satirizable position in misspelled and poorly drawn way possible. As usual, everyone's worry is about how normies will ruin Gondola. Not if or when; it's taken for granted that Gondola will become corrupted.</p>

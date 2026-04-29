@@ -1,15 +1,10 @@
 ---
 title: Homesteading the Memeosphere
+description: 'Who owns the memes? How dare we ask such a laughable question?'
 date: 2022-04-04 23:07:34 +13:00
-parent: Memeculture
-nav_order: -20220404
-grand_parent: Blog
-permalink: 2022/04/04/homesteading-the-memeosphere/
-layout: default
-author:
-  display_name: Seong-Young Her
-excerpt: 'Who owns the memes? How dare we ask such a laughable question?'
+author: "Seong-Young Her"
 image: "/uploads/2020-06-24_fossilised-bug_resized.png"
+legacyPermalink: 2022/04/04/homesteading-the-memeosphere/
 ---
 
 Eric S. Raymond, in ["Homesteading the Noosphere"](https://firstmonday.org/ojs/index.php/fm/article/download/1474/1389) (1998):  

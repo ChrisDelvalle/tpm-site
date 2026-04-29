@@ -1,22 +1,18 @@
 ---
 title: Structure and Content in Drake-Style Templates
+description: |-
+  Two dimensions stand out that make the two templates the same:
+  1. the structure (aversion/affirmation)
+  2. the content (rappers in music videos)
 date: 2018-09-11 10:43:00 +12:00
-parent: Aesthetics
-nav_order: -20180911
-layout: default
-permalink: 2018/09/11/structure-and-content-in-drake-style-templates/
+author: "Seong-Young Her"
+image: "/uploads/41513611_10215207403570323_3806778085953503232_n.jpg"
 tags:
 - template
 - memeing
 - structure
 - comics
-author:
-  display_name: Seong-Young Her
-excerpt: |-
-  Two dimensions stand out that make the two templates the same:
-  1. the structure (aversion/affirmation)
-  2. the content (rappers in music videos)
-image: "/uploads/41513611_10215207403570323_3806778085953503232_n.jpg"
+legacyPermalink: 2018/09/11/structure-and-content-in-drake-style-templates/
 ---
 
 ![41412464_10215198568029440_6155454791125303296_n.jpg](/uploads/41412464_10215198568029440_6155454791125303296_n.jpg)

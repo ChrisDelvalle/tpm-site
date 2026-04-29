@@ -1,39 +1,21 @@
 ---
 title: The Ironic Normie
-date: 2015-12-18 11:01:24
-parent: Irony
-nav_order: -20151218
-permalink: 2015/12/18/the-ironic-normie/
-categories:
-- Memetics
-tags:
-- Ironic meme
-- irony
-- memes
-- memetics
-- normie
-layout: post
-type: post
-status: publish
-meta:
-  _publicize_job_id: '17881664257'
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _thumbnail_id: '420'
-author:
-  login: jiriteller
-  email: jiriteller@hotmail.com
-  display_name: Thomas Rososchansky
-  first_name: Thomas
-  last_name: Rososchansky
-excerpt: On some parts of the Internet the term ‘normie’ is used to define anyone
+description: On some parts of the Internet the term ‘normie’ is used to define anyone
   who does not fully comprehend the humour and language of certain communities. A
   normie is usually seen as someone who has a social life outside of the Internet,
   and who does not know, or care, about its obscure customs. In this particular case,
   the term is as much an accusation as a label, expressing disdain toward anyone who
   is unaware of the growing community of Ironic memes.
+date: 2015-12-18 11:01:24
+author: "Thomas Rososchansky"
 image: "/assets/2015-12-17-the-ironic-normie/ironicnormie.png"
-fbpreview: http://thephilosophersmeme.com/assets/2015-12-17-the-ironic-normie/ironicnormie.png
+tags:
+  - "Ironic meme"
+  - "irony"
+  - "memes"
+  - "memetics"
+  - "normie"
+legacyPermalink: 2015/12/18/the-ironic-normie/
 ---
 
 <p>On some parts of the Internet the term ‘normie’ is used to define anyone who does not fully comprehend the humour and language of certain communities. A normie is usually seen as someone who has a social life outside of the Internet, and who does not know, or care, about its obscure customs. In this particular case, the term is as much an accusation as a label, expressing disdain toward anyone who is unaware of the growing community of Ironic memes. Though a normie used to simply be a person who was able to thrive in the outside world, the developing elitism in Ironic memes tainted the word to being a threat to Ironic humour. As the term was used more and more for people who do not comprehend Ironic memes, the dichotomy between those who ‘got it’ and those who didn’t was fortified and popularised. However, this contempt for normies did not stop them from finding out about Ironic memes and, conversely, finding out about Ironic memes did not rid the normies of their label. This essay explores how a middle ground is developing between normies and non-normies, as well as what implications this might have.</p>

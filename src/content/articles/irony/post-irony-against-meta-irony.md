@@ -1,9 +1,13 @@
 ---
 title: Post-Irony against Meta-Irony
+description: The Ironic Meme Movement was a reaction against the mainstream co-option
+  of the subcultural products of the underground; an attempt to create incorruptible
+  inside jokes. The Ironics employed defensive strategies which paralleled that of
+  the punks against the commercialization of their own subculture. Like the punks,
+  they failed.
 date: 2017-03-10 10:10:00 +13:00
-parent: Irony
-permalink: /2017/03/10/post-irony-against-meta-irony/
-nav_order: -20170310
+author: "Seong-Young Her & Masha Zharova"
+image: "/uploads/memetically%20assured%20destruction%20writeup_thumb.jpg"
 tags:
 - memes
 - history
@@ -11,19 +15,7 @@ tags:
 - post-irony
 - meta-irony
 - gondola
-layout: default
-author:
-  login: username
-  email: email@wherever.com
-  display_name:
-  - Seong-Young Her & Masha Zharova
-excerpt: The Ironic Meme Movement was a reaction against the mainstream co-option
-  of the subcultural products of the underground; an attempt to create incorruptible
-  inside jokes. The Ironics employed defensive strategies which paralleled that of
-  the punks against the commercialization of their own subculture. Like the punks,
-  they failed.
-image: "/uploads/memetically%20assured%20destruction%20writeup_thumb.jpg"
-fbpreview: http://www.thephilosophersmeme.com/uploads/memetically-assured-destruction-writeup_thumb.jpg
+legacyPermalink: /2017/03/10/post-irony-against-meta-irony/
 ---
 
 ![memetically assured destruction writeup.jpg](/uploads/memetic%20destruction.png)

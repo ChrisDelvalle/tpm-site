@@ -1,22 +1,15 @@
 ---
 title: President Park's Corruption Cult
 date: 2016-11-02 11:33:00 Z
-parent: Politics
-permalink: 2016/11/02/president-parks-corruption-cult/
-nav_order: -11
-type: post
-layout: post
-status: publish
+author: "Seong-Young Her"
+image: "/uploads/14938145_1857739157793035_7741224145832509244_n.png"
 tags:
 - Korea
 - politics
 - Ilbe
 - "/pol/"
 - conspiracy
-author:
-  display_name: Seong-Young Her
-image: "/uploads/14938145_1857739157793035_7741224145832509244_n.png"
-fbpreview: http://thephilosophersmeme.com/uploads/14938145_1857739157793035_7741224145832509244_n.png
+legacyPermalink: 2016/11/02/president-parks-corruption-cult/
 ---
 
 I remember the last Korean election. Half of the country went into mass shock after the results came out: the Democratic United party with their ex-human rights lawyer candidate had lost by 3.6% to the dictator's daughter, now-President Park Geun-Hye. Ilbe, the Korean equivalent of /pol/ which started in 2010, was delighted. Shitposts about the 'meme magic' relation between the 51.6% win of the candidate of their choice and the 5.16 coup of her father abounded. Four years since then, the same community is among her greatest enemies on the Internet thanks to the sheer insanity of 'her' (read: Choi Sun-Sil's) presidency thereafter.

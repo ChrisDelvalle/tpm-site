@@ -78,7 +78,7 @@ export function sourceFolder(entry: LegacyEntry) {
 }
 
 export function articleSlug(entry: LegacyEntry) {
-  const permalink = entry.data.permalink;
+  const permalink = entry.data.legacyPermalink ?? entry.data.permalink;
   const permalinkMatch =
     typeof permalink === "string"
       ? /^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/.exec(permalink)
@@ -99,11 +99,15 @@ function isDatedPermalink(permalink: unknown) {
 }
 
 function isArticle(entry: LegacyEntry) {
-  return isDatedPermalink(entry.data.permalink);
+  return isDatedPermalink(entry.data.legacyPermalink ?? entry.data.permalink);
 }
 
 function isPublished(entry: LegacyEntry) {
-  return entry.data.published !== false && entry.data.status !== "draft";
+  return (
+    entry.data.draft !== true &&
+    entry.data.published !== false &&
+    entry.data.status !== "draft"
+  );
 }
 
 export function isPublishedArticle(entry: LegacyEntry) {
@@ -144,12 +148,12 @@ export function authorName(entry: LegacyEntry) {
 }
 
 export function excerpt(entry: LegacyEntry) {
-  const value = entry.data.excerpt ?? entry.data.description;
+  const value = entry.data.description ?? entry.data.excerpt;
   return typeof value === "string" ? value : "";
 }
 
 export function imageUrl(entry: LegacyEntry) {
-  const value = entry.data.fbpreview ?? entry.data.image ?? entry.data.banner;
+  const value = entry.data.image ?? entry.data.fbpreview ?? entry.data.banner;
   return typeof value === "string" ? value : undefined;
 }
 

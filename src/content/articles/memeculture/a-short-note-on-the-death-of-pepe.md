@@ -1,11 +1,11 @@
 ---
 title: A Short Note On the Death of Pepe
+description: Honestly, I miss this meme. I guarantee that Pepe the Frog is going to become
+  the biggest 'normie' meme of all time. It's popular with high school kids, who are
+  basically the equivalent of university activists in the world of internet culture.
 date: 2015-09-14 09:29:10 Z
-parent: Memeculture
-nav_order: -20150914
-permalink: 2015/09/14/a-short-note-on-the-death-of-pepe/
-categories:
-- note
+author: "Seong-Young Her"
+image: "/assets/2015-09-14-a-short-note-on-the-death-of-pepe/10881565_870360753004673_4747543608770201737_n.jpg"
 tags:
 - aesthetics
 - art
@@ -16,25 +16,7 @@ tags:
 - Pepe
 - post-irony
 - Wojak
-layout: post
-type: post
-status: publish
-meta:
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _thumbnail_id: '233'
-  _publicize_job_id: '14763934748'
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: Honestly, I miss this meme. I guarantee that Pepe the Frog is going to become
-  the biggest 'normie' meme of all time. It's popular with high school kids, who are
-  basically the equivalent of university activists in the world of internet culture.
-image: "/assets/2015-09-14-a-short-note-on-the-death-of-pepe/10881565_870360753004673_4747543608770201737_n.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2015-09-14-a-short-note-on-the-death-of-pepe/10881565_870360753004673_4747543608770201737_n.jpg
+legacyPermalink: 2015/09/14/a-short-note-on-the-death-of-pepe/
 ---
 
 <p style="text-align:center;"><a href="{{ site.baseurl }}/assets/2015-09-14-a-short-note-on-the-death-of-pepe/10881565_870360753004673_4747543608770201737_n.jpg"><img class="alignnone size-medium wp-image-257" src="{{ site.baseurl }}/assets/2015-09-14-a-short-note-on-the-death-of-pepe/10881565_870360753004673_4747543608770201737_n.jpg" alt="10881565_870360753004673_4747543608770201737_n" width="232" height="300" /></a></p>

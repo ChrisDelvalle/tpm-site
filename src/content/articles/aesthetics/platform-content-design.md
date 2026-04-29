@@ -1,24 +1,17 @@
 ---
 title: The design of a platform determines the kind of content produced
-date: 2017-12-15 15:06:00 +13:00
-layout: default
-parent: Aesthetics
-nav_order: -20171215
-permalink: 2017/12/15/platform-content-design/
-tags:
-- memes
-- platform design
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: 'It''s a great example of how shaky the definition of ''Internet meme'' as
+description: 'It''s a great example of how shaky the definition of ''Internet meme'' as
   ''a funny image or video clip'' really is. Are these photos each a meme, or do they
   compose a single meme through being viewed together?
 
 '
+date: 2017-12-15 15:06:00 +13:00
+author: "Seong-Young Her"
 image: "/uploads/25289626_10213166218221965_5340695023336171185_n.jpg"
+tags:
+- memes
+- platform design
+legacyPermalink: 2017/12/15/platform-content-design/
 ---
 
 Facebook allows users to post multiple photos in one post, hides parts of a large photo, flick through the photos one at a time and share the post with all of the photos.

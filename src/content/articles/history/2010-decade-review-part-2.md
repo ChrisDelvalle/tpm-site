@@ -1,10 +1,11 @@
 ---
 title: '2010''s Decade Review, Part 2: Memetaphysics Through Three Lenses'
+description: 'In this article, I explore the new metaphysics of memes that developed throughout
+  the 2010s. I use three distinct perspectives to approach this vast subject matter:
+  time; place; and, process.'
 date: 2020-10-09 10:10:00 +13:00
-parent: History
-nav_order: -20201009
-layout: default
-permalink: 2020/10/09/2010-decade-review-part-2/
+author: "Seong-Young Her"
+image: "/uploads/14237500_1830640707169547_2304204517625469747_n.jpg"
 tags:
 - memes
 - meme history
@@ -15,15 +16,7 @@ tags:
 - cyberculture
 - memeculture
 - memepages
-author:
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: 'In this article, I explore the new metaphysics of memes that developed throughout
-  the 2010s. I use three distinct perspectives to approach this vast subject matter:
-  time; place; and, process.'
-image: "/uploads/14237500_1830640707169547_2304204517625469747_n.jpg"
-fbpreview: "/uploads/14237500_1830640707169547_2304204517625469747_n.jpg"
+legacyPermalink: 2020/10/09/2010-decade-review-part-2/
 ---
 
 ## Introduction

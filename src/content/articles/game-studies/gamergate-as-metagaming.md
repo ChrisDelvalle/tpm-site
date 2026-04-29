@@ -1,10 +1,8 @@
 ---
 title: GamerGate As Metagaming
+description: "GamerGaters were correct in their assessment of gaming culture and the games industry precisely because of the conspiracy theoretical nature of their campaign."
 date: 2021-05-16 06:00:00 +13:00
-parent: Game Studies
-nav_order: -20210516
-layout: default
-permalink: 2021/05/16/gamergate-as-metagaming/
+author: "Seong-Young Her"
 tags:
 - games
 - metagaming
@@ -13,12 +11,7 @@ tags:
 - journalism
 - 4chan
 - memes
-author:
-  display_name:
-  - Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: "GamerGaters were correct in their assessment of gaming culture and the games industry precisely because of the conspiracy theoretical nature of their campaign."
+legacyPermalink: 2021/05/16/gamergate-as-metagaming/
 ---
 
 GamerGate was a "swarm" (Mortensen, 2018, p. 793) harassment campaign against journalists, academics and content producers, perceived by GamerGaters as being conspirators in a culture war against games. It was a highly novel phenomenon in that it mainstreamed the use of knowledge projects as a channel of decentralised stalking. Following Boluk & Lemieux’s (2017) argument that GamerGate was a reactionary metagame, I argue that GamerGaters were correct in their assessment of gaming culture and the games industry precisely because of the conspiracy theoretical nature of their campaign.

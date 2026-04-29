@@ -1,10 +1,8 @@
 ---
 title: Facebook Groups
+description: 'This article focuses on the ironic meme community and the geography of Facebook memepages.'
 date: 2017-03-26 11:17:00 Z
-parent: History
-layout: default
-permalink: 2017/03/27/facebook-groups/
-nav_order: -20170326
+author: "Seong-Young Her & Masha Zharova"
 tags:
 - Facebook
 - shitposting
@@ -12,15 +10,7 @@ tags:
 - platform design
 - politics
 - history
-type: post
-author:
-  login: username
-  email: email@wherever.com
-  display_name:
-  - Seong-Young Her & Masha Zharova
-excerpt: 'This article focuses on the ironic meme community and the geography of Facebook memepages.'
-status: publish
-layout: post
+legacyPermalink: 2017/03/27/facebook-groups/
 ---
 
 # Introduction

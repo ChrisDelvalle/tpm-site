@@ -1,40 +1,23 @@
 ---
 title: Newfriends and the Generation Gap
-date: 2016-05-12 14:58:46 Z
-parent: Memeculture
-nav_order: -20160512
-permalink: 2016/05/12/newfriends-and-the-generation-gap/
-categories:
-- Culture
-- Memetics
-tags:
-- 4chan
-- generation gap
-- internet culture
-- linguistics
-- memetics
-- subculture
-layout: post
-type: post
-status: publish
-meta:
-  _thumbnail_id: '1279'
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _publicize_job_id: '22741573324'
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: I was walking home from a friend's place yesterday when I saw a few children
+description: I was walking home from a friend's place yesterday when I saw a few children
   chasing each other and play fighting. As I walked past, I heard one tell the other,
   'get wrecked!' I wondered whether they learned it from video games they play (my
   guess was either LoL or DotA, but it could be one of those FPSs) or from older kids
   (or perhaps, most befittingly, even older kids online!) they know such as their
   older siblings.
+date: 2016-05-12 14:58:46 Z
+author: "Seong-Young Her"
 image: "/assets/tpm_defaultpic.jpg"
+tags:
+  - "4chan"
+  - "generation gap"
+  - "internet culture"
+  - "linguistics"
+  - "memetics"
+  - "subculture"
+  - "culture"
+legacyPermalink: 2016/05/12/newfriends-and-the-generation-gap/
 ---
 
 <p><span style="font-weight:400;">I was walking home from a friend's place yesterday when I saw a few children chasing each other and play fighting. As I walked past, I heard one tell the other, "get wrecked!" I wondered whether they learned it from video games they play (my guess was either LoL or DotA, but it could be one of those FPSs) or from older kids (or perhaps, most befittingly, even older kids online!) they know such as their older siblings.</span></p>

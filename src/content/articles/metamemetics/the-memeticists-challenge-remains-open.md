@@ -1,22 +1,15 @@
 ---
 title: The Memeticist's Challenge Remains Open
+description: Seong's thesis on the memeticist's challenge (2018). Supervised by Diane Proudfoot and Douglas Campbell, and completed at the University of Canterbury.
 date: 2018-11-15 22:12:00 +13:00
-parent: Metamemetics
-nav_order: -20181115
-permalink: 2018/11/15/the-memeticists-challenge-remains-open/
-layout: post
+author: "Seong-Young Her"
+image: "/uploads/T3.gif"
 tags:
 - memetics
 - meme studies
 - philosophy
 - digital humanities
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: Seong's thesis on the memeticist's challenge (2018). Supervised by Diane Proudfoot and Douglas Campbell, and completed at the University of Canterbury.
-image: "/uploads/T3.gif"
+legacyPermalink: 2018/11/15/the-memeticists-challenge-remains-open/
 ---
 
 # 1. Introduction and Background

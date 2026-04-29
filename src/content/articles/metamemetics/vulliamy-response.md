@@ -1,14 +1,10 @@
 ---
 title: Memes and Humor&#58; Reply to Claudia Vulliamy's "What is a Meme?"
+description: "Simon Evnine responds to Vulliamy's recent article on the definition of memes."
 date: 2021-12-30 22:42:08 +13:00
-layout: default
-nav_order: -20211230
-parent: Metamemetics
-permalink: 2021/12/30/vulliamy-response/
-author:
-  display_name: Simon J. Evnine
-excerpt: "Simon Evnine responds to Vulliamy's recent article on the definition of memes."
+author: "Simon J. Evnine"
 image: "/uploads/batmanmeme.jpg"
+legacyPermalink: 2021/12/30/vulliamy-response/
 ---
 In her very interesting essay for this website, ["What is a Meme?"](http://thephilosophersmeme.com/2021/11/30/what-is-a-meme/), Claudia Vulliamy critiques a definition of the concept meme that I gave in my paper ["The Anonymity of a Murmur: Internet (and Other) Memes"](https://simonevnine.files.wordpress.com/2018/12/ayy021.pdf) and replaces it with what she argues is an improvement. I maintained that for something to be a meme it is necessary and sufficient that it be "made, as part of memographic practice, out of norms for producing things as part of that memographic practice." This is intended as a definition of a type of meme, such as Batman Slapping Robin – what Vulliamy calls a meme trend – and not of the individual things that manifest a trend or instantiate a type. Defining a meme as being constituted by norms gets at the idea that a meme is basically just some instructions that tell you to use a certain image, put a certain kind of text on it in a certain position, and so on. By "memographic practice" I mean a particular, historical phenomenon that began around the end of the 20th century on internet message boards and gradually migrated to the internet at large and even, arguably, to the non-digital world. The reference to memographic practice distinguishes memes from, say, sonnets. The sonnet is also to be identified with some instructions, instructions that prescribe number of lines, rhyme scheme, etc. But it is not a meme, in the relevant sense, since it operates in a totally different socio-cultural-historical context. 
 Vulliamy agrees with me that being (or being made out of) a norm or norms for producing things as part of memographic practice is a necessary condition on being a meme but she disputes its sufficiency. That is, she thinks my definition over-generates, counting as memes things that are not. She adds two further necessary condition and six further conditions whose status will require investigation. The two further necessary conditions are that a meme must be publicly sharable as part of memographic practice and that it must be made with comedic intent. The six further conditions are ephemerality, anonymity, digitality, appropriation, use of images and text, and stylistic resemblance to other memes. About these six conditions, Vulliamy writes: "Although I maintain as a general observation that memes meet at least five of the six central conditions, I will… refrain from stating this as a rule." In an earlier superseded definition, however, Vulliamy requires that for something to be a meme it must meet at least five of the six further conditions. It is unclear why the number five is chosen other than that it is the closest thing to holding that all six of the further conditions are necessary while still falling short of that. Nor is it clear why Vulliamy retreats from the stronger view. In any case, as I say, she seems to take a more relaxed attitude later on.

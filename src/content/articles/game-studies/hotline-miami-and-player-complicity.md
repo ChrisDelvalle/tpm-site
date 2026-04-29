@@ -1,39 +1,18 @@
 ---
 title: Hotline Miami and player complicity
+description: Do you like hurting other people?
 date: 2015-12-01 15:31:00 Z
-parent: Game Studies
-nav_order: -20151201
-permalink: 2015/12/01/hotline-miami-and-player-complicity/
-categories:
-- Games
-- Mike
-tags:
-- backtracking
-- game mechanics
-- games
-- Hotline Miami
-- ludology
-- ludonarrative consonance
-- violence
-layout: post
-type: post
-status: publish
-meta:
-  _edit_last: '89543114'
-  geo_public: '0'
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _thumbnail_id: '407'
-  _publicize_job_id: '17373277760'
-author:
-  login: remakedestroy
-  email: mikemaitland@gmail.com
-  display_name: Mike M.
-  first_name: Michael
-  last_name: Maitland
-excerpt: Do you like hurting other people?
+author: "Mike M."
 image: "/assets/2015-12-01-hotline-miami-and-player-complicity/1.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2015-12-01-hotline-miami-and-player-complicity/1.jpg
+tags:
+  - "backtracking"
+  - "game mechanics"
+  - "games"
+  - "Hotline Miami"
+  - "ludology"
+  - "ludonarrative consonance"
+  - "violence"
+legacyPermalink: 2015/12/01/hotline-miami-and-player-complicity/
 ---
 
 <blockquote><em>"Do you like hurting other people?"</em></blockquote>

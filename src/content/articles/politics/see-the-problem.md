@@ -1,22 +1,17 @@
 ---
 title: See the Problem?
+description: 'The problem is causality. And no: shouting at me won’t make it less true.
+
+'
 date: 2016-04-08 23:22:00 +12:00
-layout: default
-nav_order: -4
-parent: Politics
-permalink: 2016/04/23/see-the-problem/
+author: "Mike M."
+image: "/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
 tags:
 - education
 - philosophy
 - politics
-author:
-  display_name: Mike M.
-excerpt: 'The problem is causality. And no: shouting at me won’t make it less true.
-
-'
-image: "/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
-banner: "/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
-fbpreview: "/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
+legacyPermalink: 2016/04/23/see-the-problem/
+legacyBanner: "/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg"
 ---
 
 ![150cb-10154401_10152793631042564_7941235616270583990_n.jpg](/uploads/150cb-10154401_10152793631042564_7941235616270583990_n.jpg)

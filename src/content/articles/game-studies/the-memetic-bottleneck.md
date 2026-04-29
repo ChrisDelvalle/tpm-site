@@ -1,10 +1,15 @@
 ---
 title: The Memetic Bottleneck
+description: 'Like a panel in a highly networked version of the Infinite Canvas, every
+  meme is both a potential bottleneck and a possible choice. Since the sense that
+  every meme has a preceding meme is essential to the appreciation of memes, the memetic
+  bottleneck works in the inverse direction of the narrative bottleneck, generating
+  potential pasts. To choose a meme to post is to choose which game to play with the
+  audience. More significantly, it is to choose which save file to load up: it''s
+  scenario editing of history, conditioned on current mood.'
 date: 2019-04-05 06:00:00 +13:00
-parent: Game Studies
-nav_order: -20190405
-layout: default
-permalink: 2019/04/05/the-memetic-bottleneck/
+author: "Seong-Young Her"
+image: "/uploads/2019-04-03_thephilosophersmeme.com_catgirl-01.png"
 tags:
 - aesthetics
 - philosophy
@@ -18,22 +23,7 @@ tags:
 - linguistics
 - ludology
 - memetics
-author:
-  login: username
-  email: email@wherever.com
-  display_name:
-  - Seong-Young Her
-  first_name: Philosopher
-  last_name: Of The Meme
-excerpt: 'Like a panel in a highly networked version of the Infinite Canvas, every
-  meme is both a potential bottleneck and a possible choice. Since the sense that
-  every meme has a preceding meme is essential to the appreciation of memes, the memetic
-  bottleneck works in the inverse direction of the narrative bottleneck, generating
-  potential pasts. To choose a meme to post is to choose which game to play with the
-  audience. More significantly, it is to choose which save file to load up: it''s
-  scenario editing of history, conditioned on current mood.'
-image: "/uploads/2019-04-03_thephilosophersmeme.com_catgirl-01.png"
-fbpreview: "/uploads/2019-04-03_thephilosophersmeme.com_catgirl-01.png"
+legacyPermalink: 2019/04/05/the-memetic-bottleneck/
 ---
 
 ## I. Simplifying Memes for Impact

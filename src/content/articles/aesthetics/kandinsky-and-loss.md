@@ -1,17 +1,12 @@
 ---
 title: Kandinsky and Loss
-date: 2017-12-04 07:52:00 +13:00
-parent: Aesthetics
-nav_order: -20171204
-layout: default
-permalink: 2017/12/04/kandinsky-and-loss/
-author:
-  display_name: S. Y. Her
-excerpt: Tracing back techniques used in memes to modern art is a safe bet, because
+description: Tracing back techniques used in memes to modern art is a safe bet, because
   it's only natural that memers will use whatever tools are available to make better
   memes.
+date: 2017-12-04 07:52:00 +13:00
+author: "Seong-Young Her"
 image: "/uploads/loss_art_simplified-only.png"
-fbpreview: http://thephilosophersmeme.com/uploads/loss_art_simplified-only.png
+legacyPermalink: 2017/12/04/kandinsky-and-loss/
 ---
 
 ![loss_art_simplified.png](/uploads/loss_art_simplified.png)

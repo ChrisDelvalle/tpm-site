@@ -1,10 +1,10 @@
 ---
 title: The Structures of Hyperspatial Politics
+description: Sites of content production in Web 2.0 are strategic assets which make up
+  the terrain of political conflict in hyperspace.
 date: 2017-06-13 20:11:00 +12:00
-parent: Politics
-layout: default
-permalink: 2017/06/13/the-structure-of-hyperspatial-politics/
-nav_order: -6
+author: "Samuel Tannert"
+image: "/uploads/avatars-000304348876-0xi1aa-original.jpg"
 tags:
 - GamerGate
 - 4chan
@@ -20,12 +20,7 @@ tags:
 - Instagram
 - vectoralism
 - hyperspace
-author:
-  display_name: Samuel Tannert
-excerpt: Sites of content production in Web 2.0 are strategic assets which make up
-  the terrain of political conflict in hyperspace.
-image: "/uploads/avatars-000304348876-0xi1aa-original.jpg"
-fbpreview: "/uploads/avatars-000304348876-0xi1aa-original.jpg"
+legacyPermalink: 2017/06/13/the-structure-of-hyperspatial-politics/
 ---
 
 # The Structure of Hyperspatial Politics

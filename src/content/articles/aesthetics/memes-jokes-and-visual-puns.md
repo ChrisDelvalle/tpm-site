@@ -1,10 +1,11 @@
 ---
 title: Memes, Jokes & Visual Puns
+description: A basic framework for understanding the interplay between visual structure,
+  conceptual organization, visual perception and meaning-making in collage memes that
+  don't contain any text.
 date: 2018-03-27 08:49:00 +13:00
-parent: Aesthetics
-nav_order: -20180327
-layout: default
-permalink: 2018/03/27/memes-jokes-and-visual-puns/
+author: "Masha Zharova"
+image: "/uploads/meme-jokes-puns-chart.png"
 tags:
 - linguistics
 - puns
@@ -12,15 +13,7 @@ tags:
 - design
 - gestalt
 - memes
-author:
-  display_name: Masha Zharova
-  first_name: Masha
-  last_name: Zharova
-excerpt: A basic framework for understanding the interplay between visual structure,
-  conceptual organization, visual perception and meaning-making in collage memes that
-  don't contain any text.
-image: "/uploads/meme-jokes-puns-chart.png"
-fbpreview: http://thephilosophersmeme.com/uploads/meme-jokes-puns-chart.png
+legacyPermalink: 2018/03/27/memes-jokes-and-visual-puns/
 ---
 
 ## Introduction

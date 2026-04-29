@@ -1,21 +1,12 @@
 ---
 title: Internet Memetics
+description: 'Seong''s thesis on Internet memetics (2016). Supervised by James Maclaurin
+  and Greg Dawes, and completed at the University of Otago. '
 date: 2016-11-15 23:04:00 +13:00
-parent: Metamemetics
-permalink: 2016/11/15/internetmemetics/
-nav_order: -20161115
-layout: post
-type: post
-status: publish
+author: "Seong-Young Her"
 tags:
 - memetics
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: 'Seong''s thesis on Internet memetics (2016). Supervised by James Maclaurin
-  and Greg Dawes, and completed at the University of Otago. '
+legacyPermalink: 2016/11/15/internetmemetics/
 ---
 
 # Chapter 1. Introduction

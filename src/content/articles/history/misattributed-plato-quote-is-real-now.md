@@ -1,16 +1,10 @@
 ---
 title: Misattributed Plato Quote Is Real Now
+description: "It seems to me that 'quotes' such as these which become canon in the public psyche take on a special kind of force that highlights the close relationship between truth and beauty, as well as the fact that the two are not one and the same--although (I hope you will agree) truth is often beautiful, and there is always some truth in beauty."
 date: 2015-08-19 01:01:23 +13:00
-parent: History
-nav_order: -20150819
-layout: default
-permalink: 2015/08/19/misattributed-plato-quote-is-real-now/
-author:
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: "It seems to me that 'quotes' such as these which become canon in the public psyche take on a special kind of force that highlights the close relationship between truth and beauty, as well as the fact that the two are not one and the same--although (I hope you will agree) truth is often beautiful, and there is always some truth in beauty."
+author: "Seong-Young Her"
 image: "/uploads/11896173_1679964772237142_4577427319780722645_n.png"
+legacyPermalink: 2015/08/19/misattributed-plato-quote-is-real-now/
 ---
 
 <img src="/uploads/11896173_1679964772237142_4577427319780722645_n.png">

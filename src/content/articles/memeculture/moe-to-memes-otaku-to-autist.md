@@ -1,10 +1,12 @@
 ---
 title: Moe to Memes, Otaku to Autists
+description: The archetypal online community is specialised in its collective interests,
+  hostile to outsiders, particular about its tastes and difficult for normies to get
+  into. Knowledge and skill, especially when useful for creating relevant content
+  for the community, is highly valued; "otaku" is the Japanese equivalent of the "autist".
 date: 2017-11-23 13:50:00 +13:00
-parent: Memeculture
-nav_order: -20171123
-layout: default
-permalink: 2017/11/23/moe-to-memes-otaku-to-autist/
+author: "Seong-Young Her"
+image: "/uploads/23843224_10212994224282224_7561053404699120313_n.jpg"
 tags:
 - memes
 - otaku
@@ -12,17 +14,7 @@ tags:
 - anime
 - autist
 - subculture
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: The archetypal online community is specialised in its collective interests,
-  hostile to outsiders, particular about its tastes and difficult for normies to get
-  into. Knowledge and skill, especially when useful for creating relevant content
-  for the community, is highly valued; "otaku" is the Japanese equivalent of the "autist".
-image: "/uploads/23843224_10212994224282224_7561053404699120313_n.jpg"
-fbpreview: https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/23843224_10212994224282224_7561053404699120313_n.jpg?_nc_cat=111&_nc_ht=scontent-syd2-1.xx&oh=ed7df783df4077641968c6f57d19d9d0&oe=5CD54C54
+legacyPermalink: 2017/11/23/moe-to-memes-otaku-to-autist/
 ---
 
 The term 'moe' is one of the most important keywords in Japanese pop culture. The development of moe seems very much memetic to me: later artists copied earlier artists and added their own improvements. I also think that an understanding of moe is useful for understanding the history of Internet memes in the West. This is because anime culture was influential on Western meme culture, and moe is influential in anime culture. In the East, the connection between moe and meme has remained close and immediate for decades; in the West, only indirect.

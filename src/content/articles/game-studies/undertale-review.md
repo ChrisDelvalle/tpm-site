@@ -1,40 +1,21 @@
 ---
 title: Undertale Review
-date: 2015-11-29 12:17:16 Z
-parent: Game Studies
-nav_order: -20151129
-permalink: 2015/11/29/undertale-review/
-categories:
-- Editorials
-- Games
-- Mike
-tags:
-- aesthetics
-- games
-- indie game
-- ludology
-- philosophy
-- review
-- Undertale
-layout: post
-type: post
-status: publish
-meta:
-  _edit_last: '89543114'
-  geo_public: '0'
-  _thumbnail_id: '405'
-  _publicize_job_id: '17303770877'
-author:
-  login: remakedestroy
-  email: mikemaitland@gmail.com
-  display_name: Mike M.
-  first_name: Michael
-  last_name: Maitland
-excerpt: Undertale is a game that's very difficult to convince people to play, which
+description: Undertale is a game that's very difficult to convince people to play, which
   is a huge shame because it's probably one of the most affecting games produced in
   the last 10 years.
+date: 2015-11-29 12:17:16 Z
+author: "Mike M."
 image: "/assets/2015-11-29-undertale-review/1.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2015-11-29-undertale-review/1.jpg
+tags:
+  - "aesthetics"
+  - "games"
+  - "indie game"
+  - "ludology"
+  - "philosophy"
+  - "review"
+  - "Undertale"
+  - "editorials"
+legacyPermalink: 2015/11/29/undertale-review/
 ---
 
 <blockquote>"Seeing the hope and happiness that undertale has brought to people...<br />

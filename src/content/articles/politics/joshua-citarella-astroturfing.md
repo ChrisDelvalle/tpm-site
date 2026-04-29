@@ -1,14 +1,9 @@
 ---
-layout: default
 title: Joshua Citarella Astroturfing
 date: 2022-04-20 13:49:00 +13:00
-author:
-  display_name: Seong-Young Her
-layout: default
-nav_order: -20220420
-has_children: false
-permalink: /2022/04/20/joshua-citarella-astroturfing/
-published: false
+author: "Seong-Young Her"
+draft: true
+legacyPermalink: /2022/04/20/joshua-citarella-astroturfing/
 ---
 
 Joshua Citarella getting ratiod on his own [insta post](https://www.instagram.com/p/CcdbowvuHx_) for the "How to Plant a Meme" project, in which he memed on Instagram for a year and a half to get other memers "interested in conventional forms of political organization or possibly even engage in electoral politics." Peculiarly, he attempted this by making memes about Mark Fisher, who had this to say about electoralism: "[Don't vote, don't encourage them](http://k-punk.abstractdynamics.org/archives/005462.html)".

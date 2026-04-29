@@ -1,37 +1,20 @@
 ---
 title: An Internet Koan
-date: 2016-05-13 03:09:00 +12:00
-parent: Philosophy
-permalink: 2016/05/13/an-internet-koan/
-nav_order: -7
-categories:
-- Creative Writing
-- Editorials
-- Seong
-tags:
-- generation gap
-- internet art
-- internet culture
-- philosophy
-- Zen
-type: post
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: I just found a really strange website where a guy claims Zen is a scam and
+description: I just found a really strange website where a guy claims Zen is a scam and
   that he's figured out how to solve any koan. He even provides a Free Zen Riddle
   and Koan Service through which you can email him a koan and receive an answer.
+date: 2016-05-13 03:09:00 +12:00
+author: "Seong-Young Her"
 image: "/assets/tpm_defaultpic.jpg"
-fbpreview: thephilosophersmeme.com/uploads/xbuddhist-koans-1.jpg.pagespeed.ic.UZ0ubtwH0q.jpg
-status: publish
-meta:
-  _thumbnail_id: 1287
-  _rest_api_published: 1
-  _rest_api_client_id: -1
-  _publicize_job_id: 22741873110
-layout: post
+tags:
+  - "generation gap"
+  - "internet art"
+  - "internet culture"
+  - "philosophy"
+  - "Zen"
+  - "creative writing"
+  - "editorials"
+legacyPermalink: 2016/05/13/an-internet-koan/
 ---
 
 <p>I just found a really strange <a href="http://www.heartofmeditation.com/buddhist-koans.html" target="_blank">website</a> where a guy claims Zen is a scam and that he's figured out how to solve any koan. He even provides a "Free Zen Riddle and Koan Service" through which you can email him a koan and receive an answer. There are even e-books, one on how to solve Zen riddles and another two which collect them. Here's an example of how he solves one.</p>

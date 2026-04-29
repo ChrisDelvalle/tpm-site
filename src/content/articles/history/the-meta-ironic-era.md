@@ -1,27 +1,19 @@
 ---
 title: The Meta-Ironic Era
+description: 'In 2017, at the time of writing, most readers will find it difficult to
+  imagine how different the dynamics of the meme community were in 2014. The sum of
+  every memepage at the time, duplicates or no, was far smaller than a single large
+  memepage active today. '
 date: 2017-09-09 09:45:00 +12:00
-parent: History
-layout: default
-permalink: /2017/09/09/the-meta-ironic-era/
-nav_order: -20170909
+author: "Seong-Young Her"
+image: "/uploads/phylomemetic-tree-lamarckian.png"
 tags:
 - meta-irony
 - irony
 - memepages
 - Facebook
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: 'In 2017, at the time of writing, most readers will find it difficult to
-  imagine how different the dynamics of the meme community were in 2014. The sum of
-  every memepage at the time, duplicates or no, was far smaller than a single large
-  memepage active today. '
-image: "/uploads/phylomemetic-tree-lamarckian.png"
-banner: "/uploads/phylomemetic-tree-lamarckian.png"
-fbpreview: "/uploads/phylomemetic-tree-lamarckian.png"
+legacyPermalink: /2017/09/09/the-meta-ironic-era/
+legacyBanner: "/uploads/phylomemetic-tree-lamarckian.png"
 ---
 
 I've been wrestling with the question of what makes a meme good for 3 years as a creator and memepage admin. It's a difficult question related to, but distinct from, questions like "what makes an artwork good?" and "what makes a game good?"

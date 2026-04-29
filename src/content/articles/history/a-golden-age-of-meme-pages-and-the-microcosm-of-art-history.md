@@ -1,12 +1,8 @@
 ---
-layout: default
 title: A Golden Age of Meme Pages and the Microcosm of Art History
-author:
-  display_name: Seong-Young Her
 date: 2015-11-02 01:01:10 Z
-nav_order: -20151102
-parent: History
-permalink: 2015/11/02/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history/
+author: "Seong-Young Her"
+legacyPermalink: 2015/11/02/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history/
 ---
 
 <p>Until recently, memes existed in two largely isolated niches. Inter-group circulation of memes was relatively rare. When ironic memes moved onto Facebook, the new platform forced changes onto the art style unseen elsewhere: the strict anonymity and rapid expiration of Chan posts had hitherto prevented anything beyond ‘meme threads’ in the way of makeshift exhibitions, and curation was (excluding archived pages) private. The various image hosting sites (not to mention ‘humour websites’ which only post what is already popular) also proved too rigid in their hybrid structure which had users submit the memes and ordered them according to number of clicks, likes or other such metric. The result was that each website became something analogous to a massive meme page run by numerous admins; the fluidity promised by the decentralized, democratic structure of these pages was inevitably undermined by the very democratic process through which each user was rewarded and a post was celebrated.</p>

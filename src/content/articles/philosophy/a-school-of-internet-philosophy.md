@@ -1,26 +1,19 @@
 ---
 title: A School of Internet Philosophy
-date: 2017-03-27 03:16:00 +13:00
-parent: Philosophy
-layout: default
-nav_order: -4
-permalink: 2017/03/27/a-school-of-internet-philosophy/
-tags:
-- Internet philosophy
-- philosophy
-- subculture
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: 'I think there''s a school of ‘Internet philosophy’ like there is continental
+description: 'I think there''s a school of ‘Internet philosophy’ like there is continental
   philosophy or Anglo-American philosophy, with its own dominant interests and a unique
   style of discourse. I''m trying to figure out what this consists of. It''s a combination
   of demographics, dominant areas of interest (both within and without strict philosophy)
   and conventions and canons unique to the school.
 
 '
+date: 2017-03-27 03:16:00 +13:00
+author: "Seong-Young Her"
+tags:
+- Internet philosophy
+- philosophy
+- subculture
+legacyPermalink: 2017/03/27/a-school-of-internet-philosophy/
 ---
 
 I think there's a school of ‘Internet philosophy’ like there is continental philosophy or Anglo-American philosophy, with its own dominant interests and a unique style of discourse. I'm trying to figure out what this consists of. It's a combination of demographics, dominant areas of interest (both within and without strict philosophy) and conventions and canons unique to the school.

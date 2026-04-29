@@ -49,8 +49,9 @@ function isDatedPermalink(value) {
 }
 
 function articleSlug(file, data) {
-  if (isDatedPermalink(data.permalink)) {
-    return data.permalink.match(/^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/)?.[1];
+  const legacyPermalink = data.legacyPermalink ?? data.permalink;
+  if (isDatedPermalink(legacyPermalink)) {
+    return legacyPermalink.match(/^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/)?.[1];
   }
 
   return relativeContentPath(file)
@@ -111,7 +112,7 @@ for (const file of files) {
   }
 
   const { data } = matter(await readFile(file, "utf8"));
-  const isArticle = isDatedPermalink(data.permalink);
+  const isArticle = isDatedPermalink(data.legacyPermalink ?? data.permalink);
 
   for (const field of imageFields) {
     if (!(await publicAssetExists(data[field]))) {

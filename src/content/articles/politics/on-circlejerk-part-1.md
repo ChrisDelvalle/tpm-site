@@ -1,14 +1,10 @@
 ---
 title: On Circlejerk
+description: 'The logic of capitalism is reproduced in online communities as circlejerks, where quantified affirmation supplants monetary profit. Like capitalism, democratized Internet culture is inadequate to its own promise of freedom. Originally published in 2017.'
 date: 2021-12-18 18:46:00 +13:00
-layout: default
-parent: Politics
-nav_order: -20211218
-permalink: 2021/12/18/on-circlejerk-part-1/
-author:
-  display_name: Chicago School of Countercultural Inquiry
-excerpt: 'The logic of capitalism is reproduced in online communities as circlejerks, where quantified affirmation supplants monetary profit. Like capitalism, democratized Internet culture is inadequate to its own promise of freedom. Originally published in 2017.'
+author: "Chicago School of Countercultural Inquiry"
 image: "/uploads/circlejerk_chart_of_terms-01.png"
+legacyPermalink: 2021/12/18/on-circlejerk-part-1/
 ---
 
 

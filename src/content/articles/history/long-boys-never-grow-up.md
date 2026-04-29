@@ -1,44 +1,20 @@
 ---
 title: long boys never grow up
-date: 2016-03-23 08:33:00 +13:00
-parent: History
-nav_order: -20160323
-permalink: 2016/03/23/long-boys-never-grow-up/
-categories:
-- Internet Art
-- Memetics
-tags:
-- irony
-- long boy
-- memes
-- memetics
-- normie
-- post-irony
-- special meme fresh
-type: post
-author:
-  login: comicironic
-  email: ivb@vanbakel.io
-  display_name:
-  - Isaac van Bakel & Ulysses King
-  first_name:
-  - Isaac
-  - Ulysses
-  last_name:
-  - van Bakel
-  - King
-excerpt: Where have all the Long Boys gone? (Plus an exclusive interview with Special
+description: Where have all the Long Boys gone? (Plus an exclusive interview with Special
   Meme Fresh)
+date: 2016-03-23 08:33:00 +13:00
+author: "Isaac van Bakel & Ulysses King"
 image: "/assets/2016-03-22-long-boys-never-grow-up/what.jpg"
-fbpreview: http://thephilosophersmeme.com/assets/2016-03-22-long-boys-never-grow-up/what.jpg
-status: publish
-meta:
-  _edit_last: 99245853
-  geo_public: 0
-  _rest_api_published: 1
-  _rest_api_client_id: -1
-  _publicize_job_id: 21025469179
-layout: post
+tags:
+  - "irony"
+  - "long boy"
+  - "memes"
+  - "memetics"
+  - "normie"
+  - "post-irony"
+  - "special meme fresh"
+  - "internet art"
+legacyPermalink: 2016/03/23/long-boys-never-grow-up/
 ---
 
 <h2>1. Introduction</h2>

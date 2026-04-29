@@ -262,32 +262,42 @@ plain Astro conventions.
 
 ## Target Author Frontmatter
 
-Article frontmatter should converge to a small Astro-oriented shape:
+Article frontmatter should converge to a small Astro-oriented shape that serves
+both human-facing pages and machine-readable output such as Open Graph, Twitter
+cards, RSS, search metadata, and JSON-LD `BlogPosting` data.
 
 ```yaml
 ---
 title: "Example Article"
-date: 2026-04-28
+description: "Short summary used for social previews, search, RSS, and JSON-LD."
+date: 2026-04-28T00:00:00-04:00
 author: "Author Name"
-excerpt: "Optional summary."
 image: "/uploads/example.png"
+imageAlt: "Optional description of the article image."
+tags:
+  - philosophy
+  - memes
 draft: false
 legacyPermalink: "/2026/04/28/example-article/"
+legacyBanner: "/uploads/legacy-banner.png"
 ---
 ```
 
 Required:
 
 - `title`
+- `description`
 - `date`
+- `author`
 
 Optional:
 
-- `author`
-- `excerpt`
 - `image`
+- `imageAlt`
+- `tags`
 - `draft`
 - `legacyPermalink`
+- `legacyBanner`
 
 Rules:
 
@@ -297,12 +307,94 @@ Rules:
   overrides, and this project does not need that behavior.
 - The exact filename stem is the article slug.
 - Filename stems must be URL-safe and unique across all articles.
-- `legacyPermalink` is inert metadata. It must not affect article routing,
-  category grouping, sorting, RSS, sitemap, search, or publishing.
+- `description` is the canonical summary field. It replaces legacy `excerpt`
+  in final frontmatter.
+- `image` is the canonical article/social image field. It feeds Open Graph,
+  Twitter cards, JSON-LD, RSS/search metadata, and optional article listing UI.
+- `imageAlt` should be used when an image is shown to users or exposed through
+  metadata such as `og:image:alt` or `twitter:image:alt`.
+- `tags` are descriptive keywords. They are not the article category.
+- `legacyPermalink` is inert metadata. It exists for historical reference and
+  one-time redirect work only. It must not affect article routing, category
+  grouping, sorting, RSS, sitemap, search, or publishing.
+- `legacyBanner` is inert metadata. It exists for posterity only and must not
+  affect article rendering unless a future design explicitly adopts it.
 - `draft: true` is the only final unpublished marker.
 - `layout`, `parent`, `grand_parent`, `nav_order`, `has_children`,
-  `permalink`, `published`, `status`, `type`, `fbpreview`, `facebook`, and
-  tool-specific `meta` should be removed or migrated to one of the final fields.
+  `permalink`, `published`, `status`, `type`, `categories`, `banner`,
+  `fbpreview`, `facebook`, and tool-specific `meta` should be removed or
+  migrated to one of the final fields.
+
+### Metadata Migration Policy
+
+The metadata migration should be mechanical and easy to review. Article body
+content must not change during metadata cleanup.
+
+Fields that stay in final frontmatter:
+
+| Final field       | Purpose                                                                                               | Notes                                                                                                                                                       |
+| ----------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`           | Page title, visible heading, RSS title, Open Graph/Twitter title, JSON-LD `headline`.                 | Required. Preserve the existing value exactly except for YAML normalization.                                                                                |
+| `description`     | Meta description, Open Graph/Twitter description, RSS summary, JSON-LD `description`, search excerpt. | Required final field. Migrate from `excerpt` where available. Missing values need explicit review.                                                          |
+| `date`            | Published date, sorting, RSS date, sitemap date if used, JSON-LD `datePublished`.                     | Required. Normalize to a valid ISO-compatible date or datetime while preserving the original instant where timezone data exists.                            |
+| `author`          | Visible byline, RSS author, JSON-LD `author`.                                                         | Required. Normalize legacy author objects to a single display-name string unless a separate authors collection is intentionally added later.                |
+| `image`           | Canonical article/social image.                                                                       | Optional. Prefer the existing `image` value. It should become the source for `og:image`, `twitter:image`, JSON-LD `image`, and optional article cards.      |
+| `imageAlt`        | Accessible/social image description.                                                                  | Optional. Add only when known. Do not invent alt text during mechanical migration unless the user explicitly approves that content work.                    |
+| `tags`            | Keywords and future tag filtering.                                                                    | Optional. Preserve existing tags. Default to `[]` in the Zod schema when absent.                                                                            |
+| `draft`           | Publishing state.                                                                                     | Optional in source, default `false` in the Zod schema. `draft: true` excludes the article from generated pages, indexes, RSS, sitemap, search, and JSON-LD. |
+| `legacyPermalink` | Historical URL data.                                                                                  | Optional. Migrate from `permalink`. Runtime routing must never inspect it.                                                                                  |
+| `legacyBanner`    | Historical banner image data.                                                                         | Optional. Migrate from `banner`. Runtime rendering must not inspect it unless a future design intentionally adopts it.                                      |
+
+Fields that migrate:
+
+| Legacy field             | Final handling                                                                                                                                                                                                        |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `excerpt`                | Rename to `description`.                                                                                                                                                                                              |
+| `permalink`              | Rename to `legacyPermalink`; preserve the exact value.                                                                                                                                                                |
+| `banner`                 | Rename to `legacyBanner`; preserve the exact value as inert historical data.                                                                                                                                          |
+| `published: false`       | Replace with `draft: true`.                                                                                                                                                                                           |
+| `status: draft`          | Replace with `draft: true`.                                                                                                                                                                                           |
+| Legacy author object     | Replace with the best display-name string, normally `author.display_name` when present.                                                                                                                               |
+| Duplicate top-level keys | Collapse once, preserving the value that Jekyll/Siteleaf effectively used. The current sync script keeps the last duplicate key; the explicit migration should do the same and remove the need for sync-time cleanup. |
+
+Fields that should be removed after any useful data has been migrated:
+
+| Legacy field      | Reason                                                                                                                                                                                                                               |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `layout`          | Jekyll/Just the Docs rendering concern. Astro collection entries use Astro layouts, not Markdown `layout` frontmatter.                                                                                                               |
+| `parent`          | Jekyll/Just the Docs navigation/category concern. Final category comes from the source folder.                                                                                                                                       |
+| `grand_parent`    | Jekyll/Just the Docs navigation concern.                                                                                                                                                                                             |
+| `nav_order`       | Jekyll/Just the Docs sidebar ordering. Article sorting should use `date`; category ordering belongs in optional category metadata.                                                                                                   |
+| `has_children`    | Jekyll/Just the Docs navigation concern.                                                                                                                                                                                             |
+| `published: true` | Redundant after `draft` becomes the only publishing-state field.                                                                                                                                                                     |
+| `status: publish` | WordPress/Siteleaf import state. Redundant after `draft` becomes the only publishing-state field.                                                                                                                                    |
+| `type`            | WordPress import artifact.                                                                                                                                                                                                           |
+| `facebook`        | Legacy/social import artifact without a final use.                                                                                                                                                                                   |
+| `meta`            | Tool-specific import artifact.                                                                                                                                                                                                       |
+| `fbpreview`       | Legacy social image field. Remove it after choosing `image` as the canonical article/social image field.                                                                                                                             |
+| `categories`      | Legacy imported taxonomy. It is not the final article category. Drop `Mike`, `Seong`, and `note`; merge the remaining values into `tags` as normalized lower-case tags, avoiding case-insensitive duplicates; then remove the field. |
+
+Machine-readable output should be generated from final metadata by shared Astro
+components or typed helpers, not by article authors. The target components are:
+
+- `src/components/seo/SiteHead.astro` for document title, canonical URL,
+  description, Open Graph, and Twitter card tags.
+- `src/components/seo/ArticleJsonLd.astro` for schema.org `BlogPosting`
+  JSON-LD.
+- `src/lib/seo.ts` for testable metadata normalization and absolute URL
+  generation.
+
+The article JSON-LD should use `BlogPosting` by default. It should derive:
+
+- `headline` from `title`;
+- `description` from `description`;
+- `datePublished` from `date`;
+- `author` from normalized `author`;
+- `image` from `image`, with a site fallback only if one is intentionally
+  configured;
+- `articleSection` from the category folder;
+- `keywords` from `tags`;
+- `url` and `mainEntityOfPage` from the canonical `/articles/:slug/` route.
 
 Category metadata, if needed, should live in a separate collection:
 
@@ -319,7 +411,9 @@ src/content/categories/metamemetics.json
 ```
 
 The content collection Zod schema should validate every field in this
-frontmatter shape. Filename slug validation belongs in the content verifier or
+frontmatter shape. Use Astro's built-in Zod re-export with
+`import { z } from "astro/zod"`; no separate `zod` dependency is needed for the
+content schema. Filename slug validation belongs in the content verifier or
 loader-level checks.
 
 ## Root And Project File Audit
@@ -473,17 +567,23 @@ Article frontmatter controls metadata only:
 ```yaml
 ---
 title: "Example Article"
-date: 2026-04-28
+description: "Short summary used for social previews, search, RSS, and JSON-LD."
+date: 2026-04-28T00:00:00-04:00
 author: "Author Name"
-excerpt: "Optional summary."
 image: "/uploads/example.png"
+imageAlt: "Optional description of the article image."
+tags:
+  - philosophy
+  - memes
 draft: false
 legacyPermalink: "/2026/04/28/example-article/"
+legacyBanner: "/uploads/legacy-banner.png"
 ---
 ```
 
 `legacyPermalink` is preserved for historical reference and redirect generation,
 but it does not decide the article slug, route, category, or published status.
+`legacyBanner` is preserved for posterity only and should not drive rendering.
 
 Normal article authors should not use `slug` or `category` frontmatter. If the
 desired public URL changes, rename the file. If the article category changes,
@@ -528,15 +628,13 @@ required for all public categories.
 
 ### Reserved Content Areas
 
-Reserved folders are mostly a migration concern. In the final flat article
-collection, `notes` should not sit beside article category folders unless it is
-a separate collection.
+No reserved legacy content folders should remain in the final source tree. The
+old `docs/notes/about.md` content has moved to `src/content/pages/about.md`, and
+`docs/` has been removed.
 
-- `docs/notes/`
-
-If these remain public, migrate them to explicit pages under `src/pages/` or to
-dedicated content collections. If they are not public, remove them from the
-active content model.
+If non-article content areas are added later, they should become explicit page
+routes or dedicated content collections. They should not sit beside article
+category folders under `src/content/articles/`.
 
 ## Redirect Separation
 
@@ -576,25 +674,34 @@ module or script. That fallback must:
 
 - [x] Create `src/content/articles/` as the final article collection.
 - [x] Move article files from `docs/` into `src/content/articles/`.
-- [ ] Keep `docs/` only until `docs/notes/about.md` has a final destination.
+- [x] Move the old about page content to `src/content/pages/about.md`.
+- [x] Remove `docs/` from the active content model.
 - [x] Rename existing article files from dated `.markdown` filenames to clean
       `.md` filenames.
 - [x] Use the final desired article URL slug as the filename stem.
 - [x] Keep article body content unchanged.
 - [x] Remove transitional `topic` frontmatter from article files.
-- [ ] Rename legacy `permalink` frontmatter to `legacyPermalink` without losing
+- [x] Rename legacy `excerpt` frontmatter to canonical `description` and
+      identify any articles that still need an explicit description.
+- [x] Rename legacy `permalink` frontmatter to `legacyPermalink` without losing
       values.
-- [ ] Normalize unpublished article metadata to `draft: true`.
-- [ ] Confirm any legacy `published: false` or `status: draft` article remains
+- [x] Normalize unpublished article metadata to `draft: true`.
+- [x] Confirm any legacy `published: false` or `status: draft` article remains
       excluded from production output.
-- [ ] Clean duplicate frontmatter keys once so the sync script is no longer
+- [x] Clean duplicate frontmatter keys once so the sync script is no longer
       needed.
 - [ ] Remove Jekyll/Siteleaf/WordPress-only frontmatter fields after their data
       has either been migrated or intentionally dropped.
-- [ ] Convert author objects to the final author representation.
+- [x] Convert author objects to the final author representation.
+- [x] Preserve existing `tags` values and normalize them to a string array.
+- [x] Keep `image` as the canonical article/social image field.
+- [x] Remove legacy `fbpreview` fields after choosing `image` as the canonical
+      article/social image.
+- [x] Rename legacy `banner` frontmatter to inert `legacyBanner` metadata.
+- [x] Review legacy `categories` values, drop author/noise values, merge useful
+      values into `tags`, and remove legacy category metadata.
 - [ ] Decide whether category metadata files become
       `src/content/categories/*.json` or `src/content/categories/*.md`.
-- [ ] Move `docs/notes/about.md` to an explicit page or page content source.
 - [x] Remove unused Jekyll-era category index pages.
 - [x] Remove unused legacy dialogues content.
 - [x] Remove `docs/tree.txt`; it is not final article content.
@@ -625,9 +732,9 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 - [ ] Add an optional `categories` content collection if curated category
       display data is needed.
 - [ ] Replace the loose legacy schema with the final Zod schema.
-- [ ] Define the final author-facing fields clearly: required `title` and
-      `date`; optional `author`, `excerpt`, `image`, `draft`, and
-      `legacyPermalink`.
+- [ ] Define the final author-facing fields clearly: required `title`,
+      `description`, `date`, and `author`; optional `image`, `imageAlt`,
+      `tags`, `draft`, `legacyPermalink`, and `legacyBanner`.
 
 ### Milestone 4: Simplify Article And Category Logic
 
@@ -642,6 +749,12 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 - [ ] Filter production articles with `draft !== true`.
 - [ ] Keep temporary compatibility for legacy `published: false` and
       `status: draft` until frontmatter is normalized.
+- [ ] Add shared SEO helpers for canonical URLs, absolute image URLs, and
+      metadata normalization.
+- [ ] Add a `SiteHead.astro` component for title, description, canonical,
+      Open Graph, and Twitter card metadata.
+- [ ] Add an `ArticleJsonLd.astro` component that emits schema.org
+      `BlogPosting` JSON-LD from final article metadata.
 - [ ] Stop stripping dates from filenames in runtime logic.
 - [ ] Stop parsing `src/content/legacy/` paths.
 - [ ] Rename `LegacyEntry` and `getLegacyEntries()` to neutral names.
@@ -758,7 +871,6 @@ tests/
 Content and public assets:
 
 ```text
-docs/
 src/content/articles/
 src/content/categories/
 src/content/legacy/
@@ -820,9 +932,15 @@ MIGRATION_COMPLETION_PLAN.md
 - [ ] No final article source filenames contain legacy date prefixes unless the
       date is intentionally part of the title slug.
 - [ ] No final article frontmatter contains `layout`, `parent`,
-      `grand_parent`, `nav_order`, `has_children`, `permalink`, `published`,
-      `status`, `type`, `fbpreview`, `facebook`, or tool-specific `meta`.
+      `grand_parent`, `nav_order`, `has_children`, `excerpt`, `permalink`,
+      `published`, `status`, `type`, `categories`, `legacyCategories`,
+      `banner`, `fbpreview`, `facebook`, or tool-specific `meta`.
 - [ ] The Zod schema validates final article metadata.
+- [ ] Every final article has valid `title`, `description`, `date`, and
+      `author` metadata.
+- [ ] Article `image` values can be converted into valid absolute URLs for
+      Open Graph, Twitter cards, RSS/search metadata, and JSON-LD.
+- [ ] Article pages emit `BlogPosting` JSON-LD from final metadata.
 - [ ] No final article uses `slug` frontmatter.
 - [ ] No final article uses `category` or `topic` frontmatter.
 - [ ] `draft: true` articles are excluded from article indexes, categories, RSS,

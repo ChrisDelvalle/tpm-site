@@ -1,17 +1,13 @@
 ---
 title: GME Frenzy Hints At the New Stage of Memecultures
-date: 2021-02-02 18:51:00 +13:00
-parent: Memeculture
-nav_order: -20210202
-permalink: 2021/02/02/gme-frenzy-hints-at-the-new-stage-of-memecultures/
-layout: default
-author:
-  display_name: Seong-Young Her
-excerpt: 'A central theme of post-2015 memecultures was the gamification of memes.
+description: 'A central theme of post-2015 memecultures was the gamification of memes.
   This gave rise to Facebook memepages as well as a "meme president". Post-2020 memecultures
   now struggle with the challenge of the cope, which is an inevitable consequence
   of creating new games with a loss condition. '
+date: 2021-02-02 18:51:00 +13:00
+author: "Seong-Young Her"
 image: "/uploads/1612244326105.jpg"
+legacyPermalink: 2021/02/02/gme-frenzy-hints-at-the-new-stage-of-memecultures/
 ---
 
 Here come the classic doom and gloom /biz/ memes, now that the meme stocks are peaking and crashing one by one. 

@@ -1,23 +1,16 @@
 ---
 title: 'From Outrage to Dicks Out to Dead Celebrity: The Evolution of the Great Ape
   Harambe'
+description: "‘R.I.P. Harambe’ no longer means R.I.P. Harambe, but rather, ‘we remember
+  a dead fictional being based off a real dead being inside of a living meme’."
 date: 2016-10-13 12:00:00 Z
-parent: History
-permalink: 2016/10/13/what-we-talk-about-harambe/
-nav_order: -20161013
+author: "Thomas Rososchansky"
+image: "/assets/2016-10-13-what-we-talk-about-harambe/header.png"
 tags:
 - memes
 - Harambe
 - post-ironic
-type: post
-author:
-  display_name: Thomas Rososchansky
-excerpt: "‘R.I.P. Harambe’ no longer means R.I.P. Harambe, but rather, ‘we remember
-  a dead fictional being based off a real dead being inside of a living meme’."
-image: "/assets/2016-10-13-what-we-talk-about-harambe/header.png"
-fbpreview: http://thephilosophersmeme.com/assets/2016-10-13-what-we-talk-about-harambe/header.png
-status: publish
-layout: post
+legacyPermalink: 2016/10/13/what-we-talk-about-harambe/
 ---
 
 <img src="{{ site.baseurl }}/assets/2016-10-13-what-we-talk-about-harambe/header.png">

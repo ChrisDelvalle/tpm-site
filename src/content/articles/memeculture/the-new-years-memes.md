@@ -1,10 +1,12 @@
 ---
 title: The New Year's Memes
+description: Memes are made by shitposters that live in the meatspace, which makes them
+  affected by human schedules. It's a trivial point, but the schema of memes as semi-independent
+  entities that float around on the sea of the Internet is too popular for this point
+  not to be insightful.
 date: 2019-01-03 12:30:00 +13:00
-parent: Memeculture
-nav_order: -20190103
-layout: default
-permalink: 2019/01/03/the-new-years-memes/
+author: "Seong-Young Her"
+image: "/uploads/49121023_10215984413395083_3710986489752977408_n.jpg"
 tags:
 - memes
 - Australia
@@ -17,16 +19,7 @@ tags:
 - hyperstition
 - meme magic
 - ontology
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: Memes are made by shitposters that live in the meatspace, which makes them
-  affected by human schedules. It's a trivial point, but the schema of memes as semi-independent
-  entities that float around on the sea of the Internet is too popular for this point
-  not to be insightful.
-image: "/uploads/49121023_10215984413395083_3710986489752977408_n.jpg"
+legacyPermalink: 2019/01/03/the-new-years-memes/
 ---
 
 The new year mood is bringing in new memes, aside from the obvious memes about things that usually happen during new years. Here's an example of a meme with that new year mood which doesn't directly mention the new year. 

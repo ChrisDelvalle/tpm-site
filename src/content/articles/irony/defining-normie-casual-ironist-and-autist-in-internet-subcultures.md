@@ -1,10 +1,12 @@
 ---
 title: Defining ‘Normie’, ‘Casual’, ‘Ironist’ and ‘Autist’ In Internet Subcultures
+description: The following is my take on doing the same for online subcultures. I do this
+  by clarifying the definitions of three highly popular terms used on the Internet
+  to describe different kinds of subcultural participants, and clarifying the concept
+  of the ironist in the context of online subcultures.
 date: 2017-03-27 15:47:00 +13:00
-parent: Irony
-layout: default
-permalink: 2017/03/27/defining-normie-casual-ironist-and-autist-in-internet-subcultures/
-nav_order: -20170327
+author: "Seong-Young Her"
+image: "/uploads/four%20types%20of%20users%20in%20internet%20subcultures.png"
 tags:
 - subculture
 - users
@@ -12,17 +14,7 @@ tags:
 - sociology
 - normie
 - autist
-author:
-  email: seongyher@gmail.com
-  display_name: Seong-Young Her
-  first_name: Seong-Young
-  last_name: Her
-excerpt: The following is my take on doing the same for online subcultures. I do this
-  by clarifying the definitions of three highly popular terms used on the Internet
-  to describe different kinds of subcultural participants, and clarifying the concept
-  of the ironist in the context of online subcultures.
-image: "/uploads/four%20types%20of%20users%20in%20internet%20subcultures.png"
-fbpreview: http://thephilosophersmeme.com/uploads/four-types-of-users.jpg
+legacyPermalink: 2017/03/27/defining-normie-casual-ironist-and-autist-in-internet-subcultures/
 ---
 
 Attempts at typologizing subcultural demographics are not new (for a clear and interesting example, see [‘Geeks, MOPs, and sociopaths in subculture evolution’ on Meaningness](https://meaningness.com/geeks-mops-sociopaths)). But online subcultures are different from ordinary subcultures. The following is my take on doing the same for online subcultures. I do this by clarifying the definitions of three highly popular terms used on the Internet to describe different kinds of subcultural participants, and clarifying the concept of the ironist in the context of online subcultures.

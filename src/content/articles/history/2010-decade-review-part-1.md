@@ -1,10 +1,12 @@
 ---
 title: '2010''s Decade Review, Part 1: The Origin of 2010''s Memecultures'
+description: The importance of the 2010's to meme history was not in its novelty but its
+  scale. During the 2010's, the world reached a cultural boiling point as the underground
+  spilled out irreversibly into the mainstream and destroyed the boundaries between
+  the two.
 date: 2020-01-04 11:01:00 +13:00
-parent: History
-nav_order: -20200104
-layout: default
-permalink: 2020/01/04/2010-decade-review-part-1/
+author: "Seong-Young Her"
+image: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
 tags:
 - memetics
 - Ironic meme
@@ -16,20 +18,8 @@ tags:
 - irony
 - metairony
 - Korea
-author:
-  login: username
-  email: email@wherever.com
-  display_name:
-  - Seong-Young Her
-  first_name: Philosopher
-  last_name: Of The Meme
-excerpt: The importance of the 2010's to meme history was not in its novelty but its
-  scale. During the 2010's, the world reached a cultural boiling point as the underground
-  spilled out irreversibly into the mainstream and destroyed the boundaries between
-  the two.
-image: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
-banner: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
-fbpreview: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
+legacyPermalink: 2020/01/04/2010-decade-review-part-1/
+legacyBanner: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
 ---
 
 The memetic history of the 2010's can be divided into six Eras, starting from the influences that precipitated into the ironic meme movement and arriving at the beginning of postirony.

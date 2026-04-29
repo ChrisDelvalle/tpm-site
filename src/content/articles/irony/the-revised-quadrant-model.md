@@ -1,12 +1,9 @@
 ---
 title: The Revised Quadrant Model
+description: Revised model of the four quadrants model of irony.
 date: 2016-01-18 10:10:21 Z
-layout: default
-nav_order: -20160118
-parent: Irony
-permalink: 2016/01/18/the-revised-quadrant-model/
-categories:
-- note
+author: "Seong-Young Her"
+image: "/uploads/2x2-meme-table.png"
 tags:
 - art
 - digital art
@@ -18,18 +15,7 @@ tags:
 - post-irony
 - meta-irony
 - layers of irony
-layout: post
-type: post
-status: publish
-author:
-  login: crouchingrooster
-  email: crouchingrooster@hotmail.com
-  display_name: S. Y. Her
-  first_name: Seong
-  last_name: Her
-excerpt: Revised model of the four quadrants model of irony.
-image: "/uploads/2x2-meme-table.png"
-fbpreview: http://thephilosophersmeme.com/uploads/2x2-meme-table.png
+legacyPermalink: 2016/01/18/the-revised-quadrant-model/
 ---
 
 This article shows the progression of the Quadrant Model from 2015 to 2016.

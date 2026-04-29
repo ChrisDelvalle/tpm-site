@@ -1,14 +1,10 @@
 ---
 title: Jeremy Cahill (Metamer) Dismissed for Serious Misconduct
+description: JCC dismissed for serious misconduct
 date: 2021-06-14 13:05:00 +12:00
-layout: default
-parent: History
-nav_order: -20210614
-permalink: 2021/06/14/jeremy-cahill-metamer-dismissed-for-serious-misconduct/
-author:
-  display_name: The Philosopher's Meme
-excerpt: JCC dismissed for serious misconduct
+author: "The Philosopher's Meme"
 image: "/uploads/UqzwM3u_400x400.jpg"
+legacyPermalink: 2021/06/14/jeremy-cahill-metamer-dismissed-for-serious-misconduct/
 ---
 
 Jeremy Cahill has been dismissed from The Philosopher's Meme, in response to his illegal, abusive, and harassing behaviour which threatened the safety of other participants.

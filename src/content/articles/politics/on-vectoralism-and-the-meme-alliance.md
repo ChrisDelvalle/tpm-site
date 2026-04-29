@@ -1,30 +1,22 @@
 ---
 title: On Vectoralism & the Meme Alliance's General Strike
-date: 2016-10-26 12:00:00 Z
-parent: Politics
-permalink: 2016/10/26/on-vectoralism-and-the-meme-alliance/
-nav_order: -9
-tags:
-- memepages
-- politics
-- zucc
-- Meme Alliance
-- vectoralism
-type: post
-author:
-  display_name: Anonymous
-excerpt: We have seen in recent months the blossoming of a protest movement in Weird
+description: We have seen in recent months the blossoming of a protest movement in Weird
   Facebook, a Meme Alliance of users and memepages wearing pink profile-pictures --
   Facebook flags upside-down, signaling S.O.S. -- demanding satisfaction for Zuckerberg’s
   censorship of their content via automated moderation systems. Though their efforts
   have served as a coming-out of sorts for meme-scene activists, the failure of the
   Meme Alliance’s tactics to register demands a reconsideration of the terrain of
   struggle.
+date: 2016-10-26 12:00:00 Z
+author: "Anonymous"
 image: "/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/1_thumb.jpg"
-fbpreview: http://www.thephilosophersmeme.com/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/chooseyourclass-fb.jpg
-status: publish
-facebook: true
-layout: post
+tags:
+- memepages
+- politics
+- zucc
+- Meme Alliance
+- vectoralism
+legacyPermalink: 2016/10/26/on-vectoralism-and-the-meme-alliance/
 ---
 
 <img src="{{ site.baseurl }}/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/chooseyourclass.png">
