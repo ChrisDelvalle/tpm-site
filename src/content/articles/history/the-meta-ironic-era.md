@@ -27,7 +27,7 @@ Large pages (~250,000 by 2017 standards; ~20,000 by 2014 standards) run into the
 
 A page must ride the wave of normie reach to become massive (~500,000 by 2017 standards; 50,000 by 2014 standards). The number of high-literacy users on Facebook that can find a page is restricted both by their scarcity and the algorithm. Even a page with a mixed audience will slow in its growth unless it caters to normies, who outnumber ironists in almost every case. Pages that reach this stage have little hope of establishing a high-literacy community without extreme measures. A textbook example of such a measure is Special Meme Fresh (a large page at the heart of its pagecluster) which bans anyone who tags a friend in the comments. This also helps promote post sharing instead of tagging, for extra reach.
 
-![no taggo](/uploads/15134582_201527606967415_8484454118822905078_n.jpg)
+![no taggo](<@assets/articles/the-meta-ironic-era/15134582_201527606967415_8484454118822905078_n.jpg>)
 
 As such, the success of a post on a page signals different things about the quality of the post depending on the context. Despite its unreliability, viral success continues to inform meme creators' tastes. This is because the alternative of considering unquantified aspects of a meme is far more challenging. Although one of the most popular topics of discussion on the Internet, it has rarely been studied with aesthetically motivated creators in mind. Ironically, normies dominate this topic both academically (such as in virality studies and marketing) and in popular publications (often little more than listicles showcasing some "meme of the week") and even then rely on general popularity as the conclusive metric of quality.
 

@@ -45,6 +45,7 @@ migration implementation details.
   article, and block components.
 - `src/lib/`: content, route, metadata, and domain helpers.
 - `src/styles/`: global foundation styles. Keep this small.
+- `src/assets/`: source assets that should go through Astro's asset pipeline.
 - `public/`: static files copied directly to build output.
 - `scripts/`: repository maintenance, migration, sync, and verification scripts.
 - `dist/`: generated build output. Do not edit by hand.
@@ -194,11 +195,15 @@ Use `is:inline` sparingly. It is appropriate for tiny boot scripts such as
 initial theme setup, but it skips Astro's script processing. Normal component
 scripts should let Astro process, bundle, deduplicate, and optimize them.
 
-Images need explicit care. New component-controlled images should use Astro
-image tooling where possible, stable dimensions or aspect ratios, responsive
-sizes, useful alt text, and deliberate loading priority. Do not add oversized
-uploads or meaningful background images when a real image element would be more
-performant and accessible.
+Images need explicit care. New project-owned images should default to
+`src/assets/` so Astro can process them. Article-owned images should usually be
+organized under `src/assets/articles/<article-slug>/`, shared article images
+under `src/assets/shared/`, and site UI images under `src/assets/site/`. Use the
+`@assets/*` alias for source asset references. New component-controlled images
+should use Astro image tooling where possible, stable dimensions or aspect
+ratios, responsive sizes, useful alt text, and deliberate loading priority. Do
+not add oversized uploads or meaningful background images when a real image
+element would be more performant and accessible.
 
 ## Quality Gate
 

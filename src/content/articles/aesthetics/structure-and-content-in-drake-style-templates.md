@@ -15,7 +15,7 @@ tags:
 legacyPermalink: 2018/09/11/structure-and-content-in-drake-style-templates/
 ---
 
-![41412464_10215198568029440_6155454791125303296_n.jpg](/uploads/41412464_10215198568029440_6155454791125303296_n.jpg)
+![41412464_10215198568029440_6155454791125303296_n.jpg](<@assets/articles/structure-and-content-in-drake-style-templates/41412464_10215198568029440_6155454791125303296_n.jpg>)
 
 The joke here is obviously that the two templates are 'the same meme' with different styles, and that the Kanye-style template is about to overtake the Drake-style template. I think it's made funnier by the excited expression on Kanye's face in the third panel which makes him look like he's imagining how cool it would be to have his own template just like Drake's.
 
@@ -26,7 +26,7 @@ Two dimensions stand out that make the two templates the same:
 
 But templates with the aversion/affirmation structure is one of the oldest templates around. It goes back at least to the Gaijin4Koma, a four-panel comic from around 2004 with IGN reporters sitting on a couch. In the meme, the reporters react with boredom to whatever is in the first panel and with excitement to whatever is in the third panel.
 
-![2a7.jpg](/uploads/2a7.jpg)
+![2a7.jpg](<@assets/articles/structure-and-content-in-drake-style-templates/2a7.jpg>)
 
 It's interesting to note that the Gaijin4Koma template was made and read vertically from top to bottom, in classic Japanese four-panel comic format, and understood as a comic.
 
@@ -51,7 +51,7 @@ _Seong-Young Her_:
 
 Daniel has it right. A diagram's meaning doesn't necessarily change as the viewer progresses through from the start to the end, although I can think of plenty of examples that expressly achieve this, such as flow charts. Comics are 'sequential art' and their panel order matters a lot.
 
-![41426730_10215207366129387_7431534938211483648_n.jpg](/uploads/41426730_10215207366129387_7431534938211483648_n.jpg)
+![41426730_10215207366129387_7431534938211483648_n.jpg](<@assets/articles/structure-and-content-in-drake-style-templates/41426730_10215207366129387_7431534938211483648_n.jpg>)
 
 ### Thread 2
 
@@ -72,6 +72,6 @@ I can't say for certain but older screenshot memes tended to be more comics-like
 _Leandro Vieira Steffen_:
 
 for real though... good thinking
-![71144987_10219351074664957_7701413498927972352_n.jpg](/uploads/71144987_10219351074664957_7701413498927972352_n.jpg)
+![71144987_10219351074664957_7701413498927972352_n.jpg](<@assets/articles/structure-and-content-in-drake-style-templates/71144987_10219351074664957_7701413498927972352_n.jpg>)
 
 (Originally posted to [Diagram Memes](https://www.facebook.com/groups/diagrammemes/posts/490042968136817))

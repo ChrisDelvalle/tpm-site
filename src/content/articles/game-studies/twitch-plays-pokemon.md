@@ -19,7 +19,7 @@ legacyPermalink: 2016/10/26/twitch-plays-pokemon/
 
 _Originally published 24 February 2014._
 
-![](/assets/2016-10-27-twitch-plays-pokemon/1.png)
+![](<@assets/articles/twitch-plays-pokemon/1.png>)
 
 <p>I stayed up all night, again, playing Pokemon Red with the Internet hivemind,<br>
 ~60,000 monkeys banging on keyboards: up/down/left/right/a/b/start.</p>
@@ -28,7 +28,7 @@ Over the past twelve days 600,000 unique users have participated in a live-strea
 
 <div class="caption">How he flails about! What fun!</div>
 
-![](/assets/2016-10-27-twitch-plays-pokemon/2.gif)
+![](<@assets/articles/twitch-plays-pokemon/2.gif>)
 
 The 3rd Millennium has brought with it endless possibilities for collective experience and, therefore, endless experiments in mass-politics. Each new project offers a different method for the users to organize their world through action, and each new project propels itself by bringing order to those actions (in the sense of _natura naturans_, the necessary activity of physical laws).
 
@@ -36,7 +36,7 @@ If we are to take hyperspace seriously, we must understand that those platforms 
 
 <div class="caption">The use of any particular platform is a political act in favor of its nature.</div>
 
-![](/assets/2016-10-27-twitch-plays-pokemon/3.png)
+![](<@assets/articles/twitch-plays-pokemon/3.png>)
 
 _Twitch Plays Pokemon_ is a unique case study as it is explicitly aware of its own entanglement in politics, offering users the choice between two different methods of organizing their activities: Anarchy and Democracy.
 
@@ -60,7 +60,7 @@ Though democratic modes of production can offer directed progress towards a part
 We must take this conflict of ideologies seriously!<br>
 The meme-machine scene sees it: <i>“the paradigm of the era.”</i></div>
 
-![](/assets/2016-10-27-twitch-plays-pokemon/4.png)
+![](<@assets/articles/twitch-plays-pokemon/4.png>)
 
 Indeed it is the paradigm of the era if, perhaps, eras are now just the briefest of moments. The most drastic of changes has occurred in the low-art, shit-culture swill of social media platforms: an almost total shift in how the labors of users are organized in their co-production of a hyperspace -- a change in the sorting algorithm -- that has steered imgboard culture, if not most of Online mass-culture, from Anarchy to Democracy.
 
@@ -70,7 +70,7 @@ Do 4chan and reddit still require an introduction? Everyone seems to be in on th
 to measure the collective’s single action in and of a particular present?<br>
 Our stream speaks, now, not with each mouth -- <i>all for one</i> -- but as the Mouth -- <i>one for all.</i></div>
 
-![](/assets/2016-10-27-twitch-plays-pokemon/5.png)
+![](<@assets/articles/twitch-plays-pokemon/5.png>)
 
 We may talk about other kinds of streams, like the Libertarian freedom of Tumblr & Twitter (private property + filtered consumption) or the Sovereigns of the Blogosphere, but today, as always, pressing political action is taking place in the commons.
 
@@ -86,7 +86,7 @@ This is not to say that ‘sort-by-popular’ algorithms have no place, or that 
 The horrors of the 20th Century deeply scarred the Left,<br>
 but to engage in radical egalitarianism is to recognize its possibility.<br></div>
 
-![](/assets/2016-10-27-twitch-plays-pokemon/6.gif)
+![](<@assets/articles/twitch-plays-pokemon/6.gif>)
 
 Leftists in the 3rd Millennium will not find success in dated, mechanical-Marxist prophecies of the Coming Revolution, “necessarily” borne out of the “contradictions of Capitalism” -- a quaint politics of simpler times. The uprisings around the globe have been inspiring, whatever their result, but we do not mistake them for global insurrection. The interwoven spectacle of capitalism and democracy is, for all intents and purposes, unassailable and inescapable: what fool, today, would consider conditions favorable for a war of maneuver?
 

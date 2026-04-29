@@ -18,7 +18,7 @@ legacyPermalink: 2021/02/02/gme-frenzy-hints-at-the-new-stage-of-memecultures/
 ---
 
 Here come the classic doom and gloom /biz/ memes, now that the meme stocks are peaking and crashing one by one.
-![2021-02-02_brainstop-pink-wojak-zoomer.png](/uploads/2021-02-02_brainstop-pink-wojak-zoomer.png)
+![2021-02-02_brainstop-pink-wojak-zoomer.png](<@assets/articles/gme-frenzy-hints-at-the-new-stage-of-memecultures/2021-02-02_brainstop-pink-wojak-zoomer.png>)
 (I made this one, but you'll find many more elsewhere.)
 
 Big loser stocks always end up producing the best memes on that board. My hypothesis is that Reddit algorithm favours positive affect while posts with negative affect get the bumps on 4chan. Sorting by controversial on a subreddit seems to bring it closer to imageboards in this regard, but I haven't seen any empirical verification of this.

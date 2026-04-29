@@ -35,7 +35,7 @@ It's intriguing to me that, just as with the ["Promiscuous Theory, Puritan Pract
 
 Compare this with Azuma Hiroki's argument that otaku economies consume metanarratives (rather than grand narratives, which are dead) which are constructed ad hoc based on a database of narrative materials provided by original works that instigate the subcultures. For instance, the anime series _Neon Genesis Evangelion_ provides the database of characters, world building, concepts, and so on; otakus can draw upon this database in order to produce fan fiction and fan art, which often deviate wildly from the original anime. In Azuma's model, otakus do not consume the work itself but rather the database which lays behind the work (both canonical and unofficial). Otaku culture involves puritan theory and promiscuous practice. In theory, all unofficial material is secondary to the canonical works. In practice, fan-made (or even canon-contradicting mediamix) is nonetheless welcomed and consumed.
 
-![](/uploads/dialecticaldreams.jpg)
+![](<@assets/articles/homesteading-the-memeosphere/dialecticaldreams.jpg>)
 
 _Meme by [Material Memes and Dialectical Dreams](https://www.facebook.com/permalink.php?story_fbid=540642679634365&id=382154135483221) (2018)._
 

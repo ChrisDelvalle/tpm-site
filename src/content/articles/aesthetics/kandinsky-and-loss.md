@@ -16,7 +16,7 @@ tags:
 legacyPermalink: 2017/12/04/kandinsky-and-loss/
 ---
 
-![loss_art_simplified.png](/uploads/loss_art_simplified.png)
+![loss_art_simplified.png](<@assets/articles/kandinsky-and-loss/loss_art_simplified.png>)
 
 Wassily Kandinsky, a Russian-born artist who taught at Bauhaus, sought to depart from impressionism towards abstract expressionism. The drawings of the dancer Gret Palucca, an early pioneer of modern dance, are from an essay he wrote on the topic called 'Dance Curves'.
 

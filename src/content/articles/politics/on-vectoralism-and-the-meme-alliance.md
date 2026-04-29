@@ -20,7 +20,7 @@ tags:
 legacyPermalink: 2016/10/26/on-vectoralism-and-the-meme-alliance/
 ---
 
-![](/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/chooseyourclass.png)
+![](<@assets/articles/on-vectoralism-and-the-meme-alliance/chooseyourclass.png>)
 
 <p>We have seen in recent months the blossoming of a protest movement in Weird Facebook, users and memepages wearing pink profile-pictures -- Facebook flags upside-down, signaling S.O.S. -- demanding satisfaction for Zuckerberg’s censorship of their content via automated moderation systems. This “<a class="hover" href="/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/1.png"><img src="/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/1.png" alt="" />Meme Alliance</a>” engaged in a variety of actions, from complaints to regulatory bodies and Facebook employees to sabotage to a general strike. Though their efforts have served as a <a class="hover" href="/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/2.jpg"><img src="/assets/2016-10-27-on-vectoralism-and-the-meme-alliance/2.jpg" alt="" />coming-out of sorts</a> for meme-scene activists, expanding and strengthening the social graph of users fighting for just self-governance on the Facebook platform, the tactics being used to effect change were, acknowledgedly, ineffective.</p>
 

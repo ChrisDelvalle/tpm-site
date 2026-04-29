@@ -27,9 +27,13 @@ small, typed, and predictable.
 - Use the article filename stem as the article slug.
 - Treat the first folder under `src/content/articles/` as the article category,
   but not as part of the public article URL.
-- Keep static public assets under `public/`.
-- Keep optimized component-only images under `src/assets/` if Astro image
-  processing is desired.
+- Move project-owned images into `src/assets/` so Astro can process, optimize,
+  and validate them.
+- Use `src/assets/articles/<article-slug>/` by convention for article-owned
+  images, with `src/assets/shared/` for genuinely shared article images and
+  `src/assets/site/` for site UI images.
+- Keep `public/` only for files that intentionally need stable root URLs or must
+  be copied unchanged.
 - Remove root-level Jekyll files and duplicate static asset roots once the
   Astro equivalents are authoritative.
 
@@ -91,6 +95,10 @@ src/
     categories/
       index.astro
       [category].astro
+assets/                Source assets processed by Astro.
+  articles/            Article-owned images, usually grouped by article slug.
+  shared/              Images intentionally shared across articles.
+  site/                Site UI and homepage images.
 public/                Static files served exactly by URL.
 ```
 
@@ -453,8 +461,19 @@ are migrated.
   - Optional editor convenience. Current tasks target Bun/Astro scripts.
   - Keep only if the project wants editor task configuration in git.
 
+- `src/assets/`
+  - Target home for project-owned images that should go through Astro's asset
+    pipeline.
+  - Article images should usually live under
+    `src/assets/articles/<article-slug>/`, but the folder match is an authoring
+    convention rather than an enforced rule.
+  - Shared article images should live under `src/assets/shared/`.
+  - Site UI and homepage images should live under `src/assets/site/`.
+
 - `public/assets/` and `public/uploads/`
-  - Required while article Markdown references `/assets/...` and `/uploads/...`.
+  - Temporary legacy compatibility locations while article Markdown still
+    references `/assets/...` and `/uploads/...`.
+  - Treat these as migration input, not the final source of truth.
 
 - `public/favicon.svg`
   - Current browser tab icon.
@@ -487,15 +506,13 @@ are migrated.
 
 - root `assets/`
   - Legacy static asset source.
-  - Remove after every required public URL asset exists under `public/assets/`
-    and any `astro:assets` imports are moved to `src/assets/` or replaced with
-    public URLs.
+  - Remove after referenced project-owned images have been moved into
+    `src/assets/` or explicitly classified as public URL files.
 
 - root `uploads/`
   - Legacy static upload source.
-  - Remove after every required public URL upload exists under `public/uploads/`
-    and any `astro:assets` imports are moved to `src/assets/` or replaced with
-    public URLs.
+  - Remove after referenced project-owned images have been moved into
+    `src/assets/` or explicitly classified as public URL files.
 
 - `public/.gitkeep`
   - No longer needed because `public/` contains real files.
@@ -793,13 +810,25 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 
 ### Milestone 7: Normalize Static Assets
 
-- [ ] Decide the final source of truth for static URL assets:
-      `public/assets/` and `public/uploads/`.
-- [ ] Verify `public/assets/` contains every referenced `/assets/...` file.
-- [ ] Verify `public/uploads/` contains every referenced `/uploads/...` file.
-- [ ] Move homepage/design images currently imported from root `assets/` and
-      root `uploads/` into `src/assets/` if they should be optimized by
-      `astro:assets`.
+- [ ] Keep `@assets/*` mapped to `src/assets/*` for Markdown and component
+      image references.
+- [ ] Use `scripts/plan-asset-migration.mjs` to inventory `/assets/...`,
+      `/uploads/...`, root `assets/`, and root `uploads/` references before
+      moving files.
+- [ ] Move every singly owned article image that is safe to rewrite into
+      `src/assets/articles/<article-slug>/`.
+- [ ] Move images referenced by multiple articles into `src/assets/shared/`,
+      after resolving any filename conflicts deliberately.
+- [ ] Move homepage/design images into `src/assets/site/`.
+- [ ] Track raw HTML image tags, hover-image links, frontmatter image metadata,
+      query-string image references, missing files, and destination conflicts as
+      manual migration cases.
+- [ ] Convert raw HTML image tags to Markdown or MDX where doing so preserves
+      article behavior.
+- [ ] Migrate frontmatter image metadata to the final Astro content image model
+      before removing the corresponding public files.
+- [ ] Keep `public/` only for files that intentionally need stable root URLs or
+      must be copied unchanged.
 - [ ] Replace any remaining root `assets/` or root `uploads/` imports.
 - [ ] Remove root `assets/`.
 - [ ] Remove root `uploads/`.

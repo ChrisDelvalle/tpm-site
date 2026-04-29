@@ -501,3 +501,25 @@ on the chosen host and Cloudflare configuration.
       needed as a reference.
 - [x] Confirm no history scrub is needed for `Unrelated Project/` because it was
       not tracked and has no matching commit history.
+
+## Milestone 20: Source Asset Migration
+
+- [x] Establish `src/assets/articles/`, `src/assets/shared/`, and
+      `src/assets/site/` as the target source asset structure.
+- [x] Add the `@assets/*` alias for Markdown and component references to
+      `src/assets/*`.
+- [x] Document that new project-owned images should default to `src/assets/`,
+      while `public/` is only for files that intentionally need stable root
+      URLs or must be copied unchanged.
+- [x] Add a dry-run asset migration planner that maps `/assets/...`,
+      `/uploads/...`, root `assets/`, and root `uploads/` references to target
+      `src/assets/` destinations.
+- [x] Have the planner classify safe Markdown image moves separately from manual
+      cases such as raw HTML image tags, hover-image links, frontmatter image
+      metadata, query-string image references, code imports, missing files, and
+      destination conflicts.
+- [ ] Execute the safe asset moves with clean git diffs.
+- [ ] Convert or otherwise handle manual raw HTML image references.
+- [ ] Migrate frontmatter image metadata to the final Astro content image model.
+- [ ] Remove obsolete root/public legacy asset duplicates after all references
+      are migrated or deliberately classified as public URL files.

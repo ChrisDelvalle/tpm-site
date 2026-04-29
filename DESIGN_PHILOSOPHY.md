@@ -369,7 +369,12 @@ Use Astro image tooling where possible:
 
 - Use `<Image />` or `<Picture />` for layout images and component-controlled
   images.
-- Prefer images stored where Astro can optimize them.
+- Prefer images stored in `src/assets/` where Astro can optimize them.
+- Use `src/assets/articles/<article-slug>/` by convention for article-owned
+  images, `src/assets/shared/` for images shared across articles, and
+  `src/assets/site/` for site UI images.
+- Use the `@assets/*` alias for source image references in Markdown and
+  components.
 - Avoid adding new optimizable assets directly to `public/` unless they must be
   copied unchanged.
 - Provide useful `alt` text, or `alt=""` only for decorative images.

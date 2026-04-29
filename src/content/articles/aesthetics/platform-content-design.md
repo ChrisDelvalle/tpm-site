@@ -22,15 +22,15 @@ It's a great example of how shaky the definition of 'Internet meme' as 'a funny 
 
 I made these Siphonaptera (the Flea) images with no intention of posting each one independently.
 ![25289626_10213166218221965_5340695023336171185_n.jpg](/uploads/25289626_10213166218221965_5340695023336171185_n.jpg)
-![25157909_10213166218141963_763702513746986891_n.jpg](/uploads/25157909_10213166218141963_763702513746986891_n.jpg)
-![25442903_10213166218181964_7130385691842258542_n.jpg](/uploads/25442903_10213166218181964_7130385691842258542_n.jpg)
-![25299431_10213166218821980_5133043539185894239_n.jpg](/uploads/25299431_10213166218821980_5133043539185894239_n.jpg)
-![25358459_10213166218981984_4660872292872827797_o.jpg](/uploads/25358459_10213166218981984_4660872292872827797_o.jpg)
+![25157909_10213166218141963_763702513746986891_n.jpg](<@assets/articles/platform-content-design/25157909_10213166218141963_763702513746986891_n.jpg>)
+![25442903_10213166218181964_7130385691842258542_n.jpg](<@assets/articles/platform-content-design/25442903_10213166218181964_7130385691842258542_n.jpg>)
+![25299431_10213166218821980_5133043539185894239_n.jpg](<@assets/articles/platform-content-design/25299431_10213166218821980_5133043539185894239_n.jpg>)
+![25358459_10213166218981984_4660872292872827797_o.jpg](<@assets/articles/platform-content-design/25358459_10213166218981984_4660872292872827797_o.jpg>)
 
 If I were posting on an imageboard where I can only post one image per post, I might have replied to each previous post in order to join them into a single thread.
 
 A primitive example of the same kind are combo threads on imageboards. You can see the Slowpoke example here.
-![25152433_10213166299744003_7310654686132518406_n.jpg](/uploads/25152433_10213166299744003_7310654686132518406_n.jpg)
+![25152433_10213166299744003_7310654686132518406_n.jpg](<@assets/articles/platform-content-design/25152433_10213166299744003_7310654686132518406_n.jpg>)
 
 The unit is made up of three image files over three posts, in one thread. It is a single image made up of three image-files. Is it one meme? Are these three memes that must accompany each other to be complete? Are there multiple 'levels' of memetic content at play in every instance of a shitpost?
 

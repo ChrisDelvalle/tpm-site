@@ -19,7 +19,7 @@ legacyPermalink: 2018/03/27/memes-jokes-and-visual-puns/
 
 ## Introduction
 
-![meme-jokes-puns-1.png](/uploads/meme-jokes-puns-1.png)
+![meme-jokes-puns-1.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-1.png>)
 
 <div class="caption">Fig. 1: An old meme chart</div>
 
@@ -33,13 +33,13 @@ There are many types of puns, from the more common homophonic, or “same-sound�
 
 For example, here is one of the first things you get if you google visual puns:
 
-![meme-jokes-puns-2.png](/uploads/meme-jokes-puns-2.png)
+![meme-jokes-puns-2.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-2.png>)
 
 <div class="caption">Fig. 2: A “Visual” Pun, according to Google.</div>
 
 However, is this even a visual pun at all? You could totally have just relayed the joke verbally and it wouldn't lose anything in the translation! It’s simply illustrating a normal, homophonic pun—a nice background, if you will. I think that most memes which involve puns are like this. For example:
 
-![meme-jokes-puns-3.png](/uploads/meme-jokes-puns-3.png)
+![meme-jokes-puns-3.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-3.png>)
 
 <div class="caption">Fig. 3: “Kerchoo” (2017)</div>
 
@@ -47,13 +47,13 @@ Here it’s just a bowl(of cereal)/bowl(weed pipe) pun. While the funny “kerch
 
 But what about something like this?
 
-![meme-jokes-puns-4.png](/uploads/meme-jokes-puns-4.png)
+![meme-jokes-puns-4.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-4.png>)
 
 <div class="caption">Fig. 4: “Can Eye Fist Uranus” (2017)</div>
 
 This is what is called a “rebus,” from the Latin _non verbis, sed rebus_, which means "not by words but by things." In essence, a picture of something is substituted for something else when conveying a written message. A rebus can be a type of pun—instead of substituting a word with a similar sound but different meaning, you’re substituting a picture. It’s all the same thing basically, except that we are starting to depart from language in the conventional, words-and-letters sense. And that’s exactly where I’m headed!
 
-![meme-jokes-puns-5.png](/uploads/meme-jokes-puns-5.png)
+![meme-jokes-puns-5.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-5.png>)
 
 <div class="caption">Fig. 5: “One must imagine Sisyphus happy.” (2017)</div>
 
@@ -69,7 +69,7 @@ While the previous examples of memes move beyond conventional linguistic puns an
 
 Here is what I consider a purely visual pun:
 
-![meme-jokes-puns-6.png](/uploads/meme-jokes-puns-6.png)
+![meme-jokes-puns-6.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-6.png>)
 
 <div class="caption">Fig. 6: “10 Rubin’s Vases” </div>
 
@@ -77,7 +77,7 @@ This type of drawing is called a Rubin’s Vase, also known as a figure–ground
 
 Now let’s take a look at how this concept might work as a meme:
 
-![meme-jokes-puns-7.png](/uploads/meme-jokes-puns-7.png)
+![meme-jokes-puns-7.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-7.png>)
 
 <div class="caption">Fig. 7: “Monkey Haircut Collage” (2017)</div>
 
@@ -93,7 +93,7 @@ Another thing that arises from the unstructured form is that the elements which 
 
 It operates purely on [gestalt principles](https://en.wikipedia.org/wiki/Gestalt_psychology) of [perception](http://facweb.cs.depaul.edu/sgrais/gestalt_principles.htm), [grouping](http://graphicdesign.spokanefalls.edu/tutorials/process/gestaltprinciples/gestaltprinc.htm), continuity, etc., and while some of the components might individually have some semantic content, I don't believe it's particularly relevant to the "interpretation" of the meme as a whole. There isn't much to interpret in the first place—it's pure visual play and the only meaningful relationships between the characters are their physical interactions within the image. It's like a group of people passing a ball around but there aren't really any rules to the game, there's just physical interactions.
 
-![meme-jokes-puns-8.png](/uploads/meme-jokes-puns-8.png)
+![meme-jokes-puns-8.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-8.png>)
 
 <div class="caption">Fig. 8: Syntactical Structure in a Collage Meme</div>
 
@@ -104,13 +104,13 @@ Meme templates give structure and define relationships between the elements with
 However, it's a pretty simple relationship. The images being compared are meme templates themselves, with their own complex internal systems, yet they are just treated as objects in the grand scheme of the meme, they don't have any particular role in the system beyond just being "one template, among many." Their order is arbitrary and mutually interchangeable.
 
 We must ascend higher.
-![meme-jokes-puns-9.png](/uploads/meme-jokes-puns-9.png)
+![meme-jokes-puns-9.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-9.png>)
 
 <div class="caption">Fig. 9: Semantic Structure in a Collage Meme</div>
 
 Besides illustrating relationships between its components, the final function of a template is also to confer valuations to the components themselves—the blank spots function as value placeholders. For example, this drake meme template constructs a simple comparison of A vs B. The top panel gives it a positive value, claiming that the image in the corresponding placeholder represents a good thing, and the bottom panel gives it a negative value, claiming that the image in the corresponding placeholder represents a bad thing. This comparison can also be done ironically, reversing the implied values. Whenever an image is inserted into the value placeholder, it acquires the value embedded in that cell.
 
-![meme-jokes-puns-10.png](/uploads/meme-jokes-puns-10.png)
+![meme-jokes-puns-10.png](<@assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-10.png>)
 
 <div class="caption">Fig. 10: Value Placeholders in Memes</div>
 

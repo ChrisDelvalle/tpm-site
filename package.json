@@ -22,6 +22,8 @@
     "migrate:articles:categories": "bun scripts/migrate-articles-to-categories.mjs",
     "migrate:articles:metadata": "bun scripts/normalize-article-metadata.mjs",
     "migrate:articles:rename": "bun scripts/rename-legacy-articles.mjs",
+    "migrate:assets": "bun scripts/plan-asset-migration.mjs",
+    "migrate:assets:write": "bun scripts/plan-asset-migration.mjs --write",
     "migrate:content:html": "bun scripts/normalize-markdown-html.mjs",
     "migrate:content:html:write": "bun scripts/normalize-markdown-html.mjs --write",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",

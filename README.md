@@ -99,7 +99,7 @@ The `pages` content collection does not use the legacy mirror. Edit
    slug.
 3. Add frontmatter with `title`, `date`, and the current transitional
    `permalink`.
-4. Put images or other static files under `public/assets/` or `public/uploads/`.
+4. Put new article images under `src/assets/articles/<article-slug>/`.
 5. Run the validation commands.
 
 Example:
@@ -153,19 +153,29 @@ the current transition.
 
 ## Images And Static Files
 
-Files in `public/` are copied to the site root at build time.
+Use `src/assets/` for new project-owned images so Astro can process and
+validate them. Article-owned images should usually live under a folder matching
+the article slug:
 
-Use root-relative paths in Markdown:
-
-```md
-![Alt text](/assets/example/image.png)
+```text
+src/assets/articles/example-article-title/
+  diagram.png
 ```
 
-or:
+Use the `@assets` alias in Markdown:
 
 ```md
-![Alt text](/uploads/example.png)
+![Alt text](@assets/articles/example-article-title/diagram.png)
 ```
+
+The slug-matching asset folder is an organization convention, not an enforced
+rule. Authors can reference any asset under `src/assets/` when an image is
+shared or belongs somewhere else.
+
+Files in `public/` are copied to the site root at build time without Astro image
+processing. Use `public/` only for files that intentionally need stable
+root-relative URLs, such as favicons, `robots.txt`, deploy host files, or
+downloads that should not be transformed.
 
 Legacy `{{ site.baseurl }}` references are stripped during Astro Markdown
 rendering, and legacy `/glossary/` links are rewritten to

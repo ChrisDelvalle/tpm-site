@@ -12,7 +12,7 @@ tags:
 legacyPermalink: 2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/
 ---
 
-![](/uploads/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg)
+![](<@assets/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg>)
 
 "A serious and good philosophical work could be written consisting entirely of jokes." This is possibly Wittgenstein's most popular line, alongside "the limits of my language mean the limits of my world" and "whereof one cannot speak, thereof one must be silent"; the kind of line that gets printed on mugs on Etsy.
 

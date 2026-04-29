@@ -39,17 +39,17 @@ Here are some examples:
 
 ![](/uploads/2019-04-03_thephilosophersmeme.com_catgirl-01.png)
 
-![](/uploads/2019-04-03_thephilosophersmeme.com_catgirl-02.png)
+![](<@assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-02.png>)
 
-![](/uploads/2019-04-03_thephilosophersmeme.com_catgirl-03.png)
+![](<@assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-03.png>)
 
 <img src="/uploads/2019-04-05 12_31_47-catgirl meme - Google Search.png" alt="">
 
-![](/uploads/2019-04-03_thephilosophersmeme.com_catgirl-05.png)
+![](<@assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-05.png>)
 
 The other images begin with an elaboration, but the first image doesn't. It doesn't even have text except for "!!?", which means the viewer doesn't have to worry about reading the meme. The punctuation marks have the added benefit of being international. I strongly prefer the first image over the rest. I already know the trope of [catgirls](https://tvtropes.org/pmwiki/pmwiki.php/Main/CatGirl) and [cat ear headbands](https://tvtropes.org/pmwiki/pmwiki.php/Main/AnimalEaredHeadband), and so I can understand the subversion of that trope without elaboration. If someone didn't know the trope, they would either take longer to infer the joke from context or simply not understand the image. They might misinterpret the message as suggesting that catgirls without human ears should wear prosthetics.
 
-![](/uploads/2019-04-03_thephilosophersmeme.com_catgirl-06.png)
+![](<@assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-06.png>)
 
 Any additional information, such as that the character is a human from a [mid- to late-2000's slice of life manga and anime](https://en.wikipedia.org/wiki/K-On!) and that there is an inside joke about her catlike personality, _does_ make the joke funnier because it makes the punchline even more unexpected. But since the notion that humans do not have cat ears unless they are wearing them on a headband is a standard belief, the additional information _does not_ influence the comprehension of the comic.
 
@@ -97,7 +97,7 @@ But not only are narratives experienced in linear time, they are always contextu
 
 Note that traditional branching narratives are different from non-linear sequential narratives. A non-linear sequential narrative is what happens when the player reloads a save file. The player's choice of save files is about what can or can't happen next in the game as the consequence. Inherent in this choice is the choice of what has happened in the game up to the savepoint. The choice of which save file to load is the choice of what has happened in the past, for the purpose of making certain choices possible in the future.
 
-![](/uploads/2019-04-03_thephilosophersmeme.com_catgirl-bottleneck.png)
+![](<@assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-bottleneck.png>)
 
 This is analogous to the choice between various interpretive contexts for a given instance of a meme. The audience chooses among many _potential_ contexts and interprets the image they are currently viewing. The image constrains the potential pasts and the possible futures of the meme, bottlenecking its narrative branches. This also means that the choice to post a certain meme is the choice to evoke a particular set of scenarios in the audience's mind, in the same way that sending someone a [Civilization](https://civilization.com) save file allows them to play a game with a very specific set of narratologically significant constraints.
 
