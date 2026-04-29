@@ -15,6 +15,7 @@ import {
 } from "../lib/routes";
 
 const [latest] = await getArticles();
+const latestTitle = latest ? entryTitle(latest) : "";
 ---
 
 <BaseLayout canonicalPath="/">
@@ -22,8 +23,7 @@ const [latest] = await getArticles();
     <Image
       src={heroImage}
       alt="The Philosopher's Meme"
-      widths={[384, 768, 1200]}
-      sizes="(max-width: 48rem) calc(100vw - 1.75rem), 720px"
+      layout="constrained"
       loading="eager"
       fetchpriority="high"
     />
@@ -42,9 +42,8 @@ const [latest] = await getArticles();
     <h2>Announcements</h2>
     <Image
       src={announcementImage}
-      alt=""
-      widths={[256, 384, 640]}
-      sizes="(max-width: 48rem) calc(100vw - 1.75rem), 360px"
+      alt="Announcement Image"
+      layout="constrained"
     />
     <p>
       We've set up a <a href="https://patreon.com/thephilosophersmeme"
@@ -59,14 +58,9 @@ const [latest] = await getArticles();
     latest && (
       <section class="content-section">
         <h2>Most Recent Post</h2>
-        <Image
-          src={recentImage}
-          alt=""
-          widths={[256, 384, 640]}
-          sizes="(max-width: 48rem) calc(100vw - 1.75rem), 360px"
-        />
+        <Image src={recentImage} alt={latestTitle} layout="full-width" />
         <h3>
-          <a href={articleUrl(latest.id)}>{entryTitle(latest)}</a>
+          <a href={articleUrl(latest.id)}>{latestTitle}</a>
         </h3>
         <p class="archive-meta">{formatDate(entryDate(latest))}</p>
         {excerpt(latest) && <p>{excerpt(latest)}</p>}
