@@ -22,8 +22,6 @@ legacyPermalink: 2015/11/29/undertale-review/
 <blockquote>"Seeing the hope and happiness that undertale has brought to people...<br />
 it fills me with determination." — Toby Fox</blockquote>
 
-<!--more-->
-
 <div>
 <p>Undertale is a game that's very difficult to convince people to play, which is a huge shame because it's probably one of the most affecting games produced in the last 10 years.</p>
 <p>The kind of language that's often used to describe these indie games applies here; charming, witty, engrossing and will genuinely surprise you in a knowing yet unpretentious manner. The problem is those words get bandied around so much that there's probably little point in saying any of this. Most of us have played plenty of games that were described like that, and even if they were brilliant (Braid, Fez, Papers Please, Gone Home, To the Moon, Thomas Was Alone etc) it's difficult to shake a level of cynicism and weariness at the fact so many games seem -at first glance- so similar in tone. All I can say is that Undertale is genuinely different in a way that has to be experienced to really understand.</p>

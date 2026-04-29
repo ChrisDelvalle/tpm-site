@@ -17,8 +17,6 @@ legacyPermalink: 2015/12/01/hotline-miami-and-player-complicity/
 
 <blockquote><em>"Do you like hurting other people?"</em></blockquote>
 
-<!--more-->
-
 I.
 
 Hotline Miami is top-down pixel-graphics game set in 1980s Miami. The setting and graphics create a vibrant and psychedelic environment which is further energised by the fantastic electro-disco soundtrack. The player controls a character that fans of the game have named 'Jacket'. The game begins in Jacket's apartment when he finds a message on his answering phone that tells him about a package that has been delivered. Outside the apartment is a box containing a mask and an address with some vaguely-worded instructions. From there, the player gets in Jacket's car and drives to the address, finding it full of armed enemies. Jacket dons the mask and proceeds to infiltrate the building, violently contending with the people inside. Each stage follows this same situation: a closed space that Jacket must clear by defeating every enemy on every floor of the building before leaving and being given a performance grade.
@@ -64,4 +62,4 @@ The most obvious theme is turning a critical eye towards violence in popular med
 
 "Well, I'd like to not have to kill, but I don't have a choice: there's only one way to play the game! Is the violence not the intention of the game developer and thus ultimately not my responsibility?" You might protest, and miss the point.
 
-You're right that _the game_ forces you to kill, but _nobody_ forced you to play the game.
+You're right that _the game_ forces you to kill, but *nobody* forced you to play the game.
