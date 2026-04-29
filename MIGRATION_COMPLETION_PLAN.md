@@ -95,10 +95,10 @@ src/
     categories/
       index.astro
       [category].astro
-assets/                Source assets processed by Astro.
-  articles/            Article-owned images, usually grouped by article slug.
-  shared/              Images intentionally shared across articles.
-  site/                Site UI and homepage images.
+  assets/              Source assets processed by Astro.
+    articles/          Article-owned images, usually grouped by article slug.
+    shared/            Images intentionally shared across articles/pages.
+    site/              Site UI and homepage images.
 public/                Static files served exactly by URL.
 ```
 
@@ -829,7 +829,8 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
       `src/assets/articles/<article-slug>/`.
 - [x] Move images referenced by multiple articles into `src/assets/shared/`,
       after resolving any filename conflicts deliberately.
-- [ ] Move homepage/design images into `src/assets/site/`.
+- [x] Move homepage/design images into `src/assets/site/` and reuse existing
+      article assets where the homepage references article-owned imagery.
 - [x] Track raw HTML image tags, hover-image links, frontmatter image metadata,
       query-string image references, missing files, and destination conflicts as
       manual migration cases.
@@ -840,7 +841,7 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
 - [x] Finish canonical frontmatter `image` metadata migration to Astro
       `image()` paths.
 - [x] Move unused `public/assets/` and `public/uploads/` files to
-      `unused-assets/public/` so they no longer ship in `dist/`.
+      `unused-assets/` so they no longer ship in `dist/`.
 - [x] Add `scripts/find-duplicate-images.mjs` and
       `scripts/prune-unused-duplicate-images.mjs` for exact byte duplicate
       detection and safe unused legacy duplicate removal.
@@ -848,9 +849,9 @@ src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-f
       `unused-assets/` where an active or retained copy exists.
 - [ ] Keep `public/` only for files that intentionally need stable root URLs or
       must be copied unchanged.
-- [ ] Replace any remaining root `assets/` or root `uploads/` imports.
-- [ ] Remove root `assets/`.
-- [ ] Remove root `uploads/`.
+- [x] Replace any remaining root `assets/` or root `uploads/` imports.
+- [x] Remove root `assets/`.
+- [x] Remove root `uploads/`.
 - [ ] Remove `public/.gitkeep`.
 - [ ] Keep `public/favicon.svg` as the authoritative favicon unless replaced.
 - [ ] Decide whether `public/CNAME` is required by the deploy host.
@@ -860,11 +861,12 @@ Remaining asset cleanup after the MDX image migration:
 
 - 3 raw `<img>` tags still point at remote Discord CDN URLs and are intentionally
   not moved by the local asset migration script.
-- Homepage/design imports still reference root `assets/` or `uploads/`; move
-  them into `src/assets/site/` before removing those root directories.
-- `bun run assets:duplicates` should now report only intentional active
-  duplicates: article-local shared image copies and the temporary homepage
-  import from root `uploads/`.
+- Homepage/design imports now reference `src/assets/site/` or
+  `src/assets/shared/`.
+- Shared images referenced by multiple articles/pages now live in
+  `src/assets/shared/`.
+- `bun run assets:duplicates` should now report no exact active-image
+  duplicates.
 - `public/` now keeps only `CNAME`, `favicon.svg`, `robots.txt`, and `.gitkeep`;
   decide whether `public/CNAME` and `.gitkeep` should remain.
 - `legacyBanner` remains inert historical metadata and can keep legacy-looking
@@ -873,7 +875,7 @@ Remaining asset cleanup after the MDX image migration:
 ### Milestone 8: Remove Jekyll And Non-Astro Leftovers
 
 - [ ] Remove root `_config.yml`.
-- [ ] Remove root `index.md`.
+- [x] Remove root `index.md`.
 - [ ] Remove `script/build`.
 - [ ] Remove tracked `.env`; encode non-secret defaults in scripts/docs instead.
 - [ ] Add `.env*` to `.gitignore`, with an exception only for an intentional
@@ -936,8 +938,7 @@ Content and public assets:
 src/content/articles/
 src/content/categories/
 src/content/legacy/
-public/assets/
-public/uploads/
+unused-assets/
 public/CNAME
 public/favicon.svg
 public/robots.txt

@@ -7,9 +7,11 @@
   "scripts": {
     "assets:duplicates": "bun scripts/find-duplicate-images.mjs",
     "assets:duplicates:prune": "bun scripts/prune-unused-duplicate-images.mjs",
+    "assets:locations": "bun scripts/verify-image-asset-locations.mjs",
+    "assets:shared": "bun scripts/find-shared-assets.mjs",
     "audit": "bun audit --audit-level=high",
     "build": "bun run sync:content && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
-    "check": "bun run verify:content && bun run typecheck && bun run lint && bun run lint:docs && bun run lint:packages && bun run format && bun run deadcode && bun run test",
+    "check": "bun run verify:content && bun run assets:locations && bun run assets:shared && bun run typecheck && bun run lint && bun run lint:docs && bun run lint:packages && bun run format && bun run deadcode && bun run test",
     "check:release": "bun run check && bun run build && bun run verify && bun run validate:html && bun run test:e2e && bun run test:a11y && bun run test:perf && bun run coverage && bun run audit && bun run secrets",
     "coverage": "bun test tests/lib --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",
     "deadcode": "knip --no-config-hints",

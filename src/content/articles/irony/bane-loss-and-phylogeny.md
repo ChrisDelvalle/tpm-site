@@ -57,7 +57,7 @@ The Lamarckian model on the other hand posits that the use and disuse of traits 
 
 The result is a tendency and demand for increasing complexity, in classic Lamarckian fashion. Loss Edits were crippled by their skewed reliance on the Darwinian mode of brute competition which focused on an economy of proliferation and high fidelity, losing out to the low-fi strategy of Baneposting which satisfied the evolutionary demands of both the Mainstream (for consistency; through the reliance on a canonical blueprint of the original scene) and the Underground (for novelty; through a wider variety of creative interpretations). As such, the Darwinian model doesn't work very well when it comes to the infidelitous, Ironic memes of the Underground. Here is a model I propose instead:
 
-![phylomemetic tree iii](../../../assets/articles/bane-loss-and-phylogeny/phylomemetic-tree-iii1.png)
+![phylomemetic tree iii](../../../assets/shared/phylomemetic-tree-lamarckian.png)
 
 The externalist theory of memes, which posits that memes exist independently of minds, becomes much more relevant as the focus of Internet Meme culture moves on from Pre-Irony into Irony and beyond. The memotypes spread cybernetically; their constituent memes ideated by brains, encoded and spread through the Internet as objects, to be decoded by other brains. The internalist theory (that memes exist only as features within human brains which spread from person to person via cultural exchange) quickly loses ground. For memes to spread, it is not necessary that everybody is in on the joke—hence the disparity in the dominant evolutionary strategies and pattern in the Mainstream and the Underground (Darwinian and Lamarckian, respectively) as shown in the Neo-Lamarckian model.
 

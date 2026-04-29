@@ -252,7 +252,7 @@ opposed to content.
 
 ## The Phylomemetic Tree
 
-![](../../../assets/articles/glossary-1-dot-0/phylomemetic-tree-lamarckian.png)
+![](../../../assets/shared/phylomemetic-tree-lamarckian.png)
 
 The Phylomemetic Tree is a diagram showing the evolution of Internet memes
 from their inception as emoticons and chain e-mails through to increasingly

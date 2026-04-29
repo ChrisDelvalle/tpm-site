@@ -9,7 +9,7 @@ description:
   is unaware of the growing community of Ironic memes.
 date: 2015-12-18 11:01:24
 author: "Thomas Rososchansky"
-image: "../../../assets/articles/the-ironic-normie/ironicnormie.png"
+image: "../../../assets/shared/normiesironics.png"
 tags:
   - "Ironic meme"
   - "irony"
@@ -25,7 +25,7 @@ The title ‘normie’ as the marker for a nonconformist of memes is not enough,
 
 The Ironic meme culture has dispersed into immensely different levels of knowledge over trending memes. From these levels, we can mark two different mentalities that are polar opposites. The first, which demarcates the less knowledgeable, is the conclusive. This mentality is normie-based and limits one’s ability (or willingness) to move further into their knowledge of meme culture. Conclusive users are presumptive and naïve. They do not seek out but allow the jokes and formats to reach them through popularity or word of mouth. The conclusive user believes what they see is at its finalised stage of humour, repeating the joke to the point where it becomes stale and moving on only when they are presented with something new. The second type of mentality is what pushes the Ironic meme culture to evolve, sometimes into increasingly obscure areas as well: the inconclusive. The most keen to find new content, the inconclusive user’s grasp of general meme history shows their awareness of how memes are mobile and hard to claim. With this acknowledgment comes their proneness to dismiss a meme as canon after a certain amount of time, already paranoid about how much contact the meme may have with normie circles which, in turn, pushes the user to find newer content.
 
-![Screen Shot 2015-12-17 at 13.39.33.png](../../../assets/articles/the-ironic-normie/ironicnormie.png)
+![Screen Shot 2015-12-17 at 13.39.33.png](../../../assets/shared/normiesironics.png)
 
 Although introduced to Ironic meme culture, the normie does not decline from social activity; the normie does not sink into his or her chair with a bag of Doritos in reach; the normie does not lose friends (because their tendencies remain the same and they, as the conclusive users, do not seek out memes instead of focusing on their real lives). In other words, the definition of normie remains the same, though the user is now aware of ironic content. A great reason the tendencies don’t change is due to the ironic content being presented in normie pages on Facebook, which usually specialise in pre-Ironic memes or clickbait news. Because the ironic content is delivered in the same medium as pre-ironic content, the mentality of conclusiveness is uncorrupted, giving the normie no reason to seek content further than where they are already given it. Another source from which the normie comes across ironic content is through a popular Weird Facebook page that has developed an enormous following. This still does not affect conclusive tendencies because the page needed to be popular enough for the normie to discover without ‘seeking’ and, additionally, the growing numbers usually force the page to take a less obscure and more relatable approach to humour, which does not encourage any effort in understanding the joke’s meaning either.
 

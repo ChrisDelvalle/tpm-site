@@ -533,7 +533,7 @@ on the chosen host and Cloudflare configuration.
 - [x] Finish canonical frontmatter `image` migration to Astro `image()` relative
       source paths.
 - [x] Move unused `public/assets/` and `public/uploads/` files into root
-      `unused-assets/public/` with clean git moves.
+      `unused-assets/` with clean git moves.
 - [x] Add duplicate-image detection and unused-duplicate pruning scripts for
       byte-identical image cleanup.
 - [x] Remove obsolete root/public legacy asset duplicates after all references

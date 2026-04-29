@@ -3,7 +3,7 @@ title: Homesteading the Memeosphere
 description: "Who owns the memes? How dare we ask such a laughable question?"
 date: 2022-04-04 23:07:34 +13:00
 author: "Seong-Young Her"
-image: "../../../assets/articles/homesteading-the-memeosphere/2020-06-24_fossilised-bug_resized.png"
+image: "../../../assets/shared/2020-06-24_fossilised-bug_resized.png"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - memes
@@ -45,7 +45,7 @@ Nevertheless, there are hidden assumptions of ownership and property within meme
 
 The memecultural esotericist taboo discourages being exoteric about your love for memes and meme culture, perhaps because "it's cringe" or because it ostensibly "will ruin them". This taboo is not only nonsensical, but dangerous too. It's too late for this kind of esotericism. The concept of memes as popular cultural products are now mainstream without a shred of doubt, but memecultures still vary wildly. That diversity is a good thing; the received wisdom of subcultural esotericism going unchecked is not. Without more memeculturalists themselves "stooping to the level of normies" and earnestly engaging with the philosophy of memes, the work of defining memes and meme culture will be left to outsiders.
 
-![Gondola looking into an fossilised bug trapped in amber.](../../../assets/articles/homesteading-the-memeosphere/2020-06-24_fossilised-bug_resized.png)
+![Gondola looking into an fossilised bug trapped in amber.](../../../assets/shared/2020-06-24_fossilised-bug_resized.png)
 
 I think that many memes have great value and significance, historically and culturally, as well as intrinsically, but only when they are healthy and alive. A meme folder is dead without the rest of the memetic ecosystem to express it. The outgroup-first perspectives provided by outsiders to memecultures will prioritise what makes all memecultures the same. It will focus on aspects that affect outsiders the most, namely money and politics, and pick out readily accessible parts of memecultures that can be conveniently archived and cited as exemplar specimen.
 
