@@ -9,7 +9,7 @@ tags:
 legacyPermalink: 2019/06/30/how-to-digitally-coauthor-articles-in-philosophy-class/
 ---
 
-# Introduction
+## Introduction
 
 In this design document, I present a group assignment activity for philosophy students at the undergraduate level, which can be applied in tandem with existing curricula. The design consists of a way to standardise the work of each individual student such that each student’s contributions to the group assignment fits in seamlessly with the other team members’ contributions, and a way to apply the system to the specific course material being assessed. In the activity, students form a team of 3 to 5 members to co-author an essay and contribute to a pool of resources shared among the entire class. The shared pool of resources is built using a combination of a library for citation materials (using Zotero), initially seeded with assigned readings which will be discussed online using a collaborative discussion app (using a private NowComment group). Each student works on just a single premise for the entire duration of the project, developing the premise by adding supporting evidence and developing the argument. They must work together in order to make sure that there are no contradictions between any of the premises developed by the team, as well as cooperating with other teams in order to improve the work of the entire class in order to defeat the tutor’s own counterarguments.
 
@@ -19,9 +19,9 @@ It is unclear that there is a pressing need for training in collaborative work f
 
 According to a dataset collected by Joshua Knobe (2015) on the citation count of the most cited articles published in the top 20 philosophy journals between 2009 and 2013, 108 of the 394 sampled articles had more than one author. According to a list collected by Brian Weatherson (2013), 11 of 34 most cited articles between 1993 and 2013 had more than one author. While these statistics do not support even a correlation between coauthorship and citation count for articles in general, let alone a causal link between the number of authors and the number of citations, it does support the case for collaboration as a viable strategy for academic research in philosophy. Despite the associated costs of introducing a new method of learning, namely resistance against group work from students, the various benefits (Laal & Ghodsi, 2011) of collaborative learning and the learning activities only available to a team of students justify the extra work. Digital methods can greatly reduce the workload on behalf of the educator and add another practical dimension to the work that will benefit the students. Furthermore, philosophy presents unique advantages to other disciplines in that arguments can be formalised in such a way that they are interoperable within the same logical system.
 
-# Activity Design
+## Activity Design
 
-## Instructions for the Tutor
+### Instructions for the Tutor
 
 The activity consists of students working in teams of three to five on an argument with two to four premises and a conclusion in order to develop it through collaboration and iteration. The argument structure is provided by the tutor in advance, and varies from team to team. At the end of each week, the students review the other teams’ progress and provide feedback and counterarguments using their own material and resource pool.
 
@@ -34,7 +34,7 @@ The goal of the activity is to craft a well supported and thought out argument t
 5. Assign each team an argument template in the form of premises and a conclusion.
 6. Explain the assignment in detail using the Assignment Instructions below.
 
-## Assignment Instructions
+### Assignment Instructions
 
 In this assignment, you will co-author an essay with your teammates and contribute to a resource library together with the whole class. Your task is to develop an argument with your teammates in order to defeat the counterposition that your lecturer will develop. You will also have the opportunity to strengthen the argument based on weekly feedback from students in the other teams.
 
@@ -65,7 +65,7 @@ Rules:
   - **Your contribution to your own section of the essay**, based on its quality and how well it works with the other parts of the essay
   - How well **the whole class** argues against the opposition essay
 
-## Learning Outcomes
+### Learning Outcomes
 
 The expected learning outcomes of this group assignment are:
 
@@ -75,13 +75,13 @@ The expected learning outcomes of this group assignment are:
 - Students will improve their ability to formalise and analyse arguments
 - Students will improve their ability to give and receive feedback
 
-## Logistics
+### Logistics
 
 The group assignment is intended for use in a philosophy classroom at the undergraduate level. The assignment is organised in weekly intervals, and can last anywhere from two weeks to the entire duration of the course. At least three students and one tutor is required for the activity, and five students per team is ideal. Basic computer and internet access is necessary. Zotero and NowComment are both free, and support many useful functions that will help students work together across teams.
 
 The more the students learn about the different features of the tools (e.g. the use of tags), the more effective the activity will be. The proportion of the philosophy aspect to the digital humanities aspect can be varied depending on the needs of the course, and the activity instructions provided above is the minimum viable model for introducing the latter into a straight philosophy environment. The skills of the tutor in facilitating the group activities is fairly important to make the assignment work, especially given that arts students do not handle group assignments well. The tutor should familiarise themselves with the tools beforehand.
 
-## Grading the Students’ Work
+### Grading the Students’ Work
 
 As mentioned in the Assignment Instructions, the marking criteria are: the student’s contribution to the shared resources; the student’s contribution to the overall development process; the student’s contribution to their own section of the essay; and the class’s attack on the opposition essay. Each part is evenly weighted.
 
@@ -91,9 +91,9 @@ The assignment is not marked on the basis of the end product alone (namely, the 
 
 In order to achieve the effects described above, the tutor should exercise some discretion and independent judgment as to what counts as a contribution to the shared resources, and what counts as part of the team’s development process, and so on.
 
-# The Digital Tools
+## The Digital Tools
 
-## NowComment
+### NowComment
 
 NowComment is a collaborative annotation and discussion app which allows users to discuss a document using threaded comments. Users may highlight a section of the document and start a comment thread associated with the specific section. It works best with Word files but can also handle PDF files. Although users may also edit the document, the use of versioned documents with comment-based feedback will probably be more appropriate for the activity. It supports multimedia (images, video, audio). It can also be made to work with learning management systems such as Moodle (used by University of Canterbury).
 
@@ -107,7 +107,7 @@ The usefulness of this tool depends on a high level of participation on behalf o
 
 Most importantly, the threaded comments should be used to facilitate the constant updating and improvement of the students’ work. Beyond postgraduate theses in which the students receive routine feedback from the supervisors, students seldom get to revisit their assignments to improve it once it has been marked. The effect of closely supervised writing could be achieved, at a fraction of the cost in the tutor’s time and effort, through a system of back and forth conversation with the student responsible for the writing. This process of conscious rewriting would train the students to learn and think far more deeply about a given topic than the typical churn of essays promotes.
 
-## Zotero
+### Zotero
 
 Zotero allows users to work together in a group to create libraries of citations together. It supports file attachments and attached comments, although the comment function is far inferior compared to NowComment and best left unused for this activity. Users can sort the citations using collections, tags, and relations. Collections work like hierarchical playlists: they are organised like folders and sub-folders, but adding a citation into more than one of those folders does not duplicate it, as it would a file added into multiple folders. Tags can be anything from type to rating, and can also be assigned colours and priorities, up to nine tags and priority numbers each. Relations link citations together, and is usually reserved for linking book chapters to books or for different versions of the same document. In the activity, it could be used to link different versions and parts of each team’s essay together.
 
@@ -117,7 +117,7 @@ Collections provide an effective way of sorting the citations. In the activity, 
 
 Zotero could also be used to provide additional dimensions to the activity which reflect the course focus. For instance, a course on aesthetics might include building a library of artworks as part of the assignment, and each team could have its own art curator. A course on ethics might incorporate creating a collection of hypothetical ethical dilemmas written by the students as part of the assignment. Material produced through discussions using NowComment could be added as their own collections, or as related content to the particular article that the discussions happened around.
 
-# Conclusion
+## Conclusion
 
 The two tools described above, used as part of the group assignment activity, lay the foundations for a method of mass collaboration among philosophers. Whereas collaboration at scale is effectively built into the sciences, most work in the humanities is inherently unscalable. Certain scalable activities, such as contributing to a shared library or the enrichment of metadata, are discipline-agnostic and can be readily adopted by humanists. New digital methods in the humanities are promising in their potential to make scalable what was hitherto unscalable. For instance, macroanalysis (Jockers, 2013) and distant reading allow researchers to analyse an indefinite number of texts through the use of computational methods. Whereas the conventional method of close reading would have only allowed a researcher to become deeply familiar with a few hundred texts over their entire career at most, distant reading allows the researcher to analyse hundreds of thousands of texts for patterns.
 
@@ -138,7 +138,7 @@ The most important benefit of the collaborative method introduced in the activit
 
 The model of digital philosophy founded on equating arguments with functions in a code library is epistemologically and ideologically biased towards the analytic tradition. It would naturally select for arguments that can be expressed in the standardised form of premises leading up to a conclusion, and skew the practice towards more readily digitised thought. Digital humanities as a whole is open to the same types of critique. Whether such criticisms make sense is an empirical and philosophical question, perfectly suited for digital philosophy to handle through mass collaboration.
 
-# References
+## References
 
 Alfano M. (2018). “Digital Humanities for History of Philosophy: A Case Study on Nietzsche”. In: L. levenberg, T. Neilson & D. Rheams (eds), Research Methods for the Digital Humanities. Palgrave Macmillan, Cham, Switzerland.
 
