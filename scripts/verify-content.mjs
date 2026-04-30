@@ -3,29 +3,40 @@ import path from "node:path";
 
 import matter from "gray-matter";
 
-const contentDir = path.resolve("src/content/articles");
-const publicDir = path.resolve("public");
-const categorySources = new Set([
-  "aesthetics",
-  "game-studies",
-  "history",
-  "irony",
-  "memeculture",
-  "metamemetics",
-  "philosophy",
-  "politics",
-]);
-const imageFields = ["banner", "fbpreview", "image"];
+const articleDir = path.resolve("src/content/articles");
+const categoryDir = path.resolve("src/content/categories");
+const urlSafeSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const requiredFields = ["title", "description", "date", "author"];
+const bannedFields = [
+  "banner",
+  "category",
+  "categories",
+  "excerpt",
+  "facebook",
+  "fbpreview",
+  "grand_parent",
+  "has_children",
+  "layout",
+  "meta",
+  "nav_order",
+  "parent",
+  "permalink",
+  "published",
+  "slug",
+  "status",
+  "topic",
+  "type",
+];
 
-async function listMarkdownFiles(dir) {
+async function listFiles(dir, pattern) {
   const entries = await readdir(dir, { withFileTypes: true });
   const files = [];
 
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      files.push(...(await listMarkdownFiles(fullPath)));
-    } else if (/\.mdx?$/i.test(entry.name)) {
+      files.push(...(await listFiles(fullPath, pattern)));
+    } else if (pattern.test(entry.name)) {
       files.push(fullPath);
     }
   }
@@ -33,36 +44,16 @@ async function listMarkdownFiles(dir) {
   return files;
 }
 
-function relativeContentPath(file) {
-  return path.relative(contentDir, file);
+function relativeArticlePath(file) {
+  return path.relative(articleDir, file);
 }
 
-function topLevelFolder(file) {
-  return relativeContentPath(file).split(path.sep)[0] ?? "";
+function filenameStem(file) {
+  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
 }
 
-function isDatedPermalink(value) {
-  return (
-    typeof value === "string" &&
-    /^\/?\d{4}\/\d{2}\/\d{2}\/[^/]+\/?$/.test(value)
-  );
-}
-
-function articleSlug(file, data) {
-  const legacyPermalink = data.legacyPermalink ?? data.permalink;
-  if (isDatedPermalink(legacyPermalink)) {
-    return legacyPermalink.match(/^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/)?.[1];
-  }
-
-  return relativeContentPath(file)
-    .replace(/\.(md|mdx)$/i, "")
-    .replace(/(^|\/)\d{4}[-_]\d{2}[-_]\d{2}[-_]/, "$1");
-}
-
-function isDraft(data) {
-  return (
-    data.published === false || data.status === "draft" || data.draft === true
-  );
+function categorySlug(file) {
+  return relativeArticlePath(file).split(path.sep)[0] ?? "";
 }
 
 function isValidDate(value) {
@@ -86,87 +77,113 @@ async function pathExists(file) {
   }
 }
 
-async function assetReferenceExists(file, url) {
-  if (typeof url !== "string" || !url.startsWith("/")) {
-    if (typeof url !== "string") {
-      return true;
-    }
-
-    if (url.startsWith("http://") || url.startsWith("https://")) {
-      return true;
-    }
-
-    return pathExists(path.resolve(path.dirname(file), url));
+async function sourceAssetExists(file, reference) {
+  if (typeof reference !== "string") {
+    return true;
   }
 
-  const decoded = decodeURIComponent(url.split("#")[0].split("?")[0]).replace(
-    /^\//,
-    "",
-  );
+  if (reference.startsWith("http://") || reference.startsWith("https://")) {
+    return true;
+  }
 
-  return pathExists(path.join(publicDir, decoded));
+  if (reference.startsWith("/")) {
+    return false;
+  }
+
+  return pathExists(path.resolve(path.dirname(file), reference));
 }
 
-const files = await listMarkdownFiles(contentDir);
+const articleFiles = await listFiles(articleDir, /\.mdx?$/i);
+const categoryFiles = await listFiles(categoryDir, /\.json$/i);
 const issues = [];
 const seenSlugs = new Map();
-let articleCount = 0;
 let draftCount = 0;
 
-for (const file of files) {
-  const relativePath = relativeContentPath(file);
-  const folder = topLevelFolder(file);
-
-  if (!categorySources.has(folder)) {
+for (const file of categoryFiles) {
+  const slug = path.basename(file, ".json");
+  if (!urlSafeSlugPattern.test(slug)) {
     issues.push(
-      `${relativePath}: unknown top-level content folder "${folder}"`,
+      `src/content/categories/${path.basename(file)}: category metadata filename is not URL-safe`,
     );
   }
+}
 
+for (const file of articleFiles) {
+  const relativePath = relativeArticlePath(file);
+  const slug = filenameStem(file);
+  const category = categorySlug(file);
   const { data } = matter(await readFile(file, "utf8"));
-  const isArticle = isDatedPermalink(data.legacyPermalink ?? data.permalink);
 
-  for (const field of imageFields) {
-    if (!(await assetReferenceExists(file, data[field]))) {
-      issues.push(
-        `${relativePath}: ${field} points to missing asset ${data[field]}`,
-      );
-    }
+  if (!urlSafeSlugPattern.test(slug)) {
+    issues.push(`${relativePath}: filename stem is not URL-safe`);
   }
 
-  if (!isArticle) {
-    continue;
+  if (!urlSafeSlugPattern.test(category)) {
+    issues.push(`${relativePath}: category folder is not URL-safe`);
   }
 
-  articleCount += 1;
-  if (isDraft(data)) {
-    draftCount += 1;
-  }
-
-  if (typeof data.title !== "string" || data.title.trim() === "") {
-    issues.push(`${relativePath}: article is missing a non-empty title`);
-  }
-
-  if (!isValidDate(data.date)) {
-    issues.push(`${relativePath}: article is missing a valid date`);
-  }
-
-  if (!categorySources.has(folder)) {
-    issues.push(
-      `${relativePath}: article is not inside a known category folder`,
-    );
-  }
-
-  const slug = articleSlug(file, data);
-  const previous = slug ? seenSlugs.get(slug) : undefined;
-  if (!slug) {
-    issues.push(`${relativePath}: could not derive article slug`);
-  } else if (previous) {
+  const previous = seenSlugs.get(slug);
+  if (previous !== undefined) {
     issues.push(
       `${relativePath}: duplicate article slug "${slug}" also used by ${previous}`,
     );
   } else {
     seenSlugs.set(slug, relativePath);
+  }
+
+  for (const field of requiredFields) {
+    if (typeof data[field] !== "string" || data[field].trim() === "") {
+      if (field === "date" && isValidDate(data[field])) {
+        continue;
+      }
+      issues.push(`${relativePath}: missing required ${field} frontmatter`);
+    }
+  }
+
+  if (!isValidDate(data.date)) {
+    issues.push(`${relativePath}: date is not a valid date`);
+  }
+
+  if ("draft" in data && typeof data.draft !== "boolean") {
+    issues.push(`${relativePath}: draft must be a boolean when present`);
+  }
+
+  if (data.draft === true) {
+    draftCount += 1;
+  }
+
+  if (
+    "tags" in data &&
+    (!Array.isArray(data.tags) ||
+      data.tags.some((tag) => typeof tag !== "string" || tag.trim() === ""))
+  ) {
+    issues.push(`${relativePath}: tags must be a string array when present`);
+  }
+
+  if ("imageAlt" in data && typeof data.imageAlt !== "string") {
+    issues.push(`${relativePath}: imageAlt must be a string when present`);
+  }
+
+  if ("legacyPermalink" in data && typeof data.legacyPermalink !== "string") {
+    issues.push(
+      `${relativePath}: legacyPermalink must be a string when present`,
+    );
+  }
+
+  if ("legacyBanner" in data && typeof data.legacyBanner !== "string") {
+    issues.push(`${relativePath}: legacyBanner must be a string when present`);
+  }
+
+  if (!(await sourceAssetExists(file, data.image))) {
+    issues.push(
+      `${relativePath}: image must be a relative src/assets reference or remote URL`,
+    );
+  }
+
+  for (const field of bannedFields) {
+    if (field in data) {
+      issues.push(`${relativePath}: remove unsupported ${field} frontmatter`);
+    }
   }
 }
 
@@ -179,5 +196,5 @@ if (issues.length > 0) {
 }
 
 console.log(
-  `Content verification passed: ${articleCount} articles, ${draftCount} draft/unpublished entries.`,
+  `Content verification passed: ${articleFiles.length - draftCount} published articles, ${draftCount} drafts.`,
 );

@@ -2,6 +2,10 @@ import { defineConfig, devices } from "@playwright/test";
 
 const port = 4322;
 
+if (process.env.NO_COLOR !== undefined) {
+  delete process.env.NO_COLOR;
+}
+
 export default defineConfig({
   expect: {
     timeout: 5_000,

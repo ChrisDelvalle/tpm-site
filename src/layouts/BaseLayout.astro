@@ -3,15 +3,14 @@ import "../styles/global.css";
 
 import { Menu, Moon, Sun, X } from "lucide-astro";
 
-import { getArticles } from "../lib/content";
+import SiteHead from "../components/seo/SiteHead.astro";
+import { getCategories } from "../lib/content";
 import {
   articleUrl,
+  categoryUrl,
   entryTitle,
   SITE_DESCRIPTION,
   SITE_TITLE,
-  sourceFolder,
-  TOPICS,
-  topicUrl,
 } from "../lib/routes";
 
 interface Props {
@@ -19,6 +18,7 @@ interface Props {
   description?: string;
   canonicalPath?: string;
   image?: string | undefined;
+  imageAlt?: string | undefined;
   type?: "website" | "article";
 }
 
@@ -27,25 +27,19 @@ const {
   description = SITE_DESCRIPTION,
   canonicalPath = Astro.url.pathname,
   image,
+  imageAlt,
   type = "website",
 } = Astro.props;
-const canonicalUrl = new URL(canonicalPath, Astro.site);
-const imageUrl = image ? new URL(image, Astro.site).toString() : undefined;
-const articles = await getArticles();
 const currentPath = Astro.url.pathname;
-const sidebarTopics = TOPICS.map((topic) => {
-  const topicArticles = articles.filter(
-    (article) => sourceFolder(article) === topic.source,
-  );
-  const isCurrentTopic = currentPath.startsWith(topicUrl(topic.slug));
-  const containsCurrentArticle = topicArticles.some((article) =>
+const sidebarCategories = (await getCategories()).map((category) => {
+  const isCurrentCategory = currentPath.startsWith(categoryUrl(category.slug));
+  const containsCurrentArticle = category.articles.some((article) =>
     currentPath.startsWith(articleUrl(article.id)),
   );
 
   return {
-    ...topic,
-    articles: topicArticles,
-    isOpen: isCurrentTopic || containsCurrentArticle,
+    ...category,
+    isOpen: isCurrentCategory || containsCurrentArticle,
   };
 });
 ---
@@ -59,29 +53,16 @@ const sidebarTopics = TOPICS.map((topic) => {
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={`${SITE_TITLE} RSS`}
-      href="/feed.xml"
+    <SiteHead
+      canonicalPath={canonicalPath}
+      description={description}
+      image={image}
+      imageAlt={imageAlt}
+      title={title}
+      type={type}
     />
-    <meta property="og:site_name" content={SITE_TITLE} />
-    <meta property="og:type" content={type} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
-    {imageUrl && <meta property="og:image" content={imageUrl} />}
-    <meta
-      name="twitter:card"
-      content={imageUrl ? "summary_large_image" : "summary"}
-    />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
-    <title>{title}</title>
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
@@ -106,7 +87,7 @@ const sidebarTopics = TOPICS.map((topic) => {
           <div class="header-nav-actions">
             <nav class="primary-nav" aria-label="Primary navigation">
               <a href="/articles/">Articles</a>
-              <a href="/topics/">Topics</a>
+              <a href="/categories/">Categories</a>
               <a href="/about/">About</a>
               <a href="/feed.xml">RSS</a>
             </nav>
@@ -153,7 +134,7 @@ const sidebarTopics = TOPICS.map((topic) => {
                 aria-label="Mobile primary navigation"
               >
                 <a href="/articles/">Articles</a>
-                <a href="/topics/">Topics</a>
+                <a href="/categories/">Categories</a>
                 <a href="/about/">About</a>
                 <a href="/feed.xml">RSS</a>
               </nav>
@@ -172,16 +153,19 @@ const sidebarTopics = TOPICS.map((topic) => {
             >
               Support Us
             </a>
-            <nav class="mobile-topic-nav" aria-label="Mobile topic navigation">
-              <strong>Topics</strong>
+            <nav
+              class="mobile-category-nav"
+              aria-label="Mobile category navigation"
+            >
+              <strong>Categories</strong>
               {
-                sidebarTopics.map((topic) => (
-                  <details class="topic-group" open={topic.isOpen}>
+                sidebarCategories.map((category) => (
+                  <details class="category-group" open={category.isOpen}>
                     <summary>
-                      <span>{topic.label}</span>
+                      <span>{category.title}</span>
                     </summary>
                     <ol>
-                      {topic.articles.map((article) => (
+                      {category.articles.map((article) => (
                         <li>
                           <a href={articleUrl(article.id)}>
                             {entryTitle(article)}
@@ -197,17 +181,17 @@ const sidebarTopics = TOPICS.map((topic) => {
         </details>
       </header>
       <div class="layout-grid">
-        <aside class="sidebar" aria-label="Topic navigation">
-          <strong>Topics</strong>
-          <nav class="topic-nav" aria-label="Desktop topic navigation">
+        <aside class="sidebar" aria-label="Category navigation">
+          <strong>Categories</strong>
+          <nav class="category-nav" aria-label="Desktop category navigation">
             {
-              sidebarTopics.map((topic) => (
-                <details class="topic-group" open={topic.isOpen}>
+              sidebarCategories.map((category) => (
+                <details class="category-group" open={category.isOpen}>
                   <summary>
-                    <span>{topic.label}</span>
+                    <span>{category.title}</span>
                   </summary>
                   <ol>
-                    {topic.articles.map((article) => (
+                    {category.articles.map((article) => (
                       <li>
                         <a href={articleUrl(article.id)}>
                           {entryTitle(article)}

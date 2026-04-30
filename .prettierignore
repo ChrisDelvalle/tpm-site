@@ -2,12 +2,12 @@ node_modules/
 dist/
 .astro/
 .agents/skills/
-src/content/legacy/
 coverage/
 .lighthouseci/
 playwright-report/
 test-results/
 tmp/
+unused-assets/
 
 _site/
 _config.yml

@@ -49,8 +49,8 @@ to the active milestone.
 ## Project Map
 
 - `src/content/articles/`: current source-of-truth article content.
+- `src/content/categories/`: optional category display metadata.
 - `src/content/pages/`: source-of-truth Markdown pages such as `/about/`.
-- `src/content/legacy/`: generated content mirror. Do not edit by hand.
 - `src/pages/`: Astro file routes and endpoints.
 - `src/layouts/`: shared document, page, and article layouts.
 - `src/components/`: reusable Astro UI, layout, navigation, article, block, and
@@ -61,11 +61,10 @@ to the active milestone.
   Keep this small.
 - `src/assets/`: source assets that should go through Astro's asset pipeline.
 - `public/`: static files copied directly to build output.
-- `scripts/`: repository maintenance, migration, sync, and verification scripts.
+- `scripts/`: repository maintenance, verification, and quality scripts.
 - `tests/`: unit, e2e, accessibility, and performance tests.
 - `dist/`: generated build output. Do not edit by hand.
-- `CHECKLIST.md`: migration milestone tracking.
-- `MIGRATION_COMPLETION_PLAN.md`: cleanup and legacy removal plan.
+- `CHECKLIST.md`: migration milestone and verification tracking.
 - `DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
 - `QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
   release checks.
@@ -112,8 +111,8 @@ Components
 ```
 
 Pages should orchestrate, not implement. Route files load data, choose params,
-normalize props, and compose layouts/blocks. Normalize content and legacy
-fallbacks in `src/lib` or loaders, not in visual components.
+normalize props, and compose layouts/blocks. Normalize content data in `src/lib`
+or loaders, not in visual components.
 
 Every component owns its responsive behavior, spacing, wrapping, focus states,
 dark mode behavior, and accessibility semantics. Do not fix component layout
@@ -355,7 +354,7 @@ Routing rules:
   RSS, and `Astro.site`.
 - Know route config options before changing output behavior: `prerender`,
   `partial`, `trailingSlash`, and `build.format`.
-- Do not let legacy permalinks drive core routing after cleanup.
+- Do not let legacy permalinks drive core routing.
 - Avoid client-side routing unless there is a strong product reason.
 - Endpoint routes should return `Response` objects.
 - Use `[...id].astro` when content IDs can contain `/`.
@@ -373,9 +372,8 @@ to validate frontmatter and make invalid content fail early. Use
 `astro:content` for Markdown/MDX bodies. Do not rely on Markdown `layout`
 frontmatter for collection entries.
 
-For article routing, prefer stable slugs based on the content entry ID or
-explicit normalized metadata chosen by the migration plan. Detect duplicate
-slugs deterministically at build time.
+For article routing, use stable slugs based on the content entry ID. Detect
+duplicate slugs deterministically at build time.
 
 Content collection rules:
 
@@ -386,13 +384,13 @@ Content collection rules:
 - Always sort collections explicitly before rendering lists.
 - Keep author-facing frontmatter small and meaningful.
 - Treat frontmatter as data, not executable logic.
-- Validate dates, images, tags/categories, authors, and legacy metadata at the
+- Validate dates, images, tags, authors, and legacy metadata at the
   collection boundary.
 - Use a single published-content helper/filter for pages, RSS, sitemap, search,
   related posts, and archives.
 - Avoid frontmatter `slug` unless intentionally customizing generated entry IDs.
 - Prefer filename/file path slugs once migration cleanup is complete.
-- Use `draft`/`published` filtering so unpublished content never leaks.
+- Use draft filtering so unpublished content never leaks.
 
 Markdown and MDX rules:
 
@@ -656,8 +654,9 @@ const toneClasses = {
 Tailwind v4 automatically scans source files and ignores files in `.gitignore`,
 `node_modules`, binary files, CSS files, and common lock files. Use `@source`
 only when classes live somewhere automatic detection does not scan. Use
-`@source not` to exclude noisy legacy paths. Use `@source inline()` only to
-safelist classes that cannot appear literally in source.
+`@source not` only for noisy paths Tailwind would otherwise scan. Use
+`@source inline()` only to safelist classes that cannot appear literally in
+source.
 
 Important directives:
 
@@ -951,25 +950,16 @@ Article content fidelity is strict.
   the precise requested change. Do not restyle prose, improve phrasing, adjust
   tone, or otherwise change authorial language unless explicitly instructed.
 - Preserve existing meaningful metadata.
-- Keep legacy permalink data as metadata, but do not let it drive core routing
-  once the cleanup plan is implemented.
+- Keep legacy permalink data as inert metadata; do not let it drive routing,
+  article detection, or category grouping.
 - Ensure drafts and unpublished content remain unpublished.
 - Article authors should not need to edit routes, navigation, RSS, sitemap,
   search indexing, or build scripts to publish a normal article.
 
-Current migration state:
-
-- Article content lives in `src/content/articles/`.
-- Page content lives in `src/content/pages/`.
-- `scripts/sync-content.mjs` generates `src/content/legacy/` for the remaining
-  article compatibility layer.
-- `src/content/legacy/` is disposable generated output.
-
-Target content state: article authors should add `.md` or `.mdx` entries in the
-content collection, provide valid frontmatter, keep drafts unpublished, and let
-routes, indexes, RSS, sitemap, search, and metadata derive from the collection.
-Legacy mirror content should disappear once the cleanup milestones finish; until
-then, treat `src/content/legacy/` as generated compatibility output.
+Article authors should add `.md` or `.mdx` entries under
+`src/content/articles/<category>/`, provide valid frontmatter, keep drafts
+unpublished, and let routes, indexes, RSS, sitemap, search, and metadata derive
+from the collection.
 
 ## Assets, Images, And Fonts
 
@@ -1040,7 +1030,7 @@ Treat production output as the performance source of truth.
 - Files in `public/` are copied as-is and should already be production-ready.
 
 Keep reading pages static by default. Avoid adding client JavaScript to article,
-category/topic archive, RSS, sitemap, and ordinary content pages unless the
+category archive, RSS, sitemap, and ordinary content pages unless the
 feature requires it. Route-local interaction is preferred: search code should
 stay on search pages, and MDX interaction should stay on articles that use it.
 
@@ -1208,14 +1198,13 @@ Use unit tests for:
 - duplicate slug detection;
 - image path validation;
 - RSS/sitemap/search filtering;
-- migration helpers.
 
 Use Playwright for user-visible browser behavior:
 
 - homepage;
 - article pages;
 - article archive;
-- category pages and current legacy topic routes;
+- category pages;
 - mobile navigation;
 - theme toggle;
 - search;
@@ -1244,7 +1233,6 @@ Do not edit generated files by hand.
 Generated or disposable paths include:
 
 - `dist/`
-- `src/content/legacy/`
 - `.astro/`
 - Pagefind output under built `dist/`
 - coverage output

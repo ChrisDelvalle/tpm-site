@@ -1,6 +1,6 @@
 {
   "globs": ["*.md", ".github/**/*.md"],
-  "ignores": ["index.md", "src/content/legacy/**", "node_modules/**"],
+  "ignores": ["index.md", "node_modules/**", "unused-assets/**"],
   "config": {
     "MD013": false,
     "MD024": { "siblings_only": true },

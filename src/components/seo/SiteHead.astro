@@ -1,0 +1,50 @@
+---
+import { absoluteUrl } from "../../lib/seo";
+import { SITE_TITLE } from "../../lib/routes";
+
+interface Props {
+  canonicalPath: string;
+  description: string;
+  image?: string | undefined;
+  imageAlt?: string | undefined;
+  title: string;
+  type?: "website" | "article";
+}
+
+const {
+  canonicalPath,
+  description,
+  image,
+  imageAlt,
+  title,
+  type = "website",
+} = Astro.props;
+const canonicalUrl = absoluteUrl(canonicalPath, Astro.site);
+const absoluteImageUrl =
+  image === undefined ? undefined : absoluteUrl(image, Astro.site);
+---
+
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${SITE_TITLE} RSS`}
+  href="/feed.xml"
+/>
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+{absoluteImageUrl && <meta property="og:image" content={absoluteImageUrl} />}
+{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+<meta
+  name="twitter:card"
+  content={absoluteImageUrl ? "summary_large_image" : "summary"}
+/>
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{absoluteImageUrl && <meta name="twitter:image" content={absoluteImageUrl} />}
+{imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
+<title>{title}</title>

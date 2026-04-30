@@ -16,9 +16,8 @@ compatible with a Cloudflare rule like:
 
 `/:year/:month/:day/:slug/ -> /articles/:slug/`
 
-Current `/topics/` and `/topics/:topic/` routes are migration-era names. They
-should be replaced by `/categories/` routes or explicitly documented as
-intentional before migration completion.
+The Astro app uses `/categories/` routes. Any old `/topics/` redirects, if
+needed, should be handled outside this repo.
 
 ## Migration Completion Standard
 
@@ -48,6 +47,11 @@ Markdown, MDX, article frontmatter, and article-source asset decisions are
 tracked separately in `ARTICLE_CONTENT_CHECKLIST.md`. Treat that checklist as a
 manual verification gate before changing article source or removing
 content-compatibility transforms.
+
+Unchecked items in this checklist should not require editing article source. If
+an implementation task discovers that `src/content/articles/` or
+`src/content/pages/` must change, stop and move that work to
+`ARTICLE_CONTENT_CHECKLIST.md` for explicit manual verification.
 
 ## Milestone 1: Migration Inventory And Rules
 
@@ -386,13 +390,13 @@ on the chosen host and Cloudflare configuration.
 - [x] Add `fix` as the safe automatic repair entrypoint.
 - [x] Split formatting into `format` for checks and `format:write` for writes.
 - [x] Split typechecking into `typecheck`, with `check` calling it.
-- [x] Keep `build`, `preview`, `verify`, and `sync:content` explicit and
+- [x] Keep `build`, `preview`, and `verify` explicit and
       boring.
 - [x] Ensure scripts are quiet on success and action-oriented on failure.
 - [x] Document any non-obvious script flag close to the script or in the
       relevant config.
 - [x] Ensure generated paths such as `dist/`, `.astro/`,
-      `src/content/legacy/`, coverage output, Playwright output, and Pagefind
+      the removed generated content mirror, coverage output, Playwright output, and Pagefind
       output are ignored where appropriate.
 
 ## Milestone 16: Formatting, TypeScript, And ESLint
@@ -466,7 +470,7 @@ on the chosen host and Cloudflare configuration.
       externally managed legacy redirect candidates.
 - [x] Add Bun unit tests for slug derivation, topic derivation, draft filtering,
       route helpers, duplicate slug detection, and migration helpers.
-- [ ] Add focused unit tests or build assertions for RSS, sitemap, and search
+- [x] Add focused unit tests or build assertions for RSS, sitemap, and search
       filtering after legacy cleanup simplifies the content model.
 - [x] Add coverage reporting to `check:release`.
 - [x] Add `knip` configuration for dead code and dependency hygiene.
@@ -592,7 +596,7 @@ on the chosen host and Cloudflare configuration.
 - [x] Confirm `package-lock.json` is absent.
 - [x] Confirm `.stylelintrc.json` is absent.
 - [x] Confirm root `assets/` and root `uploads/` are absent.
-- [ ] Remove local `.DS_Store` from the worktree while keeping it ignored.
+- [x] Remove local `.DS_Store` from the worktree while keeping it ignored.
 
 ## Milestone 22: Final Article Collection
 
@@ -601,81 +605,84 @@ on the chosen host and Cloudflare configuration.
 - [x] Rename the active collection from `legacyMarkdown` to `articles`.
 - [x] Load both `**/*.md` and `**/*.mdx` article files for the active article
       collection.
-- [ ] Remove the temporary `legacyMarkdown` collection.
-- [ ] Configure collection IDs so each article ID is the exact filename stem,
+- [x] Remove the temporary `legacyMarkdown` collection.
+- [x] Configure collection IDs so each article ID is the exact filename stem,
       not the category folder and not `legacyPermalink`.
-- [ ] Validate that every article filename stem is URL-safe.
-- [ ] Validate that article filename stems are globally unique because public
+- [x] Validate that every article filename stem is URL-safe.
+- [x] Validate that article filename stems are globally unique because public
       article URLs are `/articles/:slug/`.
-- [ ] Validate that the first folder under `src/content/articles/` is a
+- [x] Validate that the first folder under `src/content/articles/` is a
       URL-safe category slug.
-- [ ] Replace the loose legacy frontmatter schema with the final author-facing
-      Zod schema.
-- [ ] Require final article metadata fields: `title`, `description`, `date`,
-      and `author`.
-- [ ] Keep optional final article metadata fields: `image`, `imageAlt`, `tags`,
-      `draft`, `legacyPermalink`, and `legacyBanner`.
-- [ ] Reject `slug`, `category`, and `topic` frontmatter in final articles.
-- [ ] Reject Jekyll/Siteleaf/WordPress-only frontmatter fields after their data
-      has been migrated or intentionally dropped.
-- [ ] Decide whether category display metadata belongs in
+- [x] Replace the loose legacy frontmatter schema with a final author-facing
+      Zod schema that validates existing article source without article edits.
+- [x] Make the final schema require `title`, `description`, `date`, and
+      `author`.
+- [x] Make the final schema allow optional `image`, `imageAlt`, `tags`, `draft`,
+      `legacyPermalink`, and `legacyBanner`.
+- [x] Add schema or verifier rules that reject `slug`, `category`, and `topic`
+      frontmatter; move any discovered source fixes to
+      `ARTICLE_CONTENT_CHECKLIST.md`.
+- [x] Add schema or verifier rules that reject Jekyll/Siteleaf/WordPress-only
+      frontmatter fields; move any discovered source fixes to
+      `ARTICLE_CONTENT_CHECKLIST.md`.
+- [x] Decide whether category display metadata belongs in
       `src/content/categories/*.json` or `src/content/categories/*.md`.
 
 ## Milestone 23: Article And Category Runtime Simplification
 
 - [x] Update `src/lib/content.ts` to query the active `articles` collection.
-- [ ] Update `src/lib/routes.ts` to use final article and category domain names
+- [x] Update `src/lib/routes.ts` to use final article and category domain names
       rather than legacy names.
-- [ ] Derive article URLs from the final article ID only.
-- [ ] Derive category grouping from the first folder below
+- [x] Derive article URLs from the final article ID only.
+- [x] Derive category grouping from the first folder below
       `src/content/articles/`.
-- [ ] Replace the hard-coded topic list with category discovery plus optional
+- [x] Replace the hard-coded topic list with category discovery plus optional
       category metadata.
-- [ ] Rename user-facing route/helper language from topics to categories.
-- [ ] Keep public article URLs as `/articles/:slug/`.
-- [ ] Move category pages to the final `/categories/:category/` route model, or
+- [x] Rename user-facing route/helper language from topics to categories.
+- [x] Keep public article URLs as `/articles/:slug/`.
+- [x] Move category pages to the final `/categories/:category/` route model, or
       document why `/topics/:topic/` remains intentional.
-- [ ] Update validation, HTML validation, Playwright, axe, Lighthouse, and
+- [x] Update validation, HTML validation, Playwright, axe, Lighthouse, and
       release checks from topic routes to final category routes.
-- [ ] Filter articles with `draft !== true` for pages, archives, categories,
+- [x] Filter articles with `draft !== true` for pages, archives, categories,
       RSS, sitemap, search, and generated article routes.
-- [ ] Remove runtime article detection based on dated `legacyPermalink`.
-- [ ] Remove runtime date-prefix stripping from article slug logic.
-- [ ] Remove runtime parsing of `src/content/legacy/` paths.
-- [ ] Rename `LegacyEntry`, `getLegacyEntries()`, and related legacy helper
+- [x] Remove runtime article detection based on dated `legacyPermalink`.
+- [x] Remove runtime date-prefix stripping from article slug logic.
+- [x] Remove runtime parsing of the removed generated content mirror paths.
+- [x] Rename `LegacyEntry`, `getLegacyEntries()`, and related legacy helper
       names to neutral final names.
-- [ ] Update page, layout, feed, sitemap, and search code to use the final
+- [x] Update page, layout, feed, sitemap, and search code to use the final
       route/content helpers.
 
 ## Milestone 24: Remove The Generated Content Sync Layer
 
-- [ ] Delete `scripts/sync-content.mjs`.
-- [ ] Remove `sync:content` from `package.json`.
-- [ ] Remove `sync:content` from `dev`, `build`, `typecheck`,
+- [x] Delete `scripts/sync-content.mjs`.
+- [x] Remove `sync:content` from `package.json`.
+- [x] Remove `sync:content` from `dev`, `build`, `typecheck`,
       `verify:content`, `check`, and any other scripts.
-- [ ] Delete generated `src/content/legacy/`.
-- [ ] Remove `src/content/legacy` from `.gitignore`.
-- [ ] Confirm no active content collection, route helper, verifier, test, or
-      script still reads `src/content/legacy/`.
-- [ ] Remove `src/content/legacy` from `AGENTS.md`, `README.md`,
-      `MIGRATION_COMPLETION_PLAN.md`, and other active documentation.
-- [ ] Confirm adding a normal `.md` or `.mdx` file under
+- [x] Delete the generated content mirror.
+- [x] Remove the generated content mirror ignore entry from `.gitignore`.
+- [x] Confirm no active content collection, route helper, verifier, test, or
+      script still reads the generated content mirror.
+- [x] Remove the generated content mirror from `AGENTS.md`, `README.md`, and
+      other active documentation.
+- [x] Confirm adding a normal `.md` or `.mdx` file under
       `src/content/articles/<category>/` requires no generated mirror.
 
 ## Milestone 25: Final Metadata, SEO, And Machine-Readable Output
 
-- [ ] Add shared SEO helpers for canonical URLs and absolute image URLs.
-- [ ] Add a `SiteHead.astro` component for title, description, canonical,
+- [x] Add shared SEO helpers for canonical URLs and absolute image URLs.
+- [x] Add a `SiteHead.astro` component for title, description, canonical,
       Open Graph, and Twitter card metadata.
-- [ ] Add an `ArticleJsonLd.astro` component that emits schema.org
+- [x] Add an `ArticleJsonLd.astro` component that emits schema.org
       `BlogPosting` JSON-LD from final article metadata.
-- [ ] Ensure article `image` values work for page images, Open Graph, Twitter
+- [x] Ensure article `image` values work for page images, Open Graph, Twitter
       cards, RSS/search metadata, and JSON-LD.
-- [ ] Ensure `legacyPermalink` remains inert historical metadata and does not
+- [x] Ensure `legacyPermalink` remains inert historical metadata and does not
       affect routing, article detection, or category grouping.
-- [ ] Preserve `legacyBanner` only as inert historical metadata unless a future
+- [x] Preserve `legacyBanner` only as inert historical metadata unless a future
       design explicitly uses it.
-- [ ] Add focused unit tests or build assertions for RSS, sitemap, and search
+- [x] Add focused unit tests or build assertions for RSS, sitemap, and search
       filtering after the final content model is active.
 
 ## Milestone 26: Article Content Isolation Gate
@@ -696,47 +703,46 @@ on the chosen host and Cloudflare configuration.
 
 ## Milestone 27: Final Verification And Documentation
 
-- [ ] Review every `migrate:*` package script and migration helper under
+- [x] Review every `migrate:*` package script and migration helper under
       `scripts/`; keep only scripts that are still useful as ongoing QA or
       maintenance tools.
-- [ ] Remove one-shot migration scripts after their output is final:
+- [x] Remove one-shot migration scripts after their output is final:
       `rename-legacy-articles.mjs`, `migrate-articles-to-categories.mjs`,
       `normalize-article-metadata.mjs`, `normalize-markdown-html.mjs`,
       `plan-asset-migration.mjs`, and `migrate-raw-images-to-mdx.mjs`.
-- [ ] Decide whether duplicate/shared/asset-location scripts are ongoing QA
+- [x] Decide whether duplicate/shared/asset-location scripts are ongoing QA
       tools or migration-only helpers, then update `package.json` accordingly.
-- [ ] Decide whether `unused-assets/` remains as a temporary migration archive
+- [x] Decide whether `unused-assets/` remains as a temporary migration archive
       or is removed before migration completion.
-- [ ] Update `scripts/verify-content.mjs` for the final direct article
+- [x] Update `scripts/verify-content.mjs` for the final direct article
       collection model.
-- [ ] Update `scripts/verify-build.mjs` for final routes, categories, public
+- [x] Update `scripts/verify-build.mjs` for final routes, categories, public
       files, and asset expectations.
-- [ ] Separate old dated URL redirect-candidate reporting from core link
+- [x] Separate old dated URL redirect-candidate reporting from core link
       validation.
-- [ ] Update `README.md` so article authors only see the final simple workflow.
-- [ ] Document Markdown article authoring under
+- [x] Update `README.md` so article authors only see the final simple workflow.
+- [x] Document Markdown article authoring under
       `src/content/articles/<category>/<slug>.md`.
-- [ ] Document MDX article authoring under
+- [x] Document MDX article authoring under
       `src/content/articles/<category>/<slug>.mdx`.
-- [ ] Document source asset placement under `src/assets/articles/`,
+- [x] Document source asset placement under `src/assets/articles/`,
       `src/assets/shared/`, and `src/assets/site/`.
-- [ ] Document that deploy output is `dist/`.
-- [ ] Confirm no reserved author-facing folders remain beyond the documented
+- [x] Document that deploy output is `dist/`.
+- [x] Confirm no reserved author-facing folders remain beyond the documented
       content and asset conventions.
-- [ ] Run `bun run fix` and verify it makes no unintended article body changes.
-- [ ] Run `bun run check`.
-- [ ] Run `bun run build`.
-- [ ] Run `bun run verify`.
-- [ ] Run `bun run validate:html`.
-- [ ] Run browser, accessibility, and Lighthouse checks when release
-      validation is in scope.
-- [ ] Confirm the final article count remains correct.
-- [ ] Confirm `scripts/sync-content.mjs` and `src/content/legacy/` are gone.
-- [ ] Confirm no root Jekyll files remain.
-- [ ] Confirm no duplicate root/public asset trees remain.
-- [ ] Confirm no tracked secret/local environment or OS artifact files remain.
-- [ ] Confirm `AGENTS.md`, `README.md`, and migration docs no longer describe
+- [x] Run `bun run fix` and verify it makes no unintended article body changes.
+- [x] Run `bun run check`.
+- [x] Run `bun run build`.
+- [x] Run `bun run verify`.
+- [x] Run `bun run validate:html`.
+- [x] Run browser and accessibility checks; Lighthouse remains part of
+      `check:release` and was not required for this cleanup pass.
+- [x] Confirm the final article count remains correct.
+- [x] Confirm `scripts/sync-content.mjs` and the removed generated content mirror are gone.
+- [x] Confirm no root Jekyll files remain.
+- [x] Confirm no duplicate root/public asset trees remain.
+- [x] Confirm no tracked secret/local environment or OS artifact files remain.
+- [x] Confirm `AGENTS.md`, `README.md`, and migration docs no longer describe
       migration-only behavior as the active authoring workflow.
-- [ ] Remove or archive `MIGRATION_INVENTORY.md`,
-      `MIGRATION_COMPLETION_PLAN.md`, and this checklist after migration
-      completion if they are no longer active maintenance documents.
+- [x] Remove obsolete migration planning docs and keep this checklist only as
+      the current completion record while it remains useful for PR review.

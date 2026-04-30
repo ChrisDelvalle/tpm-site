@@ -1,18 +1,22 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getArticles } from "../../lib/content";
+import { getArticles, getCategories } from "../../lib/content";
 import {
   articleUrl,
   authorName,
+  categorySlug,
+  categoryUrl,
   entryDate,
   entryTitle,
   excerpt,
   formatDate,
-  topicForEntry,
-  topicUrl,
 } from "../../lib/routes";
 
 const articles = await getArticles();
+const categories = await getCategories();
+const categoryMap = new Map(
+  categories.map((category) => [category.slug, category] as const),
+);
 ---
 
 <BaseLayout
@@ -28,7 +32,7 @@ const articles = await getArticles();
   <ol class="archive-list" data-pagefind-ignore>
     {
       articles.map((article) => {
-        const topic = topicForEntry(article);
+        const category = categoryMap.get(categorySlug(article));
         return (
           <li>
             <a class="archive-title" href={articleUrl(article.id)}>
@@ -37,7 +41,9 @@ const articles = await getArticles();
             <div class="archive-meta">
               <span>{formatDate(entryDate(article))}</span>
               <span>{authorName(article)}</span>
-              {topic && <a href={topicUrl(topic.slug)}>{topic.label}</a>}
+              {category && (
+                <a href={categoryUrl(category.slug)}>{category.title}</a>
+              )}
             </div>
             {excerpt(article) && <p>{excerpt(article)}</p>}
           </li>

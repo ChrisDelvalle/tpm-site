@@ -18,7 +18,6 @@
     "docs/**",
     "playwright-report/**",
     "public/**",
-    "src/content/legacy/**",
     "test-results/**"
   ],
   "ignoreDependencies": [

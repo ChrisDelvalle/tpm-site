@@ -54,7 +54,6 @@ export default tseslint.config(
       "playwright-report/",
       "public/assets/",
       "public/uploads/",
-      "src/content/legacy/",
       "test-results/",
       "tmp/",
       "package-lock.json",
@@ -130,17 +129,6 @@ export default tseslint.config(
       "no-extend-native": "error",
       "no-implied-eval": "error",
       "no-new-func": "error",
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            "**/content/legacy/*",
-            "**/content/legacy/**",
-            "**/src/content/legacy/*",
-            "**/src/content/legacy/**",
-          ],
-        },
-      ],
       "no-restricted-properties": [
         "error",
         {

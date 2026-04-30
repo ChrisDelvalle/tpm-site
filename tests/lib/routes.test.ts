@@ -5,21 +5,29 @@ import {
   articleSlug,
   articleUrl,
   assertUniqueArticleSlugs,
+  categorySlug,
+  categoryUrl,
   decodeHtmlEntities,
   isPublishedArticle,
   normalizeSlug,
-  topicForEntry,
-  topicUrl,
 } from "../../src/lib/routes";
 
 function entry(
   id: string,
-  data: Record<string, unknown>,
+  data: Record<string, unknown> = {},
   filePath = "",
 ): ArticleEntry {
   return {
     id,
-    data,
+    data: {
+      author: "Author",
+      date: new Date("2022-04-06T00:00:00Z"),
+      description: "Description",
+      draft: false,
+      tags: [],
+      title: "Title",
+      ...data,
+    },
     filePath: filePath || `/repo/src/content/articles/history/${id}.md`,
   } as ArticleEntry;
 }
@@ -34,65 +42,41 @@ describe("route helpers", () => {
     expect(articleUrl("gamergate-as-metagaming")).toBe(
       "/articles/gamergate-as-metagaming/",
     );
-    expect(topicUrl("meme-culture")).toBe("/topics/meme-culture/");
+    expect(categoryUrl("memeculture")).toBe("/categories/memeculture/");
   });
 
-  test("prefers dated permalink slugs for migrated articles", () => {
+  test("uses collection ids directly as article slugs", () => {
     expect(
       articleSlug(
-        entry("history/2022-04-06-title-from-file", {
-          legacyPermalink:
-            "/2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+        entry("filename-slug", {
+          legacyPermalink: "/2022/04/06/legacy-permalink-slug/",
         }),
       ),
-    ).toBe("wittgensteins-most-beloved-quote-was-real-but-its-fake-now");
+    ).toBe("filename-slug");
   });
 
-  test("falls back to date-stripped collection ids", () => {
-    expect(
-      articleSlug(
-        entry("history/2022-04-06-title-from-file", {
-          permalink: "/history/",
-        }),
-      ),
-    ).toBe("history/title-from-file");
-  });
-
-  test("filters unpublished and draft entries", () => {
-    const published = entry("published", {
-      legacyPermalink: "/2022/04/06/published/",
-    });
-    const unpublished = entry("unpublished", {
-      draft: true,
-      legacyPermalink: "/2022/04/06/unpublished/",
-    });
-    const draft = entry("draft", {
-      legacyPermalink: "/2022/04/06/draft/",
-      status: "draft",
-    });
+  test("filters draft entries", () => {
+    const published = entry("published");
+    const draft = entry("draft", { draft: true });
 
     expect(isPublishedArticle(published)).toBe(true);
-    expect(isPublishedArticle(unpublished)).toBe(false);
     expect(isPublishedArticle(draft)).toBe(false);
   });
 
   test("detects duplicate article slugs", () => {
     expect(() => {
-      assertUniqueArticleSlugs([
-        entry("a", { legacyPermalink: "/2022/04/06/same/" }),
-        entry("b", { legacyPermalink: "/2023/04/06/same/" }),
-      ]);
+      assertUniqueArticleSlugs([entry("same"), entry("same")]);
     }).toThrow('Duplicate article slug "same"');
   });
 
-  test("derives topics from source folders before legacy parent metadata", () => {
+  test("derives categories from source folders", () => {
     const politics = entry(
-      "politics/2016-01-29-the-post-pepe-manifesto",
-      { parent: 2016 },
-      "/repo/src/content/articles/politics/2016-01-29-the-post-pepe-manifesto.md",
+      "the-post-pepe-manifesto",
+      {},
+      "/repo/src/content/articles/politics/the-post-pepe-manifesto.md",
     );
 
-    expect(topicForEntry(politics)?.slug).toBe("politics");
+    expect(categorySlug(politics)).toBe("politics");
   });
 
   test("decodes known legacy HTML entities in titles", () => {

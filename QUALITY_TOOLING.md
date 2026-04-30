@@ -58,7 +58,7 @@ reason near the script or in the relevant config file.
 
 Custom validation scripts are appropriate when the project has domain-specific
 rules that generic tools cannot know, such as draft exclusion, duplicate slugs,
-legacy permalink separation, article image validation, and generated output
+legacy permalink isolation, article image validation, and generated output
 checks. Those scripts should be small, deterministic, and focused on one class
 of invariant.
 
@@ -147,9 +147,10 @@ Some common tooling choices need project-specific handling:
 
 - Do not copy React/Vite-only tooling unless React components are actually
   added.
-- Do not lint `dist/`, generated content mirrors, or copied legacy assets.
-- Do not apply aggressive Markdown autoformatting to migrated article bodies
-  while content fidelity is still a migration invariant.
+- Do not lint `dist/`, `.astro/`, Pagefind output, coverage, or copied public
+  assets.
+- Do not apply aggressive Markdown autoformatting to article bodies when the
+  task does not explicitly include content edits.
 - Do not require JSDoc on every Astro UI component. Require useful docs on
   exported library helpers, public types, and non-obvious scripts instead.
 - Do not ban default exports in config files where the ecosystem expects them.
@@ -364,8 +365,8 @@ Important project-specific decision:
 - Format article Markdown and MDX with Prettier, while keeping article wording
   and meaning unchanged unless content edits are explicitly requested.
 
-`.prettierignore` should ignore generated output and legacy build artifacts, not
-the active article source tree.
+`.prettierignore` should ignore generated output and build artifacts, not the
+active article source tree.
 
 ## Tailwind
 
@@ -421,7 +422,7 @@ Playwright should verify:
 - article archive renders;
 - representative article renders;
 - article with images renders;
-- topic page renders;
+- category page renders;
 - about page renders;
 - mobile navigation opens, closes, and traps/returns focus where appropriate;
 - theme toggle works;
@@ -469,7 +470,7 @@ Audit representative pages:
 - `/articles/`
 - one long article;
 - one article with images;
-- one topic page;
+- one category page;
 - `/about/`
 
 Track:
@@ -516,7 +517,7 @@ Checks should confirm:
 - built HTML does not contain unresolved Liquid/Jekyll tokens.
 - built pages do not reference missing local assets.
 - draft and unpublished articles do not appear in routes, RSS, sitemap, search,
-  topic pages, or archives.
+  category pages, or archives.
 - generated search files exist after the Pagefind step.
 
 These checks should report concise file paths and counts. They should not dump
@@ -540,7 +541,7 @@ Checks should include:
 - every source article has required metadata;
 - drafts stay unpublished;
 - duplicate slugs fail;
-- topic folders derive valid topics;
+- category folders derive valid categories;
 - reserved folders are not topics;
 - article images exist;
 - meaningful images have alt text where detectable;
@@ -548,7 +549,6 @@ Checks should include:
 - old Jekyll fields do not drive core routing;
 - `legacyPermalink` is preserved but isolated;
 - no Liquid/Jekyll artifacts appear in output;
-- generated content mirrors are not hand-edited;
 - no old dated pages accidentally appear unless explicitly generated as isolated
   redirect fallback pages.
 
@@ -584,8 +584,9 @@ Also consider:
 
 ## Markdown And Docs
 
-Use Markdown linting for project docs, not legacy article bodies during the
-content-fidelity phase.
+Use Markdown linting for project docs. Article Markdown and MDX may be formatted
+by the normal formatter, but agents must not rewrite article wording unless
+explicitly asked.
 
 Recommended package:
 
@@ -595,12 +596,11 @@ Apply to:
 
 - root project docs;
 - future authored technical docs;
-- migration plans.
+- project planning docs.
 
 Exclude or carefully scope:
 
-- migrated article bodies;
-- legacy content that must remain byte-for-byte stable.
+- article bodies when the active task does not explicitly include content edits.
 
 ## Security
 
@@ -654,9 +654,8 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
 
 ```json
 {
-  "dev": "bun run sync:content && astro dev",
-  "sync:content": "node scripts/sync-content.mjs",
-  "build": "bun run sync:content && astro build && pagefind --site dist",
+  "dev": "astro dev",
+  "build": "astro build && pagefind --site dist",
   "preview": "astro preview",
 
   "format": "prettier --check . --log-level warn",
@@ -665,7 +664,7 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "fix": "bun run lint:fix && bun run format:write",
 
-  "typecheck": "bun run sync:content && astro check",
+  "typecheck": "astro check",
   "deadcode": "knip --no-config-hints",
   "test": "bun test tests/lib --randomize --concurrent",
   "test:flake": "bun run test -- --rerun-each 10",
@@ -675,8 +674,8 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "coverage": "bun test tests/lib --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",
 
   "verify": "node scripts/verify-build.mjs",
-  "verify:content": "bun run sync:content && node scripts/verify-content.mjs",
-  "validate:html": "html-validate dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/search/**/*.html\" \"dist/topics/**/*.html\"",
+  "verify:content": "node scripts/verify-content.mjs",
+  "validate:html": "html-validate dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\"",
   "audit": "bun audit --audit-level=high",
   "secrets": "gitleaks git --redact --no-banner",
 
@@ -724,8 +723,8 @@ Current GitHub configuration:
 - `.github/workflows/security.yml` for Dependency Review, CodeQL, and gitleaks.
 - `.github/dependabot.yml` for dependency updates.
 
-Once Ruby/Jekyll is fully removed from the active build path, remove legacy
-Bundler dependency tracking from Dependabot.
+Do not add Ruby, Jekyll, or Bundler dependency tracking back into Dependabot
+unless the project intentionally reintroduces that toolchain.
 
 ## Adoption Order
 

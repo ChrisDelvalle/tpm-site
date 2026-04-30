@@ -5,7 +5,7 @@ const routes = [
   "/articles/",
   "/articles/gamergate-as-metagaming/",
   "/articles/misattributed-plato-quote-is-real-now/",
-  "/topics/history/",
+  "/categories/history/",
   "/about/",
   "/404.html",
 ];
@@ -51,15 +51,21 @@ for (const viewport of viewports) {
   });
 }
 
-test("mobile navigation exposes primary and topic links", async ({ page }) => {
+test("mobile navigation exposes primary and category links", async ({
+  page,
+}) => {
   await page.setViewportSize({ height: 844, width: 390 });
   await page.goto("/");
   await page.getByLabel("Open navigation menu").click();
 
   const mobileNav = page.getByLabel("Mobile primary navigation");
   await expect(mobileNav.getByRole("link", { name: "Articles" })).toBeVisible();
-  await expect(mobileNav.getByRole("link", { name: "Topics" })).toBeVisible();
-  await expect(page.locator(".mobile-topic-nav")).toContainText("Metamemetics");
+  await expect(
+    mobileNav.getByRole("link", { name: "Categories" }),
+  ).toBeVisible();
+  await expect(page.locator(".mobile-category-nav")).toContainText(
+    "Metamemetics",
+  );
 });
 
 test("theme toggle switches the document theme", async ({ page }) => {

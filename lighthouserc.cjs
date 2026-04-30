@@ -29,7 +29,7 @@ module.exports = {
         "/articles/",
         "/articles/gamergate-as-metagaming/",
         "/articles/misattributed-plato-quote-is-real-now/",
-        "/topics/history/",
+        "/categories/history/",
         "/about/",
       ],
     },

@@ -191,9 +191,9 @@ Suggested responsibilities:
 
 - `ui/`: buttons, links, inputs, badges, separators, icon buttons, containers.
 - `layout/`: base layout, site shell, page frame, header, footer.
-- `navigation/`: primary nav, mobile nav, topic navigation, breadcrumbs.
+- `navigation/`: primary nav, mobile nav, category navigation, breadcrumbs.
 - `articles/`: article header, metadata, article lists, cards, prose wrapper.
-- `blocks/`: homepage sections, support blocks, topic sections, about sections.
+- `blocks/`: homepage sections, support blocks, category sections, about sections.
 
 Pages should read as composition:
 
@@ -201,7 +201,7 @@ Pages should read as composition:
 <BaseLayout title={title}>
   <HomeHero />
   <LatestArticles articles={articles} />
-  <TopicOverview topics={topics} />
+  <CategoryOverview categories={categories} />
   <SupportBlock />
 </BaseLayout>
 ```
@@ -210,7 +210,7 @@ Components should have stable public props and should not reach across the
 application for unrelated data. Shared data normalization belongs in `src/lib/`,
 not in visual components.
 
-Build patterns before pages. A homepage, article page, topic archive, and search
+Build patterns before pages. A homepage, article page, category archive, and search
 page should feel like different compositions of the same system, not unrelated
 templates. When a new design need appears, prefer extracting a reusable block or
 component over adding page-local markup that cannot be reused.
@@ -611,10 +611,10 @@ Article pages should include:
 - Article title.
 - Publish date in a machine-readable `<time>`.
 - Author when available.
-- Topic metadata when available.
+- Category metadata when available.
 - Description or excerpt.
 
-RSS, sitemap, search indexing, topic pages, and article archives should all come
+RSS, sitemap, search indexing, category pages, and article archives should all come
 from the same published article source. Drafts must not appear in production
 pages, RSS, sitemap, or search indexes.
 
@@ -643,7 +643,7 @@ Use Lighthouse CI against representative pages, not just the homepage:
 - `/articles/`
 - A long article.
 - An article with images.
-- A topic page.
+- A category page.
 - `/about/`
 
 Track category scores and concrete budgets:
@@ -749,7 +749,7 @@ Preserve:
 - Content.
 - Broad editorial tone.
 - Approximate color direction.
-- Topic/article structure.
+- Category/article structure.
 - The idea of a readable essay-first site.
 
 Do not preserve by default:
@@ -757,7 +757,7 @@ Do not preserve by default:
 - Fragile header mechanics.
 - Large global stylesheet patterns.
 - One-off breakpoint fixes.
-- Legacy Jekyll-shaped routing logic.
+- Legacy routing logic.
 - Layout decisions that fight responsive design.
 - Implementation details that make authors care about the codebase.
 

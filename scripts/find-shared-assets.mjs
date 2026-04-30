@@ -17,9 +17,8 @@ if (help) {
 Detect src assets referenced by more than one source file while living outside
 src/assets/shared/.
 
-The script scans source files under src/, excluding src/assets/ and the generated
-src/content/legacy/ mirror. Multiple references from the same source file do not
-make an asset shared.
+The script scans source files under src/, excluding src/assets/. Multiple
+references from the same source file do not make an asset shared.
 `);
   process.exit(0);
 }
@@ -48,10 +47,7 @@ async function listSourceFiles(dir) {
     const fullPath = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
-      if (
-        isInside(fullPath, assetsDir) ||
-        relative(fullPath) === "src/content/legacy"
-      ) {
+      if (isInside(fullPath, assetsDir)) {
         continue;
       }
 
