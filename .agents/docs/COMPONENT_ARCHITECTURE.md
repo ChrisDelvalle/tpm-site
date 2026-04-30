@@ -953,9 +953,15 @@ should become much safer.
 
 ## Component Catalog
 
-The project should maintain a dev-only component catalog. The catalog is a
-manual review surface, a design-system reference, and a test harness for
-canonical component states.
+The project should maintain a component catalog. The first implementation
+should be dev-only: a manual review surface, a design-system reference, and a
+test harness for canonical component states.
+
+Longer term, the catalog could become a public editorial/design feature: a
+shadcn-style component gallery that explains the site's blocks, shows live
+examples, and lets readers/developers inspect or copy useful patterns. Treat
+that as deferred product work. The private QA catalog should come first so the
+component system becomes stable before the public version makes any promises.
 
 The catalog should show:
 
@@ -1002,6 +1008,10 @@ Catalog build rules:
   implemented.
 - `catalog:preview:fresh` should build with the catalog enabled, then preview
   the built output for production-like manual review.
+- If the catalog later becomes public, replace the private build gate with an
+  intentional public route, editorial copy, copyable examples, and the same QA
+  coverage expectations. Do not accidentally expose the internal QA catalog as
+  the public version.
 
 Catalog coverage:
 
