@@ -88,7 +88,9 @@ describe("build verifier helpers", () => {
           articleCountIssues: ["expected 1 article page, found 0"],
           brokenLinks: [],
           draftLeaks: [],
+          invalidLegacyRedirects: [],
           missingArticleJsonLd: [],
+          missingLegacyRedirects: [],
           missingRequired: ["articles/example/index.html"],
           unexpectedClientScripts: [],
           unexpectedDatedPages: [],
@@ -140,5 +142,173 @@ describe("build verifier helpers", () => {
       expect(formatBuildVerificationReport(result)).toContain(
         "Build verification passed",
       );
+    }));
+
+  test("allows Astro generated dated redirect fallback pages", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/draft.md",
+        "---\ntitle: Draft\ndraft: true\n---\n",
+      );
+
+      await writeText(root, "dist/index.html", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles/index.html", "");
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        '{"@type":"BlogPosting"}',
+      );
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/categories/history/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed>published</feed>");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(
+        root,
+        "dist/2022/04/20/draft/index.html",
+        '<!doctype html><title>Redirecting to: /articles/draft/</title><meta http-equiv="refresh" content="0;url=/articles/draft/"><meta name="robots" content="noindex"><link rel="canonical" href="https://thephilosophersmeme.com/articles/draft/"><body><a href="/articles/draft/">Redirecting from <code>/2022/04/20/draft/</code> to <code>/articles/draft/</code></a></body>',
+      );
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+        expectedRedirects: {
+          "/2022/04/20/draft/": "/articles/draft/",
+        },
+      });
+
+      expect(result.issues.brokenLinks).toEqual([]);
+      expect(result.issues.unexpectedDatedPages).toEqual([]);
+    }));
+
+  test("rejects dated pages that are not Astro redirect fallbacks", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\n---\n",
+      );
+
+      await writeText(root, "dist/index.html", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles/index.html", "");
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        '{"@type":"BlogPosting"}',
+      );
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/categories/history/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed>published</feed>");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(
+        root,
+        "dist/2022/04/20/not-a-redirect/index.html",
+        "<html><body>Unexpected page</body></html>",
+      );
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.unexpectedDatedPages).toEqual([
+        "2022/04/20/not-a-redirect/index.html",
+      ]);
+    }));
+
+  test("rejects redirect fallback pages that do not match configured redirects", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\n---\n",
+      );
+
+      await writeText(root, "dist/index.html", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles/index.html", "");
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        '{"@type":"BlogPosting"}',
+      );
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/categories/history/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed>published</feed>");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(
+        root,
+        "dist/2022/04/20/published/index.html",
+        '<!doctype html><title>Redirecting to: /articles/wrong/</title><meta http-equiv="refresh" content="0;url=/articles/wrong/"><meta name="robots" content="noindex"><link rel="canonical" href="https://thephilosophersmeme.com/articles/wrong/"><body><a href="/articles/wrong/">Redirecting from <code>/2022/04/20/published/</code> to <code>/articles/wrong/</code></a></body>',
+      );
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+        expectedRedirects: {
+          "/2022/04/20/published/": "/articles/published/",
+        },
+      });
+
+      expect(result.issues.invalidLegacyRedirects).toEqual([
+        "2022/04/20/published/index.html: does not match configured redirect /2022/04/20/published/ -> /articles/published/",
+      ]);
+    }));
+
+  test("reports configured redirects missing from built output", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\n---\n",
+      );
+
+      await writeText(root, "dist/index.html", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles/index.html", "");
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        '{"@type":"BlogPosting"}',
+      );
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/categories/history/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed>published</feed>");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+        expectedRedirects: {
+          "/2022/04/20/published/": "/articles/published/",
+        },
+      });
+
+      expect(result.issues.missingLegacyRedirects).toEqual([
+        "/2022/04/20/published/ -> /articles/published/ (2022/04/20/published/index.html)",
+      ]);
     }));
 });

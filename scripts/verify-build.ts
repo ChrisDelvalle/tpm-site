@@ -1,5 +1,6 @@
 import { access, readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 import matter from "gray-matter";
 
@@ -34,13 +35,16 @@ export interface BuildVerificationOptions {
   articleDir: string;
   categoryDir: string;
   distDir: string;
+  expectedRedirects?: Record<string, string>;
 }
 
 export interface BuildVerificationIssues {
   articleCountIssues: string[];
   brokenLinks: string[];
   draftLeaks: string[];
+  invalidLegacyRedirects: string[];
   missingArticleJsonLd: string[];
+  missingLegacyRedirects: string[];
   missingRequired: string[];
   unexpectedClientScripts: string[];
   unexpectedDatedPages: string[];
@@ -194,6 +198,93 @@ export function linkTargets(html: string) {
   return targets;
 }
 
+function isDatedHtmlPage(relativeHtmlPath: string) {
+  return /^\d{4}\/\d{2}\/\d{2}\/[^/]+\/index\.html$/.test(relativeHtmlPath);
+}
+
+function expectedRedirectSource(relativeHtmlPath: string) {
+  return `/${relativeHtmlPath.replace(/index\.html$/, "")}`;
+}
+
+function redirectFallbackPath(source: string) {
+  return `${source.replace(/^\//, "")}index.html`;
+}
+
+function htmlIncludesRedirect(
+  html: string,
+  source: string,
+  destination: string,
+) {
+  return (
+    html.includes(`<title>Redirecting to: ${destination}</title>`) &&
+    html.includes(`content="0;url=${destination}"`) &&
+    html.includes(`href="${destination}"`) &&
+    html.includes(`<code>${source}</code>`) &&
+    html.includes(`<code>${destination}</code>`)
+  );
+}
+
+function isAstroRedirectFallbackPage(html: string, relativeHtmlPath: string) {
+  if (!isDatedHtmlPage(relativeHtmlPath)) {
+    return false;
+  }
+
+  return (
+    /<title>Redirecting to: [^<]+<\/title>/i.test(html) &&
+    /<meta\s+http-equiv=["']refresh["']\s+content=["']0;url=[^"']+["']>/i.test(
+      html,
+    ) &&
+    /<meta\s+name=["']robots["']\s+content=["']noindex["']>/i.test(html) &&
+    /<link\s+rel=["']canonical["']\s+href=["']https?:\/\/[^"']+["']>/i.test(
+      html,
+    ) &&
+    html.includes(`<code>${expectedRedirectSource(relativeHtmlPath)}</code>`)
+  );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isAstroConfigModule(
+  value: unknown,
+): value is { default: { redirects?: Record<string, unknown> } } {
+  if (!isRecord(value) || !isRecord(value["default"])) {
+    return false;
+  }
+
+  const redirects = value["default"]["redirects"];
+  return redirects === undefined || isRecord(redirects);
+}
+
+async function configuredRedirects(rootDir: string) {
+  // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
+  const configModule: unknown = await import(
+    pathToFileURL(path.resolve(rootDir, "astro.config.mjs")).href
+  );
+
+  if (!isAstroConfigModule(configModule)) {
+    throw new TypeError("Astro config module has an unexpected shape.");
+  }
+
+  const redirects = configModule.default.redirects;
+  if (redirects === undefined) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(redirects).map(([source, destination]) => {
+      if (typeof destination !== "string") {
+        throw new TypeError(
+          `Expected string redirect destination for ${source}.`,
+        );
+      }
+
+      return [source, destination];
+    }),
+  );
+}
+
 export function isExternal(url: string) {
   return /^(?:[a-z]+:)?\/\//i.test(url) || /^(?:mailto|tel):/i.test(url);
 }
@@ -232,7 +323,9 @@ function emptyIssues(): BuildVerificationIssues {
     articleCountIssues: [],
     brokenLinks: [],
     draftLeaks: [],
+    invalidLegacyRedirects: [],
     missingArticleJsonLd: [],
+    missingLegacyRedirects: [],
     missingRequired: [],
     unexpectedClientScripts: [],
     unexpectedDatedPages: [],
@@ -251,24 +344,61 @@ async function collectMissingRequired(
   }
 }
 
+async function collectMissingLegacyRedirects(
+  distDir: string,
+  expectedRedirects: Record<string, string>,
+  issues: BuildVerificationIssues,
+) {
+  for (const [source, destination] of Object.entries(expectedRedirects)) {
+    const fallbackPath = redirectFallbackPath(source);
+    if (!(await exists(distDir, fallbackPath))) {
+      issues.missingLegacyRedirects.push(
+        `${source} -> ${destination} (${fallbackPath})`,
+      );
+    }
+  }
+}
+
 async function inspectHtmlFile(
   distDir: string,
   file: string,
   staticReadingPages: string[],
+  expectedRedirects: Record<string, string>,
   issues: BuildVerificationIssues,
 ) {
   const text = await readFile(file, "utf8");
   const relativeHtmlPath = toPosix(path.relative(distDir, file));
+  const isRedirectFallback = isAstroRedirectFallbackPage(
+    text,
+    relativeHtmlPath,
+  );
+
+  if (isDatedHtmlPage(relativeHtmlPath) && !isRedirectFallback) {
+    issues.unexpectedDatedPages.push(relativeHtmlPath);
+  }
+
+  if (isRedirectFallback) {
+    const source = expectedRedirectSource(relativeHtmlPath);
+    const expectedDestination = expectedRedirects[source];
+
+    if (expectedDestination === undefined) {
+      issues.invalidLegacyRedirects.push(
+        `${relativeHtmlPath}: no matching redirect in astro.config.mjs for ${source}`,
+      );
+    } else if (!htmlIncludesRedirect(text, source, expectedDestination)) {
+      issues.invalidLegacyRedirects.push(
+        `${relativeHtmlPath}: does not match configured redirect ${source} -> ${expectedDestination}`,
+      );
+    }
+
+    return;
+  }
 
   if (
     /^articles\/[^/]+\/index\.html$/.test(relativeHtmlPath) &&
     !text.includes('"@type":"BlogPosting"')
   ) {
     issues.missingArticleJsonLd.push(relativeHtmlPath);
-  }
-
-  if (/^\d{4}\/\d{2}\/\d{2}\/[^/]+\/index\.html$/.test(relativeHtmlPath)) {
-    issues.unexpectedDatedPages.push(relativeHtmlPath);
   }
 
   if (
@@ -317,7 +447,9 @@ function hasIssues(issues: BuildVerificationIssues) {
     issues.articleCountIssues.length > 0 ||
     issues.brokenLinks.length > 0 ||
     issues.draftLeaks.length > 0 ||
+    issues.invalidLegacyRedirects.length > 0 ||
     issues.missingArticleJsonLd.length > 0 ||
+    issues.missingLegacyRedirects.length > 0 ||
     issues.missingRequired.length > 0 ||
     issues.unexpectedClientScripts.length > 0 ||
     issues.unexpectedDatedPages.length > 0
@@ -328,6 +460,7 @@ export async function verifyBuild({
   articleDir,
   categoryDir,
   distDir,
+  expectedRedirects = {},
 }: BuildVerificationOptions): Promise<BuildVerificationResult> {
   const files = await listFiles(distDir);
   const articlePublication = await articlePublicationStats(articleDir);
@@ -350,10 +483,17 @@ export async function verifyBuild({
   const issues = emptyIssues();
 
   await collectMissingRequired(distDir, requiredPaths, issues);
+  await collectMissingLegacyRedirects(distDir, expectedRedirects, issues);
 
   for (const file of htmlAndXml) {
     if (file.endsWith(".html")) {
-      await inspectHtmlFile(distDir, file, staticReadingPages, issues);
+      await inspectHtmlFile(
+        distDir,
+        file,
+        staticReadingPages,
+        expectedRedirects,
+        issues,
+      );
     }
 
     await inspectDraftLeaks(
@@ -395,6 +535,16 @@ export function formatBuildVerificationReport(result: BuildVerificationResult) {
   if (result.issues.missingRequired.length > 0) {
     lines.push(`Missing: ${JSON.stringify(result.issues.missingRequired)}`);
   }
+  if (result.issues.missingLegacyRedirects.length > 0) {
+    lines.push(
+      `Missing legacy redirects: ${JSON.stringify(result.issues.missingLegacyRedirects.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.invalidLegacyRedirects.length > 0) {
+    lines.push(
+      `Invalid legacy redirects: ${JSON.stringify(result.issues.invalidLegacyRedirects.slice(0, 50))}`,
+    );
+  }
   if (result.issues.brokenLinks.length > 0) {
     lines.push(
       `Broken links: ${JSON.stringify(result.issues.brokenLinks.slice(0, 50))}`,
@@ -434,10 +584,12 @@ export async function runBuildVerificationCli(
   rootDir = process.cwd(),
 ) {
   const quiet = args.includes("--quiet");
+  const expectedRedirects = await configuredRedirects(rootDir);
   const result = await verifyBuild({
     articleDir: path.resolve(rootDir, "src/content/articles"),
     categoryDir: path.resolve(rootDir, "src/content/categories"),
     distDir: path.resolve(rootDir, "dist"),
+    expectedRedirects,
   });
   const report = formatBuildVerificationReport(result);
 

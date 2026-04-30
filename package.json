@@ -11,7 +11,7 @@
     "assets:unused": "bun scripts/find-unused-images.ts",
     "audit": "bun audit --audit-level=high",
     "audit:all": "bun audit",
-    "build": "astro build && pagefind --site dist --quiet",
+    "build": "astro build && pagefind --site dist --quiet --glob \"{index.html,about/**/*.html,articles/**/*.html,categories/**/*.html,search/**/*.html}\"",
     "check": "bun --silent run verify:content -- --quiet && bun --silent run assets:locations -- --quiet && bun --silent run assets:shared -- --quiet && bun --silent run typecheck && bun --silent run lint && bun --silent run lint:packages && bun --silent run format && bun --silent run deadcode && bun --silent run test",
     "check:release": "bun --silent run check && bun --silent run build && bun --silent run verify && bun --silent run validate:html && bun --silent run test:e2e && bun --silent run audit && bun --silent run secrets",
     "coverage": "bun test tests/lib tests/scripts --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",

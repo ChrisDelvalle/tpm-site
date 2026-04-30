@@ -11,7 +11,7 @@ for local checks and GitHub Actions.
 | `assets:unused`         | Finds images in `src/assets/` that no source file appears to reference. Review signal by default.                                                                         |
 | `audit`                 | Runs a high-severity dependency audit. Blocking security gate.                                                                                                            |
 | `audit:all`             | Runs dependency audit across all severities. Review signal for maintenance.                                                                                               |
-| `build`                 | Builds the static Astro site into `dist/` and generates the Pagefind search index.                                                                                        |
+| `build`                 | Builds the static Astro site into `dist/` and generates the Pagefind search index for real content routes, excluding generated redirect fallback pages.                   |
 | `check`                 | Runs the normal blocking quality gate for PR work: content validation, asset invariants, typecheck, lint, package ordering, formatting, dead-code checks, and unit tests. |
 | `check:release`         | Runs the blocking pre-release gate: `check`, production build, build verification, HTML validation, browser tests, high-severity audit, and secrets scan.                 |
 | `coverage`              | Runs unit/script tests with coverage output. Review signal until coverage thresholds exist.                                                                               |

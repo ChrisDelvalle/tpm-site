@@ -1,0 +1,134 @@
+import { readdir, readFile } from "node:fs/promises";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+
+import { describe, expect, test } from "bun:test";
+import matter from "gray-matter";
+
+const articleDir = path.resolve("src/content/articles");
+const articlePattern = /\.mdx?$/i;
+
+async function listFiles(dir: string, pattern: RegExp) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listFiles(fullPath, pattern)));
+    } else if (pattern.test(entry.name)) {
+      files.push(fullPath);
+    }
+  }
+
+  return files.sort((a, b) => a.localeCompare(b));
+}
+
+function frontmatterData(markdown: string) {
+  return (matter(markdown) as { data: Record<string, unknown> }).data;
+}
+
+function filenameStem(file: string) {
+  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
+}
+
+function withTrailingSlash(value: string) {
+  return value.endsWith("/") ? value : `${value}/`;
+}
+
+function normalizeLegacyPermalink(value: string) {
+  const trimmed = value.trim();
+  const pathname = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return withTrailingSlash(pathname.replace(/\/{2,}/g, "/"));
+}
+
+function articleUrl(file: string) {
+  return withTrailingSlash(`/articles/${filenameStem(file)}`);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isAstroConfigModule(
+  value: unknown,
+): value is { default: { redirects?: Record<string, unknown> } } {
+  if (!isRecord(value) || !isRecord(value["default"])) {
+    return false;
+  }
+
+  const redirects = value["default"]["redirects"];
+  return redirects === undefined || isRecord(redirects);
+}
+
+async function configRedirects() {
+  // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
+  const configModule: unknown = await import(
+    pathToFileURL(path.resolve("astro.config.mjs")).href
+  );
+
+  if (!isAstroConfigModule(configModule)) {
+    throw new TypeError("Astro config module has an unexpected shape.");
+  }
+
+  const redirects = configModule.default.redirects;
+
+  if (redirects === undefined) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(redirects).map(([source, destination]) => {
+      if (typeof destination !== "string") {
+        throw new TypeError(
+          `Expected string redirect destination for ${source}.`,
+        );
+      }
+
+      return [source, destination];
+    }),
+  );
+}
+
+async function expectedRedirectsFromArticleFrontmatter() {
+  const files = await listFiles(articleDir, articlePattern);
+  const redirects = new Map<string, string>();
+  const seen = new Map<string, string>();
+
+  for (const file of files) {
+    const data = frontmatterData(await readFile(file, "utf8"));
+
+    const legacyPermalink = data["legacyPermalink"];
+    if (legacyPermalink === undefined) {
+      continue;
+    }
+
+    if (typeof legacyPermalink !== "string") {
+      throw new TypeError(`${file}: legacyPermalink must be a string.`);
+    }
+
+    const source = normalizeLegacyPermalink(legacyPermalink);
+    const previous = seen.get(source);
+
+    if (previous !== undefined) {
+      throw new Error(
+        `${file}: duplicate legacyPermalink ${source}; already used by ${previous}.`,
+      );
+    }
+
+    seen.set(source, file);
+    redirects.set(source, articleUrl(file));
+  }
+
+  return Object.fromEntries(
+    [...redirects.entries()].sort(([a], [b]) => a.localeCompare(b)),
+  );
+}
+
+describe("legacy redirects", () => {
+  test("Astro redirects match article legacy permalink frontmatter", async () => {
+    expect(await configRedirects()).toEqual(
+      await expectedRedirectsFromArticleFrontmatter(),
+    );
+  });
+});
