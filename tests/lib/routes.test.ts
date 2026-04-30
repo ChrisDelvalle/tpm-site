@@ -79,7 +79,7 @@ describe("route helpers", () => {
     expect(categorySlug(politics)).toBe("politics");
   });
 
-  test("decodes known legacy HTML entities in titles", () => {
+  test("decodes known HTML entities in titles", () => {
     expect(
       decodeHtmlEntities("Memes and Humor&#58; &quot;What is a Meme?&quot;"),
     ).toBe('Memes and Humor: "What is a Meme?"');

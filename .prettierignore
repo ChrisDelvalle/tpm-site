@@ -9,7 +9,4 @@ test-results/
 tmp/
 unused-assets/
 
-_site/
-_config.yml
-
 package-lock.json

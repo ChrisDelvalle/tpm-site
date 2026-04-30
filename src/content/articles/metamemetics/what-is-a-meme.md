@@ -6,7 +6,7 @@ author: "Claudia Vulliamy"
 image: "../../../assets/articles/what-is-a-meme/vulliamy-12.jpg"
 imageAlt: "Diagram illustrating the concept of a meme"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - memes
   - meme studies
   - philosophy

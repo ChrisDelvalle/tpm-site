@@ -5,7 +5,7 @@ date: 2022-04-04 23:07:34 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/shared/2020-06-24_fossilised-bug_resized.png"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - memes
   - memetics
   - philosophy

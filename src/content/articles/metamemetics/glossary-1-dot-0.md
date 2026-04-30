@@ -1,11 +1,11 @@
 ---
 title: Glossary 1.0
-# TODO(Seong): Review and update this migration-added description.
+# TODO(Seong): Review and update this description.
 description: "A working glossary for ironic meme theory, from normies and autists to meta-irony, normification, and the phylomemetic tree."
 date: 2016-01-18 13:50:00 +13:00
 author: "The Philosopher's Meme"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - memes
   - memetics
   - metamemetics
@@ -21,9 +21,9 @@ _Last updated Jan 18, 2016. A new glossary is being prepared; much of the follow
 
 <a name="Top"></a>
 
-# Glossary 1.0
+## Glossary 1.0
 
-## Table of Contents
+### Table of Contents
 
 - [Autist](#Autist)
 - [Ironic Memes](#IronicMemes)
@@ -47,7 +47,7 @@ _Last updated Jan 18, 2016. A new glossary is being prepared; much of the follow
 
 <a name="Autist"></a>
 
-## Autist
+### Autist
 
 Participant in the underground meme scene. A poster, fluent in the associated
 linguaculture, who is able to recall (memorization of content), reproduce
@@ -59,7 +59,7 @@ speaking patterns found on the autism spectrum.
 
 <a name="IronicMemes"></a>
 
-## Ironic Memes
+### Ironic Memes
 
 Slightly more Complex memes; requires a prior base familiarity with some
 Pre-Ironic lexicon since the subversion of conventions is the primary source
@@ -70,7 +70,7 @@ as ‘normification’ or ‘normies stealing the memes’.
 
 <a name="Ironist"></a>
 
-## Ironist
+### Ironist
 
 A subgroup of autists; insiders to the Ironic meme scene. Originated from
 4chan but now largely centred around Facebook meme pages and groups.
@@ -82,7 +82,7 @@ Alternative spelling: (an) ironic
 
 <a name="MetaIronicMemes"></a>
 
-## Meta-Ironic Memes
+### Meta-Ironic Memes
 
 Complex memes that prey on less complex memes; forms the same relationship
 with the meme(s) it derives its humor from as Ironic memes do with Pre-Ironic
@@ -94,7 +94,7 @@ rate of deconstruction.
 
 <a name="Mutation"></a>
 
-## Mutation
+### Mutation
 
 The process through which a meme is altered from its previous copy. It can be
 accidental such as in the case of misspelling or misuse, or deliberate such as
@@ -105,14 +105,14 @@ towards this than towards Normalization.
 
 <a name="NarratologicalSubversion"></a>
 
-## Narratological Subversion
+### Narratological Subversion
 
 Violation of conventions regarding the plot, themes, or message of a meme. The
 joke is about the content, as opposed to format.
 
 <a name="NeoTraditionalistMemes"></a>
 
-## Neo-Traditionalist Memes
+### Neo-Traditionalist Memes
 
 Intertextual memes which reference various traditionalistic memes. Their humor
 comes from “inside” jokes. As traditionalist memes are popularized, they
@@ -127,7 +127,7 @@ scene from The Dark Knight Rises.
 
 <a name="Normalization"></a>
 
-## Normalization
+### Normalization
 
 The process through which a component becomes accepted as ‘normal’ in a given
 culture. Commonly referred to as “becoming a meme”. Conventions which emerge
@@ -139,7 +139,7 @@ this than towards mutation.
 
 <a name="Normie"></a>
 
-## Normie
+### Normie
 
 An outsider to the underground meme scene. A poster who is uninitiated,
 uninvested, and stylistically uninformed. Though most recently associated with
@@ -151,7 +151,7 @@ Alternative spellings: “normalfags,” “Norman,” and other derivatives of 
 
 <a name="Normification"></a>
 
-## Normification
+### Normification
 
 (Not to be confused with Normalization.) The process through which all complex
 memes constantly regress towards Simplicity; the decay to the meme. As a meme
@@ -164,7 +164,7 @@ itself.
 
 <a name="PostIronicMemes"></a>
 
-## Post-Ironic Memes
+### Post-Ironic Memes
 
 Highly Complex memes that reconcile Pre-Irony and Irony. Instead of outright
 violating established conventions, the narrative works with the structure in
@@ -187,7 +187,7 @@ normification.
 
 <a name="PreIronicMemes"></a>
 
-## Pre-Ironic Memes
+### Pre-Ironic Memes
 
 Simple memes; popular objects making up the lexicon of reference humor–what
 you see is what you get. They do not rely on the violation of memetic
@@ -197,7 +197,7 @@ meme right’.
 
 <a name="ProtoIronicMemes"></a>
 
-## Proto-Ironic Memes
+### Proto-Ironic Memes
 
 Slightly complex memes that reference themes and ideas rather than other memes
 themselves. They differ from Neo-Traditionalist memes in that they isolate the
@@ -207,7 +207,7 @@ restrictive formats, but doesn’t quite go as far as it)
 
 <a name="SimplicityComplexity"></a>
 
-## Simplicity/Complexity
+### Simplicity/Complexity
 
 The size of the system of related memes referenced by a particular meme.
 Insofar as a meme exists within a network of other memes and relies on those
@@ -222,7 +222,7 @@ or participation within the respective memetic languaculture.
 
 <a name="StructuralSubversion"></a>
 
-## Structural Subversion
+### Structural Subversion
 
 Deconstruction of the relationship between the meme and the convention of its
 genre through deliberate misuse (viz. a criticism of formulaic conventions in
@@ -242,7 +242,7 @@ like a play on words taking advantage of ambivalence in meaning within a meme.
 
 <a name="StylisticSubversion"></a>
 
-## Stylistic Subversion
+### Stylistic Subversion
 
 Violation of conventions regarding the visual elements, graphic structure,
 presentation, and manner/rhetoric of a meme. The joke is about the format, as
@@ -250,7 +250,7 @@ opposed to content.
 
 <a name="ThePhylomemeticTree"></a>
 
-## The Phylomemetic Tree
+### The Phylomemetic Tree
 
 ![The Phylomemetic Tree diagram](../../../assets/shared/phylomemetic-tree-lamarckian.png)
 
@@ -261,7 +261,7 @@ divergence into the mainstream and underground.
 
 <a name="TheQuadrantofIronicMemes"></a>
 
-## The Quadrant of Ironic Memes
+### The Quadrant of Ironic Memes
 
 ![The Quadrant of Ironic Memes diagram](../../../assets/shared/2x2-meme-table.png)
 
@@ -271,7 +271,7 @@ tension within ‘Ironic’ memes.
 
 <a name="TraditionalistMemes"></a>
 
-## Traditionalist Memes
+### Traditionalist Memes
 
 The most basic kinds of Internet memes; single cultural units which are copied
 and reproduced, such as emoticons, viral videos and forwarded chain e-mails.

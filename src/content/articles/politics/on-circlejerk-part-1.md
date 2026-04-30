@@ -5,7 +5,7 @@ date: 2021-12-18 18:46:00 +13:00
 author: "Chicago School of Countercultural Inquiry"
 image: "../../../assets/articles/on-circlejerk-part-1/circlejerk_chart_of_terms-01.png"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - politics
   - internet culture
   - Facebook

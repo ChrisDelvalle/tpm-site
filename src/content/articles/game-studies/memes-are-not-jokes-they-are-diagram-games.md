@@ -7,7 +7,7 @@ description:
 date: 2017-09-10 12:00:00 +12:00
 author: "Seong-Young Her"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - memes
   - games
   - philosophy

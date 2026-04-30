@@ -58,7 +58,7 @@ reason near the script or in the relevant config file.
 
 Custom validation scripts are appropriate when the project has domain-specific
 rules that generic tools cannot know, such as draft exclusion, duplicate slugs,
-legacy permalink isolation, article image validation, and generated output
+historical permalink isolation, article image validation, and generated output
 checks. Those scripts should be small, deterministic, and focused on one class
 of invariant.
 
@@ -360,8 +360,9 @@ Configuration:
 
 Important project-specific decision:
 
-- Format repository docs such as `README.md`, `CHECKLIST.md`,
-  `DESIGN_PHILOSOPHY.md`, and `QUALITY_TOOLING.md`.
+- Format repository docs such as `README.md`, `DESIGN_PHILOSOPHY.md`,
+  `QUALITY_TOOLING.md`, `ASTRO_GUIDANCE.md`, `TAILWIND_GUIDANCE.md`, and
+  `AGENTS.md`.
 - Format article Markdown and MDX with Prettier, while keeping article wording
   and meaning unchanged unless content edits are explicitly requested.
 
@@ -390,14 +391,14 @@ for Vitest.
 Test:
 
 - article slug derivation;
-- topic derivation;
+- category derivation;
 - draft filtering;
 - frontmatter normalization;
 - route helper output;
 - duplicate slug detection;
 - image path validation;
 - RSS/sitemap/search source filtering;
-- migration helpers;
+- content helper behavior;
 - any custom Markdown/content transforms.
 
 Use:
@@ -514,7 +515,6 @@ Checks should confirm:
   inlined by Astro.
 - no unexpected Astro client JavaScript appears on static reading pages.
 - Pagefind output exists only under `dist/pagefind/`.
-- built HTML does not contain unresolved Liquid/Jekyll tokens.
 - built pages do not reference missing local assets.
 - draft and unpublished articles do not appear in routes, RSS, sitemap, search,
   category pages, or archives.
@@ -542,15 +542,13 @@ Checks should include:
 - drafts stay unpublished;
 - duplicate slugs fail;
 - category folders derive valid categories;
-- reserved folders are not topics;
+- reserved folders are not categories;
 - article images exist;
 - meaningful images have alt text where detectable;
 - generated article URLs are stable;
-- old Jekyll fields do not drive core routing;
+- unsupported historical frontmatter fields do not drive core routing;
 - `legacyPermalink` is preserved but isolated;
-- no Liquid/Jekyll artifacts appear in output;
-- no old dated pages accidentally appear unless explicitly generated as isolated
-  redirect fallback pages.
+- no dated permalink pages accidentally appear.
 
 This is the main place to make invalid content state unrepresentable.
 
@@ -723,8 +721,8 @@ Current GitHub configuration:
 - `.github/workflows/security.yml` for Dependency Review, CodeQL, and gitleaks.
 - `.github/dependabot.yml` for dependency updates.
 
-Do not add Ruby, Jekyll, or Bundler dependency tracking back into Dependabot
-unless the project intentionally reintroduces that toolchain.
+Keep dependency automation scoped to the current Bun/Astro toolchain unless the
+project intentionally adds another toolchain.
 
 ## Adoption Order
 

@@ -4,7 +4,7 @@ This file is the operating manual for agents working in this repository.
 
 ## Operating Priorities
 
-The Philosopher's Meme is a Bun-first Astro static site migrated from Jekyll.
+The Philosopher's Meme is a Bun-first Astro static site.
 
 Primary goals:
 
@@ -13,10 +13,10 @@ Primary goals:
 - Keep authoring simple: adding Markdown or MDX articles should not require
   touching application code.
 - Prefer professional Astro, Tailwind, accessibility, and performance standards
-  over preserving early migration implementation details.
+  over preserving early prototype implementation details.
 
-The current Astro UI is a migration prototype. It can guide tone, palette, and
-content structure, but it is not an architectural contract.
+The current Astro UI can guide tone, palette, and content structure, but it is
+not an architectural contract.
 
 Default priorities:
 
@@ -39,8 +39,7 @@ Default to Bun for package management, scripts, tests, and local tooling.
   package runner is needed.
 - Prefer Bun scripts for repository automation when the script can run cleanly
   under Bun.
-- Do not introduce Ruby, Bundler, or Jekyll dependencies into the Astro build
-  path.
+- Do not introduce unrelated build toolchains into the Astro build path.
 
 When an existing script currently uses `node`, keep it working unless the task
 explicitly includes converting the script to Bun. Avoid churn that is unrelated
@@ -64,7 +63,6 @@ to the active milestone.
 - `scripts/`: repository maintenance, verification, and quality scripts.
 - `tests/`: unit, e2e, accessibility, and performance tests.
 - `dist/`: generated build output. Do not edit by hand.
-- `CHECKLIST.md`: migration milestone and verification tracking.
 - `DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
 - `QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
   release checks.
@@ -354,7 +352,7 @@ Routing rules:
   RSS, and `Astro.site`.
 - Know route config options before changing output behavior: `prerender`,
   `partial`, `trailingSlash`, and `build.format`.
-- Do not let legacy permalinks drive core routing.
+- Do not let historical permalink metadata drive core routing.
 - Avoid client-side routing unless there is a strong product reason.
 - Endpoint routes should return `Response` objects.
 - Use `[...id].astro` when content IDs can contain `/`.
@@ -384,12 +382,12 @@ Content collection rules:
 - Always sort collections explicitly before rendering lists.
 - Keep author-facing frontmatter small and meaningful.
 - Treat frontmatter as data, not executable logic.
-- Validate dates, images, tags, authors, and legacy metadata at the
+- Validate dates, images, tags, authors, and historical metadata at the
   collection boundary.
 - Use a single published-content helper/filter for pages, RSS, sitemap, search,
   related posts, and archives.
 - Avoid frontmatter `slug` unless intentionally customizing generated entry IDs.
-- Prefer filename/file path slugs once migration cleanup is complete.
+- Prefer filename/file path slugs unless deliberately changing URL policy.
 - Use draft filtering so unpublished content never leaks.
 
 Markdown and MDX rules:
@@ -950,7 +948,7 @@ Article content fidelity is strict.
   the precise requested change. Do not restyle prose, improve phrasing, adjust
   tone, or otherwise change authorial language unless explicitly instructed.
 - Preserve existing meaningful metadata.
-- Keep legacy permalink data as inert metadata; do not let it drive routing,
+- Keep historical permalink data as inert metadata; do not let it drive routing,
   article detection, or category grouping.
 - Ensure drafts and unpublished content remain unpublished.
 - Article authors should not need to edit routes, navigation, RSS, sitemap,
@@ -1214,19 +1212,19 @@ Use Playwright for user-visible browser behavior:
 Use axe accessibility checks for representative pages. Use Lighthouse CI for
 performance, accessibility, best practices, and SEO release gates.
 
-## Checklist Workflow
+## Planning Workflow
 
-Use `CHECKLIST.md` for migration milestones and materially important
-verification work.
+Use a focused project document only when work is large enough to need explicit
+coordination or reviewable sequencing.
 
-Before starting a non-trivial implementation phase, update the checklist or the
-relevant migration/design/tooling document so the intended work is reviewable.
-Mark checklist items complete as they are finished.
+Before starting a non-trivial implementation phase, update the relevant
+design/tooling/project document when the intended work should be reviewable
+before code changes.
 
-Do not use the checklist as a dumping ground for routine QA commands. Routine
-tooling expectations belong in this file and `QUALITY_TOOLING.md`.
+Do not create planning docs for routine QA commands. Routine tooling
+expectations belong in this file and `QUALITY_TOOLING.md`.
 
-## Generated And Legacy Files
+## Generated Files And Historical Assets
 
 Do not edit generated files by hand.
 
@@ -1237,10 +1235,9 @@ Generated or disposable paths include:
 - Pagefind output under built `dist/`
 - coverage output
 
-Legacy files should be handled carefully during migration cleanup. Do not delete
-or rename legacy content, assets, or metadata unless the active task explicitly
-includes that cleanup and the relevant migration plan/checklist has been
-updated.
+`unused-assets/` is an intentionally tracked archive of unreferenced media. Do
+not delete, rename, or repurpose those files unless the active task explicitly
+includes that cleanup.
 
 ## Handoff Policy
 

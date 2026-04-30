@@ -5,7 +5,7 @@ date: 2021-12-30 22:42:08 +13:00
 author: "Simon J. Evnine"
 image: "../../../assets/articles/vulliamy-response/batmanmeme.jpg"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - memes
   - meme studies
   - philosophy

@@ -5,7 +5,7 @@ date: 2019-12-23 10:43:00 +12:00
 author: "Seong-Young Her"
 image: "../../../assets/articles/gondola-shrine/2019-12-02_ghost-puppy_resized.png"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - art
   - Gondola
   - memes

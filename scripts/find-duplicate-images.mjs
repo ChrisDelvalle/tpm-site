@@ -4,7 +4,7 @@ import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
 const rootDir = process.cwd();
-const defaultScanDirs = ["src/assets", "public", "assets", "uploads"];
+const defaultScanDirs = ["src/assets", "public", "unused-assets"];
 const imageExtensionPattern =
   /\.(?:avif|gif|jpe?g|png|svg|webp|bmp|ico|tiff?)$/i;
 const args = process.argv.slice(2);

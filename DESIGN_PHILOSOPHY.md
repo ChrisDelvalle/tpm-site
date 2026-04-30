@@ -1,9 +1,9 @@
 # Design Philosophy
 
-This project should be rebuilt as a modern Astro site composed from responsive
-design blocks and responsive components. The current Astro implementation is a
-working migration prototype: it is useful for tone, palette, content structure,
-and broad visual direction, but it is not an architectural contract.
+This project is a modern Astro site composed from responsive design blocks and
+responsive components. The current implementation is useful for tone, palette,
+content structure, and broad visual direction, but it is not an architectural
+contract.
 
 Content fidelity is strict. Layout and implementation details are allowed to
 change when a more professional, maintainable, accessible, or performant
@@ -245,7 +245,7 @@ Use these practices as the default:
 - Prefer named variants over clusters of boolean props.
 - Make invalid states unrepresentable with typed unions or normalized state
   objects.
-- Keep visual components free of parsing, migration, routing, and data cleanup
+- Keep visual components free of parsing, routing, and data cleanup
   logic.
 - Normalize data at boundaries before passing it into UI.
 - Handle loading, empty, error, disabled, selected, expanded, and long-content
@@ -548,7 +548,7 @@ For article images, the pipeline should eventually detect:
 - Source images that are far larger than their maximum rendered size.
 - Images without known dimensions.
 - Images likely to become LCP candidates.
-- Broken root-relative paths after content migration.
+- Broken root-relative paths.
 
 For new non-article image components, prefer an explicit image API that requires
 alt text, dimensions, loading behavior, and responsive sizes. This makes the
@@ -757,12 +757,12 @@ Do not preserve by default:
 - Fragile header mechanics.
 - Large global stylesheet patterns.
 - One-off breakpoint fixes.
-- Legacy routing logic.
+- Historical permalink routing logic.
 - Layout decisions that fight responsive design.
 - Implementation details that make authors care about the codebase.
 
 Prefer professional Astro, Tailwind, accessibility, and performance standards
-over matching earlier migration attempts.
+over matching earlier prototypes.
 
 ## Default Decision Rules
 

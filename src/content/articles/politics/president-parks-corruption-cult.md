@@ -1,6 +1,6 @@
 ---
 title: President Park's Corruption Cult
-# TODO(Seong): Review and update this migration-added description.
+# TODO(Seong): Review and update this description.
 description: "On Park Geun-Hye, Choi Soon-Sil, Ilbe, meme magic, and the rage of watching Korean democracy dragged through another cult of power."
 date: 2016-11-02 11:33:00 Z
 author: "Seong-Young Her"

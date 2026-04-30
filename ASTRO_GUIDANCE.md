@@ -202,7 +202,7 @@ State rules:
 - Keep content/server data, URL state, form draft state, and local interaction
   state separate unless combining them is deliberate.
 - Derive cheap display values during render instead of duplicating state.
-- Normalize content and legacy fallbacks in `src/lib` or loaders, not UI.
+- Normalize content metadata in `src/lib` or loaders, not UI.
 - Design loading, empty, error, disabled, selected, expanded, and long-content
   states before calling a component complete.
 
@@ -374,7 +374,7 @@ Content schema rules:
 - Keep author-facing frontmatter small and meaningful.
 - Use `draft`/`published` filtering so unpublished content never leaks.
 - Frontmatter is data, not executable logic.
-- Validate dates, images, tags/categories, authors, and legacy metadata at the
+- Validate dates, images, tags/categories, authors, and historical metadata at the
   collection boundary.
 - Do not rely on Markdown `layout` frontmatter for collection entries.
 

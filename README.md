@@ -112,7 +112,7 @@ from generated article routes, archives, categories, RSS, sitemap, and search.
 Do not add `slug`, `topic`, or `category` frontmatter. The article slug comes
 from the filename. The category comes from the source folder.
 
-`legacyPermalink` and `legacyBanner` may exist on migrated articles as inert
+`legacyPermalink` and `legacyBanner` may exist on older articles as inert
 historical metadata. They do not control routing, publishing, or rendering.
 
 ## Category Folders
@@ -187,7 +187,7 @@ Category pages are:
 /categories/:category/
 ```
 
-Old dated URLs such as:
+Historical dated URLs such as:
 
 ```text
 /2021/05/16/gamergate-as-metagaming/
@@ -226,7 +226,7 @@ Pagefind search assets are generated after the Astro build and live under
 ## Verification
 
 `bun run verify` checks the built `dist/` output for expected pages, assets,
-published article count, Liquid artifacts, and broken internal links. The
+published article count, and broken internal links. The
 expected article count is derived from current source content, excluding
 articles marked `draft: true`.
 

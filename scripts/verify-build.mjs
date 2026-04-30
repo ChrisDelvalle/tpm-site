@@ -33,7 +33,6 @@ const staticReadingPages = [
   "articles/gamergate-as-metagaming/index.html",
   "categories/history/index.html",
 ];
-const draftSlug = "joshua-citarella-astroturfing";
 
 async function exists(relativePath) {
   try {
@@ -60,20 +59,27 @@ async function listFiles(dir) {
   return files;
 }
 
-async function expectedPublishedArticleCount() {
+function filenameStem(file) {
+  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
+}
+
+async function articlePublicationStats() {
   const articleSourceFiles = (await listFiles(articleDir)).filter((file) =>
     /\.mdx?$/i.test(file),
   );
-  let count = 0;
+  const draftSlugs = [];
+  let publishedCount = 0;
 
   for (const file of articleSourceFiles) {
     const { data } = matter(await readFile(file, "utf8"));
-    if (data.draft !== true) {
-      count += 1;
+    if (data.draft === true) {
+      draftSlugs.push(filenameStem(file));
+    } else {
+      publishedCount += 1;
     }
   }
 
-  return count;
+  return { draftSlugs, publishedCount };
 }
 
 function linkTargets(html) {
@@ -96,19 +102,12 @@ function withoutFragmentAndQuery(url) {
   return url.split("#")[0].split("?")[0];
 }
 
-function isOldDatedRoute(url) {
-  return /^\/\d{4}\/\d{2}\/\d{2}\/[^/]+\/?$/.test(url);
-}
-
 async function internalTargetExists(url) {
   const cleanUrl = withoutFragmentAndQuery(url);
   if (!cleanUrl || cleanUrl.startsWith("#")) {
     return true;
   }
   if (!cleanUrl.startsWith("/")) {
-    return true;
-  }
-  if (isOldDatedRoute(cleanUrl)) {
     return true;
   }
 
@@ -136,24 +135,20 @@ for (const requiredPath of requiredPaths) {
 }
 
 const files = await listFiles(distDir);
+const articlePublication = await articlePublicationStats();
 const htmlAndXml = files.filter((file) => /\.(?:html|xml)$/i.test(file));
 const astroClientScripts = files.filter((file) =>
   /\/_astro\/.+\.js$/i.test(file),
 );
-const liquidFiles = [];
 const brokenLinks = [];
 const draftLeaks = [];
 const articleCountIssues = [];
 const missingArticleJsonLd = [];
 const unexpectedClientScripts = [];
 const unexpectedDatedPages = [];
-let oldDatedLinks = 0;
 
 for (const file of htmlAndXml) {
   const text = await readFile(file, "utf8");
-  if (/\{\{\s*site\.baseurl\s*\}\}|\{%/.test(text)) {
-    liquidFiles.push(path.relative(distDir, file));
-  }
 
   if (file.endsWith(".html")) {
     const relativeHtmlPath = path.relative(distDir, file);
@@ -179,11 +174,6 @@ for (const file of htmlAndXml) {
       if (isExternal(target)) {
         continue;
       }
-      const cleanTarget = withoutFragmentAndQuery(target);
-      if (isOldDatedRoute(cleanTarget)) {
-        oldDatedLinks += 1;
-        continue;
-      }
       if (!(await internalTargetExists(target))) {
         brokenLinks.push(`${path.relative(distDir, file)} -> ${target}`);
       }
@@ -199,8 +189,10 @@ for (const file of files) {
     relativePath.startsWith("pagefind/")
   ) {
     const text = await readFile(file, "utf8");
-    if (text.includes(draftSlug)) {
-      draftLeaks.push(relativePath);
+    for (const draftSlug of articlePublication.draftSlugs) {
+      if (text.includes(draftSlug)) {
+        draftLeaks.push(`${relativePath} -> ${draftSlug}`);
+      }
     }
   }
 }
@@ -213,7 +205,7 @@ if (!articleStats.isDirectory()) {
 const articlePages = files.filter((file) =>
   /\/articles\/[^/]+\/index\.html$/.test(file),
 );
-const expectedArticlePages = await expectedPublishedArticleCount();
+const expectedArticlePages = articlePublication.publishedCount;
 
 if (articlePages.length !== expectedArticlePages) {
   articleCountIssues.push(
@@ -223,7 +215,6 @@ if (articlePages.length !== expectedArticlePages) {
 
 if (
   missingRequired.length ||
-  liquidFiles.length ||
   brokenLinks.length ||
   draftLeaks.length ||
   articleCountIssues.length ||
@@ -234,9 +225,6 @@ if (
   console.error("Build verification failed.");
   if (missingRequired.length) {
     console.error("Missing:", missingRequired);
-  }
-  if (liquidFiles.length) {
-    console.error("Liquid artifacts:", liquidFiles);
   }
   if (brokenLinks.length) {
     console.error("Broken links:", brokenLinks.slice(0, 50));
@@ -266,5 +254,5 @@ if (
 }
 
 console.log(
-  `Build verification passed: ${articlePages.length} articles, ${astroClientScripts.length} Astro client script assets, ${oldDatedLinks} old dated links classified as redirect candidates.`,
+  `Build verification passed: ${articlePages.length} articles and ${astroClientScripts.length} Astro client script assets.`,
 );

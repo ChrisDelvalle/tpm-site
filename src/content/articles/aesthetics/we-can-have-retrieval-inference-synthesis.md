@@ -4,7 +4,7 @@ description: "A Modern Synthesis of art criticism is possible."
 date: 2021-07-21 13:21:00 +12:00
 author: "Seong-Young Her"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - aesthetics
   - art
   - philosophy

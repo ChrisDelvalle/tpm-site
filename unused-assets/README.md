@@ -1,7 +1,7 @@
 # Unused Assets
 
-This directory contains image and media files left over from the Jekyll to Astro
-migration that are not currently referenced by the site.
+This directory contains image and media files that are not currently referenced
+by the site.
 
 Do not reference files from this directory in articles, layouts, or components.
 If an asset becomes useful again, move it into the appropriate folder under

@@ -5,7 +5,7 @@ date: 2015-08-19 01:01:23 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/shared/11896173_1679964772237142_4577427319780722645_n.png"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - philosophy
   - memes
   - history

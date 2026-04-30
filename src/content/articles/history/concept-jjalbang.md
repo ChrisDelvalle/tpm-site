@@ -13,7 +13,7 @@ legacyPermalink: 2020/01/07/concept-jjalbang/
 legacyBanner: "/uploads/291.jpg"
 ---
 
-# Fundamental Concepts In International Meme Studies: Jjalbang, the Korean Meme
+## Fundamental Concepts In International Meme Studies: Jjalbang, the Korean Meme
 
 Jjalbang (짤방, lit. "prune prevention") is the Korean equivalent to the Internet meme.
 While "meme" typically refers to a set of content as well as the individual videos or images, jjalbang traditionally refers only to individual images, typically random and humorous in nature.
@@ -31,7 +31,7 @@ _An ASCII art version of Gaejoogi made in Japan._
 
 However, the jjalbang was first and foremost a material object, and by no means the same thing as a meme. The term does not refer to the genre itself as a collective in the way "meme" can. Purists among contemporary users still refuse to apply the term to anything other than image files, making exception for animated jjalbangs called oomjjal (움짤, lit. "moving jjalbang").
 
-## RESOURCES
+### RESOURCES
 
 - [Namuwiki entry for jjalbang](https://namu.wiki/w/%EC%A7%A4%EB%B0%A9)
 - [News article about Gaejoogi](https://news.mt.co.kr/mtview.php?no=2009042416153570569&outlink=1&ref=%3A%2F%2F)

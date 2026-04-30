@@ -5,7 +5,7 @@ date: 2022-04-06 23:58:10 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/71B5gzMlcnL.jpg"
 tags:
-  # TODO(Seong): Review these migration-added tags.
+  # TODO(Seong): Review these tags.
   - philosophy
   - memes
   - history
@@ -35,7 +35,7 @@ The most popular phrasing, from Henry Dribble, is a (very slight) paraphrasing o
 
 As of right now, a Google search of the exact phrasing from Malcolm's 1958 memoir brings up a mere 78 results; the exact phrasing from Rosenblatt's book brings up over 7730 results. It's the top result for "Wittgenstein quote". So, most people are quoting the fictional character Henry Dribble, who is paraphrasing Norman Malcolm, who is paraphrasing Wittgenstein, who may have been joking (but was not being facetious). It would seem that Rosenblatt did indeed contribute somewhat to popularising Wittgenstein with his catchier phrasing.
 
-The last time I wrote about misattributed philosophy quotes, [I mused](/2015/08/19/misattributed-plato-quote-is-real-now) regarding a fake Plato quote that "It's as if there exists a Plato quite different from one whom we know from his books, a folk hero who loved music and wrote in flowery prose that our world is made up of something beautiful, and that hope exists as an intrinsic component of reality."
+The last time I wrote about misattributed philosophy quotes, [I mused](/articles/misattributed-plato-quote-is-real-now/) regarding a fake Plato quote that "It's as if there exists a Plato quite different from one whom we know from his books, a folk hero who loved music and wrote in flowery prose that our world is made up of something beautiful, and that hope exists as an intrinsic component of reality."
 
 ![Illustrated Plato quote image beginning "Music is a moral law. It gives a soul to the universe, wings to the mind, flight to the imagination, a charm to sadness, and life to everything. It is the essence of order, and leads to all that is good, just and beautiful, of which it is invisible, but nevertheless dazzling, passionate, and eternal form."](../../../assets/shared/11896173_1679964772237142_4577427319780722645_n.png)
 

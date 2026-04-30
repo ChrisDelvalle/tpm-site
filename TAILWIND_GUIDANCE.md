@@ -299,7 +299,7 @@ const toneClasses = {
 Tailwind v4 automatically scans source files and ignores files in `.gitignore`,
 `node_modules`, binary files, CSS files, and common lock files. Use the
 `@source` directive only when classes live somewhere automatic detection does
-not scan. Use `@source not` to exclude noisy legacy paths. Use
+not scan. Use `@source not` to exclude noisy generated or external paths. Use
 `@source inline()` only to safelist classes that cannot appear literally in
 source, and prefer small explicit safelists over broad generated ranges.
 
@@ -330,7 +330,7 @@ Tailwind also exposes build-time CSS functions:
 - `--alpha(color / opacity)` for token-based opacity mixing.
 - `--spacing(n)` for spacing-scale math inside custom CSS or arbitrary values.
 
-The legacy `theme()` function exists for compatibility, but prefer CSS theme
+The compatibility `theme()` function exists for older patterns, but prefer CSS theme
 variables in new code.
 
 Use `@apply` sparingly. It is best for third-party CSS integration or rare base
