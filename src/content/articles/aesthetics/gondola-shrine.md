@@ -14,7 +14,15 @@ tags:
 legacyPermalink: 2019/12/23/gondola-shrine/
 ---
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/kLqdn7tbIbM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/kLqdn7tbIbM"
+  title="Gondola shrine video"
+  loading="lazy"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
 
 I think of every gondola post as a shrine. People on the Internet come together to appreciate them in an almost spiritual way, much like how primitive humans used to pay their respects to holy objects like an awe-inspiring mountain or a tree, believed to house gods within. I think this ability to project magic into the world evolved very early on in human history, and continues to influence the way we perceive everything, even art and memes.
 

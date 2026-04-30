@@ -26,7 +26,15 @@ legacyPermalink: 2017/06/13/the-structure-of-hyperspatial-politics/
 
 # The Structure of Hyperspatial Politics
 
-<iframe width="100%" height="110" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/datasubjects/preview-the-structures-of-hyperspatial-politics&color=ff5500&auto_play=false&hide_related=false &show_comments=true&show_user=true&show_reposts=false" title="Embedded content"></iframe>
+<iframe
+  width="100%"
+  height="110"
+  scrolling="no"
+  src="https://w.soundcloud.com/player/?url=https://soundcloud.com/datasubjects/preview-the-structures-of-hyperspatial-politics&color=ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false"
+  title="The Structures of Hyperspatial Politics SoundCloud preview"
+  loading="lazy"
+  allow="autoplay"
+></iframe>
 
 ## The Structures of Hyperspatial Politics
 

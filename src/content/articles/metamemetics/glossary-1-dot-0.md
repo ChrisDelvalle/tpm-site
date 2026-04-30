@@ -252,7 +252,7 @@ opposed to content.
 
 ## The Phylomemetic Tree
 
-![](../../../assets/shared/phylomemetic-tree-lamarckian.png)
+![The Phylomemetic Tree diagram](../../../assets/shared/phylomemetic-tree-lamarckian.png)
 
 The Phylomemetic Tree is a diagram showing the evolution of Internet memes
 from their inception as emoticons and chain e-mails through to increasingly
@@ -263,7 +263,7 @@ divergence into the mainstream and underground.
 
 ## The Quadrant of Ironic Memes
 
-![](../../../assets/shared/2x2-meme-table.png)
+![The Quadrant of Ironic Memes diagram](../../../assets/shared/2x2-meme-table.png)
 
 The Quadrant is a system aimed at the practical, easily applicable
 classification and analysis of Internet Memes, with a focus on the inherent

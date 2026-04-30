@@ -12,7 +12,7 @@ tags:
 legacyPermalink: 2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/
 ---
 
-![](../../../assets/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg)
+![Quote image reading, "A serious and good philosophical work could be written consisting entirely of jokes."](../../../assets/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/quote-a-serious-and-good-philosophical-work-could-be-written-consisting-entirely-of-jokes-ludwig-wittgenstein-31-91-31.jpg)
 
 "A serious and good philosophical work could be written consisting entirely of jokes." This is possibly Wittgenstein's most popular line, alongside "the limits of my language mean the limits of my world" and "whereof one cannot speak, thereof one must be silent"; the kind of line that gets printed on mugs on Etsy.
 
@@ -29,7 +29,7 @@ The quote is variously cited in both peer-reviewed books and articles as well as
 >
 > It is worth noting that Wittgenstein once said that **a serious and good philosophical work could be written that would consist entirely of _jokes_** (without begin \[sic\] facetious). Another time he said that a philosophical treatise might contain nothing but questions (without answers). In his own writing he made wide use of both.
 
-<p style="text-align: right">Norman Malcolm, <i>Ludwig Wittgenstein: A Memoir</i> (1958 [bold emphasis my own.])</p>>
+<p style="text-align: right">Norman Malcolm, <i>Ludwig Wittgenstein: A Memoir</i> (1958 [bold emphasis my own.])</p>
 
 The most popular phrasing, from Henry Dribble, is a (very slight) paraphrasing of Norman Malcolm's. It first appeared in 2004, in "A View from the Asylum", one of several satirical short stories written from the perspective of "Henry Dribble", a patient in an insane asylum. It was published in a collection of similar writings under the same pseudonym of Henry Dribble, titled _Philosophical Investigations from The Sanctity of the Press_. The author, Jess Rosenblatt, was an "armchair philosopher" from Mercer Island, working as a manufacturing sales manager at CMF Industries at the time. In an interview about the book, [Rosenblatt said](https://www.mi-reporter.com/life/armchair-philosopher-pens-two-books/) that "academics won't promote \[Wittgenstein\] or teach his theories because they see him as destructive of all previous philosophy. You'll find more hackers who like him, I'm a philosophical hacker because I'm not in academics anymore."
 

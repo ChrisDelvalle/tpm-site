@@ -93,10 +93,10 @@ Memes as characterised above are a form of what I call _non-linear sequential ar
   width="560"
   height="315"
   src="https://www.youtube.com/embed/GWmEu7Yqrb0"
-  frameborder="0"
+  title="Amy Claussen: Unpopular Opinion: All Narrative is Linear"
+  loading="lazy"
   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
   allowfullscreen
-  title="Embedded content"
 ></iframe>
 
 A game player can go down one particular narrative pathway or another, making choices that sometimes constrain their future choices. This is called a branching narrative. As Claussen unhelpfully points out, each branch of a narrative is linear because it presents one scene after the next. Humans experience time in a linear way, with one thing happening after another. Therefore, she argues, all narrative is linear.

@@ -11,36 +11,11 @@ tags:
 legacyPermalink: 2021/07/21/we-can-have-retrieval-inference-synthesis
 ---
 
-<table>
-    <thead>
-    <tr>
-    <th></th>
-    <th><span>Subject matter of art criticism (i.e. "what is art?")</span></th>
-    <th><span>Methodology</span></th>
-    <th><span>Purpose</span></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td><span>Croce-Collingwood Thesis</span></td>
-    <td><span>Internal state of the artist expressed through artefacts</span></td>
-    <td><span>Strategic empathy to help readers accurately "re-enact" the artist's inner state expressed by the artwork</span></td>
-    <td><span>Reproduce the (internal) work of art (cf. the art object)</span></td>
-    </tr>
-    <tr>
-    <td><span>Wollheim's retrieval criticism</span></td>
-    <td><span>A type-token pair consisting of an artwork and its constituent art objects</span></td>
-    <td><span>"Retrieval" (cf. "scrutiny") of the creative process of the artist using relevant "cognitive stock"</span></td>
-    <td><span>Perceive the meaning of the (external) work of art more accurately</span></td>
-    </tr>
-    <tr>
-    <td><span>Baxandall's inferential criticism</span></td>
-    <td><span>"A concrete solution" to an aesthetic problem addressed by the artist</span></td>
-    <td><span>"Inference" of the "intentionality" (cf. "narrative") which led to the production of the art object</span></td>
-    <td><span>Explain the design of the artwork as a solution to a particular problem</span></td>
-    </tr>
-    </tbody>
-  </table>
+|                                   | Subject matter of art criticism (i.e. “what is art?”)                      | Methodology                                                                                               | Purpose                                                                 |
+| --------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Croce-Collingwood Thesis          | Internal state of the artist expressed through artefacts                   | Strategic empathy to help readers accurately “re-enact” the artist's inner state expressed by the artwork | Reproduce the (internal) work of art (cf. the art object)               |
+| Wollheim's retrieval criticism    | A type-token pair consisting of an artwork and its constituent art objects | “Retrieval” (cf. “scrutiny”) of the creative process of the artist using relevant “cognitive stock”       | Perceive the meaning of the (external) work of art more accurately      |
+| Baxandall's inferential criticism | “A concrete solution” to an aesthetic problem addressed by the artist      | “Inference” of the “intentionality” (cf. “narrative”) which led to the production of the art object       | Explain the design of the artwork as a solution to a particular problem |
 
 Inferential criticism is an art-critical methodology introduced by Baxandall (1985). The purpose of art criticism, according to inferential criticism, is to explain the design of the artwork in light of the problems addressed by the artist through the work. Although Baxandall explicitly denies that he is addressing the question "What is art?" (Baxandall, 1985, viii), his account of inferential criticism is nonetheless based on his ontology of artworks as embodied solutions to particular aesthetic problems.
 

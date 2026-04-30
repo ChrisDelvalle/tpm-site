@@ -829,9 +829,9 @@ Use truncation deliberately:
 - Background attachment: `bg-fixed`, `bg-local`, `bg-scroll`.
 - Background clip: `bg-clip-border`, `bg-clip-padding`, `bg-clip-content`,
   `bg-clip-text`.
-- Background color/image: `bg-*`, `bg-none`, `bg-[url(...)]`, gradient
-  utilities. Gradients are not part of this site's current visual direction
-  unless re-approved.
+- Background color/image: `bg-*`, `bg-none`,
+  `bg-[image:var(--hero-image)]`, gradient utilities. Gradients are not part of
+  this site's current visual direction unless re-approved.
 - Background origin/position/repeat/size: `bg-origin-*`, `bg-center`,
   `bg-top`, `bg-right`, `bg-bottom`, `bg-left`, `bg-repeat`,
   `bg-no-repeat`, `bg-cover`, `bg-contain`, arbitrary values.

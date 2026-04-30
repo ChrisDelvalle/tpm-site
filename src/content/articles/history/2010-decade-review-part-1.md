@@ -25,10 +25,9 @@ legacyBanner: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_
 
 The memetic history of the 2010's can be divided into six Eras, starting from the influences that precipitated into the ironic meme movement and arriving at the beginning of postirony.
 
-<figure>
-	<img src="https://cdn.discordapp.com/attachments/436415399379206144/845172062263836682/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png" alt="">
-	<figcaption>The Six Eras of recent memetic history, based on our 2015 model (<a href="https://www.youtube.com/watch?v=fRdUG9LOJGA&list=PLbRNdtOn8CjOZYsLI13poGPnDqSeZIdAW&index=6">Her & Zharova, 2015</a>)</figcaption>
-</figure>
+![The Six Eras of recent memetic history](../../../assets/articles/2010-decade-review-part-1/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png)
+
+_The Six Eras of recent memetic history, based on our 2015 model ([Her & Zharova, 2015](https://www.youtube.com/watch?v=fRdUG9LOJGA&list=PLbRNdtOn8CjOZYsLI13poGPnDqSeZIdAW&index=6))_
 
 I have divided the decade into these six Eras based on the general contours of recent cybercultural history. The causal explanations for the historical events that distinguish one Era from another can be drawn from various types of preceding states or events: conceptual developments; advancements in digital and social technologies; spread of cultural patterns; levels of memetic literacy; platform-level changes; demographics, and so on. The most useful entrance into this scaffolded web of memetic history is through the lens of the techniques that were adopted by the memers who produced original content. This must be contextualised by comparison with the previous decades, in light of the techniques that developed during those respective periods.
 

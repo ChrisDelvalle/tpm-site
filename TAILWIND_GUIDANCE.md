@@ -585,8 +585,9 @@ right family quickly, then check the docs for exact edge cases.
 - Clip: `bg-clip-border`, `bg-clip-padding`, `bg-clip-content`,
   `bg-clip-text`.
 - Color: `bg-*`, semantic colors, opacity modifiers.
-- Image: `bg-none`, `bg-[url(...)]`, gradient utilities. Gradients are not part
-  of this site's current visual direction unless re-approved.
+- Image: `bg-none`, `bg-[image:var(--hero-image)]`, gradient utilities.
+  Gradients are not part of this site's current visual direction unless
+  re-approved.
 - Origin: `bg-origin-border`, `bg-origin-padding`, `bg-origin-content`.
 - Position: `bg-center`, `bg-top`, `bg-right`, `bg-bottom`, `bg-left`, corner
   combinations, arbitrary positions.

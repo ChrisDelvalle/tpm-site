@@ -4,6 +4,7 @@ description: "A cluster definition of memes, taking into account memographic pra
 date: 2021-11-30 18:46:00 +13:00
 author: "Claudia Vulliamy"
 image: "../../../assets/articles/what-is-a-meme/vulliamy-12.jpg"
+imageAlt: "Diagram illustrating the concept of a meme"
 tags:
   # TODO(Seong): Review these migration-added tags.
   - memes
@@ -27,11 +28,11 @@ There has been, so far, very little written on the subject that is specifically 
 
 Firstly, I will make it clear that I am _not_ referring to memes in the sense used by Richard Dawkins. Dawkins' use of the word 'meme' is the etymological origin of the internet meme, since it describes an element of culture that spreads from person to person via imitation and mutates over time \[2\]. But although internet memes can be seen as a sub-category of Dawkinsian memes, these are distinct concepts and I do not see Dawkins' use of the term as useful in defining internet memes. Many theorists on internet memes (such as Shifman \[3\] and Milner \[4\]) have, more or less, taken the concept 'internet meme' to include almost any Dawkinsian meme that spreads via the internet. However, I will focus on the concept of an internet meme that is used most commonly among young internet users and meme enthusiasts today - something more specific than what these theorists are describing and something which Evnine attempts to define. This is a concept that does _not_ include, for example, a viral music video, but does include each of the following images, which are variations on the same meme-trend \[5\].
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-01.jpg)
+![Money Printer Go Brrr image macro depicting two Wojak figures representing the US Federal Reserve](../../../assets/articles/what-is-a-meme/vulliamy-01.jpg)
 
 _Figure 1: 'Money Printer Go Brrr', an image macro depicting two drawn figures (variations of the 'Wojak' figure) representing the US Federal Reserve's attempt to prevent economic downturn. Source: Know Your Meme_
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-02.jpg)
+![Variation on the Money Printer Go Brrr meme format](../../../assets/articles/what-is-a-meme/vulliamy-02.jpg)
 
 _Figure 2: One of the variations upon the 'Money Printer Go Brrr' meme format. Source: Know Your Meme_
 
@@ -39,7 +40,7 @@ Secondly, to distinguish this idea from Dawkins', I have so far referred to thes
 
 Evnine makes a distinction between a conceptual and an ontological definition. If the question is 'What is an X?', the conceptual definition provides informative, non- question-begging necessary and sufficient conditions for a concept X, while the ontological definition describes the metaphysical nature of the things that fall under the concept X. I appreciate this distinction and will address them separately. Evnine also acknowledges that the word 'meme' -- meaning an 'internet meme' -- is used in two slightly different senses. One is a meme-trend, of which there are many different instances, such as the _Distracted Boyfriend_ meme, which involves users labelling a stock photo of a man admiring a passing woman while his girlfriend looks at him, appalled. The other is a single instance of such a meme-trend, which one might send to a friend or share on Facebook, such as the specific _Distracted Boyfriend_ meme in which the man is labelled 'me', the girlfriend 'scientific evidence supporting the dangers of staring at the sun' and the passer by 'solar eclipse'.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-03.jpg)
+![Distracted Boyfriend meme about the solar eclipse and scientific evidence supporting the dangers of staring at the sun](../../../assets/articles/what-is-a-meme/vulliamy-03.jpg)
 
 _Figure 3 : Distracted Boyfriend --solar eclipse / me / scientific evidence supporting the dangers of staring at the sun. Source: Know Your Meme_
 
@@ -51,7 +52,7 @@ Evnine provides a very helpful description of how memes work, acknowledging the 
 
 It could be argued that there are counterexamples to this view which show that it is the format and style of a piece of media that makes it a meme, not the practice surrounding it, **i.e. M is a meme<sub>I</sub> if it has certain content conventional to meme- making such as reaction-based imagery, implied narrative, etc.** A 1921 cartoon from the satirical magazine The Judge was brought to attention online in 2018 and referred to by some as the first recorded memes<sub>I</sub> \[6\].
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-04.jpg)
+![A 1921 cartoon from The Judge](../../../assets/articles/what-is-a-meme/vulliamy-04.jpg)
 
 _Figure 4: A 1921 cartoon from The Judge. Source: BBC_
 
@@ -63,7 +64,7 @@ The memes that Evnine uses for examples are relatively traditional in style[^1] 
 
 [^1]: Evnine's primary examples are _Socially Awkward Penguin_ and _Batman Slapping Robin_, which both became popular in the 2000s. While these examples are helpful in laying down the basics, I find it necessary to consider more recent examples when exploring the concept of a meme, just as it is necessary to consider postmodern art when exploring the concept of art.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-05.jpg)
+![Image featured on the Facebook group Toilets With Threatening Auras](../../../assets/articles/what-is-a-meme/vulliamy-05.jpg)
 
 _Figure 5 : An image featured on the Facebook group 'Toilets With Threatening Auras'_
 
@@ -73,11 +74,11 @@ In fact, many avant-garde memes pages today play on the fact that the memes<sub>
 
 [^3]: Warning: both of these pages contain violent or disturbing images and insensitive humour.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-06.jpg)
+![Image from Pains of Hell Wellness Clinic parodying the traditional top-text-bottom-text image macro format](../../../assets/articles/what-is-a-meme/vulliamy-06.jpg)
 
 _Figure 6: An image on 'Pains of Hell Wellness Clinic', parodying the traditional top-text- bottom-text image macro format in a way that is intentionally chaotic, unsettling and incoherent_
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-07.jpg)
+![Screenshot of a video posted onto the Facebook page God Has Left the Room](../../../assets/articles/what-is-a-meme/vulliamy-07.jpg)
 
 _Figure 7: A screenshot of a video posted onto the Facebook page 'God has left the room'_
 
@@ -135,7 +136,7 @@ Some of the most challenging borderline cases are of non-digital 'memes'. When a
 
 During the Second World War, 'Kilroy was here' -- an American symbol depicting a cartoon figure peeking over a wall -- began to spread in the form of graffiti. Members of the public would write 'Kilroy was here' and often accompany it with the illustration. According to author Charles Panati, 'The outrageousness of the graffiti was not so much what it said, but where it turned up.'\[11\] A similar-looking graffiti cartoon, referred to as 'Mr Chad', appeared in the UK at a similar time, captioned with 'Wot, no sugar?' or a similar 'Wot, no -- ?' phrase bemoaning rationing\[12\]. The public ownership and re-use of these images, with the context of each instance feeding into its humour, and, in the case of Mr Chad, the variation on the phrase used, render this case quite meme-like. But, of course, it does not have the same engagement with memographic practice as online memes do. It also differs from online memes in that it is a case of hand-drawn images that exist in specific locations. It seems that, even if we accept that digitality is not a necessary condition for something to be a meme, it is required in practice to meet some other conditions that could be seen as necessary, which I will discuss below.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-08.jpg)
+![Kilroy Was Here at The National WWII Museum in New Orleans](../../../assets/articles/what-is-a-meme/vulliamy-08.jpg)
 _Figure 8 : An instance of 'Kilroy Was Here' at The National WWII Museum in New Orleans. Photo by Laura Gibbons Barnett. Source: Facebook_
 
 It seems generally agreed among theorists[^6] that collectivism of some sort is a necessary part of meme-making. Giselinde Kuipers argues that 'Like the jokes and stories of oral culture, Internet jokes have no authors (unless everyone is an author)' \[13\]. Memes, unlike most art forms, have a detachment from personal gain or credit. For a meme to flourish, it is ideally not bound to any name; anyone should be able to take a meme<sub>I</sub> and, with simple editing, turn it into another. For this reason, watermarked memes<sub>I</sub> are criticised in meme-sharing communities; the sense of public ownership, and thereby quality, is compromised by the watermark. The factor of anonymity is one of the things that make _\#scalebackabook_ a borderline case -- or, in my opinion, not a case at all. When an individual writes her own words on Twitter,
@@ -148,7 +149,7 @@ What I am calling anonymity is a kind of collectivism that goes beyond that of a
 
 The anonymity condition is closely linked with another crucial factor which I will call ephemerality. There appears to be an implicit ideological tone that feeds into the format of memes. Memes are possibly the only art form that serves virtually no material benefit to its creators. They have, entirely self-consciously, a 'low-art' status. Memes are not made to be officially collected, go down in history, or communicate universally. Perhaps their (usually) digital nature is a matter of not being given the respectable status of physical existence, because they are, essentially, silly -- too silly to be anything other than ephemeral. Each memes<sub>I</sub> is waiting to be altered or discarded, dependent on the time in which it arose. It is part of the joy of memes that if a future archaeologist were to uncover a meme<sub>I</sub> of today, she could be baffled. Therefore, I believe that if a meme were chiselled onto the side of a skyscraper, as a commission from the Tate Modern, it would cease to be a meme because its ephemerality would be taken away.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-09.jpg)
+![Tumblr post appreciating how incomprehensible a butterfly meme would be to an uninformed viewer](../../../assets/articles/what-is-a-meme/vulliamy-09.jpg)
 _Figure 9 : A Tumblr user's appreciation of how incomprehensible the above meme would be to an uninformed viewer. The meme follows a format based on a cartoon character gesturing to a butterfly and asking, 'Is this a pigeon?'. The format is used to represent someone mistaking something for something else. In this case, the figure represents a cat gesturing to 'my lap'. The photo of the man's face is, in memes, associated with the phrase 'It's free real estate'. So, the situation depicted in this meme is a cat regarding its owner's lap and considering it 'free real estate', i.e. its own property in which to sit. Source: Dopl3r_
 
 For Ryan Milner, appropriation is one of the fundamental logics central to memes \[14\]. But Milner implicitly allows to be memes content such as original YouTube or TikTok footage of people, and photos that follow a trend (e.g. _Planking_), which, according to most informal contributors in today's memetic discourse, are not memes (see footnote 5). At least part of the reason for this general opinion, it seems, is because each instance is made up of original content which, strictly, meets neither the anonymity nor the appropriation condition. Since the start of their existence, memes in the narrower sense have almost always been made up of content taken directly from other uncredited sources. This, like the anonymity factor, contributes to their implicit ideological tone. There are, of course, exceptions. The 'God Has Left the Room' video memes<sub>I</sub> appears to be made up of original graphics. Many meme formats involve repeated use of particular drawings, which in many cases were likely created for the purpose of the meme, and occasionally other media such as photos form the common content of a meme<sub>CC</sub>, having been created for this purpose.
@@ -185,7 +186,7 @@ Morris Weitz argued that to make a closed definition of _art_, or its sub-concep
 
 However, to do this would be to discount the conditions of comedic intent, arising from memographic practice, and public shareability as part of memographic practice, as being necessary. This would leave us with a definition that massively over generates; any entity that is ephemeral, or any entity that is anonymous, could count as a meme. Therefore, the necessary conditions must be kept. My definition, then, will neither be the traditional list of jointly necessary and sufficient conditions, nor a completely loose 'cluster' concept; it will take elements of both.
 
-![](../../../assets/articles/what-is-a-meme/vulliamy-12.jpg)
+![Diagram illustrating the concept of a meme](../../../assets/articles/what-is-a-meme/vulliamy-12.jpg)
 
 _Figure 12 : A diagram illustrating the concept of a meme_
 
