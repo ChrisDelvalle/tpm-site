@@ -1099,23 +1099,31 @@ reason is documented.
 
 Current baseline scripts:
 
-- `bun run dev`: start Astro dev server after content sync.
-- `bun run check`: run content validation, Astro typechecking, ESLint,
-  Markdown/config linting, package ordering, Prettier check, Knip, and unit
-  tests.
-- `bun run build`: sync content, build Astro, and generate Pagefind index.
+- `bun run dev`: start Astro dev server.
+- `bun run check`: run content validation, Astro and tooling typechecking,
+  ESLint, asset validation, package ordering, code/config Prettier check, Knip,
+  and unit tests.
+- `bun run quality`: run the local quality path quietly, printing only failures
+  and review warnings.
+- `bun run build`: build Astro and generate Pagefind index.
 - `bun run preview`: preview built output locally after `bun run build`.
+- `bun run preview:fresh`: build and then preview built output locally.
 - `bun run verify`: verify built output.
-- `bun run validate:html`: validate shell/index HTML in built output.
-- `bun run validate:links`: verify built output links.
+- `bun run validate:html`: validate built HTML output.
 - `bun run test:e2e`: run Playwright smoke/responsive/search tests.
 - `bun run test:a11y`: run axe accessibility tests.
 - `bun run test:perf`: run Lighthouse CI.
 - `bun run check:release`: run the heavy pre-release validation gate.
-- `bun run fix`: run safe automatic fixes.
+- `bun run quality:release`: run the heavy pre-release gate quietly, printing
+  only failures and review warnings.
+- `bun run fix`: run safe automatic fixes for code and config.
+- `bun run review:markdown`: run non-blocking Markdown/MDX style feedback.
+- `bun run review:assets`: run non-blocking duplicate/unused image review
+  feedback.
+- `bun run fix:markdown`: run mechanical Markdown/MDX formatting.
 
-For code, config, and formatted documentation changes, prefer running the safe
-automatic fixer before the normal check when safe for the task:
+For code and config changes, prefer running the safe automatic fixer before the
+normal check when safe for the task:
 
 ```sh
 bun run fix
@@ -1123,8 +1131,8 @@ bun run check
 ```
 
 This keeps mechanical formatting, import ordering, and safe lint autofixes out
-of the reasoning path. Inspect the diff afterward when the fixer touches files
-where content fidelity matters.
+of the reasoning path. Markdown/MDX style is review-only; do not block author
+publishing on prose formatting if the content is valid and builds.
 
 If a check cannot be run, say so in the final handoff with the reason.
 

@@ -33,6 +33,12 @@ Preview the built site locally:
 bun run preview
 ```
 
+Build and then preview in one command:
+
+```sh
+bun run preview:fresh
+```
+
 Run the normal local validation used before opening a PR:
 
 ```sh
@@ -41,10 +47,33 @@ bun run build
 bun run verify
 ```
 
-Run safe automatic fixes before checking code, config, or formatted docs:
+Run the same local quality path with successful command output hidden:
+
+```sh
+bun run quality
+```
+
+Run safe automatic fixes before checking code and config:
 
 ```sh
 bun run fix
+```
+
+Markdown and MDX style checks are review-only, not release blockers:
+
+```sh
+bun run review:markdown
+bun run fix:markdown
+```
+
+Asset cleanup checks are review-only. They warn about duplicate images and
+images in `src/assets/` that do not appear to be used by the site. If an unused
+image is worth keeping for possible future use, move it to `unused-assets/`.
+If a warning is intentionally wrong, add a narrow path or glob to
+`scripts/duplicate-image-ignore.json` or `scripts/unused-image-ignore.json`:
+
+```sh
+bun run review:assets
 ```
 
 Run the heavier pre-release gate:
@@ -53,9 +82,17 @@ Run the heavier pre-release gate:
 bun run check:release
 ```
 
+Run the heavier pre-release gate with successful command output hidden:
+
+```sh
+bun run quality:release
+```
+
 `check:release` includes browser, accessibility, Lighthouse, coverage, audit,
-and secrets checks. The secrets check expects the `gitleaks` binary to be
-available locally.
+and secrets checks. Markdown and asset cleanup review feedback are
+intentionally separate so non-technical authors are not blocked by prose
+formatting or asset cleanup warnings. The secrets check expects the `gitleaks`
+binary to be available locally.
 
 ## Content Model
 
@@ -240,7 +277,11 @@ bun run verify
 
 ## Deployment
 
-Configure the host to:
+GitHub Pages deployment is handled by `.github/workflows/ci.yml` on pushes to
+`main`. Deployment waits for the `quality` and `build` jobs, then publishes the
+generated `dist/` directory with GitHub Pages Actions.
+
+Manual deployment hosts should:
 
 1. Install dependencies with `bun install`.
 2. Build with `bun run build`.

@@ -18,6 +18,7 @@ function entry(
   filePath = "",
 ): ArticleEntry {
   return {
+    collection: "articles",
     id,
     data: {
       author: "Author",
@@ -29,7 +30,7 @@ function entry(
       ...data,
     },
     filePath: filePath || `/repo/src/content/articles/history/${id}.md`,
-  } as ArticleEntry;
+  } as unknown as ArticleEntry;
 }
 
 describe("route helpers", () => {

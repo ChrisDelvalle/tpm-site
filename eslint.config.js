@@ -20,6 +20,7 @@ const tsconfigRootDir = fileURLToPath(new URL(".", import.meta.url));
 
 const typedFiles = [
   "src/**/*.{ts,tsx}",
+  "scripts/**/*.ts",
   "tests/**/*.{ts,tsx}",
   "playwright.config.ts",
 ];
@@ -245,7 +246,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["tests/**/*.ts", "scripts/**/*.mjs", "*.config.{js,cjs,ts,mjs}"],
+    files: ["tests/**/*.ts", "scripts/**/*.ts", "*.config.{js,cjs,ts,mjs}"],
     rules: {
       "no-console": "off",
     },

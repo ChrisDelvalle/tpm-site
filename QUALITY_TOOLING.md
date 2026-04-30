@@ -62,6 +62,11 @@ historical permalink isolation, article image validation, and generated output
 checks. Those scripts should be small, deterministic, and focused on one class
 of invariant.
 
+Quiet quality runners are acceptable when they preserve blocking failure
+semantics and only suppress successful output. They should print any command
+that fails or emits warnings/errors, and they should keep review-only checks
+explicitly non-blocking.
+
 ## Output And Noise Policy
 
 Tool output should be useful, quiet, and action-oriented.
@@ -93,7 +98,7 @@ main job output.
 Use safe automatic fixes before spending time diagnosing mechanical issues.
 
 Agents should usually run the safe fixer before the normal check when the task
-touches code, config, or formatted docs:
+touches code or config:
 
 ```sh
 bun run fix
@@ -111,19 +116,25 @@ Auto-fix should not be used to hide semantic problems. If a fix changes behavior
 or touches content whose exact text must be preserved, inspect the diff before
 continuing.
 
-Article Markdown and MDX are now formatted by Prettier. Treat those changes as
-mechanical formatting only: inspect diffs when touching content, and do not use
-formatting as a reason to rewrite article prose.
+Article Markdown and MDX style checks are review-only. Use
+`bun run review:markdown` for feedback and `bun run fix:markdown` for
+mechanical Markdown/MDX formatting, but do not make prose style a release
+blocker for non-technical authors.
 
 ## Adopted Tooling Patterns
 
 These patterns define the local quality loop:
 
 - `check` for the normal PR loop.
+- `quality` for the normal PR loop with successful command output hidden.
 - `check:release` for the heavier pre-release gate.
-- `fix` as the safe automatic repair command.
+- `quality:release` for the heavier pre-release gate with successful command
+  output hidden.
+- `fix` as the safe automatic repair command for code and config.
+- `review:markdown` as non-blocking Markdown/MDX style feedback.
+- `review:assets` as non-blocking duplicate/unused image feedback.
 - ESLint flat config.
-- `eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --max-warnings=0`.
+- `eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --max-warnings=0`.
 - `--report-unused-disable-directives-severity error`.
 - Type-aware `typescript-eslint` strict configs.
 - Separate TypeScript configs for app/source code and scripts/tests.
@@ -355,7 +366,10 @@ Configuration:
 
 - Include `prettier-plugin-astro`.
 - Put `prettier-plugin-tailwindcss` last.
-- Use `format` for checking and `format:write` for modification.
+- Use `format` for blocking code/config checks and `format:write` for
+  code/config modification.
+- Use `format:markdown` and `format:markdown:write` only for review-only
+  Markdown/MDX style feedback.
 - Keep formatting deterministic and boring.
 
 Important project-specific decision:
@@ -363,8 +377,8 @@ Important project-specific decision:
 - Format repository docs such as `README.md`, `DESIGN_PHILOSOPHY.md`,
   `QUALITY_TOOLING.md`, `ASTRO_GUIDANCE.md`, `TAILWIND_GUIDANCE.md`, and
   `AGENTS.md`.
-- Format article Markdown and MDX with Prettier, while keeping article wording
-  and meaning unchanged unless content edits are explicitly requested.
+- Keep article Markdown and MDX valid through Astro/content checks, but do not
+  make prose formatting a release blocker.
 
 `.prettierignore` should ignore generated output and build artifacts, not the
 active article source tree.
@@ -526,29 +540,38 @@ large HTML, CSS, or search index contents into command output.
 ## Content Validation
 
 Generic tooling will not understand this site's authoring model, so
-project-specific verification is mandatory.
+project-specific verification is mandatory. Astro's content collection schema
+is the authority for metadata shape. Repository scripts should complement that
+schema by checking project invariants that Astro does not know about.
 
-Expand `scripts/verify-build.mjs` or split it into focused validators:
+Keep validators focused on:
 
-- source article validation;
+- source path invariants;
 - generated route validation;
 - built output validation;
 - RSS/sitemap/search validation;
-- asset validation.
+- asset location and sharing conventions.
 
 Checks should include:
 
-- every source article has required metadata;
+- Astro schema validates required article, page, and category metadata;
 - drafts stay unpublished;
 - duplicate slugs fail;
-- category folders derive valid categories;
+- category folders and category metadata filenames are URL-safe;
 - reserved folders are not categories;
-- article images exist;
+- article images are valid source asset references when modeled in frontmatter;
 - meaningful images have alt text where detectable;
 - generated article URLs are stable;
-- unsupported historical frontmatter fields do not drive core routing;
+- historical frontmatter is either explicitly modeled as inert metadata or
+  rejected by the Astro schema;
 - `legacyPermalink` is preserved but isolated;
 - no dated permalink pages accidentally appear.
+
+Repository scripts that participate in CI should be TypeScript, included in
+`tsconfig.tools.json`, covered by focused unit tests where they contain logic,
+and structured as exported functions plus a small CLI wrapper. This keeps CI
+infrastructure refactorable and testable instead of treating it as disposable
+shell glue.
 
 This is the main place to make invalid content state unrepresentable.
 
@@ -582,9 +605,9 @@ Also consider:
 
 ## Markdown And Docs
 
-Use Markdown linting for project docs. Article Markdown and MDX may be formatted
-by the normal formatter, but agents must not rewrite article wording unless
-explicitly asked.
+Use Markdown linting for project docs and article source as review feedback.
+Article Markdown and MDX validity is enforced through Astro/content validation;
+style feedback should not block publishing.
 
 Recommended package:
 
@@ -655,29 +678,48 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "dev": "astro dev",
   "build": "astro build && pagefind --site dist",
   "preview": "astro preview",
+  "preview:fresh": "bun run build && bun run preview",
+  "quality": "bun scripts/run-quality.ts",
+  "quality:release": "bun scripts/run-quality.ts --release",
 
-  "format": "prettier --check . --log-level warn",
-  "format:write": "prettier --write --list-different .",
-  "lint": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
-  "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro,.mdx --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
+  "assets:duplicates": "bun scripts/find-duplicate-images.ts",
+  "assets:locations": "bun scripts/verify-image-asset-locations.ts",
+  "assets:shared": "bun scripts/find-shared-assets.ts",
+  "assets:unused": "bun scripts/find-unused-images.ts",
+
+  "format": "bun run format:code",
+  "format:code": "prettier --check \"**/*.{astro,css,cjs,js,json,jsonc,mjs,ts,tsx,yaml,yml}\" --log-level warn",
+  "format:code:write": "prettier --write --list-different \"**/*.{astro,css,cjs,js,json,jsonc,mjs,ts,tsx,yaml,yml}\"",
+  "format:markdown": "prettier --check \"**/*.{md,mdx}\" --log-level warn",
+  "format:markdown:write": "prettier --write --list-different \"**/*.{md,mdx}\"",
+  "format:write": "bun run format:code:write",
+  "lint": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
+  "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
+  "lint:markdown": "markdownlint-cli2",
+  "lint:mdx": "eslint . --ext .mdx --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "fix": "bun run lint:fix && bun run format:write",
+  "fix:markdown": "bun run format:markdown:write",
+  "review:assets": "bun run assets:duplicates -- --review && bun run assets:unused -- --review",
+  "review:markdown": "bun run lint:markdown && bun run lint:mdx && bun run format:markdown",
 
-  "typecheck": "astro check",
+  "typecheck": "bun run typecheck:astro && bun run typecheck:tools",
+  "typecheck:astro": "astro check",
+  "typecheck:tools": "tsc --project tsconfig.tools.json",
   "deadcode": "knip --no-config-hints",
-  "test": "bun test tests/lib --randomize --concurrent",
+  "test": "bun test tests/lib tests/scripts --randomize --concurrent",
   "test:flake": "bun run test -- --rerun-each 10",
   "test:e2e": "bun run build && playwright test tests/e2e",
   "test:a11y": "bun run build && playwright test tests/a11y",
   "test:perf": "bun run build && lhci autorun",
-  "coverage": "bun test tests/lib --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",
+  "coverage": "bun test tests/lib tests/scripts --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",
 
-  "verify": "node scripts/verify-build.mjs",
-  "verify:content": "node scripts/verify-content.mjs",
+  "verify": "bun scripts/verify-build.ts",
+  "verify:content": "bun scripts/verify-content.ts",
   "validate:html": "html-validate dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\"",
   "audit": "bun audit --audit-level=high",
   "secrets": "gitleaks git --redact --no-banner",
 
-  "check": "bun run verify:content && bun run typecheck && bun run lint && bun run lint:docs && bun run lint:packages && bun run format && bun run deadcode && bun run test",
+  "check": "bun run verify:content && bun run assets:locations && bun run assets:shared && bun run typecheck && bun run lint && bun run lint:packages && bun run format && bun run deadcode && bun run test",
   "check:release": "bun run check && bun run build && bun run verify && bun run validate:html && bun run test:e2e && bun run test:a11y && bun run test:perf && bun run coverage && bun run audit && bun run secrets"
 }
 ```

@@ -2,8 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 const port = 4322;
 
-if (process.env.NO_COLOR !== undefined) {
-  delete process.env.NO_COLOR;
+if (process.env["NO_COLOR"] !== undefined) {
+  delete process.env["NO_COLOR"];
 }
 
 export default defineConfig({
@@ -29,7 +29,7 @@ export default defineConfig({
   },
   webServer: {
     command: `bun run preview --host 127.0.0.1 --port ${port}`,
-    reuseExistingServer: process.env.CI !== "true",
+    reuseExistingServer: process.env["CI"] !== "true",
     timeout: 15_000,
     url: `http://127.0.0.1:${port}`,
   },

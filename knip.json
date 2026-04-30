@@ -5,7 +5,7 @@
     "eslint.config.js",
     "lighthouserc.cjs",
     "playwright.config.ts",
-    "scripts/**/*.mjs",
+    "scripts/**/*.ts",
     "src/content.config.ts",
     "src/pages/**/*.{astro,ts,tsx}",
     "tests/**/*.ts"
@@ -31,7 +31,7 @@
     "astro.config.mjs",
     "eslint.config.js",
     "playwright.config.ts",
-    "scripts/**/*.mjs",
+    "scripts/**/*.ts",
     "src/**/*.{astro,ts,tsx}",
     "tests/**/*.ts"
   ]
