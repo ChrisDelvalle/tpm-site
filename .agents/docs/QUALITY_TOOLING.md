@@ -680,7 +680,7 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
 ```json
 {
   "dev": "astro dev",
-  "build": "astro --silent build && pagefind --site dist --quiet",
+  "build": "astro build && pagefind --site dist --quiet",
   "preview": "astro preview",
   "preview:fresh": "bun --silent run build && bun --silent run preview",
   "quality": "bun scripts/run-quality.ts",
@@ -700,14 +700,14 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "lint": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "lint:markdown": "markdownlint-cli2",
-  "lint:mdx": "eslint . --ext .mdx --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
+  "lint:mdx": "eslint \"src/content/articles/**/*.mdx\" --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "fix": "bun --silent run lint:fix && bun --silent run format:write",
   "fix:markdown": "bun --silent run format:markdown:write",
   "review:assets": "bun --silent run assets:duplicates -- --review --quiet && bun --silent run assets:unused -- --review --quiet",
   "review:markdown": "bun --silent run lint:markdown && bun --silent run lint:mdx && bun --silent run format:markdown",
 
   "typecheck": "bun --silent run typecheck:astro && bun --silent run typecheck:tools",
-  "typecheck:astro": "astro --silent check --minimumFailingSeverity warning --minimumSeverity warning",
+  "typecheck:astro": "astro check --minimumFailingSeverity warning --minimumSeverity warning",
   "typecheck:tools": "tsc --project tsconfig.tools.json --pretty false",
   "deadcode": "knip --no-config-hints --no-progress",
   "test": "bun test tests/lib tests/scripts --randomize --concurrent",

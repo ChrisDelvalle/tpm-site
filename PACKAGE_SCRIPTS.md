@@ -43,7 +43,7 @@ for local checks and GitHub Actions.
 | `test:flake`            | Repeats the unit/script test suite to investigate nondeterminism. Manual diagnostic.                                                                                      |
 | `test:perf`             | Runs Lighthouse CI against built output. Review signal.                                                                                                                   |
 | `typecheck`             | Runs Astro typechecking, failing on warnings, then TypeScript checks for tools/scripts/tests.                                                                             |
-| `typecheck:astro`       | Runs `astro check` quietly and treats Astro warnings as failures.                                                                                                         |
+| `typecheck:astro`       | Runs `astro check` and treats Astro warnings as failures.                                                                                                                 |
 | `typecheck:tools`       | Runs TypeScript checking for scripts, tests, and tooling config.                                                                                                          |
 | `validate:html`         | Validates representative built HTML files and fails on warnings.                                                                                                          |
 | `verify`                | Verifies built `dist/` output: expected pages, local links, draft exclusion, JSON-LD, and static-page script constraints.                                                 |
