@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
+  compressHTML: true,
   site: "https://thephilosophersmeme.com",
   trailingSlash: "always",
   integrations: [mdx(), sitemap(), react()],
