@@ -135,6 +135,7 @@ These patterns define the local quality loop:
 - `fix` as the safe automatic repair command for code and config.
 - `review:markdown` as non-blocking Markdown/MDX style feedback.
 - `review:assets` as non-blocking duplicate/unused image feedback.
+- `audit:all` as non-blocking all-severity dependency review feedback.
 - ESLint flat config.
 - `eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --max-warnings=0`.
 - `--report-unused-disable-directives-severity error`.
@@ -376,9 +377,8 @@ Configuration:
 
 Important project-specific decision:
 
-- Format repository docs such as `README.md`, `DESIGN_PHILOSOPHY.md`,
-  `QUALITY_TOOLING.md`, `ASTRO_GUIDANCE.md`, `TAILWIND_GUIDANCE.md`, and
-  `AGENTS.md`.
+- Format repository docs such as `README.md`, `PACKAGE_SCRIPTS.md`,
+  `AGENTS.md`, and `.agents/docs/*.md`.
 - Keep article Markdown and MDX valid through Astro/content checks, but do not
   make prose formatting a release blocker.
 
@@ -640,10 +640,11 @@ GitHub:
 - secret scanning;
 - push protection;
 - Dependency Review Action;
-- CodeQL for JavaScript/TypeScript;
 - Dependabot or Renovate.
 
 CI should fail when a PR introduces high-risk dependency issues or secrets.
+CodeQL is intentionally deferred until the project decides how much signal it
+adds for this static site.
 
 ## Git Hygiene
 
@@ -724,13 +725,15 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "secrets": "gitleaks git --redact --no-banner",
 
   "check": "bun --silent run verify:content -- --quiet && bun --silent run assets:locations -- --quiet && bun --silent run assets:shared -- --quiet && bun --silent run typecheck && bun --silent run lint && bun --silent run lint:packages && bun --silent run format && bun --silent run deadcode && bun --silent run test",
-  "check:release": "bun --silent run check && bun --silent run build && bun --silent run verify && bun --silent run validate:html && bun --silent run test:e2e && bun --silent run test:a11y && bun --silent run test:perf && bun --silent run coverage && bun --silent run audit && bun --silent run secrets"
+  "check:release": "bun --silent run check && bun --silent run build && bun --silent run verify && bun --silent run validate:html && bun --silent run test:e2e && bun --silent run audit && bun --silent run secrets"
 }
 ```
 
 The exact script order can be adjusted for speed, but `check:release` should be
-the canonical heavy gate. When adopting the scripts, verify each flag against
-the tool documentation instead of copying it mechanically.
+the canonical blocking release gate. Accessibility, Lighthouse, coverage,
+Markdown style, asset cleanup, and all-severity audit output should be review
+signals rather than release blockers. When adopting the scripts, verify each
+flag against the tool documentation instead of copying it mechanically.
 
 ## CI Shape
 
@@ -746,25 +749,34 @@ The current baseline CI should run at least:
 - `bun run build`;
 - `bun run verify`.
 
-As tooling lands, split heavier checks into separate jobs:
+As tooling lands, split heavier checks into separate jobs.
+
+Required GitHub checks should include:
 
 - unit/type/lint/format/deadcode;
 - build/verify;
 - Playwright;
-- axe;
-- Lighthouse CI;
-- security audit;
+- high-severity dependency audit;
 - gitleaks;
-- Dependency Review;
-- CodeQL.
+- Dependency Review.
+
+Review-only GitHub jobs should include:
+
+- Markdown style review;
+- duplicate/unused asset review;
+- axe accessibility review;
+- Lighthouse CI review;
+- coverage review;
+- all-severity dependency audit review.
 
 Use branch protection so the required checks must pass before merge.
 
 Current GitHub configuration:
 
-- `.github/workflows/ci.yml` for quality, build verification, Playwright, axe,
-  Lighthouse, and dependency audit jobs.
-- `.github/workflows/security.yml` for Dependency Review, CodeQL, and gitleaks.
+- `.github/workflows/ci.yml` for quality, build verification, Playwright,
+  high-severity audit, review-only axe/Lighthouse/coverage/audit-all jobs, and
+  GitHub Pages deployment.
+- `.github/workflows/security.yml` for Dependency Review and gitleaks.
 - `.github/dependabot.yml` for dependency updates.
 
 Keep dependency automation scoped to the current Bun/Astro toolchain unless the

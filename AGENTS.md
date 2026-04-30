@@ -63,11 +63,12 @@ to the active milestone.
 - `scripts/`: repository maintenance, verification, and quality scripts.
 - `tests/`: unit, e2e, accessibility, and performance tests.
 - `dist/`: generated build output. Do not edit by hand.
-- `DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
-- `QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
+- `PACKAGE_SCRIPTS.md`: brief reference for every `package.json` script.
+- `.agents/docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
+- `.agents/docs/QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
   release checks.
-- `ASTRO_GUIDANCE.md`: expanded Astro notes.
-- `TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
+- `.agents/docs/ASTRO_GUIDANCE.md`: expanded Astro notes.
+- `.agents/docs/TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
 
 ## Project-Local Skills
 
@@ -1113,9 +1114,9 @@ Current baseline scripts:
 - `bun run verify`: verify built output.
 - `bun run validate:html`: validate built HTML output.
 - `bun run test:e2e`: run Playwright smoke/responsive/search tests.
-- `bun run test:a11y`: run axe accessibility tests.
-- `bun run test:perf`: run Lighthouse CI.
-- `bun run check:release`: run the heavy pre-release validation gate.
+- `bun run test:a11y`: run axe accessibility review tests.
+- `bun run test:perf`: run Lighthouse CI review.
+- `bun run check:release`: run the blocking pre-release validation gate.
 - `bun run quality:release`: run the heavy pre-release gate quietly, printing
   only failures and review warnings.
 - `bun run fix`: run safe automatic fixes for code and config.
@@ -1233,7 +1234,7 @@ design/tooling/project document when the intended work should be reviewable
 before code changes.
 
 Do not create planning docs for routine QA commands. Routine tooling
-expectations belong in this file and `QUALITY_TOOLING.md`.
+expectations belong in this file and `.agents/docs/QUALITY_TOOLING.md`.
 
 ## Generated Files And Historical Assets
 

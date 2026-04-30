@@ -664,7 +664,8 @@ bar.
 
 Use automated checks before release.
 
-The concrete tooling plan lives in `QUALITY_TOOLING.md`. This section defines
+The concrete tooling plan lives in `.agents/docs/QUALITY_TOOLING.md`. This
+section defines
 the quality bar; that document defines the tools and scripts that enforce it.
 
 Required checks should include:

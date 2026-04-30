@@ -61,6 +61,26 @@ const releaseCommands: QualityCommand[] = [
     blocking: false,
     label: "Markdown review",
   },
+  {
+    args: ["--silent", "run", "test:a11y"],
+    blocking: false,
+    label: "Accessibility review",
+  },
+  {
+    args: ["--silent", "run", "test:perf"],
+    blocking: false,
+    label: "Lighthouse review",
+  },
+  {
+    args: ["--silent", "run", "coverage"],
+    blocking: false,
+    label: "Coverage review",
+  },
+  {
+    args: ["--silent", "run", "audit:all"],
+    blocking: false,
+    label: "All-severity dependency audit review",
+  },
 ];
 
 function commandLine(command: QualityCommand) {
@@ -161,7 +181,8 @@ emit warnings print their captured output.
 Default mode runs the local PR-quality path: check, build, verify,
 validate:html, review:assets, and review:markdown.
 
-Use --release to run check:release plus the non-blocking review checks.`;
+Use --release to run check:release plus non-blocking Markdown, asset,
+accessibility, Lighthouse, coverage, and all-severity audit review checks.`;
 }
 
 export async function runQualityCli(

@@ -47,6 +47,8 @@ bun run build
 bun run verify
 ```
 
+For a short explanation of every package script, see `PACKAGE_SCRIPTS.md`.
+
 Run the same local quality path with successful command output hidden:
 
 ```sh
@@ -94,13 +96,17 @@ Run the heavier pre-release gate with successful command output hidden:
 bun run quality:release
 ```
 
-`check:release` includes browser, accessibility, Lighthouse, coverage, audit,
-and secrets checks. Markdown and asset cleanup review feedback are
-intentionally separate so non-technical authors are not blocked by prose
-formatting or asset cleanup warnings. The secrets check expects the `gitleaks`
-binary to be available locally.
+`check:release` includes the blocking release gates: normal checks, production
+build verification, browser smoke/responsive/search tests, high-severity
+dependency audit, and secrets checks. `quality:release` also runs the
+non-blocking review signals: Markdown style, asset cleanup, accessibility,
+Lighthouse, coverage, and all-severity dependency audit. The secrets check
+expects the `gitleaks` binary to be available locally.
 
 ## Content Model
+
+For a step-by-step article submission guide for non-technical authors, see
+`AUTHOR_TUTORIAL.md`.
 
 Article Markdown and MDX live in:
 
@@ -284,8 +290,13 @@ bun run verify
 ## Deployment
 
 GitHub Pages deployment is handled by `.github/workflows/ci.yml` on pushes to
-`main`. Deployment waits for the `quality` and `build` jobs, then publishes the
-generated `dist/` directory with GitHub Pages Actions.
+`main`. Deployment waits for the blocking quality, build verification, browser,
+and high-severity audit jobs, then publishes the generated `dist/` directory
+with GitHub Pages Actions.
+
+GitHub review also runs non-blocking Markdown, asset cleanup, accessibility,
+Lighthouse, coverage, and all-severity audit jobs. Treat those as review
+signals rather than publish blockers.
 
 Manual deployment hosts should:
 

@@ -13,7 +13,7 @@
     "audit:all": "bun audit",
     "build": "astro --silent build && pagefind --site dist --quiet",
     "check": "bun --silent run verify:content -- --quiet && bun --silent run assets:locations -- --quiet && bun --silent run assets:shared -- --quiet && bun --silent run typecheck && bun --silent run lint && bun --silent run lint:packages && bun --silent run format && bun --silent run deadcode && bun --silent run test",
-    "check:release": "bun --silent run check && bun --silent run build && bun --silent run verify && bun --silent run validate:html && bun --silent run test:e2e && bun --silent run test:a11y && bun --silent run test:perf && bun --silent run coverage && bun --silent run audit && bun --silent run secrets",
+    "check:release": "bun --silent run check && bun --silent run build && bun --silent run verify && bun --silent run validate:html && bun --silent run test:e2e && bun --silent run audit && bun --silent run secrets",
     "coverage": "bun test tests/lib tests/scripts --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",
     "deadcode": "knip --no-config-hints --no-progress",
     "dev": "astro dev",

@@ -52,6 +52,7 @@ jobs:
 
   asset-review:
     name: Asset review
+    continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -109,7 +110,8 @@ jobs:
             test-results/
 
   accessibility:
-    name: Accessibility
+    name: Accessibility review
+    continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -133,7 +135,8 @@ jobs:
             test-results/
 
   lighthouse:
-    name: Lighthouse
+    name: Lighthouse review
+    continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -169,12 +172,53 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run audit
 
+  audit-review:
+    name: Dependency audit review
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.12
+      - run: bun install --frozen-lockfile
+      - run: bun run audit:all
+
+  coverage-review:
+    name: Coverage review
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.12
+      - run: bun install --frozen-lockfile
+      - run: bun run coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: coverage/
+
   deploy:
     name: Deploy to GitHub Pages
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs:
       - quality
       - build
+      - browser
+      - audit
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
