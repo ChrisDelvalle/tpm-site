@@ -24,8 +24,6 @@ tags:
 legacyPermalink: 2017/06/13/the-structure-of-hyperspatial-politics/
 ---
 
-# The Structure of Hyperspatial Politics
-
 <iframe
   width="100%"
   height="110"

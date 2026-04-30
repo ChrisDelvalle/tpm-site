@@ -74,7 +74,7 @@ What long boy tells us is something deeply important about ourselves, and to som
 
 ---
 
-![](../../../assets/articles/long-boys-never-grow-up/smf.png)
+![Meme Man, sometimes also referred to as Mr. Succ or the Stonks guy](../../../assets/articles/long-boys-never-grow-up/smf.png)
 
 ## INTERVIEW WITH SPECIAL MEME FRESH
 

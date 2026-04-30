@@ -37,19 +37,19 @@ One of my favourite techniques whenever I make a meme, take a screenshot, or edi
 
 Here are some examples:
 
-![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-01.png)
+![Anime catgirl joke showing a cat-ear headband being removed from Azusa Nakano's hair, revealing that the cat ears are part of her head and not the headband. The text reads "!!?"](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-01.png)
 
-![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-02.png)
+![Two-panel catgirl comic where Azusa Nakano is told she left her cat ears on before removing her headband reveals her cat ear are real](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-02.png)
 
-![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-03.png)
+![Meme variation captioned "Azusa's secret was discovered" beneath the cat-ear reveal comic](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-03.png)
 
-![](<../../../assets/articles/the-memetic-bottleneck/2019-04-05 12_31_47-catgirl meme - Google Search.png>)
+![YouTube-style screenshot of the cat-ear reveal comic titled "Top 10 Best Anime Plot Twists"](<../../../assets/articles/the-memetic-bottleneck/2019-04-05 12_31_47-catgirl meme - Google Search.png>)
 
-![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-05.png)
+![Two-panel comic explaining that Azusa Nakano wore a cat-ear reveal comic with text "How many times do we have to tell you to take off that stupid handbad at school? We have uniform policies for a reason."](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-05.png)
 
 The other images begin with an elaboration, but the first image doesn't. It doesn't even have text except for "!!?", which means the viewer doesn't have to worry about reading the meme. The punctuation marks have the added benefit of being international. I strongly prefer the first image over the rest. I already know the trope of [catgirls](https://tvtropes.org/pmwiki/pmwiki.php/Main/CatGirl) and [cat ear headbands](https://tvtropes.org/pmwiki/pmwiki.php/Main/AnimalEaredHeadband), and so I can understand the subversion of that trope without elaboration. If someone didn't know the trope, they would either take longer to infer the joke from context or simply not understand the image. They might misinterpret the message as suggesting that catgirls without human ears should wear prosthetics.
 
-![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-06.png)
+![Screenshot of comments debating whether Azusa Nakano has cat-like features](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-06.png)
 
 Any additional information, such as that the character is a human from a [mid- to late-2000's slice of life manga and anime](https://en.wikipedia.org/wiki/K-On!) and that there is an inside joke about her catlike personality, _does_ make the joke funnier because it makes the punchline even more unexpected. But since the notion that humans do not have cat ears unless they are wearing them on a headband is a standard belief, the additional information _does not_ influence the comprehension of the comic.
 
@@ -105,7 +105,7 @@ But not only are narratives experienced in linear time, they are always contextu
 
 Note that traditional branching narratives are different from non-linear sequential narratives. A non-linear sequential narrative is what happens when the player reloads a save file. The player's choice of save files is about what can or can't happen next in the game as the consequence. Inherent in this choice is the choice of what has happened in the game up to the savepoint. The choice of which save file to load is the choice of what has happened in the past, for the purpose of making certain choices possible in the future.
 
-![](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-bottleneck.png)
+![Hand-drawn diagram of the memetic bottleneck. With text "To get to a certain ending, the player must pick on of the paths that lead there. In other words, specific goals commit the player to specific paths and choices."](../../../assets/articles/the-memetic-bottleneck/2019-04-03_thephilosophersmeme.com_catgirl-bottleneck.png)
 
 This is analogous to the choice between various interpretive contexts for a given instance of a meme. The audience chooses among many _potential_ contexts and interprets the image they are currently viewing. The image constrains the potential pasts and the possible futures of the meme, bottlenecking its narrative branches. This also means that the choice to post a certain meme is the choice to evoke a particular set of scenarios in the audience's mind, in the same way that sending someone a [Civilization](https://civilization.com) save file allows them to play a game with a very specific set of narratologically significant constraints.
 

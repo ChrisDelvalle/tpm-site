@@ -32,7 +32,7 @@ Seriously, just go and play it.
 
 This is your last chance to play it, I'm about to dive into spoilerific detail about the game mechanics, how the story is implemented through them and the whole time I'm going to assume that you've played the game to completion at least once. This is the kind of game where you really want to go and experience this stuff first-hand. Don't say you weren't warned.
 
-![](../../../assets/articles/undertale-review/1.jpg)
+![Undertale screenshot of Papyrus saying, "The internet! I'm quite popular there."](../../../assets/articles/undertale-review/1.jpg)
 
 I.
 
@@ -44,7 +44,7 @@ In a lot of ways, the fact that the game will feel immediately familiar to anybo
 
 Having said that, Undertale can be quite difficult. Never incredibly hard, but the game can be frustrating; without having played 'bullet-hell' games before, some players may well struggle with some encounters. In the very least, new players are certainly not expected to achieve the true pacifist ending on a first playthrough, and the difficulty must have been intended to play a part in that. There is a very generous save-system that constantly encourages the player, and even the game-over screens do their best to allay some of the frustration that the game can sometimes cause, with several instances making affordances for retries (skippable boss dialogue on the subsequent attempts after dying is a good example). Failures, mistakes and game-overs are very much expected, but perhaps the difficulty curve is slightly skewed towards people who already have some experience with games. That's not a bad thing in and of itself (and I'm not criticising the game for not letting me sail through without dying), but it's a shame that the game is a little inaccessible on that front.
 
-![Image result for undertale toriel](../../../assets/articles/undertale-review/2.jpg)
+![Screenshot of Undertale combat against Toriel](../../../assets/articles/undertale-review/2.jpg)
 
 II.
 
@@ -52,7 +52,7 @@ However, with death and difficulty, Undertale is actually doing something incred
 
 Upon playing through what fans have termed 'the genocide route' (kill everything you ever meet), you are confronted by a character who explains to you that your ability to save and reload isn't just a game-quirk, it's actually resetting their world. Upon completion of the 'true pacifist route' which fans consider to be the 'best' ending; loading up the game will actually confront you with a message telling the player to go and do something else rather than reset the game-world which would effectively reset all the characters' happiness for your own selfish indulgence.
 
-![](../../../assets/articles/undertale-review/3.png)
+![Undertale screenshot of Bratty and Catty saying they are so hyped for the destruction of humanity](../../../assets/articles/undertale-review/3.png)
 
 That's already interesting enough, but Undertale makes uses of it's platform (PC and Mac) in a really interesting way; Even if you uninstall the game, Undertale leaves files hidden on your computer that track a history of everything you did whilst playing. The game **always remembers**, even after you've moved on. While you can root through the system files and remove this data from your computer, it was clearly the developer's intention that you never be able to fully avail yourself of the consequences and responsibility for your actions without clearly being aware of what it is you are doing. For example, if the player chooses the name 'Chara' after a character slightly hidden in the lore, then the game remarks that it's a fantastic name and forbids you from **ever** changing it; you knew what you were doing choosing that name and now you've forever tarnished the game-world with its presence. Playing the 'genocide route' to completion goes so far as permanently locking the 'true pacifist' ending to the game.
 
@@ -70,7 +70,7 @@ But even more than that, the feeling of invasion that comes with having a game f
 
 It's no coincidence that Flowey is a flower; Undertale really gets it's roots into your computer and into your life.
 
-![](../../../assets/articles/undertale-review/4.jpg)
+![Undertale battle screenshot with ACT menu options including Check, Encourage, Criticize, and Hug](../../../assets/articles/undertale-review/4.jpg)
 
 For this reason and the reasons mentioned above, Undertale is an amazing success story in terms of utilising the platform, akin to the successes of Super Mario 64, Metal Gear Solid and Demon's Souls. PC gaming should be more about this kind of incredibly clever usage of the framing afforded by the platform rather than the 60fps, 1080p, mouse&amp;keyboard, master-race bullshit that has dominated mainstream discussion of the PC as a games platform.
 
@@ -92,7 +92,7 @@ V.
 
 Undertale is hugely intelligent and charming game that perhaps makes one of the strongest cases for non-violence ever seen in any medium ever without every being preachy or pretentious, and if you have read through this without having played it then you're a terrible person.
 
-![](../../../assets/articles/undertale-review/5.jpg)
+![Undertale screenshot of Sans shrugging on a black background](../../../assets/articles/undertale-review/5.jpg)
 
 ---
 
@@ -102,4 +102,4 @@ If you are finding it difficult to defeat Asgore, you might need to buy some hea
 
 On my second playthrough I experienced this and found that it totally wound-down the pacing of several scenes. It's nice that the developer considered that people might want to explore the rest of the game before entering the final encounter and has placed 'transport' areas that can be used to bypass lengthy walks (albeit with needlessly time-consuming animations), but I can't shake the feeling that the ending sequence definitely could have been handled better in order to maintain the emotional tension rather than give you the option to turn back seconds before the fight begins. Perhaps a warning before the players begins the long exposition-sequence or the option to warp back to a store/hub more easily rather than asking the player to walk through the empty areas...whatever the solution might be, I feel that this part has an potentially crippling effect on the emotional pacing of the final moments. It's such a shame, because for a game that is so close to being perfect in almost everything else it tries, it drops the ball slightly at the very last moment at unfortunately what is meant to be the emotional payoff of the story (at least for most players).
 
-![](../../../assets/articles/undertale-review/6.png)
+![Undertale sprite of Flowey winking and sticking out its tongue on a black background](../../../assets/articles/undertale-review/6.png)
