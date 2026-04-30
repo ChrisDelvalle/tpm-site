@@ -1,5 +1,6 @@
 ---
 import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
+import ArticleProse from "../components/article/ArticleProse.astro";
 import { getCategory } from "../lib/content";
 import {
   articleUrl,
@@ -50,8 +51,8 @@ const category = await getCategory(categorySlug(article));
       {date && <span>{formatDate(date)}</span>}
     </div>
     {description && <p class="lede">{description}</p>}
-    <div class="content">
+    <ArticleProse class="mt-8">
       <slot />
-    </div>
+    </ArticleProse>
   </article>
 </BaseLayout>

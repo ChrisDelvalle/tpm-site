@@ -1,6 +1,7 @@
 ---
 import { getEntry, render } from "astro:content";
 
+import ArticleProse from "../components/article/ArticleProse.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const about = await getEntry("pages", "about");
@@ -19,6 +20,8 @@ const description = about.data.description ?? "About The Philosopher's Meme.";
   canonicalPath="/about/"
 >
   <article class="article">
-    <Content />
+    <ArticleProse>
+      <Content />
+    </ArticleProse>
   </article>
 </BaseLayout>

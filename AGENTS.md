@@ -67,6 +67,9 @@ to the active milestone.
 - `.agents/docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
 - `.agents/docs/QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
   release checks.
+- `.agents/docs/COMPONENT_ARCHITECTURE.md`: target component hierarchy,
+  component responsibilities, navigation redesign direction, and migration
+  sequence.
 - `.agents/docs/ASTRO_GUIDANCE.md`: expanded Astro notes.
 - `.agents/docs/TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
 
