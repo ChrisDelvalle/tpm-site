@@ -429,7 +429,11 @@ export function formatBuildVerificationReport(result: BuildVerificationResult) {
   return lines.join("\n");
 }
 
-export async function runBuildVerificationCli(rootDir = process.cwd()) {
+export async function runBuildVerificationCli(
+  args = process.argv.slice(2),
+  rootDir = process.cwd(),
+) {
+  const quiet = args.includes("--quiet");
   const result = await verifyBuild({
     articleDir: path.resolve(rootDir, "src/content/articles"),
     categoryDir: path.resolve(rootDir, "src/content/categories"),
@@ -442,7 +446,10 @@ export async function runBuildVerificationCli(rootDir = process.cwd()) {
     return 1;
   }
 
-  console.log(report);
+  if (!quiet) {
+    console.log(report);
+  }
+
   return 0;
 }
 

@@ -29,6 +29,7 @@ interface UnusedImageCliOptions {
   help: boolean;
   ignoreFile: string;
   json: boolean;
+  quiet: boolean;
   review: boolean;
 }
 
@@ -245,12 +246,13 @@ function parseCliArgs(args: string[]): UnusedImageCliOptions {
     help: args.includes("--help") || args.includes("-h"),
     ignoreFile,
     json: args.includes("--json"),
+    quiet: args.includes("--quiet"),
     review: args.includes("--review"),
   };
 }
 
 function usage() {
-  return `Usage: bun run assets:unused [--json] [--review] [--fail-on-unused] [--ignore-file path]
+  return `Usage: bun run assets:unused [--json] [--quiet] [--review] [--fail-on-unused] [--ignore-file path]
 
 Find images in src/assets that no source file appears to reference.
 
@@ -281,7 +283,7 @@ export async function runUnusedImageCli(
     const report = formatUnusedImageReport(result, options.ignoreFile);
     if (result.unusedImages.length > 0) {
       console.warn(report);
-    } else {
+    } else if (!options.quiet) {
       console.log(report);
     }
   }

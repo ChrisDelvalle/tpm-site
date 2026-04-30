@@ -8,13 +8,13 @@ import {
 } from "../../scripts/run-quality";
 
 const blockingCommand = {
-  args: ["run", "check"],
+  args: ["--silent", "run", "check"],
   blocking: true,
   label: "Normal quality gate",
 };
 
 const reviewCommand = {
-  args: ["run", "review:assets"],
+  args: ["--silent", "run", "review:assets"],
   blocking: false,
   label: "Asset review",
 };
@@ -61,7 +61,7 @@ describe("quiet quality runner", () => {
 
     expect(shouldPrintResult(result)).toBe(true);
     expect(resultIsBlockingFailure(result)).toBe(true);
-    expect(formatCommandResult(result)).toContain("$ bun run check");
+    expect(formatCommandResult(result)).toContain("$ bun --silent run check");
   });
 
   test("non-blocking review failures do not fail the quality runner", () => {

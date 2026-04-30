@@ -408,7 +408,7 @@ export async function runSharedAssetsCli(
   rootDir = process.cwd(),
 ) {
   if (args.includes("--help") || args.includes("-h")) {
-    console.log(`Usage: bun run assets:shared [--json]
+    console.log(`Usage: bun run assets:shared [--json] [--quiet]
 
 Detect src assets referenced by more than one source file while living outside
 src/assets/shared/.
@@ -446,7 +446,7 @@ references from the same source file do not make an asset shared.`);
     const report = formatSharedAssetReport(result, rootDir);
     if (result.violations.length > 0) {
       console.error(report);
-    } else {
+    } else if (!args.includes("--quiet")) {
       console.log(report);
     }
   }

@@ -219,7 +219,7 @@ export async function runImageAssetLocationCli(
   rootDir = process.cwd(),
 ) {
   if (args.includes("--help") || args.includes("-h")) {
-    console.log(`Usage: bun run assets:locations [--json]
+    console.log(`Usage: bun run assets:locations [--json] [--quiet]
 
 Require image assets to live under src/assets/.
 
@@ -236,7 +236,7 @@ dot-directories, and paths ignored by Git are skipped automatically.`);
     const report = formatImageAssetLocationReport(result);
     if (result.violations.length > 0) {
       console.error(report);
-    } else {
+    } else if (!args.includes("--quiet")) {
       console.log(report);
     }
   }

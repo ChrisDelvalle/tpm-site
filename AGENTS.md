@@ -1103,6 +1103,8 @@ Current baseline scripts:
 - `bun run check`: run content validation, Astro and tooling typechecking,
   ESLint, asset validation, package ordering, code/config Prettier check, Knip,
   and unit tests.
+- `bun run typecheck`: run Astro checks silently while failing on warnings, then
+  run TypeScript tool checks.
 - `bun run quality`: run the local quality path quietly, printing only failures
   and review warnings.
 - `bun run build`: build Astro and generate Pagefind index.
@@ -1120,6 +1122,7 @@ Current baseline scripts:
 - `bun run review:markdown`: run non-blocking Markdown/MDX style feedback.
 - `bun run review:assets`: run non-blocking duplicate/unused image review
   feedback.
+- `bun run audit:all`: run dependency audit review across all severities.
 - `bun run fix:markdown`: run mechanical Markdown/MDX formatting.
 
 For code and config changes, prefer running the safe automatic fixer before the

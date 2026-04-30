@@ -34,6 +34,7 @@ interface DuplicateImageCliOptions {
   help: boolean;
   ignoreFile: string;
   json: boolean;
+  quiet: boolean;
   review: boolean;
   scanDirs: string[];
 }
@@ -300,13 +301,14 @@ function parseCliArgs(args: string[]): DuplicateImageCliOptions {
     help: args.includes("--help") || args.includes("-h"),
     ignoreFile,
     json: args.includes("--json"),
+    quiet: args.includes("--quiet"),
     review: args.includes("--review"),
     scanDirs,
   };
 }
 
 function usage() {
-  return `Usage: bun run assets:duplicates [--json] [--review] [--fail-on-duplicates] [--ignore-file path] [dir ...]
+  return `Usage: bun run assets:duplicates [--json] [--quiet] [--review] [--fail-on-duplicates] [--ignore-file path] [dir ...]
 
 Find image files with identical byte content.
 
@@ -342,7 +344,7 @@ export async function runDuplicateImageCli(
     const report = formatDuplicateImageReport(result, options.ignoreFile);
     if (result.duplicateGroups.length > 0) {
       console.warn(report);
-    } else {
+    } else if (!options.quiet) {
       console.log(report);
     }
   }

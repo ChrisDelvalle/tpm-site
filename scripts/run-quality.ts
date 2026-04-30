@@ -14,32 +14,32 @@ interface CommandResult {
 
 const localCommands: QualityCommand[] = [
   {
-    args: ["run", "check"],
+    args: ["--silent", "run", "check"],
     blocking: true,
     label: "Normal quality gate",
   },
   {
-    args: ["run", "build"],
+    args: ["--silent", "run", "build"],
     blocking: true,
     label: "Production build",
   },
   {
-    args: ["run", "verify"],
+    args: ["--silent", "run", "verify"],
     blocking: true,
     label: "Build verification",
   },
   {
-    args: ["run", "validate:html"],
+    args: ["--silent", "run", "validate:html"],
     blocking: true,
     label: "HTML validation",
   },
   {
-    args: ["run", "review:assets"],
+    args: ["--silent", "run", "review:assets"],
     blocking: false,
     label: "Asset review",
   },
   {
-    args: ["run", "review:markdown"],
+    args: ["--silent", "run", "review:markdown"],
     blocking: false,
     label: "Markdown review",
   },
@@ -47,17 +47,17 @@ const localCommands: QualityCommand[] = [
 
 const releaseCommands: QualityCommand[] = [
   {
-    args: ["run", "check:release"],
+    args: ["--silent", "run", "check:release"],
     blocking: true,
     label: "Release quality gate",
   },
   {
-    args: ["run", "review:assets"],
+    args: ["--silent", "run", "review:assets"],
     blocking: false,
     label: "Asset review",
   },
   {
-    args: ["run", "review:markdown"],
+    args: ["--silent", "run", "review:markdown"],
     blocking: false,
     label: "Markdown review",
   },

@@ -78,6 +78,8 @@ large volumes of irrelevant detail.
 
 Local scripts should:
 
+- use `bun --silent run` for composed scripts when the nested command echo adds
+  no diagnostic value;
 - use concise reporters where available;
 - fail with clear actionable messages;
 - avoid verbose logs on success;
@@ -630,6 +632,7 @@ Use both local scripts and GitHub-native security checks.
 Local/release scripts:
 
 - `bun audit --audit-level=high`
+- `bun audit`
 - `gitleaks git --redact --no-banner`
 
 GitHub:
@@ -676,9 +679,9 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
 ```json
 {
   "dev": "astro dev",
-  "build": "astro build && pagefind --site dist",
+  "build": "astro --silent build && pagefind --site dist --quiet",
   "preview": "astro preview",
-  "preview:fresh": "bun run build && bun run preview",
+  "preview:fresh": "bun --silent run build && bun --silent run preview",
   "quality": "bun scripts/run-quality.ts",
   "quality:release": "bun scripts/run-quality.ts --release",
 
@@ -687,40 +690,41 @@ clear validation output. Do not hide tool failures behind wrapper scripts.
   "assets:shared": "bun scripts/find-shared-assets.ts",
   "assets:unused": "bun scripts/find-unused-images.ts",
 
-  "format": "bun run format:code",
+  "format": "bun --silent run format:code",
   "format:code": "prettier --check \"**/*.{astro,css,cjs,js,json,jsonc,mjs,ts,tsx,yaml,yml}\" --log-level warn",
   "format:code:write": "prettier --write --list-different \"**/*.{astro,css,cjs,js,json,jsonc,mjs,ts,tsx,yaml,yml}\"",
   "format:markdown": "prettier --check \"**/*.{md,mdx}\" --log-level warn",
   "format:markdown:write": "prettier --write --list-different \"**/*.{md,mdx}\"",
-  "format:write": "bun run format:code:write",
+  "format:write": "bun --silent run format:code:write",
   "lint": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts,.tsx,.astro --fix --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
   "lint:markdown": "markdownlint-cli2",
   "lint:mdx": "eslint . --ext .mdx --max-warnings=0 --report-unused-disable-directives-severity error --no-cache",
-  "fix": "bun run lint:fix && bun run format:write",
-  "fix:markdown": "bun run format:markdown:write",
-  "review:assets": "bun run assets:duplicates -- --review && bun run assets:unused -- --review",
-  "review:markdown": "bun run lint:markdown && bun run lint:mdx && bun run format:markdown",
+  "fix": "bun --silent run lint:fix && bun --silent run format:write",
+  "fix:markdown": "bun --silent run format:markdown:write",
+  "review:assets": "bun --silent run assets:duplicates -- --review --quiet && bun --silent run assets:unused -- --review --quiet",
+  "review:markdown": "bun --silent run lint:markdown && bun --silent run lint:mdx && bun --silent run format:markdown",
 
-  "typecheck": "bun run typecheck:astro && bun run typecheck:tools",
-  "typecheck:astro": "astro check",
-  "typecheck:tools": "tsc --project tsconfig.tools.json",
-  "deadcode": "knip --no-config-hints",
+  "typecheck": "bun --silent run typecheck:astro && bun --silent run typecheck:tools",
+  "typecheck:astro": "astro --silent check --minimumFailingSeverity warning --minimumSeverity warning",
+  "typecheck:tools": "tsc --project tsconfig.tools.json --pretty false",
+  "deadcode": "knip --no-config-hints --no-progress",
   "test": "bun test tests/lib tests/scripts --randomize --concurrent",
-  "test:flake": "bun run test -- --rerun-each 10",
-  "test:e2e": "bun run build && playwright test tests/e2e",
-  "test:a11y": "bun run build && playwright test tests/a11y",
-  "test:perf": "bun run build && lhci autorun",
+  "test:flake": "bun --silent run test -- --rerun-each 10",
+  "test:e2e": "bun --silent run build && playwright test tests/e2e",
+  "test:a11y": "bun --silent run build && playwright test tests/a11y",
+  "test:perf": "bun --silent run build && lhci autorun",
   "coverage": "bun test tests/lib tests/scripts --randomize --concurrent --coverage --coverage-reporter=text --coverage-reporter=lcov",
 
-  "verify": "bun scripts/verify-build.ts",
+  "verify": "bun scripts/verify-build.ts --quiet",
   "verify:content": "bun scripts/verify-content.ts",
-  "validate:html": "html-validate dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\"",
+  "validate:html": "html-validate --max-warnings=0 dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\"",
   "audit": "bun audit --audit-level=high",
+  "audit:all": "bun audit",
   "secrets": "gitleaks git --redact --no-banner",
 
-  "check": "bun run verify:content && bun run assets:locations && bun run assets:shared && bun run typecheck && bun run lint && bun run lint:packages && bun run format && bun run deadcode && bun run test",
-  "check:release": "bun run check && bun run build && bun run verify && bun run validate:html && bun run test:e2e && bun run test:a11y && bun run test:perf && bun run coverage && bun run audit && bun run secrets"
+  "check": "bun --silent run verify:content -- --quiet && bun --silent run assets:locations -- --quiet && bun --silent run assets:shared -- --quiet && bun --silent run typecheck && bun --silent run lint && bun --silent run lint:packages && bun --silent run format && bun --silent run deadcode && bun --silent run test",
+  "check:release": "bun --silent run check && bun --silent run build && bun --silent run verify && bun --silent run validate:html && bun --silent run test:e2e && bun --silent run test:a11y && bun --silent run test:perf && bun --silent run coverage && bun --silent run audit && bun --silent run secrets"
 }
 ```
 

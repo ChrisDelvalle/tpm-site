@@ -137,7 +137,11 @@ function formatContentVerificationResult(result: ContentVerificationResult) {
   return `Content verification passed: ${result.publishedCount} published articles, ${result.draftCount} drafts.`;
 }
 
-export async function runContentVerificationCli(rootDir = process.cwd()) {
+export async function runContentVerificationCli(
+  args = process.argv.slice(2),
+  rootDir = process.cwd(),
+) {
+  const quiet = args.includes("--quiet");
   const result = await verifyContent({
     articleDir: path.resolve(rootDir, "src/content/articles"),
     categoryDir: path.resolve(rootDir, "src/content/categories"),
@@ -150,7 +154,10 @@ export async function runContentVerificationCli(rootDir = process.cwd()) {
     return 1;
   }
 
-  console.log(report);
+  if (!quiet) {
+    console.log(report);
+  }
+
   return 0;
 }
 

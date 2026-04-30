@@ -76,6 +76,12 @@ If a warning is intentionally wrong, add a narrow path or glob to
 bun run review:assets
 ```
 
+Run dependency audit review across all severities:
+
+```sh
+bun run audit:all
+```
+
 Run the heavier pre-release gate:
 
 ```sh
