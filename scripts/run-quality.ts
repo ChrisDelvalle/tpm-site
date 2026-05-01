@@ -87,6 +87,12 @@ function commandLine(command: QualityCommand) {
   return ["bun", ...command.args].join(" ");
 }
 
+/**
+ * Detects whether captured command output contains actionable warning text.
+ *
+ * @param output Combined stdout and stderr from a command.
+ * @returns True when the output should be shown to the user.
+ */
 export function outputHasWarningOrError(output: string) {
   return output.split(/\r?\n/).some((line) => {
     if (line.trimStart().startsWith("$ ")) {
@@ -103,14 +109,32 @@ export function outputHasWarningOrError(output: string) {
   });
 }
 
+/**
+ * Decides whether a quality-command result should be printed.
+ *
+ * @param result Captured command result.
+ * @returns True when the command failed or emitted warning-like output.
+ */
 export function shouldPrintResult(result: CommandResult) {
   return result.exitCode !== 0 || outputHasWarningOrError(result.output);
 }
 
+/**
+ * Checks whether a command failure should fail the whole quality run.
+ *
+ * @param result Captured command result.
+ * @returns True when a blocking command exited unsuccessfully.
+ */
 export function resultIsBlockingFailure(result: CommandResult) {
   return result.command.blocking && result.exitCode !== 0;
 }
 
+/**
+ * Formats a noisy command result with label, command, and captured output.
+ *
+ * @param result Captured command result.
+ * @returns Human-readable command report.
+ */
 export function formatCommandResult(result: CommandResult) {
   const status =
     result.exitCode === 0
@@ -185,6 +209,13 @@ Use --release to run check:release plus non-blocking Markdown, asset,
 accessibility, Lighthouse, coverage, and all-severity audit review checks.`;
 }
 
+/**
+ * Runs the quiet quality-check command dispatcher.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param cwd Working directory for Bun subprocesses.
+ * @returns Process exit code.
+ */
 export async function runQualityCli(
   args = process.argv.slice(2),
   cwd = process.cwd(),

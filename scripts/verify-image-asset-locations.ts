@@ -8,11 +8,13 @@ const imageExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|tiff?|webp)$/i;
 const alwaysIgnoredDirectoryNames = new Set([".git", "node_modules"]);
 
+/** Compiled ignore-list pattern for image asset location checks. */
 export interface IgnorePattern {
   pattern: string;
   regex: RegExp;
 }
 
+/** Inputs needed to verify image asset locations. */
 export interface ImageAssetLocationOptions {
   ignoreFile?: string;
   isGitIgnored?: (relativePath: string) => boolean;
@@ -20,6 +22,7 @@ export interface ImageAssetLocationOptions {
   srcAssetsDir?: string;
 }
 
+/** Image asset location verification output used by reports and tests. */
 export interface ImageAssetLocationResult {
   ignoredPatterns: string[];
   imageCount: number;
@@ -38,6 +41,12 @@ function regexEscape(value: string) {
   return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
 }
 
+/**
+ * Converts a small glob subset used by ignore files into a regular expression.
+ *
+ * @param pattern Ignore-file glob pattern.
+ * @returns Regular expression that matches full POSIX-style relative paths.
+ */
 export function globToRegExp(pattern: string) {
   let source = "^";
 
@@ -161,6 +170,16 @@ async function listImageFiles(
   return files;
 }
 
+/**
+ * Verifies that project image assets live under the source asset pipeline.
+ *
+ * @param options Repository root, allowed asset directory, and ignore settings.
+ * @param options.ignoreFile JSON file containing intentional location exceptions.
+ * @param options.isGitIgnored Optional Git ignore checker for tests and callers.
+ * @param options.rootDir Repository root to verify from.
+ * @param options.srcAssetsDir Relative directory where image assets are allowed.
+ * @returns Image asset location verification result.
+ */
 export async function verifyImageAssetLocations({
   ignoreFile = defaultIgnoreFile,
   isGitIgnored,
@@ -189,6 +208,13 @@ export async function verifyImageAssetLocations({
   };
 }
 
+/**
+ * Formats image-location violations with remediation guidance.
+ *
+ * @param result Image asset location verification result.
+ * @param ignoreFile Ignore-list file to mention in remediation guidance.
+ * @returns Human-readable image-location report.
+ */
 export function formatImageAssetLocationReport(
   result: ImageAssetLocationResult,
   ignoreFile = defaultIgnoreFile,
@@ -214,6 +240,13 @@ export function formatImageAssetLocationReport(
   ].join("\n");
 }
 
+/**
+ * Runs the image asset location command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to verify from.
+ * @returns Process exit code.
+ */
 export async function runImageAssetLocationCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),

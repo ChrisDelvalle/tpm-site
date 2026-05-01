@@ -3,12 +3,24 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Provides the root state container for hover-card interactions.
+ *
+ * @param props Radix hover-card root props.
+ * @returns Hover-card root provider.
+ */
 function HoverCard({
   ...props
 }: React.ComponentProps<typeof HoverCardPrimitive.Root>) {
   return <HoverCardPrimitive.Root data-slot="hover-card" {...props} />;
 }
 
+/**
+ * Marks the element that opens the hover-card preview.
+ *
+ * @param props Radix hover-card trigger props.
+ * @returns Hover-card trigger element.
+ */
 function HoverCardTrigger({
   ...props
 }: React.ComponentProps<typeof HoverCardPrimitive.Trigger>) {
@@ -17,6 +29,15 @@ function HoverCardTrigger({
   );
 }
 
+/**
+ * Renders hover-card content in a portal with project styling.
+ *
+ * @param props Radix hover-card content props plus optional class names.
+ * @param props.className Additional classes for the content panel.
+ * @param props.align Alignment relative to the trigger.
+ * @param props.sideOffset Distance from the trigger.
+ * @returns Styled hover-card content portal.
+ */
 function HoverCardContent({
   className,
   align = "center",

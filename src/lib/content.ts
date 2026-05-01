@@ -36,12 +36,22 @@ function categoryFromMetadata(
   };
 }
 
+/**
+ * Loads all published articles in newest-first order.
+ *
+ * @returns Published article entries sorted for public listing surfaces.
+ */
 export async function getArticles() {
   const entries = await getArticleEntries();
   assertUniqueArticleSlugs(entries);
   return sortNewestFirst(entries.filter(isPublishedArticle));
 }
 
+/**
+ * Loads category summaries with their published articles.
+ *
+ * @returns Category summaries sorted by category metadata order and title.
+ */
 export async function getCategories() {
   const articles = await getArticles();
   const categoryEntries = await getCollection("categories");
@@ -67,6 +77,12 @@ export async function getCategories() {
     });
 }
 
+/**
+ * Looks up one category summary by URL slug.
+ *
+ * @param slug Raw category slug from a route parameter or caller.
+ * @returns Matching category summary when it exists.
+ */
 export async function getCategory(slug: string) {
   const normalizedSlug = normalizeSlug(slug);
   const categories = await getCategories();

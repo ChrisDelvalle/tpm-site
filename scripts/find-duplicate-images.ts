@@ -9,12 +9,14 @@ const imageExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|tiff?|webp)$/i;
 const alwaysIgnoredDirectoryNames = new Set([".git", "node_modules"]);
 
+/** One scanned image file with its content hash and file size. */
 export interface DuplicateImageRecord {
   hash: string;
   path: string;
   size: number;
 }
 
+/** Duplicate-image scan output used by reports and tests. */
 export interface DuplicateImageResult {
   duplicateGroups: DuplicateImageRecord[][];
   ignoredPatterns: string[];
@@ -51,6 +53,12 @@ function regexEscape(value: string) {
   return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
 }
 
+/**
+ * Converts a small glob subset used by ignore files into a regular expression.
+ *
+ * @param pattern Ignore-file glob pattern.
+ * @returns Regular expression that matches full POSIX-style relative paths.
+ */
 export function globToRegExp(pattern: string) {
   let source = "^";
 
@@ -175,6 +183,12 @@ async function imageRecord(
   };
 }
 
+/**
+ * Groups image records by content hash and keeps only duplicated hashes.
+ *
+ * @param records Image file records with SHA-256 hashes.
+ * @returns Duplicate groups sorted by size and path for stable reports.
+ */
 export function groupDuplicateImages(records: DuplicateImageRecord[]) {
   const byHash = new Map<string, DuplicateImageRecord[]>();
 
@@ -197,6 +211,16 @@ export function groupDuplicateImages(records: DuplicateImageRecord[]) {
     });
 }
 
+/**
+ * Scans configured image directories for byte-identical duplicate images.
+ *
+ * @param options Scan roots, directories, and ignore-list configuration.
+ * @param options.ignoreFile JSON file containing intentional duplicate ignore patterns.
+ * @param options.ignorePatterns Explicit ignore patterns that bypass `ignoreFile`.
+ * @param options.rootDir Repository root to scan from.
+ * @param options.scanDirs Relative directories to scan for image files.
+ * @returns Duplicate-image scan result.
+ */
 export async function findDuplicateImages({
   ignoreFile = defaultIgnoreFile,
   ignorePatterns,
@@ -235,6 +259,13 @@ export async function findDuplicateImages({
   };
 }
 
+/**
+ * Formats duplicate-image findings for human review.
+ *
+ * @param result Duplicate-image scan result.
+ * @param ignoreFile Ignore-list file to mention in remediation guidance.
+ * @returns Human-readable duplicate-image report.
+ */
 export function formatDuplicateImageReport(
   result: DuplicateImageResult,
   ignoreFile = defaultIgnoreFile,
@@ -319,6 +350,13 @@ Intentional duplicates can be ignored with ${defaultIgnoreFile}.
 Use --fail-on-duplicates when duplicate images should fail a gate.`;
 }
 
+/**
+ * Runs the duplicate-image command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to scan from.
+ * @returns Process exit code.
+ */
 export async function runDuplicateImageCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),

@@ -9,6 +9,7 @@ const imageExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|tiff?|webp)$/i;
 const alwaysIgnoredDirectoryNames = new Set([".git", "node_modules"]);
 
+/** Unused-image scan output used by reports and tests. */
 export interface UnusedImageResult {
   ignoredPatterns: string[];
   referencedImageCount: number;
@@ -45,6 +46,12 @@ function regexEscape(value: string) {
   return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
 }
 
+/**
+ * Converts a small glob subset used by ignore files into a regular expression.
+ *
+ * @param pattern Ignore-file glob pattern.
+ * @returns Regular expression that matches full POSIX-style relative paths.
+ */
 export function globToRegExp(pattern: string) {
   let source = "^";
 
@@ -143,7 +150,7 @@ async function listImages(
 
 function referencedImages(
   rootDir: string,
-  references: { assetPath: string }[],
+  references: Array<{ assetPath: string }>,
 ) {
   return new Set(
     references
@@ -153,6 +160,17 @@ function referencedImages(
   );
 }
 
+/**
+ * Finds images in `src/assets` that are not referenced by source files.
+ *
+ * @param options Source, asset, and ignore-list configuration.
+ * @param options.assetsDir Relative asset directory to scan.
+ * @param options.ignoreFile JSON file containing intentional unused-image ignore patterns.
+ * @param options.ignorePatterns Explicit ignore patterns that bypass `ignoreFile`.
+ * @param options.rootDir Repository root to scan from.
+ * @param options.srcDir Source directory to inspect for references.
+ * @returns Unused-image scan result.
+ */
 export async function findUnusedImages({
   assetsDir = defaultAssetsDir,
   ignoreFile = defaultIgnoreFile,
@@ -200,6 +218,13 @@ export async function findUnusedImages({
   };
 }
 
+/**
+ * Formats unused-image findings with author-friendly remediation guidance.
+ *
+ * @param result Unused-image scan result.
+ * @param ignoreFile Ignore-list file to mention in remediation guidance.
+ * @returns Human-readable unused-image report.
+ */
 export function formatUnusedImageReport(
   result: UnusedImageResult,
   ignoreFile = defaultIgnoreFile,
@@ -261,6 +286,13 @@ unused-assets/, delete files that are not needed, or add an intentional
 exception to ${defaultIgnoreFile}.`;
 }
 
+/**
+ * Runs the unused-image command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to scan from.
+ * @returns Process exit code.
+ */
 export async function runUnusedImageCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),

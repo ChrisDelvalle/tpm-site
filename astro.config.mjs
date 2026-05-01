@@ -6,6 +6,7 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   compressHTML: true,
+  prerenderConflictBehavior: "error",
   site: "https://thephilosophersmeme.com",
   trailingSlash: "always",
   redirects: {

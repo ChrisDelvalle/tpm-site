@@ -20,17 +20,20 @@ const staticReadingBasePages = [
   "articles/index.html",
 ];
 
+/** Publication metadata for one non-draft article source file. */
 export interface PublishedArticle {
   isMdx: boolean;
   slug: string;
 }
 
+/** Source-content publication state used to verify generated output. */
 export interface ArticlePublication {
   draftSlugs: string[];
   publishedArticles: PublishedArticle[];
   publishedCategorySlugs: Set<string>;
 }
 
+/** Inputs needed to verify a completed Astro build. */
 export interface BuildVerificationOptions {
   articleDir: string;
   categoryDir: string;
@@ -38,6 +41,7 @@ export interface BuildVerificationOptions {
   expectedRedirects?: Record<string, string>;
 }
 
+/** Categorized build verification failures. */
 export interface BuildVerificationIssues {
   articleCountIssues: string[];
   brokenLinks: string[];
@@ -50,6 +54,7 @@ export interface BuildVerificationIssues {
   unexpectedDatedPages: string[];
 }
 
+/** Build verification output used by reports and tests. */
 export interface BuildVerificationResult {
   articlePageCount: number;
   astroClientScriptCount: number;
@@ -97,6 +102,12 @@ function isDraft(data: Record<string, unknown>) {
   return data["draft"] === true;
 }
 
+/**
+ * Reads article source files and separates draft and published article data.
+ *
+ * @param articleDir Source article directory.
+ * @returns Publication stats derived from article frontmatter and paths.
+ */
 export async function articlePublicationStats(articleDir: string) {
   const articleSourceFiles = (await listFiles(articleDir)).filter((file) =>
     /\.mdx?$/i.test(file),
@@ -140,6 +151,13 @@ async function categorySlugsFromMetadata(categoryDir: string) {
   return categoryFiles.map((file) => path.basename(file, ".json"));
 }
 
+/**
+ * Collects all category slugs that should have generated category pages.
+ *
+ * @param categoryDir Source category metadata directory.
+ * @param articlePublication Published article and draft metadata.
+ * @returns Sorted category slugs from metadata and published article folders.
+ */
 export async function sourceCategorySlugs(
   categoryDir: string,
   articlePublication: ArticlePublication,
@@ -152,6 +170,13 @@ export async function sourceCategorySlugs(
   return [...slugs].sort((left, right) => left.localeCompare(right));
 }
 
+/**
+ * Builds the list of required build-output paths for the current source tree.
+ *
+ * @param articlePublication Published article and draft metadata.
+ * @param categorySlugs Category slugs expected in the output.
+ * @returns Relative `dist` paths that must exist after build.
+ */
 export function requiredPathsForSource(
   articlePublication: ArticlePublication,
   categorySlugs: string[],
@@ -165,6 +190,13 @@ export function requiredPathsForSource(
   ];
 }
 
+/**
+ * Chooses representative reading pages that should stay static and lightweight.
+ *
+ * @param articlePublication Published article and draft metadata.
+ * @param categorySlugs Category slugs expected in the output.
+ * @returns Relative `dist` paths to inspect for unexpected client scripts.
+ */
 export function staticReadingPagesForSource(
   articlePublication: ArticlePublication,
   categorySlugs: string[],
@@ -183,6 +215,12 @@ export function staticReadingPagesForSource(
   ].filter((page): page is string => page !== undefined);
 }
 
+/**
+ * Extracts link and asset targets from rendered HTML attributes.
+ *
+ * @param html Rendered HTML text.
+ * @returns Values from `href` and `src` attributes.
+ */
 export function linkTargets(html: string) {
   const targets: string[] = [];
   const attributePattern = /\s(?:href|src)=["']([^"']+)["']/gi;
@@ -285,6 +323,12 @@ async function configuredRedirects(rootDir: string) {
   );
 }
 
+/**
+ * Checks whether a URL points outside the generated static site.
+ *
+ * @param url URL or URL-like target from rendered HTML.
+ * @returns True for protocol-relative, absolute, mail, or telephone URLs.
+ */
 export function isExternal(url: string) {
   return /^(?:[a-z]+:)?\/\//i.test(url) || /^(?:mailto|tel):/i.test(url);
 }
@@ -456,6 +500,16 @@ function hasIssues(issues: BuildVerificationIssues) {
   );
 }
 
+/**
+ * Verifies that generated `dist` output matches source content expectations.
+ *
+ * @param options Build output, source content, and redirect expectations.
+ * @param options.articleDir Source article directory.
+ * @param options.categoryDir Source category metadata directory.
+ * @param options.distDir Generated build output directory.
+ * @param options.expectedRedirects Legacy redirect map from Astro config.
+ * @returns Build verification result with counts and issues.
+ */
 export async function verifyBuild({
   articleDir,
   categoryDir,
@@ -525,6 +579,12 @@ export async function verifyBuild({
   };
 }
 
+/**
+ * Formats build verification issues for CI and local command output.
+ *
+ * @param result Build verification result.
+ * @returns Human-readable build verification report.
+ */
 export function formatBuildVerificationReport(result: BuildVerificationResult) {
   if (!hasIssues(result.issues)) {
     return `Build verification passed: ${result.articlePageCount} articles and ${result.astroClientScriptCount} Astro client script assets.`;
@@ -579,6 +639,13 @@ export function formatBuildVerificationReport(result: BuildVerificationResult) {
   return lines.join("\n");
 }
 
+/**
+ * Runs the build verification command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to verify from.
+ * @returns Process exit code.
+ */
 export async function runBuildVerificationCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),

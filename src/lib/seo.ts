@@ -12,14 +12,35 @@ import {
 
 const DEFAULT_SITE_URL = "https://thephilosophersmeme.com";
 
+/**
+ * Resolves a site-relative or absolute URL against the configured site origin.
+ *
+ * @param pathOrUrl Relative path or absolute URL.
+ * @param site Astro site origin when available.
+ * @returns Absolute URL string.
+ */
 export function absoluteUrl(pathOrUrl: string, site: string | URL | undefined) {
   return new URL(pathOrUrl, site ?? DEFAULT_SITE_URL).toString();
 }
 
+/**
+ * Serializes JSON-LD so it is safe to place inside an HTML script element.
+ *
+ * @param value Structured data object to serialize.
+ * @returns JSON string with HTML-significant less-than characters escaped.
+ */
 export function safeJsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
+/**
+ * Builds BlogPosting JSON-LD for an article page.
+ *
+ * @param article Article content entry.
+ * @param category Category summary for the article, when available.
+ * @param site Astro site origin when available.
+ * @returns Schema.org BlogPosting object ready for serialization.
+ */
 export function articleBlogPostingJsonLd(
   article: ArticleEntry,
   category: CategorySummary | undefined,

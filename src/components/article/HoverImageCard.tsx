@@ -19,6 +19,16 @@ interface HoverImageCardProps {
   expanded?: boolean;
 }
 
+/**
+ * Renders an inline link that previews an image in a hover/focus card.
+ *
+ * @param props Hover image configuration and link label.
+ * @param props.image Image metadata and source URL for the preview.
+ * @param props.label Inline link text shown in article prose.
+ * @param props.alt Accessible alt text for the preview image.
+ * @param props.expanded Whether to use the larger preview size.
+ * @returns React hover card for MDX article image previews.
+ */
 export default function HoverImageCard({
   image,
   label,

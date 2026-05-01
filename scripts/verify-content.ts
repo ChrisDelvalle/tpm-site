@@ -5,12 +5,14 @@ import matter from "gray-matter";
 
 const urlSafeSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/** Inputs needed to verify source content conventions. */
 export interface ContentVerificationOptions {
   articleDir: string;
   categoryDir: string;
   rootDir: string;
 }
 
+/** Content verification output used by reports and tests. */
 export interface ContentVerificationResult {
   draftCount: number;
   issues: string[];
@@ -95,6 +97,15 @@ function validateArticlePath(
   }
 }
 
+/**
+ * Verifies source content paths and publication metadata invariants.
+ *
+ * @param options Article, category, and repository-root directories.
+ * @param options.articleDir Source article directory.
+ * @param options.categoryDir Source category metadata directory.
+ * @param options.rootDir Repository root for relative error paths.
+ * @returns Content verification result with counts and issues.
+ */
 export async function verifyContent({
   articleDir,
   categoryDir,
@@ -137,6 +148,13 @@ function formatContentVerificationResult(result: ContentVerificationResult) {
   return `Content verification passed: ${result.publishedCount} published articles, ${result.draftCount} drafts.`;
 }
 
+/**
+ * Runs the content verification command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to verify from.
+ * @returns Process exit code.
+ */
 export async function runContentVerificationCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),

@@ -5,6 +5,7 @@ const sourceFilePattern = /\.(?:astro|css|mdx?|[cm]?[jt]sx?)$/i;
 const assetExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|mp3|mp4|ogg|otf|pdf|png|svg|tiff?|ttf|wav|webm|webp|woff2?)$/i;
 
+/** One source-file reference to an asset under `src/assets`. */
 export interface AssetReference {
   assetPath: string;
   file: string;
@@ -12,18 +13,21 @@ export interface AssetReference {
   value: string;
 }
 
+/** Asset placement violation for files referenced by multiple source files. */
 export interface SharedAssetViolation {
   assetPath: string;
   references: AssetReference[];
   sourceFiles: string[];
 }
 
+/** Shared-asset verification output used by reports and tests. */
 export interface SharedAssetResult {
   referenceCount: number;
   referencedAssetCount: number;
   violations: SharedAssetViolation[];
 }
 
+/** Options for scanning shared asset placement. */
 export interface SharedAssetOptions {
   assetsDir?: string;
   rootDir: string;
@@ -31,6 +35,7 @@ export interface SharedAssetOptions {
   srcDir?: string;
 }
 
+/** Options for collecting source-file asset references. */
 export interface AssetReferenceOptions {
   assetsDir?: string;
   rootDir: string;
@@ -86,6 +91,12 @@ function lineNumberAt(text: string, index: number) {
   return text.slice(0, index).split(/\r?\n/).length;
 }
 
+/**
+ * Normalizes a source-code asset reference into a path-like value.
+ *
+ * @param value Raw Markdown, HTML, or quoted reference target.
+ * @returns Normalized asset path when the reference points at a local asset.
+ */
 export function normalizeReference(value: string) {
   let raw = value.trim();
 
@@ -112,6 +123,15 @@ export function normalizeReference(value: string) {
   return pathOnly;
 }
 
+/**
+ * Resolves a local asset reference to an absolute path under `src/assets`.
+ *
+ * @param file Source file containing the reference.
+ * @param value Raw reference value.
+ * @param rootDir Repository root directory.
+ * @param assetsDir Absolute path to the source assets directory.
+ * @returns Absolute asset path when the reference is valid and in scope.
+ */
 export function resolveAssetReference(
   file: string,
   value: string,
@@ -307,6 +327,13 @@ function referencedFiles(references: AssetReference[]) {
   return new Set(references.map((reference) => reference.file));
 }
 
+/**
+ * Finds assets referenced from multiple source files outside the shared folder.
+ *
+ * @param groups References grouped by resolved asset path.
+ * @param sharedAssetsDir Absolute path to the shared assets directory.
+ * @returns Shared-asset placement violations.
+ */
 export function sharedAssetViolations(
   groups: Map<string, AssetReference[]>,
   sharedAssetsDir: string,
@@ -325,6 +352,15 @@ export function sharedAssetViolations(
     .sort((left, right) => left.assetPath.localeCompare(right.assetPath));
 }
 
+/**
+ * Scans source files for references to assets under `src/assets`.
+ *
+ * @param options Source and asset directory configuration.
+ * @param options.assetsDir Absolute path to the source asset directory.
+ * @param options.rootDir Repository root to scan from.
+ * @param options.srcDir Absolute source directory to scan.
+ * @returns Resolved asset references found in source files.
+ */
 export async function findAssetReferences({
   assetsDir,
   rootDir,
@@ -344,6 +380,16 @@ export async function findAssetReferences({
   return references;
 }
 
+/**
+ * Finds shared source assets that should live under `src/assets/shared`.
+ *
+ * @param options Source, asset, and shared-directory configuration.
+ * @param options.assetsDir Absolute path to the source asset directory.
+ * @param options.rootDir Repository root to scan from.
+ * @param options.sharedAssetsDir Absolute path to the shared assets directory.
+ * @param options.srcDir Absolute source directory to scan.
+ * @returns Shared-asset verification result.
+ */
 export async function findSharedAssets({
   assetsDir,
   rootDir,
@@ -370,6 +416,13 @@ export async function findSharedAssets({
   };
 }
 
+/**
+ * Formats shared-asset placement findings for developers.
+ *
+ * @param result Shared-asset verification result.
+ * @param rootDir Repository root for relative paths in the report.
+ * @returns Human-readable shared-asset report.
+ */
 export function formatSharedAssetReport(
   result: SharedAssetResult,
   rootDir: string,
@@ -403,6 +456,13 @@ export function formatSharedAssetReport(
   return lines.join("\n");
 }
 
+/**
+ * Runs the shared-asset command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to scan from.
+ * @returns Process exit code.
+ */
 export async function runSharedAssetsCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),

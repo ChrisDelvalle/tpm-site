@@ -1077,7 +1077,7 @@ src/catalog/
   CatalogSection.astro
   CatalogExample.astro
 
-src/pages/_catalog.astro
+src/pages/catalog/[...path].astro
   enabled only for catalog builds
 ```
 
@@ -1086,7 +1086,11 @@ Catalog build rules:
 - Normal production builds must not include the catalog.
 - A dedicated environment variable such as `TPM_COMPONENT_CATALOG=true` should
   enable catalog routes.
-- Add a release verification guard that fails if `dist/_catalog` appears in a
+- Use a tracked `.env.catalog` file for catalog builds with
+  `TPM_COMPONENT_CATALOG=true` and `ASTRO_TELEMETRY_DISABLED=1`.
+- Catalog scripts should load `.env.catalog` with Bun's `--env-file` flag so
+  they remain cross-platform.
+- Add a release verification guard that fails if `dist/catalog` appears in a
   normal production build.
 - Add `catalog:dev`, `catalog:build`, `catalog:preview`,
   `catalog:preview:fresh`, and `catalog:check` scripts when the catalog is

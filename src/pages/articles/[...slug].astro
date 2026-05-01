@@ -4,6 +4,11 @@ import { render } from "astro:content";
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import { getArticles } from "../../lib/content";
 
+/**
+ * Generates one static article route for each published article.
+ *
+ * @returns Static route parameters and article props for Astro.
+ */
 export async function getStaticPaths() {
   const articles = await getArticles();
 

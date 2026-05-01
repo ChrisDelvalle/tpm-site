@@ -13,6 +13,12 @@ import {
   SITE_TITLE,
 } from "../lib/routes";
 
+/**
+ * Generates the RSS feed endpoint from published article content.
+ *
+ * @param context Astro API route context with site metadata.
+ * @returns RSS response for feed readers.
+ */
 export async function GET(context: APIContext) {
   const articles = await getArticles();
   const site = context.site?.toString() ?? "https://thephilosophersmeme.com";
