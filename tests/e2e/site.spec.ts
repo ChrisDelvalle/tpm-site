@@ -1,4 +1,11 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Locator, test } from "@playwright/test";
+
+interface ElementBox {
+  height: number;
+  width: number;
+  x: number;
+  y: number;
+}
 
 const keyRoutes = [
   "/",
@@ -19,6 +26,19 @@ const viewports = [
   { height: 900, label: "desktop", width: 1280 },
   { height: 1200, label: "wide desktop", width: 2560 },
 ];
+
+async function visibleBoundingBox(
+  locator: Locator,
+  label: string,
+): Promise<ElementBox> {
+  const box = await locator.boundingBox();
+
+  if (box === null) {
+    throw new Error(`Expected ${label} to have a visible bounding box.`);
+  }
+
+  return box;
+}
 
 for (const route of smokeRoutes) {
   test(`renders ${route}`, async ({ page }) => {
@@ -68,6 +88,30 @@ test("keyboard focus is visible", async ({ page }) => {
     (element) => getComputedStyle(element).outlineStyle,
   );
   expect(outlineStyle).not.toBe("none");
+});
+
+test("desktop sticky sidebar stays below sticky header", async ({ page }) => {
+  const viewportHeight = 900;
+
+  await page.setViewportSize({ height: viewportHeight, width: 1280 });
+  await page.goto("/articles/gamergate-as-metagaming/");
+
+  await page.evaluate(() => window.scrollTo(0, 600));
+
+  const headerBox = await visibleBoundingBox(
+    page.locator("[data-site-header]"),
+    "sticky header",
+  );
+  const sidebarBox = await visibleBoundingBox(
+    page.locator('aside[aria-label="Category navigation"]'),
+    "desktop category sidebar",
+  );
+  const headerBottom = headerBox.y + headerBox.height;
+
+  expect(sidebarBox.y).toBeGreaterThanOrEqual(headerBottom - 1);
+  expect(sidebarBox.height).toBeLessThanOrEqual(
+    viewportHeight - headerBottom + 1,
+  );
 });
 
 test("category disclosure toggles article links without navigation", async ({

@@ -1,6 +1,6 @@
 # Component Architecture Implementation Checklist
 
-This checklist translates `agent-docs/COMPONENT_ARCHITECTURE.md` into
+This checklist translates `docs/COMPONENT_ARCHITECTURE.md` into
 developer-ready implementation milestones.
 
 Scope rules:
@@ -268,7 +268,190 @@ Scope rules:
 - [ ] Verify JSON-LD, Open Graph, canonical URLs, sitemap, RSS, and Pagefind
       still work after the component extraction.
 
-## Milestone 13: Optional Category Dropdown Discovery
+## Milestone 13: Component Design One-Pagers
+
+- [ ] Add `docs/components/README.md` describing the component design
+      one-pager standard and where new component designs must be documented
+      before implementation.
+- [ ] Structure `docs/components/` to mirror `src/components/`, including
+      subfolders such as `ui/`, `media/`, `layout/`, `navigation/`,
+      `articles/`, `pages/`, `blocks/`, and `islands/` where corresponding
+      component folders exist.
+- [ ] Add a reusable component one-pager template covering purpose, public
+      contract, composition relationships, layout behavior, responsive behavior,
+      layering/z-index behavior, interaction states, accessibility semantics,
+      content edge cases, theme behavior, and testable invariants.
+- [ ] Inventory every public component in `src/components/` and every page-level
+      block in `src/components/blocks/`, grouped by UI primitive, layout,
+      navigation, article, page, media, and homepage responsibility.
+- [ ] Create a one-page design doc for every existing public component and
+      block, using the template and keeping each doc specific to the actual
+      component rather than generic design guidance.
+- [ ] For each component one-pager, document its intended relationships to
+      sibling and parent components: alignment, shared dimensions, spacing,
+      containment, ordering, visibility exclusivity, sticky/fixed behavior, and
+      what should happen during scrolling and resizing.
+- [ ] For each component one-pager, document all meaningful states and variants:
+      default, hover, focus-visible, active, disabled, current, selected,
+      expanded/collapsed, empty, loading, error, missing content, long content,
+      and dense content where applicable.
+- [ ] For each layout-sensitive component one-pager, document the mobile base
+      behavior, tablet behavior, desktop behavior, wide behavior, short-viewport
+      behavior, wrapping rules, overflow rules, and container/viewport
+      dependencies.
+- [ ] For each interactive component one-pager, document keyboard behavior,
+      pointer behavior, touch behavior, focus order, accessible names, ARIA or
+      native semantic requirements, and no-JavaScript fallback expectations.
+- [ ] For each media/content component one-pager, document image sizing,
+      aspect-ratio behavior, caption relationships, fallback behavior, loading
+      policy, and how content should avoid layout shift.
+- [ ] For each component one-pager, list the specific invariant, render,
+      accessibility, interaction, and visual checks that should exist in tests.
+- [ ] Record brittle or questionable implementation decisions discovered during
+      documentation in the relevant one-pager with a follow-up note, instead of
+      silently treating the current implementation as the design contract.
+- [ ] Move or create the component architecture source of truth at
+      `docs/COMPONENT_ARCHITECTURE.md`, keeping agent-specific summaries out of
+      the project design-doc tree.
+- [ ] Update `docs/COMPONENT_ARCHITECTURE.md` to state that new
+      component work starts with a one-pager, then catalog examples, then
+      implementation, then tests.
+
+## Milestone 14: Component Invariant Documentation And Tests
+
+- [ ] Use the Milestone 13 one-pagers as the source of truth for component
+      intentions, and update a one-pager first if a missing or unclear
+      invariant is discovered while writing tests.
+- [ ] Add reusable Playwright layout helpers under `tests/e2e/helpers/` for
+      bounding boxes, overlap detection, visible dimensions, viewport matrices,
+      scroll positions, focus state, z-order checks, and element-relative
+      assertions.
+- [ ] Add component-catalog e2e coverage that exercises canonical component
+      examples in light mode and dark mode without depending on production-only
+      pages.
+- [ ] Add invariant tests for UI primitives: buttons, link buttons, icon
+      buttons, text links, inputs, badges, separators, cards, containers, and
+      sections.
+- [ ] Test primitive relationships where meaningful: equal heights, consistent
+      alignment, stable dimensions across variants, disabled and focus-visible
+      states, text wrapping, and no accidental low-contrast states.
+- [ ] Add invariant tests for site layout: header, shell, main frame, sidebar,
+      footer, skip link, and page frame composition.
+- [ ] Test layout relationships across scrolling and resizing: sticky elements
+      do not overlap incorrectly, fixed-height regions remain stable, sidebars
+      stay below headers, footers do not cover content, and content never gains
+      unintended horizontal overflow.
+- [ ] Add invariant tests for navigation components: brand link, primary nav,
+      support link, theme toggle, search form, mobile menu, category tree,
+      category groups, and category sidebar.
+- [ ] Test navigation behavior across viewports: desktop and mobile surfaces do
+      not both expose conflicting controls, hidden surfaces are truly hidden,
+      disclosure state does not cause unwanted navigation, keyboard focus order
+      remains usable, and touch-size targets remain practical.
+- [ ] Add invariant tests for article components: article header, metadata,
+      tags, prose wrapper, article cards, article lists, more-in-category,
+      related/discovery placeholders, and article endcaps.
+- [ ] Test article relationships: prose measure remains readable, hero/media
+      placement does not shift surrounding content, article cards align in
+      grids, metadata remains associated with titles, and endcap/support blocks
+      do not compete visually with article content.
+- [ ] Add invariant tests for media and embed components: responsive images,
+      hover-card images, iframes, embeds, captions, and missing-media states.
+- [ ] Test media behavior across viewports: media stays centered where intended,
+      aspect ratios are preserved, previews stay related to their trigger,
+      embeds reserve space, and images do not exceed their containing measure.
+- [ ] Add invariant tests for homepage and archive blocks: hero, announcement,
+      latest article, featured/start-here, category overview, archive links,
+      search results, support block, and footer discovery surfaces.
+- [ ] Fix and test the homepage bottom support block so its bounding box aligns
+      with the same content measure/container as the surrounding homepage
+      sections instead of spanning wider than the rest of the content.
+- [ ] Test dynamic behavior where it represents component intent: theme
+      persistence, search result highlighting renders as real markup rather than
+      escaped text, search empty states, mobile menu disclosure, category
+      disclosure, and hover/focus/touch alternatives for interactive previews.
+- [ ] Prefer stable `data-*` test anchors for structural relationships that are
+      hard to select semantically, and avoid tests coupled to incidental class
+      strings unless the class is the public contract being tested.
+- [ ] Record brittle or questionable implementation decisions discovered during
+      invariant review in `docs/COMPONENT_ARCHITECTURE.md` or a focused
+      follow-up checklist item instead of hiding them in tests.
+- [ ] Keep invariant tests useful rather than screenshot-only: assert explicit
+      relationships, states, dimensions, visibility, stacking, focus behavior,
+      overflow, and interaction outcomes.
+- [ ] Update `PACKAGE_SCRIPTS.md` if new invariant-specific test scripts or
+      catalog test commands are added.
+
+## Milestone 15: Regression Hardening And Reliability Gates
+
+- [ ] Add a "new component readiness" policy to
+      `docs/COMPONENT_ARCHITECTURE.md`: every new public component needs
+      a catalog example, render test, documented invariants, invariant e2e tests
+      when layout-sensitive, and keyboard/a11y tests when interactive.
+- [ ] Add or update reusable hostile fixtures for catalog and tests: long
+      titles, long unbroken words, missing images, missing excerpts, many tags,
+      empty states, dense lists, one-item lists, many-item lists, narrow
+      containers, short viewport heights, unusual punctuation, and both themes.
+- [ ] Audit component state modeling and replace brittle boolean clusters with
+      discriminated states where a component can be `empty`, `ready`, `error`,
+      `loading`, `expanded`, `collapsed`, `selected`, or otherwise mutually
+      exclusive.
+- [ ] Keep internal URL construction centralized in `src/lib/routes.ts` or
+      similarly explicit route helpers; remove hand-built internal URLs from
+      components where a route helper should be used.
+- [ ] Add route-helper tests for every public helper, including trailing-slash
+      behavior, article paths, category paths, page paths, RSS/feed paths, and
+      canonical URL composition.
+- [ ] Add content schema and published-filter tests for required frontmatter,
+      invalid dates, invalid image references, unpublished content exclusion,
+      duplicate article slugs, missing category metadata, and category/article
+      count consistency.
+- [ ] Add route-level smoke coverage for every generated page and endpoint:
+      homepage, articles, categories, Markdown pages, RSS/feed, sitemap, search,
+      and representative article/category detail pages.
+- [ ] Add semantic document tests for key routes: one `main`, valid skip-link
+      target, sensible heading order, labeled navigation landmarks, footer
+      landmark, accessible names for links/buttons, and no duplicate critical
+      landmarks.
+- [ ] Add focused visual-regression coverage for stable surfaces: homepage,
+      article page, component catalog overview, header/nav, sidebar, support
+      block, article cards, search results, and mobile menu.
+- [ ] Keep visual-regression tests targeted and reviewable; do not replace
+      explicit invariant assertions with broad screenshot tests where a
+      relationship can be tested directly.
+- [ ] Add build-output guards for no accidental catalog route in production, no
+      unexpected client JavaScript growth, no unexpected hydration boundaries,
+      no source maps unless deliberately enabled, no broken internal links, and
+      no escaped markup where real HTML is intended.
+- [ ] Add asset-integrity checks for referenced local images, required alt text
+      or documented alt exceptions, approved `public/` files only, and
+      project-owned images living under `src/assets/`.
+- [ ] Add design-token enforcement or review checks for hard-coded colors,
+      border radii, shadows, and spacing in first-party UI when semantic tokens
+      or component variants should be used instead.
+- [ ] Add theme-matrix checks for key components so light and dark mode both
+      preserve readable text, visible borders, visible focus rings, and correct
+      CTA contrast.
+- [ ] Add interaction-state checks for hover, focus-visible, active, disabled,
+      current, selected, expanded, and collapsed states where those states are
+      part of a component contract.
+- [ ] Add content-relationship tests so article cards link to the correct
+      routes, article metadata remains associated with titles, category counts
+      match published article data, and archive/search/RSS use the same
+      published-content filter.
+- [ ] Add review-only performance budget checks for page weight, client
+      JavaScript size/count, image sizing, LCP candidate sanity, and
+      CLS-sensitive layout shifts.
+- [ ] Maintain a documented exception ledger for intentionally untested,
+      untestable, or deliberately rule-breaking cases, with a clear reason and
+      explicit handoff note.
+- [ ] Establish a regression policy: every layout, accessibility, routing,
+      content, or interaction bug fix should add a focused invariant or
+      contract test for the underlying intention.
+- [ ] Update `PACKAGE_SCRIPTS.md`, CI workflow comments, and agent docs if new
+      reliability scripts, review-only checks, or release gates are added.
+
+## Milestone 16: Optional Category Dropdown Discovery
 
 - [ ] Revisit category dropdowns only after `SectionNav`, `CategoryTree`,
       homepage discovery blocks, and footer discovery are stable.

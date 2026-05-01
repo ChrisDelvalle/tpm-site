@@ -24,20 +24,28 @@ const {
     className,
   ]}
 >
-  <header class="grid gap-1">
-    <h3 class="text-foreground text-base font-semibold">{title}</h3>
+  <header class="grid min-w-0 gap-1">
+    <h3 class="text-foreground min-w-0 text-base font-semibold break-words">
+      {title}
+    </h3>
     {
       description ? (
-        <p class="text-muted-foreground text-sm">{description}</p>
+        <p class="text-muted-foreground min-w-0 text-sm break-words">
+          {description}
+        </p>
       ) : null
     }
     {
       componentPath ? (
-        <code class="text-muted-foreground text-xs">{componentPath}</code>
+        <code class="text-muted-foreground block min-w-0 text-xs break-all">
+          {componentPath}
+        </code>
       ) : null
     }
   </header>
-  <div class="border-border bg-background min-w-0 rounded-sm border p-4">
+  <div
+    class="border-border bg-background min-w-0 overflow-x-auto rounded-sm border p-4"
+  >
     <slot />
   </div>
 </article>

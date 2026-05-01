@@ -24,7 +24,7 @@ const {
 ---
 
 <nav aria-label={label}>
-  <ul class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium">
+  <ul class="flex flex-nowrap items-center gap-x-4 text-sm font-medium">
     {
       items.map((item) => {
         const isCurrent = currentPath.startsWith(item.href);

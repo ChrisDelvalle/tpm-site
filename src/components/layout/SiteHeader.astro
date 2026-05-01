@@ -16,21 +16,22 @@ const { currentPath, navigationItems } = Astro.props;
 ---
 
 <header
+  data-site-header
   class="border-border bg-background/95 sticky top-0 z-40 border-b backdrop-blur-sm"
 >
   <div
-    class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 lg:grid-cols-[minmax(12rem,1fr)_minmax(16rem,32rem)_minmax(12rem,1fr)] lg:px-8"
+    class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 lg:grid-cols-[minmax(max-content,1fr)_minmax(12rem,32rem)_minmax(max-content,1fr)] lg:px-8"
   >
     <div class="min-w-0 justify-self-start">
       <BrandLink />
     </div>
 
-    <div class="hidden min-w-0 lg:block">
+    <div class="hidden min-w-0 justify-self-center lg:block lg:w-full">
       <SearchForm />
     </div>
 
     <div
-      class="hidden min-w-0 justify-self-end lg:flex lg:items-center lg:gap-4"
+      class="hidden min-w-max justify-self-end lg:flex lg:items-center lg:gap-4"
     >
       <PrimaryNav currentPath={currentPath} />
       <ThemeToggle />
