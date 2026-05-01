@@ -438,8 +438,7 @@ development assets or unbuilt source files.
 
 The production build contract is:
 
-- `bun run build` syncs content, runs `astro build`, and generates the Pagefind
-  search index.
+- `bun run build` runs `astro build` and generates the Pagefind search index.
 - `astro build` writes deployable static output to `dist/`.
 - Astro/Vite owns bundled CSS and processed client JavaScript from project
   source.

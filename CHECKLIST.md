@@ -88,8 +88,9 @@ Scope rules:
       disabled or missing-content states where applicable.
 - [ ] Keep Bun tests for pure TypeScript logic in `tests/lib/` and
       `tests/scripts/`; do not migrate those to browser tests.
-- [ ] Add a `test:components` package script for Astro component render tests.
-- [ ] Document `test:components` in `PACKAGE_SCRIPTS.md`.
+- [ ] Use the existing `test:astro` package script for Astro component render
+      tests, expanding it as new component tests are added.
+- [ ] Keep `test:astro` documented in `PACKAGE_SCRIPTS.md`.
 
 ## Milestone 4: Navigation Data Boundary
 

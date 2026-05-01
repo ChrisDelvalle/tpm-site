@@ -200,6 +200,8 @@ function validateCategoryMetadataFilename(
   }
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runContentVerificationCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runContentVerificationCli();

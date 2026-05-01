@@ -535,6 +535,8 @@ function toPosix(file: string): string {
   return file.split(path.sep).join("/");
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runSharedAssetsCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runSharedAssetsCli();

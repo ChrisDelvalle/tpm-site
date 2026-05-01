@@ -40,4 +40,38 @@ describe("duplicate image finder", () => {
       true,
     );
   });
+
+  test("formats success output and supports single-character globs", () => {
+    expect(
+      formatDuplicateImageReport({
+        duplicateGroups: [],
+        ignoredPatterns: [],
+        imageCount: 3,
+        scanDirs: ["src/assets"],
+      }),
+    ).toBe("No duplicate images found across 3 image files.");
+    expect(globToRegExp("src/assets/?.png").test("src/assets/a.png")).toBe(
+      true,
+    );
+    expect(globToRegExp("src/assets/?.png").test("src/assets/ab.png")).toBe(
+      false,
+    );
+  });
+
+  test("sorts duplicate groups by size and path for stable reports", () => {
+    expect(
+      groupDuplicateImages([
+        { hash: "small", path: "src/assets/z.png", size: 1 },
+        { hash: "large", path: "src/assets/b.png", size: 10 },
+        { hash: "small", path: "src/assets/y.png", size: 1 },
+        { hash: "large", path: "src/assets/a.png", size: 10 },
+        { hash: "large-two", path: "src/assets/c.png", size: 10 },
+        { hash: "large-two", path: "src/assets/d.png", size: 10 },
+      ]).map((group) => group.map((record) => record.path)),
+    ).toEqual([
+      ["src/assets/b.png", "src/assets/a.png"],
+      ["src/assets/c.png", "src/assets/d.png"],
+      ["src/assets/z.png", "src/assets/y.png"],
+    ]);
+  });
 });

@@ -87,7 +87,9 @@ describe("route helpers", () => {
 
   test("decodes known HTML entities in titles", () => {
     expect(
-      decodeHtmlEntities("Memes and Humor&#58; &quot;What is a Meme?&quot;"),
-    ).toBe('Memes and Humor: "What is a Meme?"');
+      decodeHtmlEntities(
+        "Memes and Humor&#58; &#x26; &quot;What is a Meme?&quot;",
+      ),
+    ).toBe('Memes and Humor: & "What is a Meme?"');
   });
 });

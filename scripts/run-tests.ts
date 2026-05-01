@@ -90,6 +90,9 @@ export async function runTestsCli(
     return 0;
   }
 
+  // Coverage note: the non-help CLI path intentionally launches the real test
+  // workflow. Unit tests cover `runTestWorkflow()` with injected commands
+  // rather than recursively spawning the repository test runner.
   return runTestWorkflow({
     cwd,
     verbose: args.includes("--verbose"),
@@ -146,6 +149,9 @@ export async function runTestWorkflow({
 }
 
 function commandEnvironment(): NodeJS.ProcessEnv {
+  // Coverage note: this environment adapter is only used by the real
+  // subprocess runner; workflow tests inject their runner to avoid nested Bun
+  // process execution.
   const env = { ...process.env };
   env["NO_COLOR"] = "1";
   delete env["FORCE_COLOR"];
@@ -169,6 +175,9 @@ async function runCommand(
   command: TestCommand,
   cwd: string,
 ): Promise<TestCommandResult> {
+  // Coverage note: this is the process boundary for the test dispatcher.
+  // Behavior above it is tested through dependency injection; exercising this
+  // directly would run nested test commands from inside unit tests.
   return new Promise<TestCommandResult>((resolve) => {
     const child = spawn("bun", command.args, {
       cwd,
@@ -207,6 +216,8 @@ Run test accountability first, then run Bun unit tests and Astro component
 tests concurrently. Passing commands stay quiet unless --verbose is used.`;
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise workflow behavior through `runTestWorkflow()`.
 if (import.meta.main) {
   try {
     process.exitCode = await runTestsCli();

@@ -17,5 +17,6 @@ describe("image asset location verifier", () => {
     expect(globToRegExp("public/**/*.png").test("public/images/a.png")).toBe(
       true,
     );
+    expect(globToRegExp("public/?.png").test("public/a.png")).toBe(true);
   });
 });

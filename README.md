@@ -84,6 +84,17 @@ Run dependency audit review across all severities:
 bun run audit:all
 ```
 
+Run broad coverage review after changing scripts, helpers, browser scripts, or
+other testable code:
+
+```sh
+bun run coverage
+```
+
+Prefer meaningful behavior tests. If a remaining uncovered path is an
+unavoidable process, generated-output, or browser auto-init boundary, document
+the reason near that boundary with a `Coverage note:` comment.
+
 Run the heavier pre-release gate:
 
 ```sh

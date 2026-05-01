@@ -86,6 +86,8 @@ export function setTheme(runtime: ThemeRuntime, theme: Theme): void {
   runtime.localStorage.setItem("theme", theme);
 }
 
+// Coverage note: this browser auto-init guard is exercised by built pages.
+// Unit tests call `installTheme()` with injected DOM/storage dependencies.
 if (typeof document !== "undefined" && typeof localStorage !== "undefined") {
   installTheme({ document, localStorage });
 }

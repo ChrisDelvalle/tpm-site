@@ -324,6 +324,8 @@ unused-assets/, delete files that are not needed, or add an intentional
 exception to ${defaultIgnoreFile}.`;
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runUnusedImageCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runUnusedImageCli();

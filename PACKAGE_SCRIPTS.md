@@ -55,3 +55,8 @@ for local checks and GitHub Actions.
 | `validate:html`               | Validates representative built HTML files and fails on warnings.                                                                                                          |
 | `verify`                      | Verifies built `dist/` output: expected pages, local links, draft exclusion, JSON-LD, and static-page script constraints.                                                 |
 | `verify:content`              | Verifies source content invariants such as URL-safe slugs/categories and duplicate article slugs.                                                                         |
+
+Coverage is a review and accountability tool, not an excuse to leave testable
+behavior uncovered. Prefer meaningful behavior tests. Remaining process,
+generated-output, or browser auto-init boundaries should have a nearby
+`Coverage note:` comment explaining why they are not directly covered.

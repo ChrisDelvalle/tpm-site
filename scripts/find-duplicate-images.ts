@@ -393,6 +393,8 @@ Intentional duplicates can be ignored with ${defaultIgnoreFile}.
 Use --fail-on-duplicates when duplicate images should fail a gate.`;
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runDuplicateImageCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runDuplicateImageCli();

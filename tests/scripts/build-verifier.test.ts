@@ -2,14 +2,16 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { describe, expect, test } from "bun:test";
+import { describe, expect, spyOn, test } from "bun:test";
 
 import {
   type ArticlePublication,
+  articlePublicationStats,
   formatBuildVerificationReport,
   isExternal,
   linkTargets,
   requiredPathsForSource,
+  runBuildVerificationCli,
   staticReadingPagesForSource,
   verifyBuild,
 } from "../../scripts/verify-build";
@@ -53,6 +55,29 @@ describe("build verifier helpers", () => {
       "categories/history/index.html",
     );
   });
+
+  test("sorts source article publication stats deterministically", async () =>
+    withTempRoot(async (root) => {
+      await writeText(
+        root,
+        "src/content/articles/history/z-post.md",
+        "---\ntitle: Z\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/a-post.md",
+        "---\ntitle: A\n---\n",
+      );
+
+      const result = await articlePublicationStats(
+        path.join(root, "src/content/articles"),
+      );
+
+      expect(result.publishedArticles.map((article) => article.slug)).toEqual([
+        "a-post",
+        "z-post",
+      ]);
+    }));
 
   test("chooses representative static pages without hardcoded migrated slugs", () => {
     expect(staticReadingPagesForSource(publication(), ["history"])).toEqual([
@@ -99,6 +124,34 @@ describe("build verifier helpers", () => {
     ).toContain("Build verification failed.");
   });
 
+  test("formats each build verification issue section", () => {
+    const report = formatBuildVerificationReport({
+      articlePageCount: 2,
+      astroClientScriptCount: 1,
+      issues: {
+        articleCountIssues: ["expected 1 article page, found 2"],
+        brokenLinks: ["index.html -> /missing/"],
+        draftLeaks: ["feed.xml -> draft-post"],
+        invalidLegacyRedirects: ["2022/01/01/post/index.html: invalid"],
+        missingArticleJsonLd: ["articles/post/index.html"],
+        missingLegacyRedirects: ["/2022/01/01/post/ -> /articles/post/"],
+        missingRequired: ["feed.xml"],
+        unexpectedClientScripts: ["index.html"],
+        unexpectedDatedPages: ["2022/01/01/post/index.html"],
+      },
+    });
+
+    expect(report).toContain("Missing:");
+    expect(report).toContain("Missing legacy redirects:");
+    expect(report).toContain("Invalid legacy redirects:");
+    expect(report).toContain("Broken links:");
+    expect(report).toContain("Article count mismatch:");
+    expect(report).toContain("Unexpected static-page client scripts:");
+    expect(report).toContain("Unexpected generated dated pages:");
+    expect(report).toContain("Draft content leaked into generated metadata:");
+    expect(report).toContain("Missing article JSON-LD:");
+  });
+
   test("verifies built output against source articles and categories", async () =>
     withTempRoot(async (root) => {
       await writeText(root, "src/content/categories/history.json", "{}");
@@ -142,6 +195,203 @@ describe("build verifier helpers", () => {
       expect(formatBuildVerificationReport(result)).toContain(
         "Build verification passed",
       );
+    }));
+
+  test.serial(
+    "prints a quiet success from the command-line workflow",
+    async () =>
+      withTempRoot(async (root) => {
+        const log = spyOn(console, "log").mockImplementation(() => undefined);
+
+        try {
+          await writeText(root, "astro.config.ts", "export default {};\n");
+          await writeText(root, "src/content/categories/history.json", "{}");
+          await writeText(
+            root,
+            "src/content/articles/history/published.md",
+            "---\ntitle: Published\n---\n",
+          );
+
+          await writeText(root, "dist/index.html", "");
+          await writeText(root, "dist/404.html", "");
+          await writeText(root, "dist/about/index.html", "");
+          await writeText(root, "dist/articles/index.html", "");
+          await writeText(
+            root,
+            "dist/articles/published/index.html",
+            '{"@type":"BlogPosting"}',
+          );
+          await writeText(root, "dist/categories/index.html", "");
+          await writeText(root, "dist/categories/history/index.html", "");
+          await writeText(root, "dist/feed.xml", "<feed>published</feed>");
+          await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+          await writeText(root, "dist/pagefind/pagefind.js", "");
+
+          const exitCode = await runBuildVerificationCli(["--quiet"], root);
+
+          expect(exitCode).toBe(0);
+          expect(log.mock.calls).toHaveLength(0);
+
+          const loggedExitCode = await runBuildVerificationCli([], root);
+
+          expect(loggedExitCode).toBe(0);
+          expect(String(log.mock.calls[0]?.[0])).toContain(
+            "Build verification passed",
+          );
+        } finally {
+          log.mockRestore();
+        }
+      }),
+  );
+
+  test("reports generated output regressions without hardcoded article counts", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/draft.md",
+        "---\ntitle: Draft\ndraft: true\n---\n",
+      );
+
+      await writeText(
+        root,
+        "dist/index.html",
+        '<script src="/_astro/index.js"></script><a href="/missing/">Missing</a><a href="relative">Relative</a>',
+      );
+      await writeText(root, "dist/_astro/index.js", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles/index.html", "");
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        '<a href="#local">Article without JSON-LD</a>',
+      );
+      await writeText(root, "dist/articles/extra/index.html", "");
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed>draft</feed>");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.articleCountIssues).toEqual([
+        "expected 1 article pages from published source content, found 2",
+      ]);
+      expect(result.issues.brokenLinks).toEqual(["index.html -> /missing/"]);
+      expect(result.issues.draftLeaks).toEqual(["feed.xml -> draft"]);
+      expect(result.issues.missingArticleJsonLd).toEqual([
+        "articles/extra/index.html",
+        "articles/published/index.html",
+      ]);
+      expect(result.issues.missingRequired).toContain(
+        "categories/history/index.html",
+      );
+      expect(result.issues.unexpectedClientScripts).toEqual(["index.html"]);
+    }));
+
+  test.serial(
+    "prints build verification failures from the command-line workflow",
+    async () =>
+      withTempRoot(async (root) => {
+        const error = spyOn(console, "error").mockImplementation(
+          () => undefined,
+        );
+
+        try {
+          await writeText(root, "astro.config.ts", "export default {};\n");
+          await writeText(root, "src/content/categories/history.json", "{}");
+          await writeText(
+            root,
+            "src/content/articles/history/published.md",
+            "---\ntitle: Published\n---\n",
+          );
+          await writeText(root, "dist/index.html", "");
+          await writeText(root, "dist/articles/index.html", "");
+          await writeText(root, "dist/articles/published/index.html", "");
+
+          const exitCode = await runBuildVerificationCli(["--quiet"], root);
+
+          expect(exitCode).toBe(1);
+          expect(String(error.mock.calls[0]?.[0])).toContain(
+            "Build verification failed",
+          );
+        } finally {
+          error.mockRestore();
+        }
+      }),
+  );
+
+  test("reports when the articles output path is not a directory", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(root, "src/content/articles/.keep", "");
+      await writeText(root, "dist/index.html", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles", "not a directory");
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/categories/history/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed />");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.missingRequired).toContain("articles/");
+    }));
+
+  test("rejects redirect fallback pages without matching configured redirects", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\n---\n",
+      );
+
+      await writeText(root, "dist/index.html", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles/index.html", "");
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        '{"@type":"BlogPosting"}',
+      );
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/categories/history/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed>published</feed>");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(
+        root,
+        "dist/2022/04/20/published/index.html",
+        '<!doctype html><title>Redirecting to: /articles/published/</title><meta http-equiv="refresh" content="0;url=/articles/published/"><meta name="robots" content="noindex"><link rel="canonical" href="https://thephilosophersmeme.com/articles/published/"><body><a href="/articles/published/">Redirecting from <code>/2022/04/20/published/</code> to <code>/articles/published/</code></a></body>',
+      );
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.invalidLegacyRedirects).toEqual([
+        "2022/04/20/published/index.html: no matching redirect in astro.config.ts for /2022/04/20/published/",
+      ]);
     }));
 
   test("allows Astro generated dated redirect fallback pages", async () =>

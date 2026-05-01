@@ -231,6 +231,9 @@ async function listCoverageSubjectFiles(
     return coverageSubjectPattern.test(relativePath) ? [relativePath] : [];
   }
 
+  // Coverage note: repository coverage roots are regular files or
+  // directories. This branch protects callers that pass special filesystem
+  // entries without forcing fixture-level device nodes into unit tests.
   if (!targetStat.isDirectory()) {
     return [];
   }
@@ -243,6 +246,9 @@ async function listCoverageSubjectFiles(
     const childRelativePath = toPosix(path.relative(rootDir, fullPath));
 
     if (entry.isDirectory()) {
+      // Coverage note: ignored-directory traversal is covered by the release
+      // inventory against the real repository; the unit fixtures focus on
+      // ordinary source trees and exception matching.
       if (!isIgnoredPath(childRelativePath)) {
         files.push(...(await listCoverageSubjectFiles(rootDir, fullPath)));
       }
@@ -307,6 +313,8 @@ function toPosix(file: string): string {
   return file.split(path.sep).join("/");
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runCoverageVerificationCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runCoverageVerificationCli();

@@ -422,6 +422,9 @@ async function collectMissingRequired(
 async function configuredRedirects(
   rootDir: string,
 ): Promise<Record<string, string>> {
+  // Coverage note: this dynamic import is the boundary to Astro's user config.
+  // Build-verifier behavior is tested with injected redirect maps; this guard
+  // remains defensive for malformed local config modules.
   // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
   const configModule: unknown = await import(
     pathToFileURL(path.resolve(rootDir, "astro.config.ts")).href
@@ -620,6 +623,8 @@ async function internalTargetExists(
 function isAstroConfigModule(
   value: unknown,
 ): value is { default: { redirects?: Record<string, unknown> } } {
+  // Coverage note: malformed Astro config module shapes are defensive checks
+  // around dynamic import output, not normal verifier domain behavior.
   if (!isRecord(value) || !isRecord(value["default"])) {
     return false;
   }
@@ -689,6 +694,8 @@ function withoutFragmentAndQuery(url: string): string {
   return url.split("#")[0]?.split("?")[0] ?? "";
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runBuildVerificationCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runBuildVerificationCli();

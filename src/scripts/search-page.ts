@@ -51,6 +51,9 @@ export function isPagefindModule(value: unknown): value is PagefindModule {
  */
 export async function loadPagefind(): Promise<PagefindModule> {
   const pagefindUrl = "/pagefind/pagefind.js";
+  // Coverage note: Pagefind is generated only after a production build. Unit
+  // tests inject a loader into `runSearch()` instead of importing generated
+  // static output from the test process.
   const pagefindModule: unknown = await import(/* @vite-ignore */ pagefindUrl);
 
   if (!isPagefindModule(pagefindModule)) {
@@ -154,6 +157,8 @@ export function searchQuery(locationSearch: string): string {
   return new URLSearchParams(locationSearch).get("q") ?? "";
 }
 
+// Coverage note: this browser auto-init guard is exercised by built pages.
+// Unit tests call `runSearch()` with injected DOM and Pagefind dependencies.
 if (typeof document !== "undefined" && typeof window !== "undefined") {
   runSearch().catch(() => {
     const container = document.querySelector("#search");

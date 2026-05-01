@@ -22,4 +22,21 @@ describe("unused image finder", () => {
       globToRegExp("src/assets/**/*.png").test("src/assets/post/image.png"),
     ).toBe(true);
   });
+
+  test("formats success output and supports single-character globs", () => {
+    expect(
+      formatUnusedImageReport({
+        ignoredPatterns: [],
+        referencedImageCount: 2,
+        scannedImageCount: 2,
+        unusedImages: [],
+      }),
+    ).toBe("No unused src images found (2 image files scanned, 2 referenced).");
+    expect(globToRegExp("src/assets/?.png").test("src/assets/a.png")).toBe(
+      true,
+    );
+    expect(globToRegExp("src/assets/?.png").test("src/assets/ab.png")).toBe(
+      false,
+    );
+  });
 });

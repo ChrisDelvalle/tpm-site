@@ -188,6 +188,9 @@ function isGitIgnoredPath(
   relativePath: string,
   gitIgnoredPaths: GitIgnoredPaths | undefined,
 ) {
+  // Coverage note: undefined is only possible when this private helper is
+  // called outside the normal verifier path; public tests inject a checker
+  // instead of reaching this defensive fallback.
   if (gitIgnoredPaths === undefined) {
     return false;
   }
@@ -294,6 +297,9 @@ function regexEscape(value: string) {
 }
 
 async function runGit(args: string[], rootDir: string): Promise<string> {
+  // Coverage note: this is a best-effort Git boundary. Unit tests cover the
+  // verifier with injected ignore behavior and one real successful Git call;
+  // forcing spawn errors would test the runtime more than the script logic.
   return new Promise<string>((resolve) => {
     const child = spawn("git", args, {
       cwd: rootDir,
@@ -329,6 +335,8 @@ function toPosix(file: string) {
   return file.split(path.sep).join("/");
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runImageAssetLocationCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runImageAssetLocationCli();

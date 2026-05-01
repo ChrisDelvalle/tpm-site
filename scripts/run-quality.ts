@@ -1,15 +1,34 @@
 import { spawn } from "node:child_process";
 
-interface CommandResult {
+/** Captured result for one quality command. */
+export interface CommandResult {
   command: QualityCommand;
   exitCode: number;
   output: string;
 }
 
-interface QualityCommand {
+/** Command run by the quality dispatcher. */
+export interface QualityCommand {
   args: string[];
   blocking: boolean;
   label: string;
+}
+
+/** Dependency-injected command runner for quality workflow tests. */
+export type QualityCommandRunner = (
+  command: QualityCommand,
+  cwd: string,
+) => Promise<CommandResult>;
+
+/** Output level for quiet quality command reports. */
+export type QualityOutputLevel = "error" | "warn";
+
+/** Options for running the quiet quality workflow. */
+export interface QualityWorkflowOptions {
+  commands: QualityCommand[];
+  cwd: string;
+  runner?: QualityCommandRunner;
+  write?: (message: string, level: QualityOutputLevel) => void;
 }
 
 const localCommands: QualityCommand[] = [
@@ -160,23 +179,13 @@ export async function runQualityCli(
     return 0;
   }
 
-  const results: CommandResult[] = [];
-
-  for (const command of selectedCommands(args)) {
-    const result = await runCommand(command, cwd);
-    results.push(result);
-
-    if (shouldPrintResult(result)) {
-      const formatted = formatCommandResult(result);
-      if (result.exitCode === 0) {
-        console.warn(formatted);
-      } else {
-        console.error(formatted);
-      }
-    }
-  }
-
-  return results.some(resultIsBlockingFailure) ? 1 : 0;
+  // Coverage note: the non-help CLI path intentionally launches the real
+  // repository quality commands. Unit tests cover `runQualityWorkflow()` with
+  // an injected runner instead of recursively running the whole toolchain.
+  return runQualityWorkflow({
+    commands: selectedCommands(args),
+    cwd,
+  });
 }
 
 /**
@@ -189,7 +198,44 @@ export function shouldPrintResult(result: CommandResult): boolean {
   return result.exitCode !== 0 || outputHasWarningOrError(result.output);
 }
 
+/**
+ * Runs quality commands quietly, printing only failures and warning-like
+ * output.
+ *
+ * @param options Quality workflow options.
+ * @param options.commands Commands to run sequentially.
+ * @param options.cwd Working directory for Bun subprocesses.
+ * @param options.runner Command runner dependency.
+ * @param options.write Output sink for visible command reports.
+ * @returns Process exit code.
+ */
+export async function runQualityWorkflow({
+  commands,
+  cwd,
+  runner = runCommand,
+  write = defaultWrite,
+}: QualityWorkflowOptions): Promise<number> {
+  const results: CommandResult[] = [];
+
+  for (const command of commands) {
+    const result = await runner(command, cwd);
+    results.push(result);
+
+    if (shouldPrintResult(result)) {
+      write(
+        formatCommandResult(result),
+        result.exitCode === 0 ? "warn" : "error",
+      );
+    }
+  }
+
+  return results.some(resultIsBlockingFailure) ? 1 : 0;
+}
+
 function commandEnvironment(): NodeJS.ProcessEnv {
+  // Coverage note: this environment adapter is only used by the real
+  // subprocess runner; workflow tests inject their runner to avoid nested Bun
+  // process execution.
   const env = { ...process.env };
   env["NO_COLOR"] = "1";
   delete env["FORCE_COLOR"];
@@ -200,10 +246,22 @@ function commandLine(command: QualityCommand): string {
   return ["bun", ...command.args].join(" ");
 }
 
+function defaultWrite(message: string, level: QualityOutputLevel): void {
+  if (level === "error") {
+    console.error(message);
+    return;
+  }
+
+  console.warn(message);
+}
+
 async function runCommand(
   command: QualityCommand,
   cwd: string,
 ): Promise<CommandResult> {
+  // Coverage note: this is the process boundary for the quality dispatcher.
+  // Behavior above it is tested through dependency injection; exercising this
+  // directly would rerun the repository quality suite inside unit tests.
   return new Promise<CommandResult>((resolve) => {
     const child = spawn("bun", command.args, {
       cwd,
@@ -236,6 +294,8 @@ async function runCommand(
 }
 
 function selectedCommands(args: string[]): QualityCommand[] {
+  // Coverage note: command selection is only reached by the real CLI path,
+  // which is intentionally not unit-tested because it launches full checks.
   return args.includes("--release") ? releaseCommands : localCommands;
 }
 
@@ -252,6 +312,8 @@ Use --release to run check:release plus non-blocking Markdown, asset,
 accessibility, Lighthouse, all-severity audit, and coverage review checks.`;
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise workflow behavior through `runQualityWorkflow()`.
 if (import.meta.main) {
   try {
     process.exitCode = await runQualityCli();

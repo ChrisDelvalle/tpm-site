@@ -353,6 +353,8 @@ function listRepositoryFiles(rootDir: string): string[] {
 
   if (result.status !== 0) {
     const stderr = result.stderr.trim();
+    // Coverage note: Git normally emits stderr for this failure path. The
+    // empty-stderr fallback is defensive process-boundary behavior.
     throw new Error(
       stderr === "" ? "Failed to list repository files." : stderr,
     );
@@ -369,6 +371,8 @@ function toPosix(file: string): string {
   return file.split(path.sep).join("/");
 }
 
+// Coverage note: this wrapper only wires the exported CLI workflow to process
+// exit state; tests exercise `runTestAccountabilityCli()` directly.
 if (import.meta.main) {
   try {
     process.exitCode = await runTestAccountabilityCli();

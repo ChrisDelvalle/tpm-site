@@ -45,6 +45,19 @@ await mock.module("astro:content", () => ({
           filePath: "/repo/src/content/articles/politics/older.md",
           id: "older",
         },
+        {
+          collection: "articles",
+          data: {
+            author: "Author",
+            date: new Date("2019-01-02T00:00:00Z"),
+            description: "Unlisted category",
+            draft: false,
+            tags: [],
+            title: "Unlisted Category Article",
+          },
+          filePath: "/repo/src/content/articles/game-studies/unlisted.md",
+          id: "unlisted",
+        },
       ];
     }
 
@@ -83,10 +96,12 @@ describe("content helpers", () => {
     expect(categories.map((category) => category.slug)).toEqual([
       "history",
       "politics",
+      "game-studies",
     ]);
     expect(categories[0]?.articles.map((article) => article.id)).toEqual([
       "newer",
     ]);
+    expect(categories[2]).toMatchObject({ title: "Game Studies" });
   });
 
   test("normalizes category lookup before searching summaries", async () => {

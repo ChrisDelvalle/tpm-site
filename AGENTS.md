@@ -1267,6 +1267,11 @@ developers must still add meaningful tests for every sensible behavior path
 they touch and push coverage upward wherever practical. `bun run coverage` is a
 broad review inventory, not a release gate.
 
+When a remaining uncovered path is genuinely a process boundary,
+generated-output boundary, browser auto-init guard, or similarly brittle
+integration edge, add a nearby `Coverage note:` comment explaining the reason.
+Prefer tests over notes whenever behavior can be tested cleanly.
+
 Every repository file must have explicit test accountability. Prefer mirrored
 tests for executable code, config, scripts, components, pages, schemas, and
 helpers. Files that cannot sensibly have mirrored tests must be listed in
