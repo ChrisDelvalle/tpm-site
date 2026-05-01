@@ -1,19 +1,19 @@
 import { fileURLToPath } from "node:url";
 
-import * as reactUseMemo from "@arthurgeron/eslint-plugin-react-usememo";
+import { fixupPluginRules } from "@eslint/compat";
 import js from "@eslint/js";
+import eslintComments from "@eslint-community/eslint-plugin-eslint-comments";
 import html from "@html-eslint/eslint-plugin";
 import shopify from "@shopify/eslint-plugin";
 import stylistic from "@stylistic/eslint-plugin";
+import { globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier";
 import arrayFunc from "eslint-plugin-array-func";
 import astro from "eslint-plugin-astro";
 import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 import compat from "eslint-plugin-compat";
 import decoratorPosition from "eslint-plugin-decorator-position";
-import eslintComments from "eslint-plugin-eslint-comments";
 import etc from "eslint-plugin-etc";
-import ext from "eslint-plugin-ext";
 import functional from "eslint-plugin-functional";
 import importPlugin from "eslint-plugin-import";
 import jsdoc from "eslint-plugin-jsdoc";
@@ -29,14 +29,14 @@ import noUseExtendNative from "eslint-plugin-no-use-extend-native";
 import perfectionist from "eslint-plugin-perfectionist";
 import playwright from "eslint-plugin-playwright";
 import promise from "eslint-plugin-promise";
-import putout from "eslint-plugin-putout";
+import putout, { safeRules as putoutSafeRules } from "eslint-plugin-putout";
 import react from "eslint-plugin-react";
 import reactFormFields from "eslint-plugin-react-form-fields";
 import reactHookForm from "eslint-plugin-react-hook-form";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactPerf from "eslint-plugin-react-perf";
 import reactPreferFunctionComponent from "eslint-plugin-react-prefer-function-component";
-import reactRefresh from "eslint-plugin-react-refresh";
+import reactRefreshPlugin from "eslint-plugin-react-refresh";
 import regexp from "eslint-plugin-regexp";
 import security from "eslint-plugin-security";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
@@ -241,8 +241,8 @@ const publicDocumentationRules = {
   "jsdoc/require-jsdoc": [
     "error",
     {
+      contexts: [...exportedFunctionContexts, ...exportedTypeContexts],
       enableFixer: false,
-      contexts: exportedTypeContexts,
       exemptEmptyConstructors: false,
       exemptEmptyFunctions: false,
       publicOnly: {
@@ -292,31 +292,11 @@ const publicDocumentationRules = {
   ],
 };
 
-function scopeToTypedFiles(configs) {
+function configsAsErrors(configs) {
   return configs.map((config) => ({
     ...config,
-    files: typedFiles,
-    languageOptions: {
-      ...config.languageOptions,
-      parserOptions: {
-        ...config.languageOptions?.parserOptions,
-        project: ["./tsconfig.json", "./tsconfig.tools.json"],
-        tsconfigRootDir,
-      },
-    },
+    rules: rulesAsErrors(config.rules),
   }));
-}
-
-function ruleSettingAsError(setting) {
-  if (setting === 0 || setting === "off") {
-    return setting;
-  }
-
-  if (Array.isArray(setting)) {
-    return ["error", ...setting.slice(1)];
-  }
-
-  return "error";
 }
 
 function rulesAsErrors(rules = {}) {
@@ -328,14 +308,26 @@ function rulesAsErrors(rules = {}) {
   );
 }
 
-function mergeRules(...ruleSets) {
-  return Object.assign({}, ...ruleSets.map((rules) => rulesAsErrors(rules)));
+function ruleSettingAsError(setting) {
+  if (setting === 0 || setting === "off") return setting;
+
+  if (Array.isArray(setting)) return ["error", ...setting.slice(1)];
+
+  return "error";
 }
 
-function configsAsErrors(configs) {
+function scopeToTypedFiles(configs) {
   return configs.map((config) => ({
     ...config,
-    rules: rulesAsErrors(config.rules),
+    files: [...typedFiles],
+    languageOptions: {
+      ...config.languageOptions,
+      parserOptions: {
+        ...config.languageOptions?.parserOptions,
+        project: ["./tsconfig.json", "./tsconfig.tools.json"],
+        tsconfigRootDir,
+      },
+    },
   }));
 }
 
@@ -346,18 +338,18 @@ const perfectionistRules = {
 };
 
 export default tseslint.config(
+  globalIgnores([
+    ".astro/",
+    ".lighthouseci/",
+    "coverage/",
+    "dist/",
+    "node_modules/",
+    "playwright-report/",
+    "test-results/",
+    "tmp/",
+    "package-lock.json",
+  ]),
   {
-    ignores: [
-      ".astro/",
-      ".lighthouseci/",
-      "coverage/",
-      "dist/",
-      "node_modules/",
-      "playwright-report/",
-      "test-results/",
-      "tmp/",
-      "package-lock.json",
-    ],
     linterOptions: {
       reportUnusedDisableDirectives: "error",
     },
@@ -416,25 +408,24 @@ export default tseslint.config(
     files: ["**/*.{js,mjs,cjs,ts,tsx}"],
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "module",
       globals: {
         ...globals.browser,
         ...globals.node,
         ...globals.bunBuiltin,
       },
+      sourceType: "module",
     },
     plugins: {
-      "@shopify": shopify,
+      "@eslint-community/eslint-comments": fixupPluginRules(eslintComments),
+      "@shopify": fixupPluginRules(shopify),
       "@stylistic": stylistic,
       "array-func": arrayFunc,
       compat,
       "decorator-position": decoratorPosition,
-      "eslint-comments": eslintComments,
-      ext,
       import: importPlugin,
       jsdoc,
       "jsx-a11y": jsxA11y,
-      "no-constructor-bind": noConstructorBind,
+      "no-constructor-bind": fixupPluginRules(noConstructorBind),
       "no-only-tests": noOnlyTests,
       "no-unsanitized": noUnsanitized,
       "no-use-extend-native": noUseExtendNative,
@@ -442,22 +433,14 @@ export default tseslint.config(
       promise,
       putout,
       "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
+      "react-refresh": reactRefreshPlugin,
       security,
       "simple-import-sort": simpleImportSort,
       sonarjs,
       "sort-class-members": sortClassMembers,
-      "typescript-compat": typescriptCompat,
+      "typescript-compat": fixupPluginRules(typescriptCompat),
       unicorn,
       "unused-imports": unusedImports,
-    },
-    settings: {
-      "import/resolver": {
-        node: true,
-        typescript: {
-          project: "./tsconfig.json",
-        },
-      },
     },
     rules: {
       ...rulesAsErrors(arrayFunc.configs.recommended.rules),
@@ -470,75 +453,23 @@ export default tseslint.config(
       ...rulesAsErrors(promise.configs["flat/recommended"].rules),
       ...rulesAsErrors(security.configs.recommended.rules),
       ...rulesAsErrors(stylistic.configs.recommended.rules),
+      "@shopify/binary-assignment-parens": ["error", "always"],
+      "@shopify/class-property-semi": "error",
+      "@shopify/no-context-menu": "error",
+      "@shopify/no-debugger": "error",
+      "@shopify/no-fully-static-classes": "error",
+      "@shopify/no-useless-computed-properties": "error",
+      "@shopify/prefer-early-return": "error",
+      "@shopify/prefer-module-scope-constants": "error",
+      "@shopify/prefer-twine": "error",
+      "@shopify/strict-component-boundaries": "error",
       "block-scoped-var": "error",
       curly: ["error", "all"],
+      "decorator-position/decorator-position": "error",
       "default-case-last": "error",
       "dot-notation": "error",
       eqeqeq: ["error", "always"],
       "guard-for-in": "error",
-      "no-alert": "error",
-      "no-array-constructor": "error",
-      "no-caller": "error",
-      "no-console": "warn",
-      "no-debugger": "error",
-      "no-duplicate-imports": "error",
-      "no-eval": "error",
-      "no-extend-native": "error",
-      "no-implicit-coercion": [
-        "error",
-        {
-          allow: [],
-          boolean: false,
-          disallowTemplateShorthand: true,
-          number: true,
-          string: true,
-        },
-      ],
-      "no-implied-eval": "error",
-      "no-new-func": "error",
-      "no-new-wrappers": "error",
-      "no-only-tests/no-only-tests": "error",
-      "no-restricted-properties": [
-        "error",
-        {
-          message: "Focused tests must not be committed.",
-          object: "describe",
-          property: "only",
-        },
-        {
-          message: "Focused tests must not be committed.",
-          object: "it",
-          property: "only",
-        },
-        {
-          message: "Focused tests must not be committed.",
-          object: "test",
-          property: "only",
-        },
-      ],
-      "no-param-reassign": "error",
-      "no-restricted-globals": ["error", ...unsafeNumericGlobals],
-      "no-octal-escape": "error",
-      "no-proto": "error",
-      "no-script-url": "error",
-      "no-sequences": "error",
-      "no-template-curly-in-string": "error",
-      "no-undef-init": "error",
-      "no-unneeded-ternary": "error",
-      "no-useless-call": "error",
-      "no-useless-computed-key": "error",
-      "no-useless-concat": "error",
-      "no-useless-return": "error",
-      "no-var": "error",
-      "one-var": ["error", "never"],
-      "prefer-arrow-callback": "error",
-      "prefer-const": "error",
-      "prefer-object-has-own": "error",
-      "prefer-regex-literals": "error",
-      radix: "error",
-      "require-atomic-updates": "error",
-      "decorator-position/decorator-position": "error",
-      "ext/lines-between-object-properties": "error",
       "import/no-cycle": "error",
       "import/no-extraneous-dependencies": [
         "error",
@@ -552,50 +483,13 @@ export default tseslint.config(
       ],
       "import/no-mutable-exports": "error",
       "import/no-self-import": "error",
+      "import/no-unresolved": [
+        "error",
+        {
+          ignore: ["^astro:"],
+        },
+      ],
       "import/no-useless-path-segments": "error",
-      "no-constructor-bind/no-constructor-bind": "error",
-      "no-constructor-bind/no-constructor-state": "error",
-      "putout/putout": "error",
-      "simple-import-sort/imports": "error",
-      "sonarjs/cognitive-complexity": ["error", 15],
-      "sort-class-members/sort-class-members": "error",
-      "@shopify/binary-assignment-parens": ["error", "always"],
-      "@shopify/class-property-semi": "error",
-      "@shopify/no-context-menu": "error",
-      "@shopify/no-debugger": "error",
-      "@shopify/no-fully-static-classes": "error",
-      "@shopify/no-useless-computed-properties": "error",
-      "@shopify/prefer-early-return": "error",
-      "@shopify/prefer-module-scope-constants": "error",
-      "@shopify/prefer-twine": "error",
-      "@shopify/strict-component-boundaries": "error",
-      "sonarjs/no-all-duplicated-branches": "error",
-      "sonarjs/no-collapsible-if": "error",
-      "sonarjs/no-duplicated-branches": "error",
-      "sonarjs/no-identical-conditions": "error",
-      "sonarjs/no-identical-expressions": "error",
-      "sonarjs/no-inverted-boolean-check": "error",
-      "sonarjs/no-nested-conditional": "error",
-      "sonarjs/no-redundant-boolean": "error",
-      "sonarjs/no-small-switch": "error",
-      "sonarjs/no-useless-catch": "error",
-      "unicorn/catch-error-name": "error",
-      "unicorn/error-message": "error",
-      "unicorn/no-abusive-eslint-disable": "error",
-      "unicorn/no-anonymous-default-export": "error",
-      "unicorn/no-new-array": "error",
-      "unicorn/no-static-only-class": "error",
-      "unicorn/no-useless-fallback-in-spread": "error",
-      "unicorn/no-useless-spread": "error",
-      "unicorn/prefer-add-event-listener": "error",
-      "unicorn/prefer-dom-node-text-content": "error",
-      "unicorn/prefer-modern-dom-apis": "error",
-      "unicorn/prefer-number-properties": "error",
-      "unicorn/prefer-string-slice": "error",
-      "unicorn/throw-new-error": "error",
-      "unused-imports/no-unused-imports": "error",
-      "no-unsanitized/method": "error",
-      "no-unsanitized/property": "error",
       "jsdoc/check-alignment": "error",
       "jsdoc/check-param-names": "error",
       "jsdoc/check-property-names": "error",
@@ -618,25 +512,142 @@ export default tseslint.config(
       "jsdoc/require-property-name": "error",
       "jsdoc/require-template": "error",
       "jsdoc/require-template-description": "error",
+      "no-alert": "error",
+      "no-array-constructor": "error",
+      "no-caller": "error",
+      "no-console": "error",
+      "no-constructor-bind/no-constructor-bind": "error",
+      "no-constructor-bind/no-constructor-state": "error",
+      "no-debugger": "error",
+      "no-duplicate-imports": "error",
+      "no-eval": "error",
+      "no-extend-native": "error",
+      "no-implicit-coercion": [
+        "error",
+        {
+          allow: [],
+          boolean: false,
+          disallowTemplateShorthand: true,
+          number: true,
+          string: true,
+        },
+      ],
+      "no-implied-eval": "error",
+      "no-new-func": "error",
+      "no-new-wrappers": "error",
+      "no-octal-escape": "error",
+      "no-only-tests/no-only-tests": "error",
+      "no-param-reassign": "error",
+      "no-proto": "error",
+      "no-restricted-globals": ["error", ...unsafeNumericGlobals],
+      "no-restricted-properties": [
+        "error",
+        {
+          message: "Focused tests must not be committed.",
+          object: "describe",
+          property: "only",
+        },
+        {
+          message: "Focused tests must not be committed.",
+          object: "it",
+          property: "only",
+        },
+        {
+          message: "Focused tests must not be committed.",
+          object: "test",
+          property: "only",
+        },
+      ],
+      "no-script-url": "error",
+      "no-sequences": "error",
+      "no-template-curly-in-string": "error",
+      "no-undef-init": "error",
+      "no-unneeded-ternary": "error",
+      "no-unsanitized/method": "error",
+      "no-unsanitized/property": "error",
+      "no-useless-call": "error",
+      "no-useless-computed-key": "error",
+      "no-useless-concat": "error",
+      "no-useless-return": "error",
+      "no-var": "error",
+      "one-var": ["error", "never"],
+      "prefer-arrow-callback": "error",
+      "prefer-const": "error",
+      "prefer-object-has-own": "error",
+      "prefer-regex-literals": "error",
+      "putout/putout": [
+        "error",
+        {
+          rules: {
+            ...putoutSafeRules,
+            "apply-arrow": "off",
+            "conditions/remove-boolean": "off",
+            "conditions/remove-zero": "off",
+            "convert-quotes-to-backticks": "off",
+          },
+        },
+      ],
+      radix: "error",
+      "require-atomic-updates": "error",
+      "simple-import-sort/imports": "error",
+      "sonarjs/cognitive-complexity": ["error", 15],
+      "sonarjs/no-all-duplicated-branches": "error",
+      "sonarjs/no-collapsible-if": "error",
+      "sonarjs/no-duplicated-branches": "error",
+      "sonarjs/no-identical-conditions": "error",
+      "sonarjs/no-identical-expressions": "error",
+      "sonarjs/no-inverted-boolean-check": "error",
+      "sonarjs/no-nested-conditional": "error",
+      "sonarjs/no-redundant-boolean": "error",
+      "sonarjs/no-small-switch": "error",
+      "sonarjs/no-useless-catch": "error",
+      "sort-class-members/sort-class-members": "error",
+      "unicorn/catch-error-name": "error",
+      "unicorn/error-message": "error",
+      "unicorn/no-abusive-eslint-disable": "error",
+      "unicorn/no-anonymous-default-export": "error",
+      "unicorn/no-new-array": "error",
+      "unicorn/no-static-only-class": "error",
+      "unicorn/no-useless-fallback-in-spread": "error",
+      "unicorn/no-useless-spread": "error",
+      "unicorn/prefer-add-event-listener": "error",
+      "unicorn/prefer-dom-node-text-content": "error",
+      "unicorn/prefer-modern-dom-apis": "error",
+      "unicorn/prefer-number-properties": "error",
+      "unicorn/prefer-string-slice": "error",
+      "unicorn/throw-new-error": "error",
+      "unused-imports/no-unused-imports": "error",
       ...publicDocumentationRules,
+    },
+    settings: {
+      "import/core-modules": ["astro:assets", "astro:content", "bun:test"],
+      "import/resolver": {
+        node: true,
+        typescript: {
+          project: "./tsconfig.json",
+        },
+      },
     },
   },
   {
-    files: typedFiles,
+    files: [...typedFiles],
     plugins: {
-      etc,
+      etc: fixupPluginRules(etc),
       functional,
-      "no-explicit-type-exports": noExplicitTypeExports,
-      "total-functions": totalFunctions,
+      "no-explicit-type-exports": fixupPluginRules(noExplicitTypeExports),
+      "total-functions": fixupPluginRules(totalFunctions),
     },
     rules: {
       ...rulesAsErrors(etc.configs.recommended.rules),
       ...rulesAsErrors(totalFunctions.configs.recommended.rules),
-      "total-functions/require-strict-mode": "off",
-      "dot-notation": "off",
+      "@shopify/typescript-prefer-pascal-case-enums": "error",
+      "@shopify/typescript-prefer-singular-enums": "error",
       "@typescript-eslint/array-type": [
         "error",
-        { default: "array-simple", readonly: "array-simple" },
+        {
+          default: "array-simple",
+          readonly: "array-simple",
+        },
       ],
       "@typescript-eslint/ban-ts-comment": [
         "error",
@@ -648,10 +659,6 @@ export default tseslint.config(
           "ts-nocheck": true,
         },
       ],
-      "@typescript-eslint/dot-notation": [
-        "error",
-        { allowIndexSignaturePropertyAccess: false },
-      ],
       "@typescript-eslint/consistent-type-exports": "error",
       "@typescript-eslint/consistent-type-imports": [
         "error",
@@ -662,6 +669,12 @@ export default tseslint.config(
         },
       ],
       "@typescript-eslint/default-param-last": "error",
+      "@typescript-eslint/dot-notation": [
+        "error",
+        {
+          allowIndexSignaturePropertyAccess: false,
+        },
+      ],
       "@typescript-eslint/explicit-function-return-type": [
         "error",
         {
@@ -682,7 +695,10 @@ export default tseslint.config(
       "@typescript-eslint/no-empty-object-type": "error",
       "@typescript-eslint/no-explicit-any": [
         "error",
-        { fixToUnknown: true, ignoreRestArgs: false },
+        {
+          fixToUnknown: true,
+          ignoreRestArgs: false,
+        },
       ],
       "@typescript-eslint/no-extraneous-class": [
         "error",
@@ -695,13 +711,18 @@ export default tseslint.config(
       ],
       "@typescript-eslint/no-floating-promises": [
         "error",
-        { ignoreIIFE: false, ignoreVoid: false },
+        {
+          ignoreIIFE: false,
+          ignoreVoid: false,
+        },
       ],
       "@typescript-eslint/no-for-in-array": "error",
       "@typescript-eslint/no-import-type-side-effects": "error",
       "@typescript-eslint/no-misused-promises": [
         "error",
-        { checksVoidReturn: true },
+        {
+          checksVoidReturn: true,
+        },
       ],
       "@typescript-eslint/no-misused-spread": "error",
       "@typescript-eslint/no-mixed-enums": "error",
@@ -716,7 +737,9 @@ export default tseslint.config(
       "@typescript-eslint/no-require-imports": "error",
       "@typescript-eslint/no-unnecessary-condition": [
         "error",
-        { allowConstantLoopConditions: false },
+        {
+          allowConstantLoopConditions: false,
+        },
       ],
       "@typescript-eslint/no-unnecessary-type-arguments": "error",
       "@typescript-eslint/no-unnecessary-type-assertion": "error",
@@ -733,7 +756,9 @@ export default tseslint.config(
       "@typescript-eslint/promise-function-async": "error",
       "@typescript-eslint/require-array-sort-compare": [
         "error",
-        { ignoreStringArrays: true },
+        {
+          ignoreStringArrays: true,
+        },
       ],
       "@typescript-eslint/restrict-plus-operands": [
         "error",
@@ -778,8 +803,7 @@ export default tseslint.config(
         },
       ],
       "@typescript-eslint/triple-slash-reference": "error",
-      "@shopify/typescript-prefer-pascal-case-enums": "error",
-      "@shopify/typescript-prefer-singular-enums": "error",
+      "dot-notation": "off",
       "functional/no-class-inheritance": "error",
       "functional/no-classes": "error",
       "functional/no-loop-statements": "error",
@@ -787,6 +811,7 @@ export default tseslint.config(
       "functional/prefer-readonly-type": "error",
       "no-explicit-type-exports/no-explicit-type-exports": "error",
       "no-restricted-syntax": ["error", ...normalModuleSyntaxRestrictions],
+      "total-functions/require-strict-mode": "off",
       "typescript-compat/compat": "error",
     },
   },
@@ -800,20 +825,16 @@ export default tseslint.config(
     files: ["src/**/*.tsx"],
     languageOptions: jsxA11y.flatConfigs.strict.languageOptions,
     plugins: {
-      "@arthurgeron/react-usememo": reactUseMemo.flatConfig,
-      react,
-      "react-form-fields": reactFormFields,
-      "react-hook-form": reactHookForm,
-      "react-perf": reactPerf,
-      "react-prefer-function-component": reactPreferFunctionComponent,
-      "ssr-friendly": ssrFriendly,
-      "styled-components-a11y": styledComponentsA11y,
-      "validate-jsx-nesting": validateJsxNesting,
-    },
-    settings: {
-      react: {
-        version: "detect",
-      },
+      react: fixupPluginRules(react),
+      "react-form-fields": fixupPluginRules(reactFormFields),
+      "react-hook-form": fixupPluginRules(reactHookForm),
+      "react-perf": fixupPluginRules(reactPerf),
+      "react-prefer-function-component": fixupPluginRules(
+        reactPreferFunctionComponent,
+      ),
+      "ssr-friendly": fixupPluginRules(ssrFriendly),
+      "styled-components-a11y": fixupPluginRules(styledComponentsA11y),
+      "validate-jsx-nesting": fixupPluginRules(validateJsxNesting),
     },
     rules: {
       ...rulesAsErrors(react.configs.flat.recommended.rules),
@@ -824,14 +845,16 @@ export default tseslint.config(
       ...reactHooks.configs.flat.recommended.rules,
       ...rulesAsErrors(reactPerf.configs.recommended.rules),
       ...rulesAsErrors(reactPreferFunctionComponent.configs.recommended.rules),
-      ...rulesAsErrors(reactUseMemo.flatConfig.configs.recommended.rules),
       ...rulesAsErrors(ssrFriendly.configs.recommended.rules),
       ...rulesAsErrors(styledComponentsA11y.flatConfigs.strict.rules),
       "react-refresh/only-export-components": [
         "error",
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+        },
       ],
       "react/button-has-type": "error",
+      "react/default-props-match-prop-types": "off",
       "react/function-component-definition": [
         "error",
         {
@@ -854,15 +877,22 @@ export default tseslint.config(
       "react/no-danger": "error",
       "react/no-did-mount-set-state": "error",
       "react/no-did-update-set-state": "error",
-      "react/default-props-match-prop-types": "off",
       "react/no-set-state": "error",
       "react/no-unused-prop-types": "off",
       "react/prop-types": "off",
       "validate-jsx-nesting/no-invalid-jsx-nesting": "error",
     },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
   },
   {
-    files: ["tests/**/*.{ts,tsx}"],
+    files: [
+      "tests/**/*.{test,spec}.tsx",
+      "tests/components/**/*.{test,spec}.{ts,tsx}",
+    ],
     plugins: {
       "testing-library": testingLibrary,
     },
@@ -880,7 +910,7 @@ export default tseslint.config(
     },
   },
   {
-    files: componentFiles,
+    files: [...componentFiles],
     plugins: {
       functional,
       sonarjs,
@@ -893,7 +923,6 @@ export default tseslint.config(
       "functional/no-loop-statements": "error",
       "functional/no-this-expressions": "error",
       "no-param-reassign": "error",
-      "sonarjs/cognitive-complexity": ["error", 8],
       "no-restricted-imports": [
         "error",
         {
@@ -927,6 +956,7 @@ export default tseslint.config(
         ...normalModuleSyntaxRestrictions,
         ...componentSyntaxRestrictions,
       ],
+      "sonarjs/cognitive-complexity": ["error", 8],
     },
   },
   {
@@ -968,6 +998,7 @@ export default tseslint.config(
       "n/file-extension-in-import": "off",
       "n/no-missing-import": "off",
       "n/no-unsupported-features/es-syntax": "off",
+      "n/no-unsupported-features/node-builtins": "off",
     },
     settings: {
       n: {
@@ -978,13 +1009,6 @@ export default tseslint.config(
   {
     ...betterTailwindcss.configs["correctness-error"],
     files: ["src/**/*.{astro,ts,tsx}"],
-    settings: {
-      "better-tailwindcss": {
-        entryPoint: "src/styles/global.css",
-        messageStyle: "compact",
-        tsconfig: "tsconfig.json",
-      },
-    },
     rules: {
       ...betterTailwindcss.configs["correctness-error"].rules,
       "better-tailwindcss/no-deprecated-classes": "error",
@@ -1013,9 +1037,22 @@ export default tseslint.config(
         },
       ],
     },
+    settings: {
+      "better-tailwindcss": {
+        entryPoint: "src/styles/global.css",
+        messageStyle: "compact",
+        tsconfig: "tsconfig.json",
+      },
+    },
   },
   {
-    files: ["tests/**/*.ts", "scripts/**/*.ts", "*.config.{js,cjs,ts,mjs}"],
+    files: [
+      "src/lib/**/*.ts",
+      "src/pages/**/*.ts",
+      "tests/**/*.ts",
+      "scripts/**/*.ts",
+      "*.config.{js,cjs,ts,mjs}",
+    ],
     rules: {
       "compat/compat": "off",
       "no-console": "off",
@@ -1024,6 +1061,8 @@ export default tseslint.config(
   {
     files: ["eslint.config.js", "*.config.{js,cjs,ts,mjs}"],
     rules: {
+      "array-func/prefer-array-from": "off",
+      "import/no-named-as-default-member": "off",
       "unicorn/no-anonymous-default-export": "off",
     },
   },
