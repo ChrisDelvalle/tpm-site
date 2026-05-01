@@ -21,7 +21,12 @@ const {
 } = Astro.props;
 ---
 
-<footer class="mt-12 grid gap-8" data-pagefind-ignore>
+<aside
+  class="mt-12 grid gap-8"
+  aria-label="Article support and discovery"
+  data-pagefind-ignore
+>
+  <SupportBlock headingId={`${idPrefix}-support-heading`} />
   <MoreInCategoryBlock
     categoryHref={categoryHref}
     categoryTitle={categoryTitle}
@@ -32,5 +37,4 @@ const {
     headingId={`${idPrefix}-related-articles-heading`}
     items={related}
   />
-  <SupportBlock headingId={`${idPrefix}-support-heading`} />
-</footer>
+</aside>

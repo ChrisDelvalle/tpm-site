@@ -2,14 +2,19 @@ import { describe, expect, test } from "bun:test";
 
 import {
   type ArticleEntry,
+  articlesIndexUrl,
   articleSlug,
   articleUrl,
   assertUniqueArticleSlugs,
+  categoriesIndexUrl,
   categorySlug,
   categoryUrl,
   decodeHtmlEntities,
+  feedUrl,
   isPublishedArticle,
   normalizeSlug,
+  pageUrl,
+  searchUrl,
 } from "../../src/lib/routes";
 
 function entry(
@@ -45,10 +50,15 @@ describe("route helpers", () => {
   });
 
   test("keeps canonical routes trailing-slashed", () => {
+    expect(articlesIndexUrl()).toBe("/articles/");
     expect(articleUrl("gamergate-as-metagaming")).toBe(
       "/articles/gamergate-as-metagaming/",
     );
+    expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("memeculture")).toBe("/categories/memeculture/");
+    expect(pageUrl("About")).toBe("/about/");
+    expect(searchUrl()).toBe("/search/");
+    expect(feedUrl()).toBe("/feed.xml");
   });
 
   test("uses collection ids directly as article slugs", () => {

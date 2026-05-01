@@ -258,212 +258,621 @@ Scope rules:
 - [x] Add or update checks for theme switching, focus visibility, mobile menu
       disclosure, category disclosure, and search behavior.
 - [x] Add or update axe checks for critical and serious accessibility issues.
-- [ ] Manually inspect the component catalog in light and dark mode.
-- [ ] Manually inspect long titles, missing excerpts, missing images, empty
+- [x] Manually inspect the component catalog in light and dark mode.
+- [x] Manually inspect long titles, missing excerpts, missing images, empty
       search, category pages, article endcaps, and support CTAs.
-- [ ] Verify likely LCP images are eager only when appropriate and below-fold
+- [x] Verify likely LCP images are eager only when appropriate and below-fold
       media lazy-loads.
-- [ ] Verify media and embeds reserve stable space and do not cause layout
+- [x] Verify media and embeds reserve stable space and do not cause layout
       shift.
-- [ ] Verify JSON-LD, Open Graph, canonical URLs, sitemap, RSS, and Pagefind
+- [x] Verify JSON-LD, Open Graph, canonical URLs, sitemap, RSS, and Pagefind
       still work after the component extraction.
 
 ## Milestone 13: Component Design One-Pagers
 
-- [ ] Add `docs/components/README.md` describing the component design
+- [x] Add `docs/components/README.md` describing the component design
       one-pager standard and where new component designs must be documented
       before implementation.
-- [ ] Structure `docs/components/` to mirror `src/components/`, including
+- [x] Structure `docs/components/` to mirror `src/components/`, including
       subfolders such as `ui/`, `media/`, `layout/`, `navigation/`,
       `articles/`, `pages/`, `blocks/`, and `islands/` where corresponding
       component folders exist.
-- [ ] Add a reusable component one-pager template covering purpose, public
+- [x] Add a reusable component one-pager template covering purpose, public
       contract, composition relationships, layout behavior, responsive behavior,
       layering/z-index behavior, interaction states, accessibility semantics,
       content edge cases, theme behavior, and testable invariants.
-- [ ] Inventory every public component in `src/components/` and every page-level
+- [x] Inventory every public component in `src/components/` and every page-level
       block in `src/components/blocks/`, grouped by UI primitive, layout,
       navigation, article, page, media, and homepage responsibility.
-- [ ] Create a one-page design doc for every existing public component and
+- [x] Create a one-page design doc for every existing public component and
       block, using the template and keeping each doc specific to the actual
       component rather than generic design guidance.
-- [ ] For each component one-pager, document its intended relationships to
+- [x] For each component one-pager, document its intended relationships to
       sibling and parent components: alignment, shared dimensions, spacing,
       containment, ordering, visibility exclusivity, sticky/fixed behavior, and
       what should happen during scrolling and resizing.
-- [ ] For each component one-pager, document all meaningful states and variants:
+- [x] For each component one-pager, document all meaningful states and variants:
       default, hover, focus-visible, active, disabled, current, selected,
       expanded/collapsed, empty, loading, error, missing content, long content,
       and dense content where applicable.
-- [ ] For each layout-sensitive component one-pager, document the mobile base
+- [x] For each layout-sensitive component one-pager, document the mobile base
       behavior, tablet behavior, desktop behavior, wide behavior, short-viewport
       behavior, wrapping rules, overflow rules, and container/viewport
       dependencies.
-- [ ] For each interactive component one-pager, document keyboard behavior,
+- [x] For each interactive component one-pager, document keyboard behavior,
       pointer behavior, touch behavior, focus order, accessible names, ARIA or
       native semantic requirements, and no-JavaScript fallback expectations.
-- [ ] For each media/content component one-pager, document image sizing,
+- [x] For each media/content component one-pager, document image sizing,
       aspect-ratio behavior, caption relationships, fallback behavior, loading
       policy, and how content should avoid layout shift.
-- [ ] For each component one-pager, list the specific invariant, render,
+- [x] For each component one-pager, list the specific invariant, render,
       accessibility, interaction, and visual checks that should exist in tests.
-- [ ] Record brittle or questionable implementation decisions discovered during
+- [x] Record brittle or questionable implementation decisions discovered during
       documentation in the relevant one-pager with a follow-up note, instead of
       silently treating the current implementation as the design contract.
-- [ ] Move or create the component architecture source of truth at
+- [x] Move or create the component architecture source of truth at
       `docs/COMPONENT_ARCHITECTURE.md`, keeping agent-specific summaries out of
       the project design-doc tree.
-- [ ] Update `docs/COMPONENT_ARCHITECTURE.md` to state that new
+- [x] Update `docs/COMPONENT_ARCHITECTURE.md` to state that new
       component work starts with a one-pager, then catalog examples, then
       implementation, then tests.
 
 ## Milestone 14: Component Invariant Documentation And Tests
 
-- [ ] Use the Milestone 13 one-pagers as the source of truth for component
+- [x] Use the Milestone 13 one-pagers as the source of truth for component
       intentions, and update a one-pager first if a missing or unclear
       invariant is discovered while writing tests.
-- [ ] Add reusable Playwright layout helpers under `tests/e2e/helpers/` for
+- [x] Add reusable Playwright layout helpers under `tests/e2e/helpers/` for
       bounding boxes, overlap detection, visible dimensions, viewport matrices,
       scroll positions, focus state, z-order checks, and element-relative
       assertions.
-- [ ] Add component-catalog e2e coverage that exercises canonical component
+- [x] Add component-catalog e2e coverage that exercises canonical component
       examples in light mode and dark mode without depending on production-only
       pages.
-- [ ] Add invariant tests for UI primitives: buttons, link buttons, icon
+- [x] Add invariant tests for UI primitives: buttons, link buttons, icon
       buttons, text links, inputs, badges, separators, cards, containers, and
       sections.
-- [ ] Test primitive relationships where meaningful: equal heights, consistent
+- [x] Test primitive relationships where meaningful: equal heights, consistent
       alignment, stable dimensions across variants, disabled and focus-visible
       states, text wrapping, and no accidental low-contrast states.
-- [ ] Add invariant tests for site layout: header, shell, main frame, sidebar,
+- [x] Add invariant tests for site layout: header, shell, main frame, sidebar,
       footer, skip link, and page frame composition.
-- [ ] Test layout relationships across scrolling and resizing: sticky elements
+- [x] Test layout relationships across scrolling and resizing: sticky elements
       do not overlap incorrectly, fixed-height regions remain stable, sidebars
       stay below headers, footers do not cover content, and content never gains
       unintended horizontal overflow.
-- [ ] Add invariant tests for navigation components: brand link, primary nav,
+- [x] Add invariant tests for navigation components: brand link, primary nav,
       support link, theme toggle, search form, mobile menu, category tree,
       category groups, and category sidebar.
-- [ ] Test navigation behavior across viewports: desktop and mobile surfaces do
+- [x] Test navigation behavior across viewports: desktop and mobile surfaces do
       not both expose conflicting controls, hidden surfaces are truly hidden,
       disclosure state does not cause unwanted navigation, keyboard focus order
       remains usable, and touch-size targets remain practical.
-- [ ] Add invariant tests for article components: article header, metadata,
+- [x] Add invariant tests for article components: article header, metadata,
       tags, prose wrapper, article cards, article lists, more-in-category,
       related/discovery placeholders, and article endcaps.
-- [ ] Test article relationships: prose measure remains readable, hero/media
+- [x] Move article tags out of the top article header and render them as the
+      final article surface after the article endcap/discovery surfaces, so the
+      top of the article stays visually uncluttered.
+- [x] Test article relationships: prose measure remains readable, hero/media
       placement does not shift surrounding content, article cards align in
       grids, metadata remains associated with titles, and endcap/support blocks
       do not compete visually with article content.
-- [ ] Add invariant tests for media and embed components: responsive images,
+- [x] Add invariant tests for media and embed components: responsive images,
       hover-card images, iframes, embeds, captions, and missing-media states.
-- [ ] Test media behavior across viewports: media stays centered where intended,
+- [x] Test media behavior across viewports: media stays centered where intended,
       aspect ratios are preserved, previews stay related to their trigger,
       embeds reserve space, and images do not exceed their containing measure.
-- [ ] Add invariant tests for homepage and archive blocks: hero, announcement,
+- [x] Add invariant tests for homepage and archive blocks: hero, announcement,
       latest article, featured/start-here, category overview, archive links,
       search results, support block, and footer discovery surfaces.
-- [ ] Fix and test the homepage bottom support block so its bounding box aligns
+- [x] Fix and test the homepage bottom support block so its bounding box aligns
       with the same content measure/container as the surrounding homepage
       sections instead of spanning wider than the rest of the content.
-- [ ] Test dynamic behavior where it represents component intent: theme
+- [x] Fix and test the `/articles/`, `/categories/`, and `/search/` page
+      content measure so archive-style pages keep a comfortable reading width
+      instead of filling the entire viewport on wide screens.
+- [x] Test dynamic behavior where it represents component intent: theme
       persistence, search result highlighting renders as real markup rather than
       escaped text, search empty states, mobile menu disclosure, category
       disclosure, and hover/focus/touch alternatives for interactive previews.
-- [ ] Prefer stable `data-*` test anchors for structural relationships that are
+- [x] Prefer stable `data-*` test anchors for structural relationships that are
       hard to select semantically, and avoid tests coupled to incidental class
       strings unless the class is the public contract being tested.
-- [ ] Record brittle or questionable implementation decisions discovered during
+- [x] Record brittle or questionable implementation decisions discovered during
       invariant review in `docs/COMPONENT_ARCHITECTURE.md` or a focused
       follow-up checklist item instead of hiding them in tests.
-- [ ] Keep invariant tests useful rather than screenshot-only: assert explicit
+- [x] Keep invariant tests useful rather than screenshot-only: assert explicit
       relationships, states, dimensions, visibility, stacking, focus behavior,
       overflow, and interaction outcomes.
-- [ ] Update `PACKAGE_SCRIPTS.md` if new invariant-specific test scripts or
+- [x] Update `PACKAGE_SCRIPTS.md` if new invariant-specific test scripts or
       catalog test commands are added.
 
 ## Milestone 15: Regression Hardening And Reliability Gates
 
-- [ ] Add a "new component readiness" policy to
+- [x] Add a "new component readiness" policy to
       `docs/COMPONENT_ARCHITECTURE.md`: every new public component needs
       a catalog example, render test, documented invariants, invariant e2e tests
       when layout-sensitive, and keyboard/a11y tests when interactive.
-- [ ] Add or update reusable hostile fixtures for catalog and tests: long
+- [x] Add or update reusable hostile fixtures for catalog and tests: long
       titles, long unbroken words, missing images, missing excerpts, many tags,
       empty states, dense lists, one-item lists, many-item lists, narrow
       containers, short viewport heights, unusual punctuation, and both themes.
-- [ ] Audit component state modeling and replace brittle boolean clusters with
+- [x] Audit component state modeling and replace brittle boolean clusters with
       discriminated states where a component can be `empty`, `ready`, `error`,
       `loading`, `expanded`, `collapsed`, `selected`, or otherwise mutually
       exclusive.
-- [ ] Keep internal URL construction centralized in `src/lib/routes.ts` or
+- [x] Keep internal URL construction centralized in `src/lib/routes.ts` or
       similarly explicit route helpers; remove hand-built internal URLs from
       components where a route helper should be used.
-- [ ] Add route-helper tests for every public helper, including trailing-slash
+- [x] Add route-helper tests for every public helper, including trailing-slash
       behavior, article paths, category paths, page paths, RSS/feed paths, and
       canonical URL composition.
-- [ ] Add content schema and published-filter tests for required frontmatter,
+- [x] Add content schema and published-filter tests for required frontmatter,
       invalid dates, invalid image references, unpublished content exclusion,
       duplicate article slugs, missing category metadata, and category/article
       count consistency.
-- [ ] Add route-level smoke coverage for every generated page and endpoint:
+- [x] Add route-level smoke coverage for every generated page and endpoint:
       homepage, articles, categories, Markdown pages, RSS/feed, sitemap, search,
       and representative article/category detail pages.
-- [ ] Add semantic document tests for key routes: one `main`, valid skip-link
+- [x] Add semantic document tests for key routes: one `main`, valid skip-link
       target, sensible heading order, labeled navigation landmarks, footer
       landmark, accessible names for links/buttons, and no duplicate critical
       landmarks.
-- [ ] Add focused visual-regression coverage for stable surfaces: homepage,
+- [x] Add focused visual/invariant-regression coverage for stable surfaces:
+      homepage,
       article page, component catalog overview, header/nav, sidebar, support
       block, article cards, search results, and mobile menu.
-- [ ] Keep visual-regression tests targeted and reviewable; do not replace
+- [x] Keep visual-regression tests targeted and reviewable; do not replace
       explicit invariant assertions with broad screenshot tests where a
       relationship can be tested directly.
-- [ ] Add build-output guards for no accidental catalog route in production, no
+- [x] Add build-output guards for no accidental catalog route in production, no
       unexpected client JavaScript growth, no unexpected hydration boundaries,
       no source maps unless deliberately enabled, no broken internal links, and
       no escaped markup where real HTML is intended.
-- [ ] Add asset-integrity checks for referenced local images, required alt text
+- [x] Add asset-integrity checks for referenced local images, required alt text
       or documented alt exceptions, approved `public/` files only, and
       project-owned images living under `src/assets/`.
-- [ ] Add design-token enforcement or review checks for hard-coded colors,
+- [x] Add design-token enforcement or review checks for hard-coded colors,
       border radii, shadows, and spacing in first-party UI when semantic tokens
       or component variants should be used instead.
-- [ ] Add theme-matrix checks for key components so light and dark mode both
+- [x] Add theme-matrix checks for key components so light and dark mode both
       preserve readable text, visible borders, visible focus rings, and correct
       CTA contrast.
-- [ ] Add interaction-state checks for hover, focus-visible, active, disabled,
+- [x] Add interaction-state checks for hover, focus-visible, active, disabled,
       current, selected, expanded, and collapsed states where those states are
       part of a component contract.
-- [ ] Add content-relationship tests so article cards link to the correct
+- [x] Add content-relationship tests so article cards link to the correct
       routes, article metadata remains associated with titles, category counts
       match published article data, and archive/search/RSS use the same
       published-content filter.
-- [ ] Add review-only performance budget checks for page weight, client
+- [x] Reorder article-end surfaces so `Support The Philosopher's Meme` appears
+      before `More in <category>`, related/references/discovery comes next, and
+      article tags are the final surface at the bottom of the article.
+- [x] Audit and fix article header-to-body spacing so articles without a hero
+      image do not reserve awkward empty space; if hero images are added later,
+      image-specific spacing should be owned by the hero/media component rather
+      than by a permanent prose offset.
+- [x] Fix and test the homepage Browse Categories block so its grid is
+      constrained by the same comfortable content measure as the surrounding
+      homepage sections and cannot drift wider on large screens.
+- [x] Fix and test category detail pages such as `/categories/metamemetics/`
+      so they use the same shared page framing and comfortable content measure
+      as archive, category-index, and search pages.
+- [x] Add a modularization and reuse pass for page framing, archive/list
+      layout, discovery sections, and support surfaces so routes stop
+      reimplementing common layout decisions and sitewide consistency is the
+      default.
+- [x] Add review-only performance budget checks for page weight, client
       JavaScript size/count, image sizing, LCP candidate sanity, and
       CLS-sensitive layout shifts.
-- [ ] Maintain a documented exception ledger for intentionally untested,
+- [x] Maintain a documented exception ledger for intentionally untested,
       untestable, or deliberately rule-breaking cases, with a clear reason and
       explicit handoff note.
-- [ ] Establish a regression policy: every layout, accessibility, routing,
+- [x] Establish a regression policy: every layout, accessibility, routing,
       content, or interaction bug fix should add a focused invariant or
       contract test for the underlying intention.
-- [ ] Update `PACKAGE_SCRIPTS.md`, CI workflow comments, and agent docs if new
+- [x] Update `PACKAGE_SCRIPTS.md`, CI workflow comments, and agent docs if new
       reliability scripts, review-only checks, or release gates are added.
 
-## Milestone 16: Optional Category Dropdown Discovery
+## Milestone 16: Site Anatomy Technical Design
 
-- [ ] Revisit category dropdowns only after `SectionNav`, `CategoryTree`,
-      homepage discovery blocks, and footer discovery are stable.
-- [ ] Decide whether dropdowns use native `details`/`summary`, HTML `popover`,
-      or a small Radix/shadcn island based on accessibility and browser testing.
-- [ ] Add `src/components/navigation/DiscoveryMenu.astro`,
-      `CategoryDropdown.astro`, and `CategoryPreviewList.astro` only if the
-      basic section nav needs richer discovery.
-- [ ] Limit dropdown content to a few recent or featured article previews and a
-      View All link.
-- [ ] Do not render the full archive inside the header.
+- [ ] Add a site anatomy technical design doc at `docs/SITE_ANATOMY.md`.
+- [ ] Inventory every route in `src/pages/` and document its current anatomy:
+      document shell, site shell, header/nav, sidebar/discovery, content frame,
+      page body, blocks, end surfaces, and footer.
+- [ ] Inventory every public component in `src/components/` and classify it as
+      a document shell, layout primitive, page body, page section, content
+      block, article part, navigation part, media part, UI primitive, or island.
+- [ ] Document the current component tree for each major page type: homepage,
+      article detail, article archive, category index, category detail, search,
+      about/generic Markdown page, 404, and catalog.
+- [ ] Identify every place where routes or blocks reimplement page width,
+      gutters, vertical rhythm, sidebar placement, archive/list layout,
+      discovery ordering, support CTA placement, or footer-like surfaces.
+- [ ] Propose a simpler target anatomy that makes sitewide consistency the
+      default, with a small set of reusable page-body primitives instead of
+      bespoke route layouts.
+- [ ] Decide and document the final page-body taxonomy. The expected direction
+      is a reading body for article/prose-first pages and a browsing body for
+      homepage, archives, categories, search, and other discovery-first pages,
+      but use the most conventional names after design review.
+- [ ] Define the target article anatomy, including article header, article
+      body/prose, optional article media/hero ownership, article
+      support/discovery surfaces, references/related surfaces, tags, article
+      table of contents, and article footer/end metadata.
+- [ ] Define the target browsing-page anatomy, including page header, optional
+      intro/prose, primary listing/grid region, filters/search or category
+      discovery, support/discovery surfaces, and footer handoff.
+- [ ] Define the target site-shell anatomy, including sticky header, mobile
+      navigation, category discovery in navigation surfaces, article-local
+      margin/sidebar surfaces, centered content column, right margin, footer,
+      skip link, and theme/search islands.
+- [ ] Document the navigation decision that category discovery moves into the
+      site-wide navigation, mobile menu, footer/homepage discovery, and category
+      pages; the desktop margin sidebar becomes article-local table of contents
+      where article headings make that useful.
+- [ ] Name every new or changed layout/navigation/article component that needs a
+      component one-pager before implementation.
+- [ ] Define the test strategy for the anatomy refactor: render tests,
+      catalog examples, accessibility checks, Playwright layout invariants, and
+      build-output guards.
+- [ ] Update `docs/COMPONENT_ARCHITECTURE.md` with the final site anatomy and
+      make it clear that future pages must compose existing anatomy primitives
+      before adding new bespoke layout.
+- [ ] Update `CHECKLIST.md` if the anatomy design discovers additional required
+      design or implementation milestones.
+
+## Milestone 17: Layout Primitive Component Designs
+
+- [ ] Update or create component one-pagers under `docs/components/layout/` for
+      every layout primitive chosen in Milestone 16 before implementation.
+- [ ] Update or create component one-pagers for the shared site shell, main
+      frame, page frame, reading body, browsing body, section stack, content
+      rail, endcap stack, and margin/sidebar layout as applicable.
+- [ ] Document parent-child relationships, slot ownership, content measure,
+      gutters, vertical rhythm, sidebar/margin placement, sticky offsets,
+      overflow rules, responsive breakpoints, and no-sidebar behavior for each
+      layout primitive.
+- [ ] Document mobile, tablet, desktop, wide desktop, and short-viewport
+      behavior for every layout-sensitive primitive.
+- [ ] Document catalog examples required for every new or changed anatomy
+      primitive: reading body, browsing body, section stack, content rail,
+      endcap stack, margin/sidebar layout, empty states, dense states, and
+      long-content states.
+- [ ] Document render, accessibility, and Playwright invariants for each layout
+      primitive before implementation begins.
+- [ ] Record any brittle prototype layout decisions that must be removed during
+      implementation.
+
+## Milestone 18: Category Navigation Component Designs
+
+- [ ] Update or create component one-pagers before implementation for
+      `src/components/navigation/DiscoveryMenu.astro`,
+      `src/components/navigation/CategoryDropdown.astro`, and
+      `src/components/navigation/CategoryPreviewList.astro`.
+- [ ] Update existing one-pagers for affected navigation components such as
+      `SiteHeader`, `PrimaryNav`, `MobileMenu`, `SectionNav`, `CategoryTree`,
+      `CategoryGroup`, `SearchForm`, `SupportLink`, `ThemeToggle`, and
+      `SiteFooter` where their contracts change.
+- [ ] Choose and document the dropdown primitive: native `details`/`summary`,
+      HTML `popover`, or a small Radix/shadcn island based on accessibility,
+      no-JavaScript behavior, browser support, and testing complexity.
+- [ ] Document the category dropdown contract: category labels, direct category
+      links, recent or featured article previews if used, View All links,
+      no-full-archive rule, empty preview states, and data ownership.
+- [ ] Document keyboard, pointer, touch, focus, dismissal, reduced-motion,
+      no-JavaScript fallback, and assistive-technology behavior.
+- [ ] Document responsive behavior and visibility exclusivity so desktop
+      dropdowns, mobile menus, and footer/homepage discovery do not compete.
+- [ ] Document catalog examples and render/Playwright tests required before
+      production navigation uses the dropdown.
+
+## Milestone 19: Article Table Of Contents Component Designs
+
+- [ ] Update or create component one-pagers before implementation for the
+      article table-of-contents components, using names such as
+      `ArticleTableOfContents`, `TableOfContentsItem`, `TableOfContentsToggle`,
+      and `MarginSidebarLayout` unless Milestone 16 chooses better conventional
+      names.
+- [ ] Update existing one-pagers for affected article/layout components such as
+      `ArticleLayout`, `ArticleHeader`, `ArticleProse`, `ArticleEndcap`,
+      `ArticleTags`, `MainFrame`, and `PageFrame` where their contracts change.
+- [ ] Document how article headings are discovered, which heading levels are
+      included, how duplicate heading IDs are handled, how generated Markdown
+      IDs stay stable, and how malformed heading order should be reported.
+- [ ] Document no-headings and too-few-headings behavior: no empty sidebar, no
+      reserved blank margin, and no broken layout on articles that do not need a
+      contents surface.
+- [ ] Document hide/show behavior: visible label, keyboard behavior, focus
+      behavior, reduced-motion behavior, state persistence decision, and the
+      smallest acceptable client-side boundary.
+- [ ] Document sticky and layering rules: the TOC stays below the sticky header,
+      never hides underneath it while scrolling, never overlays article prose,
+      and never competes with mobile navigation.
+- [ ] Document active-section behavior if included, including scroll-spy
+      thresholds, URL hash behavior, focus/target behavior, and the
+      no-JavaScript fallback.
+- [ ] Document catalog examples and render/Playwright tests required before the
+      article TOC ships.
+
+## Milestone 20: Bibliography Technical Design
+
+- [ ] Add a bibliography technical design doc at `docs/BIBLIOGRAPHY.md`.
+- [ ] Inventory every article in `src/content/articles/` for bibliography or
+      citation-like content, including explicit references sections, footnotes,
+      inline Markdown links used as citations, blockquote attributions, raw HTML
+      links, bibliography-style lists, and article-specific unusual formats.
+- [ ] Record every bibliography/citation format found, the articles that use it,
+      whether it is parseable without ambiguity, and whether it appears to be a
+      real source entry, a normal prose link, media credit, archive link, or
+      editorial aside.
+- [ ] Determine whether there is a consistent existing bibliography format
+      across the corpus; if not, propose the smallest canonical Markdown/MDX
+      bibliography format authors can realistically follow.
+- [ ] Define the canonical bibliography entry data model: source text/title, URL
+      or non-URL source, optional author/publication/date fields, optional note,
+      source article title, source article URL, article category, and article
+      publication date.
+- [ ] Decide whether bibliography entries should be parsed from Markdown AST,
+      MDX AST, frontmatter, explicit bibliography/reference blocks, or another
+      structured source; avoid fragile regex-only parsing unless the design doc
+      proves it is sufficient.
+- [ ] Document how bad or legacy bibliography/citation formats should be adapted
+      to the canonical format while preserving article wording and author
+      intent.
+- [ ] Document which article edits are required for bibliography normalization
+      and mark them as article-content work requiring careful manual
+      verification.
+- [ ] Define validation/enforcement for future articles: content checks,
+      markdown/MDX linting, parser tests, author-facing error messages, and
+      documentation in the article submission tutorial.
+- [ ] Define technical tests needed before implementation: parser fixtures for
+      every bibliography/citation format, duplicate/invalid bibliography tests,
+      content-validation tests, and route data tests.
+- [ ] Identify open questions and risks: ambiguous source/link distinction, dead
+      external links, non-URL sources, generated IDs, duplicates across
+      articles, and whether normalization should be blocking or review-only.
+
+## Milestone 21: Bibliography Component Designs
+
+- [ ] Update or create component one-pagers before implementation for the
+      bibliography page and bibliography UI components, using names such as
+      `BibliographyPage`, `BibliographyList`, `BibliographyEntry`,
+      `BibliographySourceArticles`, `BibliographyFilters`, and
+      `BibliographyEmptyState` unless Milestone 20 chooses better names.
+- [ ] Update existing one-pagers for affected footer/navigation components so
+      the bibliography page is reachable site-wide without cluttering the
+      primary header navigation.
+- [ ] Design the `/bibliography/` page information architecture: grouping,
+      sorting, duplicate handling, source display, search/filter behavior if
+      any, and article back-links for every bibliography entry.
+- [ ] Document empty, malformed, duplicate, external-link, non-URL source, long
+      source title, many-source, and no-JavaScript states.
+- [ ] Document SEO, JSON-LD, canonical URL, sitemap, RSS/feed, and Pagefind
+      implications for bibliography pages.
+- [ ] Document catalog examples and render/Playwright/accessibility tests
+      required before implementation.
+
+## Milestone 22: Author Metadata Technical Design
+
+- [ ] Add an author metadata technical design doc at `docs/AUTHORS.md`.
+- [ ] Inventory all current article author values in `src/content/articles/`,
+      including spelling variants, legacy metadata shapes, group authors,
+      multiple-author articles if any, and articles with missing or ambiguous
+      author data.
+- [ ] Decide the canonical author model and where it lives. The expected
+      direction is an `authors` content collection or similarly structured
+      source under `src/content/`, but the design doc should compare options
+      before choosing.
+- [ ] Define stable author identity rules: slug generation, display name,
+      aliases, legacy names, duplicate names, group authors, and how article
+      frontmatter references an author without relying on fragile free-text
+      matching.
+- [ ] Define optional author metadata fields: short bio for article pages,
+      longer profile description for author pages, avatar/image if used,
+      website, social links, affiliations, location/time period if relevant,
+      and any privacy/consent rules for public links.
+- [ ] Define graceful fallback behavior for authors with no profile metadata:
+      author links should still be useful, at minimum showing the author's
+      article list, without requiring placeholder bios or broken profile boxes.
+- [ ] Define how author data participates in machine-readable metadata: Article
+      JSON-LD author references, optional Person/Organization schema, Open Graph
+      metadata, RSS author fields, and canonical URLs.
+- [ ] Define validation/enforcement for future articles: every published
+      article should reference a known author or use an explicitly documented
+      fallback; aliases and unknown authors should fail or warn according to the
+      design decision.
+- [ ] Document any article frontmatter edits required to normalize author
+      references and mark them as article-content work requiring careful manual
+      verification.
+- [ ] Define technical tests needed before implementation: author metadata
+      schema tests, alias/duplicate resolution tests, article-author
+      relationship tests, structured-data tests, RSS tests, and route data tests.
+- [ ] Identify open questions and risks: public personal data, authors who do
+      not want profile pages, group authors, pseudonyms, dead social links,
+      author name changes, and whether missing author metadata should block
+      publishing or remain review-only.
+
+## Milestone 23: Author Page Component Designs
+
+- [ ] Update or create component one-pagers before implementation for author UI
+      components, using names such as `AuthorLink`, `AuthorByline`,
+      `AuthorBioBlock`, `AuthorProfileHeader`, `AuthorArticleList`,
+      `AuthorSocialLinks`, `AuthorPage`, and `AuthorsIndexPage` unless
+      Milestone 22 chooses better names.
+- [ ] Update existing one-pagers for affected article components such as
+      `ArticleMeta`, `ArticleHeader`, `ArticleCard`, `ArticleList`,
+      `ArticleEndcap`, and `ArticleJsonLd` where author behavior changes.
+- [ ] Design the article-page author interaction: author name links from
+      article metadata, optional "About the author" surface, placement relative
+      to article endcaps/tags, and behavior for multiple authors.
+- [ ] Design the author detail page route, likely `/authors/[author]/`,
+      including page header, short/long bio, external links, article count,
+      chronological article list, category/tag summaries if useful, and SEO
+      metadata.
+- [ ] Decide whether an `/authors/` index page is needed now or deferred; if
+      included, design grouping, sorting, empty states, and navigation from the
+      footer or other discovery surfaces.
+- [ ] Document empty metadata, missing bio, no social links, long author names,
+      group authors, multiple authors, dark/light mode, mobile, and wide layout
+      states.
+- [ ] Document catalog examples and render/Playwright/accessibility tests
+      required before implementation.
+
+## Milestone 24: Site-Wide Anatomy Layout Refactor
+
+- [ ] Implement only after Milestones 16 and 17 are complete.
+- [ ] Create or refactor the reusable layout primitives named in the design:
+      site shell, main frame, page frame, reading body, browsing body, section
+      stack, content rail, endcap stack, and margin/sidebar layout as needed.
+- [ ] Make layout primitives own reusable constraints: content measure, gutters,
+      vertical rhythm, sidebar/margin placement, sticky offsets, overflow rules,
+      and responsive breakpoints.
+- [ ] Keep route files thin: each route should load data, choose the correct
+      page body, pass normalized props, and avoid implementing custom layout
+      structure inline.
+- [ ] Refactor article detail pages to use the reading-body anatomy and remove
+      duplicated layout decisions from `ArticleLayout.astro` and article route
+      composition.
+- [ ] Refactor homepage, article archive, category index, category detail,
+      search, and generic Markdown pages to use the browsing/prose body
+      primitives where appropriate.
+- [ ] Ensure support CTAs, category discovery, related reading, archive links,
+      and tags are placed through named reusable surfaces rather than ad hoc
+      per-page markup.
+- [ ] Ensure category detail pages, article archive pages, category index pages,
+      and search pages share the same browsing body and archive/list section
+      primitives unless the design doc explicitly justifies a difference.
+- [ ] Ensure article pages and generic Markdown pages share prose/readability
+      primitives without coupling generic pages to article-only metadata or
+      article-only endcaps.
+- [ ] Remove obsolete one-off width, spacing, and grid patches after the shared
+      anatomy primitives own those decisions.
+- [ ] Add or update catalog examples for every new or changed anatomy primitive.
+- [ ] Add render tests for new anatomy primitives proving semantic structure,
+      slots, required labels, heading levels, and empty/missing-content states.
+- [ ] Add Playwright invariants proving reading pages preserve readable measure,
+      browsing pages preserve comfortable listing width, and both page-body
+      types remain consistent across mobile, tablet, desktop, wide desktop, and
+      short viewport heights.
+- [ ] Add Playwright invariants proving shared anatomy prevents regressions:
+      no horizontal overflow, no duplicated critical landmarks, no competing
+      sidebars/mobile menus, support/discovery surfaces keep intended order,
+      and centered content stays centered when sidebars are present.
+
+## Milestone 25: Category Dropdown Discovery
+
+- [ ] Implement only after Milestones 16, 17, and 18 are complete.
+- [ ] Add or update `src/components/navigation/DiscoveryMenu.astro`,
+      `CategoryDropdown.astro`, and `CategoryPreviewList.astro` according to
+      the documented component contracts.
+- [ ] Move primary desktop category discovery from the left category sidebar
+      into the site-wide navigation while keeping a normal `/categories/` link
+      and direct category links reachable.
+- [ ] Ensure the mobile menu exposes equivalent category discovery without
+      rendering a competing desktop sidebar at mobile/tablet widths.
+- [ ] Source dropdown data from the shared navigation/content boundary rather
+      than fetching or shaping article data inside visual components.
+- [ ] Show category labels, a restrained set of recent or featured article
+      previews where the design calls for them, and a clear View All link.
+- [ ] Do not render the full archive inside the header dropdown.
 - [ ] Ensure every dropdown destination remains accessible through normal links
       when JavaScript is disabled.
-- [ ] Add catalog examples and Playwright keyboard/focus tests for dropdown
-      behavior before using it in production navigation.
+- [ ] Ensure dropdown controls are keyboard reachable, dismissible, focus-safe,
+      pointer/touch usable, and named correctly for assistive technology.
+- [ ] Add catalog examples for desktop, mobile, long category labels, many
+      categories, empty preview data, dark mode, light mode, and no-JavaScript
+      fallback behavior.
+- [ ] Add render tests for semantic structure, labels, links, empty preview
+      behavior, and stable data boundaries.
+- [ ] Add Playwright keyboard/focus/pointer tests before using the dropdown in
+      production navigation.
+- [ ] Add Playwright responsive invariants proving category discovery does not
+      collide with the header, does not create horizontal overflow, and does not
+      duplicate visible desktop/mobile controls.
+- [ ] Remove or disable the old desktop category sidebar as a category discovery
+      surface after the dropdown and fallback category paths are working.
+- [ ] Update affected component one-pagers and `docs/COMPONENT_ARCHITECTURE.md`
+      after implementation if the final behavior differs from the design docs.
+
+## Milestone 26: Article Table Of Contents Margin Sidebar
+
+- [ ] Implement only after Milestones 16, 17, and 19 are complete.
+- [ ] Create or refactor the shared margin/sidebar layout primitive so the left
+      margin can host article-local navigation without affecting the centered
+      reading measure.
+- [ ] Replace the old category-sidebar usage on article pages with the article
+      table-of-contents surface.
+- [ ] Keep category discovery available through the site navigation, mobile
+      menu, footer/homepage discovery, and category pages after the article TOC
+      replaces the desktop sidebar.
+- [ ] Build a heading extraction boundary in `src/lib/` or the article view
+      model so visual TOC components receive normalized heading data and do not
+      parse content themselves.
+- [ ] Include only the heading levels chosen in the design doc and preserve
+      stable heading IDs for hash links.
+- [ ] Handle duplicate heading text deterministically and add tests for the
+      generated labels/links.
+- [ ] Do not render an empty TOC sidebar when an article has no headings or too
+      few headings for useful local navigation.
+- [ ] Add a visible hide button for the TOC with keyboard support, accessible
+      name, sensible focus return, and the smallest practical client-side
+      behavior.
+- [ ] Ensure hiding the TOC does not reflow the reading column in a way that
+      makes the article jump or lose scroll position.
+- [ ] If active-section highlighting is implemented, keep it progressive:
+      static hash links must work without JavaScript, and the enhancement must
+      not block reading.
+- [ ] Add catalog examples for article TOC with many headings, no headings, long
+      headings, duplicate headings, hidden state, short viewport, mobile,
+      tablet, desktop, and wide desktop.
+- [ ] Add render tests for TOC structure, heading-link normalization,
+      no-headings behavior, hidden-state markup, and accessible labels.
+- [ ] Add Playwright invariants proving the TOC stays below the sticky header,
+      never overlays prose, never creates horizontal overflow, and keeps the
+      reading column centered.
+- [ ] Add Playwright interaction tests for hide/show behavior, keyboard
+      navigation, hash-link navigation, focus-visible states, and mobile/tablet
+      absence or compact behavior.
+- [ ] Remove obsolete category-sidebar tests, catalog examples, docs, or route
+      wiring that no longer match the new category navigation plus article TOC
+      architecture.
+
+## Milestone 27: Bibliography Implementation And Normalization
+
+- [ ] Implement only after Milestones 20 and 21 are complete.
+- [ ] Add the bibliography parsing, normalization, and validation boundary
+      chosen in the technical design.
+- [ ] Normalize legacy bibliography/citation formats only according to the
+      approved article-content plan and preserve article wording and author
+      intent.
+- [ ] Add the `/bibliography/` route and footer navigation link.
+- [ ] Implement bibliography UI components according to their one-pagers.
+- [ ] Add parser, content validation, route smoke, render, accessibility, and
+      Playwright tests defined by the design milestones.
+- [ ] Update author-facing article submission documentation with the canonical
+      bibliography format and validation guidance.
+- [ ] Update `CHECKLIST.md` with any remaining article normalization follow-up
+      discovered during implementation.
+
+## Milestone 28: Author Pages Implementation And Metadata Normalization
+
+- [ ] Implement only after Milestones 22 and 23 are complete.
+- [ ] Add the author metadata source and content schema chosen in the technical
+      design.
+- [ ] Normalize article author references only according to the approved
+      article-content plan and preserve article wording and author intent.
+- [ ] Add author routes, likely `/authors/[author]/`, and an `/authors/` index
+      if the design includes one.
+- [ ] Implement author UI components according to their one-pagers.
+- [ ] Link article bylines to author pages when author data is known and use the
+      approved fallback behavior when it is not.
+- [ ] Add author metadata to JSON-LD, RSS, canonical metadata, and other
+      machine-readable surfaces according to the technical design.
+- [ ] Add schema, relationship, route smoke, render, accessibility, RSS, JSON-LD,
+      and Playwright tests defined by the design milestones.
+- [ ] Update author-facing article submission documentation with author
+      reference and metadata guidance.
+- [ ] Update `CHECKLIST.md` with any remaining author metadata follow-up
+      discovered during implementation.

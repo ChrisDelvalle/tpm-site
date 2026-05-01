@@ -20,6 +20,15 @@ export const SITE_DESCRIPTION =
   "The philosophy of memes, cyberculture, and the Internet.";
 
 /**
+ * Builds the public article archive URL.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function articlesIndexUrl(): string {
+  return withTrailingSlash("/articles");
+}
+
+/**
  * Reads the stable URL slug for an article.
  *
  * @param entry Article content entry.
@@ -36,7 +45,7 @@ export function articleSlug(entry: ArticleEntry): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function articleUrl(slug: string): string {
-  return withTrailingSlash(`/articles/${slug}`);
+  return withTrailingSlash(`${articlesIndexUrl()}${slug}`);
 }
 
 /**
@@ -88,13 +97,22 @@ export function categorySlug(entry: ArticleEntry): string {
 }
 
 /**
+ * Builds the public category archive URL.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function categoriesIndexUrl(): string {
+  return withTrailingSlash("/categories");
+}
+
+/**
  * Builds the canonical site URL path for a category slug.
  *
  * @param slug Category slug.
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function categoryUrl(slug: string): string {
-  return withTrailingSlash(`/categories/${slug}`);
+  return withTrailingSlash(`${categoriesIndexUrl()}${slug}`);
 }
 
 /**
@@ -150,6 +168,15 @@ export function excerpt(entry: ArticleEntry): string {
 }
 
 /**
+ * Builds the public RSS feed URL.
+ *
+ * @returns Absolute-path URL for the RSS endpoint.
+ */
+export function feedUrl(): string {
+  return "/feed.xml";
+}
+
+/**
  * Formats a date for reader-facing article metadata.
  *
  * @param date Date to format.
@@ -199,6 +226,25 @@ export function normalizeSlug(value: string): string {
     .replace(/&/g, "and")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+}
+
+/**
+ * Builds a stable public URL for a top-level Markdown page.
+ *
+ * @param slug Page slug without slashes.
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function pageUrl(slug: string): string {
+  return withTrailingSlash(`/${normalizeSlug(slug)}`);
+}
+
+/**
+ * Builds the public search page URL.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function searchUrl(): string {
+  return withTrailingSlash("/search");
 }
 
 /**

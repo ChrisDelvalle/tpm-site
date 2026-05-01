@@ -1,23 +1,27 @@
 ---
 import CategoryOverviewBlock from "../../components/blocks/CategoryOverviewBlock.astro";
+import PageFrame from "../../components/layout/PageFrame.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCategories } from "../../lib/content";
 import { sectionNavigationItems } from "../../lib/navigation";
+import { categoriesIndexUrl } from "../../lib/routes";
 
 const categoryItems = sectionNavigationItems(
   await getCategories(),
-  "/categories/",
+  categoriesIndexUrl(),
 );
 ---
 
 <BaseLayout
   title="Categories | The Philosopher's Meme"
   description="Browse articles by category."
-  canonicalPath="/categories/"
+  canonicalPath={categoriesIndexUrl()}
 >
-  <CategoryOverviewBlock
-    title="Categories"
-    description="Browse the archive by subject."
-    items={categoryItems}
-  />
+  <PageFrame size="md">
+    <CategoryOverviewBlock
+      title="Categories"
+      description="Browse the archive by subject."
+      items={categoryItems}
+    />
+  </PageFrame>
 </BaseLayout>

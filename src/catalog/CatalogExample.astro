@@ -19,6 +19,8 @@ const {
 
 <article
   {...attrs}
+  data-catalog-component={componentPath ?? title}
+  data-catalog-example={title}
   class:list={[
     "border-border bg-card text-card-foreground grid min-w-0 gap-4 rounded-sm border p-4",
     className,
@@ -45,6 +47,7 @@ const {
   </header>
   <div
     class="border-border bg-background min-w-0 overflow-x-auto rounded-sm border p-4"
+    data-catalog-preview
   >
     <slot />
   </div>

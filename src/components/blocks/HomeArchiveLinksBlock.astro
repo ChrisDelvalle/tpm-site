@@ -1,6 +1,11 @@
 ---
 import LinkButton from "../ui/LinkButton.astro";
 import TextLink from "../ui/TextLink.astro";
+import {
+  articlesIndexUrl,
+  categoriesIndexUrl,
+  feedUrl,
+} from "../../lib/routes";
 
 interface Props {
   title?: string;
@@ -17,15 +22,16 @@ const { title = "Explore the Archive" } = Astro.props;
     {title}
   </h2>
   <p class="text-muted-foreground">
-    Browse the full <TextLink href="/articles/">article archive</TextLink>,
-    explore <TextLink href="/categories/">categories</TextLink>, or subscribe to
-    the <TextLink href="/feed.xml">RSS feed</TextLink>.
+    Browse the full <TextLink href={articlesIndexUrl()}
+      >article archive</TextLink
+    >, explore <TextLink href={categoriesIndexUrl()}>categories</TextLink>, or
+    subscribe to the <TextLink href={feedUrl()}>RSS feed</TextLink>.
   </p>
   <div class="flex flex-wrap gap-3">
-    <LinkButton href="/articles/" variant="outline" tone="neutral">
+    <LinkButton href={articlesIndexUrl()} variant="outline" tone="neutral">
       Articles
     </LinkButton>
-    <LinkButton href="/categories/" variant="outline" tone="neutral">
+    <LinkButton href={categoriesIndexUrl()} variant="outline" tone="neutral">
       Categories
     </LinkButton>
   </div>

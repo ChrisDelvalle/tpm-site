@@ -1,0 +1,95 @@
+# Component Inventory
+
+This inventory groups current public components by responsibility. Every listed
+component has a matching one-pager in this directory.
+
+## UI Primitives
+
+- `src/components/ui/Badge.astro`
+- `src/components/ui/Button.astro`
+- `src/components/ui/Card.astro`
+- `src/components/ui/Container.astro`
+- `src/components/ui/IconButton.astro`
+- `src/components/ui/Input.astro`
+- `src/components/ui/LinkButton.astro`
+- `src/components/ui/Section.astro`
+- `src/components/ui/Separator.astro`
+- `src/components/ui/TextLink.astro`
+- `src/components/ui/hover-card.tsx`
+
+## Layout
+
+- `src/components/layout/MainFrame.astro`
+- `src/components/layout/PageFrame.astro`
+- `src/components/layout/SiteFooter.astro`
+- `src/components/layout/SiteHeader.astro`
+- `src/components/layout/SiteShell.astro`
+
+## Navigation
+
+- `src/components/navigation/BrandLink.astro`
+- `src/components/navigation/CategoryGroup.astro`
+- `src/components/navigation/CategorySidebar.astro`
+- `src/components/navigation/CategoryTree.astro`
+- `src/components/navigation/MobileMenu.astro`
+- `src/components/navigation/PrimaryNav.astro`
+- `src/components/navigation/SearchForm.astro`
+- `src/components/navigation/SectionNav.astro`
+- `src/components/navigation/SectionNavItem.astro`
+- `src/components/navigation/SupportLink.astro`
+- `src/components/navigation/ThemeToggle.astro`
+
+## Article Components
+
+- `src/components/articles/ArticleCard.astro`
+- `src/components/articles/ArticleEndcap.astro`
+- `src/components/articles/ArticleHeader.astro`
+- `src/components/articles/ArticleImage.astro`
+- `src/components/articles/ArticleList.astro`
+- `src/components/articles/ArticleMeta.astro`
+- `src/components/articles/ArticleProse.astro`
+- `src/components/articles/ArticleTags.astro`
+- `src/components/articles/HoverImageCard.tsx`
+- `src/components/articles/HoverImageLink.astro`
+- `src/components/articles/HoverImageParagraph.astro`
+- `src/components/articles/MoreInCategoryBlock.astro`
+- `src/components/articles/RelatedArticlesBlock.astro`
+
+## Legacy Article Compatibility
+
+- `src/components/article/ArticleProse.astro`
+- `src/components/article/HoverImageCard.tsx`
+- `src/components/article/HoverImageLink.astro`
+- `src/components/article/HoverImageParagraph.astro`
+
+These remain separate from `src/components/articles/` only while existing MDX
+imports require that path.
+
+## Page Components
+
+- `src/components/pages/MarkdownPage.astro`
+- `src/components/pages/PageHeader.astro`
+- `src/components/pages/PageProse.astro`
+
+## Media Components
+
+- `src/components/media/EmbedFrame.astro`
+- `src/components/media/ResponsiveIframe.astro`
+
+## SEO Components
+
+- `src/components/seo/ArticleJsonLd.astro`
+- `src/components/seo/SiteHead.astro`
+
+## Homepage And Page Blocks
+
+- `src/components/blocks/ArchiveListBlock.astro`
+- `src/components/blocks/CategoryOverviewBlock.astro`
+- `src/components/blocks/HomeAnnouncementBlock.astro`
+- `src/components/blocks/HomeArchiveLinksBlock.astro`
+- `src/components/blocks/HomeCategoryOverviewBlock.astro`
+- `src/components/blocks/HomeFeaturedArticlesBlock.astro`
+- `src/components/blocks/HomeHeroBlock.astro`
+- `src/components/blocks/HomeLatestArticleBlock.astro`
+- `src/components/blocks/SearchResultsBlock.astro`
+- `src/components/blocks/SupportBlock.astro`

@@ -78,6 +78,7 @@ describe("RSS feed endpoint", () => {
     expect(response.status).toBe(200);
     expect(text).toContain("<rss");
     expect(text).toContain("Newer Article");
+    expect(text).not.toContain("Draft Article");
     expect(text).toContain("https://example.com/articles/newer/");
   });
 });

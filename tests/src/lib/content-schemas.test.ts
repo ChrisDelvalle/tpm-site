@@ -47,6 +47,28 @@ describe("content schemas", () => {
         title: "Article Title",
       }).success,
     ).toBe(false);
+    expect(
+      schema.safeParse({
+        author: "Author",
+        date: "not a date",
+        description: "Description",
+        title: "Article Title",
+      }).success,
+    ).toBe(false);
+    expect(
+      schema.safeParse({
+        author: "Author",
+        date: "2022-04-06",
+        description: "Description",
+        image: {
+          format: "jpg",
+          height: "bad",
+          src: "/article.jpg",
+          width: 960,
+        },
+        title: "Article Title",
+      }).success,
+    ).toBe(false);
   });
 
   test("validates category and standalone page frontmatter", () => {
@@ -56,6 +78,19 @@ describe("content schemas", () => {
         title: "History",
       }).success,
     ).toBe(true);
+    expect(
+      categorySchema().safeParse({
+        order: -1,
+        title: "History",
+      }).success,
+    ).toBe(false);
+    expect(
+      categorySchema().safeParse({
+        order: 1,
+        slug: "history",
+        title: "History",
+      }).success,
+    ).toBe(false);
     expect(
       pageSchema().safeParse({
         description: "About the site",

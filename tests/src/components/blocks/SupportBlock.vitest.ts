@@ -19,5 +19,6 @@ describe("SupportBlock", () => {
     expect(view).toContain("Support TPM");
     expect(view).toContain("Support independent writing.");
     expect(view).toContain("Support Us");
+    expect(view).toContain("max-w-3xl");
   });
 });

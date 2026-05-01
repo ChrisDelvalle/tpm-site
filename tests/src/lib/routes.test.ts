@@ -2,10 +2,17 @@ import { describe, expect, test } from "bun:test";
 
 import {
   type ArticleEntry,
+  articlesIndexUrl,
+  articleUrl,
+  categoriesIndexUrl,
   categorySlug,
+  categoryUrl,
   entryTitle,
+  feedUrl,
   formatDate,
   imageUrl,
+  pageUrl,
+  searchUrl,
   sortNewestFirst,
 } from "../../../src/lib/routes";
 
@@ -31,6 +38,16 @@ function article(
 }
 
 describe("route helpers", () => {
+  test("builds stable public URLs with expected trailing slash behavior", () => {
+    expect(articlesIndexUrl()).toBe("/articles/");
+    expect(articleUrl("article-title")).toBe("/articles/article-title/");
+    expect(categoriesIndexUrl()).toBe("/categories/");
+    expect(categoryUrl("history")).toBe("/categories/history/");
+    expect(pageUrl("About")).toBe("/about/");
+    expect(searchUrl()).toBe("/search/");
+    expect(feedUrl()).toBe("/feed.xml");
+  });
+
   test("sorts newest first with stable slug tiebreakers", () => {
     const sameDate = new Date("2022-01-01T00:00:00Z");
 

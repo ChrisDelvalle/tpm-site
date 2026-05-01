@@ -13,6 +13,7 @@ describe("ArticleProse", () => {
     });
 
     expect(view).toContain("prose");
+    expect(view).toContain("[&#38;>*:first-child]:mt-0");
     expect(view).toContain("Readable article copy.");
   });
 });

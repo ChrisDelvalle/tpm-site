@@ -1,13 +1,17 @@
 ---
 import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
+import PageFrame from "../components/layout/PageFrame.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { searchUrl } from "../lib/routes";
 ---
 
 <BaseLayout
   title="Search | The Philosopher's Meme"
   description="Search The Philosopher's Meme archive."
-  canonicalPath="/search/"
+  canonicalPath={searchUrl()}
 >
-  <SearchResultsBlock />
+  <PageFrame size="md">
+    <SearchResultsBlock />
+  </PageFrame>
   <script src="../scripts/search-page.ts"></script>
 </BaseLayout>

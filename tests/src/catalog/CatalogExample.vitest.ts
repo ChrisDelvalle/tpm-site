@@ -19,6 +19,10 @@ describe("CatalogExample", () => {
 
     expect(view).toContain("Button example.");
     expect(view).toContain("src/components/ui/Button.astro");
+    expect(view).toContain(
+      'data-catalog-component="src/components/ui/Button.astro"',
+    );
+    expect(view).toContain("data-catalog-preview");
     expect(view).toContain("Preview");
   });
 });

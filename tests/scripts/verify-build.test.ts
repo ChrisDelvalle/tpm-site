@@ -40,6 +40,8 @@ describe("build verifier", () => {
           missingArticleJsonLd: [],
           missingLegacyRedirects: [],
           missingRequired: [],
+          sourceMaps: [],
+          unexpectedHydrationBoundaries: [],
           unexpectedClientScripts: [],
           unexpectedDatedPages: [],
         },

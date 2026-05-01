@@ -3,6 +3,7 @@ import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
 import ArticleProse from "../components/articles/ArticleProse.astro";
+import ArticleTags from "../components/articles/ArticleTags.astro";
 import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleViewModel } from "../lib/article-view";
 import { articleArchiveItems } from "../lib/archive";
@@ -52,10 +53,9 @@ const moreInCategory =
       date={articleView.date}
       description={articleView.description}
       formattedDate={articleView.formattedDate}
-      tags={article.data.tags}
       title={articleView.title}
     />
-    <ArticleProse class="mt-8">
+    <ArticleProse data-article-prose>
       <slot />
     </ArticleProse>
     <ArticleEndcap
@@ -63,5 +63,12 @@ const moreInCategory =
       categoryTitle={category?.title}
       moreInCategory={moreInCategory}
     />
+    {
+      article.data.tags.length > 0 && (
+        <div class="border-border border-t pt-6" data-article-tags-placement>
+          <ArticleTags tags={article.data.tags} />
+        </div>
+      )
+    }
   </article>
 </BaseLayout>

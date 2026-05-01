@@ -20,6 +20,15 @@ describe("ArticleEndcap", () => {
     expect(view).toContain("More in History");
     expect(view).toContain("Related Articles");
     expect(view).toContain("Support The Philosopher&#39;s Meme");
+    expect(view).toContain('aria-label="Article support and discovery"');
     expect(view).toContain("test-endcap-support-heading");
+
+    const supportIndex = view.indexOf("test-endcap-support-heading");
+    const moreIndex = view.indexOf("test-endcap-more-in-category-heading");
+    const relatedIndex = view.indexOf("test-endcap-related-articles-heading");
+
+    expect(supportIndex).toBeGreaterThan(-1);
+    expect(moreIndex).toBeGreaterThan(supportIndex);
+    expect(relatedIndex).toBeGreaterThan(moreIndex);
   });
 });

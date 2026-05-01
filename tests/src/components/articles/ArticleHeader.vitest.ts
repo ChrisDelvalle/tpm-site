@@ -4,7 +4,7 @@ import ArticleHeader from "../../../../src/components/articles/ArticleHeader.ast
 import { createAstroTestContainer } from "../../../helpers/astro-container";
 
 describe("ArticleHeader", () => {
-  test("renders article title, category, metadata, description, and tags", async () => {
+  test("renders article title, category, metadata, and description without tags", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(ArticleHeader, {
       props: {
@@ -16,7 +16,6 @@ describe("ArticleHeader", () => {
         date: new Date("2022-04-06T23:58:10.000Z"),
         description: "Article description.",
         formattedDate: "April 6, 2022",
-        tags: ["history"],
         title: "Article Title",
       },
     });
@@ -25,6 +24,6 @@ describe("ArticleHeader", () => {
     expect(view).toContain("Article Title");
     expect(view).toContain("/categories/history/");
     expect(view).toContain("Article description.");
-    expect(view).toContain("history");
+    expect(view).not.toContain("Article tags");
   });
 });

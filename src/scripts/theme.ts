@@ -28,10 +28,10 @@ interface ThemeStorage {
  * Reads the active document theme.
  *
  * @param documentElement Root document element with theme metadata.
- * @returns Current theme, defaulting to dark for unknown values.
+ * @returns Current theme, defaulting to light for unknown values.
  */
 export function currentTheme(documentElement: ThemeElement): Theme {
-  return documentElement.dataset["theme"] === "light" ? "light" : "dark";
+  return documentElement.dataset["theme"] === "dark" ? "dark" : "light";
 }
 
 /**

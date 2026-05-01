@@ -22,6 +22,7 @@ describe("category page", () => {
     });
 
     expect(view).toContain(category.title);
+    expect(view).toContain("data-page-frame");
     expect(view).toContain("<article");
   });
 });

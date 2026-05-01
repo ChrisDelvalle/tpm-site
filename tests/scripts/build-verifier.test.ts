@@ -118,6 +118,8 @@ describe("build verifier helpers", () => {
           missingArticleJsonLd: [],
           missingLegacyRedirects: [],
           missingRequired: ["articles/example/index.html"],
+          sourceMaps: [],
+          unexpectedHydrationBoundaries: [],
           unexpectedClientScripts: [],
           unexpectedDatedPages: [],
         },
@@ -138,6 +140,8 @@ describe("build verifier helpers", () => {
         missingArticleJsonLd: ["articles/post/index.html"],
         missingLegacyRedirects: ["/2022/01/01/post/ -> /articles/post/"],
         missingRequired: ["feed.xml"],
+        sourceMaps: ["_astro/index.js.map"],
+        unexpectedHydrationBoundaries: ["articles/post/index.html"],
         unexpectedClientScripts: ["index.html"],
         unexpectedDatedPages: ["2022/01/01/post/index.html"],
       },
@@ -153,6 +157,8 @@ describe("build verifier helpers", () => {
     expect(report).toContain("Unexpected generated dated pages:");
     expect(report).toContain("Draft content leaked into generated metadata:");
     expect(report).toContain("Missing article JSON-LD:");
+    expect(report).toContain("Unexpected source maps:");
+    expect(report).toContain("Unexpected hydration boundaries:");
   });
 
   test("verifies built output against source articles and categories", async () =>
@@ -298,9 +304,10 @@ describe("build verifier helpers", () => {
       await writeText(
         root,
         "dist/index.html",
-        '<script src="/_astro/index.js"></script><a href="/missing/">Missing</a><a href="relative">Relative</a>',
+        '<script src="/_astro/index.js"></script><astro-island></astro-island><a href="/missing/">Missing</a><a href="relative">Relative</a>',
       );
       await writeText(root, "dist/_astro/index.js", "");
+      await writeText(root, "dist/_astro/index.js.map", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
@@ -333,6 +340,10 @@ describe("build verifier helpers", () => {
       expect(result.issues.missingRequired).toContain(
         "categories/history/index.html",
       );
+      expect(result.issues.sourceMaps).toEqual(["_astro/index.js.map"]);
+      expect(result.issues.unexpectedHydrationBoundaries).toEqual([
+        "index.html",
+      ]);
       expect(result.issues.unexpectedClientScripts).toEqual(["index.html"]);
     }));
 

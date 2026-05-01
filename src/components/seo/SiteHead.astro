@@ -1,6 +1,6 @@
 ---
 import { absoluteUrl } from "../../lib/seo";
-import { SITE_TITLE } from "../../lib/routes";
+import { feedUrl, SITE_TITLE } from "../../lib/routes";
 
 interface Props {
   canonicalPath: string;
@@ -30,7 +30,7 @@ const absoluteImageUrl =
   rel="alternate"
   type="application/rss+xml"
   title={`${SITE_TITLE} RSS`}
-  href="/feed.xml"
+  href={feedUrl()}
 />
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:type" content={type} />

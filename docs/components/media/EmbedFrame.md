@@ -1,0 +1,64 @@
+# Embed Frame
+
+Source: `src/components/media/EmbedFrame.astro`
+
+## Purpose
+
+`EmbedFrame` serves as a media component that protects layout stability, accessibility, and loading behavior.
+
+## Public Contract
+
+- `aspect?: "classic" | "square" | "video" | "wide"`
+- `description?: string`
+- `fallbackHref?: string`
+- `title: string`
+
+Public props should remain narrow and semantic. Do not add broad configuration
+objects or boolean clusters when a named variant or a smaller component would
+make invalid states harder to express.
+
+## Composition Relationships
+
+It should not depend on sibling internals beyond normal slot/prop composition. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+
+## Layout And Responsiveness
+
+The component must reserve stable space before media loads, avoid overflow beyond its containing measure, and preserve the media's semantic relationship to captions or fallbacks.
+
+## Layering And Scrolling
+
+The component should avoid creating a stacking context unless it owns an overlay,
+sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
+container is part of this component's public design and needs an invariant test.
+
+## Interaction States
+
+Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant.
+
+## Accessibility Semantics
+
+Require meaningful titles for iframes and meaningful alt/caption behavior for images; provide fallback links for external embeds when possible.
+
+## Content Edge Cases
+
+Test or catalog long titles, long words, dense content, empty content, missing
+optional fields, and unusual punctuation whenever this component renders user or
+author-provided content.
+
+## Theme Behavior
+
+Use semantic color tokens and Tailwind utilities. Light and dark mode must keep
+text readable, borders visible when they communicate structure, focus rings
+visible, and CTAs distinguishable from neutral actions.
+
+## Testable Invariants
+
+- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
+- preserves readable text and visible focus/hover states in light and dark themes.
+- handles long content without clipping or overlapping neighboring components.
+- reserves aspect-ratio space before load.
+- does not exceed its containing measure.
+
+## Follow-Up Notes
+
+- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.

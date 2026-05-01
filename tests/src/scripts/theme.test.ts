@@ -17,6 +17,15 @@ describe("theme browser script", () => {
     expect(nextTheme("dark")).toBe("light");
   });
 
+  test("defaults unknown document theme values to light", () => {
+    const window = new Window();
+
+    expect(currentTheme(window.document.documentElement)).toBe("light");
+
+    window.document.documentElement.dataset["theme"] = "unknown";
+    expect(currentTheme(window.document.documentElement)).toBe("light");
+  });
+
   test("applies persisted theme values through browser DOM dependencies", () => {
     const window = new Window();
     Reflect.set(window, "SyntaxError", SyntaxError);

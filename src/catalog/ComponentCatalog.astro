@@ -52,82 +52,14 @@ import Section from "../components/ui/Section.astro";
 import Separator from "../components/ui/Separator.astro";
 import TextLink from "../components/ui/TextLink.astro";
 import sampleImage from "../assets/shared/tpm_defaultpic.jpg";
-import type { ArticleListItem } from "../lib/article-list";
-import type { SectionNavItem as SectionNavItemData } from "../lib/navigation";
 import { catalogMetadata } from "./catalog.config";
 import CatalogExample from "./CatalogExample.astro";
 import CatalogSection from "./CatalogSection.astro";
-
-const catalogNavigationItems = [
-  {
-    articles: [
-      {
-        description: "A compact article example for navigation previews.",
-        href: "/articles/memes-are-not-jokes-they-are-diagram-games/",
-        isCurrent: false,
-        slug: "memes-are-not-jokes-they-are-diagram-games",
-        title: "Memes Are Not Jokes: They Are Diagram Games",
-      },
-      {
-        description: "A deliberately long title for wrapping behavior.",
-        href: "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
-        isCurrent: true,
-        slug: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now",
-        title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
-      },
-    ],
-    description: "How memes move through culture and platforms.",
-    href: "/categories/metamemetics/",
-    isCurrent: false,
-    isOpen: true,
-    slug: "metamemetics",
-    title: "Metamemetics",
-  },
-  {
-    articles: [
-      {
-        description: "Game studies category article example.",
-        href: "/articles/twitch-plays-pokemon/",
-        isCurrent: false,
-        slug: "twitch-plays-pokemon",
-        title: "Twitch Plays Pokemon",
-      },
-    ],
-    description: "Games and culture.",
-    href: "/categories/game-studies/",
-    isCurrent: false,
-    isOpen: false,
-    slug: "game-studies",
-    title: "Game Studies",
-  },
-] as const satisfies SectionNavItemData[];
-
-const catalogArticleItems = [
-  {
-    author: "Seong-Young Her",
-    category: {
-      href: "/categories/metamemetics/",
-      title: "Metamemetics",
-    },
-    date: "April 6, 2022",
-    description:
-      "A compact article teaser with enough text to check wrapping and rhythm.",
-    href: "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
-    title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
-  },
-  {
-    author: "Seong-Young Her",
-    category: {
-      href: "/categories/game-studies/",
-      title: "Game Studies",
-    },
-    date: "May 16, 2021",
-    description:
-      "A second card keeps list spacing and repeated-item styling visible.",
-    href: "/articles/gamergate-as-metagaming/",
-    title: "Gamergate as Metagaming",
-  },
-] as const satisfies readonly ArticleListItem[];
+import {
+  catalogArticleItems,
+  catalogNavigationItems,
+  catalogTags,
+} from "./examples/hostile-fixtures";
 ---
 
 <main class="bg-background text-foreground">
@@ -304,7 +236,7 @@ const catalogArticleItems = [
     >
       <CatalogExample
         title="ArticleHeader"
-        description="Title block with category, metadata, description, and tags."
+        description="Title block with category, metadata, and description."
         componentPath="src/components/articles/ArticleHeader.astro"
       >
         <ArticleHeader
@@ -313,7 +245,6 @@ const catalogArticleItems = [
           date={new Date("2022-04-06T23:58:10.000Z")}
           description="A serious and good philosophical work could be written consisting entirely of fake philosophy quotes."
           formattedDate="April 6, 2022"
-          tags={["philosophy", "history"]}
           title="Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now"
         />
       </CatalogExample>
@@ -335,7 +266,7 @@ const catalogArticleItems = [
         description="Tag badges for article metadata."
         componentPath="src/components/articles/ArticleTags.astro"
       >
-        <ArticleTags tags={["metamemetics", "philosophy", "history"]} />
+        <ArticleTags tags={catalogTags} />
       </CatalogExample>
 
       <CatalogExample

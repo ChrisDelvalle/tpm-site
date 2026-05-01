@@ -19,5 +19,22 @@ describe("CategoryOverviewBlock", () => {
     expect(view).toContain("Browse the archive by subject.");
     expect(view).toContain("Metamemetics");
     expect(view).toMatch(/2\s+articles/);
+    expect(view).toContain("xl:grid-cols-4");
+  });
+
+  test("supports a compact two-column variant for constrained surfaces", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(CategoryOverviewBlock, {
+      props: {
+        columns: "compact",
+        headingLevel: 2,
+        items: navigationItems,
+      },
+    });
+
+    expect(view).toContain("<h2");
+    expect(view).not.toContain("<h1");
+    expect(view).toContain("sm:grid-cols-2");
+    expect(view).not.toContain("xl:grid-cols-4");
   });
 });

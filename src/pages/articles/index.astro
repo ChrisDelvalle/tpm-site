@@ -1,9 +1,11 @@
 ---
 import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import PageFrame from "../../components/layout/PageFrame.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { articleListItemsFromArchive } from "../../lib/article-list";
 import { articleArchiveItems } from "../../lib/archive";
 import { getArticles, getCategories } from "../../lib/content";
+import { articlesIndexUrl } from "../../lib/routes";
 
 const archiveItems = articleArchiveItems(
   await getArticles(),
@@ -15,12 +17,14 @@ const articleItems = articleListItemsFromArchive(archiveItems);
 <BaseLayout
   title="Articles | The Philosopher's Meme"
   description="Complete article archive for The Philosopher's Meme."
-  canonicalPath="/articles/"
+  canonicalPath={articlesIndexUrl()}
 >
-  <ArchiveListBlock
-    title="Articles"
-    description="Essays and notes on memes, cyberculture, and the Internet."
-    items={articleItems}
-    pagefindIgnore
-  />
+  <PageFrame size="md">
+    <ArchiveListBlock
+      title="Articles"
+      description="Essays and notes on memes, cyberculture, and the Internet."
+      items={articleItems}
+      pagefindIgnore
+    />
+  </PageFrame>
 </BaseLayout>

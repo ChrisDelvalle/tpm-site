@@ -37,8 +37,10 @@ export interface BuildVerificationIssues {
   missingArticleJsonLd: string[];
   missingLegacyRedirects: string[];
   missingRequired: string[];
+  sourceMaps: string[];
   unexpectedClientScripts: string[];
   unexpectedDatedPages: string[];
+  unexpectedHydrationBoundaries: string[];
 }
 
 /** Inputs needed to verify a completed Astro build. */
@@ -166,6 +168,16 @@ export function formatBuildVerificationReport(
   if (result.issues.missingArticleJsonLd.length > 0) {
     lines.push(
       `Missing article JSON-LD: ${JSON.stringify(result.issues.missingArticleJsonLd.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.sourceMaps.length > 0) {
+    lines.push(
+      `Unexpected source maps: ${JSON.stringify(result.issues.sourceMaps.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.unexpectedHydrationBoundaries.length > 0) {
+    lines.push(
+      `Unexpected hydration boundaries: ${JSON.stringify(result.issues.unexpectedHydrationBoundaries.slice(0, 50))}`,
     );
   }
 
@@ -336,6 +348,11 @@ export async function verifyBuild({
     /\/_astro\/.+\.js$/i.test(file),
   );
   const issues = emptyIssues();
+  issues.sourceMaps.push(
+    ...files
+      .map((file) => toPosix(path.relative(distDir, file)))
+      .filter((file) => file.endsWith(".map")),
+  );
 
   await collectMissingRequired(distDir, requiredPaths, issues);
   await collectMissingLegacyRedirects(distDir, expectedRedirects, issues);
@@ -471,6 +488,8 @@ function emptyIssues(): BuildVerificationIssues {
     missingArticleJsonLd: [],
     missingLegacyRedirects: [],
     missingRequired: [],
+    sourceMaps: [],
+    unexpectedHydrationBoundaries: [],
     unexpectedClientScripts: [],
     unexpectedDatedPages: [],
   };
@@ -503,6 +522,8 @@ function hasIssues(issues: BuildVerificationIssues): boolean {
     issues.missingArticleJsonLd.length > 0 ||
     issues.missingLegacyRedirects.length > 0 ||
     issues.missingRequired.length > 0 ||
+    issues.sourceMaps.length > 0 ||
+    issues.unexpectedHydrationBoundaries.length > 0 ||
     issues.unexpectedClientScripts.length > 0 ||
     issues.unexpectedDatedPages.length > 0
   );
@@ -589,17 +610,36 @@ async function inspectHtmlFile(
     issues.missingArticleJsonLd.push(relativeHtmlPath);
   }
 
-  if (
-    staticReadingPages.includes(relativeHtmlPath) &&
-    /<script[^>]+src=["']\/_astro\/[^"']+\.js["']/i.test(text)
-  ) {
-    issues.unexpectedClientScripts.push(relativeHtmlPath);
-  }
+  inspectStaticReadingPageHtml(
+    text,
+    relativeHtmlPath,
+    staticReadingPages,
+    issues,
+  );
 
   for (const target of linkTargets(text)) {
     if (!isExternal(target) && !(await internalTargetExists(distDir, target))) {
       issues.brokenLinks.push(`${relativeHtmlPath} -> ${target}`);
     }
+  }
+}
+
+function inspectStaticReadingPageHtml(
+  text: string,
+  relativeHtmlPath: string,
+  staticReadingPages: string[],
+  issues: BuildVerificationIssues,
+): void {
+  if (!staticReadingPages.includes(relativeHtmlPath)) {
+    return;
+  }
+
+  if (/<script[^>]+src=["']\/_astro\/[^"']+\.js["']/i.test(text)) {
+    issues.unexpectedClientScripts.push(relativeHtmlPath);
+  }
+
+  if (/<astro-island\b/i.test(text)) {
+    issues.unexpectedHydrationBoundaries.push(relativeHtmlPath);
   }
 }
 

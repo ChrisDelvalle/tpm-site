@@ -3,35 +3,54 @@ import TextLink from "../ui/TextLink.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 
 interface Props {
+  columns?: "compact" | "default";
   description?: string | undefined;
+  headingLevel?: 1 | 2;
   headingId?: string;
   items: readonly SectionNavItem[];
   title?: string;
 }
 
 const {
+  columns = "default",
   description,
+  headingLevel = 1,
   headingId = "category-overview-heading",
   items,
   title = "Categories",
 } = Astro.props;
+const columnClasses = {
+  compact: "sm:grid-cols-2",
+  default: "sm:grid-cols-2 xl:grid-cols-4",
+} as const;
 ---
 
 <section class="grid gap-4" aria-labelledby={headingId}>
   <header class="grid gap-2">
-    <h1
-      id={headingId}
-      class="text-foreground m-0 text-4xl font-bold tracking-normal"
-    >
-      {title}
-    </h1>
+    {
+      headingLevel === 1 ? (
+        <h1
+          id={headingId}
+          class="text-foreground m-0 text-4xl font-bold tracking-normal"
+        >
+          {title}
+        </h1>
+      ) : (
+        <h2
+          id={headingId}
+          class="text-foreground m-0 text-2xl font-semibold tracking-normal"
+        >
+          {title}
+        </h2>
+      )
+    }
     {
       description && (
         <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
       )
     }
   </header>
-  <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+  <ul class:list={["grid gap-3", columnClasses[columns]]}>
     {
       items.map((item) => (
         <li class="border-border bg-card grid gap-1 rounded-sm border p-4">

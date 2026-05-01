@@ -109,6 +109,30 @@ jobs:
             playwright-report/
             test-results/
 
+  catalog:
+    name: Component catalog tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.12
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:catalog
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-catalog-artifacts
+          path: |
+            playwright-report/
+            test-results/
+
   accessibility:
     name: Accessibility review
     continue-on-error: true
@@ -218,6 +242,7 @@ jobs:
       - quality
       - build
       - browser
+      - catalog
       - audit
     runs-on: ubuntu-latest
     timeout-minutes: 15

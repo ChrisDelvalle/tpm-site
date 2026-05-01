@@ -1,7 +1,9 @@
 ---
+import type { HTMLAttributes } from "astro/types";
+
 import LinkButton from "../ui/LinkButton.astro";
 
-interface Props {
+interface Props extends HTMLAttributes<"section"> {
   body?: string;
   headingId?: string;
   href?: string;
@@ -15,11 +17,18 @@ const {
   href = "https://patreon.com/thephilosophersmeme",
   label = "Support Us",
   title = "Support The Philosopher's Meme",
+  class: className,
+  ...attrs
 } = Astro.props;
 ---
 
 <section
-  class="border-border bg-muted/40 grid gap-4 rounded-sm border p-5"
+  {...attrs}
+  data-support-block
+  class:list={[
+    "border-border bg-muted/40 grid w-full max-w-3xl gap-4 rounded-sm border p-5",
+    className,
+  ]}
   aria-labelledby={headingId}
 >
   <div class="grid gap-1">

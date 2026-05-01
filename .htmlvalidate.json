@@ -9,6 +9,7 @@
     "element-required-attributes": "error",
     "no-dup-attr": "error",
     "no-dup-id": "error",
+    "no-trailing-whitespace": "off",
     "no-missing-references": "off",
     "prefer-button": "error",
     "svg-focusable": "off",

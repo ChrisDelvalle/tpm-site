@@ -1,11 +1,13 @@
-import { expect, type Locator, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-interface ElementBox {
-  height: number;
-  width: number;
-  x: number;
-  y: number;
-}
+import {
+  expectElementAtViewportPoint,
+  expectFocusVisible,
+  expectNoHorizontalOverflow,
+  scrollToY,
+  viewportMatrix,
+  visibleBoundingBox,
+} from "./helpers/layout";
 
 const keyRoutes = [
   "/",
@@ -19,25 +21,17 @@ const keyRoutes = [
 
 const smokeRoutes = [...keyRoutes, "/404.html"];
 
-const viewports = [
-  { height: 844, label: "mobile", width: 390 },
-  { height: 560, label: "short mobile", width: 390 },
-  { height: 1024, label: "tablet", width: 768 },
-  { height: 900, label: "desktop", width: 1280 },
-  { height: 1200, label: "wide desktop", width: 2560 },
-];
+function sitemapLocPathnames(xml: string): string[] {
+  return Array.from(xml.matchAll(/<loc>([^<]+)<\/loc>/gu), (match) =>
+    sitemapLocPathname(match[1] ?? ""),
+  );
+}
 
-async function visibleBoundingBox(
-  locator: Locator,
-  label: string,
-): Promise<ElementBox> {
-  const box = await locator.boundingBox();
-
-  if (box === null) {
-    throw new Error(`Expected ${label} to have a visible bounding box.`);
-  }
-
-  return box;
+function sitemapLocPathname(loc: string): string {
+  const pathWithOptionalSlash = loc.replace(/^https?:\/\/[^/]+/iu, "");
+  return pathWithOptionalSlash.startsWith("/")
+    ? pathWithOptionalSlash
+    : `/${pathWithOptionalSlash}`;
 }
 
 for (const route of smokeRoutes) {
@@ -56,7 +50,53 @@ test("serves the RSS feed", async ({ request }) => {
   expect(await response.text()).toContain("<rss");
 });
 
-for (const viewport of viewports) {
+test("sitemap-listed pages are generated and reachable", async ({
+  request,
+}) => {
+  const indexResponse = await request.get("/sitemap-index.xml");
+  expect(indexResponse.ok()).toBe(true);
+
+  const indexXml = await indexResponse.text();
+  const sitemapPaths = sitemapLocPathnames(indexXml).filter((pathname) =>
+    pathname.endsWith(".xml"),
+  );
+
+  expect(sitemapPaths.length).toBeGreaterThan(0);
+
+  const pagePaths: string[] = [];
+  for (const sitemapPath of sitemapPaths) {
+    const sitemapResponse = await request.get(sitemapPath);
+    expect(sitemapResponse.ok()).toBe(true);
+
+    const sitemapXml = await sitemapResponse.text();
+    pagePaths.push(...sitemapLocPathnames(sitemapXml));
+  }
+
+  expect(pagePaths.length).toBeGreaterThan(50);
+  for (const pagePath of pagePaths) {
+    const response = await request.get(pagePath);
+    expect(response.ok(), `${pagePath} should render`).toBe(true);
+  }
+});
+
+for (const route of keyRoutes) {
+  test(`has semantic document landmarks on ${route}`, async ({ page }) => {
+    await page.goto(route);
+
+    await expect(page.locator("main#content")).toHaveCount(1);
+    await expect(page.locator('a.skip-link[href="#content"]')).toHaveCount(1);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("footer")).toHaveCount(1);
+    await expect(
+      page.getByRole("navigation", { name: "Primary navigation" }).first(),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "Footer navigation" }),
+    ).toBeVisible();
+  });
+}
+
+for (const viewport of viewportMatrix) {
   for (const route of keyRoutes) {
     test(`has no horizontal overflow on ${route} at ${viewport.label}`, async ({
       page,
@@ -67,12 +107,8 @@ for (const viewport of viewports) {
       });
       await page.goto(route);
 
-      const overflow = await page.evaluate(() => {
-        const documentElement = document.documentElement;
-        return documentElement.scrollWidth - documentElement.clientWidth;
-      });
-
-      expect(overflow).toBeLessThanOrEqual(1);
+      await expectNoHorizontalOverflow(page);
+      expect(await page.evaluate(() => window.location.pathname)).toBe(route);
     });
   }
 }
@@ -81,13 +117,8 @@ test("keyboard focus is visible", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Tab");
 
-  const focused = page.locator(":focus-visible").first();
-  await expect(focused).toBeVisible();
-
-  const outlineStyle = await focused.evaluate(
-    (element) => getComputedStyle(element).outlineStyle,
-  );
-  expect(outlineStyle).not.toBe("none");
+  const focused = await expectFocusVisible(page);
+  await expect(focused).toHaveCount(1);
 });
 
 test("desktop sticky sidebar stays below sticky header", async ({ page }) => {
@@ -96,14 +127,15 @@ test("desktop sticky sidebar stays below sticky header", async ({ page }) => {
   await page.setViewportSize({ height: viewportHeight, width: 1280 });
   await page.goto("/articles/gamergate-as-metagaming/");
 
-  await page.evaluate(() => window.scrollTo(0, 600));
+  await scrollToY(page, 600);
 
   const headerBox = await visibleBoundingBox(
     page.locator("[data-site-header]"),
     "sticky header",
   );
+  const sidebar = page.locator('aside[aria-label="Category navigation"]');
   const sidebarBox = await visibleBoundingBox(
-    page.locator('aside[aria-label="Category navigation"]'),
+    sidebar,
     "desktop category sidebar",
   );
   const headerBottom = headerBox.y + headerBox.height;
@@ -111,6 +143,14 @@ test("desktop sticky sidebar stays below sticky header", async ({ page }) => {
   expect(sidebarBox.y).toBeGreaterThanOrEqual(headerBottom - 1);
   expect(sidebarBox.height).toBeLessThanOrEqual(
     viewportHeight - headerBottom + 1,
+  );
+  await expectElementAtViewportPoint(
+    sidebar,
+    {
+      x: sidebarBox.x + Math.min(sidebarBox.width / 2, 32),
+      y: sidebarBox.y + 12,
+    },
+    "desktop category sidebar",
   );
 });
 
@@ -163,9 +203,9 @@ test("mobile navigation exposes primary and category links", async ({
 
 test("theme toggle switches the document theme", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.locator(".theme-toggle").first().click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.locator(".theme-toggle").first().click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
 test("search returns built Pagefind results", async ({ page }) => {

@@ -3,6 +3,7 @@ import PageFrame from "../components/layout/PageFrame.astro";
 import PageHeader from "../components/pages/PageHeader.astro";
 import TextLink from "../components/ui/TextLink.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { articlesIndexUrl } from "../lib/routes";
 ---
 
 <BaseLayout
@@ -17,7 +18,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         description="The page you were looking for is not available at this address."
       />
       <p>
-        <TextLink href="/articles/">Browse the article archive</TextLink>
+        <TextLink href={articlesIndexUrl()}>Browse the article archive</TextLink
+        >
       </p>
     </div>
   </PageFrame>

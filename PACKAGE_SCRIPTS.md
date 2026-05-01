@@ -18,7 +18,7 @@ for local checks and GitHub Actions.
 | `catalog:preview`             | Serves a previously built catalog-enabled `dist/` output.                                                                                                                             |
 | `catalog:preview:fresh`       | Builds with the private component catalog enabled, then previews the built output.                                                                                                    |
 | `check`                       | Runs the normal blocking quality gate for PR work: content validation, asset and catalog invariants, typecheck, lint, package ordering, formatting, dead-code checks, and unit tests. |
-| `check:release`               | Runs release accountability, `check`, production build, build verification, HTML validation, browser tests, high-severity audit, and secrets scan.                                    |
+| `check:release`               | Runs release accountability, `check`, production build, build verification, HTML validation, browser/catalog tests, high-severity audit, and secrets scan.                            |
 | `coverage`                    | Runs unit/script/component/page tests with LCOV output, then reports broad code-like source files missing LCOV coverage, mirrored tests, or approved exceptions.                      |
 | `coverage:check`              | Runs the broad coverage review with concise test output. Review signal; not part of the normal blocking `check` gate.                                                                 |
 | `coverage:unit`               | Generates Bun text and LCOV coverage for unit-level tests.                                                                                                                            |
@@ -50,6 +50,7 @@ for local checks and GitHub Actions.
 | `test:accountability:release` | Runs test-accountability verification in release mode and fails while requested-permission exceptions remain.                                                                         |
 | `test:a11y`                   | Runs axe accessibility checks in Playwright. Review signal.                                                                                                                           |
 | `test:astro`                  | Syncs Astro content for container tests, then runs component, layout, and page rendering tests through Vitest and the Astro container API.                                            |
+| `test:catalog`                | Builds with the private component catalog enabled, then runs catalog-specific Playwright invariant tests.                                                                             |
 | `test:e2e`                    | Runs Playwright browser smoke, responsive, navigation, theme, and search tests. Blocking browser gate.                                                                                |
 | `test:flake`                  | Repeats the unit/script test suite to investigate nondeterminism. Manual diagnostic.                                                                                                  |
 | `test:perf`                   | Runs Lighthouse CI against built output. Review signal.                                                                                                                               |

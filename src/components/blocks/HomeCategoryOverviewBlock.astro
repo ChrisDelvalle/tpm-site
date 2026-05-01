@@ -10,8 +10,10 @@ interface Props {
 const { items, title = "Browse Categories" } = Astro.props;
 ---
 
-<div class="max-w-4xl [&_h1]:text-2xl [&_h1]:font-semibold">
+<div class="max-w-3xl" data-home-category-overview>
   <CategoryOverviewBlock
+    columns="compact"
+    headingLevel={2}
     headingId="home-categories-heading"
     items={items}
     title={title}
