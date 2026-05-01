@@ -67,7 +67,9 @@ export interface PublishedArticle {
  * @param articleDir Source article directory.
  * @returns Publication stats derived from article frontmatter and paths.
  */
-export async function articlePublicationStats(articleDir: string) {
+export async function articlePublicationStats(
+  articleDir: string,
+): Promise<ArticlePublication> {
   const articleSourceFiles = (await listFiles(articleDir)).filter((file) =>
     /\.mdx?$/i.test(file),
   );
@@ -108,7 +110,9 @@ export async function articlePublicationStats(articleDir: string) {
  * @param result Build verification result.
  * @returns Human-readable build verification report.
  */
-export function formatBuildVerificationReport(result: BuildVerificationResult) {
+export function formatBuildVerificationReport(
+  result: BuildVerificationResult,
+): string {
   if (!hasIssues(result.issues)) {
     return `Build verification passed: ${result.articlePageCount} articles and ${result.astroClientScriptCount} Astro client script assets.`;
   }
@@ -168,7 +172,8 @@ export function formatBuildVerificationReport(result: BuildVerificationResult) {
  * @param url URL or URL-like target from rendered HTML.
  * @returns True for protocol-relative, absolute, mail, or telephone URLs.
  */
-export function isExternal(url: string) {
+export function isExternal(url: string): boolean {
+  // eslint-disable-next-line security/detect-unsafe-regex -- URL scheme detection is bounded to the target string.
   return /^(?:[a-z]+:)?\/\//i.test(url) || /^(?:mailto|tel):/i.test(url);
 }
 
@@ -178,7 +183,7 @@ export function isExternal(url: string) {
  * @param html Rendered HTML text.
  * @returns Values from `href` and `src` attributes.
  */
-export function linkTargets(html: string) {
+export function linkTargets(html: string): string[] {
   const targets: string[] = [];
   const attributePattern = /\s(?:href|src)=["']([^"']+)["']/gi;
   let match: null | RegExpExecArray;
@@ -203,7 +208,7 @@ export function linkTargets(html: string) {
 export function requiredPathsForSource(
   articlePublication: ArticlePublication,
   categorySlugs: string[],
-) {
+): string[] {
   return [
     ...requiredBasePaths,
     ...articlePublication.publishedArticles.map(
@@ -223,7 +228,7 @@ export function requiredPathsForSource(
 export async function runBuildVerificationCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
-) {
+): Promise<number> {
   const quiet = args.includes("--quiet");
   const expectedRedirects = await configuredRedirects(rootDir);
   const result = await verifyBuild({
@@ -256,7 +261,7 @@ export async function runBuildVerificationCli(
 export async function sourceCategorySlugs(
   categoryDir: string,
   articlePublication: ArticlePublication,
-) {
+): Promise<string[]> {
   const slugs = new Set([
     ...(await categorySlugsFromMetadata(categoryDir)),
     ...articlePublication.publishedCategorySlugs,
@@ -275,7 +280,7 @@ export async function sourceCategorySlugs(
 export function staticReadingPagesForSource(
   articlePublication: ArticlePublication,
   categorySlugs: string[],
-) {
+): string[] {
   const representativeMarkdownArticle =
     articlePublication.publishedArticles.find((article) => !article.isMdx);
 
@@ -369,15 +374,17 @@ export async function verifyBuild({
   };
 }
 
-function articlePageFiles(files: string[]) {
+function articlePageFiles(files: string[]): string[] {
   return files.filter((file) => /\/articles\/[^/]+\/index\.html$/.test(file));
 }
 
-function categorySlugFromArticlePath(articleDir: string, file: string) {
+function categorySlugFromArticlePath(articleDir: string, file: string): string {
   return path.relative(articleDir, file).split(path.sep)[0] ?? "";
 }
 
-async function categorySlugsFromMetadata(categoryDir: string) {
+async function categorySlugsFromMetadata(
+  categoryDir: string,
+): Promise<string[]> {
   const categoryFiles = (await listFiles(categoryDir)).filter((file) =>
     /\.json$/i.test(file),
   );
@@ -389,7 +396,7 @@ async function collectMissingLegacyRedirects(
   distDir: string,
   expectedRedirects: Record<string, string>,
   issues: BuildVerificationIssues,
-) {
+): Promise<void> {
   for (const [source, destination] of Object.entries(expectedRedirects)) {
     const fallbackPath = redirectFallbackPath(source);
     if (!(await exists(distDir, fallbackPath))) {
@@ -404,7 +411,7 @@ async function collectMissingRequired(
   distDir: string,
   requiredPaths: string[],
   issues: BuildVerificationIssues,
-) {
+): Promise<void> {
   for (const requiredPath of requiredPaths) {
     if (!(await exists(distDir, requiredPath))) {
       issues.missingRequired.push(requiredPath);
@@ -412,7 +419,9 @@ async function collectMissingRequired(
   }
 }
 
-async function configuredRedirects(rootDir: string) {
+async function configuredRedirects(
+  rootDir: string,
+): Promise<Record<string, string>> {
   // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
   const configModule: unknown = await import(
     pathToFileURL(path.resolve(rootDir, "astro.config.ts")).href
@@ -454,7 +463,7 @@ function emptyIssues(): BuildVerificationIssues {
   };
 }
 
-async function exists(distDir: string, relativePath: string) {
+async function exists(distDir: string, relativePath: string): Promise<boolean> {
   try {
     await access(path.join(distDir, relativePath));
     return true;
@@ -463,15 +472,15 @@ async function exists(distDir: string, relativePath: string) {
   }
 }
 
-function expectedRedirectSource(relativeHtmlPath: string) {
+function expectedRedirectSource(relativeHtmlPath: string): string {
   return `/${relativeHtmlPath.replace(/index\.html$/, "")}`;
 }
 
-function filenameStem(file: string) {
+function filenameStem(file: string): string {
   return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
 }
 
-function hasIssues(issues: BuildVerificationIssues) {
+function hasIssues(issues: BuildVerificationIssues): boolean {
   return (
     issues.articleCountIssues.length > 0 ||
     issues.brokenLinks.length > 0 ||
@@ -489,7 +498,7 @@ function htmlIncludesRedirect(
   html: string,
   source: string,
   destination: string,
-) {
+): boolean {
   return (
     html.includes(`<title>Redirecting to: ${destination}</title>`) &&
     html.includes(`content="0;url=${destination}"`) &&
@@ -504,7 +513,7 @@ async function inspectDraftLeaks(
   file: string,
   draftSlugs: string[],
   issues: BuildVerificationIssues,
-) {
+): Promise<void> {
   const relativePath = toPosix(path.relative(distDir, file));
   if (
     relativePath !== "feed.xml" &&
@@ -528,7 +537,7 @@ async function inspectHtmlFile(
   staticReadingPages: string[],
   expectedRedirects: Record<string, string>,
   issues: BuildVerificationIssues,
-) {
+): Promise<void> {
   const text = await readFile(file, "utf8");
   const relativeHtmlPath = toPosix(path.relative(distDir, file));
   const isRedirectFallback = isAstroRedirectFallbackPage(
@@ -542,7 +551,9 @@ async function inspectHtmlFile(
 
   if (isRedirectFallback) {
     const source = expectedRedirectSource(relativeHtmlPath);
-    const expectedDestination = expectedRedirects[source];
+    const expectedDestination = new Map(Object.entries(expectedRedirects)).get(
+      source,
+    );
 
     if (expectedDestination === undefined) {
       issues.invalidLegacyRedirects.push(
@@ -578,9 +589,12 @@ async function inspectHtmlFile(
   }
 }
 
-async function internalTargetExists(distDir: string, url: string) {
+async function internalTargetExists(
+  distDir: string,
+  url: string,
+): Promise<boolean> {
   const cleanUrl = withoutFragmentAndQuery(url);
-  if (!cleanUrl || cleanUrl.startsWith("#")) {
+  if (cleanUrl === "" || cleanUrl.startsWith("#")) {
     return true;
   }
   if (!cleanUrl.startsWith("/")) {
@@ -614,7 +628,10 @@ function isAstroConfigModule(
   return redirects === undefined || isRecord(redirects);
 }
 
-function isAstroRedirectFallbackPage(html: string, relativeHtmlPath: string) {
+function isAstroRedirectFallbackPage(
+  html: string,
+  relativeHtmlPath: string,
+): boolean {
   if (!isDatedHtmlPage(relativeHtmlPath)) {
     return false;
   }
@@ -632,11 +649,11 @@ function isAstroRedirectFallbackPage(html: string, relativeHtmlPath: string) {
   );
 }
 
-function isDatedHtmlPage(relativeHtmlPath: string) {
+function isDatedHtmlPage(relativeHtmlPath: string): boolean {
   return /^\d{4}\/\d{2}\/\d{2}\/[^/]+\/index\.html$/.test(relativeHtmlPath);
 }
 
-function isDraft(data: Record<string, unknown>) {
+function isDraft(data: Record<string, unknown>): boolean {
   return data["draft"] === true;
 }
 
@@ -644,7 +661,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-async function listFiles(dir: string) {
+async function listFiles(dir: string): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true });
   const files: string[] = [];
 
@@ -660,15 +677,15 @@ async function listFiles(dir: string) {
   return files;
 }
 
-function redirectFallbackPath(source: string) {
+function redirectFallbackPath(source: string): string {
   return `${source.replace(/^\//, "")}index.html`;
 }
 
-function toPosix(file: string) {
+function toPosix(file: string): string {
   return file.split(path.sep).join("/");
 }
 
-function withoutFragmentAndQuery(url: string) {
+function withoutFragmentAndQuery(url: string): string {
   return url.split("#")[0]?.split("?")[0] ?? "";
 }
 

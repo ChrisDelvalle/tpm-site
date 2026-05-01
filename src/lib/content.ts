@@ -16,7 +16,7 @@ import {
  *
  * @returns Published article entries sorted for public listing surfaces.
  */
-export async function getArticles() {
+export async function getArticles(): Promise<ArticleEntry[]> {
   const entries = await getArticleEntries();
   assertUniqueArticleSlugs(entries);
   return sortNewestFirst(entries.filter(isPublishedArticle));
@@ -27,7 +27,7 @@ export async function getArticles() {
  *
  * @returns Category summaries sorted by category metadata order and title.
  */
-export async function getCategories() {
+export async function getCategories(): Promise<CategorySummary[]> {
   const articles = await getArticles();
   const categoryEntries = await getCollection("categories");
   const metadata = new Map(
@@ -39,16 +39,15 @@ export async function getCategories() {
   ]);
 
   return Array.from(slugs, (slug) =>
-      categoryFromMetadata(
-        slug,
-        metadata.get(slug),
-        articles.filter((article) => categorySlug(article) === slug),
-      ),
-    )
-    .sort((a, b) => {
-      const orderSort = a.order - b.order;
-      return orderSort !== 0 ? orderSort : a.title.localeCompare(b.title);
-    });
+    categoryFromMetadata(
+      slug,
+      metadata.get(slug),
+      articles.filter((article) => categorySlug(article) === slug),
+    ),
+  ).sort((a, b) => {
+    const orderSort = a.order - b.order;
+    return orderSort !== 0 ? orderSort : a.title.localeCompare(b.title);
+  });
 }
 
 /**
@@ -57,7 +56,9 @@ export async function getCategories() {
  * @param slug Raw category slug from a route parameter or caller.
  * @returns Matching category summary when it exists.
  */
-export async function getCategory(slug: string) {
+export async function getCategory(
+  slug: string,
+): Promise<CategorySummary | undefined> {
   const normalizedSlug = normalizeSlug(slug);
   const categories = await getCategories();
   return categories.find((category) => category.slug === normalizedSlug);
@@ -77,11 +78,11 @@ function categoryFromMetadata(
   };
 }
 
-async function getArticleEntries() {
+async function getArticleEntries(): Promise<ArticleEntry[]> {
   return getCollection("articles");
 }
 
-function labelFromSlug(slug: string) {
+function labelFromSlug(slug: string): string {
   return slug
     .split("-")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))

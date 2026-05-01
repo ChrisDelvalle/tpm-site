@@ -5,6 +5,7 @@ import { articleBlogPostingJsonLd, safeJsonLd } from "../../src/lib/seo";
 
 function article(): ArticleEntry {
   return {
+    collection: "articles",
     data: {
       author: "Seong-Young Her",
       date: new Date("2022-04-06T10:58:10.000Z"),
@@ -14,7 +15,7 @@ function article(): ArticleEntry {
       title: "Example Article",
     },
     id: "example-article",
-  } as ArticleEntry;
+  };
 }
 
 function category(): CategorySummary {

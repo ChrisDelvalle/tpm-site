@@ -17,20 +17,25 @@ function entry(
   data: Record<string, unknown> = {},
   filePath = "",
 ): ArticleEntry {
+  const articleData = {
+    author: "Author",
+    date: new Date("2022-04-06T00:00:00Z"),
+    description: "Description",
+    draft: false,
+    tags: [],
+    title: "Title",
+    ...data,
+  } satisfies ArticleEntry["data"];
+
   return {
     collection: "articles",
     id,
-    data: {
-      author: "Author",
-      date: new Date("2022-04-06T00:00:00Z"),
-      description: "Description",
-      draft: false,
-      tags: [],
-      title: "Title",
-      ...data,
-    },
-    filePath: filePath || `/repo/src/content/articles/history/${id}.md`,
-  } as unknown as ArticleEntry;
+    data: articleData,
+    filePath:
+      filePath === ""
+        ? `/repo/src/content/articles/history/${id}.md`
+        : filePath,
+  };
 }
 
 describe("route helpers", () => {

@@ -19,8 +19,21 @@ const DEFAULT_SITE_URL = "https://thephilosophersmeme.com";
  * @param site Astro site origin when available.
  * @returns Absolute URL string.
  */
-export function absoluteUrl(pathOrUrl: string, site: string | undefined | URL) {
-  return new URL(pathOrUrl, site ?? DEFAULT_SITE_URL).toString();
+export function absoluteUrl(
+  pathOrUrl: string,
+  site: string | undefined | URL,
+): string {
+  if (hasAbsoluteUrlPrefix(pathOrUrl)) {
+    return pathOrUrl;
+  }
+
+  const base = site?.toString() ?? DEFAULT_SITE_URL;
+  const normalizedBase = base.replace(/\/+$/, "");
+  const normalizedPath = pathOrUrl.startsWith("/")
+    ? pathOrUrl
+    : `/${pathOrUrl}`;
+
+  return `${normalizedBase}${normalizedPath}`;
 }
 
 /**
@@ -35,7 +48,7 @@ export function articleBlogPostingJsonLd(
   article: ArticleEntry,
   category: CategorySummary | undefined,
   site: string | undefined | URL,
-) {
+): Record<string, unknown> {
   const canonicalUrl = absoluteUrl(articleUrl(article.id), site);
   const articleImage = imageUrl(article);
   const absoluteImage =
@@ -69,6 +82,42 @@ export function articleBlogPostingJsonLd(
  * @param value Structured data object to serialize.
  * @returns JSON string with HTML-significant less-than characters escaped.
  */
-export function safeJsonLd(value: unknown) {
+export function safeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
+function hasAbsoluteUrlPrefix(value: string): boolean {
+  if (value.startsWith("//")) {
+    return true;
+  }
+
+  const schemeSeparator = value.indexOf(":");
+  if (schemeSeparator <= 0) {
+    return false;
+  }
+
+  const scheme = value.slice(0, schemeSeparator);
+  return Array.from(scheme).every(isUrlSchemeCharacter);
+}
+
+function isUrlSchemeCharacter(character: string, index: number): boolean {
+  const codePoint = character.codePointAt(0);
+
+  if (codePoint === undefined) {
+    return false;
+  }
+
+  const isAsciiLetter =
+    (codePoint >= 65 && codePoint <= 90) ||
+    (codePoint >= 97 && codePoint <= 122);
+  const isAsciiDigit = codePoint >= 48 && codePoint <= 57;
+
+  return (
+    isAsciiLetter ||
+    (index > 0 &&
+      (isAsciiDigit ||
+        character === "+" ||
+        character === "." ||
+        character === "-"))
+  );
 }

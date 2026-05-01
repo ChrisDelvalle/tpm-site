@@ -39,7 +39,7 @@ export interface ImageAssetLocationResult {
 export function formatImageAssetLocationReport(
   result: ImageAssetLocationResult,
   ignoreFile = defaultIgnoreFile,
-) {
+): string {
   if (result.violations.length === 0) {
     return `Image asset location verification passed: ${result.imageCount} image files scanned.`;
   }
@@ -67,7 +67,7 @@ export function formatImageAssetLocationReport(
  * @param pattern Ignore-file glob pattern.
  * @returns Regular expression that matches full POSIX-style relative paths.
  */
-export function globToRegExp(pattern: string) {
+export function globToRegExp(pattern: string): RegExp {
   let source = "^";
 
   for (let index = 0; index < pattern.length; index += 1) {
@@ -86,6 +86,7 @@ export function globToRegExp(pattern: string) {
     }
   }
 
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Glob input is escaped before constructing the matcher.
   return new RegExp(`${source}$`);
 }
 
@@ -99,7 +100,7 @@ export function globToRegExp(pattern: string) {
 export async function runImageAssetLocationCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
-) {
+): Promise<number> {
   if (args.includes("--help") || args.includes("-h")) {
     console.log(`Usage: bun run assets:locations [--json] [--quiet]
 

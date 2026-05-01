@@ -89,13 +89,13 @@ const releaseCommands: QualityCommand[] = [
  * @param result Captured command result.
  * @returns Human-readable command report.
  */
-export function formatCommandResult(result: CommandResult) {
-  const status =
-    result.exitCode === 0
-      ? "produced warnings"
-      : result.command.blocking
-        ? `failed with exit code ${result.exitCode}`
-        : `produced review warnings with exit code ${result.exitCode}`;
+export function formatCommandResult(result: CommandResult): string {
+  let status = "produced warnings";
+  if (result.exitCode !== 0) {
+    status = result.command.blocking
+      ? `failed with exit code ${result.exitCode}`
+      : `produced review warnings with exit code ${result.exitCode}`;
+  }
   const output = result.output.trim();
 
   return [
@@ -113,7 +113,7 @@ export function formatCommandResult(result: CommandResult) {
  * @param output Combined stdout and stderr from a command.
  * @returns True when the output should be shown to the user.
  */
-export function outputHasWarningOrError(output: string) {
+export function outputHasWarningOrError(output: string): boolean {
   return output.split(/\r?\n/).some((line) => {
     if (line.trimStart().startsWith("$ ")) {
       return false;
@@ -135,7 +135,7 @@ export function outputHasWarningOrError(output: string) {
  * @param result Captured command result.
  * @returns True when a blocking command exited unsuccessfully.
  */
-export function resultIsBlockingFailure(result: CommandResult) {
+export function resultIsBlockingFailure(result: CommandResult): boolean {
   return result.command.blocking && result.exitCode !== 0;
 }
 
@@ -149,7 +149,7 @@ export function resultIsBlockingFailure(result: CommandResult) {
 export async function runQualityCli(
   args = process.argv.slice(2),
   cwd = process.cwd(),
-) {
+): Promise<number> {
   if (args.includes("--help") || args.includes("-h")) {
     console.log(usage());
     return 0;
@@ -180,22 +180,25 @@ export async function runQualityCli(
  * @param result Captured command result.
  * @returns True when the command failed or emitted warning-like output.
  */
-export function shouldPrintResult(result: CommandResult) {
+export function shouldPrintResult(result: CommandResult): boolean {
   return result.exitCode !== 0 || outputHasWarningOrError(result.output);
 }
 
-function commandEnvironment() {
+function commandEnvironment(): NodeJS.ProcessEnv {
   const env = { ...process.env };
   env["NO_COLOR"] = "1";
   delete env["FORCE_COLOR"];
   return env;
 }
 
-function commandLine(command: QualityCommand) {
+function commandLine(command: QualityCommand): string {
   return ["bun", ...command.args].join(" ");
 }
 
-async function runCommand(command: QualityCommand, cwd: string) {
+async function runCommand(
+  command: QualityCommand,
+  cwd: string,
+): Promise<CommandResult> {
   return new Promise<CommandResult>((resolve) => {
     const child = spawn("bun", command.args, {
       cwd,
@@ -227,11 +230,11 @@ async function runCommand(command: QualityCommand, cwd: string) {
   });
 }
 
-function selectedCommands(args: string[]) {
+function selectedCommands(args: string[]): QualityCommand[] {
   return args.includes("--release") ? releaseCommands : localCommands;
 }
 
-function usage() {
+function usage(): string {
   return `Usage: bun run quality [--release]
 
 Run quality checks quietly. Passing commands stay silent. Commands that fail or

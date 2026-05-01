@@ -55,7 +55,7 @@ export async function findAssetReferences({
   assetsDir,
   rootDir,
   srcDir,
-}: AssetReferenceOptions) {
+}: AssetReferenceOptions): Promise<AssetReference[]> {
   const resolvedSrcDir = srcDir ?? path.resolve(rootDir, "src");
   const resolvedAssetsDir = assetsDir ?? path.resolve(rootDir, "src/assets");
   const sourceFiles = await listSourceFiles(resolvedSrcDir, resolvedAssetsDir);
@@ -116,7 +116,7 @@ export async function findSharedAssets({
 export function formatSharedAssetReport(
   result: SharedAssetResult,
   rootDir: string,
-) {
+): string {
   if (result.violations.length === 0) {
     return `No shared src assets found outside src/assets/shared (${result.referencedAssetCount} referenced assets, ${result.referenceCount} references scanned).`;
   }
@@ -152,7 +152,7 @@ export function formatSharedAssetReport(
  * @param value Raw Markdown, HTML, or quoted reference target.
  * @returns Normalized asset path when the reference points at a local asset.
  */
-export function normalizeReference(value: string) {
+export function normalizeReference(value: string): string | undefined {
   let raw = value.trim();
 
   if (raw.startsWith("<") && raw.endsWith(">")) {
@@ -192,7 +192,7 @@ export function resolveAssetReference(
   value: string,
   rootDir: string,
   assetsDir: string,
-) {
+): string | undefined {
   const normalized = normalizeReference(value);
 
   if (normalized === undefined) {
@@ -207,7 +207,7 @@ export function resolveAssetReference(
     resolved = path.resolve(rootDir, `.${normalized}`);
   } else if (normalized.startsWith(relativeAssetsPrefix)) {
     resolved = path.resolve(rootDir, normalized);
-  } else if (/^(?:\.\.?\/)+assets\//.test(normalized)) {
+  } else if (startsWithRelativeAssetsPath(normalized)) {
     resolved = path.resolve(path.dirname(file), normalized);
   } else {
     return undefined;
@@ -230,7 +230,7 @@ export function resolveAssetReference(
 export async function runSharedAssetsCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
-) {
+): Promise<number> {
   if (args.includes("--help") || args.includes("-h")) {
     console.log(`Usage: bun run assets:shared [--json] [--quiet]
 
@@ -288,12 +288,12 @@ references from the same source file do not make an asset shared.`);
 export function sharedAssetViolations(
   groups: Map<string, AssetReference[]>,
   sharedAssetsDir: string,
-) {
+): SharedAssetViolation[] {
   return Array.from(groups.entries(), ([assetPath, references]) => ({
-      assetPath,
-      references,
-      sourceFiles: Array.from(referencedFiles(references)).sort(),
-    }))
+    assetPath,
+    references,
+    sourceFiles: Array.from(referencedFiles(references)).sort(),
+  }))
     .filter(
       (group) =>
         group.sourceFiles.length > 1 &&
@@ -307,9 +307,10 @@ function angleReferences(
   file: string,
   rootDir: string,
   assetsDir: string,
-) {
+): AssetReference[] {
   const references: AssetReference[] = [];
   const anglePathPattern =
+    // eslint-disable-next-line security/detect-unsafe-regex -- This bounded asset-reference matcher scans source files, not untrusted runtime input.
     /<((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^>\r\n]+)>/g;
 
   for (const match of text.matchAll(anglePathPattern)) {
@@ -334,8 +335,11 @@ function angleReferences(
   return references;
 }
 
-function findClosingMarkdownTarget(text: string, start: number) {
-  if (text[start] === "<") {
+function findClosingMarkdownTarget(
+  text: string,
+  start: number,
+): number | undefined {
+  if (text.charAt(start) === "<") {
     const close = text.indexOf(">)", start);
     return close === -1 ? undefined : close + 1;
   }
@@ -344,7 +348,9 @@ function findClosingMarkdownTarget(text: string, start: number) {
   return close === -1 ? undefined : close;
 }
 
-function groupByAsset(references: AssetReference[]) {
+function groupByAsset(
+  references: AssetReference[],
+): Map<string, AssetReference[]> {
   const groups = new Map<string, AssetReference[]>();
 
   for (const reference of references) {
@@ -356,7 +362,7 @@ function groupByAsset(references: AssetReference[]) {
   return groups;
 }
 
-function isInside(file: string, dir: string) {
+function isInside(file: string, dir: string): boolean {
   const relativePath = path.relative(dir, file);
   return (
     relativePath === "" ||
@@ -364,11 +370,14 @@ function isInside(file: string, dir: string) {
   );
 }
 
-function lineNumberAt(text: string, index: number) {
+function lineNumberAt(text: string, index: number): number {
   return text.slice(0, index).split(/\r?\n/).length;
 }
 
-async function listSourceFiles(dir: string, assetsDir: string) {
+async function listSourceFiles(
+  dir: string,
+  assetsDir: string,
+): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true });
   const files: string[] = [];
 
@@ -394,7 +403,7 @@ function markdownTargetReferences(
   file: string,
   rootDir: string,
   assetsDir: string,
-) {
+): AssetReference[] {
   const references: AssetReference[] = [];
   let searchIndex = 0;
 
@@ -441,9 +450,10 @@ function quotedReferences(
   file: string,
   rootDir: string,
   assetsDir: string,
-) {
+): AssetReference[] {
   const references: AssetReference[] = [];
   const quotedPathPattern =
+    // eslint-disable-next-line security/detect-unsafe-regex -- This bounded asset-reference matcher scans source files, not untrusted runtime input.
     /(["'`])((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^"'`\r\n]+)\1/g;
 
   for (const match of text.matchAll(quotedPathPattern)) {
@@ -468,15 +478,15 @@ function quotedReferences(
   return references;
 }
 
-function referencedFiles(references: AssetReference[]) {
+function referencedFiles(references: AssetReference[]): Set<string> {
   return new Set(references.map((reference) => reference.file));
 }
 
-function relative(rootDir: string, file: string) {
+function relative(rootDir: string, file: string): string {
   return toPosix(path.relative(rootDir, file));
 }
 
-function safeDecodeUri(value: string) {
+function safeDecodeUri(value: string): string {
   try {
     return decodeURI(value);
   } catch {
@@ -488,7 +498,7 @@ async function sourceFileReferences(
   file: string,
   rootDir: string,
   assetsDir: string,
-) {
+): Promise<AssetReference[]> {
   const text = await readFile(file, "utf8");
   const references = [
     ...markdownTargetReferences(text, file, rootDir, assetsDir),
@@ -509,7 +519,19 @@ async function sourceFileReferences(
   });
 }
 
-function toPosix(file: string) {
+function startsWithRelativeAssetsPath(normalized: string): boolean {
+  const segments = normalized.split("/");
+  const assetsIndex = segments.findIndex((segment) => segment === "assets");
+
+  return (
+    assetsIndex > 0 &&
+    segments
+      .slice(0, assetsIndex)
+      .every((segment) => segment === "." || segment === "..")
+  );
+}
+
+function toPosix(file: string): string {
   return file.split(path.sep).join("/");
 }
 

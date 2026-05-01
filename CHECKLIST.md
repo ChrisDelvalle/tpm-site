@@ -1,6 +1,6 @@
 # Component Architecture Implementation Checklist
 
-This checklist translates `.agents/docs/COMPONENT_ARCHITECTURE.md` into
+This checklist translates `agent-docs/COMPONENT_ARCHITECTURE.md` into
 developer-ready implementation milestones.
 
 Scope rules:

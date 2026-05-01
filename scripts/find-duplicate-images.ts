@@ -99,7 +99,7 @@ export async function findDuplicateImages({
 export function formatDuplicateImageReport(
   result: DuplicateImageResult,
   ignoreFile = defaultIgnoreFile,
-) {
+): string {
   if (result.duplicateGroups.length === 0) {
     return `No duplicate images found across ${result.imageCount} image files.`;
   }
@@ -144,7 +144,7 @@ export function formatDuplicateImageReport(
  * @param pattern Ignore-file glob pattern.
  * @returns Regular expression that matches full POSIX-style relative paths.
  */
-export function globToRegExp(pattern: string) {
+export function globToRegExp(pattern: string): RegExp {
   let source = "^";
 
   for (let index = 0; index < pattern.length; index += 1) {
@@ -163,6 +163,7 @@ export function globToRegExp(pattern: string) {
     }
   }
 
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Glob input is escaped before constructing the matcher.
   return new RegExp(`${source}$`);
 }
 
@@ -172,7 +173,9 @@ export function globToRegExp(pattern: string) {
  * @param records Image file records with SHA-256 hashes.
  * @returns Duplicate groups sorted by size and path for stable reports.
  */
-export function groupDuplicateImages(records: DuplicateImageRecord[]) {
+export function groupDuplicateImages(
+  records: DuplicateImageRecord[],
+): DuplicateImageRecord[][] {
   const byHash = new Map<string, DuplicateImageRecord[]>();
 
   for (const record of records) {
@@ -204,7 +207,7 @@ export function groupDuplicateImages(records: DuplicateImageRecord[]) {
 export async function runDuplicateImageCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
-) {
+): Promise<number> {
   const options = parseCliArgs(args);
 
   if (options.help) {
@@ -317,7 +320,7 @@ function parseCliArgs(args: string[]): DuplicateImageCliOptions {
   let ignoreFile = defaultIgnoreFile;
 
   for (let index = 0; index < args.length; index += 1) {
-    const arg = args[index];
+    const arg = args.at(index);
 
     if (arg === "--ignore-file") {
       const value = args[index + 1];

@@ -378,7 +378,7 @@ Configuration:
 Important project-specific decision:
 
 - Format repository docs such as `README.md`, `PACKAGE_SCRIPTS.md`,
-  `AGENTS.md`, and `.agents/docs/*.md`.
+  `AGENTS.md`, and `agent-docs/*.md`.
 - Keep article Markdown and MDX valid through Astro/content checks, but do not
   make prose formatting a release blocker.
 

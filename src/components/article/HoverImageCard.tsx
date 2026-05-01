@@ -34,11 +34,10 @@ export default function HoverImageCard({
   label,
   alt = "",
   expanded = false,
-}: HoverImageCardProps) {
+}: HoverImageCardProps): React.JSX.Element {
   const maxWidthRem = expanded ? 40 : 30;
   const maxHeightRem = expanded ? 34 : 28;
-  const aspectRatio =
-    image.width > 0 && image.height > 0 ? image.width / image.height : 1;
+  const aspectRatio = aspectRatioOrFallback(image);
   const displayWidthRem = Math.min(maxWidthRem, maxHeightRem * aspectRatio);
   const imageStyle = {
     width: `min(${displayWidthRem.toFixed(3)}rem, calc(100vw - 2rem))`,
@@ -68,4 +67,13 @@ export default function HoverImageCard({
       </HoverCardContent>
     </HoverCard>
   );
+}
+
+function aspectRatioOrFallback(image: HoverImage): number {
+  if (image.width <= 0 || image.height <= 0) {
+    return 1;
+  }
+
+  // eslint-disable-next-line total-functions/no-partial-division -- Positive image dimensions are checked immediately above.
+  return image.width / image.height;
 }

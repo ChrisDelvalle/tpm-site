@@ -3,12 +3,14 @@ import type { KnipConfig } from "knip";
 const config = {
   entry: [
     "astro.config.ts",
+    "eslint/**/*.ts",
     "eslint.config.ts",
     "lighthouserc.json",
     "playwright.config.ts",
     "scripts/**/*.ts",
     "src/content.config.ts",
     "src/pages/**/*.{astro,ts,tsx}",
+    "src/scripts/**/*.ts",
     "tests/**/*.ts",
   ],
   ignore: [
@@ -31,6 +33,7 @@ const config = {
   ],
   project: [
     "astro.config.ts",
+    "eslint/**/*.ts",
     "eslint.config.ts",
     "playwright.config.ts",
     "scripts/**/*.ts",

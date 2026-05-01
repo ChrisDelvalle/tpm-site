@@ -12,6 +12,7 @@ import {
   SITE_DESCRIPTION,
   SITE_TITLE,
 } from "../lib/routes";
+import { absoluteUrl } from "../lib/seo";
 
 /**
  * Generates the RSS feed endpoint from published article content.
@@ -19,7 +20,7 @@ import {
  * @param context Astro API route context with site metadata.
  * @returns RSS response for feed readers.
  */
-export async function GET(context: APIContext) {
+export async function GET(context: APIContext): Promise<Response> {
   const articles = await getArticles();
   const site = context.site?.toString() ?? "https://thephilosophersmeme.com";
 
@@ -30,7 +31,7 @@ export async function GET(context: APIContext) {
     items: articles.map((article) => {
       const image = imageUrl(article);
       const absoluteImage =
-        image === undefined ? undefined : new URL(image, site).toString();
+        image === undefined ? undefined : absoluteUrl(image, site);
 
       return {
         title: entryTitle(article),

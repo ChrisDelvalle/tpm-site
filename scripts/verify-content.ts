@@ -3,8 +3,6 @@ import path from "node:path";
 
 import matter from "gray-matter";
 
-const urlSafeSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
 /** Inputs needed to verify source content conventions. */
 export interface ContentVerificationOptions {
   articleDir: string;
@@ -29,7 +27,7 @@ export interface ContentVerificationResult {
 export async function runContentVerificationCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
-) {
+): Promise<number> {
   const quiet = args.includes("--quiet");
   const result = await verifyContent({
     articleDir: path.resolve(rootDir, "src/content/articles"),
@@ -113,6 +111,29 @@ function isDraft(data: Record<string, unknown>) {
   return data["draft"] === true;
 }
 
+function isLowercaseAsciiLetterOrDigit(character: string): boolean {
+  const codePoint = character.codePointAt(0);
+
+  return (
+    codePoint !== undefined &&
+    ((codePoint >= 97 && codePoint <= 122) ||
+      (codePoint >= 48 && codePoint <= 57))
+  );
+}
+
+function isUrlSafeSlug(value: string): boolean {
+  return (
+    value !== "" &&
+    value
+      .split("-")
+      .every(
+        (segment) =>
+          segment !== "" &&
+          Array.from(segment).every(isLowercaseAsciiLetterOrDigit),
+      )
+  );
+}
+
 async function listFiles(dir: string, pattern: RegExp) {
   const entries = await readdir(dir, { withFileTypes: true });
   const files: string[] = [];
@@ -147,11 +168,11 @@ function validateArticlePath(
   const slug = filenameStem(file);
   const category = categorySlug(articleDir, file);
 
-  if (!urlSafeSlugPattern.test(slug)) {
+  if (!isUrlSafeSlug(slug)) {
     issues.push(`${relativePath}: filename stem is not URL-safe`);
   }
 
-  if (!urlSafeSlugPattern.test(category)) {
+  if (!isUrlSafeSlug(category)) {
     issues.push(`${relativePath}: category folder is not URL-safe`);
   }
 
@@ -172,7 +193,7 @@ function validateCategoryMetadataFilename(
 ) {
   const slug = path.basename(file, ".json");
 
-  if (!urlSafeSlugPattern.test(slug)) {
+  if (!isUrlSafeSlug(slug)) {
     issues.push(
       `${toPosix(path.relative(rootDir, file))}: category metadata filename is not URL-safe`,
     );

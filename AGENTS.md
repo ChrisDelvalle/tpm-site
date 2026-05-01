@@ -64,14 +64,14 @@ to the active milestone.
 - `tests/`: unit, e2e, accessibility, and performance tests.
 - `dist/`: generated build output. Do not edit by hand.
 - `PACKAGE_SCRIPTS.md`: brief reference for every `package.json` script.
-- `.agents/docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
-- `.agents/docs/QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
+- `agent-docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
+- `agent-docs/QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
   release checks.
-- `.agents/docs/COMPONENT_ARCHITECTURE.md`: target component hierarchy,
+- `agent-docs/COMPONENT_ARCHITECTURE.md`: target component hierarchy,
   component responsibilities, navigation redesign direction, and migration
   sequence.
-- `.agents/docs/ASTRO_GUIDANCE.md`: expanded Astro notes.
-- `.agents/docs/TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
+- `agent-docs/ASTRO_GUIDANCE.md`: expanded Astro notes.
+- `agent-docs/TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
 
 ## Project-Local Skills
 
@@ -120,9 +120,26 @@ Every component owns its responsive behavior, spacing, wrapping, focus states,
 dark mode behavior, and accessibility semantics. Do not fix component layout
 failures with page-level CSS patches.
 
+Component files should stay view-focused and mostly declarative:
+
+- Use `const` derivations, props, slots, and typed helper calls instead of
+  mutable local state.
+- Do not put IO, filesystem access, network access, process/env reads, or
+  repository automation inside component files.
+- Avoid loops and in-place mutation in components; use `map`, `filter`,
+  `flatMap`, `reduce`, object/array spreads, or move the logic into a typed
+  helper.
+- Keep Astro components static by default. If runtime interaction is required,
+  isolate it in the smallest script, custom element, React island, or external
+  controller that satisfies the requirement.
+- Keep React component files as views over explicit props and narrowly scoped
+  interaction state. Move non-view logic into typed helpers or custom hooks.
+
 Strong UI work in this project should make good composition easy and invalid
 states hard to express:
 
+- Use type-driven design. Model data and UI state so invalid states are
+  unrepresentable wherever practical.
 - Keep pages thin and compose them from blocks, components, and primitives.
 - Give components explicit typed props, clear slots, stable variants, and
   narrow responsibilities.
@@ -1150,6 +1167,11 @@ truth.
 
 Core principles:
 
+- Use type-driven design to make invalid states unrepresentable wherever
+  practical.
+- Write defensively by making future misuse difficult: validate boundaries,
+  model finite states explicitly, isolate side effects, and prefer clear APIs
+  that prevent whole classes of bugs without speculative abstractions.
 - Prefer simple, explicit, maintainable code over clever abstractions.
 - Keep changes narrowly scoped.
 - Preserve module boundaries unless there is a clear reason to improve them.
@@ -1168,6 +1190,26 @@ Core principles:
 
 Default exports are acceptable where Astro or tool config conventions expect
 them. Prefer named exports for reusable TypeScript modules.
+
+## Documentation Policy
+
+Write useful documentation that explains purpose, correct use, constraints,
+failure modes, and non-obvious tradeoffs. Good docs should prevent misuse
+without restating obvious code.
+
+- Document every exported function, type, interface, enum, class, and public
+  component prop contract with useful JSDoc, except generated shadcn/ui
+  component files.
+- Use implementation comments only to explain intent, invariants, constraints,
+  or non-obvious tradeoffs.
+- Do not use unsafe assertions unless a documented invariant justifies them.
+- Do not leave empty or silent `catch` blocks without an explanatory comment.
+- Document dependency, security, and coverage exceptions explicitly and report
+  them during handoff.
+- Update relevant user-facing or developer-facing docs when workflows,
+  commands, public APIs, content conventions, or architecture change.
+- Use consistent project vocabulary such as article, page, category, asset,
+  public file, component, block, and island.
 
 ## Dependency And Security Policy
 
@@ -1237,7 +1279,7 @@ design/tooling/project document when the intended work should be reviewable
 before code changes.
 
 Do not create planning docs for routine QA commands. Routine tooling
-expectations belong in this file and `.agents/docs/QUALITY_TOOLING.md`.
+expectations belong in this file and `agent-docs/QUALITY_TOOLING.md`.
 
 ## Generated Files And Historical Assets
 

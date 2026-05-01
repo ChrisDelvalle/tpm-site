@@ -45,12 +45,9 @@ const sidebarCategories = (await getCategories()).map((category) => {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
-    <script is:inline>
-      const storedTheme = localStorage.getItem("theme");
-      document.documentElement.dataset.theme = storedTheme || "dark";
-    </script>
+    <script src="../scripts/theme.ts"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
@@ -215,19 +212,5 @@ const sidebarCategories = (await getCategories()).map((category) => {
         >
       </footer>
     </div>
-    <script is:inline>
-      const themeToggles = document.querySelectorAll(".theme-toggle");
-      const setTheme = (theme) => {
-        document.documentElement.dataset.theme = theme;
-        localStorage.setItem("theme", theme);
-      };
-
-      themeToggles.forEach((themeToggle) => {
-        themeToggle.addEventListener("click", () => {
-          const currentTheme = document.documentElement.dataset.theme || "dark";
-          setTheme(currentTheme === "dark" ? "light" : "dark");
-        });
-      });
-    </script>
   </body>
 </html>
