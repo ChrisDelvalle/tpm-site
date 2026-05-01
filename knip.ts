@@ -1,38 +1,41 @@
-{
-  "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": [
-    "astro.config.mjs",
-    "eslint.config.js",
-    "lighthouserc.cjs",
+import type { KnipConfig } from "knip";
+
+const config = {
+  entry: [
+    "astro.config.ts",
+    "eslint.config.ts",
+    "lighthouserc.json",
     "playwright.config.ts",
     "scripts/**/*.ts",
     "src/content.config.ts",
     "src/pages/**/*.{astro,ts,tsx}",
-    "tests/**/*.ts"
+    "tests/**/*.ts",
   ],
-  "ignore": [
+  ignore: [
     ".astro/**",
     ".lighthouseci/**",
     "coverage/**",
     "dist/**",
     "playwright-report/**",
     "public/**",
-    "test-results/**"
+    "test-results/**",
   ],
-  "ignoreDependencies": [
+  ignoreBinaries: ["gitleaks"],
+  ignoreDependencies: [
     "@tailwindcss/typography",
     "markdownlint-cli2",
     "sort-package-json",
     "tailwindcss",
-    "tw-animate-css"
+    "tw-animate-css",
   ],
-  "ignoreBinaries": ["gitleaks"],
-  "project": [
-    "astro.config.mjs",
-    "eslint.config.js",
+  project: [
+    "astro.config.ts",
+    "eslint.config.ts",
     "playwright.config.ts",
     "scripts/**/*.ts",
     "src/**/*.{astro,ts,tsx}",
-    "tests/**/*.ts"
-  ]
-}
+    "tests/**/*.ts",
+  ],
+} satisfies KnipConfig;
+
+export default config;

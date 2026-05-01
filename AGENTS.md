@@ -261,7 +261,7 @@ src/styles/             global CSS entry and tokens
 src/env.d.ts            global app types
 src/content.config.ts   content collection config
 public/                 copied as-is to site root
-astro.config.mjs        framework config
+astro.config.ts         framework config
 dist/                   generated output
 ```
 
@@ -351,8 +351,8 @@ dynamic routes requires `getStaticPaths()`.
 Routing rules:
 
 - Keep URL construction centralized in route helpers.
-- Use trailing slashes consistently with `astro.config.mjs`.
-- Set and preserve `site` in `astro.config.mjs` for canonical URLs, sitemap,
+- Use trailing slashes consistently with `astro.config.ts`.
+- Set and preserve `site` in `astro.config.ts` for canonical URLs, sitemap,
   RSS, and `Astro.site`.
 - Know route config options before changing output behavior: `prerender`,
   `partial`, `trailingSlash`, and `build.format`.
@@ -415,7 +415,7 @@ Environment:
 - Avoid adding environment-variable requirements to the static site.
 - Do not read secrets in client-side code.
 - Never put secrets in `PUBLIC_*`.
-- `.env` is not automatically loaded in `astro.config.mjs`; use `process.env`
+- `.env` is not automatically loaded in `astro.config.ts`; use `process.env`
   or Vite `loadEnv()` when config-time env access is genuinely needed.
 - Validate required variables during build/check.
 

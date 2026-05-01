@@ -64,7 +64,7 @@ function isAstroConfigModule(
 async function configRedirects() {
   // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
   const configModule: unknown = await import(
-    pathToFileURL(path.resolve("astro.config.mjs")).href
+    pathToFileURL(path.resolve("astro.config.ts")).href
   );
 
   if (!isAstroConfigModule(configModule)) {

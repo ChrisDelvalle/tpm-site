@@ -304,7 +304,7 @@ Manual deployment hosts should:
 2. Build with `bun run build`.
 3. Publish the `dist/` directory.
 
-The production site origin is configured in `astro.config.mjs`:
+The production site origin is configured in `astro.config.ts`:
 
 ```js
 site: "https://thephilosophersmeme.com";

@@ -10,12 +10,14 @@
   "include": [
     ".astro/content.d.ts",
     ".astro/types.d.ts",
-    "astro.config.mjs",
-    "eslint.config.js",
-    "lighthouserc.cjs",
+    "astro.config.ts",
+    "eslint.config.ts",
+    "knip.ts",
     "playwright.config.ts",
+    "prettier.config.ts",
     "scripts/**/*.ts",
-    "tests/**/*.ts"
+    "tests/**/*.ts",
+    "types/**/*.d.ts"
   ],
   "exclude": ["dist", "node_modules"]
 }

@@ -345,11 +345,11 @@ Start with the config files that affect CI and builds:
 
 - `package.json`
 - `tsconfig*.json`
-- `.prettierrc*`
-- `astro.config.*`
-- `eslint.config.*`
+- `prettier.config.ts`
+- `astro.config.ts`
+- `eslint.config.ts`
 - `playwright.config.*`
-- `lighthouserc.*`
+- `lighthouserc.json`
 - `.github/**/*.yml`
 - `dependabot.yml`
 

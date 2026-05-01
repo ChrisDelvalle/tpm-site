@@ -28,7 +28,7 @@ The setup is CSS-first:
 }
 ```
 
-`astro.config.mjs` should load `tailwindcss()` through Vite. There does not need
+`astro.config.ts` should load `tailwindcss()` through Vite. There does not need
 to be a `tailwind.config.js` unless a tool specifically requires one. Prefer the
 CSS-first v4 APIs: `@theme`, `@source`, `@utility`, `@variant`,
 `@custom-variant`, and `@plugin`.

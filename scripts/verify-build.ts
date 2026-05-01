@@ -298,7 +298,7 @@ function isAstroConfigModule(
 async function configuredRedirects(rootDir: string) {
   // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
   const configModule: unknown = await import(
-    pathToFileURL(path.resolve(rootDir, "astro.config.mjs")).href
+    pathToFileURL(path.resolve(rootDir, "astro.config.ts")).href
   );
 
   if (!isAstroConfigModule(configModule)) {
@@ -427,7 +427,7 @@ async function inspectHtmlFile(
 
     if (expectedDestination === undefined) {
       issues.invalidLegacyRedirects.push(
-        `${relativeHtmlPath}: no matching redirect in astro.config.mjs for ${source}`,
+        `${relativeHtmlPath}: no matching redirect in astro.config.ts for ${source}`,
       );
     } else if (!htmlIncludesRedirect(text, source, expectedDestination)) {
       issues.invalidLegacyRedirects.push(

@@ -1,3 +1,4 @@
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { fixupPluginRules } from "@eslint/compat";
@@ -6,6 +7,7 @@ import eslintComments from "@eslint-community/eslint-plugin-eslint-comments";
 import html from "@html-eslint/eslint-plugin";
 import shopify from "@shopify/eslint-plugin";
 import stylistic from "@stylistic/eslint-plugin";
+import type { ESLint } from "eslint";
 import { globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier";
 import arrayFunc from "eslint-plugin-array-func";
@@ -54,15 +56,32 @@ import unusedImports from "eslint-plugin-unused-imports";
 import validateJsxNesting from "eslint-plugin-validate-jsx-nesting";
 import yml from "eslint-plugin-yml";
 import globals from "globals";
-import tseslint from "typescript-eslint";
+import tseslint, { type ConfigWithExtends } from "typescript-eslint";
 
-const tsconfigRootDir = fileURLToPath(new URL(".", import.meta.url));
+const isUndefined = (value: unknown): value is undefined =>
+  typeof value === "undefined";
+
+type RuleSetting = RuleSettings[string];
+type RuleSettings = NonNullable<ConfigWithExtends["rules"]>;
+
+const reactPreferFunctionComponentPlugin = reactPreferFunctionComponent;
+
+const typescriptCompatPlugin = {
+  rules: typescriptCompat.rules,
+} satisfies ESLint.Plugin;
+
+const tsconfigRootDir = path.dirname(fileURLToPath(import.meta.url));
 
 const typedFiles = [
+  "astro.config.ts",
+  "eslint.config.ts",
+  "knip.ts",
+  "prettier.config.ts",
   "src/**/*.{ts,tsx}",
   "scripts/**/*.ts",
   "tests/**/*.{ts,tsx}",
   "playwright.config.ts",
+  "types/**/*.d.ts",
 ];
 
 const componentFiles = [
@@ -290,33 +309,49 @@ const publicDocumentationRules = {
       contexts: exportedFunctionContexts,
     },
   ],
-};
+} as RuleSettings;
 
-function configsAsErrors(configs) {
+function configsAsErrors(
+  configs: readonly ConfigWithExtends[],
+): readonly ConfigWithExtends[] {
   return configs.map((config) => ({
     ...config,
     rules: rulesAsErrors(config.rules),
   }));
 }
 
-function rulesAsErrors(rules = {}) {
+function requiredConfig<T>(config: T | undefined, label: string): T {
+  if (isUndefined(config)) {
+    throw new Error(`Missing ESLint shared config: ${label}.`);
+  }
+
+  return config;
+}
+
+function rulesAsErrors(
+  rules?: Readonly<Record<string, unknown>>,
+): RuleSettings {
   return Object.fromEntries(
-    Object.entries(rules).map(([name, setting]) => [
+    Object.entries({ ...rules }).map(([name, setting]) => [
       name,
       ruleSettingAsError(setting),
     ]),
   );
 }
 
-function ruleSettingAsError(setting) {
+function ruleSettingAsError(setting: unknown): RuleSetting {
   if (setting === 0 || setting === "off") return setting;
 
-  if (Array.isArray(setting)) return ["error", ...setting.slice(1)];
+  if (Array.isArray(setting)) {
+    return ["error", ...setting.slice(1)] as RuleSetting;
+  }
 
   return "error";
 }
 
-function scopeToTypedFiles(configs) {
+function scopeToTypedFiles(
+  configs: readonly ConfigWithExtends[],
+): readonly ConfigWithExtends[] {
   return configs.map((config) => ({
     ...config,
     files: [...typedFiles],
@@ -331,11 +366,81 @@ function scopeToTypedFiles(configs) {
   }));
 }
 
+const arrayFuncRecommendedConfig = requiredConfig(
+  arrayFunc.configs["recommended"],
+  "array-func/recommended",
+);
+
+const etcRecommendedConfig = requiredConfig(
+  etc.configs["recommended"],
+  "etc/recommended",
+);
+
+const jsxA11yStrictConfig = requiredConfig(
+  jsxA11y.flatConfigs["strict"],
+  "jsx-a11y/strict",
+);
+
+const noUseExtendNativeRecommendedConfig = requiredConfig(
+  noUseExtendNative.configs["recommended"],
+  "no-use-extend-native/recommended",
+);
+
+const promiseRecommendedConfig = requiredConfig(
+  promise.configs["flat/recommended"],
+  "promise/flat/recommended",
+);
+
+const reactJsxRuntimeConfig = requiredConfig(
+  react.configs.flat?.["jsx-runtime"],
+  "react/flat/jsx-runtime",
+);
+
+const reactRecommendedConfig = requiredConfig(
+  react.configs.flat?.["recommended"],
+  "react/flat/recommended",
+);
+
+const reactPreferFunctionComponentRecommendedConfig = requiredConfig(
+  reactPreferFunctionComponentPlugin.configs["recommended"],
+  "react-prefer-function-component/recommended",
+);
+
+const securityRecommendedConfig = requiredConfig(
+  security.configs["recommended"],
+  "security/recommended",
+);
+
+const ssrFriendlyRecommendedConfig = requiredConfig(
+  ssrFriendly.configs["recommended"],
+  "ssr-friendly/recommended",
+);
+
+const storybookRecommendedConfigs = requiredConfig(
+  storybook.configs["flat/recommended"],
+  "storybook/flat/recommended",
+).map((config) => ({
+  name: config.name,
+  ...(isUndefined(config.files) ? {} : { files: config.files }),
+  ...(isUndefined(config.plugins) ? {} : { plugins: config.plugins }),
+  ...(isUndefined(config.rules) ? {} : { rules: config.rules }),
+})) satisfies readonly ConfigWithExtends[];
+
+const styledComponentsA11yStrictConfig = requiredConfig(
+  styledComponentsA11y.flatConfigs["strict"],
+  "styled-components-a11y/strict",
+);
+
+const totalFunctionsRecommendedConfig = requiredConfig(
+  totalFunctions.configs["recommended"],
+  "total-functions/recommended",
+);
+
 const perfectionistRules = {
   ...rulesAsErrors(perfectionist.configs["recommended-natural"].rules),
   "perfectionist/sort-imports": "off",
   "perfectionist/sort-named-imports": "off",
-};
+} satisfies RuleSettings;
 
 export default tseslint.config(
   globalIgnores([
@@ -400,7 +505,7 @@ export default tseslint.config(
     },
   },
   regexp.configs["flat/recommended"],
-  ...configsAsErrors(storybook.configs["flat/recommended"]),
+  ...configsAsErrors(storybookRecommendedConfigs),
   ...scopeToTypedFiles(tseslint.configs.recommended),
   ...scopeToTypedFiles(tseslint.configs.strictTypeChecked),
   ...scopeToTypedFiles(tseslint.configs.stylisticTypeChecked),
@@ -438,20 +543,20 @@ export default tseslint.config(
       "simple-import-sort": simpleImportSort,
       sonarjs,
       "sort-class-members": sortClassMembers,
-      "typescript-compat": fixupPluginRules(typescriptCompat),
+      "typescript-compat": fixupPluginRules(typescriptCompatPlugin),
       unicorn,
       "unused-imports": unusedImports,
     },
     rules: {
-      ...rulesAsErrors(arrayFunc.configs.recommended.rules),
+      ...rulesAsErrors(arrayFuncRecommendedConfig.rules),
       ...rulesAsErrors(compat.configs["flat/recommended"].rules),
       ...rulesAsErrors(eslintComments.configs.recommended.rules),
       ...rulesAsErrors(importPlugin.flatConfigs.recommended.rules),
       ...rulesAsErrors(importPlugin.flatConfigs.typescript.rules),
-      ...rulesAsErrors(noUseExtendNative.configs.recommended.rules),
+      ...rulesAsErrors(noUseExtendNativeRecommendedConfig.rules),
       ...perfectionistRules,
-      ...rulesAsErrors(promise.configs["flat/recommended"].rules),
-      ...rulesAsErrors(security.configs.recommended.rules),
+      ...rulesAsErrors(promiseRecommendedConfig.rules),
+      ...rulesAsErrors(securityRecommendedConfig.rules),
       ...rulesAsErrors(stylistic.configs.recommended.rules),
       "@shopify/binary-assignment-parens": ["error", "always"],
       "@shopify/class-property-semi": "error",
@@ -581,6 +686,7 @@ export default tseslint.config(
           rules: {
             ...putoutSafeRules,
             "apply-arrow": "off",
+            "apply-dot-notation": "off",
             "conditions/remove-boolean": "off",
             "conditions/remove-zero": "off",
             "convert-quotes-to-backticks": "off",
@@ -638,8 +744,8 @@ export default tseslint.config(
       "total-functions": fixupPluginRules(totalFunctions),
     },
     rules: {
-      ...rulesAsErrors(etc.configs.recommended.rules),
-      ...rulesAsErrors(totalFunctions.configs.recommended.rules),
+      ...rulesAsErrors(etcRecommendedConfig.rules),
+      ...rulesAsErrors(totalFunctionsRecommendedConfig.rules),
       "@shopify/typescript-prefer-pascal-case-enums": "error",
       "@shopify/typescript-prefer-singular-enums": "error",
       "@typescript-eslint/array-type": [
@@ -823,7 +929,11 @@ export default tseslint.config(
   },
   {
     files: ["src/**/*.tsx"],
-    languageOptions: jsxA11y.flatConfigs.strict.languageOptions,
+    ...(isUndefined(jsxA11yStrictConfig.languageOptions)
+      ? {}
+      : {
+          languageOptions: jsxA11yStrictConfig.languageOptions,
+        }),
     plugins: {
       react: fixupPluginRules(react),
       "react-form-fields": fixupPluginRules(reactFormFields),
@@ -837,16 +947,16 @@ export default tseslint.config(
       "validate-jsx-nesting": fixupPluginRules(validateJsxNesting),
     },
     rules: {
-      ...rulesAsErrors(react.configs.flat.recommended.rules),
-      ...rulesAsErrors(react.configs.flat["jsx-runtime"].rules),
-      ...jsxA11y.flatConfigs.strict.rules,
-      ...rulesAsErrors(reactFormFields.configs.recommended.rules),
-      ...rulesAsErrors(reactHookForm.configs.recommended.rules),
+      ...rulesAsErrors(reactRecommendedConfig.rules),
+      ...rulesAsErrors(reactJsxRuntimeConfig.rules),
+      ...rulesAsErrors(jsxA11yStrictConfig.rules),
+      ...rulesAsErrors(reactFormFields.configs["recommended"]?.rules),
+      ...rulesAsErrors(reactHookForm.configs["recommended"]?.rules),
       ...reactHooks.configs.flat.recommended.rules,
-      ...rulesAsErrors(reactPerf.configs.recommended.rules),
-      ...rulesAsErrors(reactPreferFunctionComponent.configs.recommended.rules),
-      ...rulesAsErrors(ssrFriendly.configs.recommended.rules),
-      ...rulesAsErrors(styledComponentsA11y.flatConfigs.strict.rules),
+      ...rulesAsErrors(reactPerf.configs["recommended"]?.rules),
+      ...rulesAsErrors(reactPreferFunctionComponentRecommendedConfig.rules),
+      ...rulesAsErrors(ssrFriendlyRecommendedConfig.rules),
+      ...rulesAsErrors(styledComponentsA11yStrictConfig.rules),
       "react-refresh/only-export-components": [
         "error",
         {
@@ -1059,10 +1169,18 @@ export default tseslint.config(
     },
   },
   {
-    files: ["eslint.config.js", "*.config.{js,cjs,ts,mjs}"],
+    files: ["eslint.config.ts", "*.config.{js,cjs,ts,mjs}"],
     rules: {
+      "@typescript-eslint/no-deprecated": "off",
+      "@typescript-eslint/no-unnecessary-condition": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-type-assertion": "off",
       "array-func/prefer-array-from": "off",
+      "etc/no-deprecated": "off",
       "import/no-named-as-default-member": "off",
+      "putout/putout": "off",
+      "total-functions/no-unsafe-readonly-mutable-assignment": "off",
+      "total-functions/no-unsafe-type-assertion": "off",
       "unicorn/no-anonymous-default-export": "off",
     },
   },
@@ -1070,6 +1188,13 @@ export default tseslint.config(
     files: ["src/env.d.ts"],
     rules: {
       "@typescript-eslint/triple-slash-reference": "off",
+    },
+  },
+  {
+    files: ["types/**/*.d.ts"],
+    rules: {
+      "@typescript-eslint/consistent-type-imports": "off",
+      "putout/putout": "off",
     },
   },
   eslintConfigPrettier,

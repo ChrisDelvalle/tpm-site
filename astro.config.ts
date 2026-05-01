@@ -6,9 +6,8 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   compressHTML: true,
+  integrations: [mdx(), sitemap(), react()],
   prerenderConflictBehavior: "error",
-  site: "https://thephilosophersmeme.com",
-  trailingSlash: "always",
   redirects: {
     "/2015/06/18/tmnh/": "/articles/tmnh/",
     "/2015/08/19/misattributed-plato-quote-is-real-now/":
@@ -110,7 +109,8 @@ export default defineConfig({
     "/2022/04/20/joshua-citarella-astroturfing/":
       "/articles/joshua-citarella-astroturfing/",
   },
-  integrations: [mdx(), sitemap(), react()],
+  site: "https://thephilosophersmeme.com",
+  trailingSlash: "always",
   vite: {
     plugins: [tailwindcss()],
   },

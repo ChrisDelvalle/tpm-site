@@ -69,7 +69,7 @@ src/middleware.ts       request middleware
 src/env.d.ts            global app types
 src/content.config.ts   content collection config
 public/                 copied as-is to site root
-astro.config.mjs        framework config
+astro.config.ts         framework config
 dist/                   generated output
 ```
 
@@ -277,7 +277,7 @@ Route priority: reserved routes, more segments, static routes, named dynamic,
 rest routes, prerendered dynamic over server dynamic, endpoints over pages, file
 routes over configured redirects.
 
-Set `site` in `astro.config.mjs` for canonical URLs, sitemap, RSS, and
+Set `site` in `astro.config.ts` for canonical URLs, sitemap, RSS, and
 `Astro.site`. Know these options:
 
 - `trailingSlash: "always" | "never" | "ignore"`
@@ -467,7 +467,7 @@ children from an Astro parent when needed.
 ## Fonts And Imports
 
 Astro Fonts can download, cache, and serve fonts locally. Configure fonts in
-`astro.config.mjs`, render `<Font />` in `<head>`, and expose variables to
+`astro.config.ts`, render `<Font />` in `<head>`, and expose variables to
 Tailwind through `@theme inline`. Preload fonts sparingly.
 
 Astro uses ESM imports. Supported defaults include `.astro`, `.md`,
@@ -688,7 +688,7 @@ Astro supports Vite env vars through `import.meta.env`:
 - Server code can access all env vars.
 - Client code can only access `PUBLIC_*`.
 - Never put secrets in `PUBLIC_*`.
-- `.env` is not loaded automatically in `astro.config.mjs`; use `process.env`
+- `.env` is not loaded automatically in `astro.config.ts`; use `process.env`
   or Vite `loadEnv()` when necessary.
 - Defaults include `MODE`, `DEV`, `PROD`, `BASE_URL`, `SITE`.
 
@@ -798,7 +798,7 @@ Accessibility defaults:
 - Letting drafts leak into RSS, sitemap, search, related posts, or archives.
 - Using frontmatter `slug` without realizing it changes entry IDs.
 - Using `[id].astro` when IDs can contain `/`.
-- Depending on `.env` inside `astro.config.mjs`.
+- Depending on `.env` inside `astro.config.ts`.
 - Exposing secrets with `PUBLIC_`.
 - Using `set:html` on unsanitized content.
 - Accidentally adding `is:inline` via script/style attributes.
