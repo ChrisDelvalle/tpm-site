@@ -5,13 +5,8 @@ import { Menu, Moon, Sun, X } from "lucide-astro";
 
 import SiteHead from "../components/seo/SiteHead.astro";
 import { getCategories } from "../lib/content";
-import {
-  articleUrl,
-  categoryUrl,
-  entryTitle,
-  SITE_DESCRIPTION,
-  SITE_TITLE,
-} from "../lib/routes";
+import { categoryNavigationItems } from "../lib/navigation";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../lib/routes";
 
 interface Props {
   title?: string;
@@ -30,18 +25,10 @@ const {
   imageAlt,
   type = "website",
 } = Astro.props;
-const currentPath = Astro.url.pathname;
-const sidebarCategories = (await getCategories()).map((category) => {
-  const isCurrentCategory = currentPath.startsWith(categoryUrl(category.slug));
-  const containsCurrentArticle = category.articles.some((article) =>
-    currentPath.startsWith(articleUrl(article.id)),
-  );
-
-  return {
-    ...category,
-    isOpen: isCurrentCategory || containsCurrentArticle,
-  };
-});
+const sidebarCategories = categoryNavigationItems(
+  await getCategories(),
+  Astro.url.pathname,
+);
 ---
 
 <!doctype html>
@@ -164,9 +151,7 @@ const sidebarCategories = (await getCategories()).map((category) => {
                     <ol>
                       {category.articles.map((article) => (
                         <li>
-                          <a href={articleUrl(article.id)}>
-                            {entryTitle(article)}
-                          </a>
+                          <a href={article.url}>{article.title}</a>
                         </li>
                       ))}
                     </ol>
@@ -190,9 +175,7 @@ const sidebarCategories = (await getCategories()).map((category) => {
                   <ol>
                     {category.articles.map((article) => (
                       <li>
-                        <a href={articleUrl(article.id)}>
-                          {entryTitle(article)}
-                        </a>
+                        <a href={article.url}>{article.title}</a>
                       </li>
                     ))}
                   </ol>

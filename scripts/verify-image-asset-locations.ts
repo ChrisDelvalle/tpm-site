@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -27,6 +27,11 @@ export interface ImageAssetLocationResult {
   ignoredPatterns: string[];
   imageCount: number;
   violations: string[];
+}
+
+interface GitIgnoredPaths {
+  directories: string[];
+  files: Set<string>;
 }
 
 /**
@@ -144,9 +149,11 @@ export async function verifyImageAssetLocations({
   srcAssetsDir = defaultSrcAssetsDir,
 }: ImageAssetLocationOptions): Promise<ImageAssetLocationResult> {
   const ignorePatterns = await loadIgnorePatterns(rootDir, ignoreFile);
+  const gitIgnoredPaths =
+    isGitIgnored === undefined ? await listGitIgnoredPaths(rootDir) : undefined;
   const gitIgnored =
     isGitIgnored ??
-    ((relativePath: string) => defaultIsGitIgnored(rootDir, relativePath));
+    ((relativePath: string) => isGitIgnoredPath(relativePath, gitIgnoredPaths));
   const imageFiles = await listImageFiles(
     rootDir,
     rootDir,
@@ -165,18 +172,6 @@ export async function verifyImageAssetLocations({
   };
 }
 
-function defaultIsGitIgnored(rootDir: string, relativePath: string) {
-  const result = spawnSync(
-    "git",
-    ["check-ignore", "--quiet", "--no-index", "--", relativePath],
-    {
-      cwd: rootDir,
-    },
-  );
-
-  return result.status === 0;
-}
-
 function hasDotPathSegment(relativePath: string) {
   return relativePath
     .split("/")
@@ -186,6 +181,25 @@ function hasDotPathSegment(relativePath: string) {
 function isAllowedAssetLocation(relativePath: string, srcAssetsDir: string) {
   return (
     relativePath === srcAssetsDir || relativePath.startsWith(`${srcAssetsDir}/`)
+  );
+}
+
+function isGitIgnoredPath(
+  relativePath: string,
+  gitIgnoredPaths: GitIgnoredPaths | undefined,
+) {
+  if (gitIgnoredPaths === undefined) {
+    return false;
+  }
+
+  return (
+    gitIgnoredPaths.files.has(relativePath) ||
+    gitIgnoredPaths.directories.includes(
+      relativePath.endsWith("/") ? relativePath : `${relativePath}/`,
+    ) ||
+    gitIgnoredPaths.directories.some((directory) =>
+      relativePath.startsWith(directory),
+    )
   );
 }
 
@@ -200,44 +214,61 @@ function isStringArray(value: unknown): value is string[] {
   );
 }
 
+async function listGitIgnoredPaths(rootDir: string): Promise<GitIgnoredPaths> {
+  const output = await runGit(
+    ["ls-files", "--others", "--ignored", "--exclude-standard", "--directory"],
+    rootDir,
+  );
+  const ignoredPaths = output
+    .split(/\r?\n/)
+    .filter((line) => line !== "")
+    .map(toPosix);
+
+  return {
+    directories: ignoredPaths.filter((relativePath) =>
+      relativePath.endsWith("/"),
+    ),
+    files: new Set(
+      ignoredPaths.filter((relativePath) => !relativePath.endsWith("/")),
+    ),
+  };
+}
+
 async function listImageFiles(
   dir: string,
   rootDir: string,
   ignorePatterns: IgnorePattern[],
   isGitIgnored: (relativePath: string) => boolean,
-) {
+): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true });
-  const files: string[] = [];
+  const files = await Promise.all(
+    entries.map(async (entry): Promise<string[]> => {
+      const fullPath = path.join(dir, entry.name);
+      const relativePath = normalizeRelativePath(rootDir, fullPath);
 
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relativePath = normalizeRelativePath(rootDir, fullPath);
+      if (entry.isDirectory()) {
+        if (
+          alwaysIgnoredDirectoryNames.has(entry.name) ||
+          shouldSkip(`${relativePath}/`, ignorePatterns, isGitIgnored)
+        ) {
+          return [];
+        }
 
-    if (entry.isDirectory()) {
-      if (
-        alwaysIgnoredDirectoryNames.has(entry.name) ||
-        shouldSkip(`${relativePath}/`, ignorePatterns, isGitIgnored)
-      ) {
-        continue;
+        return listImageFiles(fullPath, rootDir, ignorePatterns, isGitIgnored);
       }
 
-      files.push(
-        ...(await listImageFiles(
-          fullPath,
-          rootDir,
-          ignorePatterns,
-          isGitIgnored,
-        )),
-      );
-    } else if (
-      imageExtensionPattern.test(entry.name) &&
-      !shouldSkip(relativePath, ignorePatterns, isGitIgnored)
-    ) {
-      files.push(relativePath);
-    }
-  }
+      if (
+        imageExtensionPattern.test(entry.name) &&
+        !shouldSkip(relativePath, ignorePatterns, isGitIgnored)
+      ) {
+        return [relativePath];
+      }
 
-  return files;
+      return [];
+    }),
+  );
+
+  return files.flat();
 }
 
 async function loadIgnorePatterns(rootDir: string, ignoreFile: string) {
@@ -260,6 +291,26 @@ function normalizeRelativePath(rootDir: string, file: string) {
 
 function regexEscape(value: string) {
   return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
+}
+
+async function runGit(args: string[], rootDir: string): Promise<string> {
+  return new Promise<string>((resolve) => {
+    const child = spawn("git", args, {
+      cwd: rootDir,
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+    const chunks: Buffer[] = [];
+
+    child.stdout.on("data", (chunk: Buffer) => {
+      chunks.push(chunk);
+    });
+    child.on("error", () => {
+      resolve("");
+    });
+    child.on("close", (code) => {
+      resolve(code === 0 ? Buffer.concat(chunks).toString("utf8") : "");
+    });
+  });
 }
 
 function shouldSkip(

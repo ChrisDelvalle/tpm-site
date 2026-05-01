@@ -43,6 +43,11 @@ const localCommands: QualityCommand[] = [
     blocking: false,
     label: "Markdown review",
   },
+  {
+    args: ["--silent", "run", "coverage"],
+    blocking: false,
+    label: "Coverage review",
+  },
 ];
 
 const releaseCommands: QualityCommand[] = [
@@ -75,6 +80,11 @@ const releaseCommands: QualityCommand[] = [
     args: ["--silent", "run", "audit:all"],
     blocking: false,
     label: "All-severity dependency audit review",
+  },
+  {
+    args: ["--silent", "run", "coverage"],
+    blocking: false,
+    label: "Coverage review",
   },
 ];
 
@@ -236,10 +246,10 @@ Run quality checks quietly. Passing commands stay silent. Commands that fail or
 emit warnings print their captured output.
 
 Default mode runs the local PR-quality path: check, build, verify,
-validate:html, review:assets, and review:markdown.
+validate:html, review:assets, review:markdown, and coverage review.
 
 Use --release to run check:release plus non-blocking Markdown, asset,
-accessibility, Lighthouse, and all-severity audit review checks.`;
+accessibility, Lighthouse, all-severity audit, and coverage review checks.`;
 }
 
 if (import.meta.main) {

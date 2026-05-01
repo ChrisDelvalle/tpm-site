@@ -1,19 +1,9 @@
 ---
 import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
 import ArticleProse from "../components/article/ArticleProse.astro";
+import { articleViewModel } from "../lib/article-view";
 import { getCategory } from "../lib/content";
-import {
-  articleUrl,
-  authorName,
-  categorySlug,
-  categoryUrl,
-  entryDate,
-  entryTitle,
-  excerpt,
-  formatDate,
-  imageUrl,
-  type ArticleEntry,
-} from "../lib/routes";
+import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
@@ -21,19 +11,16 @@ interface Props {
 }
 
 const { article } = Astro.props;
-const date = entryDate(article);
-const description = excerpt(article);
-const title = entryTitle(article);
-const canonicalPath = articleUrl(article.id);
-const category = await getCategory(categorySlug(article));
+const articleView = articleViewModel(article);
+const category = await getCategory(articleView.categorySlug);
 ---
 
 <BaseLayout
-  title={`${title} | The Philosopher's Meme`}
-  description={description}
-  canonicalPath={canonicalPath}
-  image={imageUrl(article)}
-  imageAlt={article.data.imageAlt}
+  title={`${articleView.title} | The Philosopher's Meme`}
+  description={articleView.description}
+  canonicalPath={articleView.canonicalPath}
+  image={articleView.image}
+  imageAlt={articleView.imageAlt}
   type="article"
 >
   <ArticleJsonLd slot="head" article={article} category={category} />
@@ -45,12 +32,12 @@ const category = await getCategory(categorySlug(article));
         </a>
       )
     }
-    <h1>{title}</h1>
+    <h1>{articleView.title}</h1>
     <div class="article-meta">
-      <span>{authorName(article)}</span>
-      {date && <span>{formatDate(date)}</span>}
+      <span>{articleView.author}</span>
+      {articleView.formattedDate && <span>{articleView.formattedDate}</span>}
     </div>
-    {description && <p class="lede">{description}</p>}
+    {articleView.description && <p class="lede">{articleView.description}</p>}
     <ArticleProse class="mt-8">
       <slot />
     </ArticleProse>

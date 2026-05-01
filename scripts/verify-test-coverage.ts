@@ -1,25 +1,55 @@
-import { readdir, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
+import { accountabilityMirrorTests } from "./verify-test-accountability";
+
 const defaultCoverageFile = "coverage/lcov.info";
-const defaultRoots = ["scripts", "src/components", "src/lib", "src/pages"];
+const defaultExceptionFile = "scripts/coverage-exceptions.json";
+const defaultRoots = [
+  "astro.config.ts",
+  "eslint",
+  "eslint.config.ts",
+  "knip.ts",
+  "playwright.config.ts",
+  "prettier.config.ts",
+  "scripts",
+  "src",
+  "types",
+];
 const coveredFilePattern = /^SF:(.+)$/gm;
-const testableFilePattern = /\.(?:ts|tsx)$/;
-const ignoredPathSegments = new Set(["node_modules"]);
-const ignoredExactFiles = new Set(["src/content.config.ts", "src/env.d.ts"]);
+const coverageSubjectPattern = /\.(?:astro|css|[cm]?[jt]sx?)$/i;
+const ignoredPathSegments = new Set([
+  ".astro",
+  ".git",
+  ".lighthouseci",
+  "coverage",
+  "dist",
+  "node_modules",
+  "playwright-report",
+  "test-results",
+  "tmp",
+]);
 
 /** Coverage inventory result used by reports and tests. */
 export interface CoverageInventoryResult {
+  approvedExceptionFiles: string[];
   coveredFiles: string[];
   missingFiles: string[];
-  testableFiles: string[];
+  subjectFiles: string[];
 }
 
 /** Inputs needed to verify unit-test coverage inventory. */
 export interface CoverageVerificationOptions {
   coverageFile?: string;
+  exceptionFile?: string;
   rootDir: string;
   roots?: string[];
+}
+
+interface CoverageException {
+  pattern: string;
+  reason: string;
 }
 
 /**
@@ -32,15 +62,15 @@ export function formatCoverageInventoryReport(
   result: CoverageInventoryResult,
 ): string {
   if (result.missingFiles.length === 0) {
-    return `Coverage inventory passed: ${result.testableFiles.length} testable source files are represented in LCOV.`;
+    return `Coverage inventory passed: ${result.subjectFiles.length} code-like source files are represented in LCOV or covered by approved exceptions.`;
   }
 
   return [
-    `Coverage inventory failed: ${result.missingFiles.length} testable source file${
+    `Coverage inventory found ${result.missingFiles.length} unapproved coverage gap${
       result.missingFiles.length === 1 ? "" : "s"
-    } missing from LCOV.`,
+    }.`,
     "",
-    "Add focused unit tests for these files, or exclude the file only if it is config/declarative glue that should not be unit-covered.",
+    "Add meaningful tests, extract testable logic into a covered module, add a mirrored accountability test, or add an explicitly approved exception with rationale to scripts/coverage-exceptions.json.",
     "",
     ...result.missingFiles.map((file) => `- ${file}`),
   ].join("\n");
@@ -61,8 +91,9 @@ export async function runCoverageVerificationCli(
     console.log(`Usage: bun run coverage:verify [--quiet]
 
 Verify that every testable TypeScript source file appears in coverage/lcov.info.
-Config files, declaration files, Astro templates, and browser-only entrypoint
-scripts are intentionally outside this unit-coverage inventory.`);
+This is intentionally broad: Astro templates, CSS, declarations, browser scripts,
+tooling config, app code, and repository scripts are all treated as coverage
+subjects unless they match an approved exception.`);
     return 0;
   }
 
@@ -87,12 +118,14 @@ scripts are intentionally outside this unit-coverage inventory.`);
  *
  * @param options Repository root, coverage file, and source roots.
  * @param options.coverageFile Relative path to the LCOV report.
+ * @param options.exceptionFile Relative path to approved coverage exceptions.
  * @param options.rootDir Repository root.
  * @param options.roots Source roots to inventory.
  * @returns Coverage inventory result.
  */
 export async function verifyCoverageInventory({
   coverageFile = defaultCoverageFile,
+  exceptionFile = defaultExceptionFile,
   rootDir,
   roots = defaultRoots,
 }: CoverageVerificationOptions): Promise<CoverageInventoryResult> {
@@ -101,65 +134,158 @@ export async function verifyCoverageInventory({
     rootDir,
   );
   const covered = new Set(coveredFiles);
-  const testableFiles = (
+  const exceptions = await loadCoverageExceptions(rootDir, exceptionFile);
+  const subjectFiles = (
     await Promise.all(
       roots.map(async (root) =>
-        listTestableFiles(rootDir, path.resolve(rootDir, root)),
+        listCoverageSubjectFiles(rootDir, path.resolve(rootDir, root)),
       ),
     )
   )
     .flat()
     .sort((left, right) => left.localeCompare(right));
+  const approvedExceptionFiles = subjectFiles.filter((file) =>
+    matchesApprovedException(file, exceptions),
+  );
 
   return {
+    approvedExceptionFiles,
     coveredFiles,
-    missingFiles: testableFiles.filter((file) => !covered.has(file)),
-    testableFiles,
+    missingFiles: subjectFiles.filter(
+      (file) =>
+        !covered.has(file) &&
+        !approvedExceptionFiles.includes(file) &&
+        !hasMirroredAccountabilityTest(rootDir, file),
+    ),
+    subjectFiles,
   };
 }
 
-function isIgnored(relativePath: string): boolean {
-  if (ignoredExactFiles.has(relativePath)) {
-    return true;
+function globToRegExp(pattern: string): RegExp {
+  let regex = "^";
+
+  for (let index = 0; index < pattern.length; index += 1) {
+    const character = pattern.charAt(index);
+    const nextCharacter = pattern.charAt(index + 1);
+    const followingCharacter = pattern.charAt(index + 2);
+
+    if (
+      character === "*" &&
+      nextCharacter === "*" &&
+      followingCharacter === "/"
+    ) {
+      regex += "(?:.*/)?";
+      index += 2;
+    } else if (character === "*" && nextCharacter === "*") {
+      regex += ".*";
+      index += 1;
+    } else if (character === "*") {
+      regex += "[^/]*";
+    } else if (character === "?") {
+      regex += "[^/]";
+    } else {
+      regex += regexEscape(character);
+    }
   }
 
-  if (relativePath.endsWith(".config.ts") || relativePath.endsWith(".d.ts")) {
-    return true;
-  }
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Approved exception patterns are repository-owned glob strings parsed above.
+  return new RegExp(`${regex}$`);
+}
 
-  if (relativePath.startsWith("src/scripts/")) {
-    return true;
-  }
+function hasMirroredAccountabilityTest(rootDir: string, file: string): boolean {
+  return accountabilityMirrorTests(file).some((testFile) =>
+    existsSync(path.resolve(rootDir, testFile)),
+  );
+}
 
+function isCoverageException(value: unknown): value is CoverageException {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "pattern" in value &&
+    "reason" in value &&
+    typeof value.pattern === "string" &&
+    typeof value.reason === "string" &&
+    value.reason.trim() !== ""
+  );
+}
+
+function isIgnoredPath(relativePath: string): boolean {
   return relativePath
     .split("/")
     .some((segment) => ignoredPathSegments.has(segment));
 }
 
-async function listTestableFiles(
+async function listCoverageSubjectFiles(
   rootDir: string,
-  dir: string,
+  target: string,
 ): Promise<string[]> {
-  const entries = await readdir(dir, { withFileTypes: true });
+  const targetStat = await stat(target);
+  const relativePath = toPosix(path.relative(rootDir, target));
+
+  if (isIgnoredPath(relativePath)) {
+    return [];
+  }
+
+  if (targetStat.isFile()) {
+    return coverageSubjectPattern.test(relativePath) ? [relativePath] : [];
+  }
+
+  if (!targetStat.isDirectory()) {
+    return [];
+  }
+
+  const entries = await readdir(target, { withFileTypes: true });
   const files: string[] = [];
 
   for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relativePath = toPosix(path.relative(rootDir, fullPath));
+    const fullPath = path.join(target, entry.name);
+    const childRelativePath = toPosix(path.relative(rootDir, fullPath));
 
     if (entry.isDirectory()) {
-      if (!isIgnored(relativePath)) {
-        files.push(...(await listTestableFiles(rootDir, fullPath)));
+      if (!isIgnoredPath(childRelativePath)) {
+        files.push(...(await listCoverageSubjectFiles(rootDir, fullPath)));
       }
     } else if (
-      testableFilePattern.test(entry.name) &&
-      !isIgnored(relativePath)
+      coverageSubjectPattern.test(entry.name) &&
+      !isIgnoredPath(childRelativePath)
     ) {
-      files.push(relativePath);
+      files.push(childRelativePath);
     }
   }
 
   return files;
+}
+
+async function loadCoverageExceptions(
+  rootDir: string,
+  exceptionFile: string,
+): Promise<CoverageException[]> {
+  const fullPath = path.resolve(rootDir, exceptionFile);
+  const parsed: unknown = JSON.parse(await readFile(fullPath, "utf8"));
+
+  if (!Array.isArray(parsed)) {
+    throw new TypeError(`${exceptionFile} must contain an array.`);
+  }
+
+  return parsed.map((item, index) => {
+    if (!isCoverageException(item)) {
+      throw new TypeError(
+        `${exceptionFile}[${index}] must include string pattern and reason fields.`,
+      );
+    }
+
+    return item;
+  });
+}
+
+function matchesApprovedException(
+  file: string,
+  exceptions: CoverageException[],
+): boolean {
+  return exceptions.some((exception) =>
+    globToRegExp(exception.pattern).test(file),
+  );
 }
 
 function parseCoveredFiles(lcov: string, rootDir: string): string[] {
@@ -171,6 +297,10 @@ function parseCoveredFiles(lcov: string, rootDir: string): string[] {
 
     return toPosix(relativePath);
   }).sort((left, right) => left.localeCompare(right));
+}
+
+function regexEscape(value: string): string {
+  return value.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
 }
 
 function toPosix(file: string): string {

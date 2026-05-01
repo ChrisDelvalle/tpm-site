@@ -1,4 +1,5 @@
-interface PagefindData {
+/** Search-result payload returned by Pagefind. */
+export interface PagefindData {
   excerpt: string;
   meta: {
     title?: string | undefined;
@@ -6,20 +7,33 @@ interface PagefindData {
   url: string;
 }
 
-interface PagefindModule {
+/** Runtime Pagefind module shape loaded from the generated static bundle. */
+export interface PagefindModule {
   options(options: { excerptLength: number }): Promise<void> | void;
   search(query: string): Promise<PagefindSearch>;
 }
 
-interface PagefindResult {
+/** Lazy Pagefind result handle. */
+export interface PagefindResult {
   data(): Promise<PagefindData>;
 }
 
-interface PagefindSearch {
+/** Pagefind search response containing lazy result handles. */
+export interface PagefindSearch {
   results: PagefindResult[];
 }
 
-function isPagefindModule(value: unknown): value is PagefindModule {
+interface SearchErrorTarget {
+  textContent: null | string;
+}
+
+/**
+ * Checks the runtime shape of the Pagefind module loaded in the browser.
+ *
+ * @param value Unknown module value from dynamic import.
+ * @returns Whether the module exposes the Pagefind search API.
+ */
+export function isPagefindModule(value: unknown): value is PagefindModule {
   return (
     typeof value === "object" &&
     value !== null &&
@@ -30,7 +44,12 @@ function isPagefindModule(value: unknown): value is PagefindModule {
   );
 }
 
-async function loadPagefind(): Promise<PagefindModule> {
+/**
+ * Loads the generated Pagefind module from built static output.
+ *
+ * @returns Pagefind module with configured search API.
+ */
+export async function loadPagefind(): Promise<PagefindModule> {
   const pagefindUrl = "/pagefind/pagefind.js";
   const pagefindModule: unknown = await import(/* @vite-ignore */ pagefindUrl);
 
@@ -41,7 +60,14 @@ async function loadPagefind(): Promise<PagefindModule> {
   return pagefindModule;
 }
 
-async function renderResults(
+/**
+ * Renders search results into the target container.
+ *
+ * @param pagefind Search provider.
+ * @param results Results container to replace.
+ * @param value Search query text.
+ */
+export async function renderResults(
   pagefind: PagefindModule,
   results: HTMLElement,
   value: string,
@@ -68,30 +94,46 @@ async function renderResults(
   }
 }
 
-function renderSearchError(container: HTMLElement): void {
+/**
+ * Renders the search error fallback.
+ *
+ * @param container Element that should display the error.
+ */
+export function renderSearchError(container: SearchErrorTarget): void {
   container.textContent = "Search is unavailable right now.";
 }
 
-async function runSearch(): Promise<void> {
-  const container = document.querySelector("#search");
+/**
+ * Initializes the search page UI.
+ *
+ * @param searchDocument Browser document dependency.
+ * @param locationSearch Current location search string.
+ * @param pagefindLoader Loader for the Pagefind module.
+ */
+export async function runSearch(
+  searchDocument = document,
+  locationSearch = window.location.search,
+  pagefindLoader = loadPagefind,
+): Promise<void> {
+  const container = searchDocument.querySelector("#search");
 
   if (!(container instanceof HTMLElement)) {
     return;
   }
 
-  const query = searchQuery();
-  const input = document.createElement("input");
+  const query = searchQuery(locationSearch);
+  const input = searchDocument.createElement("input");
   input.type = "search";
   input.value = query;
   input.placeholder = "Search";
   input.className = "search-page-input";
   container.append(input);
 
-  const results = document.createElement("div");
+  const results = searchDocument.createElement("div");
   results.className = "search-results";
   container.append(results);
 
-  const pagefind = await loadPagefind();
+  const pagefind = await pagefindLoader();
   await pagefind.options({ excerptLength: 24 });
 
   input.addEventListener("input", () => {
@@ -102,13 +144,21 @@ async function runSearch(): Promise<void> {
   await renderResults(pagefind, results, query);
 }
 
-function searchQuery(): string {
-  return new URLSearchParams(window.location.search).get("q") ?? "";
+/**
+ * Reads the query parameter used by the search page.
+ *
+ * @param locationSearch Raw URL search string.
+ * @returns Search query text or an empty string.
+ */
+export function searchQuery(locationSearch: string): string {
+  return new URLSearchParams(locationSearch).get("q") ?? "";
 }
 
-runSearch().catch(() => {
-  const container = document.querySelector("#search");
-  if (container instanceof HTMLElement) {
-    renderSearchError(container);
-  }
-});
+if (typeof document !== "undefined" && typeof window !== "undefined") {
+  runSearch().catch(() => {
+    const container = document.querySelector("#search");
+    if (container instanceof HTMLElement) {
+      renderSearchError(container);
+    }
+  });
+}

@@ -1,0 +1,6 @@
+[
+  {
+    "pattern": "src/styles/**/*.css",
+    "reason": "Approved E3: CSS behavior is covered through browser, accessibility, responsive, and visual review checks instead of LCOV line coverage."
+  }
+]

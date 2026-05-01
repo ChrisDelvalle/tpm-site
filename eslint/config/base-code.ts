@@ -46,6 +46,7 @@ const securityRecommendedConfig = requiredConfig(
 const perfectionistRules = {
   ...rulesAsErrors(perfectionist.configs["recommended-natural"].rules),
   "perfectionist/sort-imports": "off",
+  "perfectionist/sort-modules": "off",
   "perfectionist/sort-named-imports": "off",
   "perfectionist/sort-objects": "off",
 } satisfies RuleSettings;

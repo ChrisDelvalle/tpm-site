@@ -1121,7 +1121,19 @@ Current baseline scripts:
 - `bun run dev`: start Astro dev server.
 - `bun run check`: run content validation, Astro and tooling typechecking,
   ESLint, asset validation, package ordering, code/config Prettier check, Knip,
-  and unit tests.
+  test-accountability verification, Bun unit tests, and Astro component tests.
+- `bun run test`: run test-accountability verification, Bun unit tests, and
+  Astro component tests.
+- `bun run test:unit`: run Bun unit/script/component/page tests.
+- `bun run test:astro`: run Astro component and page tests through Vitest and
+  the Astro container API.
+- `bun run test:accountability`: verify every repository file is covered by a
+  mirrored test or documented accountability rule.
+- `bun run test:accountability:release`: run the same accountability check and
+  fail on requested-permission exceptions.
+- `bun run coverage`: run unit tests with LCOV, then report code-like files
+  that are not represented by LCOV coverage, a mirrored accountability test, or
+  an approved exception.
 - `bun run typecheck`: run Astro checks silently while failing on warnings, then
   run TypeScript tool checks.
 - `bun run quality`: run the local quality path quietly, printing only failures
@@ -1249,20 +1261,42 @@ leaky public interfaces. A coverage exception must be explicitly justified in a
 nearby code comment, reported during handoff, and accepted by the user after
 handoff. Do not silently leave testable code uncovered.
 
-The blocking coverage inventory should include every testable TypeScript/TSX
-source file except documented exclusions such as config files, declaration
-files, declarative Astro templates, and browser entrypoints whose behavior is
-covered by Playwright. When adding a new executable source module, add focused
-tests or update the explicit exception with rationale.
+Developer checks are practical iteration gates, not permission to leave
+coverage weak. Passing `bun run check` does not prove coverage is sufficient;
+developers must still add meaningful tests for every sensible behavior path
+they touch and push coverage upward wherever practical. `bun run coverage` is a
+broad review inventory, not a release gate.
+
+Every repository file must have explicit test accountability. Prefer mirrored
+tests for executable code, config, scripts, components, pages, schemas, and
+helpers. Files that cannot sensibly have mirrored tests must be listed in
+`.test-accountability-ignore` with a meaningful gitignore-style comment. Use
+`Requested permission:` for new or unresolved exceptions, report them during
+handoff, and remove that prefix only after the user accepts the exception.
+Release accountability must fail while requested-permission exceptions remain.
+
+Do not game coverage. Do not add import-only tests, branch-execution tests
+without meaningful assertions, broad ignores, test-only exports, weakened
+runtime code, or tests that assert mocks or implementation details instead of
+observable behavior.
+
+The broad coverage inventory should start from every code-like source file and
+only narrow through explicit approved exceptions. When adding a new executable
+source module, add focused tests or update the explicit exception with
+rationale. Astro templates should have Vitest/Astro container tests when their
+rendered output, props, slots, static paths, or integration behavior matters.
 
 Use unit tests for deterministic logic and script behavior, including slug
 generation, category derivation, draft filtering, metadata normalization, route
 helpers, duplicate slug detection, image path validation, RSS/feed output,
 content helpers, quality/verification scripts, and custom content transforms.
 
-For UI work, prefer tests that assert user-visible behavior. Use Playwright for
-real browser behavior: homepage, article pages, article archive, category
-pages, mobile navigation, theme toggle, search, no horizontal overflow, and
+For UI work, prefer tests that assert user-visible behavior. Use happy-dom for
+fast unit tests of DOM script behavior, such as event wiring, query parsing, and
+small browser-entry helpers. Use Vitest with Astro's container API for granular
+Astro component, layout, and page rendering tests. Use Playwright for real
+browser behavior: homepage, article pages, article archive, category pages,
+mobile navigation, theme toggle, search, no horizontal overflow, and
 representative responsive viewports. Use Playwright for full authoring flows
 once a local server and editor workflow exist.
 

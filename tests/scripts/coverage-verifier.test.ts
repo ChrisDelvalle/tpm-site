@@ -39,17 +39,67 @@ describe("coverage inventory verifier", () => {
         "scripts/missing.ts",
         "export const missing = 1;\n",
       );
-      await writeText(root, "scripts/tool.config.ts", "export default {};\n");
+      await writeText(root, "scripts/component.astro", "<div />\n");
+      await writeText(
+        root,
+        "scripts/types.d.ts",
+        "declare const value: string;\n",
+      );
+      await writeText(root, "scripts/styles.css", ".x { color: red; }\n");
+      await writeText(
+        root,
+        "scripts/coverage-exceptions.json",
+        JSON.stringify([
+          {
+            pattern: "scripts/styles.css",
+            reason: "Approved CSS exception for this test.",
+          },
+        ]),
+      );
 
       const result = await verifyCoverageInventory({
+        exceptionFile: "scripts/coverage-exceptions.json",
         rootDir: root,
         roots: ["scripts"],
       });
 
-      expect(result.missingFiles).toEqual(["scripts/missing.ts"]);
+      expect(result.approvedExceptionFiles).toEqual(["scripts/styles.css"]);
+      expect(result.missingFiles).toEqual([
+        "scripts/component.astro",
+        "scripts/missing.ts",
+        "scripts/types.d.ts",
+      ]);
       expect(formatCoverageInventoryReport(result)).toContain(
-        "Coverage inventory failed",
+        "unapproved coverage gaps",
       );
+    }));
+
+  test("accepts source files represented by mirrored accountability tests", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "coverage/lcov.info", "");
+      await writeText(
+        root,
+        "scripts/mirrored.ts",
+        "export const mirrored = 1;\n",
+      );
+      await writeText(
+        root,
+        "tests/scripts/mirrored.test.ts",
+        "import { describe } from 'bun:test';\n",
+      );
+      await writeText(
+        root,
+        "scripts/coverage-exceptions.json",
+        JSON.stringify([]),
+      );
+
+      const result = await verifyCoverageInventory({
+        exceptionFile: "scripts/coverage-exceptions.json",
+        rootDir: root,
+        roots: ["scripts"],
+      });
+
+      expect(result.missingFiles).toEqual([]);
     }));
 
   test("passes when all testable source files are represented", async () =>
@@ -60,8 +110,14 @@ describe("coverage inventory verifier", () => {
         "scripts/covered.ts",
         "export const covered = 1;\n",
       );
+      await writeText(
+        root,
+        "scripts/coverage-exceptions.json",
+        JSON.stringify([]),
+      );
 
       const result = await verifyCoverageInventory({
+        exceptionFile: "scripts/coverage-exceptions.json",
         rootDir: root,
         roots: ["scripts"],
       });

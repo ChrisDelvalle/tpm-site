@@ -1,3 +1,4 @@
+import { spawn } from "node:child_process";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -18,6 +19,29 @@ import {
   formatImageAssetLocationReport,
   verifyImageAssetLocations,
 } from "../../scripts/verify-image-asset-locations";
+
+async function runGit(root: string, args: string[]): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    const child = spawn("git", args, {
+      cwd: root,
+      stdio: ["ignore", "ignore", "pipe"],
+    });
+    const chunks: Buffer[] = [];
+
+    child.stderr.on("data", (chunk: Buffer) => {
+      chunks.push(chunk);
+    });
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+
+      reject(new Error(Buffer.concat(chunks).toString("utf8")));
+    });
+  });
+}
 
 async function withTempRoot<T>(callback: (root: string) => Promise<T>) {
   const root = await mkdtemp(path.join(tmpdir(), "tpm-script-test-"));
@@ -131,6 +155,19 @@ describe("image asset location script", () => {
       });
 
       expect(result.violations).toEqual([]);
+    }));
+
+  test("skips gitignored image paths with one batched git lookup", async () =>
+    withTempRoot(async (root) => {
+      await runGit(root, ["init"]);
+      await writeText(root, ".gitignore", "ignored-assets/\n");
+      await writeText(root, "scripts/image-asset-location-ignore.json", "[]");
+      await writeBytes(root, "ignored-assets/ignored.png", Buffer.from("ok"));
+      await writeBytes(root, "public/leaked.png", Buffer.from("bad"));
+
+      const result = await verifyImageAssetLocations({ rootDir: root });
+
+      expect(result.violations).toEqual(["public/leaked.png"]);
     }));
 });
 

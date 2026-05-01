@@ -1,0 +1,62 @@
+# Test files are accountability artifacts for source files. They are executed by
+# Bun or Vitest and do not require their own mirrored tests.
+tests/**
+
+# The accountability policy file is parsed and validated by
+# scripts/verify-test-accountability.ts on every accountability run.
+.test-accountability-ignore
+
+# Approved exception: Article and page bodies are human-authored editorial
+# content validated by content schemas, build checks, Markdown/MDX review
+# checks, and manual editorial review rather than mirrored unit tests.
+src/content/articles/**
+src/content/pages/**
+
+# Approved exception: Category JSON files are content data validated by Astro
+# content schemas, content verification, build checks, and category-page tests.
+src/content/categories/**
+
+# Approved exception: Static image and public assets are validated by
+# asset-location, shared-asset, duplicate-asset, unused-asset, build, and browser
+# review checks rather than mirrored unit tests.
+src/assets/**
+unused-assets/**
+public/**
+
+# Approved exception: Global CSS is exercised by browser, accessibility,
+# responsive, visual, and build checks instead of mirrored unit tests.
+src/styles/**/*.css
+
+# Approved exception: Project documentation, agent guidance, and local skill docs
+# are reviewed manually and through Markdown formatting/lint review.
+*.md
+.agents/**
+agent-docs/**
+scripts/article-submission/**
+
+# Approved exception: GitHub, editor, and local-tool metadata configure external
+# tools and are covered by the tools they configure, not mirrored unit tests.
+.codex/**
+.github/**
+.vscode/**
+.editorconfig
+.env
+.gitignore
+.htmlvalidate.json
+.markdownlint-cli2.jsonc
+.node-version
+.prettierignore
+components.json
+lighthouserc.json
+skills-lock.json
+
+# Approved exception: Package lockfiles and package metadata are validated by
+# Bun, package sorting, install reproducibility, and CI checks rather than
+# mirrored unit tests.
+bun.lock
+package.json
+
+# Approved exception: Tool ignore-list JSON files are exercised by their
+# corresponding script tests and intentionally maintained as data files.
+scripts/*-ignore.json
+scripts/coverage-exceptions.json

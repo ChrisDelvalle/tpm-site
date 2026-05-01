@@ -10,6 +10,7 @@ import {
   excerpt,
   formatDate,
 } from "../../lib/routes";
+import { categoryStaticPaths } from "../../lib/static-paths";
 
 /**
  * Generates one static category route for each public category.
@@ -17,12 +18,7 @@ import {
  * @returns Static route parameters and category props for Astro.
  */
 export async function getStaticPaths() {
-  const categories = await getCategories();
-
-  return categories.map((category) => ({
-    params: { category: category.slug },
-    props: { category },
-  }));
+  return categoryStaticPaths(await getCategories());
 }
 
 const { category } = Astro.props;

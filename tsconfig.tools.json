@@ -18,7 +18,8 @@
     "prettier.config.ts",
     "scripts/**/*.ts",
     "tests/**/*.ts",
-    "types/**/*.d.ts"
+    "types/**/*.d.ts",
+    "vitest.config.ts"
   ],
   "exclude": ["dist", "node_modules"]
 }
