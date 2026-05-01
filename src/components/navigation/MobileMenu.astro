@@ -1,0 +1,39 @@
+---
+import { Menu, X } from "lucide-astro";
+
+import CategoryTree from "./CategoryTree.astro";
+import PrimaryNav from "./PrimaryNav.astro";
+import SearchForm from "./SearchForm.astro";
+import SupportLink from "./SupportLink.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props {
+  currentPath?: string;
+  items: readonly SectionNavItem[];
+  label?: string;
+}
+
+const { currentPath = "", items, label = "Open navigation menu" } = Astro.props;
+---
+
+<details class="group relative">
+  <summary
+    class="text-foreground hover:text-primary focus-visible:outline-ring inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 [&::-webkit-details-marker]:hidden"
+    aria-label={label}
+  >
+    <Menu class="block size-5 group-open:hidden" aria-hidden="true" />
+    <X class="hidden size-5 group-open:block" aria-hidden="true" />
+  </summary>
+  <div
+    class="border-border bg-background absolute end-0 top-full z-50 mt-3 grid w-[min(22rem,calc(100vw-2rem))] gap-5 rounded-sm border p-4 shadow-lg"
+  >
+    <SearchForm inputId="mobile-site-search" label="Mobile site search" />
+    <div class="flex items-center justify-between gap-4">
+      <PrimaryNav currentPath={currentPath} label="Mobile primary navigation" />
+      <ThemeToggle />
+    </div>
+    <SupportLink />
+    <CategoryTree items={items} label="Mobile category navigation" />
+  </div>
+</details>

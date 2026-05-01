@@ -22,6 +22,6 @@ describe("category page", () => {
     });
 
     expect(view).toContain(category.title);
-    expect(view).toContain("archive-list");
+    expect(view).toContain("<article");
   });
 });

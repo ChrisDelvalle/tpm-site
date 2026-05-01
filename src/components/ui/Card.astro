@@ -1,0 +1,52 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for repeated item surfaces such as article cards. */
+interface Props extends HTMLAttributes<"article"> {
+  as?: "article" | "div" | "li" | "section";
+  padding?: "none" | "sm" | "md" | "lg";
+  tone?: "muted" | "plain" | "surface";
+  variant?: "bordered" | "elevated" | "plain";
+}
+
+const {
+  as = "article",
+  padding = "md",
+  tone = "surface",
+  variant = "bordered",
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const Element = as;
+const baseClasses = "min-w-0 rounded-sm";
+const paddingClasses = {
+  lg: "p-6",
+  md: "p-4",
+  none: "p-0",
+  sm: "p-3",
+} as const;
+const toneClasses = {
+  muted: "bg-muted text-foreground",
+  plain: "bg-transparent text-foreground",
+  surface: "bg-card text-card-foreground",
+} as const;
+const variantClasses = {
+  bordered: "border border-border",
+  elevated: "border border-border shadow-sm",
+  plain: "border border-transparent",
+} as const;
+---
+
+<Element
+  {...attrs}
+  class:list={[
+    baseClasses,
+    paddingClasses[padding],
+    toneClasses[tone],
+    variantClasses[variant],
+    className,
+  ]}
+>
+  <slot />
+</Element>

@@ -41,6 +41,7 @@ scripts/article-submission/**
 .vscode/**
 .editorconfig
 .env
+.env.catalog
 .gitignore
 .htmlvalidate.json
 .markdownlint-cli2.jsonc

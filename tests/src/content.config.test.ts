@@ -10,6 +10,8 @@ describe("content collection config", () => {
     expect(source).toContain("const categories = defineCollection");
     expect(source).toContain("const pages = defineCollection");
     expect(source).toContain('base: "./src/content/articles"');
+    expect(source).toContain('base: "./src/content/pages"');
+    expect(source).toContain("generateId: ({ entry }) => filenameStem(entry)");
     expect(source).toContain('pattern: "**/*.{md,mdx}"');
   });
 });

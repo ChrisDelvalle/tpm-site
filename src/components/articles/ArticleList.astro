@@ -1,0 +1,28 @@
+---
+import ArticleCard from "./ArticleCard.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+
+interface Props {
+  items: readonly ArticleListItem[];
+  pagefindIgnore?: boolean;
+}
+
+const { items, pagefindIgnore = false } = Astro.props;
+---
+
+<ol class="grid gap-4" data-pagefind-ignore={pagefindIgnore ? true : undefined}>
+  {
+    items.map((item) => (
+      <li>
+        <ArticleCard
+          author={item.author}
+          category={item.category}
+          date={item.date}
+          description={item.description}
+          href={item.href}
+          title={item.title}
+        />
+      </li>
+    ))
+  }
+</ol>

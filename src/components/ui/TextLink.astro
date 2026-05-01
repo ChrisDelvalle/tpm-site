@@ -1,0 +1,50 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for inline and navigation text links. */
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+  tone?: "muted" | "neutral" | "primary";
+  variant?: "inline" | "nav" | "subtle";
+}
+
+const {
+  href,
+  variant = "inline",
+  tone = "primary",
+  target,
+  rel,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const safeRel = target === "_blank" && rel === undefined ? "noreferrer" : rel;
+const baseClasses =
+  "rounded-xs tracking-normal transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+const variantClasses = {
+  inline:
+    "underline decoration-current/40 underline-offset-4 hover:decoration-current",
+  nav: "no-underline hover:no-underline",
+  subtle: "no-underline hover:underline hover:underline-offset-4",
+} as const;
+const toneClasses = {
+  muted: "text-muted-foreground hover:text-foreground",
+  neutral: "text-foreground hover:text-primary",
+  primary: "text-primary hover:text-primary/80",
+} as const;
+---
+
+<a
+  {...attrs}
+  href={href}
+  target={target}
+  rel={safeRel}
+  class:list={[
+    baseClasses,
+    variantClasses[variant],
+    toneClasses[tone],
+    className,
+  ]}
+>
+  <slot />
+</a>

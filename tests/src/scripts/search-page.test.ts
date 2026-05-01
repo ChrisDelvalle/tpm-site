@@ -69,6 +69,125 @@ describe("search page browser script", () => {
     }
   });
 
+  test("renders Pagefind mark highlights as sanitized markup", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const results = window.document.createElement("div");
+    Reflect.set(globalThis, "document", window.document);
+
+    try {
+      await renderResults(
+        {
+          options: () => undefined,
+          search: async () =>
+            Promise.resolve({
+              results: [
+                {
+                  data: async () =>
+                    Promise.resolve({
+                      excerpt: "A <mark>highlighted</mark> search result.",
+                      meta: { title: "Highlighted Result" },
+                      url: "/articles/highlighted/",
+                    }),
+                },
+              ],
+            }),
+        },
+        browserElement(results),
+        "highlighted",
+      );
+
+      const mark = results.querySelector("mark");
+
+      expect(mark?.textContent).toBe("highlighted");
+      expect(results.textContent).toContain("A highlighted search result.");
+      expect(results.innerHTML).not.toContain("&lt;mark&gt;");
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+    }
+  });
+
+  test("drops unsupported Pagefind excerpt markup", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const results = window.document.createElement("div");
+    Reflect.set(globalThis, "document", window.document);
+
+    try {
+      await renderResults(
+        {
+          options: () => undefined,
+          search: async () =>
+            Promise.resolve({
+              results: [
+                {
+                  data: async () =>
+                    Promise.resolve({
+                      excerpt:
+                        'Safe <strong>text</strong><script>alert(1)</script> <mark onclick="alert(1)">match</mark>.',
+                      meta: { title: "Sanitized Result" },
+                      url: "/articles/sanitized/",
+                    }),
+                },
+              ],
+            }),
+        },
+        browserElement(results),
+        "match",
+      );
+
+      const excerpt = results.querySelector("span");
+
+      expect(excerpt?.querySelector("strong")).toBeNull();
+      expect(excerpt?.querySelector("script")).toBeNull();
+      expect(
+        excerpt?.querySelector("mark")?.getAttribute("onclick"),
+      ).toBeNull();
+      expect(excerpt?.textContent).toContain("Safe text match.");
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+    }
+  });
+
+  test("handles malformed Pagefind excerpt tags as safe text", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const results = window.document.createElement("div");
+    Reflect.set(globalThis, "document", window.document);
+
+    try {
+      await renderResults(
+        {
+          options: () => undefined,
+          search: async () =>
+            Promise.resolve({
+              results: [
+                {
+                  data: async () =>
+                    Promise.resolve({
+                      excerpt:
+                        "<!---->Visible <script><mark>hidden</mark></script> text <",
+                      meta: { title: "Malformed Result" },
+                      url: "/articles/malformed/",
+                    }),
+                },
+              ],
+            }),
+        },
+        browserElement(results),
+        "malformed",
+      );
+
+      const excerpt = results.querySelector("span");
+
+      expect(excerpt?.querySelector("script")).toBeNull();
+      expect(excerpt?.querySelector("mark")).toBeNull();
+      expect(excerpt?.textContent).toBe("Visible  text <");
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+    }
+  });
+
   test("clears results without searching when the query is blank", async () => {
     const window = new Window();
     Reflect.set(window, "SyntaxError", SyntaxError);
@@ -161,6 +280,7 @@ describe("search page browser script", () => {
     window.document.body.append(container);
     Reflect.set(globalThis, "document", window.document);
     Reflect.set(globalThis, "HTMLElement", window.HTMLElement);
+    Reflect.set(globalThis, "HTMLInputElement", window.HTMLInputElement);
     Reflect.set(globalThis, "Element", window.Element);
 
     try {
@@ -184,12 +304,13 @@ describe("search page browser script", () => {
       await Promise.resolve();
       await Promise.resolve();
 
-      expect(container.querySelector(".search-results")?.textContent).toBe(
-        "Search is unavailable right now.",
-      );
+      expect(
+        container.querySelector("[data-search-results]")?.textContent,
+      ).toBe("Search is unavailable right now.");
     } finally {
       Reflect.deleteProperty(globalThis, "document");
       Reflect.deleteProperty(globalThis, "Element");
+      Reflect.deleteProperty(globalThis, "HTMLInputElement");
       Reflect.deleteProperty(globalThis, "HTMLElement");
     }
   });
@@ -202,6 +323,7 @@ describe("search page browser script", () => {
     window.document.body.append(container);
     Reflect.set(globalThis, "document", window.document);
     Reflect.set(globalThis, "HTMLElement", window.HTMLElement);
+    Reflect.set(globalThis, "HTMLInputElement", window.HTMLInputElement);
     Reflect.set(globalThis, "Element", window.Element);
 
     try {
@@ -216,10 +338,44 @@ describe("search page browser script", () => {
         null,
       );
       expect(container.querySelector("input")?.value).toBe("memes");
-      expect(container.querySelector(".search-results")).not.toBeNull();
+      expect(container.querySelector("[data-search-results]")).not.toBeNull();
     } finally {
       Reflect.deleteProperty(globalThis, "document");
       Reflect.deleteProperty(globalThis, "Element");
+      Reflect.deleteProperty(globalThis, "HTMLInputElement");
+      Reflect.deleteProperty(globalThis, "HTMLElement");
+    }
+  });
+
+  test("enhances an existing search form and results region", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const container = window.document.createElement("section");
+    container.id = "search";
+    const input = window.document.createElement("input");
+    input.type = "search";
+    const results = window.document.createElement("div");
+    results.dataset["searchResults"] = "";
+    container.append(input, results);
+    window.document.body.append(container);
+    Reflect.set(globalThis, "document", window.document);
+    Reflect.set(globalThis, "HTMLElement", window.HTMLElement);
+    Reflect.set(globalThis, "HTMLInputElement", window.HTMLInputElement);
+
+    try {
+      await runSearch(browserDocument(window), "?q=history", async () =>
+        Promise.resolve({
+          options: () => undefined,
+          search: async () => Promise.resolve({ results: [] }),
+        }),
+      );
+
+      expect(container.querySelectorAll("input")).toHaveLength(1);
+      expect(input.value).toBe("history");
+      expect(container.querySelector("[data-search-results]")).toBe(results);
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+      Reflect.deleteProperty(globalThis, "HTMLInputElement");
       Reflect.deleteProperty(globalThis, "HTMLElement");
     }
   });

@@ -14,6 +14,7 @@ describe("articles index page", () => {
     });
 
     expect(view).toContain("Essays and notes");
-    expect(view).toContain('class="archive-list"');
+    expect(view).toContain("data-pagefind-ignore");
+    expect(view).toContain("<article");
   });
 });

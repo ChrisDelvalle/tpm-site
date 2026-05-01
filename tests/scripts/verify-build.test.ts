@@ -34,6 +34,7 @@ describe("build verifier", () => {
         issues: {
           articleCountIssues: [],
           brokenLinks: [],
+          catalogLeaks: [],
           draftLeaks: [],
           invalidLegacyRedirects: [],
           missingArticleJsonLd: [],

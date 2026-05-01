@@ -1,9 +1,13 @@
 ---
+import CategoryOverviewBlock from "../../components/blocks/CategoryOverviewBlock.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCategories } from "../../lib/content";
-import { categoryUrl } from "../../lib/routes";
+import { sectionNavigationItems } from "../../lib/navigation";
 
-const categories = await getCategories();
+const categoryItems = sectionNavigationItems(
+  await getCategories(),
+  "/categories/",
+);
 ---
 
 <BaseLayout
@@ -11,19 +15,9 @@ const categories = await getCategories();
   description="Browse articles by category."
   canonicalPath="/categories/"
 >
-  <section class="page-heading">
-    <h1>Categories</h1>
-    <p>Browse the archive by subject.</p>
-  </section>
-
-  <div class="category-grid">
-    {
-      categories.map((category) => (
-        <a class="category-card" href={categoryUrl(category.slug)}>
-          <span>{category.title}</span>
-          <small>{category.articles.length} articles</small>
-        </a>
-      ))
-    }
-  </div>
+  <CategoryOverviewBlock
+    title="Categories"
+    description="Browse the archive by subject."
+    items={categoryItems}
+  />
 </BaseLayout>

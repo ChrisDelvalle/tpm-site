@@ -1,78 +1,66 @@
 ---
-import { Image } from "astro:assets";
+import { getEntry, render } from "astro:content";
 
 import recentImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
 import heroImage from "../assets/site/2022-04-05_tpm-header_trnp_dm.png";
 import announcementImage from "../assets/site/r2021-03-22.png";
+import HomeAnnouncementBlock from "../components/blocks/HomeAnnouncementBlock.astro";
+import HomeArchiveLinksBlock from "../components/blocks/HomeArchiveLinksBlock.astro";
+import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
+import HomeFeaturedArticlesBlock from "../components/blocks/HomeFeaturedArticlesBlock.astro";
+import HomeHeroBlock from "../components/blocks/HomeHeroBlock.astro";
+import HomeLatestArticleBlock from "../components/blocks/HomeLatestArticleBlock.astro";
+import SupportBlock from "../components/blocks/SupportBlock.astro";
+import PageFrame from "../components/layout/PageFrame.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getArticles } from "../lib/content";
-import {
-  articleUrl,
-  entryDate,
-  entryTitle,
-  excerpt,
-  formatDate,
-} from "../lib/routes";
+import { articleListItemsFromArchive } from "../lib/article-list";
+import { articleArchiveItems } from "../lib/archive";
+import { getArticles, getCategories } from "../lib/content";
+import { sectionNavigationItems } from "../lib/navigation";
 
-const [latest] = await getArticles();
-const latestTitle = latest ? entryTitle(latest) : "";
+const home = await getEntry("pages", "index");
+
+if (!home) {
+  throw new Error("Missing home page content at src/content/pages/index.md.");
+}
+
+const { Content } = await render(home);
+const articles = await getArticles();
+const categories = await getCategories();
+const articleItems = articleListItemsFromArchive(
+  articleArchiveItems(articles, categories),
+);
+const [latestArticle] = articleItems;
+const featuredArticles = articleItems.slice(1, 4);
+const categoryItems = sectionNavigationItems(categories, "/");
+
+const title = `${home.data.title} | The Philosopher's Meme`;
+const description =
+  home.data.description ??
+  "The philosophy of memes, cyberculture, and the Internet.";
 ---
 
-<BaseLayout canonicalPath="/">
-  <section class="home-hero">
-    <Image
-      src={heroImage}
-      alt="The Philosopher's Meme"
-      layout="constrained"
-      loading="eager"
-      fetchpriority="high"
+<BaseLayout title={title} description={description} canonicalPath="/">
+  <PageFrame size="lg">
+    <HomeHeroBlock
+      image={heroImage}
+      imageAlt={home.data.title}
+      tagline={description}
     />
-    <p>The philosophy of memes, cyberculture, and the Internet.</p>
-    <div class="button-row">
-      <a class="button" href="https://patreon.com/thephilosophersmeme"
-        >Support Us</a
-      >
-      <a class="button secondary" href="https://discord.gg/8MVFRMa"
-        >Join TPM Discord</a
-      >
-    </div>
-  </section>
-
-  <section class="content-section">
-    <h2>Announcements</h2>
-    <Image
-      src={announcementImage}
-      alt="Announcement Image"
-      layout="constrained"
+    <HomeAnnouncementBlock
+      image={announcementImage}
+      imageAlt="The Philosopher's Meme announcement artwork"
+    >
+      <Content />
+    </HomeAnnouncementBlock>
+    <HomeLatestArticleBlock
+      image={recentImage}
+      imageAlt={latestArticle?.title ?? "Most recent article"}
+      item={latestArticle}
     />
-    <p>
-      We've set up a <a href="https://patreon.com/thephilosophersmeme"
-        >Patreon</a
-      >. The current priority is to fund the new
-      <a href="https://forum.memestudies.org">forum</a>. Please consider
-      supporting TPM by pledging to the Patreon.
-    </p>
-  </section>
-
-  {
-    latest && (
-      <section class="content-section">
-        <h2>Most Recent Post</h2>
-        <Image src={recentImage} alt={latestTitle} layout="full-width" />
-        <h3>
-          <a href={articleUrl(latest.id)}>{latestTitle}</a>
-        </h3>
-        <p class="archive-meta">{formatDate(entryDate(latest))}</p>
-        {excerpt(latest) && <p>{excerpt(latest)}</p>}
-      </section>
-    )
-  }
-
-  <section class="content-section">
-    <p>
-      Browse <a href="/articles/">Articles</a> and <a href="/categories/"
-        >Categories</a
-      > for the archive.
-    </p>
-  </section>
+    <HomeFeaturedArticlesBlock items={featuredArticles} />
+    <HomeCategoryOverviewBlock items={categoryItems} />
+    <HomeArchiveLinksBlock />
+    <SupportBlock />
+  </PageFrame>
 </BaseLayout>

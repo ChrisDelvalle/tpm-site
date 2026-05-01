@@ -1,0 +1,21 @@
+---
+import type { ImageMetadata } from "astro";
+
+import HoverImageLink from "./HoverImageLink.astro";
+
+/** Public props for a paragraph ending with a hover-image link. */
+interface Props {
+  after: string;
+  alt?: string;
+  expanded?: boolean;
+  image: ImageMetadata;
+  label: string;
+}
+
+const { image, label, after, alt = "", expanded = false } = Astro.props;
+---
+
+<p>
+  <HoverImageLink image={image} label={label} alt={alt} expanded={expanded} />
+  {after}
+</p>

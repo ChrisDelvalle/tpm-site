@@ -1,19 +1,27 @@
 import {
+  articleSlug,
   articleUrl,
   type CategorySummary,
   categoryUrl,
   entryTitle,
+  excerpt,
 } from "./routes";
 
-/** Article link rendered inside category navigation menus. */
-interface NavigationArticle {
+/** Article data rendered inside navigation and discovery surfaces. */
+export interface ArticleSummary {
+  description: string;
+  href: string;
+  isCurrent: boolean;
+  slug: string;
   title: string;
-  url: string;
 }
 
-/** Category navigation item with current-page open state. */
-interface NavigationCategory {
-  articles: NavigationArticle[];
+/** Category section data rendered inside navigation and discovery surfaces. */
+export interface SectionNavItem {
+  articles: ArticleSummary[];
+  description?: string | undefined;
+  href: string;
+  isCurrent: boolean;
   isOpen: boolean;
   slug: string;
   title: string;
@@ -26,27 +34,44 @@ interface NavigationCategory {
  * @param currentPath Current request path from Astro.
  * @returns Display-ready sidebar/mobile category navigation items.
  */
-export function categoryNavigationItems(
+export function sectionNavigationItems(
   categories: CategorySummary[],
   currentPath: string,
-): NavigationCategory[] {
+): SectionNavItem[] {
   return categories.map((category) => {
-    const isCurrentCategory = currentPath.startsWith(
-      categoryUrl(category.slug),
+    const href = categoryUrl(category.slug);
+    const isCurrent = currentPath.startsWith(href);
+    const articles = category.articles.map((article) =>
+      articleSummary(article, currentPath),
     );
-    const articles = category.articles.map((article) => ({
-      title: entryTitle(article),
-      url: articleUrl(article.id),
-    }));
-    const containsCurrentArticle = articles.some((article) =>
-      currentPath.startsWith(article.url),
+    const containsCurrentArticle = articles.some(
+      (article) => article.isCurrent,
     );
 
     return {
       articles,
-      isOpen: isCurrentCategory || containsCurrentArticle,
+      description: category.description,
+      href,
+      isCurrent,
+      isOpen: isCurrent || containsCurrentArticle,
       slug: category.slug,
       title: category.title,
     };
   });
+}
+
+function articleSummary(
+  article: CategorySummary["articles"][number],
+  currentPath: string,
+): ArticleSummary {
+  const slug = articleSlug(article);
+  const href = articleUrl(slug);
+
+  return {
+    description: excerpt(article),
+    href,
+    isCurrent: currentPath.startsWith(href),
+    slug,
+    title: entryTitle(article),
+  };
 }

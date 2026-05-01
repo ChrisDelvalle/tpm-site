@@ -12,7 +12,7 @@ import {
 } from "./routes";
 
 /** Display-ready archive item for article listing pages. */
-interface ArticleArchiveItem {
+export interface ArticleArchiveItem {
   article: ArticleEntry;
   author: string;
   category?:

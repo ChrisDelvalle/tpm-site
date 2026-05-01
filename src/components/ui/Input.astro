@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for shared native input styling. */
+interface Props extends HTMLAttributes<"input"> {
+  density?: "lg" | "md" | "sm";
+  invalid?: boolean;
+}
+
+const {
+  density = "md",
+  invalid = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const baseClasses =
+  "block w-full min-w-0 rounded-sm border bg-background text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-60";
+const densityClasses = {
+  lg: "min-h-12 px-4 py-3 text-base",
+  md: "min-h-10 px-3 py-2 text-sm",
+  sm: "min-h-8 px-2 py-1.5 text-sm",
+} as const;
+---
+
+<input
+  {...attrs}
+  aria-invalid={invalid ? "true" : undefined}
+  class:list={[
+    baseClasses,
+    densityClasses[density],
+    invalid ? "border-destructive" : "border-input",
+    className,
+  ]}
+/>

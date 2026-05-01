@@ -1,7 +1,11 @@
 ---
 import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
-import ArticleProse from "../components/article/ArticleProse.astro";
+import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
+import ArticleHeader from "../components/articles/ArticleHeader.astro";
+import ArticleProse from "../components/articles/ArticleProse.astro";
+import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleViewModel } from "../lib/article-view";
+import { articleArchiveItems } from "../lib/archive";
 import { getCategory } from "../lib/content";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import BaseLayout from "./BaseLayout.astro";
@@ -13,6 +17,18 @@ interface Props {
 const { article } = Astro.props;
 const articleView = articleViewModel(article);
 const category = await getCategory(articleView.categorySlug);
+const categoryHref = category ? categoryUrl(category.slug) : undefined;
+const moreInCategory =
+  category === undefined
+    ? []
+    : articleListItemsFromArchive(
+        articleArchiveItems(
+          category.articles
+            .filter((categoryArticle) => categoryArticle.id !== article.id)
+            .slice(0, 3),
+          [category],
+        ),
+      );
 ---
 
 <BaseLayout
@@ -24,22 +40,28 @@ const category = await getCategory(articleView.categorySlug);
   type="article"
 >
   <ArticleJsonLd slot="head" article={article} category={category} />
-  <article class="article" data-pagefind-body>
-    {
-      category && (
-        <a class="eyebrow" href={categoryUrl(category.slug)}>
-          {category.title}
-        </a>
-      )
-    }
-    <h1>{articleView.title}</h1>
-    <div class="article-meta">
-      <span>{articleView.author}</span>
-      {articleView.formattedDate && <span>{articleView.formattedDate}</span>}
-    </div>
-    {articleView.description && <p class="lede">{articleView.description}</p>}
+  <article
+    class="mx-auto grid w-full max-w-3xl gap-8 px-4 py-8 lg:px-8 lg:py-12"
+    data-pagefind-body
+  >
+    <ArticleHeader
+      author={articleView.author}
+      category={category && categoryHref
+        ? { href: categoryHref, title: category.title }
+        : undefined}
+      date={articleView.date}
+      description={articleView.description}
+      formattedDate={articleView.formattedDate}
+      tags={article.data.tags}
+      title={articleView.title}
+    />
     <ArticleProse class="mt-8">
       <slot />
     </ArticleProse>
+    <ArticleEndcap
+      categoryHref={categoryHref}
+      categoryTitle={category?.title}
+      moreInCategory={moreInCategory}
+    />
   </article>
 </BaseLayout>

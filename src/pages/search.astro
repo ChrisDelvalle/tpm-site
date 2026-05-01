@@ -1,4 +1,5 @@
 ---
+import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
@@ -7,9 +8,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   description="Search The Philosopher's Meme archive."
   canonicalPath="/search/"
 >
-  <section class="page-heading">
-    <h1>Search</h1>
-  </section>
-  <div id="search"></div>
+  <SearchResultsBlock />
   <script src="../scripts/search-page.ts"></script>
 </BaseLayout>

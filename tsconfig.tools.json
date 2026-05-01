@@ -17,6 +17,7 @@
     "playwright.config.ts",
     "prettier.config.ts",
     "scripts/**/*.ts",
+    "tests/.env.catalog.test.ts",
     "tests/**/*.ts",
     "types/**/*.d.ts",
     "vitest.config.ts"

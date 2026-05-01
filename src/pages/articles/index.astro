@@ -1,5 +1,7 @@
 ---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
 import { articleArchiveItems } from "../../lib/archive";
 import { getArticles, getCategories } from "../../lib/content";
 
@@ -7,6 +9,7 @@ const archiveItems = articleArchiveItems(
   await getArticles(),
   await getCategories(),
 );
+const articleItems = articleListItemsFromArchive(archiveItems);
 ---
 
 <BaseLayout
@@ -14,28 +17,10 @@ const archiveItems = articleArchiveItems(
   description="Complete article archive for The Philosopher's Meme."
   canonicalPath="/articles/"
 >
-  <section class="page-heading">
-    <h1>Articles</h1>
-    <p>Essays and notes on memes, cyberculture, and the Internet.</p>
-  </section>
-
-  <ol class="archive-list" data-pagefind-ignore>
-    {
-      archiveItems.map((item) => (
-        <li>
-          <a class="archive-title" href={item.url}>
-            {item.title}
-          </a>
-          <div class="archive-meta">
-            <span>{item.date}</span>
-            <span>{item.author}</span>
-            {item.category && (
-              <a href={item.category.url}>{item.category.title}</a>
-            )}
-          </div>
-          {item.description && <p>{item.description}</p>}
-        </li>
-      ))
-    }
-  </ol>
+  <ArchiveListBlock
+    title="Articles"
+    description="Essays and notes on memes, cyberculture, and the Internet."
+    items={articleItems}
+    pagefindIgnore
+  />
 </BaseLayout>

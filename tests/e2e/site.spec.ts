@@ -1,16 +1,26 @@
 import { expect, test } from "@playwright/test";
 
-const routes = [
+const keyRoutes = [
   "/",
   "/articles/",
   "/articles/gamergate-as-metagaming/",
-  "/articles/misattributed-plato-quote-is-real-now/",
+  "/categories/",
   "/categories/history/",
   "/about/",
-  "/404.html",
+  "/search/",
 ];
 
-for (const route of routes) {
+const smokeRoutes = [...keyRoutes, "/404.html"];
+
+const viewports = [
+  { height: 844, label: "mobile", width: 390 },
+  { height: 560, label: "short mobile", width: 390 },
+  { height: 1024, label: "tablet", width: 768 },
+  { height: 900, label: "desktop", width: 1280 },
+  { height: 1200, label: "wide desktop", width: 2560 },
+];
+
+for (const route of smokeRoutes) {
   test(`renders ${route}`, async ({ page }) => {
     const response = await page.goto(route);
     expect(response?.ok()).toBe(true);
@@ -26,46 +36,85 @@ test("serves the RSS feed", async ({ request }) => {
   expect(await response.text()).toContain("<rss");
 });
 
-const viewports = [
-  { height: 844, label: "mobile", width: 390 },
-  { height: 1024, label: "tablet", width: 768 },
-  { height: 900, label: "laptop", width: 1280 },
-  { height: 1080, label: "desktop", width: 1920 },
-  { height: 1200, label: "wide", width: 2560 },
-];
-
 for (const viewport of viewports) {
-  test(`has no horizontal overflow at ${viewport.label}`, async ({ page }) => {
-    await page.setViewportSize({
-      height: viewport.height,
-      width: viewport.width,
-    });
-    await page.goto("/articles/gamergate-as-metagaming/");
+  for (const route of keyRoutes) {
+    test(`has no horizontal overflow on ${route} at ${viewport.label}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({
+        height: viewport.height,
+        width: viewport.width,
+      });
+      await page.goto(route);
 
-    const overflow = await page.evaluate(() => {
-      const documentElement = document.documentElement;
-      return documentElement.scrollWidth - documentElement.clientWidth;
-    });
+      const overflow = await page.evaluate(() => {
+        const documentElement = document.documentElement;
+        return documentElement.scrollWidth - documentElement.clientWidth;
+      });
 
-    expect(overflow).toBeLessThanOrEqual(1);
-  });
+      expect(overflow).toBeLessThanOrEqual(1);
+    });
+  }
 }
+
+test("keyboard focus is visible", async ({ page }) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+
+  const focused = page.locator(":focus-visible").first();
+  await expect(focused).toBeVisible();
+
+  const outlineStyle = await focused.evaluate(
+    (element) => getComputedStyle(element).outlineStyle,
+  );
+  expect(outlineStyle).not.toBe("none");
+});
+
+test("category disclosure toggles article links without navigation", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const categoryNav = page.getByLabel("Desktop category navigation");
+  const group = categoryNav.locator("details", {
+    has: page.locator("summary", { hasText: "Memeculture" }),
+  });
+  await expect(group).not.toHaveAttribute("open", "");
+
+  await group.locator("summary").click();
+  await expect(group).toHaveAttribute("open", "");
+  await expect(
+    group.getByRole("link", { name: /View all Memeculture/ }),
+  ).toBeVisible();
+  await expect(page).toHaveURL("/");
+
+  await group.locator("summary").click();
+  await expect(group).not.toHaveAttribute("open", "");
+  await expect(page).toHaveURL("/");
+});
 
 test("mobile navigation exposes primary and category links", async ({
   page,
 }) => {
   await page.setViewportSize({ height: 844, width: 390 });
   await page.goto("/");
+
+  const menu = page.locator("header details").first();
+  await expect(menu).not.toHaveAttribute("open", "");
   await page.getByLabel("Open navigation menu").click();
+  await expect(menu).toHaveAttribute("open", "");
 
   const mobileNav = page.getByLabel("Mobile primary navigation");
   await expect(mobileNav.getByRole("link", { name: "Articles" })).toBeVisible();
   await expect(
     mobileNav.getByRole("link", { name: "Categories" }),
   ).toBeVisible();
-  await expect(page.locator(".mobile-category-nav")).toContainText(
+  await expect(page.getByLabel("Mobile category navigation")).toContainText(
     "Metamemetics",
   );
+
+  await page.getByLabel("Open navigation menu").click();
+  await expect(menu).not.toHaveAttribute("open", "");
 });
 
 test("theme toggle switches the document theme", async ({ page }) => {

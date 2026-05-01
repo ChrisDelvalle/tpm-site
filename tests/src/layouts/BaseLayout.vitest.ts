@@ -21,7 +21,8 @@ describe("BaseLayout", () => {
       },
     });
 
-    expect(view).toContain('class="site-header"');
+    expect(view).toContain('href="/favicon.svg?v=2"');
+    expect(view).toContain("Skip to content");
     expect(view).toContain("<h1>Example Page</h1>");
     expect(view).toContain("Category navigation");
   });

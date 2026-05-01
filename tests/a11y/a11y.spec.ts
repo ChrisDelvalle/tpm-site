@@ -5,8 +5,10 @@ const routes = [
   "/",
   "/articles/",
   "/articles/gamergate-as-metagaming/",
+  "/categories/",
   "/categories/history/",
   "/about/",
+  "/search/",
 ];
 
 for (const route of routes) {

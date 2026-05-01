@@ -13,252 +13,251 @@ Scope rules:
 
 ## Milestone 1: Component Directory Foundation And UI Primitives
 
-- [ ] Create the target component folders that do not already exist:
+- [x] Create the target component folders that do not already exist:
       `src/components/ui/`, `src/components/media/`,
       `src/components/layout/`, `src/components/navigation/`,
       `src/components/articles/`, `src/components/pages/`,
       `src/components/blocks/`, and `src/components/islands/`.
-- [ ] Move or wrap the existing article components from
+- [x] Move or wrap the existing article components from
       `src/components/article/` into the long-term
       `src/components/articles/` namespace, preserving imports and behavior.
-- [ ] Add `src/components/ui/Button.astro` for button actions with typed
+- [x] Add `src/components/ui/Button.astro` for button actions with typed
       `variant`, `size`, and `tone` props.
-- [ ] Add `src/components/ui/LinkButton.astro` for link-shaped CTAs such as
+- [x] Add `src/components/ui/LinkButton.astro` for link-shaped CTAs such as
       Support links.
-- [ ] Add `src/components/ui/IconButton.astro` with a required accessible label.
-- [ ] Add `src/components/ui/TextLink.astro` for inline and navigation links
+- [x] Add `src/components/ui/IconButton.astro` with a required accessible label.
+- [x] Add `src/components/ui/TextLink.astro` for inline and navigation links
       that need shared focus/hover behavior.
-- [ ] Add `src/components/ui/Input.astro` for shared native input styling.
-- [ ] Add `src/components/ui/Badge.astro`,
+- [x] Add `src/components/ui/Input.astro` for shared native input styling.
+- [x] Add `src/components/ui/Badge.astro`,
       `src/components/ui/Separator.astro`, `src/components/ui/Container.astro`,
       `src/components/ui/Section.astro`, and `src/components/ui/Card.astro`.
-- [ ] Add `src/components/media/ResponsiveIframe.astro` for stable,
+- [x] Add `src/components/media/ResponsiveIframe.astro` for stable,
       accessible iframe sizing with required titles.
-- [ ] Add `src/components/media/EmbedFrame.astro` for external embeds with
+- [x] Add `src/components/media/EmbedFrame.astro` for external embeds with
       stable spacing, fallback content, and loading policy.
-- [ ] Ensure primitives use semantic Tailwind tokens such as
+- [x] Ensure primitives use semantic Tailwind tokens such as
       `bg-background`, `text-foreground`, `border-border`, `bg-card`,
       `text-muted-foreground`, and `text-primary`.
-- [ ] Keep primitive class strings statically visible to Tailwind through
+- [x] Keep primitive class strings statically visible to Tailwind through
       `class:list` in Astro or complete class-string maps where needed.
-- [ ] Add or update lightweight render examples in comments or tests only where
-      the component contract would otherwise be ambiguous.
+- [x] Add mirrored render tests for new primitive, media, and article namespace
+      components so their public contracts are test-accountable.
 
 ## Milestone 2: Component Catalog Foundation
 
-- [ ] Add `src/catalog/catalog.config.ts` with explicit catalog metadata and an
+- [x] Add `src/catalog/catalog.config.ts` with explicit catalog metadata and an
       ignore list for intentionally uncatalogued public components.
-- [ ] Add `src/catalog/ComponentCatalog.astro`,
+- [x] Add `src/catalog/ComponentCatalog.astro`,
       `src/catalog/CatalogSection.astro`, and
       `src/catalog/CatalogExample.astro`.
-- [ ] Add `src/catalog/examples/ui.examples.ts` with realistic examples for
+- [x] Add `src/catalog/examples/ui.examples.ts` with realistic examples for
       the UI primitives from Milestone 1.
-- [ ] Add a tracked `.env.catalog` file that sets
+- [x] Add a tracked `.env.catalog` file that sets
       `TPM_COMPONENT_CATALOG=true` and `ASTRO_TELEMETRY_DISABLED=1`.
-- [ ] Add `src/pages/catalog/[...path].astro` and gate `getStaticPaths()` behind
+- [x] Add `src/pages/catalog/[...path].astro` and gate `getStaticPaths()` behind
       `TPM_COMPONENT_CATALOG=true`.
-- [ ] Return no catalog paths when `TPM_COMPONENT_CATALOG` is not enabled, and
+- [x] Return no catalog paths when `TPM_COMPONENT_CATALOG` is not enabled, and
       return the top-level `/catalog/` path when it is enabled.
-- [ ] Treat `TPM_COMPONENT_CATALOG` as `false` when it is unset, empty, or any
+- [x] Treat `TPM_COMPONENT_CATALOG` as `false` when it is unset, empty, or any
       value other than `true`.
-- [ ] Ensure normal `bun run build` output does not include `dist/catalog`.
-- [ ] Add `scripts/verify-component-catalog.ts` to scan
+- [x] Ensure normal `bun run build` output does not include `dist/catalog`.
+- [x] Add `scripts/verify-component-catalog.ts` to scan
       `src/components/**/*.{astro,tsx}` for public components.
-- [ ] Require every public component to have a catalog example or an ignore-list
+- [x] Require every public component to have a catalog example or an ignore-list
       entry with a short reason.
-- [ ] Add package scripts:
+- [x] Add package scripts:
       `catalog:dev`, `catalog:build`, `catalog:preview`,
       `catalog:preview:fresh`, and `catalog:check`.
-- [ ] Ensure `catalog:*` scripts opt into the catalog with
+- [x] Ensure `catalog:*` scripts opt into the catalog with
       `bun --env-file=.env.catalog` instead of relying on Astro dev mode.
-- [ ] Do not use POSIX-only inline environment-variable syntax like
+- [x] Do not use POSIX-only inline environment-variable syntax like
       `TPM_COMPONENT_CATALOG=true astro build`.
-- [ ] Add a production-build guard to fail if `dist/catalog` appears in normal
+- [x] Add a production-build guard to fail if `dist/catalog` appears in normal
       build output.
-- [ ] Document the catalog scripts in `PACKAGE_SCRIPTS.md`.
+- [x] Document the catalog scripts in `PACKAGE_SCRIPTS.md`.
 
-## Milestone 3: Astro Component Render Test Harness
+## Milestone 3: Astro Component Render Test Coverage
 
-- [ ] Add Vitest and Astro Container API test support for isolated `.astro`
-      component rendering.
-- [ ] Add a Vitest config that uses Astro's `getViteConfig()` and keeps tests
-      compatible with the static Astro/Bun project.
-- [ ] Add `tests/components/ui/` render tests for the primitive components.
-- [ ] Test semantic output for links, buttons, icon labels, slots, variants, and
+- [x] Keep Vitest and Astro Container API support for isolated `.astro`
+      component rendering working with the static Astro/Bun project.
+- [x] Add or update `tests/src/components/ui/` render tests for the primitive
+      components.
+- [x] Test semantic output for links, buttons, icon labels, slots, variants, and
       disabled or missing-content states where applicable.
-- [ ] Keep Bun tests for pure TypeScript logic in `tests/lib/` and
+- [x] Keep Bun tests for pure TypeScript logic in `tests/lib/` and
       `tests/scripts/`; do not migrate those to browser tests.
-- [ ] Use the existing `test:astro` package script for Astro component render
+- [x] Use the existing `test:astro` package script for Astro component render
       tests, expanding it as new component tests are added.
-- [ ] Keep `test:astro` documented in `PACKAGE_SCRIPTS.md`.
+- [x] Keep `test:astro` documented in `PACKAGE_SCRIPTS.md`.
 
 ## Milestone 4: Navigation Data Boundary
 
-- [ ] Add `src/lib/navigation.ts`.
-- [ ] Define normalized navigation data types such as `SectionNavItem` and
+- [x] Refine `src/lib/navigation.ts` as the shared navigation data boundary.
+- [x] Export normalized navigation data types such as `SectionNavItem` and
       `ArticleSummary`.
-- [ ] Build category navigation data from existing content helpers in one place.
-- [ ] Include display-ready `title`, `href`, `slug`, optional `description`,
+- [x] Build category navigation data from existing content helpers in one place.
+- [x] Include display-ready `title`, `href`, `slug`, optional `description`,
       and article preview data.
-- [ ] Preserve current category ordering and current-page active state.
-- [ ] Replace ad hoc category shaping in `src/layouts/BaseLayout.astro` with the
+- [x] Preserve current category ordering and current-page active state.
+- [x] Replace ad hoc category shaping in `src/layouts/BaseLayout.astro` with the
       shared navigation helper.
-- [ ] Add pure logic tests in `tests/lib/navigation.test.ts` for category
+- [x] Add pure logic tests in `tests/lib/navigation.test.ts` for category
       ordering, article summary shape, href generation, and current item state.
 
 ## Milestone 5: Navigation Components And Discovery Surfaces
 
-- [ ] Add `src/components/navigation/BrandLink.astro`.
-- [ ] Add `src/components/navigation/PrimaryNav.astro` for high-level links
+- [x] Add `src/components/navigation/BrandLink.astro`.
+- [x] Add `src/components/navigation/PrimaryNav.astro` for high-level links
       such as Articles, About, Search, and Support.
-- [ ] Add `src/components/navigation/SectionNav.astro` and
+- [x] Add `src/components/navigation/SectionNav.astro` and
       `src/components/navigation/SectionNavItem.astro` for publication category
       links.
-- [ ] Add `src/components/navigation/SearchForm.astro` using semantic search
+- [x] Add `src/components/navigation/SearchForm.astro` using semantic search
       markup and accessible labels.
-- [ ] Add `src/components/navigation/SupportLink.astro` using
+- [x] Add `src/components/navigation/SupportLink.astro` using
       `LinkButton.astro`.
-- [ ] Add `src/components/navigation/ThemeToggle.astro`.
-- [ ] Move persistent theme browser logic into
+- [x] Add `src/components/navigation/ThemeToggle.astro`.
+- [x] Move persistent theme browser logic into
       `src/components/islands/ThemeController.ts` if the toggle needs a
       separate processed script boundary.
-- [ ] Add `src/components/navigation/MobileMenu.astro` with all core
+- [x] Add `src/components/navigation/MobileMenu.astro` with all core
       destinations and category discovery available at narrow sizes.
-- [ ] Add `src/components/navigation/CategoryTree.astro`,
+- [x] Add `src/components/navigation/CategoryTree.astro`,
       `CategoryGroup.astro`, and `CategorySidebar.astro`.
-- [ ] Use native `details`/`summary` for category disclosure unless a later test
+- [x] Use native `details`/`summary` for category disclosure unless a later test
       proves a small island is required.
-- [ ] Keep RSS out of crowded header surfaces unless the final navigation design
+- [x] Keep RSS out of crowded header surfaces unless the final navigation design
       deliberately includes it.
-- [ ] Add catalog examples for navigation states: desktop, mobile, current
+- [x] Add catalog examples for navigation states: desktop, mobile, current
       category, long article title, and keyboard-focus states.
 
 ## Milestone 6: Layout Shell Extraction
 
-- [ ] Add `src/components/layout/SiteShell.astro` for the high-level page shell.
-- [ ] Add `src/components/layout/MainFrame.astro` for main/sidebar layout
+- [x] Add `src/components/layout/SiteShell.astro` for the high-level page shell.
+- [x] Add `src/components/layout/MainFrame.astro` for main/sidebar layout
       composition.
-- [ ] Add `src/components/layout/SiteHeader.astro` composed from navigation
+- [x] Add `src/components/layout/SiteHeader.astro` composed from navigation
       components.
-- [ ] Add `src/components/layout/SiteFooter.astro` with useful publication
+- [x] Add `src/components/layout/SiteFooter.astro` with useful publication
       links: Articles, categories, About, RSS, Discord/community, and Support.
-- [ ] Add `src/components/layout/PageFrame.astro` for generic page layout
+- [x] Add `src/components/layout/PageFrame.astro` for generic page layout
       spacing and optional sidebar regions.
-- [ ] Move header, sidebar, footer, and mobile-menu markup out of
+- [x] Move header, sidebar, footer, and mobile-menu markup out of
       `src/layouts/BaseLayout.astro`.
-- [ ] Keep `src/layouts/BaseLayout.astro` focused on document structure, global
+- [x] Keep `src/layouts/BaseLayout.astro` focused on document structure, global
       CSS import, theme boot script, `SiteHead`, skip link, and slots.
-- [ ] Preserve canonical metadata, favicon, theme default, and skip-link
+- [x] Preserve canonical metadata, favicon, theme default, and skip-link
       behavior during extraction.
-- [ ] Add catalog examples for layout shells where useful.
+- [x] Add catalog examples for layout shells where useful.
 
 ## Milestone 7: Article Components And Article-End Discovery
 
-- [ ] Keep `src/layouts/ArticleLayout.astro` as the article route-facing layout
+- [x] Keep `src/layouts/ArticleLayout.astro` as the article route-facing layout
       and extract article display pieces into `src/components/articles/`.
-- [ ] Add `src/components/articles/ArticleHeader.astro` for title,
+- [x] Add `src/components/articles/ArticleHeader.astro` for title,
       description, author, dates, tags, and hero metadata.
-- [ ] Add `src/components/articles/ArticleMeta.astro` for machine-readable
+- [x] Add `src/components/articles/ArticleMeta.astro` for machine-readable
       `<time datetime>` output and compact metadata display.
-- [ ] Keep or move `ArticleProse.astro` under `src/components/articles/` and
+- [x] Keep or move `ArticleProse.astro` under `src/components/articles/` and
       make it the only prose wrapper for article Markdown/MDX output.
-- [ ] Add `src/components/articles/ArticleTags.astro`.
-- [ ] Add `src/components/articles/ArticleImage.astro` for future MDX/article
+- [x] Add `src/components/articles/ArticleTags.astro`.
+- [x] Add `src/components/articles/ArticleImage.astro` for future MDX/article
       images using Astro `Image` or `Picture` defaults.
-- [ ] Add `src/components/articles/ArticleCard.astro` and
+- [x] Add `src/components/articles/ArticleCard.astro` and
       `src/components/articles/ArticleList.astro`.
-- [ ] Add `src/components/articles/MoreInCategoryBlock.astro`.
-- [ ] Add `src/components/articles/RelatedArticlesBlock.astro` as a stable
+- [x] Add `src/components/articles/MoreInCategoryBlock.astro`.
+- [x] Add `src/components/articles/RelatedArticlesBlock.astro` as a stable
       placeholder for future related-article logic; keep it simple if no real
       data exists yet.
-- [ ] Add `src/components/articles/ArticleEndcap.astro` composed from
+- [x] Add `src/components/articles/ArticleEndcap.astro` composed from
       more-in-category, related/discovery, and `SupportBlock`.
-- [ ] Use the new article components in `src/pages/articles/[...slug].astro`,
+- [x] Use the new article components in `src/pages/articles/[...slug].astro`,
       `src/pages/articles/index.astro`, and `src/pages/categories/[category].astro`.
-- [ ] Preserve article body wording and rendered content.
+- [x] Preserve article body wording and rendered content.
 
 ## Milestone 8: Generic Markdown Page Components
 
-- [ ] Add `src/components/pages/MarkdownPage.astro` for non-article Markdown
+- [x] Add `src/components/pages/MarkdownPage.astro` for non-article Markdown
       surfaces.
-- [ ] Add `src/components/pages/PageHeader.astro` for page title and optional
+- [x] Add `src/components/pages/PageHeader.astro` for page title and optional
       description.
-- [ ] Add `src/components/pages/PageProse.astro` for non-article prose using
+- [x] Add `src/components/pages/PageProse.astro` for non-article prose using
       the shared typography rules without article metadata.
-- [ ] Update `src/pages/about.astro` to compose the new page components while
+- [x] Update `src/pages/about.astro` to compose the new page components while
       keeping page copy in `src/content/pages/` where possible.
-- [ ] Ensure non-article pages do not import article-specific metadata or
+- [x] Ensure non-article pages do not import article-specific metadata or
       article-only endcap components.
-- [ ] Add catalog examples for page prose and page headers.
+- [x] Add catalog examples for page prose and page headers.
 
 ## Milestone 9: Homepage Content Model And Blocks
 
-- [ ] Add `src/content/pages/index.md` for homepage editorial prose and stable
+- [x] Add `src/content/pages/index.md` for homepage editorial prose and stable
       page data that authors may edit.
-- [ ] Keep `src/pages/index.astro` as the homepage composer for dynamic article
+- [x] Keep `src/pages/index.astro` as the homepage composer for dynamic article
       data and Astro image components.
-- [ ] Add `src/components/blocks/HomeHeroBlock.astro`.
-- [ ] Add `src/components/blocks/HomeAnnouncementBlock.astro`.
-- [ ] Add `src/components/blocks/HomeLatestArticleBlock.astro`.
-- [ ] Add `src/components/blocks/HomeFeaturedArticlesBlock.astro` or a
+- [x] Add `src/components/blocks/HomeHeroBlock.astro`.
+- [x] Add `src/components/blocks/HomeAnnouncementBlock.astro`.
+- [x] Add `src/components/blocks/HomeLatestArticleBlock.astro`.
+- [x] Add `src/components/blocks/HomeFeaturedArticlesBlock.astro` or a
       start-here equivalent if featured data is available.
-- [ ] Add `src/components/blocks/HomeCategoryOverviewBlock.astro`.
-- [ ] Add `src/components/blocks/HomeArchiveLinksBlock.astro`.
-- [ ] Add `src/components/blocks/SupportBlock.astro` for reusable support CTAs.
-- [ ] Use `ArticleCard`, `ArticleList`, category navigation data, and shared
+- [x] Add `src/components/blocks/HomeCategoryOverviewBlock.astro`.
+- [x] Add `src/components/blocks/HomeArchiveLinksBlock.astro`.
+- [x] Add `src/components/blocks/SupportBlock.astro` for reusable support CTAs.
+- [x] Use `ArticleCard`, `ArticleList`, category navigation data, and shared
       media/image components inside homepage blocks.
-- [ ] Remove repeated homepage section markup from `src/pages/index.astro`.
-- [ ] Add catalog examples for each homepage block with normal, narrow, long
+- [x] Remove repeated homepage section markup from `src/pages/index.astro`.
+- [x] Add catalog examples for each homepage block with normal, narrow, long
       title, and missing-content states where applicable.
 
 ## Milestone 10: Archive, Category, Search, And Footer Reuse
 
-- [ ] Update `src/pages/articles/index.astro` to use shared archive/list
+- [x] Update `src/pages/articles/index.astro` to use shared archive/list
       components.
-- [ ] Update `src/pages/categories/index.astro` to use
+- [x] Update `src/pages/categories/index.astro` to use
       `CategoryOverviewBlock.astro` or equivalent reusable category overview
       components.
-- [ ] Update `src/pages/categories/[category].astro` to use shared category
+- [x] Update `src/pages/categories/[category].astro` to use shared category
       page framing and `ArticleList.astro`.
-- [ ] Add `src/components/blocks/SearchResultsBlock.astro`.
-- [ ] Update `src/pages/search.astro` so search UI is composed from
+- [x] Add `src/components/blocks/SearchResultsBlock.astro`.
+- [x] Update `src/pages/search.astro` so search UI is composed from
       `SearchForm.astro` and `SearchResultsBlock.astro`.
-- [ ] Ensure `SiteFooter.astro` uses the same navigation/category data boundary
+- [x] Ensure `SiteFooter.astro` uses the same navigation/category data boundary
       as header, sidebar, and homepage category discovery.
-- [ ] Keep Pagefind behavior working without hydrating unrelated page regions.
-- [ ] Add catalog examples for archive lists, category overviews, search empty
+- [x] Keep Pagefind behavior working without hydrating unrelated page regions.
+- [x] Add catalog examples for archive lists, category overviews, search empty
       state, and footer layout.
 
 ## Milestone 11: Global CSS Cleanup And Token-Driven Styling
 
-- [ ] Audit `src/styles/global.css` for component selectors such as `.button`,
+- [x] Audit `src/styles/global.css` for component selectors such as `.button`,
       `.site-header`, `.sidebar`, `.category-*`, `.archive-*`,
       `.category-card`, and page-section classes.
-- [ ] Move `.button` behavior into `Button.astro` and `LinkButton.astro`.
-- [ ] Move header and mobile-menu styling into layout/navigation components via
+- [x] Move `.button` behavior into `Button.astro` and `LinkButton.astro`.
+- [x] Move header and mobile-menu styling into layout/navigation components via
       Tailwind classes.
-- [ ] Move sidebar and category-tree styling into navigation components.
-- [ ] Move archive/card/list styling into article and block components.
-- [ ] Move page section spacing into `Container.astro`, `Section.astro`, and
+- [x] Move sidebar and category-tree styling into navigation components.
+- [x] Move archive/card/list styling into article and block components.
+- [x] Move page section spacing into `Container.astro`, `Section.astro`, and
       page/block components.
-- [ ] Keep global CSS limited to Tailwind imports/plugins, theme tokens,
+- [x] Keep global CSS limited to Tailwind imports/plugins, theme tokens,
       light/dark variables, document base styles, focus behavior, skip link,
       prose defaults, and rare cross-cutting browser behavior.
-- [ ] Replace hard-coded palette classes in first-party UI with semantic tokens
+- [x] Replace hard-coded palette classes in first-party UI with semantic tokens
       unless a one-off editorial treatment is intentional and documented.
-- [ ] Confirm border radius, shadows, spacing, and typography come from tokens
+- [x] Confirm border radius, shadows, spacing, and typography come from tokens
       or component variants rather than one-off global classes.
 
 ## Milestone 12: Responsive, Accessibility, And Browser Hardening
 
-- [ ] Add or update Playwright checks for no horizontal overflow on key routes:
+- [x] Add or update Playwright checks for no horizontal overflow on key routes:
       `/`, `/articles/`, at least one article page, `/categories/`,
       one category page, `/about/`, and `/search/`.
-- [ ] Add or update Playwright checks for mobile, tablet, desktop, wide
+- [x] Add or update Playwright checks for mobile, tablet, desktop, wide
       desktop, and short viewport heights.
-- [ ] Add or update checks for theme switching, focus visibility, mobile menu
+- [x] Add or update checks for theme switching, focus visibility, mobile menu
       disclosure, category disclosure, and search behavior.
-- [ ] Add or update axe checks for critical and serious accessibility issues.
+- [x] Add or update axe checks for critical and serious accessibility issues.
 - [ ] Manually inspect the component catalog in light and dark mode.
 - [ ] Manually inspect long titles, missing excerpts, missing images, empty
       search, category pages, article endcaps, and support CTAs.

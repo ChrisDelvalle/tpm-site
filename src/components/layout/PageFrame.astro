@@ -1,0 +1,23 @@
+---
+import Container from "../ui/Container.astro";
+
+interface Props {
+  size?: "lg" | "md" | "prose" | "xl";
+  spacing?: "lg" | "md" | "sm";
+}
+
+const { size = "lg", spacing = "md" } = Astro.props;
+const spacingClasses = {
+  lg: "py-12 lg:py-16",
+  md: "py-8 lg:py-12",
+  sm: "py-6 lg:py-8",
+} as const;
+---
+
+<Container
+  as="div"
+  size={size}
+  class:list={["grid gap-8", spacingClasses[spacing]]}
+>
+  <slot />
+</Container>

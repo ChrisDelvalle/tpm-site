@@ -1,0 +1,37 @@
+---
+import { Search } from "lucide-astro";
+
+import Input from "../ui/Input.astro";
+
+interface Props {
+  action?: string;
+  inputId?: string;
+  label?: string;
+  placeholder?: string;
+}
+
+const {
+  action = "/search/",
+  inputId = "site-search",
+  label = "Search",
+  placeholder = "Search",
+} = Astro.props;
+---
+
+<form action={action} role="search" aria-label={label} class="min-w-0">
+  <label class="sr-only" for={inputId}>{label}</label>
+  <div class="relative">
+    <Search
+      class="text-muted-foreground pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2"
+      aria-hidden="true"
+    />
+    <Input
+      id={inputId}
+      type="search"
+      name="q"
+      placeholder={placeholder}
+      class="ps-9"
+    />
+  </div>
+  <button class="sr-only" type="submit">{label}</button>
+</form>

@@ -1,0 +1,62 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for stable external embed wrappers. */
+interface Props extends HTMLAttributes<"figure"> {
+  aspect?: "classic" | "square" | "video" | "wide";
+  description?: string;
+  fallbackHref?: string;
+  title: string;
+}
+
+const {
+  title,
+  description,
+  fallbackHref,
+  aspect = "video",
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const aspectClasses = {
+  classic: "aspect-4/3",
+  square: "aspect-square",
+  video: "aspect-video",
+  wide: "aspect-21/9",
+} as const;
+---
+
+<figure {...attrs} class:list={["min-w-0 space-y-2", className]}>
+  <div
+    class:list={[
+      "border-border bg-muted overflow-hidden rounded-sm border",
+      aspectClasses[aspect],
+    ]}
+  >
+    {
+      Astro.slots.has("default") ? (
+        <slot />
+      ) : fallbackHref ? (
+        <a
+          class="text-primary flex size-full items-center justify-center p-4 text-center"
+          href={fallbackHref}
+        >
+          Open {title}
+        </a>
+      ) : null
+    }
+  </div>
+  {
+    description || fallbackHref ? (
+      <figcaption class="text-muted-foreground text-sm">
+        {description}
+        {description && fallbackHref ? " " : ""}
+        {fallbackHref ? (
+          <a class="text-primary" href={fallbackHref}>
+            Open embed source.
+          </a>
+        ) : null}
+      </figcaption>
+    ) : null
+  }
+</figure>

@@ -28,6 +28,7 @@ const categories = defineCollection({
 const pages = defineCollection({
   loader: glob({
     base: "./src/content/pages",
+    generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
   schema: pageSchema(),

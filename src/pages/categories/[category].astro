@@ -1,15 +1,10 @@
 ---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
 import { getCategories } from "../../lib/content";
-import {
-  articleUrl,
-  authorName,
-  categoryUrl,
-  entryDate,
-  entryTitle,
-  excerpt,
-  formatDate,
-} from "../../lib/routes";
+import { categoryUrl } from "../../lib/routes";
 import { categoryStaticPaths } from "../../lib/static-paths";
 
 /**
@@ -22,6 +17,9 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.props;
+const categoryItems = articleListItemsFromArchive(
+  articleArchiveItems(category.articles, [category]),
+);
 ---
 
 <BaseLayout
@@ -30,26 +28,11 @@ const { category } = Astro.props;
     `Articles filed under ${category.title}.`}
   canonicalPath={categoryUrl(category.slug)}
 >
-  <section class="page-heading">
-    <p class="eyebrow">Category</p>
-    <h1>{category.title}</h1>
-    {category.description && <p>{category.description}</p>}
-  </section>
-
-  <ol class="archive-list">
-    {
-      category.articles.map((article) => (
-        <li>
-          <a class="archive-title" href={articleUrl(article.id)}>
-            {entryTitle(article)}
-          </a>
-          <div class="archive-meta">
-            <span>{formatDate(entryDate(article))}</span>
-            <span>{authorName(article)}</span>
-          </div>
-          {excerpt(article) && <p>{excerpt(article)}</p>}
-        </li>
-      ))
-    }
-  </ol>
+  <ArchiveListBlock
+    eyebrow="Category"
+    title={category.title}
+    description={category.description ??
+      `Articles filed under ${category.title}.`}
+    items={categoryItems}
+  />
 </BaseLayout>

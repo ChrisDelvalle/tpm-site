@@ -1,0 +1,47 @@
+---
+import TextLink from "../ui/TextLink.astro";
+
+interface PrimaryNavItem {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  currentPath?: string;
+  items?: readonly PrimaryNavItem[];
+  label?: string;
+}
+
+const {
+  currentPath = "",
+  items = [
+    { href: "/articles/", label: "Articles" },
+    { href: "/categories/", label: "Categories" },
+    { href: "/about/", label: "About" },
+  ],
+  label = "Primary navigation",
+} = Astro.props;
+---
+
+<nav aria-label={label}>
+  <ul class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium">
+    {
+      items.map((item) => {
+        const isCurrent = currentPath.startsWith(item.href);
+
+        return (
+          <li>
+            <TextLink
+              href={item.href}
+              variant="nav"
+              tone={isCurrent ? "primary" : "muted"}
+              aria-current={isCurrent ? "page" : undefined}
+            >
+              {item.label}
+            </TextLink>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

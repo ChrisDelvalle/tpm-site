@@ -22,6 +22,7 @@ describe("article page", () => {
     });
 
     expect(view).toContain(article.data.title);
-    expect(view).toContain("article-meta");
+    expect(view).toContain("Article tags");
+    expect(view).toContain("Support The Philosopher&#39;s Meme");
   });
 });

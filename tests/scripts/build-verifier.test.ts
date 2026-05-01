@@ -112,6 +112,7 @@ describe("build verifier helpers", () => {
         issues: {
           articleCountIssues: ["expected 1 article page, found 0"],
           brokenLinks: [],
+          catalogLeaks: [],
           draftLeaks: [],
           invalidLegacyRedirects: [],
           missingArticleJsonLd: [],
@@ -131,6 +132,7 @@ describe("build verifier helpers", () => {
       issues: {
         articleCountIssues: ["expected 1 article page, found 2"],
         brokenLinks: ["index.html -> /missing/"],
+        catalogLeaks: ["catalog/"],
         draftLeaks: ["feed.xml -> draft-post"],
         invalidLegacyRedirects: ["2022/01/01/post/index.html: invalid"],
         missingArticleJsonLd: ["articles/post/index.html"],
@@ -145,6 +147,7 @@ describe("build verifier helpers", () => {
     expect(report).toContain("Missing legacy redirects:");
     expect(report).toContain("Invalid legacy redirects:");
     expect(report).toContain("Broken links:");
+    expect(report).toContain("Unexpected component catalog output:");
     expect(report).toContain("Article count mismatch:");
     expect(report).toContain("Unexpected static-page client scripts:");
     expect(report).toContain("Unexpected generated dated pages:");
@@ -195,6 +198,40 @@ describe("build verifier helpers", () => {
       expect(formatBuildVerificationReport(result)).toContain(
         "Build verification passed",
       );
+    }));
+
+  test("fails normal build verification when private catalog output is present", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\n---\n",
+      );
+
+      await writeText(root, "dist/index.html", "");
+      await writeText(root, "dist/404.html", "");
+      await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/articles/index.html", "");
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        '{"@type":"BlogPosting"}',
+      );
+      await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/categories/history/index.html", "");
+      await writeText(root, "dist/feed.xml", "<feed>published</feed>");
+      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(root, "dist/catalog/index.html", "catalog");
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.catalogLeaks).toEqual(["catalog/"]);
     }));
 
   test.serial(

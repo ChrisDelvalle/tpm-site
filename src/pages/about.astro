@@ -1,7 +1,8 @@
 ---
 import { getEntry, render } from "astro:content";
 
-import ArticleProse from "../components/article/ArticleProse.astro";
+import PageFrame from "../components/layout/PageFrame.astro";
+import MarkdownPage from "../components/pages/MarkdownPage.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const about = await getEntry("pages", "about");
@@ -19,9 +20,9 @@ const description = about.data.description ?? "About The Philosopher's Meme.";
   description={description}
   canonicalPath="/about/"
 >
-  <article class="article">
-    <ArticleProse>
+  <PageFrame size="prose">
+    <MarkdownPage title={about.data.title} description={description}>
       <Content />
-    </ArticleProse>
-  </article>
+    </MarkdownPage>
+  </PageFrame>
 </BaseLayout>

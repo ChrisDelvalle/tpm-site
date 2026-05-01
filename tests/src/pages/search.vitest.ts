@@ -15,5 +15,7 @@ describe("search page", () => {
 
     expect(view).toContain("Search");
     expect(view).toContain('id="search"');
+    expect(view).toContain("data-search-results");
+    expect(view).toContain("Search The Philosopher&#39;s Meme archive");
   });
 });

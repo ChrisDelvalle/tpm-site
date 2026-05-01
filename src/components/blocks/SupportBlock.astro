@@ -1,0 +1,37 @@
+---
+import LinkButton from "../ui/LinkButton.astro";
+
+interface Props {
+  body?: string;
+  headingId?: string;
+  href?: string;
+  label?: string;
+  title?: string;
+}
+
+const {
+  body = "Help keep independent research and writing going.",
+  headingId = "support-block-heading",
+  href = "https://patreon.com/thephilosophersmeme",
+  label = "Support Us",
+  title = "Support The Philosopher's Meme",
+} = Astro.props;
+---
+
+<section
+  class="border-border bg-muted/40 grid gap-4 rounded-sm border p-5"
+  aria-labelledby={headingId}
+>
+  <div class="grid gap-1">
+    <h2
+      id={headingId}
+      class="text-foreground m-0 text-xl font-semibold tracking-normal"
+    >
+      {title}
+    </h2>
+    <p class="text-muted-foreground text-sm">{body}</p>
+  </div>
+  <div>
+    <LinkButton href={href}>{label}</LinkButton>
+  </div>
+</section>

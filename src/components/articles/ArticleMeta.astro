@@ -1,0 +1,19 @@
+---
+interface Props {
+  author?: string | undefined;
+  date?: Date | undefined;
+  formattedDate?: string | undefined;
+}
+
+const { author, date, formattedDate } = Astro.props;
+const dateTime = date?.toISOString();
+---
+
+{
+  (author || formattedDate) && (
+    <div class="text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 text-sm">
+      {author && <span>{author}</span>}
+      {formattedDate && <time datetime={dateTime}>{formattedDate}</time>}
+    </div>
+  )
+}

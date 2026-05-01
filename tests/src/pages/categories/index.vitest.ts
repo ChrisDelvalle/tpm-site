@@ -14,6 +14,7 @@ describe("categories index page", () => {
     });
 
     expect(view).toContain("Browse the archive by subject.");
-    expect(view).toContain("category-card");
+    expect(view).toContain("Metamemetics");
+    expect(view).toMatch(/articles/);
   });
 });

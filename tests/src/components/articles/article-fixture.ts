@@ -1,0 +1,27 @@
+import type { ArticleListItem } from "../../../../src/lib/article-list";
+
+/** Article-list fixture used by article component render tests. */
+export const articleItems = [
+  {
+    author: "Seong-Young Her",
+    category: {
+      href: "/categories/history/",
+      title: "History",
+    },
+    date: "April 6, 2022",
+    description: "Article description.",
+    href: "/articles/article-title/",
+    title: "Article Title",
+  },
+  {
+    author: "Seong-Young Her",
+    category: {
+      href: "/categories/metamemetics/",
+      title: "Metamemetics",
+    },
+    date: "May 16, 2021",
+    description: "Second article description.",
+    href: "/articles/second-article/",
+    title: "Second Article",
+  },
+] as const satisfies readonly ArticleListItem[];

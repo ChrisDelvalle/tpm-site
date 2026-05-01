@@ -1,0 +1,19 @@
+---
+import CategoryOverviewBlock from "./CategoryOverviewBlock.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props {
+  items: readonly SectionNavItem[];
+  title?: string;
+}
+
+const { items, title = "Browse Categories" } = Astro.props;
+---
+
+<div class="max-w-4xl [&_h1]:text-2xl [&_h1]:font-semibold">
+  <CategoryOverviewBlock
+    headingId="home-categories-heading"
+    items={items}
+    title={title}
+  />
+</div>

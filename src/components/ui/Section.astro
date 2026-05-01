@@ -1,0 +1,41 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for page sections and full-width content bands. */
+interface Props extends HTMLAttributes<"section"> {
+  spacing?: "lg" | "md" | "none" | "sm";
+  tone?: "muted" | "plain" | "surface";
+}
+
+const {
+  spacing = "md",
+  tone = "plain",
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const baseClasses = "min-w-0";
+const spacingClasses = {
+  lg: "py-12 sm:py-16",
+  md: "py-8 sm:py-10",
+  none: "py-0",
+  sm: "py-4 sm:py-6",
+} as const;
+const toneClasses = {
+  muted: "bg-muted text-foreground",
+  plain: "bg-transparent text-foreground",
+  surface: "bg-card text-card-foreground",
+} as const;
+---
+
+<section
+  {...attrs}
+  class:list={[
+    baseClasses,
+    spacingClasses[spacing],
+    toneClasses[tone],
+    className,
+  ]}
+>
+  <slot />
+</section>

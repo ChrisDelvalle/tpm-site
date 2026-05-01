@@ -1,0 +1,785 @@
+---
+import { Search } from "lucide-astro";
+
+import ArticleCard from "../components/articles/ArticleCard.astro";
+import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
+import ArticleHeader from "../components/articles/ArticleHeader.astro";
+import ArticleImage from "../components/articles/ArticleImage.astro";
+import ArticleList from "../components/articles/ArticleList.astro";
+import ArticleMeta from "../components/articles/ArticleMeta.astro";
+import ArticleProse from "../components/articles/ArticleProse.astro";
+import ArticleTags from "../components/articles/ArticleTags.astro";
+import ArchiveListBlock from "../components/blocks/ArchiveListBlock.astro";
+import CategoryOverviewBlock from "../components/blocks/CategoryOverviewBlock.astro";
+import HomeAnnouncementBlock from "../components/blocks/HomeAnnouncementBlock.astro";
+import HomeArchiveLinksBlock from "../components/blocks/HomeArchiveLinksBlock.astro";
+import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
+import HomeFeaturedArticlesBlock from "../components/blocks/HomeFeaturedArticlesBlock.astro";
+import HomeHeroBlock from "../components/blocks/HomeHeroBlock.astro";
+import HomeLatestArticleBlock from "../components/blocks/HomeLatestArticleBlock.astro";
+import MoreInCategoryBlock from "../components/articles/MoreInCategoryBlock.astro";
+import RelatedArticlesBlock from "../components/articles/RelatedArticlesBlock.astro";
+import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
+import SupportBlock from "../components/blocks/SupportBlock.astro";
+import MainFrame from "../components/layout/MainFrame.astro";
+import PageFrame from "../components/layout/PageFrame.astro";
+import SiteFooter from "../components/layout/SiteFooter.astro";
+import SiteHeader from "../components/layout/SiteHeader.astro";
+import EmbedFrame from "../components/media/EmbedFrame.astro";
+import ResponsiveIframe from "../components/media/ResponsiveIframe.astro";
+import BrandLink from "../components/navigation/BrandLink.astro";
+import CategoryGroup from "../components/navigation/CategoryGroup.astro";
+import CategorySidebar from "../components/navigation/CategorySidebar.astro";
+import CategoryTree from "../components/navigation/CategoryTree.astro";
+import MobileMenu from "../components/navigation/MobileMenu.astro";
+import PrimaryNav from "../components/navigation/PrimaryNav.astro";
+import SearchForm from "../components/navigation/SearchForm.astro";
+import SectionNav from "../components/navigation/SectionNav.astro";
+import SectionNavItem from "../components/navigation/SectionNavItem.astro";
+import SupportLink from "../components/navigation/SupportLink.astro";
+import ThemeToggle from "../components/navigation/ThemeToggle.astro";
+import MarkdownPage from "../components/pages/MarkdownPage.astro";
+import PageHeader from "../components/pages/PageHeader.astro";
+import PageProse from "../components/pages/PageProse.astro";
+import Badge from "../components/ui/Badge.astro";
+import Button from "../components/ui/Button.astro";
+import Card from "../components/ui/Card.astro";
+import Container from "../components/ui/Container.astro";
+import IconButton from "../components/ui/IconButton.astro";
+import Input from "../components/ui/Input.astro";
+import LinkButton from "../components/ui/LinkButton.astro";
+import Section from "../components/ui/Section.astro";
+import Separator from "../components/ui/Separator.astro";
+import TextLink from "../components/ui/TextLink.astro";
+import sampleImage from "../assets/shared/tpm_defaultpic.jpg";
+import type { ArticleListItem } from "../lib/article-list";
+import type { SectionNavItem as SectionNavItemData } from "../lib/navigation";
+import { catalogMetadata } from "./catalog.config";
+import CatalogExample from "./CatalogExample.astro";
+import CatalogSection from "./CatalogSection.astro";
+
+const catalogNavigationItems = [
+  {
+    articles: [
+      {
+        description: "A compact article example for navigation previews.",
+        href: "/articles/memes-are-not-jokes-they-are-diagram-games/",
+        isCurrent: false,
+        slug: "memes-are-not-jokes-they-are-diagram-games",
+        title: "Memes Are Not Jokes: They Are Diagram Games",
+      },
+      {
+        description: "A deliberately long title for wrapping behavior.",
+        href: "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+        isCurrent: true,
+        slug: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now",
+        title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+      },
+    ],
+    description: "How memes move through culture and platforms.",
+    href: "/categories/metamemetics/",
+    isCurrent: false,
+    isOpen: true,
+    slug: "metamemetics",
+    title: "Metamemetics",
+  },
+  {
+    articles: [
+      {
+        description: "Game studies category article example.",
+        href: "/articles/twitch-plays-pokemon/",
+        isCurrent: false,
+        slug: "twitch-plays-pokemon",
+        title: "Twitch Plays Pokemon",
+      },
+    ],
+    description: "Games and culture.",
+    href: "/categories/game-studies/",
+    isCurrent: false,
+    isOpen: false,
+    slug: "game-studies",
+    title: "Game Studies",
+  },
+] as const satisfies SectionNavItemData[];
+
+const catalogArticleItems = [
+  {
+    author: "Seong-Young Her",
+    category: {
+      href: "/categories/metamemetics/",
+      title: "Metamemetics",
+    },
+    date: "April 6, 2022",
+    description:
+      "A compact article teaser with enough text to check wrapping and rhythm.",
+    href: "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+    title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+  },
+  {
+    author: "Seong-Young Her",
+    category: {
+      href: "/categories/game-studies/",
+      title: "Game Studies",
+    },
+    date: "May 16, 2021",
+    description:
+      "A second card keeps list spacing and repeated-item styling visible.",
+    href: "/articles/gamergate-as-metagaming/",
+    title: "Gamergate as Metagaming",
+  },
+] as const satisfies readonly ArticleListItem[];
+---
+
+<main class="bg-background text-foreground">
+  <Container as="div" size="xl" class="grid gap-10 py-10">
+    <header class="max-w-3xl">
+      <p class="text-primary text-sm font-semibold uppercase">Design System</p>
+      <h1 class="text-foreground mt-2 text-4xl font-bold tracking-normal">
+        {catalogMetadata.title}
+      </h1>
+      <p class="text-muted-foreground mt-3 text-lg">
+        {catalogMetadata.description}
+      </p>
+    </header>
+
+    <CatalogSection
+      title="UI Primitives"
+      description="Small Astro components that provide the shared visual and accessibility contracts."
+    >
+      <CatalogExample
+        title="Button"
+        description="Native actions with variant, size, and tone props."
+        componentPath="src/components/ui/Button.astro"
+      >
+        <div class="flex flex-wrap gap-3">
+          <Button>Primary</Button>
+          <Button variant="outline" tone="neutral">Neutral</Button>
+          <Button variant="ghost" tone="danger">Danger</Button>
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="LinkButton"
+        description="Navigation and support CTAs that remain links."
+        componentPath="src/components/ui/LinkButton.astro"
+      >
+        <div class="flex flex-wrap gap-3">
+          <LinkButton href="https://patreon.com/thephilosophersmeme">
+            Support Us
+          </LinkButton>
+          <LinkButton href="/articles/" variant="outline" tone="neutral">
+            Browse Articles
+          </LinkButton>
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="IconButton"
+        description="Icon-only button with a required accessible label."
+        componentPath="src/components/ui/IconButton.astro"
+      >
+        <IconButton label="Search the catalog">
+          <Search size={18} aria-hidden="true" />
+        </IconButton>
+      </CatalogExample>
+
+      <CatalogExample
+        title="TextLink"
+        description="Inline and navigation links with shared focus behavior."
+        componentPath="src/components/ui/TextLink.astro"
+      >
+        <p>
+          Read the <TextLink href="/articles/">article archive</TextLink> or explore
+          <TextLink href="/categories/" tone="neutral">categories</TextLink>.
+        </p>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Input"
+        description="Native input styling with invalid-state support."
+        componentPath="src/components/ui/Input.astro"
+      >
+        <div class="grid gap-2">
+          <label class="text-sm font-medium" for="catalog-search-example">
+            Search
+          </label>
+          <Input
+            id="catalog-search-example"
+            type="search"
+            name="q"
+            placeholder="Search articles"
+          />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Badge"
+        description="Compact labels for metadata and categories."
+        componentPath="src/components/ui/Badge.astro"
+      >
+        <div class="flex flex-wrap gap-2">
+          <Badge tone="primary">Metamemetics</Badge>
+          <Badge tone="muted" variant="outline">Draft</Badge>
+          <Badge tone="neutral" variant="solid">Featured</Badge>
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Separator"
+        description="Decorative or semantic dividers."
+        componentPath="src/components/ui/Separator.astro"
+      >
+        <div class="grid gap-4">
+          <Separator />
+          <div class="flex h-10 items-center gap-4">
+            <span>Left</span>
+            <Separator orientation="vertical" decorative={false} />
+            <span>Right</span>
+          </div>
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Container"
+        description="Responsive width and gutter constraints."
+        componentPath="src/components/ui/Container.astro"
+      >
+        <Container size="prose" gutters="narrow" class="bg-muted py-3">
+          Container content stays readable.
+        </Container>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Section"
+        description="Content band with spacing and tone variants."
+        componentPath="src/components/ui/Section.astro"
+      >
+        <Section tone="muted" spacing="sm" class="px-4">
+          <p>Section content uses tokenized spacing and backgrounds.</p>
+        </Section>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Card"
+        description="Repeated item shell, not a page-section wrapper."
+        componentPath="src/components/ui/Card.astro"
+      >
+        <Card>
+          <h3 class="text-foreground font-semibold">Article Card Shell</h3>
+          <p class="text-muted-foreground mt-1 text-sm">
+            Cards frame repeated items with stable spacing.
+          </p>
+        </Card>
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Media Primitives"
+      description="Embed components reserve stable space and require accessible metadata."
+    >
+      <CatalogExample
+        title="ResponsiveIframe"
+        description="Low-level responsive iframe frame."
+        componentPath="src/components/media/ResponsiveIframe.astro"
+      >
+        <ResponsiveIframe src="about:blank" title="Blank catalog iframe" />
+      </CatalogExample>
+
+      <CatalogExample
+        title="EmbedFrame"
+        description="External embed wrapper with fallback source link."
+        componentPath="src/components/media/EmbedFrame.astro"
+      >
+        <EmbedFrame
+          title="External essay video"
+          description="Fallback link remains available if the embed fails."
+          fallbackHref="https://example.com/video"
+        />
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Article Components"
+      description="Article surfaces, prose wrappers, discovery lists, and support prompts."
+    >
+      <CatalogExample
+        title="ArticleHeader"
+        description="Title block with category, metadata, description, and tags."
+        componentPath="src/components/articles/ArticleHeader.astro"
+      >
+        <ArticleHeader
+          author="Seong-Young Her"
+          category={{ href: "/categories/history/", title: "History" }}
+          date={new Date("2022-04-06T23:58:10.000Z")}
+          description="A serious and good philosophical work could be written consisting entirely of fake philosophy quotes."
+          formattedDate="April 6, 2022"
+          tags={["philosophy", "history"]}
+          title="Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now"
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleMeta"
+        description="Author and machine-readable date metadata."
+        componentPath="src/components/articles/ArticleMeta.astro"
+      >
+        <ArticleMeta
+          author="Seong-Young Her"
+          date={new Date("2022-04-06T23:58:10.000Z")}
+          formattedDate="April 6, 2022"
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleTags"
+        description="Tag badges for article metadata."
+        componentPath="src/components/articles/ArticleTags.astro"
+      >
+        <ArticleTags tags={["metamemetics", "philosophy", "history"]} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleImage"
+        description="Astro-optimized image with caption."
+        componentPath="src/components/articles/ArticleImage.astro"
+      >
+        <ArticleImage
+          src={sampleImage}
+          alt="The Philosopher's Meme default preview image"
+          caption="Article image caption example."
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleProse"
+        description="Markdown body wrapper using Tailwind Typography."
+        componentPath="src/components/articles/ArticleProse.astro"
+      >
+        <ArticleProse>
+          <p>
+            Article prose keeps generated Markdown readable without shipping a
+            client-side renderer.
+          </p>
+          <h2>Subheading</h2>
+          <p>
+            Links, images, blockquotes, and code inherit the prose styling
+            contract.
+          </p>
+        </ArticleProse>
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleCard"
+        description="One article teaser card."
+        componentPath="src/components/articles/ArticleCard.astro"
+      >
+        <ArticleCard {...catalogArticleItems[0]} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleList"
+        description="Ordered list of article cards."
+        componentPath="src/components/articles/ArticleList.astro"
+      >
+        <ArticleList items={catalogArticleItems} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="MoreInCategoryBlock"
+        description="Article-end same-category discovery."
+        componentPath="src/components/articles/MoreInCategoryBlock.astro"
+      >
+        <MoreInCategoryBlock
+          categoryHref="/categories/metamemetics/"
+          categoryTitle="Metamemetics"
+          headingId="catalog-more-in-category-heading"
+          items={catalogArticleItems}
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="RelatedArticlesBlock"
+        description="Future related-article discovery surface."
+        componentPath="src/components/articles/RelatedArticlesBlock.astro"
+      >
+        <RelatedArticlesBlock
+          headingId="catalog-related-articles-heading"
+          items={catalogArticleItems}
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleEndcap"
+        description="Composed article footer with discovery and support."
+        componentPath="src/components/articles/ArticleEndcap.astro"
+      >
+        <ArticleEndcap
+          categoryHref="/categories/metamemetics/"
+          categoryTitle="Metamemetics"
+          idPrefix="catalog-endcap"
+          moreInCategory={catalogArticleItems}
+          related={catalogArticleItems.slice(0, 1)}
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="SupportBlock"
+        description="Reusable support CTA for article endcaps and homepage sections."
+        componentPath="src/components/blocks/SupportBlock.astro"
+      >
+        <SupportBlock headingId="catalog-support-block-heading" />
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Homepage Blocks"
+      description="Composable homepage sections with normal, narrow, long-content, and empty-state examples."
+    >
+      <CatalogExample
+        title="HomeHeroBlock"
+        description="Brand image, tagline, and calls to action."
+        componentPath="src/components/blocks/HomeHeroBlock.astro"
+      >
+        <div class="grid gap-8">
+          <HomeHeroBlock
+            image={sampleImage}
+            imageAlt="The Philosopher's Meme"
+            tagline="The philosophy of memes, cyberculture, and the Internet."
+          />
+          <div class="max-w-xs">
+            <HomeHeroBlock
+              image={sampleImage}
+              imageAlt="The Philosopher's Meme narrow preview"
+              tagline="A deliberately narrow example that checks wrapping for the homepage hero tagline."
+            />
+          </div>
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="HomeAnnouncementBlock"
+        description="Announcement artwork with editable Markdown prose."
+        componentPath="src/components/blocks/HomeAnnouncementBlock.astro"
+      >
+        <HomeAnnouncementBlock
+          image={sampleImage}
+          imageAlt="The Philosopher's Meme announcement artwork"
+        >
+          <p>
+            We've set up a <a href="https://patreon.com/thephilosophersmeme">
+              Patreon
+            </a>. Please consider supporting TPM.
+          </p>
+        </HomeAnnouncementBlock>
+      </CatalogExample>
+
+      <CatalogExample
+        title="HomeLatestArticleBlock"
+        description="Latest article teaser and empty state."
+        componentPath="src/components/blocks/HomeLatestArticleBlock.astro"
+      >
+        <div class="grid gap-8">
+          <HomeLatestArticleBlock
+            image={sampleImage}
+            imageAlt={catalogArticleItems[0].title}
+            item={catalogArticleItems[0]}
+          />
+          <HomeLatestArticleBlock
+            image={sampleImage}
+            imageAlt="Missing latest article"
+            item={undefined}
+            title="Latest Empty State"
+          />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="HomeFeaturedArticlesBlock"
+        description="Start-here article list and missing-content state."
+        componentPath="src/components/blocks/HomeFeaturedArticlesBlock.astro"
+      >
+        <div class="grid gap-8">
+          <HomeFeaturedArticlesBlock items={catalogArticleItems} />
+          <HomeFeaturedArticlesBlock items={[]} title="Featured Empty State" />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="HomeCategoryOverviewBlock"
+        description="Category discovery grid using navigation data."
+        componentPath="src/components/blocks/HomeCategoryOverviewBlock.astro"
+      >
+        <HomeCategoryOverviewBlock items={catalogNavigationItems} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="HomeArchiveLinksBlock"
+        description="Archive, categories, and RSS link block."
+        componentPath="src/components/blocks/HomeArchiveLinksBlock.astro"
+      >
+        <HomeArchiveLinksBlock />
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Archive, Category, And Search Blocks"
+      description="Reusable article archive, category overview, and search surfaces."
+    >
+      <CatalogExample
+        title="ArchiveListBlock"
+        description="Shared archive and category article-list framing."
+        componentPath="src/components/blocks/ArchiveListBlock.astro"
+      >
+        <div class="grid gap-8">
+          <ArchiveListBlock
+            title="Articles"
+            description="Essays and notes on memes, cyberculture, and the Internet."
+            items={catalogArticleItems}
+            pagefindIgnore
+          />
+          <ArchiveListBlock
+            eyebrow="Category"
+            title="A Category With A Deliberately Long Title For Wrapping"
+            items={catalogArticleItems.slice(0, 1)}
+          />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="CategoryOverviewBlock"
+        description="Category overview backed by shared navigation data."
+        componentPath="src/components/blocks/CategoryOverviewBlock.astro"
+      >
+        <div class="grid gap-8">
+          <CategoryOverviewBlock
+            title="Categories"
+            description="Browse the archive by subject."
+            items={catalogNavigationItems}
+          />
+          <CategoryOverviewBlock
+            headingId="catalog-empty-categories-heading"
+            title="Empty Category Overview"
+            items={[]}
+          />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="SearchResultsBlock"
+        description="Search form and empty result-enhancement region."
+        componentPath="src/components/blocks/SearchResultsBlock.astro"
+      >
+        <SearchResultsBlock
+          headingId="catalog-search-heading"
+          title="Search"
+          description="Search starts empty until Pagefind enhances the result region."
+        />
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Page Components"
+      description="Generic Markdown page components that avoid article-only metadata and endcaps."
+    >
+      <CatalogExample
+        title="PageHeader"
+        description="Generic page title and description."
+        componentPath="src/components/pages/PageHeader.astro"
+      >
+        <PageHeader title="About" description="About The Philosopher's Meme." />
+      </CatalogExample>
+
+      <CatalogExample
+        title="PageProse"
+        description="Non-article Markdown prose wrapper."
+        componentPath="src/components/pages/PageProse.astro"
+      >
+        <PageProse>
+          <h2>History</h2>
+          <p>
+            Generic Markdown pages share prose styling without article metadata
+            or article-end discovery.
+          </p>
+        </PageProse>
+      </CatalogExample>
+
+      <CatalogExample
+        title="MarkdownPage"
+        description="Composed non-article Markdown page shell."
+        componentPath="src/components/pages/MarkdownPage.astro"
+      >
+        <MarkdownPage title="About" description="About The Philosopher's Meme.">
+          <p>
+            MarkdownPage keeps page copy renderable while routing and metadata
+            stay in the Astro page.
+          </p>
+        </MarkdownPage>
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Navigation Components"
+      description="Static navigation and discovery components using semantic links, forms, and disclosure."
+    >
+      <CatalogExample
+        title="BrandLink"
+        description="Publication identity link with truncation for narrow spaces."
+        componentPath="src/components/navigation/BrandLink.astro"
+      >
+        <div class="max-w-64">
+          <BrandLink />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="PrimaryNav"
+        description="Desktop navigation with current-page state."
+        componentPath="src/components/navigation/PrimaryNav.astro"
+      >
+        <PrimaryNav currentPath="/articles/" />
+      </CatalogExample>
+
+      <CatalogExample
+        title="SearchForm"
+        description="Semantic search form that can shrink inside header layouts."
+        componentPath="src/components/navigation/SearchForm.astro"
+      >
+        <div class="max-w-md">
+          <SearchForm inputId="catalog-navigation-search" />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="ThemeToggle"
+        description="Small header action with keyboard focus and theme-controller hook."
+        componentPath="src/components/navigation/ThemeToggle.astro"
+      >
+        <ThemeToggle />
+      </CatalogExample>
+
+      <CatalogExample
+        title="SupportLink"
+        description="Reusable support call to action for header, footer, and endcap surfaces."
+        componentPath="src/components/navigation/SupportLink.astro"
+      >
+        <SupportLink />
+      </CatalogExample>
+
+      <CatalogExample
+        title="SectionNavItem"
+        description="One category disclosure with current article and long-title wrapping."
+        componentPath="src/components/navigation/SectionNavItem.astro"
+      >
+        <ol class="max-w-sm">
+          <SectionNavItem item={catalogNavigationItems[0]} />
+        </ol>
+      </CatalogExample>
+
+      <CatalogExample
+        title="CategoryGroup"
+        description="Category-named wrapper for the same disclosure behavior."
+        componentPath="src/components/navigation/CategoryGroup.astro"
+      >
+        <ol class="max-w-sm">
+          <CategoryGroup item={catalogNavigationItems[1]} />
+        </ol>
+      </CatalogExample>
+
+      <CatalogExample
+        title="CategoryTree"
+        description="All-category discovery tree for desktop and mobile surfaces."
+        componentPath="src/components/navigation/CategoryTree.astro"
+      >
+        <div class="max-w-sm">
+          <CategoryTree items={catalogNavigationItems} />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="SectionNav"
+        description="Category discovery block with heading and tree."
+        componentPath="src/components/navigation/SectionNav.astro"
+      >
+        <div class="max-w-sm">
+          <SectionNav items={catalogNavigationItems} />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="CategorySidebar"
+        description="Desktop sidebar shell for content discovery."
+        componentPath="src/components/navigation/CategorySidebar.astro"
+      >
+        <div class="max-h-96 max-w-sm overflow-hidden border">
+          <CategorySidebar items={catalogNavigationItems} />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="MobileMenu"
+        description="Narrow navigation disclosure containing search, top links, theme, support, and categories."
+        componentPath="src/components/navigation/MobileMenu.astro"
+      >
+        <div class="relative flex justify-end">
+          <MobileMenu currentPath="/articles/" items={catalogNavigationItems} />
+        </div>
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Layout Components"
+      description="Page-shell components that compose navigation, sidebars, content, and footer surfaces."
+    >
+      <CatalogExample
+        title="SiteHeader"
+        description="Responsive header composed from navigation primitives."
+        componentPath="src/components/layout/SiteHeader.astro"
+      >
+        <SiteHeader
+          currentPath="/articles/"
+          navigationItems={catalogNavigationItems}
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="MainFrame"
+        description="Desktop sidebar plus main content composition."
+        componentPath="src/components/layout/MainFrame.astro"
+      >
+        <div class="max-h-96 overflow-hidden border">
+          <MainFrame navigationItems={catalogNavigationItems}>
+            <PageFrame spacing="sm">
+              <h2 class="text-foreground text-xl font-semibold">
+                Main content slot
+              </h2>
+              <p class="text-muted-foreground">
+                Layout frames preserve the content region while sidebar
+                discovery remains reusable.
+              </p>
+            </PageFrame>
+          </MainFrame>
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="SiteFooter"
+        description="Publication footer with categories and support action."
+        componentPath="src/components/layout/SiteFooter.astro"
+      >
+        <SiteFooter navigationItems={catalogNavigationItems} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="PageFrame"
+        description="Generic page content width and vertical rhythm."
+        componentPath="src/components/layout/PageFrame.astro"
+      >
+        <PageFrame spacing="sm" size="prose">
+          <p>
+            PageFrame gives non-article pages a predictable responsive measure.
+          </p>
+        </PageFrame>
+      </CatalogExample>
+    </CatalogSection>
+  </Container>
+</main>

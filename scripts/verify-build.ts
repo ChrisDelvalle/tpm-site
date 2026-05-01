@@ -31,6 +31,7 @@ export interface ArticlePublication {
 export interface BuildVerificationIssues {
   articleCountIssues: string[];
   brokenLinks: string[];
+  catalogLeaks: string[];
   draftLeaks: string[];
   invalidLegacyRedirects: string[];
   missingArticleJsonLd: string[];
@@ -135,6 +136,11 @@ export function formatBuildVerificationReport(
   if (result.issues.brokenLinks.length > 0) {
     lines.push(
       `Broken links: ${JSON.stringify(result.issues.brokenLinks.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.catalogLeaks.length > 0) {
+    lines.push(
+      `Unexpected component catalog output: ${JSON.stringify(result.issues.catalogLeaks)}`,
     );
   }
   if (result.issues.articleCountIssues.length > 0) {
@@ -333,6 +339,9 @@ export async function verifyBuild({
 
   await collectMissingRequired(distDir, requiredPaths, issues);
   await collectMissingLegacyRedirects(distDir, expectedRedirects, issues);
+  if (await exists(distDir, "catalog")) {
+    issues.catalogLeaks.push("catalog/");
+  }
 
   for (const file of htmlAndXml) {
     if (file.endsWith(".html")) {
@@ -456,6 +465,7 @@ function emptyIssues(): BuildVerificationIssues {
   return {
     articleCountIssues: [],
     brokenLinks: [],
+    catalogLeaks: [],
     draftLeaks: [],
     invalidLegacyRedirects: [],
     missingArticleJsonLd: [],
@@ -487,6 +497,7 @@ function hasIssues(issues: BuildVerificationIssues): boolean {
   return (
     issues.articleCountIssues.length > 0 ||
     issues.brokenLinks.length > 0 ||
+    issues.catalogLeaks.length > 0 ||
     issues.draftLeaks.length > 0 ||
     issues.invalidLegacyRedirects.length > 0 ||
     issues.missingArticleJsonLd.length > 0 ||

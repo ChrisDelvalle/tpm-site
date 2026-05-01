@@ -1,0 +1,35 @@
+---
+import ArticleList from "../articles/ArticleList.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+
+interface Props {
+  description?: string | undefined;
+  eyebrow?: string | undefined;
+  items: readonly ArticleListItem[];
+  pagefindIgnore?: boolean;
+  title: string;
+}
+
+const {
+  description,
+  eyebrow,
+  items,
+  pagefindIgnore = false,
+  title,
+} = Astro.props;
+---
+
+<section class="grid gap-6">
+  <header class="grid gap-3">
+    {eyebrow && <p class="text-primary text-sm font-semibold">{eyebrow}</p>}
+    <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
+      {title}
+    </h1>
+    {
+      description && (
+        <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
+      )
+    }
+  </header>
+  <ArticleList items={items} pagefindIgnore={pagefindIgnore} />
+</section>

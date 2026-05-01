@@ -1,0 +1,44 @@
+---
+import BrandLink from "../navigation/BrandLink.astro";
+import MobileMenu from "../navigation/MobileMenu.astro";
+import PrimaryNav from "../navigation/PrimaryNav.astro";
+import SearchForm from "../navigation/SearchForm.astro";
+import SupportLink from "../navigation/SupportLink.astro";
+import ThemeToggle from "../navigation/ThemeToggle.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props {
+  currentPath: string;
+  navigationItems: readonly SectionNavItem[];
+}
+
+const { currentPath, navigationItems } = Astro.props;
+---
+
+<header
+  class="border-border bg-background/95 sticky top-0 z-40 border-b backdrop-blur-sm"
+>
+  <div
+    class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 lg:grid-cols-[minmax(12rem,1fr)_minmax(16rem,32rem)_minmax(12rem,1fr)] lg:px-8"
+  >
+    <div class="min-w-0 justify-self-start">
+      <BrandLink />
+    </div>
+
+    <div class="hidden min-w-0 lg:block">
+      <SearchForm />
+    </div>
+
+    <div
+      class="hidden min-w-0 justify-self-end lg:flex lg:items-center lg:gap-4"
+    >
+      <PrimaryNav currentPath={currentPath} />
+      <ThemeToggle />
+      <SupportLink />
+    </div>
+
+    <div class="justify-self-end lg:hidden">
+      <MobileMenu currentPath={currentPath} items={navigationItems} />
+    </div>
+  </div>
+</header>

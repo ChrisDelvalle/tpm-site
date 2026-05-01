@@ -1,0 +1,15 @@
+---
+import LinkButton from "../ui/LinkButton.astro";
+
+interface Props {
+  href?: string;
+  label?: string;
+}
+
+const {
+  href = "https://patreon.com/thephilosophersmeme",
+  label = "Support Us",
+} = Astro.props;
+---
+
+<LinkButton href={href} size="md">{label}</LinkButton>

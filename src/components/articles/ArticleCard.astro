@@ -1,0 +1,43 @@
+---
+import ArticleMeta from "./ArticleMeta.astro";
+import Card from "../ui/Card.astro";
+import TextLink from "../ui/TextLink.astro";
+
+interface ArticleCardCategory {
+  href: string;
+  title: string;
+}
+
+interface Props {
+  author?: string | undefined;
+  category?: ArticleCardCategory | undefined;
+  date?: string | undefined;
+  description?: string | undefined;
+  href: string;
+  title: string;
+}
+
+const { author, category, date, description, href, title } = Astro.props;
+---
+
+<Card as="article" class="grid gap-3">
+  <div class="grid gap-2">
+    <h2 class="text-foreground m-0 text-xl font-semibold tracking-normal">
+      <TextLink href={href} variant="subtle" tone="neutral">{title}</TextLink>
+    </h2>
+    <ArticleMeta author={author} formattedDate={date} />
+  </div>
+  {
+    category && (
+      <TextLink
+        href={category.href}
+        variant="subtle"
+        tone="primary"
+        class="text-sm"
+      >
+        {category.title}
+      </TextLink>
+    )
+  }
+  {description && <p class="text-muted-foreground text-sm">{description}</p>}
+</Card>
