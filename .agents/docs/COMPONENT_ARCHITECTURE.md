@@ -119,6 +119,10 @@ src/components/
     Section.astro
     Card.astro
 
+  media/
+    EmbedFrame.astro
+    ResponsiveIframe.astro
+
   layout/
     BaseLayout.astro
     SiteShell.astro
@@ -412,6 +416,25 @@ categories, routing policy, or content collections.
 Primitives should support `class` pass-through, but parents should not need to
 know internal selectors. Use typed props for variants and sizes.
 
+### Media Components
+
+Media components own stable sizing, loading policy, fallback behavior, and
+accessibility requirements for non-text media.
+
+- `EmbedFrame`: wrapper for external embeds with title, fallback link/content,
+  loading policy, and stable frame.
+- `ResponsiveIframe`: low-level iframe component with required `title`, stable
+  aspect ratio, loading defaults, and safe attributes.
+
+Raw `iframe` and embed markup should not spread through article, page, or block
+components. Put media behavior behind these components so layout stability,
+accessibility, and Lighthouse requirements stay consistent.
+
+Do not create a generic media wrapper unless repeated implementation pressure
+proves it is needed. Images and embeds have different responsibilities: images
+should use Astro `Image`/`Picture` through image-specific components, while
+iframes and external embeds should use media-specific components.
+
 ### Layout Components
 
 Layout components own shells and regions, not domain display.
@@ -693,6 +716,53 @@ Every page shell should make it easy to provide:
 Article and category components should preserve enough metadata to support rich
 snippets and social sharing. SEO should not require page-specific copy/paste.
 
+## Lighthouse And Page Quality Contracts
+
+Lighthouse quality should be designed into components instead of patched after
+audits fail. Component APIs should make performance, accessibility, best
+practices, and SEO the default path.
+
+Performance and layout stability:
+
+- Media components must reserve space with width/height, `aspect-ratio`, or a
+  stable frame. This applies to article images, hero images, card images,
+  embeds, iframes, and future media blocks.
+- Likely LCP images must not be lazy-loaded. Hero and primary images should use
+  Astro `Image`/`Picture`, right-sized sources, and `fetchpriority="high"` only
+  when they are truly likely to be the LCP element.
+- Below-the-fold images and embeds should lazy-load by default.
+- Components must not inject content above the reader after load unless the
+  space was already reserved.
+- Avoid large DOM discovery surfaces. Header dropdowns should preview a few
+  recent/featured articles, not render the full archive.
+- Third-party scripts are disallowed by default. Support, Discord, social, and
+  donation destinations should be plain links unless there is an explicit
+  product and performance decision.
+
+Accessibility and interaction:
+
+- Accessibility is part of component API design. For example, `IconButton`
+  should require a label, and current navigation links should expose
+  `aria-current` where appropriate.
+- Interactive components must define keyboard behavior, focus behavior,
+  pointer/touch behavior, and no-hover access before shipping.
+- Popover, dialog, menu, and disclosure components must pass keyboard and axe
+  checks before merge.
+- Links remain links when they navigate. Buttons are for actions.
+- Motion must be optional and respect `prefers-reduced-motion`.
+
+SEO and best practices:
+
+- Page metadata should flow through `SiteHead`/SEO helpers, not per-route
+  copy/paste.
+- Article dates should render with machine-readable `<time datetime>`.
+- Captioned images should use `figure`/`figcaption` through article/media
+  components.
+- Embeds should use a dedicated component that requires title, stable sizing,
+  loading policy, and fallback content.
+- Font choices should stay boring: minimal families, weights, and styles; good
+  fallbacks; no layout-shifting font behavior.
+
 ## Styling Strategy
 
 Long-term styling should move away from global component selectors.
@@ -841,6 +911,19 @@ Static interaction preference:
 - Use Radix/shadcn only when native HTML cannot provide the required behavior
   cleanly.
 
+Native HTML and CSS notes worth remembering:
+
+- Use `details name="..."` when a JS-free accordion group is enough.
+- Use `<search>` around site-search UI instead of adding `role="search"` to a
+  generic wrapper.
+- Use `color-scheme` with the theme system so browser UI such as form controls
+  and scrollbars matches light/dark mode.
+- Use `text-wrap: balance` selectively for short editorial headings, titles,
+  and CTA text. Do not apply expensive text wrapping broadly to long prose.
+- Treat HTML `popover` and CSS anchor positioning as candidates for future
+  dropdown/search/hover positioning, but verify accessibility and browser
+  behavior before relying on them.
+
 ## Responsive Contracts
 
 Each component should document or encode:
@@ -976,6 +1059,8 @@ The catalog should show:
 - narrow, medium, and wide containers;
 - long text and long-title states;
 - empty and missing-content states;
+- focus states and keyboard-reachable states;
+- image/media frame variants;
 - support CTA variants.
 
 Catalog examples should be curated and explicit. Do not auto-render every
