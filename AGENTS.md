@@ -65,8 +65,6 @@ to the active milestone.
 - `dist/`: generated build output. Do not edit by hand.
 - `PACKAGE_SCRIPTS.md`: brief reference for every `package.json` script.
 - `agent-docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
-- `agent-docs/QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
-  release checks.
 - `agent-docs/COMPONENT_ARCHITECTURE.md`: target component hierarchy,
   component responsibilities, navigation redesign direction, and migration
   sequence.
@@ -1241,33 +1239,35 @@ and CodeQL. Do not bypass security tooling to get a release check green.
 ## Testing Policy
 
 Test behavior through intended public APIs. Do not export implementation details
-only to make tests easier.
+only to make tests easier. Test-only exports require explicit user permission.
+If a test appears to need a private helper, first reconsider the module
+boundary and separate stable pure logic from side-effect-heavy edge code.
 
-Use unit tests for:
+Aim for 100% useful coverage of testable behavior. Coverage must come from
+meaningful behavior tests, not weakened runtime code, brittle assertions, or
+leaky public interfaces. A coverage exception must be explicitly justified in a
+nearby code comment, reported during handoff, and accepted by the user after
+handoff. Do not silently leave testable code uncovered.
 
-- slug generation;
-- category derivation;
-- draft filtering;
-- metadata normalization;
-- route helpers;
-- duplicate slug detection;
-- image path validation;
-- RSS/sitemap/search filtering;
+The blocking coverage inventory should include every testable TypeScript/TSX
+source file except documented exclusions such as config files, declaration
+files, declarative Astro templates, and browser entrypoints whose behavior is
+covered by Playwright. When adding a new executable source module, add focused
+tests or update the explicit exception with rationale.
 
-Use Playwright for user-visible browser behavior:
+Use unit tests for deterministic logic and script behavior, including slug
+generation, category derivation, draft filtering, metadata normalization, route
+helpers, duplicate slug detection, image path validation, RSS/feed output,
+content helpers, quality/verification scripts, and custom content transforms.
 
-- homepage;
-- article pages;
-- article archive;
-- category pages;
-- mobile navigation;
-- theme toggle;
-- search;
-- no horizontal overflow;
-- representative responsive viewports.
+For UI work, prefer tests that assert user-visible behavior. Use Playwright for
+real browser behavior: homepage, article pages, article archive, category
+pages, mobile navigation, theme toggle, search, no horizontal overflow, and
+representative responsive viewports. Use Playwright for full authoring flows
+once a local server and editor workflow exist.
 
 Use axe accessibility checks for representative pages. Use Lighthouse CI for
-performance, accessibility, best practices, and SEO release gates.
+performance, accessibility, best practices, and SEO review checks.
 
 ## Planning Workflow
 
@@ -1279,7 +1279,7 @@ design/tooling/project document when the intended work should be reviewable
 before code changes.
 
 Do not create planning docs for routine QA commands. Routine tooling
-expectations belong in this file and `agent-docs/QUALITY_TOOLING.md`.
+expectations belong in this file and `PACKAGE_SCRIPTS.md`.
 
 ## Generated Files And Historical Assets
 

@@ -664,9 +664,8 @@ bar.
 
 Use automated checks before release.
 
-The concrete tooling plan lives in `agent-docs/QUALITY_TOOLING.md`. This
-section defines
-the quality bar; that document defines the tools and scripts that enforce it.
+Concrete script usage lives in `PACKAGE_SCRIPTS.md`. This section defines the
+quality bar those scripts should enforce.
 
 Required checks should include:
 
