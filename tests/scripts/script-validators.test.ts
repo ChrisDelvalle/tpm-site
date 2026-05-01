@@ -29,16 +29,16 @@ async function withTempRoot<T>(callback: (root: string) => Promise<T>) {
   }
 }
 
-async function writeText(root: string, relativePath: string, text: string) {
-  const fullPath = path.join(root, relativePath);
-  await mkdir(path.dirname(fullPath), { recursive: true });
-  await writeFile(fullPath, text);
-}
-
 async function writeBytes(root: string, relativePath: string, bytes: Buffer) {
   const fullPath = path.join(root, relativePath);
   await mkdir(path.dirname(fullPath), { recursive: true });
   await writeFile(fullPath, bytes);
+}
+
+async function writeText(root: string, relativePath: string, text: string) {
+  const fullPath = path.join(root, relativePath);
+  await mkdir(path.dirname(fullPath), { recursive: true });
+  await writeFile(fullPath, text);
 }
 
 describe("content verification script", () => {

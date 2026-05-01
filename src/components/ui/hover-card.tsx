@@ -16,20 +16,6 @@ function HoverCard({
 }
 
 /**
- * Marks the element that opens the hover-card preview.
- *
- * @param props Radix hover-card trigger props.
- * @returns Hover-card trigger element.
- */
-function HoverCardTrigger({
-  ...props
-}: React.ComponentProps<typeof HoverCardPrimitive.Trigger>) {
-  return (
-    <HoverCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} />
-  );
-}
-
-/**
  * Renders hover-card content in a portal with project styling.
  *
  * @param props Radix hover-card content props plus optional class names.
@@ -47,17 +33,31 @@ function HoverCardContent({
   return (
     <HoverCardPrimitive.Portal data-slot="hover-card-portal">
       <HoverCardPrimitive.Content
-        data-slot="hover-card-content"
         align={align}
-        sideOffset={sideOffset}
         className={cn(
           "bg-popover text-popover-foreground data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 z-50 w-64 origin-(--radix-hover-card-content-transform-origin) rounded-md border p-4 shadow-md outline-hidden",
           className,
         )}
+        data-slot="hover-card-content"
+        sideOffset={sideOffset}
         {...props}
       />
     </HoverCardPrimitive.Portal>
   );
 }
 
-export { HoverCard, HoverCardTrigger, HoverCardContent };
+/**
+ * Marks the element that opens the hover-card preview.
+ *
+ * @param props Radix hover-card trigger props.
+ * @returns Hover-card trigger element.
+ */
+function HoverCardTrigger({
+  ...props
+}: React.ComponentProps<typeof HoverCardPrimitive.Trigger>) {
+  return (
+    <HoverCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} />
+  );
+}
+
+export { HoverCard, HoverCardContent, HoverCardTrigger };

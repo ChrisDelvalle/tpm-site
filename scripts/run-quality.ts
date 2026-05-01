@@ -1,15 +1,15 @@
 import { spawn } from "node:child_process";
 
-interface QualityCommand {
-  args: string[];
-  blocking: boolean;
-  label: string;
-}
-
 interface CommandResult {
   command: QualityCommand;
   exitCode: number;
   output: string;
+}
+
+interface QualityCommand {
+  args: string[];
+  blocking: boolean;
+  label: string;
 }
 
 const localCommands: QualityCommand[] = [
@@ -83,8 +83,28 @@ const releaseCommands: QualityCommand[] = [
   },
 ];
 
-function commandLine(command: QualityCommand) {
-  return ["bun", ...command.args].join(" ");
+/**
+ * Formats a noisy command result with label, command, and captured output.
+ *
+ * @param result Captured command result.
+ * @returns Human-readable command report.
+ */
+export function formatCommandResult(result: CommandResult) {
+  const status =
+    result.exitCode === 0
+      ? "produced warnings"
+      : result.command.blocking
+        ? `failed with exit code ${result.exitCode}`
+        : `produced review warnings with exit code ${result.exitCode}`;
+  const output = result.output.trim();
+
+  return [
+    `[quality] ${result.command.label} ${status}`,
+    `$ ${commandLine(result.command)}`,
+    output === "" ? undefined : output,
+  ]
+    .filter((line) => line !== undefined)
+    .join("\n");
 }
 
 /**
@@ -110,16 +130,6 @@ export function outputHasWarningOrError(output: string) {
 }
 
 /**
- * Decides whether a quality-command result should be printed.
- *
- * @param result Captured command result.
- * @returns True when the command failed or emitted warning-like output.
- */
-export function shouldPrintResult(result: CommandResult) {
-  return result.exitCode !== 0 || outputHasWarningOrError(result.output);
-}
-
-/**
  * Checks whether a command failure should fail the whole quality run.
  *
  * @param result Captured command result.
@@ -130,27 +140,48 @@ export function resultIsBlockingFailure(result: CommandResult) {
 }
 
 /**
- * Formats a noisy command result with label, command, and captured output.
+ * Runs the quiet quality-check command dispatcher.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param cwd Working directory for Bun subprocesses.
+ * @returns Process exit code.
+ */
+export async function runQualityCli(
+  args = process.argv.slice(2),
+  cwd = process.cwd(),
+) {
+  if (args.includes("--help") || args.includes("-h")) {
+    console.log(usage());
+    return 0;
+  }
+
+  const results: CommandResult[] = [];
+
+  for (const command of selectedCommands(args)) {
+    const result = await runCommand(command, cwd);
+    results.push(result);
+
+    if (shouldPrintResult(result)) {
+      const formatted = formatCommandResult(result);
+      if (result.exitCode === 0) {
+        console.warn(formatted);
+      } else {
+        console.error(formatted);
+      }
+    }
+  }
+
+  return results.some(resultIsBlockingFailure) ? 1 : 0;
+}
+
+/**
+ * Decides whether a quality-command result should be printed.
  *
  * @param result Captured command result.
- * @returns Human-readable command report.
+ * @returns True when the command failed or emitted warning-like output.
  */
-export function formatCommandResult(result: CommandResult) {
-  const status =
-    result.exitCode === 0
-      ? "produced warnings"
-      : result.command.blocking
-        ? `failed with exit code ${result.exitCode}`
-        : `produced review warnings with exit code ${result.exitCode}`;
-  const output = result.output.trim();
-
-  return [
-    `[quality] ${result.command.label} ${status}`,
-    `$ ${commandLine(result.command)}`,
-    output === "" ? undefined : output,
-  ]
-    .filter((line) => line !== undefined)
-    .join("\n");
+export function shouldPrintResult(result: CommandResult) {
+  return result.exitCode !== 0 || outputHasWarningOrError(result.output);
 }
 
 function commandEnvironment() {
@@ -158,6 +189,10 @@ function commandEnvironment() {
   env["NO_COLOR"] = "1";
   delete env["FORCE_COLOR"];
   return env;
+}
+
+function commandLine(command: QualityCommand) {
+  return ["bun", ...command.args].join(" ");
 }
 
 async function runCommand(command: QualityCommand, cwd: string) {
@@ -207,41 +242,6 @@ validate:html, review:assets, and review:markdown.
 
 Use --release to run check:release plus non-blocking Markdown, asset,
 accessibility, Lighthouse, coverage, and all-severity audit review checks.`;
-}
-
-/**
- * Runs the quiet quality-check command dispatcher.
- *
- * @param args Command-line arguments without the executable prefix.
- * @param cwd Working directory for Bun subprocesses.
- * @returns Process exit code.
- */
-export async function runQualityCli(
-  args = process.argv.slice(2),
-  cwd = process.cwd(),
-) {
-  if (args.includes("--help") || args.includes("-h")) {
-    console.log(usage());
-    return 0;
-  }
-
-  const results: CommandResult[] = [];
-
-  for (const command of selectedCommands(args)) {
-    const result = await runCommand(command, cwd);
-    results.push(result);
-
-    if (shouldPrintResult(result)) {
-      const formatted = formatCommandResult(result);
-      if (result.exitCode === 0) {
-        console.warn(formatted);
-      } else {
-        console.error(formatted);
-      }
-    }
-  }
-
-  return results.some(resultIsBlockingFailure) ? 1 : 0;
 }
 
 if (import.meta.main) {

@@ -13,18 +13,11 @@ export interface AssetReference {
   value: string;
 }
 
-/** Asset placement violation for files referenced by multiple source files. */
-export interface SharedAssetViolation {
-  assetPath: string;
-  references: AssetReference[];
-  sourceFiles: string[];
-}
-
-/** Shared-asset verification output used by reports and tests. */
-export interface SharedAssetResult {
-  referenceCount: number;
-  referencedAssetCount: number;
-  violations: SharedAssetViolation[];
+/** Options for collecting source-file asset references. */
+export interface AssetReferenceOptions {
+  assetsDir?: string;
+  rootDir: string;
+  srcDir?: string;
 }
 
 /** Options for scanning shared asset placement. */
@@ -35,321 +28,18 @@ export interface SharedAssetOptions {
   srcDir?: string;
 }
 
-/** Options for collecting source-file asset references. */
-export interface AssetReferenceOptions {
-  assetsDir?: string;
-  rootDir: string;
-  srcDir?: string;
+/** Shared-asset verification output used by reports and tests. */
+export interface SharedAssetResult {
+  referenceCount: number;
+  referencedAssetCount: number;
+  violations: SharedAssetViolation[];
 }
 
-function toPosix(file: string) {
-  return file.split(path.sep).join("/");
-}
-
-function relative(rootDir: string, file: string) {
-  return toPosix(path.relative(rootDir, file));
-}
-
-function isInside(file: string, dir: string) {
-  const relativePath = path.relative(dir, file);
-  return (
-    relativePath === "" ||
-    (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
-  );
-}
-
-async function listSourceFiles(dir: string, assetsDir: string) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files: string[] = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-
-    if (entry.isDirectory()) {
-      if (isInside(fullPath, assetsDir)) {
-        continue;
-      }
-
-      files.push(...(await listSourceFiles(fullPath, assetsDir)));
-    } else if (sourceFilePattern.test(entry.name)) {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
-}
-
-function safeDecodeUri(value: string) {
-  try {
-    return decodeURI(value);
-  } catch {
-    return value;
-  }
-}
-
-function lineNumberAt(text: string, index: number) {
-  return text.slice(0, index).split(/\r?\n/).length;
-}
-
-/**
- * Normalizes a source-code asset reference into a path-like value.
- *
- * @param value Raw Markdown, HTML, or quoted reference target.
- * @returns Normalized asset path when the reference points at a local asset.
- */
-export function normalizeReference(value: string) {
-  let raw = value.trim();
-
-  if (raw.startsWith("<") && raw.endsWith(">")) {
-    raw = raw.slice(1, -1).trim();
-  }
-
-  if (
-    raw === "" ||
-    raw.includes("${") ||
-    raw.startsWith("http://") ||
-    raw.startsWith("https://") ||
-    raw.startsWith("//")
-  ) {
-    return undefined;
-  }
-
-  const pathOnly = safeDecodeUri(raw.split(/[?#]/, 1)[0] ?? raw);
-
-  if (!assetExtensionPattern.test(pathOnly)) {
-    return undefined;
-  }
-
-  return pathOnly;
-}
-
-/**
- * Resolves a local asset reference to an absolute path under `src/assets`.
- *
- * @param file Source file containing the reference.
- * @param value Raw reference value.
- * @param rootDir Repository root directory.
- * @param assetsDir Absolute path to the source assets directory.
- * @returns Absolute asset path when the reference is valid and in scope.
- */
-export function resolveAssetReference(
-  file: string,
-  value: string,
-  rootDir: string,
-  assetsDir: string,
-) {
-  const normalized = normalizeReference(value);
-
-  if (normalized === undefined) {
-    return undefined;
-  }
-
-  let resolved: string;
-  const absoluteAssetsPrefix = `/${relative(rootDir, assetsDir)}/`;
-  const relativeAssetsPrefix = `${relative(rootDir, assetsDir)}/`;
-
-  if (normalized.startsWith(absoluteAssetsPrefix)) {
-    resolved = path.resolve(rootDir, `.${normalized}`);
-  } else if (normalized.startsWith(relativeAssetsPrefix)) {
-    resolved = path.resolve(rootDir, normalized);
-  } else if (/^(?:\.\.?\/)+assets\//.test(normalized)) {
-    resolved = path.resolve(path.dirname(file), normalized);
-  } else {
-    return undefined;
-  }
-
-  if (!isInside(resolved, assetsDir)) {
-    return undefined;
-  }
-
-  return resolved;
-}
-
-function findClosingMarkdownTarget(text: string, start: number) {
-  if (text[start] === "<") {
-    const close = text.indexOf(">)", start);
-    return close === -1 ? undefined : close + 1;
-  }
-
-  const close = text.indexOf(")", start);
-  return close === -1 ? undefined : close;
-}
-
-function markdownTargetReferences(
-  text: string,
-  file: string,
-  rootDir: string,
-  assetsDir: string,
-) {
-  const references: AssetReference[] = [];
-  let searchIndex = 0;
-
-  while (searchIndex < text.length) {
-    const targetOpen = text.indexOf("](", searchIndex);
-
-    if (targetOpen === -1) {
-      break;
-    }
-
-    const targetStart = targetOpen + 2;
-    const targetEnd = findClosingMarkdownTarget(text, targetStart);
-
-    if (targetEnd === undefined) {
-      searchIndex = targetStart;
-      continue;
-    }
-
-    const targetToken = text.slice(targetStart, targetEnd);
-    const assetPath = resolveAssetReference(
-      file,
-      targetToken,
-      rootDir,
-      assetsDir,
-    );
-
-    if (assetPath !== undefined) {
-      references.push({
-        assetPath,
-        file,
-        line: lineNumberAt(text, targetStart),
-        value: targetToken,
-      });
-    }
-
-    searchIndex = targetEnd + 1;
-  }
-
-  return references;
-}
-
-function quotedReferences(
-  text: string,
-  file: string,
-  rootDir: string,
-  assetsDir: string,
-) {
-  const references: AssetReference[] = [];
-  const quotedPathPattern =
-    /(["'`])((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^"'`\r\n]+)\1/g;
-
-  for (const match of text.matchAll(quotedPathPattern)) {
-    const value = match[2];
-
-    if (value === undefined) {
-      continue;
-    }
-
-    const assetPath = resolveAssetReference(file, value, rootDir, assetsDir);
-
-    if (assetPath !== undefined) {
-      references.push({
-        assetPath,
-        file,
-        line: lineNumberAt(text, match.index),
-        value,
-      });
-    }
-  }
-
-  return references;
-}
-
-function angleReferences(
-  text: string,
-  file: string,
-  rootDir: string,
-  assetsDir: string,
-) {
-  const references: AssetReference[] = [];
-  const anglePathPattern =
-    /<((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^>\r\n]+)>/g;
-
-  for (const match of text.matchAll(anglePathPattern)) {
-    const value = match[1];
-
-    if (value === undefined) {
-      continue;
-    }
-
-    const assetPath = resolveAssetReference(file, value, rootDir, assetsDir);
-
-    if (assetPath !== undefined) {
-      references.push({
-        assetPath,
-        file,
-        line: lineNumberAt(text, match.index),
-        value,
-      });
-    }
-  }
-
-  return references;
-}
-
-async function sourceFileReferences(
-  file: string,
-  rootDir: string,
-  assetsDir: string,
-) {
-  const text = await readFile(file, "utf8");
-  const references = [
-    ...markdownTargetReferences(text, file, rootDir, assetsDir),
-    ...quotedReferences(text, file, rootDir, assetsDir),
-    ...angleReferences(text, file, rootDir, assetsDir),
-  ];
-  const seen = new Set<string>();
-
-  return references.filter((reference) => {
-    const key = `${reference.assetPath}:${reference.file}:${reference.line}:${reference.value}`;
-
-    if (seen.has(key)) {
-      return false;
-    }
-
-    seen.add(key);
-    return true;
-  });
-}
-
-function groupByAsset(references: AssetReference[]) {
-  const groups = new Map<string, AssetReference[]>();
-
-  for (const reference of references) {
-    const group = groups.get(reference.assetPath) ?? [];
-    group.push(reference);
-    groups.set(reference.assetPath, group);
-  }
-
-  return groups;
-}
-
-function referencedFiles(references: AssetReference[]) {
-  return new Set(references.map((reference) => reference.file));
-}
-
-/**
- * Finds assets referenced from multiple source files outside the shared folder.
- *
- * @param groups References grouped by resolved asset path.
- * @param sharedAssetsDir Absolute path to the shared assets directory.
- * @returns Shared-asset placement violations.
- */
-export function sharedAssetViolations(
-  groups: Map<string, AssetReference[]>,
-  sharedAssetsDir: string,
-) {
-  return [...groups.entries()]
-    .map(([assetPath, references]) => ({
-      assetPath,
-      references,
-      sourceFiles: [...referencedFiles(references)].sort(),
-    }))
-    .filter(
-      (group) =>
-        group.sourceFiles.length > 1 &&
-        !isInside(group.assetPath, sharedAssetsDir),
-    )
-    .sort((left, right) => left.assetPath.localeCompare(right.assetPath));
+/** Asset placement violation for files referenced by multiple source files. */
+export interface SharedAssetViolation {
+  assetPath: string;
+  references: AssetReference[];
+  sourceFiles: string[];
 }
 
 /**
@@ -448,12 +138,86 @@ export function formatSharedAssetReport(
         .map((reference) => reference.line)
         .sort((left, right) => left - right);
       lines.push(
-        `  - ${relative(rootDir, sourceFile)}:${[...new Set(linesForFile)].join(",")}`,
+        `  - ${relative(rootDir, sourceFile)}:${Array.from(new Set(linesForFile)).join(",")}`,
       );
     }
   }
 
   return lines.join("\n");
+}
+
+/**
+ * Normalizes a source-code asset reference into a path-like value.
+ *
+ * @param value Raw Markdown, HTML, or quoted reference target.
+ * @returns Normalized asset path when the reference points at a local asset.
+ */
+export function normalizeReference(value: string) {
+  let raw = value.trim();
+
+  if (raw.startsWith("<") && raw.endsWith(">")) {
+    raw = raw.slice(1, -1).trim();
+  }
+
+  if (
+    raw === "" ||
+    raw.includes("${") ||
+    raw.startsWith("http://") ||
+    raw.startsWith("https://") ||
+    raw.startsWith("//")
+  ) {
+    return undefined;
+  }
+
+  const pathOnly = safeDecodeUri(raw.split(/[?#]/, 1)[0] ?? raw);
+
+  if (!assetExtensionPattern.test(pathOnly)) {
+    return undefined;
+  }
+
+  return pathOnly;
+}
+
+/**
+ * Resolves a local asset reference to an absolute path under `src/assets`.
+ *
+ * @param file Source file containing the reference.
+ * @param value Raw reference value.
+ * @param rootDir Repository root directory.
+ * @param assetsDir Absolute path to the source assets directory.
+ * @returns Absolute asset path when the reference is valid and in scope.
+ */
+export function resolveAssetReference(
+  file: string,
+  value: string,
+  rootDir: string,
+  assetsDir: string,
+) {
+  const normalized = normalizeReference(value);
+
+  if (normalized === undefined) {
+    return undefined;
+  }
+
+  let resolved: string;
+  const absoluteAssetsPrefix = `/${relative(rootDir, assetsDir)}/`;
+  const relativeAssetsPrefix = `${relative(rootDir, assetsDir)}/`;
+
+  if (normalized.startsWith(absoluteAssetsPrefix)) {
+    resolved = path.resolve(rootDir, `.${normalized}`);
+  } else if (normalized.startsWith(relativeAssetsPrefix)) {
+    resolved = path.resolve(rootDir, normalized);
+  } else if (/^(?:\.\.?\/)+assets\//.test(normalized)) {
+    resolved = path.resolve(path.dirname(file), normalized);
+  } else {
+    return undefined;
+  }
+
+  if (!isInside(resolved, assetsDir)) {
+    return undefined;
+  }
+
+  return resolved;
 }
 
 /**
@@ -512,6 +276,241 @@ references from the same source file do not make an asset shared.`);
   }
 
   return result.violations.length > 0 ? 1 : 0;
+}
+
+/**
+ * Finds assets referenced from multiple source files outside the shared folder.
+ *
+ * @param groups References grouped by resolved asset path.
+ * @param sharedAssetsDir Absolute path to the shared assets directory.
+ * @returns Shared-asset placement violations.
+ */
+export function sharedAssetViolations(
+  groups: Map<string, AssetReference[]>,
+  sharedAssetsDir: string,
+) {
+  return Array.from(groups.entries(), ([assetPath, references]) => ({
+      assetPath,
+      references,
+      sourceFiles: Array.from(referencedFiles(references)).sort(),
+    }))
+    .filter(
+      (group) =>
+        group.sourceFiles.length > 1 &&
+        !isInside(group.assetPath, sharedAssetsDir),
+    )
+    .sort((left, right) => left.assetPath.localeCompare(right.assetPath));
+}
+
+function angleReferences(
+  text: string,
+  file: string,
+  rootDir: string,
+  assetsDir: string,
+) {
+  const references: AssetReference[] = [];
+  const anglePathPattern =
+    /<((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^>\r\n]+)>/g;
+
+  for (const match of text.matchAll(anglePathPattern)) {
+    const value = match[1];
+
+    if (value === undefined) {
+      continue;
+    }
+
+    const assetPath = resolveAssetReference(file, value, rootDir, assetsDir);
+
+    if (assetPath !== undefined) {
+      references.push({
+        assetPath,
+        file,
+        line: lineNumberAt(text, match.index),
+        value,
+      });
+    }
+  }
+
+  return references;
+}
+
+function findClosingMarkdownTarget(text: string, start: number) {
+  if (text[start] === "<") {
+    const close = text.indexOf(">)", start);
+    return close === -1 ? undefined : close + 1;
+  }
+
+  const close = text.indexOf(")", start);
+  return close === -1 ? undefined : close;
+}
+
+function groupByAsset(references: AssetReference[]) {
+  const groups = new Map<string, AssetReference[]>();
+
+  for (const reference of references) {
+    const group = groups.get(reference.assetPath) ?? [];
+    group.push(reference);
+    groups.set(reference.assetPath, group);
+  }
+
+  return groups;
+}
+
+function isInside(file: string, dir: string) {
+  const relativePath = path.relative(dir, file);
+  return (
+    relativePath === "" ||
+    (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
+  );
+}
+
+function lineNumberAt(text: string, index: number) {
+  return text.slice(0, index).split(/\r?\n/).length;
+}
+
+async function listSourceFiles(dir: string, assetsDir: string) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      if (isInside(fullPath, assetsDir)) {
+        continue;
+      }
+
+      files.push(...(await listSourceFiles(fullPath, assetsDir)));
+    } else if (sourceFilePattern.test(entry.name)) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
+function markdownTargetReferences(
+  text: string,
+  file: string,
+  rootDir: string,
+  assetsDir: string,
+) {
+  const references: AssetReference[] = [];
+  let searchIndex = 0;
+
+  while (searchIndex < text.length) {
+    const targetOpen = text.indexOf("](", searchIndex);
+
+    if (targetOpen === -1) {
+      break;
+    }
+
+    const targetStart = targetOpen + 2;
+    const targetEnd = findClosingMarkdownTarget(text, targetStart);
+
+    if (targetEnd === undefined) {
+      searchIndex = targetStart;
+      continue;
+    }
+
+    const targetToken = text.slice(targetStart, targetEnd);
+    const assetPath = resolveAssetReference(
+      file,
+      targetToken,
+      rootDir,
+      assetsDir,
+    );
+
+    if (assetPath !== undefined) {
+      references.push({
+        assetPath,
+        file,
+        line: lineNumberAt(text, targetStart),
+        value: targetToken,
+      });
+    }
+
+    searchIndex = targetEnd + 1;
+  }
+
+  return references;
+}
+
+function quotedReferences(
+  text: string,
+  file: string,
+  rootDir: string,
+  assetsDir: string,
+) {
+  const references: AssetReference[] = [];
+  const quotedPathPattern =
+    /(["'`])((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^"'`\r\n]+)\1/g;
+
+  for (const match of text.matchAll(quotedPathPattern)) {
+    const value = match[2];
+
+    if (value === undefined) {
+      continue;
+    }
+
+    const assetPath = resolveAssetReference(file, value, rootDir, assetsDir);
+
+    if (assetPath !== undefined) {
+      references.push({
+        assetPath,
+        file,
+        line: lineNumberAt(text, match.index),
+        value,
+      });
+    }
+  }
+
+  return references;
+}
+
+function referencedFiles(references: AssetReference[]) {
+  return new Set(references.map((reference) => reference.file));
+}
+
+function relative(rootDir: string, file: string) {
+  return toPosix(path.relative(rootDir, file));
+}
+
+function safeDecodeUri(value: string) {
+  try {
+    return decodeURI(value);
+  } catch {
+    return value;
+  }
+}
+
+async function sourceFileReferences(
+  file: string,
+  rootDir: string,
+  assetsDir: string,
+) {
+  const text = await readFile(file, "utf8");
+  const references = [
+    ...markdownTargetReferences(text, file, rootDir, assetsDir),
+    ...quotedReferences(text, file, rootDir, assetsDir),
+    ...angleReferences(text, file, rootDir, assetsDir),
+  ];
+  const seen = new Set<string>();
+
+  return references.filter((reference) => {
+    const key = `${reference.assetPath}:${reference.file}:${reference.line}:${reference.value}`;
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function toPosix(file: string) {
+  return file.split(path.sep).join("/");
 }
 
 if (import.meta.main) {

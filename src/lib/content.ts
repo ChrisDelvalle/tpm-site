@@ -11,31 +11,6 @@ import {
   sortNewestFirst,
 } from "./routes";
 
-async function getArticleEntries() {
-  return getCollection("articles");
-}
-
-function labelFromSlug(slug: string) {
-  return slug
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
-function categoryFromMetadata(
-  slug: string,
-  entry: CategoryEntry | undefined,
-  articles: ArticleEntry[],
-): CategorySummary {
-  return {
-    articles: sortNewestFirst(articles),
-    description: entry?.data.description,
-    order: entry?.data.order ?? Number.MAX_SAFE_INTEGER,
-    slug,
-    title: entry?.data.title ?? labelFromSlug(slug),
-  };
-}
-
 /**
  * Loads all published articles in newest-first order.
  *
@@ -63,8 +38,7 @@ export async function getCategories() {
     ...categoryEntries.map((entry) => entry.id),
   ]);
 
-  return [...slugs]
-    .map((slug) =>
+  return Array.from(slugs, (slug) =>
       categoryFromMetadata(
         slug,
         metadata.get(slug),
@@ -87,4 +61,29 @@ export async function getCategory(slug: string) {
   const normalizedSlug = normalizeSlug(slug);
   const categories = await getCategories();
   return categories.find((category) => category.slug === normalizedSlug);
+}
+
+function categoryFromMetadata(
+  slug: string,
+  entry: CategoryEntry | undefined,
+  articles: ArticleEntry[],
+): CategorySummary {
+  return {
+    articles: sortNewestFirst(articles),
+    description: entry?.data.description,
+    order: entry?.data.order ?? Number.MAX_SAFE_INTEGER,
+    slug,
+    title: entry?.data.title ?? labelFromSlug(slug),
+  };
+}
+
+async function getArticleEntries() {
+  return getCollection("articles");
+}
+
+function labelFromSlug(slug: string) {
+  return slug
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }

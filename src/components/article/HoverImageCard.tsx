@@ -7,16 +7,16 @@ import {
 } from "@/components/ui/hover-card";
 
 interface HoverImage {
+  height: number;
   src: string;
   width: number;
-  height: number;
 }
 
 interface HoverImageCardProps {
-  image: HoverImage;
-  label: string;
   alt?: string;
   expanded?: boolean;
+  image: HoverImage;
+  label: string;
 }
 
 /**

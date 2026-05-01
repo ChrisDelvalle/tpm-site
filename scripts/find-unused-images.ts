@@ -17,14 +17,6 @@ export interface UnusedImageResult {
   unusedImages: string[];
 }
 
-interface UnusedImageOptions {
-  assetsDir?: string;
-  ignoreFile?: string;
-  ignorePatterns?: string[];
-  rootDir: string;
-  srcDir?: string;
-}
-
 interface UnusedImageCliOptions {
   failOnUnused: boolean;
   help: boolean;
@@ -34,130 +26,12 @@ interface UnusedImageCliOptions {
   review: boolean;
 }
 
-function toPosix(file: string) {
-  return file.split(path.sep).join("/");
-}
-
-function relative(rootDir: string, file: string) {
-  return toPosix(path.relative(rootDir, file));
-}
-
-function regexEscape(value: string) {
-  return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
-}
-
-/**
- * Converts a small glob subset used by ignore files into a regular expression.
- *
- * @param pattern Ignore-file glob pattern.
- * @returns Regular expression that matches full POSIX-style relative paths.
- */
-export function globToRegExp(pattern: string) {
-  let source = "^";
-
-  for (let index = 0; index < pattern.length; index += 1) {
-    const character = pattern.charAt(index);
-    const nextCharacter = pattern.charAt(index + 1);
-
-    if (character === "*" && nextCharacter === "*") {
-      source += ".*";
-      index += 1;
-    } else if (character === "*") {
-      source += "[^/]*";
-    } else if (character === "?") {
-      source += "[^/]";
-    } else {
-      source += regexEscape(character);
-    }
-  }
-
-  return new RegExp(`${source}$`);
-}
-
-async function pathExists(file: string) {
-  try {
-    await stat(file);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function isStringArray(value: unknown): value is string[] {
-  return (
-    Array.isArray(value) &&
-    value.every((pattern) => typeof pattern === "string")
-  );
-}
-
-async function loadIgnorePatterns(rootDir: string, ignoreFile: string) {
-  const fullPath = path.resolve(rootDir, ignoreFile);
-
-  if (!(await pathExists(fullPath))) {
-    return [];
-  }
-
-  const parsed: unknown = JSON.parse(await readFile(fullPath, "utf8"));
-
-  if (!isStringArray(parsed)) {
-    throw new TypeError(`${ignoreFile} must contain a JSON array of strings.`);
-  }
-
-  return parsed;
-}
-
-function hasDotPathSegment(relativePath: string) {
-  return relativePath
-    .split("/")
-    .some((segment) => segment.startsWith(".") && segment !== ".");
-}
-
-function isIgnored(relativePath: string, ignorePatterns: string[]) {
-  return ignorePatterns
-    .map((pattern) => globToRegExp(pattern))
-    .some((regex) => regex.test(relativePath));
-}
-
-async function listImages(
-  rootDir: string,
-  dir: string,
-  ignorePatterns: string[],
-) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const images: string[] = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relativePath = relative(rootDir, fullPath);
-
-    if (
-      alwaysIgnoredDirectoryNames.has(entry.name) ||
-      hasDotPathSegment(relativePath) ||
-      isIgnored(relativePath, ignorePatterns)
-    ) {
-      continue;
-    }
-
-    if (entry.isDirectory()) {
-      images.push(...(await listImages(rootDir, fullPath, ignorePatterns)));
-    } else if (imageExtensionPattern.test(entry.name)) {
-      images.push(fullPath);
-    }
-  }
-
-  return images;
-}
-
-function referencedImages(
-  rootDir: string,
-  references: Array<{ assetPath: string }>,
-) {
-  return new Set(
-    references
-      .map((reference) => reference.assetPath)
-      .filter((assetPath) => imageExtensionPattern.test(assetPath))
-      .map((assetPath) => relative(rootDir, assetPath)),
-  );
+interface UnusedImageOptions {
+  assetsDir?: string;
+  ignoreFile?: string;
+  ignorePatterns?: string[];
+  rootDir: string;
+  srcDir?: string;
 }
 
 /**
@@ -249,41 +123,32 @@ export function formatUnusedImageReport(
   ].join("\n");
 }
 
-function parseCliArgs(args: string[]): UnusedImageCliOptions {
-  let ignoreFile = defaultIgnoreFile;
+/**
+ * Converts a small glob subset used by ignore files into a regular expression.
+ *
+ * @param pattern Ignore-file glob pattern.
+ * @returns Regular expression that matches full POSIX-style relative paths.
+ */
+export function globToRegExp(pattern: string) {
+  let source = "^";
 
-  for (let index = 0; index < args.length; index += 1) {
-    if (args[index] !== "--ignore-file") {
-      continue;
+  for (let index = 0; index < pattern.length; index += 1) {
+    const character = pattern.charAt(index);
+    const nextCharacter = pattern.charAt(index + 1);
+
+    if (character === "*" && nextCharacter === "*") {
+      source += ".*";
+      index += 1;
+    } else if (character === "*") {
+      source += "[^/]*";
+    } else if (character === "?") {
+      source += "[^/]";
+    } else {
+      source += regexEscape(character);
     }
-
-    const value = args[index + 1];
-    if (value === undefined) {
-      throw new Error("--ignore-file requires a path.");
-    }
-
-    ignoreFile = value;
-    index += 1;
   }
 
-  return {
-    failOnUnused: args.includes("--fail-on-unused"),
-    help: args.includes("--help") || args.includes("-h"),
-    ignoreFile,
-    json: args.includes("--json"),
-    quiet: args.includes("--quiet"),
-    review: args.includes("--review"),
-  };
-}
-
-function usage() {
-  return `Usage: bun run assets:unused [--json] [--quiet] [--review] [--fail-on-unused] [--ignore-file path]
-
-Find images in src/assets that no source file appears to reference.
-
-This is review feedback by default. Move unused-but-preserved files to
-unused-assets/, delete files that are not needed, or add an intentional
-exception to ${defaultIgnoreFile}.`;
+  return new RegExp(`${source}$`);
 }
 
 /**
@@ -321,6 +186,141 @@ export async function runUnusedImageCli(
   }
 
   return options.failOnUnused && result.unusedImages.length > 0 ? 1 : 0;
+}
+
+function hasDotPathSegment(relativePath: string) {
+  return relativePath
+    .split("/")
+    .some((segment) => segment.startsWith(".") && segment !== ".");
+}
+
+function isIgnored(relativePath: string, ignorePatterns: string[]) {
+  return ignorePatterns
+    .map((pattern) => globToRegExp(pattern))
+    .some((regex) => regex.test(relativePath));
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) &&
+    value.every((pattern) => typeof pattern === "string")
+  );
+}
+
+async function listImages(
+  rootDir: string,
+  dir: string,
+  ignorePatterns: string[],
+) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const images: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    const relativePath = relative(rootDir, fullPath);
+
+    if (
+      alwaysIgnoredDirectoryNames.has(entry.name) ||
+      hasDotPathSegment(relativePath) ||
+      isIgnored(relativePath, ignorePatterns)
+    ) {
+      continue;
+    }
+
+    if (entry.isDirectory()) {
+      images.push(...(await listImages(rootDir, fullPath, ignorePatterns)));
+    } else if (imageExtensionPattern.test(entry.name)) {
+      images.push(fullPath);
+    }
+  }
+
+  return images;
+}
+
+async function loadIgnorePatterns(rootDir: string, ignoreFile: string) {
+  const fullPath = path.resolve(rootDir, ignoreFile);
+
+  if (!(await pathExists(fullPath))) {
+    return [];
+  }
+
+  const parsed: unknown = JSON.parse(await readFile(fullPath, "utf8"));
+
+  if (!isStringArray(parsed)) {
+    throw new TypeError(`${ignoreFile} must contain a JSON array of strings.`);
+  }
+
+  return parsed;
+}
+
+function parseCliArgs(args: string[]): UnusedImageCliOptions {
+  let ignoreFile = defaultIgnoreFile;
+
+  for (let index = 0; index < args.length; index += 1) {
+    if (args[index] !== "--ignore-file") {
+      continue;
+    }
+
+    const value = args[index + 1];
+    if (value === undefined) {
+      throw new Error("--ignore-file requires a path.");
+    }
+
+    ignoreFile = value;
+    index += 1;
+  }
+
+  return {
+    failOnUnused: args.includes("--fail-on-unused"),
+    help: args.includes("--help") || args.includes("-h"),
+    ignoreFile,
+    json: args.includes("--json"),
+    quiet: args.includes("--quiet"),
+    review: args.includes("--review"),
+  };
+}
+
+async function pathExists(file: string) {
+  try {
+    await stat(file);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function referencedImages(
+  rootDir: string,
+  references: Array<{ assetPath: string }>,
+) {
+  return new Set(
+    references
+      .map((reference) => reference.assetPath)
+      .filter((assetPath) => imageExtensionPattern.test(assetPath))
+      .map((assetPath) => relative(rootDir, assetPath)),
+  );
+}
+
+function regexEscape(value: string) {
+  return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
+}
+
+function relative(rootDir: string, file: string) {
+  return toPosix(path.relative(rootDir, file));
+}
+
+function toPosix(file: string) {
+  return file.split(path.sep).join("/");
+}
+
+function usage() {
+  return `Usage: bun run assets:unused [--json] [--quiet] [--review] [--fail-on-unused] [--ignore-file path]
+
+Find images in src/assets that no source file appears to reference.
+
+This is review feedback by default. Move unused-but-preserved files to
+unused-assets/, delete files that are not needed, or add an intentional
+exception to ${defaultIgnoreFile}.`;
 }
 
 if (import.meta.main) {

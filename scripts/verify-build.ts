@@ -20,25 +20,11 @@ const staticReadingBasePages = [
   "articles/index.html",
 ];
 
-/** Publication metadata for one non-draft article source file. */
-export interface PublishedArticle {
-  isMdx: boolean;
-  slug: string;
-}
-
 /** Source-content publication state used to verify generated output. */
 export interface ArticlePublication {
   draftSlugs: string[];
   publishedArticles: PublishedArticle[];
   publishedCategorySlugs: Set<string>;
-}
-
-/** Inputs needed to verify a completed Astro build. */
-export interface BuildVerificationOptions {
-  articleDir: string;
-  categoryDir: string;
-  distDir: string;
-  expectedRedirects?: Record<string, string>;
 }
 
 /** Categorized build verification failures. */
@@ -54,6 +40,14 @@ export interface BuildVerificationIssues {
   unexpectedDatedPages: string[];
 }
 
+/** Inputs needed to verify a completed Astro build. */
+export interface BuildVerificationOptions {
+  articleDir: string;
+  categoryDir: string;
+  distDir: string;
+  expectedRedirects?: Record<string, string>;
+}
+
 /** Build verification output used by reports and tests. */
 export interface BuildVerificationResult {
   articlePageCount: number;
@@ -61,45 +55,10 @@ export interface BuildVerificationResult {
   issues: BuildVerificationIssues;
 }
 
-async function exists(distDir: string, relativePath: string) {
-  try {
-    await access(path.join(distDir, relativePath));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function listFiles(dir: string) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files: string[] = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await listFiles(fullPath)));
-    } else {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
-}
-
-function toPosix(file: string) {
-  return file.split(path.sep).join("/");
-}
-
-function filenameStem(file: string) {
-  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
-}
-
-function categorySlugFromArticlePath(articleDir: string, file: string) {
-  return path.relative(articleDir, file).split(path.sep)[0] ?? "";
-}
-
-function isDraft(data: Record<string, unknown>) {
-  return data["draft"] === true;
+/** Publication metadata for one non-draft article source file. */
+export interface PublishedArticle {
+  isMdx: boolean;
+  slug: string;
 }
 
 /**
@@ -143,31 +102,95 @@ export async function articlePublicationStats(articleDir: string) {
   };
 }
 
-async function categorySlugsFromMetadata(categoryDir: string) {
-  const categoryFiles = (await listFiles(categoryDir)).filter((file) =>
-    /\.json$/i.test(file),
-  );
+/**
+ * Formats build verification issues for CI and local command output.
+ *
+ * @param result Build verification result.
+ * @returns Human-readable build verification report.
+ */
+export function formatBuildVerificationReport(result: BuildVerificationResult) {
+  if (!hasIssues(result.issues)) {
+    return `Build verification passed: ${result.articlePageCount} articles and ${result.astroClientScriptCount} Astro client script assets.`;
+  }
 
-  return categoryFiles.map((file) => path.basename(file, ".json"));
+  const lines = ["Build verification failed."];
+
+  if (result.issues.missingRequired.length > 0) {
+    lines.push(`Missing: ${JSON.stringify(result.issues.missingRequired)}`);
+  }
+  if (result.issues.missingLegacyRedirects.length > 0) {
+    lines.push(
+      `Missing legacy redirects: ${JSON.stringify(result.issues.missingLegacyRedirects.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.invalidLegacyRedirects.length > 0) {
+    lines.push(
+      `Invalid legacy redirects: ${JSON.stringify(result.issues.invalidLegacyRedirects.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.brokenLinks.length > 0) {
+    lines.push(
+      `Broken links: ${JSON.stringify(result.issues.brokenLinks.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.articleCountIssues.length > 0) {
+    lines.push(
+      `Article count mismatch: ${JSON.stringify(result.issues.articleCountIssues)}`,
+    );
+  }
+  if (result.issues.unexpectedClientScripts.length > 0) {
+    lines.push(
+      `Unexpected static-page client scripts: ${JSON.stringify(result.issues.unexpectedClientScripts)}`,
+    );
+  }
+  if (result.issues.unexpectedDatedPages.length > 0) {
+    lines.push(
+      `Unexpected generated dated pages: ${JSON.stringify(result.issues.unexpectedDatedPages)}`,
+    );
+  }
+  if (result.issues.draftLeaks.length > 0) {
+    lines.push(
+      `Draft content leaked into generated metadata: ${JSON.stringify(result.issues.draftLeaks)}`,
+    );
+  }
+  if (result.issues.missingArticleJsonLd.length > 0) {
+    lines.push(
+      `Missing article JSON-LD: ${JSON.stringify(result.issues.missingArticleJsonLd.slice(0, 50))}`,
+    );
+  }
+
+  return lines.join("\n");
 }
 
 /**
- * Collects all category slugs that should have generated category pages.
+ * Checks whether a URL points outside the generated static site.
  *
- * @param categoryDir Source category metadata directory.
- * @param articlePublication Published article and draft metadata.
- * @returns Sorted category slugs from metadata and published article folders.
+ * @param url URL or URL-like target from rendered HTML.
+ * @returns True for protocol-relative, absolute, mail, or telephone URLs.
  */
-export async function sourceCategorySlugs(
-  categoryDir: string,
-  articlePublication: ArticlePublication,
-) {
-  const slugs = new Set([
-    ...(await categorySlugsFromMetadata(categoryDir)),
-    ...articlePublication.publishedCategorySlugs,
-  ]);
+export function isExternal(url: string) {
+  return /^(?:[a-z]+:)?\/\//i.test(url) || /^(?:mailto|tel):/i.test(url);
+}
 
-  return [...slugs].sort((left, right) => left.localeCompare(right));
+/**
+ * Extracts link and asset targets from rendered HTML attributes.
+ *
+ * @param html Rendered HTML text.
+ * @returns Values from `href` and `src` attributes.
+ */
+export function linkTargets(html: string) {
+  const targets: string[] = [];
+  const attributePattern = /\s(?:href|src)=["']([^"']+)["']/gi;
+  let match: null | RegExpExecArray;
+
+  while ((match = attributePattern.exec(html)) !== null) {
+    const target = match[1];
+    if (target !== undefined) {
+      targets.push(target);
+    }
+  }
+
+  return targets;
 }
 
 /**
@@ -188,6 +211,58 @@ export function requiredPathsForSource(
     ),
     ...categorySlugs.map((slug) => `categories/${slug}/index.html`),
   ];
+}
+
+/**
+ * Runs the build verification command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to verify from.
+ * @returns Process exit code.
+ */
+export async function runBuildVerificationCli(
+  args = process.argv.slice(2),
+  rootDir = process.cwd(),
+) {
+  const quiet = args.includes("--quiet");
+  const expectedRedirects = await configuredRedirects(rootDir);
+  const result = await verifyBuild({
+    articleDir: path.resolve(rootDir, "src/content/articles"),
+    categoryDir: path.resolve(rootDir, "src/content/categories"),
+    distDir: path.resolve(rootDir, "dist"),
+    expectedRedirects,
+  });
+  const report = formatBuildVerificationReport(result);
+
+  if (hasIssues(result.issues)) {
+    console.error(report);
+    return 1;
+  }
+
+  if (!quiet) {
+    console.log(report);
+  }
+
+  return 0;
+}
+
+/**
+ * Collects all category slugs that should have generated category pages.
+ *
+ * @param categoryDir Source category metadata directory.
+ * @param articlePublication Published article and draft metadata.
+ * @returns Sorted category slugs from metadata and published article folders.
+ */
+export async function sourceCategorySlugs(
+  categoryDir: string,
+  articlePublication: ArticlePublication,
+) {
+  const slugs = new Set([
+    ...(await categorySlugsFromMetadata(categoryDir)),
+    ...articlePublication.publishedCategorySlugs,
+  ]);
+
+  return Array.from(slugs).sort((left, right) => left.localeCompare(right));
 }
 
 /**
@@ -213,291 +288,6 @@ export function staticReadingPagesForSource(
       ? undefined
       : `categories/${categorySlugs[0]}/index.html`,
   ].filter((page): page is string => page !== undefined);
-}
-
-/**
- * Extracts link and asset targets from rendered HTML attributes.
- *
- * @param html Rendered HTML text.
- * @returns Values from `href` and `src` attributes.
- */
-export function linkTargets(html: string) {
-  const targets: string[] = [];
-  const attributePattern = /\s(?:href|src)=["']([^"']+)["']/gi;
-  let match: RegExpExecArray | null;
-
-  while ((match = attributePattern.exec(html)) !== null) {
-    const target = match[1];
-    if (target !== undefined) {
-      targets.push(target);
-    }
-  }
-
-  return targets;
-}
-
-function isDatedHtmlPage(relativeHtmlPath: string) {
-  return /^\d{4}\/\d{2}\/\d{2}\/[^/]+\/index\.html$/.test(relativeHtmlPath);
-}
-
-function expectedRedirectSource(relativeHtmlPath: string) {
-  return `/${relativeHtmlPath.replace(/index\.html$/, "")}`;
-}
-
-function redirectFallbackPath(source: string) {
-  return `${source.replace(/^\//, "")}index.html`;
-}
-
-function htmlIncludesRedirect(
-  html: string,
-  source: string,
-  destination: string,
-) {
-  return (
-    html.includes(`<title>Redirecting to: ${destination}</title>`) &&
-    html.includes(`content="0;url=${destination}"`) &&
-    html.includes(`href="${destination}"`) &&
-    html.includes(`<code>${source}</code>`) &&
-    html.includes(`<code>${destination}</code>`)
-  );
-}
-
-function isAstroRedirectFallbackPage(html: string, relativeHtmlPath: string) {
-  if (!isDatedHtmlPage(relativeHtmlPath)) {
-    return false;
-  }
-
-  return (
-    /<title>Redirecting to: [^<]+<\/title>/i.test(html) &&
-    /<meta\s+http-equiv=["']refresh["']\s+content=["']0;url=[^"']+["']>/i.test(
-      html,
-    ) &&
-    /<meta\s+name=["']robots["']\s+content=["']noindex["']>/i.test(html) &&
-    /<link\s+rel=["']canonical["']\s+href=["']https?:\/\/[^"']+["']>/i.test(
-      html,
-    ) &&
-    html.includes(`<code>${expectedRedirectSource(relativeHtmlPath)}</code>`)
-  );
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
-function isAstroConfigModule(
-  value: unknown,
-): value is { default: { redirects?: Record<string, unknown> } } {
-  if (!isRecord(value) || !isRecord(value["default"])) {
-    return false;
-  }
-
-  const redirects = value["default"]["redirects"];
-  return redirects === undefined || isRecord(redirects);
-}
-
-async function configuredRedirects(rootDir: string) {
-  // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
-  const configModule: unknown = await import(
-    pathToFileURL(path.resolve(rootDir, "astro.config.ts")).href
-  );
-
-  if (!isAstroConfigModule(configModule)) {
-    throw new TypeError("Astro config module has an unexpected shape.");
-  }
-
-  const redirects = configModule.default.redirects;
-  if (redirects === undefined) {
-    return {};
-  }
-
-  return Object.fromEntries(
-    Object.entries(redirects).map(([source, destination]) => {
-      if (typeof destination !== "string") {
-        throw new TypeError(
-          `Expected string redirect destination for ${source}.`,
-        );
-      }
-
-      return [source, destination];
-    }),
-  );
-}
-
-/**
- * Checks whether a URL points outside the generated static site.
- *
- * @param url URL or URL-like target from rendered HTML.
- * @returns True for protocol-relative, absolute, mail, or telephone URLs.
- */
-export function isExternal(url: string) {
-  return /^(?:[a-z]+:)?\/\//i.test(url) || /^(?:mailto|tel):/i.test(url);
-}
-
-function withoutFragmentAndQuery(url: string) {
-  return url.split("#")[0]?.split("?")[0] ?? "";
-}
-
-async function internalTargetExists(distDir: string, url: string) {
-  const cleanUrl = withoutFragmentAndQuery(url);
-  if (!cleanUrl || cleanUrl.startsWith("#")) {
-    return true;
-  }
-  if (!cleanUrl.startsWith("/")) {
-    return true;
-  }
-
-  const decoded = decodeURIComponent(cleanUrl).replace(/^\//, "");
-  const candidates = [
-    decoded,
-    path.join(decoded, "index.html"),
-    decoded.endsWith("/") ? path.join(decoded, "index.html") : "",
-  ].filter((candidate): candidate is string => candidate !== "");
-
-  for (const candidate of candidates) {
-    if (await exists(distDir, candidate)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function emptyIssues(): BuildVerificationIssues {
-  return {
-    articleCountIssues: [],
-    brokenLinks: [],
-    draftLeaks: [],
-    invalidLegacyRedirects: [],
-    missingArticleJsonLd: [],
-    missingLegacyRedirects: [],
-    missingRequired: [],
-    unexpectedClientScripts: [],
-    unexpectedDatedPages: [],
-  };
-}
-
-async function collectMissingRequired(
-  distDir: string,
-  requiredPaths: string[],
-  issues: BuildVerificationIssues,
-) {
-  for (const requiredPath of requiredPaths) {
-    if (!(await exists(distDir, requiredPath))) {
-      issues.missingRequired.push(requiredPath);
-    }
-  }
-}
-
-async function collectMissingLegacyRedirects(
-  distDir: string,
-  expectedRedirects: Record<string, string>,
-  issues: BuildVerificationIssues,
-) {
-  for (const [source, destination] of Object.entries(expectedRedirects)) {
-    const fallbackPath = redirectFallbackPath(source);
-    if (!(await exists(distDir, fallbackPath))) {
-      issues.missingLegacyRedirects.push(
-        `${source} -> ${destination} (${fallbackPath})`,
-      );
-    }
-  }
-}
-
-async function inspectHtmlFile(
-  distDir: string,
-  file: string,
-  staticReadingPages: string[],
-  expectedRedirects: Record<string, string>,
-  issues: BuildVerificationIssues,
-) {
-  const text = await readFile(file, "utf8");
-  const relativeHtmlPath = toPosix(path.relative(distDir, file));
-  const isRedirectFallback = isAstroRedirectFallbackPage(
-    text,
-    relativeHtmlPath,
-  );
-
-  if (isDatedHtmlPage(relativeHtmlPath) && !isRedirectFallback) {
-    issues.unexpectedDatedPages.push(relativeHtmlPath);
-  }
-
-  if (isRedirectFallback) {
-    const source = expectedRedirectSource(relativeHtmlPath);
-    const expectedDestination = expectedRedirects[source];
-
-    if (expectedDestination === undefined) {
-      issues.invalidLegacyRedirects.push(
-        `${relativeHtmlPath}: no matching redirect in astro.config.ts for ${source}`,
-      );
-    } else if (!htmlIncludesRedirect(text, source, expectedDestination)) {
-      issues.invalidLegacyRedirects.push(
-        `${relativeHtmlPath}: does not match configured redirect ${source} -> ${expectedDestination}`,
-      );
-    }
-
-    return;
-  }
-
-  if (
-    /^articles\/[^/]+\/index\.html$/.test(relativeHtmlPath) &&
-    !text.includes('"@type":"BlogPosting"')
-  ) {
-    issues.missingArticleJsonLd.push(relativeHtmlPath);
-  }
-
-  if (
-    staticReadingPages.includes(relativeHtmlPath) &&
-    /<script[^>]+src=["']\/_astro\/[^"']+\.js["']/i.test(text)
-  ) {
-    issues.unexpectedClientScripts.push(relativeHtmlPath);
-  }
-
-  for (const target of linkTargets(text)) {
-    if (!isExternal(target) && !(await internalTargetExists(distDir, target))) {
-      issues.brokenLinks.push(`${relativeHtmlPath} -> ${target}`);
-    }
-  }
-}
-
-async function inspectDraftLeaks(
-  distDir: string,
-  file: string,
-  draftSlugs: string[],
-  issues: BuildVerificationIssues,
-) {
-  const relativePath = toPosix(path.relative(distDir, file));
-  if (
-    relativePath !== "feed.xml" &&
-    !/^sitemap.*\.xml$/.test(relativePath) &&
-    !relativePath.startsWith("pagefind/")
-  ) {
-    return;
-  }
-
-  const text = await readFile(file, "utf8");
-  for (const draftSlug of draftSlugs) {
-    if (text.includes(draftSlug)) {
-      issues.draftLeaks.push(`${relativePath} -> ${draftSlug}`);
-    }
-  }
-}
-
-function articlePageFiles(files: string[]) {
-  return files.filter((file) => /\/articles\/[^/]+\/index\.html$/.test(file));
-}
-
-function hasIssues(issues: BuildVerificationIssues) {
-  return (
-    issues.articleCountIssues.length > 0 ||
-    issues.brokenLinks.length > 0 ||
-    issues.draftLeaks.length > 0 ||
-    issues.invalidLegacyRedirects.length > 0 ||
-    issues.missingArticleJsonLd.length > 0 ||
-    issues.missingLegacyRedirects.length > 0 ||
-    issues.missingRequired.length > 0 ||
-    issues.unexpectedClientScripts.length > 0 ||
-    issues.unexpectedDatedPages.length > 0
-  );
 }
 
 /**
@@ -579,97 +369,307 @@ export async function verifyBuild({
   };
 }
 
-/**
- * Formats build verification issues for CI and local command output.
- *
- * @param result Build verification result.
- * @returns Human-readable build verification report.
- */
-export function formatBuildVerificationReport(result: BuildVerificationResult) {
-  if (!hasIssues(result.issues)) {
-    return `Build verification passed: ${result.articlePageCount} articles and ${result.astroClientScriptCount} Astro client script assets.`;
-  }
-
-  const lines = ["Build verification failed."];
-
-  if (result.issues.missingRequired.length > 0) {
-    lines.push(`Missing: ${JSON.stringify(result.issues.missingRequired)}`);
-  }
-  if (result.issues.missingLegacyRedirects.length > 0) {
-    lines.push(
-      `Missing legacy redirects: ${JSON.stringify(result.issues.missingLegacyRedirects.slice(0, 50))}`,
-    );
-  }
-  if (result.issues.invalidLegacyRedirects.length > 0) {
-    lines.push(
-      `Invalid legacy redirects: ${JSON.stringify(result.issues.invalidLegacyRedirects.slice(0, 50))}`,
-    );
-  }
-  if (result.issues.brokenLinks.length > 0) {
-    lines.push(
-      `Broken links: ${JSON.stringify(result.issues.brokenLinks.slice(0, 50))}`,
-    );
-  }
-  if (result.issues.articleCountIssues.length > 0) {
-    lines.push(
-      `Article count mismatch: ${JSON.stringify(result.issues.articleCountIssues)}`,
-    );
-  }
-  if (result.issues.unexpectedClientScripts.length > 0) {
-    lines.push(
-      `Unexpected static-page client scripts: ${JSON.stringify(result.issues.unexpectedClientScripts)}`,
-    );
-  }
-  if (result.issues.unexpectedDatedPages.length > 0) {
-    lines.push(
-      `Unexpected generated dated pages: ${JSON.stringify(result.issues.unexpectedDatedPages)}`,
-    );
-  }
-  if (result.issues.draftLeaks.length > 0) {
-    lines.push(
-      `Draft content leaked into generated metadata: ${JSON.stringify(result.issues.draftLeaks)}`,
-    );
-  }
-  if (result.issues.missingArticleJsonLd.length > 0) {
-    lines.push(
-      `Missing article JSON-LD: ${JSON.stringify(result.issues.missingArticleJsonLd.slice(0, 50))}`,
-    );
-  }
-
-  return lines.join("\n");
+function articlePageFiles(files: string[]) {
+  return files.filter((file) => /\/articles\/[^/]+\/index\.html$/.test(file));
 }
 
-/**
- * Runs the build verification command-line workflow.
- *
- * @param args Command-line arguments without the executable prefix.
- * @param rootDir Repository root to verify from.
- * @returns Process exit code.
- */
-export async function runBuildVerificationCli(
-  args = process.argv.slice(2),
-  rootDir = process.cwd(),
+function categorySlugFromArticlePath(articleDir: string, file: string) {
+  return path.relative(articleDir, file).split(path.sep)[0] ?? "";
+}
+
+async function categorySlugsFromMetadata(categoryDir: string) {
+  const categoryFiles = (await listFiles(categoryDir)).filter((file) =>
+    /\.json$/i.test(file),
+  );
+
+  return categoryFiles.map((file) => path.basename(file, ".json"));
+}
+
+async function collectMissingLegacyRedirects(
+  distDir: string,
+  expectedRedirects: Record<string, string>,
+  issues: BuildVerificationIssues,
 ) {
-  const quiet = args.includes("--quiet");
-  const expectedRedirects = await configuredRedirects(rootDir);
-  const result = await verifyBuild({
-    articleDir: path.resolve(rootDir, "src/content/articles"),
-    categoryDir: path.resolve(rootDir, "src/content/categories"),
-    distDir: path.resolve(rootDir, "dist"),
-    expectedRedirects,
-  });
-  const report = formatBuildVerificationReport(result);
+  for (const [source, destination] of Object.entries(expectedRedirects)) {
+    const fallbackPath = redirectFallbackPath(source);
+    if (!(await exists(distDir, fallbackPath))) {
+      issues.missingLegacyRedirects.push(
+        `${source} -> ${destination} (${fallbackPath})`,
+      );
+    }
+  }
+}
 
-  if (hasIssues(result.issues)) {
-    console.error(report);
-    return 1;
+async function collectMissingRequired(
+  distDir: string,
+  requiredPaths: string[],
+  issues: BuildVerificationIssues,
+) {
+  for (const requiredPath of requiredPaths) {
+    if (!(await exists(distDir, requiredPath))) {
+      issues.missingRequired.push(requiredPath);
+    }
+  }
+}
+
+async function configuredRedirects(rootDir: string) {
+  // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
+  const configModule: unknown = await import(
+    pathToFileURL(path.resolve(rootDir, "astro.config.ts")).href
+  );
+
+  if (!isAstroConfigModule(configModule)) {
+    throw new TypeError("Astro config module has an unexpected shape.");
   }
 
-  if (!quiet) {
-    console.log(report);
+  const redirects = configModule.default.redirects;
+  if (redirects === undefined) {
+    return {};
   }
 
-  return 0;
+  return Object.fromEntries(
+    Object.entries(redirects).map(([source, destination]) => {
+      if (typeof destination !== "string") {
+        throw new TypeError(
+          `Expected string redirect destination for ${source}.`,
+        );
+      }
+
+      return [source, destination];
+    }),
+  );
+}
+
+function emptyIssues(): BuildVerificationIssues {
+  return {
+    articleCountIssues: [],
+    brokenLinks: [],
+    draftLeaks: [],
+    invalidLegacyRedirects: [],
+    missingArticleJsonLd: [],
+    missingLegacyRedirects: [],
+    missingRequired: [],
+    unexpectedClientScripts: [],
+    unexpectedDatedPages: [],
+  };
+}
+
+async function exists(distDir: string, relativePath: string) {
+  try {
+    await access(path.join(distDir, relativePath));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function expectedRedirectSource(relativeHtmlPath: string) {
+  return `/${relativeHtmlPath.replace(/index\.html$/, "")}`;
+}
+
+function filenameStem(file: string) {
+  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
+}
+
+function hasIssues(issues: BuildVerificationIssues) {
+  return (
+    issues.articleCountIssues.length > 0 ||
+    issues.brokenLinks.length > 0 ||
+    issues.draftLeaks.length > 0 ||
+    issues.invalidLegacyRedirects.length > 0 ||
+    issues.missingArticleJsonLd.length > 0 ||
+    issues.missingLegacyRedirects.length > 0 ||
+    issues.missingRequired.length > 0 ||
+    issues.unexpectedClientScripts.length > 0 ||
+    issues.unexpectedDatedPages.length > 0
+  );
+}
+
+function htmlIncludesRedirect(
+  html: string,
+  source: string,
+  destination: string,
+) {
+  return (
+    html.includes(`<title>Redirecting to: ${destination}</title>`) &&
+    html.includes(`content="0;url=${destination}"`) &&
+    html.includes(`href="${destination}"`) &&
+    html.includes(`<code>${source}</code>`) &&
+    html.includes(`<code>${destination}</code>`)
+  );
+}
+
+async function inspectDraftLeaks(
+  distDir: string,
+  file: string,
+  draftSlugs: string[],
+  issues: BuildVerificationIssues,
+) {
+  const relativePath = toPosix(path.relative(distDir, file));
+  if (
+    relativePath !== "feed.xml" &&
+    !/^sitemap.*\.xml$/.test(relativePath) &&
+    !relativePath.startsWith("pagefind/")
+  ) {
+    return;
+  }
+
+  const text = await readFile(file, "utf8");
+  for (const draftSlug of draftSlugs) {
+    if (text.includes(draftSlug)) {
+      issues.draftLeaks.push(`${relativePath} -> ${draftSlug}`);
+    }
+  }
+}
+
+async function inspectHtmlFile(
+  distDir: string,
+  file: string,
+  staticReadingPages: string[],
+  expectedRedirects: Record<string, string>,
+  issues: BuildVerificationIssues,
+) {
+  const text = await readFile(file, "utf8");
+  const relativeHtmlPath = toPosix(path.relative(distDir, file));
+  const isRedirectFallback = isAstroRedirectFallbackPage(
+    text,
+    relativeHtmlPath,
+  );
+
+  if (isDatedHtmlPage(relativeHtmlPath) && !isRedirectFallback) {
+    issues.unexpectedDatedPages.push(relativeHtmlPath);
+  }
+
+  if (isRedirectFallback) {
+    const source = expectedRedirectSource(relativeHtmlPath);
+    const expectedDestination = expectedRedirects[source];
+
+    if (expectedDestination === undefined) {
+      issues.invalidLegacyRedirects.push(
+        `${relativeHtmlPath}: no matching redirect in astro.config.ts for ${source}`,
+      );
+    } else if (!htmlIncludesRedirect(text, source, expectedDestination)) {
+      issues.invalidLegacyRedirects.push(
+        `${relativeHtmlPath}: does not match configured redirect ${source} -> ${expectedDestination}`,
+      );
+    }
+
+    return;
+  }
+
+  if (
+    /^articles\/[^/]+\/index\.html$/.test(relativeHtmlPath) &&
+    !text.includes('"@type":"BlogPosting"')
+  ) {
+    issues.missingArticleJsonLd.push(relativeHtmlPath);
+  }
+
+  if (
+    staticReadingPages.includes(relativeHtmlPath) &&
+    /<script[^>]+src=["']\/_astro\/[^"']+\.js["']/i.test(text)
+  ) {
+    issues.unexpectedClientScripts.push(relativeHtmlPath);
+  }
+
+  for (const target of linkTargets(text)) {
+    if (!isExternal(target) && !(await internalTargetExists(distDir, target))) {
+      issues.brokenLinks.push(`${relativeHtmlPath} -> ${target}`);
+    }
+  }
+}
+
+async function internalTargetExists(distDir: string, url: string) {
+  const cleanUrl = withoutFragmentAndQuery(url);
+  if (!cleanUrl || cleanUrl.startsWith("#")) {
+    return true;
+  }
+  if (!cleanUrl.startsWith("/")) {
+    return true;
+  }
+
+  const decoded = decodeURIComponent(cleanUrl).replace(/^\//, "");
+  const candidates = [
+    decoded,
+    path.join(decoded, "index.html"),
+    decoded.endsWith("/") ? path.join(decoded, "index.html") : "",
+  ].filter((candidate): candidate is string => candidate !== "");
+
+  for (const candidate of candidates) {
+    if (await exists(distDir, candidate)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isAstroConfigModule(
+  value: unknown,
+): value is { default: { redirects?: Record<string, unknown> } } {
+  if (!isRecord(value) || !isRecord(value["default"])) {
+    return false;
+  }
+
+  const redirects = value["default"]["redirects"];
+  return redirects === undefined || isRecord(redirects);
+}
+
+function isAstroRedirectFallbackPage(html: string, relativeHtmlPath: string) {
+  if (!isDatedHtmlPage(relativeHtmlPath)) {
+    return false;
+  }
+
+  return (
+    /<title>Redirecting to: [^<]+<\/title>/i.test(html) &&
+    /<meta\s+http-equiv=["']refresh["']\s+content=["']0;url=[^"']+["']>/i.test(
+      html,
+    ) &&
+    /<meta\s+name=["']robots["']\s+content=["']noindex["']>/i.test(html) &&
+    /<link\s+rel=["']canonical["']\s+href=["']https?:\/\/[^"']+["']>/i.test(
+      html,
+    ) &&
+    html.includes(`<code>${expectedRedirectSource(relativeHtmlPath)}</code>`)
+  );
+}
+
+function isDatedHtmlPage(relativeHtmlPath: string) {
+  return /^\d{4}\/\d{2}\/\d{2}\/[^/]+\/index\.html$/.test(relativeHtmlPath);
+}
+
+function isDraft(data: Record<string, unknown>) {
+  return data["draft"] === true;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+async function listFiles(dir: string) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listFiles(fullPath)));
+    } else {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
+function redirectFallbackPath(source: string) {
+  return `${source.replace(/^\//, "")}index.html`;
+}
+
+function toPosix(file: string) {
+  return file.split(path.sep).join("/");
+}
+
+function withoutFragmentAndQuery(url: string) {
+  return url.split("#")[0]?.split("?")[0] ?? "";
 }
 
 if (import.meta.main) {

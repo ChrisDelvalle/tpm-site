@@ -14,6 +14,17 @@ import {
   verifyBuild,
 } from "../../scripts/verify-build";
 
+function publication(): ArticlePublication {
+  return {
+    draftSlugs: ["draft-post"],
+    publishedArticles: [
+      { isMdx: false, slug: "markdown-post" },
+      { isMdx: true, slug: "interactive-post" },
+    ],
+    publishedCategorySlugs: new Set(["history"]),
+  };
+}
+
 async function withTempRoot<T>(callback: (root: string) => Promise<T>) {
   const root = await mkdtemp(path.join(tmpdir(), "tpm-build-test-"));
 
@@ -28,17 +39,6 @@ async function writeText(root: string, relativePath: string, text: string) {
   const fullPath = path.join(root, relativePath);
   await mkdir(path.dirname(fullPath), { recursive: true });
   await writeFile(fullPath, text);
-}
-
-function publication(): ArticlePublication {
-  return {
-    draftSlugs: ["draft-post"],
-    publishedArticles: [
-      { isMdx: false, slug: "markdown-post" },
-      { isMdx: true, slug: "interactive-post" },
-    ],
-    publishedCategorySlugs: new Set(["history"]),
-  };
 }
 
 describe("build verifier helpers", () => {

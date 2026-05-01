@@ -29,16 +29,36 @@ export interface ImageAssetLocationResult {
   violations: string[];
 }
 
-function toPosix(file: string) {
-  return file.split(path.sep).join("/");
-}
+/**
+ * Formats image-location violations with remediation guidance.
+ *
+ * @param result Image asset location verification result.
+ * @param ignoreFile Ignore-list file to mention in remediation guidance.
+ * @returns Human-readable image-location report.
+ */
+export function formatImageAssetLocationReport(
+  result: ImageAssetLocationResult,
+  ignoreFile = defaultIgnoreFile,
+) {
+  if (result.violations.length === 0) {
+    return `Image asset location verification passed: ${result.imageCount} image files scanned.`;
+  }
 
-function normalizeRelativePath(rootDir: string, file: string) {
-  return toPosix(path.relative(rootDir, file));
-}
-
-function regexEscape(value: string) {
-  return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
+  return [
+    `Image asset location verification failed: ${result.violations.length} image file${
+      result.violations.length === 1 ? "" : "s"
+    } found outside src/assets/.`,
+    "",
+    "Move each file into the appropriate source asset folder:",
+    "- src/assets/articles/<article-slug>/ for one article.",
+    "- src/assets/shared/ for assets reused by multiple pages.",
+    "- src/assets/site/ for site UI, layout, and homepage assets.",
+    "",
+    `If a file intentionally must stay outside src/assets/, add a specific path or glob to ${ignoreFile}.`,
+    "",
+    "Files:",
+    ...result.violations.map((violation) => `- ${violation}`),
+  ].join("\n");
 }
 
 /**
@@ -69,35 +89,79 @@ export function globToRegExp(pattern: string) {
   return new RegExp(`${source}$`);
 }
 
-async function loadIgnorePatterns(rootDir: string, ignoreFile: string) {
-  const text = await readFile(path.resolve(rootDir, ignoreFile), "utf8");
-  const patterns: unknown = JSON.parse(text);
+/**
+ * Runs the image asset location command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to verify from.
+ * @returns Process exit code.
+ */
+export async function runImageAssetLocationCli(
+  args = process.argv.slice(2),
+  rootDir = process.cwd(),
+) {
+  if (args.includes("--help") || args.includes("-h")) {
+    console.log(`Usage: bun run assets:locations [--json] [--quiet]
 
-  if (!isStringArray(patterns)) {
-    throw new TypeError(`${ignoreFile} must contain a JSON array of strings.`);
+Require image assets to live under src/assets/.
+
+Intentional exceptions are configured in ${defaultIgnoreFile}. Dotfiles,
+dot-directories, and paths ignored by Git are skipped automatically.`);
+    return 0;
   }
 
-  return patterns.map((pattern) => ({
-    pattern,
-    regex: globToRegExp(pattern),
-  }));
+  const result = await verifyImageAssetLocations({ rootDir });
+
+  if (args.includes("--json")) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    const report = formatImageAssetLocationReport(result);
+    if (result.violations.length > 0) {
+      console.error(report);
+    } else if (!args.includes("--quiet")) {
+      console.log(report);
+    }
+  }
+
+  return result.violations.length > 0 ? 1 : 0;
 }
 
-function isStringArray(value: unknown): value is string[] {
-  return (
-    Array.isArray(value) &&
-    value.every((pattern) => typeof pattern === "string")
+/**
+ * Verifies that project image assets live under the source asset pipeline.
+ *
+ * @param options Repository root, allowed asset directory, and ignore settings.
+ * @param options.ignoreFile JSON file containing intentional location exceptions.
+ * @param options.isGitIgnored Optional Git ignore checker for tests and callers.
+ * @param options.rootDir Repository root to verify from.
+ * @param options.srcAssetsDir Relative directory where image assets are allowed.
+ * @returns Image asset location verification result.
+ */
+export async function verifyImageAssetLocations({
+  ignoreFile = defaultIgnoreFile,
+  isGitIgnored,
+  rootDir,
+  srcAssetsDir = defaultSrcAssetsDir,
+}: ImageAssetLocationOptions): Promise<ImageAssetLocationResult> {
+  const ignorePatterns = await loadIgnorePatterns(rootDir, ignoreFile);
+  const gitIgnored =
+    isGitIgnored ??
+    ((relativePath: string) => defaultIsGitIgnored(rootDir, relativePath));
+  const imageFiles = await listImageFiles(
+    rootDir,
+    rootDir,
+    ignorePatterns,
+    gitIgnored,
   );
-}
+  const violations = imageFiles
+    .filter((file) => !isAllowedAssetLocation(file, srcAssetsDir))
+    .filter((file) => !isIgnored(file, ignorePatterns))
+    .sort((left, right) => left.localeCompare(right));
 
-function isIgnored(relativePath: string, ignorePatterns: IgnorePattern[]) {
-  return ignorePatterns.some(({ regex }) => regex.test(relativePath));
-}
-
-function hasDotPathSegment(relativePath: string) {
-  return relativePath
-    .split("/")
-    .some((segment) => segment.startsWith(".") && segment !== ".");
+  return {
+    ignoredPatterns: ignorePatterns.map(({ pattern }) => pattern),
+    imageCount: imageFiles.length,
+    violations,
+  };
 }
 
 function defaultIsGitIgnored(rootDir: string, relativePath: string) {
@@ -112,21 +176,26 @@ function defaultIsGitIgnored(rootDir: string, relativePath: string) {
   return result.status === 0;
 }
 
-function shouldSkip(
-  relativePath: string,
-  ignorePatterns: IgnorePattern[],
-  isGitIgnored: (relativePath: string) => boolean,
-) {
-  return (
-    hasDotPathSegment(relativePath) ||
-    isGitIgnored(relativePath) ||
-    isIgnored(relativePath, ignorePatterns)
-  );
+function hasDotPathSegment(relativePath: string) {
+  return relativePath
+    .split("/")
+    .some((segment) => segment.startsWith(".") && segment !== ".");
 }
 
 function isAllowedAssetLocation(relativePath: string, srcAssetsDir: string) {
   return (
     relativePath === srcAssetsDir || relativePath.startsWith(`${srcAssetsDir}/`)
+  );
+}
+
+function isIgnored(relativePath: string, ignorePatterns: IgnorePattern[]) {
+  return ignorePatterns.some(({ regex }) => regex.test(relativePath));
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) &&
+    value.every((pattern) => typeof pattern === "string")
   );
 }
 
@@ -170,111 +239,42 @@ async function listImageFiles(
   return files;
 }
 
-/**
- * Verifies that project image assets live under the source asset pipeline.
- *
- * @param options Repository root, allowed asset directory, and ignore settings.
- * @param options.ignoreFile JSON file containing intentional location exceptions.
- * @param options.isGitIgnored Optional Git ignore checker for tests and callers.
- * @param options.rootDir Repository root to verify from.
- * @param options.srcAssetsDir Relative directory where image assets are allowed.
- * @returns Image asset location verification result.
- */
-export async function verifyImageAssetLocations({
-  ignoreFile = defaultIgnoreFile,
-  isGitIgnored,
-  rootDir,
-  srcAssetsDir = defaultSrcAssetsDir,
-}: ImageAssetLocationOptions): Promise<ImageAssetLocationResult> {
-  const ignorePatterns = await loadIgnorePatterns(rootDir, ignoreFile);
-  const gitIgnored =
-    isGitIgnored ??
-    ((relativePath: string) => defaultIsGitIgnored(rootDir, relativePath));
-  const imageFiles = await listImageFiles(
-    rootDir,
-    rootDir,
-    ignorePatterns,
-    gitIgnored,
+async function loadIgnorePatterns(rootDir: string, ignoreFile: string) {
+  const text = await readFile(path.resolve(rootDir, ignoreFile), "utf8");
+  const patterns: unknown = JSON.parse(text);
+
+  if (!isStringArray(patterns)) {
+    throw new TypeError(`${ignoreFile} must contain a JSON array of strings.`);
+  }
+
+  return patterns.map((pattern) => ({
+    pattern,
+    regex: globToRegExp(pattern),
+  }));
+}
+
+function normalizeRelativePath(rootDir: string, file: string) {
+  return toPosix(path.relative(rootDir, file));
+}
+
+function regexEscape(value: string) {
+  return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
+}
+
+function shouldSkip(
+  relativePath: string,
+  ignorePatterns: IgnorePattern[],
+  isGitIgnored: (relativePath: string) => boolean,
+) {
+  return (
+    hasDotPathSegment(relativePath) ||
+    isGitIgnored(relativePath) ||
+    isIgnored(relativePath, ignorePatterns)
   );
-  const violations = imageFiles
-    .filter((file) => !isAllowedAssetLocation(file, srcAssetsDir))
-    .filter((file) => !isIgnored(file, ignorePatterns))
-    .sort((left, right) => left.localeCompare(right));
-
-  return {
-    ignoredPatterns: ignorePatterns.map(({ pattern }) => pattern),
-    imageCount: imageFiles.length,
-    violations,
-  };
 }
 
-/**
- * Formats image-location violations with remediation guidance.
- *
- * @param result Image asset location verification result.
- * @param ignoreFile Ignore-list file to mention in remediation guidance.
- * @returns Human-readable image-location report.
- */
-export function formatImageAssetLocationReport(
-  result: ImageAssetLocationResult,
-  ignoreFile = defaultIgnoreFile,
-) {
-  if (result.violations.length === 0) {
-    return `Image asset location verification passed: ${result.imageCount} image files scanned.`;
-  }
-
-  return [
-    `Image asset location verification failed: ${result.violations.length} image file${
-      result.violations.length === 1 ? "" : "s"
-    } found outside src/assets/.`,
-    "",
-    "Move each file into the appropriate source asset folder:",
-    "- src/assets/articles/<article-slug>/ for one article.",
-    "- src/assets/shared/ for assets reused by multiple pages.",
-    "- src/assets/site/ for site UI, layout, and homepage assets.",
-    "",
-    `If a file intentionally must stay outside src/assets/, add a specific path or glob to ${ignoreFile}.`,
-    "",
-    "Files:",
-    ...result.violations.map((violation) => `- ${violation}`),
-  ].join("\n");
-}
-
-/**
- * Runs the image asset location command-line workflow.
- *
- * @param args Command-line arguments without the executable prefix.
- * @param rootDir Repository root to verify from.
- * @returns Process exit code.
- */
-export async function runImageAssetLocationCli(
-  args = process.argv.slice(2),
-  rootDir = process.cwd(),
-) {
-  if (args.includes("--help") || args.includes("-h")) {
-    console.log(`Usage: bun run assets:locations [--json] [--quiet]
-
-Require image assets to live under src/assets/.
-
-Intentional exceptions are configured in ${defaultIgnoreFile}. Dotfiles,
-dot-directories, and paths ignored by Git are skipped automatically.`);
-    return 0;
-  }
-
-  const result = await verifyImageAssetLocations({ rootDir });
-
-  if (args.includes("--json")) {
-    console.log(JSON.stringify(result, null, 2));
-  } else {
-    const report = formatImageAssetLocationReport(result);
-    if (result.violations.length > 0) {
-      console.error(report);
-    } else if (!args.includes("--quiet")) {
-      console.log(report);
-    }
-  }
-
-  return result.violations.length > 0 ? 1 : 0;
+function toPosix(file: string) {
+  return file.split(path.sep).join("/");
 }
 
 if (import.meta.main) {

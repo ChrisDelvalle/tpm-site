@@ -24,13 +24,6 @@ export interface DuplicateImageResult {
   scanDirs: string[];
 }
 
-interface DuplicateImageOptions {
-  ignoreFile?: string;
-  ignorePatterns?: string[];
-  rootDir: string;
-  scanDirs?: string[];
-}
-
 interface DuplicateImageCliOptions {
   failOnDuplicates: boolean;
   help: boolean;
@@ -41,174 +34,11 @@ interface DuplicateImageCliOptions {
   scanDirs: string[];
 }
 
-function toPosix(file: string) {
-  return file.split(path.sep).join("/");
-}
-
-function relative(rootDir: string, file: string) {
-  return toPosix(path.relative(rootDir, file));
-}
-
-function regexEscape(value: string) {
-  return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
-}
-
-/**
- * Converts a small glob subset used by ignore files into a regular expression.
- *
- * @param pattern Ignore-file glob pattern.
- * @returns Regular expression that matches full POSIX-style relative paths.
- */
-export function globToRegExp(pattern: string) {
-  let source = "^";
-
-  for (let index = 0; index < pattern.length; index += 1) {
-    const character = pattern.charAt(index);
-    const nextCharacter = pattern.charAt(index + 1);
-
-    if (character === "*" && nextCharacter === "*") {
-      source += ".*";
-      index += 1;
-    } else if (character === "*") {
-      source += "[^/]*";
-    } else if (character === "?") {
-      source += "[^/]";
-    } else {
-      source += regexEscape(character);
-    }
-  }
-
-  return new RegExp(`${source}$`);
-}
-
-async function pathExists(file: string) {
-  try {
-    await stat(file);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function isStringArray(value: unknown): value is string[] {
-  return (
-    Array.isArray(value) &&
-    value.every((pattern) => typeof pattern === "string")
-  );
-}
-
-async function loadIgnorePatterns(rootDir: string, ignoreFile: string) {
-  const fullPath = path.resolve(rootDir, ignoreFile);
-
-  if (!(await pathExists(fullPath))) {
-    return [];
-  }
-
-  const parsed: unknown = JSON.parse(await readFile(fullPath, "utf8"));
-
-  if (!isStringArray(parsed)) {
-    throw new TypeError(`${ignoreFile} must contain a JSON array of strings.`);
-  }
-
-  return parsed;
-}
-
-function hasDotPathSegment(relativePath: string) {
-  return relativePath
-    .split("/")
-    .some((segment) => segment.startsWith(".") && segment !== ".");
-}
-
-function isIgnored(relativePath: string, ignorePatterns: string[]) {
-  return ignorePatterns
-    .map((pattern) => globToRegExp(pattern))
-    .some((regex) => regex.test(relativePath));
-}
-
-async function listImageFiles(
-  rootDir: string,
-  dir: string,
-  ignorePatterns: string[],
-) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files: string[] = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relativePath = relative(rootDir, fullPath);
-
-    if (
-      alwaysIgnoredDirectoryNames.has(entry.name) ||
-      hasDotPathSegment(relativePath) ||
-      isIgnored(relativePath, ignorePatterns)
-    ) {
-      continue;
-    }
-
-    if (entry.isDirectory()) {
-      files.push(...(await listImageFiles(rootDir, fullPath, ignorePatterns)));
-    } else if (imageExtensionPattern.test(entry.name)) {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
-}
-
-async function sha256(file: string) {
-  const hash = createHash("sha256");
-  const stream = createReadStream(file);
-
-  await new Promise<void>((resolve, reject) => {
-    stream.on("data", (chunk: string | Buffer) => {
-      hash.update(chunk);
-    });
-    stream.on("error", reject);
-    stream.on("end", resolve);
-  });
-
-  return hash.digest("hex");
-}
-
-async function imageRecord(
-  rootDir: string,
-  file: string,
-): Promise<DuplicateImageRecord> {
-  const fileStats = await stat(file);
-
-  return {
-    hash: await sha256(file),
-    path: relative(rootDir, file),
-    size: fileStats.size,
-  };
-}
-
-/**
- * Groups image records by content hash and keeps only duplicated hashes.
- *
- * @param records Image file records with SHA-256 hashes.
- * @returns Duplicate groups sorted by size and path for stable reports.
- */
-export function groupDuplicateImages(records: DuplicateImageRecord[]) {
-  const byHash = new Map<string, DuplicateImageRecord[]>();
-
-  for (const record of records) {
-    const group = byHash.get(record.hash) ?? [];
-    group.push(record);
-    byHash.set(record.hash, group);
-  }
-
-  return [...byHash.values()]
-    .filter((group) => group.length > 1)
-    .sort((left, right) => {
-      const sizeDelta = (right[0]?.size ?? 0) - (left[0]?.size ?? 0);
-
-      if (sizeDelta !== 0) {
-        return sizeDelta;
-      }
-
-      return (left[0]?.path ?? "").localeCompare(right[0]?.path ?? "");
-    });
+interface DuplicateImageOptions {
+  ignoreFile?: string;
+  ignorePatterns?: string[];
+  rootDir: string;
+  scanDirs?: string[];
 }
 
 /**
@@ -308,46 +138,60 @@ export function formatDuplicateImageReport(
   return lines.join("\n");
 }
 
-function parseCliArgs(args: string[]): DuplicateImageCliOptions {
-  const scanDirs: string[] = [];
-  let ignoreFile = defaultIgnoreFile;
+/**
+ * Converts a small glob subset used by ignore files into a regular expression.
+ *
+ * @param pattern Ignore-file glob pattern.
+ * @returns Regular expression that matches full POSIX-style relative paths.
+ */
+export function globToRegExp(pattern: string) {
+  let source = "^";
 
-  for (let index = 0; index < args.length; index += 1) {
-    const arg = args[index];
+  for (let index = 0; index < pattern.length; index += 1) {
+    const character = pattern.charAt(index);
+    const nextCharacter = pattern.charAt(index + 1);
 
-    if (arg === "--ignore-file") {
-      const value = args[index + 1];
-      if (value === undefined) {
-        throw new Error("--ignore-file requires a path.");
-      }
-      ignoreFile = value;
+    if (character === "*" && nextCharacter === "*") {
+      source += ".*";
       index += 1;
-    } else if (arg !== undefined && !arg.startsWith("--")) {
-      scanDirs.push(arg);
+    } else if (character === "*") {
+      source += "[^/]*";
+    } else if (character === "?") {
+      source += "[^/]";
+    } else {
+      source += regexEscape(character);
     }
   }
 
-  return {
-    failOnDuplicates: args.includes("--fail-on-duplicates"),
-    help: args.includes("--help") || args.includes("-h"),
-    ignoreFile,
-    json: args.includes("--json"),
-    quiet: args.includes("--quiet"),
-    review: args.includes("--review"),
-    scanDirs,
-  };
+  return new RegExp(`${source}$`);
 }
 
-function usage() {
-  return `Usage: bun run assets:duplicates [--json] [--quiet] [--review] [--fail-on-duplicates] [--ignore-file path] [dir ...]
+/**
+ * Groups image records by content hash and keeps only duplicated hashes.
+ *
+ * @param records Image file records with SHA-256 hashes.
+ * @returns Duplicate groups sorted by size and path for stable reports.
+ */
+export function groupDuplicateImages(records: DuplicateImageRecord[]) {
+  const byHash = new Map<string, DuplicateImageRecord[]>();
 
-Find image files with identical byte content.
+  for (const record of records) {
+    const group = byHash.get(record.hash) ?? [];
+    group.push(record);
+    byHash.set(record.hash, group);
+  }
 
-Defaults to:
-${defaultScanDirs.map((dir) => `- ${dir}`).join("\n")}
+  return Array.from(byHash.values())
+    .filter((group) => group.length > 1)
+    .sort((left, right) => {
+      const sizeDelta = (right[0]?.size ?? 0) - (left[0]?.size ?? 0);
 
-Intentional duplicates can be ignored with ${defaultIgnoreFile}.
-Use --fail-on-duplicates when duplicate images should fail a gate.`;
+      if (sizeDelta !== 0) {
+        return sizeDelta;
+      }
+
+      return (left[0]?.path ?? "").localeCompare(right[0]?.path ?? "");
+    });
 }
 
 /**
@@ -388,6 +232,162 @@ export async function runDuplicateImageCli(
   }
 
   return options.failOnDuplicates && result.duplicateGroups.length > 0 ? 1 : 0;
+}
+
+function hasDotPathSegment(relativePath: string) {
+  return relativePath
+    .split("/")
+    .some((segment) => segment.startsWith(".") && segment !== ".");
+}
+
+async function imageRecord(
+  rootDir: string,
+  file: string,
+): Promise<DuplicateImageRecord> {
+  const fileStats = await stat(file);
+
+  return {
+    hash: await sha256(file),
+    path: relative(rootDir, file),
+    size: fileStats.size,
+  };
+}
+
+function isIgnored(relativePath: string, ignorePatterns: string[]) {
+  return ignorePatterns
+    .map((pattern) => globToRegExp(pattern))
+    .some((regex) => regex.test(relativePath));
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) &&
+    value.every((pattern) => typeof pattern === "string")
+  );
+}
+
+async function listImageFiles(
+  rootDir: string,
+  dir: string,
+  ignorePatterns: string[],
+) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    const relativePath = relative(rootDir, fullPath);
+
+    if (
+      alwaysIgnoredDirectoryNames.has(entry.name) ||
+      hasDotPathSegment(relativePath) ||
+      isIgnored(relativePath, ignorePatterns)
+    ) {
+      continue;
+    }
+
+    if (entry.isDirectory()) {
+      files.push(...(await listImageFiles(rootDir, fullPath, ignorePatterns)));
+    } else if (imageExtensionPattern.test(entry.name)) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
+async function loadIgnorePatterns(rootDir: string, ignoreFile: string) {
+  const fullPath = path.resolve(rootDir, ignoreFile);
+
+  if (!(await pathExists(fullPath))) {
+    return [];
+  }
+
+  const parsed: unknown = JSON.parse(await readFile(fullPath, "utf8"));
+
+  if (!isStringArray(parsed)) {
+    throw new TypeError(`${ignoreFile} must contain a JSON array of strings.`);
+  }
+
+  return parsed;
+}
+
+function parseCliArgs(args: string[]): DuplicateImageCliOptions {
+  const scanDirs: string[] = [];
+  let ignoreFile = defaultIgnoreFile;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+
+    if (arg === "--ignore-file") {
+      const value = args[index + 1];
+      if (value === undefined) {
+        throw new Error("--ignore-file requires a path.");
+      }
+      ignoreFile = value;
+      index += 1;
+    } else if (arg !== undefined && !arg.startsWith("--")) {
+      scanDirs.push(arg);
+    }
+  }
+
+  return {
+    failOnDuplicates: args.includes("--fail-on-duplicates"),
+    help: args.includes("--help") || args.includes("-h"),
+    ignoreFile,
+    json: args.includes("--json"),
+    quiet: args.includes("--quiet"),
+    review: args.includes("--review"),
+    scanDirs,
+  };
+}
+
+async function pathExists(file: string) {
+  try {
+    await stat(file);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function regexEscape(value: string) {
+  return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
+}
+
+function relative(rootDir: string, file: string) {
+  return toPosix(path.relative(rootDir, file));
+}
+
+async function sha256(file: string) {
+  const hash = createHash("sha256");
+  const stream = createReadStream(file);
+
+  await new Promise<void>((resolve, reject) => {
+    stream.on("data", (chunk: Buffer | string) => {
+      hash.update(chunk);
+    });
+    stream.on("error", reject);
+    stream.on("end", resolve);
+  });
+
+  return hash.digest("hex");
+}
+
+function toPosix(file: string) {
+  return file.split(path.sep).join("/");
+}
+
+function usage() {
+  return `Usage: bun run assets:duplicates [--json] [--quiet] [--review] [--fail-on-duplicates] [--ignore-file path] [dir ...]
+
+Find image files with identical byte content.
+
+Defaults to:
+${defaultScanDirs.map((dir) => `- ${dir}`).join("\n")}
+
+Intentional duplicates can be ignored with ${defaultIgnoreFile}.
+Use --fail-on-duplicates when duplicate images should fail a gate.`;
 }
 
 if (import.meta.main) {

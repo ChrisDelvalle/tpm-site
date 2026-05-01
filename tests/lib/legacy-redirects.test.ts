@@ -8,57 +8,8 @@ import matter from "gray-matter";
 const articleDir = path.resolve("src/content/articles");
 const articlePattern = /\.mdx?$/i;
 
-async function listFiles(dir: string, pattern: RegExp) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files: string[] = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await listFiles(fullPath, pattern)));
-    } else if (pattern.test(entry.name)) {
-      files.push(fullPath);
-    }
-  }
-
-  return files.sort((a, b) => a.localeCompare(b));
-}
-
-function frontmatterData(markdown: string) {
-  return (matter(markdown) as { data: Record<string, unknown> }).data;
-}
-
-function filenameStem(file: string) {
-  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
-}
-
-function withTrailingSlash(value: string) {
-  return value.endsWith("/") ? value : `${value}/`;
-}
-
-function normalizeLegacyPermalink(value: string) {
-  const trimmed = value.trim();
-  const pathname = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-  return withTrailingSlash(pathname.replace(/\/{2,}/g, "/"));
-}
-
 function articleUrl(file: string) {
   return withTrailingSlash(`/articles/${filenameStem(file)}`);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
-function isAstroConfigModule(
-  value: unknown,
-): value is { default: { redirects?: Record<string, unknown> } } {
-  if (!isRecord(value) || !isRecord(value["default"])) {
-    return false;
-  }
-
-  const redirects = value["default"]["redirects"];
-  return redirects === undefined || isRecord(redirects);
 }
 
 async function configRedirects() {
@@ -121,8 +72,57 @@ async function expectedRedirectsFromArticleFrontmatter() {
   }
 
   return Object.fromEntries(
-    [...redirects.entries()].sort(([a], [b]) => a.localeCompare(b)),
+    Array.from(redirects.entries()).sort(([a], [b]) => a.localeCompare(b)),
   );
+}
+
+function filenameStem(file: string) {
+  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
+}
+
+function frontmatterData(markdown: string) {
+  return (matter(markdown) as { data: Record<string, unknown> }).data;
+}
+
+function isAstroConfigModule(
+  value: unknown,
+): value is { default: { redirects?: Record<string, unknown> } } {
+  if (!isRecord(value) || !isRecord(value["default"])) {
+    return false;
+  }
+
+  const redirects = value["default"]["redirects"];
+  return redirects === undefined || isRecord(redirects);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+async function listFiles(dir: string, pattern: RegExp) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listFiles(fullPath, pattern)));
+    } else if (pattern.test(entry.name)) {
+      files.push(fullPath);
+    }
+  }
+
+  return files.sort((a, b) => a.localeCompare(b));
+}
+
+function normalizeLegacyPermalink(value: string) {
+  const trimmed = value.trim();
+  const pathname = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return withTrailingSlash(pathname.replace(/\/{2,}/g, "/"));
+}
+
+function withTrailingSlash(value: string) {
+  return value.endsWith("/") ? value : `${value}/`;
 }
 
 describe("legacy redirects", () => {

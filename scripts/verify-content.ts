@@ -19,82 +19,35 @@ export interface ContentVerificationResult {
   publishedCount: number;
 }
 
-async function listFiles(dir: string, pattern: RegExp) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files: string[] = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await listFiles(fullPath, pattern)));
-    } else if (pattern.test(entry.name)) {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
-}
-
-function toPosix(file: string) {
-  return file.split(path.sep).join("/");
-}
-
-function relativeArticlePath(articleDir: string, file: string) {
-  return toPosix(path.relative(articleDir, file));
-}
-
-function filenameStem(file: string) {
-  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
-}
-
-function categorySlug(articleDir: string, file: string) {
-  return relativeArticlePath(articleDir, file).split("/")[0] ?? "";
-}
-
-function isDraft(data: Record<string, unknown>) {
-  return data["draft"] === true;
-}
-
-function validateCategoryMetadataFilename(
-  rootDir: string,
-  file: string,
-  issues: string[],
+/**
+ * Runs the content verification command-line workflow.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @param rootDir Repository root to verify from.
+ * @returns Process exit code.
+ */
+export async function runContentVerificationCli(
+  args = process.argv.slice(2),
+  rootDir = process.cwd(),
 ) {
-  const slug = path.basename(file, ".json");
+  const quiet = args.includes("--quiet");
+  const result = await verifyContent({
+    articleDir: path.resolve(rootDir, "src/content/articles"),
+    categoryDir: path.resolve(rootDir, "src/content/categories"),
+    rootDir,
+  });
+  const report = formatContentVerificationResult(result);
 
-  if (!urlSafeSlugPattern.test(slug)) {
-    issues.push(
-      `${toPosix(path.relative(rootDir, file))}: category metadata filename is not URL-safe`,
-    );
-  }
-}
-
-function validateArticlePath(
-  articleDir: string,
-  file: string,
-  seenSlugs: Map<string, string>,
-  issues: string[],
-) {
-  const relativePath = relativeArticlePath(articleDir, file);
-  const slug = filenameStem(file);
-  const category = categorySlug(articleDir, file);
-
-  if (!urlSafeSlugPattern.test(slug)) {
-    issues.push(`${relativePath}: filename stem is not URL-safe`);
+  if (result.issues.length > 0) {
+    console.error(report);
+    return 1;
   }
 
-  if (!urlSafeSlugPattern.test(category)) {
-    issues.push(`${relativePath}: category folder is not URL-safe`);
+  if (!quiet) {
+    console.log(report);
   }
 
-  const previous = seenSlugs.get(slug);
-  if (previous !== undefined) {
-    issues.push(
-      `${relativePath}: duplicate article slug "${slug}" also used by ${previous}`,
-    );
-  } else {
-    seenSlugs.set(slug, relativePath);
-  }
+  return 0;
 }
 
 /**
@@ -137,6 +90,14 @@ export async function verifyContent({
   };
 }
 
+function categorySlug(articleDir: string, file: string) {
+  return relativeArticlePath(articleDir, file).split("/")[0] ?? "";
+}
+
+function filenameStem(file: string) {
+  return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
+}
+
 function formatContentVerificationResult(result: ContentVerificationResult) {
   if (result.issues.length > 0) {
     return [
@@ -148,35 +109,74 @@ function formatContentVerificationResult(result: ContentVerificationResult) {
   return `Content verification passed: ${result.publishedCount} published articles, ${result.draftCount} drafts.`;
 }
 
-/**
- * Runs the content verification command-line workflow.
- *
- * @param args Command-line arguments without the executable prefix.
- * @param rootDir Repository root to verify from.
- * @returns Process exit code.
- */
-export async function runContentVerificationCli(
-  args = process.argv.slice(2),
-  rootDir = process.cwd(),
+function isDraft(data: Record<string, unknown>) {
+  return data["draft"] === true;
+}
+
+async function listFiles(dir: string, pattern: RegExp) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listFiles(fullPath, pattern)));
+    } else if (pattern.test(entry.name)) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
+function relativeArticlePath(articleDir: string, file: string) {
+  return toPosix(path.relative(articleDir, file));
+}
+
+function toPosix(file: string) {
+  return file.split(path.sep).join("/");
+}
+
+function validateArticlePath(
+  articleDir: string,
+  file: string,
+  seenSlugs: Map<string, string>,
+  issues: string[],
 ) {
-  const quiet = args.includes("--quiet");
-  const result = await verifyContent({
-    articleDir: path.resolve(rootDir, "src/content/articles"),
-    categoryDir: path.resolve(rootDir, "src/content/categories"),
-    rootDir,
-  });
-  const report = formatContentVerificationResult(result);
+  const relativePath = relativeArticlePath(articleDir, file);
+  const slug = filenameStem(file);
+  const category = categorySlug(articleDir, file);
 
-  if (result.issues.length > 0) {
-    console.error(report);
-    return 1;
+  if (!urlSafeSlugPattern.test(slug)) {
+    issues.push(`${relativePath}: filename stem is not URL-safe`);
   }
 
-  if (!quiet) {
-    console.log(report);
+  if (!urlSafeSlugPattern.test(category)) {
+    issues.push(`${relativePath}: category folder is not URL-safe`);
   }
 
-  return 0;
+  const previous = seenSlugs.get(slug);
+  if (previous !== undefined) {
+    issues.push(
+      `${relativePath}: duplicate article slug "${slug}" also used by ${previous}`,
+    );
+  } else {
+    seenSlugs.set(slug, relativePath);
+  }
+}
+
+function validateCategoryMetadataFilename(
+  rootDir: string,
+  file: string,
+  issues: string[],
+) {
+  const slug = path.basename(file, ".json");
+
+  if (!urlSafeSlugPattern.test(slug)) {
+    issues.push(
+      `${toPosix(path.relative(rootDir, file))}: category metadata filename is not URL-safe`,
+    );
+  }
 }
 
 if (import.meta.main) {

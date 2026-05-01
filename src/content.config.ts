@@ -4,10 +4,6 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { defineCollection } from "astro:content";
 
-function filenameStem(entry: string) {
-  return basename(entry).replace(/\.(?:md|mdx)$/i, "");
-}
-
 function articleSchema({ image }: { image: () => z.ZodType }) {
   return z
     .object({
@@ -23,6 +19,10 @@ function articleSchema({ image }: { image: () => z.ZodType }) {
       title: z.string().min(1),
     })
     .strict();
+}
+
+function filenameStem(entry: string) {
+  return basename(entry).replace(/\.(?:md|mdx)$/i, "");
 }
 
 const articles = defineCollection({
