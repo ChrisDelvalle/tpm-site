@@ -4,37 +4,24 @@ import { fileURLToPath } from "node:url";
 import { fixupPluginRules } from "@eslint/compat";
 import js from "@eslint/js";
 import eslintComments from "@eslint-community/eslint-plugin-eslint-comments";
-import html from "@html-eslint/eslint-plugin";
-import shopify from "@shopify/eslint-plugin";
 import stylistic from "@stylistic/eslint-plugin";
-import type { ESLint } from "eslint";
 import { globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier";
 import arrayFunc from "eslint-plugin-array-func";
 import astro from "eslint-plugin-astro";
 import betterTailwindcss from "eslint-plugin-better-tailwindcss";
-import compat from "eslint-plugin-compat";
 import decoratorPosition from "eslint-plugin-decorator-position";
-import etc from "eslint-plugin-etc";
-import functional from "eslint-plugin-functional";
-import importPlugin from "eslint-plugin-import";
 import jsdoc from "eslint-plugin-jsdoc";
 import jsonc from "eslint-plugin-jsonc";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import * as mdx from "eslint-plugin-mdx";
-import n from "eslint-plugin-n";
-import noConstructorBind from "eslint-plugin-no-constructor-bind";
-import noExplicitTypeExports from "eslint-plugin-no-explicit-type-exports";
 import noOnlyTests from "eslint-plugin-no-only-tests";
 import noUnsanitized from "eslint-plugin-no-unsanitized";
 import noUseExtendNative from "eslint-plugin-no-use-extend-native";
 import perfectionist from "eslint-plugin-perfectionist";
 import playwright from "eslint-plugin-playwright";
 import promise from "eslint-plugin-promise";
-import putout, { safeRules as putoutSafeRules } from "eslint-plugin-putout";
 import react from "eslint-plugin-react";
-import reactFormFields from "eslint-plugin-react-form-fields";
-import reactHookForm from "eslint-plugin-react-hook-form";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactPerf from "eslint-plugin-react-perf";
 import reactPreferFunctionComponent from "eslint-plugin-react-prefer-function-component";
@@ -43,16 +30,11 @@ import regexp from "eslint-plugin-regexp";
 import security from "eslint-plugin-security";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import sonarjs from "eslint-plugin-sonarjs";
-import sortClassMembers from "eslint-plugin-sort-class-members";
 import ssrFriendly from "eslint-plugin-ssr-friendly";
-import storybook from "eslint-plugin-storybook";
-import styledComponentsA11y from "eslint-plugin-styled-components-a11y";
 import testingLibrary from "eslint-plugin-testing-library";
 import toml from "eslint-plugin-toml";
 import totalFunctions from "eslint-plugin-total-functions";
-import typescriptCompat from "eslint-plugin-typescript-compat";
 import unicorn from "eslint-plugin-unicorn";
-import unusedImports from "eslint-plugin-unused-imports";
 import validateJsxNesting from "eslint-plugin-validate-jsx-nesting";
 import yml from "eslint-plugin-yml";
 import globals from "globals";
@@ -65,10 +47,6 @@ type RuleSetting = RuleSettings[string];
 type RuleSettings = NonNullable<ConfigWithExtends["rules"]>;
 
 const reactPreferFunctionComponentPlugin = reactPreferFunctionComponent;
-
-const typescriptCompatPlugin = {
-  rules: typescriptCompat.rules,
-} satisfies ESLint.Plugin;
 
 const tsconfigRootDir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -371,11 +349,6 @@ const arrayFuncRecommendedConfig = requiredConfig(
   "array-func/recommended",
 );
 
-const etcRecommendedConfig = requiredConfig(
-  etc.configs["recommended"],
-  "etc/recommended",
-);
-
 const jsxA11yStrictConfig = requiredConfig(
   jsxA11y.flatConfigs["strict"],
   "jsx-a11y/strict",
@@ -416,21 +389,6 @@ const ssrFriendlyRecommendedConfig = requiredConfig(
   "ssr-friendly/recommended",
 );
 
-const storybookRecommendedConfigs = requiredConfig(
-  storybook.configs["flat/recommended"],
-  "storybook/flat/recommended",
-).map((config) => ({
-  name: config.name,
-  ...(isUndefined(config.files) ? {} : { files: config.files }),
-  ...(isUndefined(config.plugins) ? {} : { plugins: config.plugins }),
-  ...(isUndefined(config.rules) ? {} : { rules: config.rules }),
-})) satisfies readonly ConfigWithExtends[];
-
-const styledComponentsA11yStrictConfig = requiredConfig(
-  styledComponentsA11y.flatConfigs["strict"],
-  "styled-components-a11y/strict",
-);
-
 const totalFunctionsRecommendedConfig = requiredConfig(
   totalFunctions.configs["recommended"],
   "total-functions/recommended",
@@ -440,6 +398,7 @@ const perfectionistRules = {
   ...rulesAsErrors(perfectionist.configs["recommended-natural"].rules),
   "perfectionist/sort-imports": "off",
   "perfectionist/sort-named-imports": "off",
+  "perfectionist/sort-objects": "off",
 } satisfies RuleSettings;
 
 export default tseslint.config(
@@ -490,84 +449,54 @@ export default tseslint.config(
   ...jsonc.configs["flat/recommended-with-jsonc"],
   ...yml.configs["flat/recommended"],
   ...configsAsErrors(toml.configs["flat/recommended"]),
-  {
-    ...html.configs["flat/recommended"],
-    files: ["**/*.html"],
-    rules: {
-      ...rulesAsErrors(html.configs["flat/recommended"].rules),
-      "@html-eslint/no-inline-styles": "error",
-      "@html-eslint/no-multiple-h1": "error",
-      "@html-eslint/require-button-type": "error",
-      "@html-eslint/require-explicit-size": "error",
-      "@html-eslint/require-img-alt": "error",
-      "@html-eslint/require-lang": "error",
-      "@html-eslint/require-title": "error",
-    },
-  },
   regexp.configs["flat/recommended"],
-  ...configsAsErrors(storybookRecommendedConfigs),
   ...scopeToTypedFiles(tseslint.configs.recommended),
   ...scopeToTypedFiles(tseslint.configs.strictTypeChecked),
   ...scopeToTypedFiles(tseslint.configs.stylisticTypeChecked),
   {
     files: ["**/*.{js,mjs,cjs,ts,tsx}"],
+    ignores: ["**/*.astro/**", "**/*.mdx/**"],
     languageOptions: {
-      ecmaVersion: "latest",
       globals: {
         ...globals.browser,
         ...globals.node,
         ...globals.bunBuiltin,
       },
+    },
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,ts,tsx}"],
+    languageOptions: {
+      ecmaVersion: "latest",
       sourceType: "module",
     },
     plugins: {
       "@eslint-community/eslint-comments": fixupPluginRules(eslintComments),
-      "@shopify": fixupPluginRules(shopify),
       "@stylistic": stylistic,
       "array-func": arrayFunc,
-      compat,
       "decorator-position": decoratorPosition,
-      import: importPlugin,
       jsdoc,
       "jsx-a11y": jsxA11y,
-      "no-constructor-bind": fixupPluginRules(noConstructorBind),
       "no-only-tests": noOnlyTests,
       "no-unsanitized": noUnsanitized,
       "no-use-extend-native": noUseExtendNative,
       perfectionist,
       promise,
-      putout,
       "react-hooks": reactHooks,
       "react-refresh": reactRefreshPlugin,
       security,
       "simple-import-sort": simpleImportSort,
       sonarjs,
-      "sort-class-members": sortClassMembers,
-      "typescript-compat": fixupPluginRules(typescriptCompatPlugin),
       unicorn,
-      "unused-imports": unusedImports,
     },
     rules: {
       ...rulesAsErrors(arrayFuncRecommendedConfig.rules),
-      ...rulesAsErrors(compat.configs["flat/recommended"].rules),
       ...rulesAsErrors(eslintComments.configs.recommended.rules),
-      ...rulesAsErrors(importPlugin.flatConfigs.recommended.rules),
-      ...rulesAsErrors(importPlugin.flatConfigs.typescript.rules),
       ...rulesAsErrors(noUseExtendNativeRecommendedConfig.rules),
       ...perfectionistRules,
       ...rulesAsErrors(promiseRecommendedConfig.rules),
       ...rulesAsErrors(securityRecommendedConfig.rules),
       ...rulesAsErrors(stylistic.configs.recommended.rules),
-      "@shopify/binary-assignment-parens": ["error", "always"],
-      "@shopify/class-property-semi": "error",
-      "@shopify/no-context-menu": "error",
-      "@shopify/no-debugger": "error",
-      "@shopify/no-fully-static-classes": "error",
-      "@shopify/no-useless-computed-properties": "error",
-      "@shopify/prefer-early-return": "error",
-      "@shopify/prefer-module-scope-constants": "error",
-      "@shopify/prefer-twine": "error",
-      "@shopify/strict-component-boundaries": "error",
       "block-scoped-var": "error",
       curly: ["error", "all"],
       "decorator-position/decorator-position": "error",
@@ -575,26 +504,6 @@ export default tseslint.config(
       "dot-notation": "error",
       eqeqeq: ["error", "always"],
       "guard-for-in": "error",
-      "import/no-cycle": "error",
-      "import/no-extraneous-dependencies": [
-        "error",
-        {
-          devDependencies: [
-            "*.config.{js,cjs,mjs,ts}",
-            "scripts/**/*.ts",
-            "tests/**/*.{ts,tsx}",
-          ],
-        },
-      ],
-      "import/no-mutable-exports": "error",
-      "import/no-self-import": "error",
-      "import/no-unresolved": [
-        "error",
-        {
-          ignore: ["^astro:"],
-        },
-      ],
-      "import/no-useless-path-segments": "error",
       "jsdoc/check-alignment": "error",
       "jsdoc/check-param-names": "error",
       "jsdoc/check-property-names": "error",
@@ -621,8 +530,6 @@ export default tseslint.config(
       "no-array-constructor": "error",
       "no-caller": "error",
       "no-console": "error",
-      "no-constructor-bind/no-constructor-bind": "error",
-      "no-constructor-bind/no-constructor-state": "error",
       "no-debugger": "error",
       "no-duplicate-imports": "error",
       "no-eval": "error",
@@ -680,19 +587,6 @@ export default tseslint.config(
       "prefer-const": "error",
       "prefer-object-has-own": "error",
       "prefer-regex-literals": "error",
-      "putout/putout": [
-        "error",
-        {
-          rules: {
-            ...putoutSafeRules,
-            "apply-arrow": "off",
-            "apply-dot-notation": "off",
-            "conditions/remove-boolean": "off",
-            "conditions/remove-zero": "off",
-            "convert-quotes-to-backticks": "off",
-          },
-        },
-      ],
       radix: "error",
       "require-atomic-updates": "error",
       "simple-import-sort/imports": "error",
@@ -707,7 +601,6 @@ export default tseslint.config(
       "sonarjs/no-redundant-boolean": "error",
       "sonarjs/no-small-switch": "error",
       "sonarjs/no-useless-catch": "error",
-      "sort-class-members/sort-class-members": "error",
       "unicorn/catch-error-name": "error",
       "unicorn/error-message": "error",
       "unicorn/no-abusive-eslint-disable": "error",
@@ -722,32 +615,16 @@ export default tseslint.config(
       "unicorn/prefer-number-properties": "error",
       "unicorn/prefer-string-slice": "error",
       "unicorn/throw-new-error": "error",
-      "unused-imports/no-unused-imports": "error",
       ...publicDocumentationRules,
-    },
-    settings: {
-      "import/core-modules": ["astro:assets", "astro:content", "bun:test"],
-      "import/resolver": {
-        node: true,
-        typescript: {
-          project: "./tsconfig.json",
-        },
-      },
     },
   },
   {
     files: [...typedFiles],
     plugins: {
-      etc: fixupPluginRules(etc),
-      functional,
-      "no-explicit-type-exports": fixupPluginRules(noExplicitTypeExports),
       "total-functions": fixupPluginRules(totalFunctions),
     },
     rules: {
-      ...rulesAsErrors(etcRecommendedConfig.rules),
       ...rulesAsErrors(totalFunctionsRecommendedConfig.rules),
-      "@shopify/typescript-prefer-pascal-case-enums": "error",
-      "@shopify/typescript-prefer-singular-enums": "error",
       "@typescript-eslint/array-type": [
         "error",
         {
@@ -797,6 +674,7 @@ export default tseslint.config(
           ignoreVoidOperator: false,
         },
       ],
+      "@typescript-eslint/no-deprecated": "off",
       "@typescript-eslint/no-duplicate-enum-values": "error",
       "@typescript-eslint/no-empty-object-type": "error",
       "@typescript-eslint/no-explicit-any": [
@@ -910,15 +788,10 @@ export default tseslint.config(
       ],
       "@typescript-eslint/triple-slash-reference": "error",
       "dot-notation": "off",
-      "functional/no-class-inheritance": "error",
-      "functional/no-classes": "error",
-      "functional/no-loop-statements": "error",
-      "functional/no-this-expressions": "error",
-      "functional/prefer-readonly-type": "error",
-      "no-explicit-type-exports/no-explicit-type-exports": "error",
       "no-restricted-syntax": ["error", ...normalModuleSyntaxRestrictions],
+      "total-functions/no-unsafe-readonly-mutable-assignment": "off",
+      "total-functions/no-unsafe-type-assertion": "off",
       "total-functions/require-strict-mode": "off",
-      "typescript-compat/compat": "error",
     },
   },
   {
@@ -936,27 +809,22 @@ export default tseslint.config(
         }),
     plugins: {
       react: fixupPluginRules(react),
-      "react-form-fields": fixupPluginRules(reactFormFields),
-      "react-hook-form": fixupPluginRules(reactHookForm),
       "react-perf": fixupPluginRules(reactPerf),
       "react-prefer-function-component": fixupPluginRules(
         reactPreferFunctionComponent,
       ),
       "ssr-friendly": fixupPluginRules(ssrFriendly),
-      "styled-components-a11y": fixupPluginRules(styledComponentsA11y),
       "validate-jsx-nesting": fixupPluginRules(validateJsxNesting),
     },
     rules: {
       ...rulesAsErrors(reactRecommendedConfig.rules),
       ...rulesAsErrors(reactJsxRuntimeConfig.rules),
       ...rulesAsErrors(jsxA11yStrictConfig.rules),
-      ...rulesAsErrors(reactFormFields.configs["recommended"]?.rules),
-      ...rulesAsErrors(reactHookForm.configs["recommended"]?.rules),
       ...reactHooks.configs.flat.recommended.rules,
       ...rulesAsErrors(reactPerf.configs["recommended"]?.rules),
       ...rulesAsErrors(reactPreferFunctionComponentRecommendedConfig.rules),
       ...rulesAsErrors(ssrFriendlyRecommendedConfig.rules),
-      ...rulesAsErrors(styledComponentsA11yStrictConfig.rules),
+      "react-hooks/static-components": "off",
       "react-refresh/only-export-components": [
         "error",
         {
@@ -1022,16 +890,9 @@ export default tseslint.config(
   {
     files: [...componentFiles],
     plugins: {
-      functional,
       sonarjs,
     },
     rules: {
-      "functional/immutable-data": "error",
-      "functional/no-class-inheritance": "error",
-      "functional/no-classes": "error",
-      "functional/no-let": "error",
-      "functional/no-loop-statements": "error",
-      "functional/no-this-expressions": "error",
       "no-param-reassign": "error",
       "no-restricted-imports": [
         "error",
@@ -1095,28 +956,6 @@ export default tseslint.config(
     },
   },
   {
-    files: [
-      "scripts/**/*.ts",
-      "*.config.{js,cjs,ts,mjs}",
-      "playwright.config.ts",
-    ],
-    plugins: {
-      n,
-    },
-    rules: {
-      ...rulesAsErrors(n.configs["flat/recommended-module"].rules),
-      "n/file-extension-in-import": "off",
-      "n/no-missing-import": "off",
-      "n/no-unsupported-features/es-syntax": "off",
-      "n/no-unsupported-features/node-builtins": "off",
-    },
-    settings: {
-      n: {
-        tryExtensions: [".js", ".mjs", ".cjs", ".ts", ".tsx"],
-      },
-    },
-  },
-  {
     ...betterTailwindcss.configs["correctness-error"],
     files: ["src/**/*.{astro,ts,tsx}"],
     rules: {
@@ -1164,7 +1003,6 @@ export default tseslint.config(
       "*.config.{js,cjs,ts,mjs}",
     ],
     rules: {
-      "compat/compat": "off",
       "no-console": "off",
     },
   },
@@ -1176,11 +1014,6 @@ export default tseslint.config(
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-type-assertion": "off",
       "array-func/prefer-array-from": "off",
-      "etc/no-deprecated": "off",
-      "import/no-named-as-default-member": "off",
-      "putout/putout": "off",
-      "total-functions/no-unsafe-readonly-mutable-assignment": "off",
-      "total-functions/no-unsafe-type-assertion": "off",
       "unicorn/no-anonymous-default-export": "off",
     },
   },
@@ -1194,7 +1027,6 @@ export default tseslint.config(
     files: ["types/**/*.d.ts"],
     rules: {
       "@typescript-eslint/consistent-type-imports": "off",
-      "putout/putout": "off",
     },
   },
   eslintConfigPrettier,

@@ -22,6 +22,7 @@ const config = {
   ],
   ignoreBinaries: ["gitleaks"],
   ignoreDependencies: [
+    "@typescript-eslint/parser",
     "@tailwindcss/typography",
     "markdownlint-cli2",
     "sort-package-json",
