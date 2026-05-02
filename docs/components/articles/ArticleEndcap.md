@@ -27,7 +27,7 @@ It composes local components: `../../lib/article-list`, `../blocks/SupportBlock`
 
 The component must respect a readable prose measure, keep continuation surfaces
 visually subordinate to the article body, and render support before
-same-category discovery, followed by related/reference-style discovery.
+same-category discovery, followed by related reading.
 
 ## Layering And Scrolling
 
@@ -65,9 +65,9 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
 - renders Support The Philosopher's Meme before More in Category.
-- renders related/reference-style discovery after same-category discovery.
-- leaves final metadata such as tags outside the endcap so tags can be the last
-  article surface.
+- renders related discovery after same-category discovery.
+- leaves article apparatus such as notes/bibliography and final metadata such
+  as tags outside the endcap.
 
 ## Follow-Up Notes
 

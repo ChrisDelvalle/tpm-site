@@ -596,8 +596,21 @@ Scope rules:
 - [ ] Document catalog examples and render/Playwright tests required before the
       article TOC ships.
 
-## Milestone 20: Bibliography Technical Design
+## Milestone 20: Bibliography And Article References Technical Design
 
+- [x] Add the article references remark plugin technical design at
+      `docs/remark-plugins/article-references.md`.
+- [x] Document the canonical article-local reference syntax:
+      `note-*` labels for explanatory footnotes, `cite-*` labels for
+      bibliography citations, and optional leading `[@Display Label]`
+      definition metadata.
+- [x] Document parser architecture requirements: use parsed GFM footnote AST
+      nodes, keep pure normalization separate from the remark transformer,
+      parse into typed data, and make invalid states unrepresentable after
+      normalization.
+- [x] Document the preferred metadata output path, documented AST-injection
+      fallback, validation rules, author-readable diagnostics, test fixtures,
+      and implementation file structure for article references.
 - [ ] Add a bibliography technical design doc at `docs/BIBLIOGRAPHY.md`.
 - [ ] Inventory every article in `src/content/articles/` for bibliography or
       citation-like content, including explicit references sections, footnotes,
@@ -636,6 +649,21 @@ Scope rules:
 
 ## Milestone 21: Bibliography Component Designs
 
+- [x] Add article-local reference component one-pagers for
+      `ArticleReferences`, `ArticleFootnotes`, `ArticleBibliography`, and
+      `ArticleReferenceBacklinks`.
+- [x] Document the article-local reference hierarchy:
+      `ArticleLayout` owns placement, `ArticleReferences` owns note versus
+      bibliography section composition, `ArticleFootnotes` owns explanatory
+      note markup, `ArticleBibliography` owns citation markup, and
+      `ArticleReferenceBacklinks` owns shared return-link behavior.
+- [x] Document article-local reference ordering: references render after
+      `ArticleEndcap` and before `ArticleTags`, with notes before
+      bibliography when both exist.
+- [x] Document article-local reference states: no references, notes only,
+      citations only, repeated citation references, optional display labels,
+      long source text, long URLs, rich Markdown definitions, and backlink
+      accessibility.
 - [ ] Update or create component one-pagers before implementation for the
       bibliography page and bibliography UI components, using names such as
       `BibliographyPage`, `BibliographyList`, `BibliographyEntry`,
@@ -839,24 +867,205 @@ Scope rules:
       wiring that no longer match the new category navigation plus article TOC
       architecture.
 
-## Milestone 27: Bibliography Implementation And Normalization
+## Milestone 27: Article References Data Path Proof
 
-- [ ] Implement only after Milestones 20 and 21 are complete.
-- [ ] Add the bibliography parsing, normalization, and validation boundary
-      chosen in the technical design.
-- [ ] Normalize legacy bibliography/citation formats only according to the
-      approved article-content plan and preserve article wording and author
-      intent.
-- [ ] Add the `/bibliography/` route and footer navigation link.
-- [ ] Implement bibliography UI components according to their one-pagers.
-- [ ] Add parser, content validation, route smoke, render, accessibility, and
-      Playwright tests defined by the design milestones.
+- [ ] Implement only after the article-local reference portions of Milestones
+      20 and 21 are complete.
+- [ ] Add focused fixtures for one Markdown article and one MDX article that use
+      canonical `note-*` and `cite-*` labels with rich definition content.
+- [ ] Prove whether `render(entry).remarkPluginFrontmatter` can carry
+      normalized note/citation data and rich renderable definition content from
+      the Markdown pipeline to `ArticleLayout`.
+- [ ] Document the result in `docs/remark-plugins/article-references.md`,
+      including the exact data shape available to article routes/layouts.
+- [ ] Choose the component-rendered metadata path if it can preserve rich
+      definitions safely.
+- [ ] Choose the documented AST-injection fallback only if the proof shows the
+      metadata path cannot preserve renderable definition content.
+- [ ] Keep the proof isolated from the published article corpus; do not enable
+      release-blocking validation or edit article content in this milestone.
+- [ ] Add focused tests for the proof path so future Astro upgrades cannot
+      silently break reference data transport.
+
+## Milestone 28: Article References Model And Pure Normalization
+
+- [ ] Add `src/lib/article-references/` with the smallest useful split for
+      `model.ts`, `normalize.ts`, `validate.ts`, and ID/display-label helpers.
+- [ ] Model references with discriminated, type-safe shapes for notes,
+      citations, definitions, source markers, generated IDs, display labels,
+      and diagnostics.
+- [ ] Make invalid states unrepresentable after normalization: unknown label
+      kind, malformed slug, duplicate definitions, missing definitions,
+      unreferenced definitions, repeated notes, ID collisions, and ambiguous
+      classification should not survive as renderable data.
+- [ ] Implement label classification for `note-*` and `cite-*` labels using
+      lowercase ASCII slug rules.
+- [ ] Implement deterministic first-reference ordering and deterministic IDs
+      for note entries, citation entries, source markers, and citation backrefs.
+- [ ] Implement display-label extraction only for a valid leading `[@...]`
+      marker at the first inline position of `note-*` or `cite-*`
+      definitions.
+- [ ] Preserve rich definition children after removing leading display-label
+      metadata; do not flatten definitions to plain strings too early.
+- [ ] Keep pure helpers independent of Astro so they can be tested without
+      building the site.
+- [ ] Add table-driven unit tests for accepted and rejected labels, duplicate
+      detection, missing reference/definition detection, ordering, repeated
+      citation handling, repeated note failure, ID generation, display-label
+      extraction, and rich definition preservation.
+
+## Milestone 29: Article References Remark Plugin
+
+- [ ] Add direct dependencies where needed instead of relying on transitive
+      packages: `unist-util-visit`, explicit mdast types if needed, and
+      `remark`/`remark-gfm` for isolated plugin tests if those tests require
+      them.
+- [ ] Add `src/remark-plugins/articleReferences.ts` as a thin unified remark
+      transformer that orchestrates the pure article-reference helpers.
+- [ ] Visit every `footnoteReference` and `footnoteDefinition` node through the
+      parsed Markdown AST rather than regexing source text or post-render HTML.
+- [ ] Classify labels by `note-*` and `cite-*`; fail on any other published
+      article footnote label once validation is enabled.
+- [ ] Extract optional leading display labels from valid note/citation
+      definitions and preserve later `[@...]` text as ordinary definition
+      content.
+- [ ] Preserve rich Markdown definition content, including emphasis, links,
+      inline code, punctuation, and GFM continuation blocks.
+- [ ] Suppress or replace Astro/GFM's default combined footnote output so custom
+      note and bibliography sections do not duplicate it.
+- [ ] Replace inline footnote reference nodes with accessible marker links, or
+      produce the equivalent renderable marker representation chosen in
+      Milestone 27.
+- [ ] Use `file.fail(...)` for blocking errors and `file.message(...)` only for
+      review-only warnings; messages must be author-readable and include how to
+      fix the problem.
+- [ ] Add plugin integration tests using `remark`, `remark-gfm`, and the plugin
+      for valid notes, valid citations, mixed notes/citations, repeated
+      citations, repeated-note failure, display labels, malformed display
+      labels, invalid legacy labels, missing definitions, unreferenced
+      definitions, duplicate definitions, and rich definitions.
+- [ ] Wire the plugin into `astro.config.ts` under `markdown.remarkPlugins`
+      only after isolated plugin tests pass.
+- [ ] Verify MDX inherits the same plugin behavior as Markdown.
+
+## Milestone 30: Article Reference Rendering Components
+
+- [ ] Implement only after Milestones 27, 28, and 29 establish the data path and
+      normalized model.
+- [ ] Implement `src/components/articles/ArticleReferences.astro` according to
+      `docs/components/articles/ArticleReferences.md`.
+- [ ] Implement `src/components/articles/ArticleFootnotes.astro` according to
+      `docs/components/articles/ArticleFootnotes.md`.
+- [ ] Implement `src/components/articles/ArticleBibliography.astro` according
+      to `docs/components/articles/ArticleBibliography.md`.
+- [ ] Implement `src/components/articles/ArticleReferenceBacklinks.astro`
+      according to `docs/components/articles/ArticleReferenceBacklinks.md`.
+- [ ] Keep visual components data-driven: they must not parse Markdown, inspect
+      article source, fetch global content, or infer citations from inline
+      prose links.
+- [ ] Render nothing for no references, only notes for notes-only articles, only
+      bibliography for citation-only articles, and notes before bibliography
+      when both exist.
+- [ ] Render notes as numbered article footnotes by default while preserving
+      optional note display labels as metadata.
+- [ ] Render citations numerically by default and with explicit display labels
+      when the normalized citation data provides them.
+- [ ] Render stable entry IDs and accessible backlinks from each note/citation
+      entry to the originating inline marker or markers.
+- [ ] Keep reference sections in the article reading measure, with long labels,
+      titles, URLs, and many backlinks wrapping without horizontal overflow.
+- [ ] Use semantic headings, ordered lists, links, and Tailwind semantic tokens;
+      do not create extra landmarks or CTA/card styling for reference
+      apparatus.
+- [ ] Add catalog examples for no references, notes only, citations only, both,
+      repeated citations, display labels, long URLs, rich definitions, dark
+      mode, light mode, mobile, desktop, and wide desktop.
+- [ ] Add Astro render tests for empty states, section ordering, default
+      headings, ordered-list output, stable IDs, backlinks, accessible labels,
+      long content, and preserved rich definition content.
+
+## Milestone 31: Article Reference Article Integration And Gates
+
+- [ ] Wire normalized article reference data from `render(article)` into
+      `ArticleLayout` or the article route without making route files parse
+      Markdown or inspect article source.
+- [ ] Place `ArticleReferences` after `ArticleEndcap` and before `ArticleTags`
+      on article pages.
+- [ ] Verify article end ordering remains prose, support CTA, more-in-category
+      and related discovery, notes/bibliography, then tags as the final article
+      surface.
+- [ ] Ensure article pages do not render Astro's default combined GFM footnote
+      section alongside custom note/bibliography sections.
+- [ ] Add Astro integration tests for `.md` and `.mdx` article content running
+      through the plugin.
+- [ ] Add route/build tests proving invalid published article references fail
+      only after the corpus is normalized or explicitly excepted.
+- [ ] Add Playwright checks that reference markers and backlinks are keyboard
+      focusable links, have visible focus states, and navigate to the intended
+      entry/marker targets.
+- [ ] Add accessibility checks for sensible headings, no duplicate IDs, no
+      competing landmarks, and readable links in light and dark mode.
+- [ ] Add responsive checks proving reference sections do not create horizontal
+      overflow at mobile, tablet, desktop, wide desktop, and short viewport
+      heights.
+- [ ] Update `docs/remark-plugins/article-references.md`,
+      `docs/COMPONENT_ARCHITECTURE.md`, and component one-pagers if the final
+      integration differs from the design.
+
+## Milestone 32: Article Reference Corpus Normalization
+
+- [ ] Implement only after Milestone 31 proves the canonical format and gates
+      against fixtures; article-content edits require explicit instruction and
+      careful manual verification.
+- [ ] Add or update an audit script/test that inventories current article
+      reference formats: explicit references sections, Markdown footnotes,
+      bibliography footnotes, bracket-style entries, raw HTML links, MDX links,
+      blockquote attributions, media credits, archive links, and prose links.
+- [ ] Record every article that needs manual normalization and the exact legacy
+      pattern it uses.
+- [ ] Normalize one article-reference format at a time into canonical
+      `note-*` and `cite-*` footnotes according to the approved article-content
+      plan.
+- [ ] Preserve author wording and article intent; only change reference syntax
+      and section structure needed for the canonical parser.
+- [ ] Keep ambiguous inline prose links out of bibliography data unless the
+      article is explicitly edited to use a canonical `cite-*` reference.
+- [ ] Add explicit exceptions only when an article cannot reasonably be
+      normalized yet, and document why the exception is temporary or permanent.
+- [ ] Enable release-blocking validation for published articles only after the
+      normalized corpus and exceptions pass.
 - [ ] Update author-facing article submission documentation with the canonical
-      bibliography format and validation guidance.
-- [ ] Update `CHECKLIST.md` with any remaining article normalization follow-up
+      `note-*`, `cite-*`, and optional `[@Display Label]` syntax.
+
+## Milestone 33: Global Bibliography Page Implementation
+
+- [ ] Implement only after Milestones 20, 21, and 32 provide approved global
+      bibliography requirements and normalized citation data.
+- [ ] Add the `/bibliography/` route and footer navigation link without
+      cluttering the primary header navigation.
+- [ ] Build global bibliography data from normalized `cite-*` entries and
+      source article metadata; do not infer sources from ordinary inline links.
+- [ ] Preserve article back-links for every bibliography entry so readers can
+      see which article used each source.
+- [ ] Implement bibliography page UI components according to their one-pagers,
+      such as `BibliographyPage`, `BibliographyList`, `BibliographyEntry`,
+      `BibliographySourceArticles`, `BibliographyFilters`, and
+      `BibliographyEmptyState` unless the design chooses better names.
+- [ ] Implement grouping, sorting, duplicate handling, non-URL source display,
+      long source display, and empty states according to the approved global
+      bibliography design.
+- [ ] Avoid fuzzy global source deduplication unless explicit canonical source
+      IDs are added; do not guess duplicates from prose.
+- [ ] Add SEO, sitemap, Pagefind, canonical URL, and machine-readable metadata
+      behavior according to the design.
+- [ ] Add route data tests, render tests, accessibility tests, and Playwright
+      tests for grouping, sorting, back-links, filters if present, no
+      JavaScript behavior, long sources, duplicate sources, and no horizontal
+      overflow.
+- [ ] Update `CHECKLIST.md` with any remaining bibliography follow-up
       discovered during implementation.
 
-## Milestone 28: Author Pages Implementation And Metadata Normalization
+## Milestone 34: Author Pages Implementation And Metadata Normalization
 
 - [ ] Implement only after Milestones 22 and 23 are complete.
 - [ ] Add the author metadata source and content schema chosen in the technical

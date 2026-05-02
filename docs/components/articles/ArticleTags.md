@@ -57,8 +57,8 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
-- renders after prose, support, same-category discovery, and related/reference
-  surfaces.
+- renders after prose, support, same-category discovery, related surfaces, and
+  `ArticleReferences` when notes or bibliography exist.
 - remains the final visible article surface when tags exist.
 
 ## Follow-Up Notes

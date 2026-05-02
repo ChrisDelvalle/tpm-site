@@ -157,6 +157,10 @@ src/components/
     ArticleList.astro
     ArticleImage.astro
     ArticleTags.astro
+    ArticleReferences.astro
+    ArticleFootnotes.astro
+    ArticleBibliography.astro
+    ArticleReferenceBacklinks.astro
     MoreInCategoryBlock.astro
     RelatedArticlesBlock.astro
     ArticleEndcap.astro
@@ -275,9 +279,15 @@ src/pages/articles/[...slug].astro
     ArticleProse
       Content
     ArticleEndcap
+      SupportBlock
       MoreInCategoryBlock
       RelatedArticlesBlock
-      SupportBlock
+    ArticleReferences
+      ArticleFootnotes
+        ArticleReferenceBacklinks
+      ArticleBibliography
+        ArticleReferenceBacklinks
+    ArticleTags
 ```
 
 `ArticleLayout` should not manually assemble every header detail forever. It
@@ -489,6 +499,12 @@ Article components own article display and metadata presentation.
 - `ArticleList`: list semantics and spacing for repeated article cards.
 - `ArticleImage`: future MDX figure/image abstraction.
 - `ArticleTags`: optional tag display once tags become public UI.
+- `ArticleReferences`: article-local owner for notes and bibliography sections.
+- `ArticleFootnotes`: explanatory note section rendered from normalized
+  `note-*` reference data.
+- `ArticleBibliography`: article-local source citation section rendered from
+  normalized `cite-*` reference data.
+- `ArticleReferenceBacklinks`: shared return-link UI for notes and citations.
 - `MoreInCategoryBlock`: natural continuation from the current article.
 - `RelatedArticlesBlock`: curated or metadata-driven related reading.
 - `ArticleEndcap`: after-article reading/support region.
@@ -496,7 +512,9 @@ Article components own article display and metadata presentation.
 
 Article components should receive `ArticleEntry` only where that is simpler and
 clear. Lower components can receive normalized display props if that prevents
-route/content logic from leaking downward.
+route/content logic from leaking downward. Reference components must receive
+normalized note/citation data; they should not parse Markdown source, inspect
+article body text, or infer citations from ordinary prose links.
 
 ### Page And Block Components
 
@@ -1268,15 +1286,18 @@ This sequence minimizes risk and keeps visual changes reviewable.
 9. Extract `ArticleHeader`, `ArticleMeta`, `ArticleCard`, and `ArticleList`.
 10. Replace archive/category repeated markup with article list/card components.
 11. Add `ArticleEndcap`, `MoreInCategoryBlock`, and reusable `SupportBlock`.
-12. Add `PageLayout`, `PageHeader`, and `PageProse` for non-article Markdown
+12. Add article-local reference components after the references technical
+    design is approved: `ArticleReferences`, `ArticleFootnotes`,
+    `ArticleBibliography`, and `ArticleReferenceBacklinks`.
+13. Add `PageLayout`, `PageHeader`, and `PageProse` for non-article Markdown
     pages.
-13. Move homepage prose/data into `src/content/pages/index.md`.
-14. Replace homepage section markup with home blocks: hero, announcements,
+14. Move homepage prose/data into `src/content/pages/index.md`.
+15. Replace homepage section markup with home blocks: hero, announcements,
     latest, featured/start-here, category overview, support.
-15. Move remaining component-specific global CSS into Tailwind component
+16. Move remaining component-specific global CSS into Tailwind component
     classes.
-16. Revisit sidebar/header visual design once ownership boundaries are clean.
-17. Add category dropdown previews only after section nav and discovery blocks
+17. Revisit sidebar/header visual design once ownership boundaries are clean.
+18. Add category dropdown previews only after section nav and discovery blocks
     are stable.
 
 Each step should be independently buildable and testable. Avoid combining a
