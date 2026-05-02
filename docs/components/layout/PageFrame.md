@@ -4,59 +4,74 @@ Source: `src/components/layout/PageFrame.astro`
 
 ## Purpose
 
-`PageFrame` serves as a layout component that owns document regions, page framing, or persistent chrome.
+`PageFrame` is a compatibility and transition frame for generic pages. Long
+term, most routes should prefer `ReadingBody` or `BrowsingBody`; `PageFrame`
+remains useful for simple pages that do not need a named body family yet.
+
+It must not become the place where every page invents a new width.
 
 ## Public Contract
 
-- `size?: "lg" | "md" | "prose" | "xl"`
-- `spacing?: "lg" | "md" | "sm"`
+- `size?: "prose" | "md" | "lg" | "xl"`
+- `spacing?: "sm" | "md" | "lg"`
+- default slot
 
-Public props should remain narrow and semantic. Do not add broad configuration
-objects or boolean clusters when a named variant or a smaller component would
-make invalid states harder to express.
+The `size` options must map to semantic measures. Do not add arbitrary
+page-specific sizes to satisfy one route.
 
 ## Composition Relationships
 
-It composes local components: `../ui/Container`. It defines region relationships for children; children should not patch its spacing or stacking from outside.
+```text
+MainFrame
+  PageFrame
+    PageHeader
+    PageProse | page blocks
+```
+
+`PageFrame` may wrap generic Markdown and simple error pages. Browsing pages
+with archive/list behavior should migrate to `BrowsingBody`. Article/prose
+pages should migrate to `ReadingBody`.
 
 ## Layout And Responsiveness
 
-The component owns structural relationships between regions. It must maintain skip-link access, avoid content being covered by sticky chrome, and preserve a single coherent main content flow at every viewport.
+Mobile base is full available width with shared gutters. Larger sizes cap the
+content at named measures.
+
+`PageFrame` should not own side rails. If a page needs rails, use
+`MarginSidebarLayout` inside a `ReadingBody` or browsing-specific design.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+No sticky, fixed, overlay, or `z-index` behavior is intended.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant.
+No direct interaction. Descendant links and controls own their states.
 
 ## Accessibility Semantics
 
-Use semantic HTML first, preserve heading order when headings are rendered, and keep focus-visible states intact for any interactive descendants.
+`PageFrame` should not create landmarks. It only constrains content.
 
 ## Content Edge Cases
 
-Test or catalog long titles, long words, dense content, empty content, missing
-optional fields, and unusual punctuation whenever this component renders user or
-author-provided content.
+Handle very short pages, long headings, generic Markdown, empty 404 states, and
+wide embedded content by constraining or wrapping rather than overflowing.
 
 ## Theme Behavior
 
-Use semantic color tokens and Tailwind utilities. Light and dark mode must keep
-text readable, borders visible when they communicate structure, focus rings
-visible, and CTAs distinguishable from neutral actions.
+Use no extra visual styling by default. The page body and child components own
+backgrounds, borders, and section treatments.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
-- handles long content without clipping or overlapping neighboring components.
-- maintains exactly one reachable main region.
-- prevents sticky/fixed chrome from covering visible content during scroll.
+- Does not render a landmark.
+- Keeps content within the selected semantic measure.
+- Does not create horizontal overflow at narrow widths.
+- Does not reserve sidebar or hero space.
+- Does not override child component spacing with page-specific patches.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- As `ReadingBody` and `BrowsingBody` become standard, audit remaining
+  `PageFrame` use. Each use should be either a simple compatibility case or a
+  candidate for a named body primitive.

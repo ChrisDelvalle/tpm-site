@@ -4,13 +4,23 @@ Source: `src/components/articles/ArticleMeta.astro`
 
 ## Purpose
 
-`ArticleMeta` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`ArticleMeta` renders compact article metadata for article headers, article
+cards, archive lists, and related-reading surfaces.
+
+It owns metadata rhythm and ordering, but it does not look up content. Parents
+pass normalized dates, categories, and author summaries.
 
 ## Public Contract
 
 - `author?: string | undefined`
+- `authors?: readonly AuthorSummary[] | undefined`
 - `date?: Date | undefined`
 - `formattedDate?: string | undefined`
+- `legacyAuthor?: string | undefined`
+
+`author` is the current implementation shape. The target author design should
+move display to `authors` plus `legacyAuthor` during migration, then remove the
+legacy fallback once article frontmatter is normalized.
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -18,7 +28,16 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It should not depend on sibling internals beyond normal slot/prop composition. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+ArticleHeader / ArticleCard / ArticleList surfaces
+  ArticleMeta
+    AuthorByline
+      AuthorLink
+```
+
+`ArticleMeta` owns date/author grouping and separator punctuation around the
+metadata group. `AuthorByline` owns author ordering, author links, multi-author
+punctuation, and legacy author fallback.
 
 ## Layout And Responsiveness
 
@@ -57,7 +76,11 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
 - keeps article body, continuation, and support surfaces in the intended order.
+- preserves author order and uses links only for known structured authors.
+- falls back to legacy author text without creating broken author links.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Author handling should become structured after `src/content/authors/` is in
+  place. Do not keep both `author` and `authors` as permanent public API unless
+  a compatibility requirement is explicitly approved.

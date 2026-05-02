@@ -62,3 +62,7 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Search should be available from header/mobile navigation, but it should not
+  force the desktop header into fragile collision behavior. A compact search
+  entry or dedicated search page is preferable to a permanent oversized field
+  when horizontal space is constrained.

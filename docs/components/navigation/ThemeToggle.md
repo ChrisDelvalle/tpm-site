@@ -59,3 +59,5 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Theme toggle is a utility action, not a primary discovery item. It should
+  remain compact and should not determine header layout breakpoints.

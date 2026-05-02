@@ -4,58 +4,87 @@ Source: `src/components/layout/MainFrame.astro`
 
 ## Purpose
 
-`MainFrame` serves as a layout component that owns document regions, page framing, or persistent chrome.
+`MainFrame` owns the main landmark and the page body's relationship to optional
+margin/sidebar regions. It is the bridge between persistent site chrome and
+page-specific reading or browsing bodies.
+
+It must not render category trees, article tables of contents, archive cards,
+or article metadata directly.
 
 ## Public Contract
 
-- `navigationItems: readonly SectionNavItem[]`
+- `id?: string`
+- default slot for page body content
+- optional named slot `left-rail`
+- optional named slot `right-rail`
+- optional `bodyType?: "reading" | "browsing" | "plain"`
 
-Public props should remain narrow and semantic. Do not add broad configuration
-objects or boolean clusters when a named variant or a smaller component would
-make invalid states harder to express.
+The final implementation may split rail behavior into `MarginSidebarLayout`,
+but `MainFrame` remains the named owner of the main landmark.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/navigation`, `../navigation/CategorySidebar`. It defines region relationships for children; children should not patch its spacing or stacking from outside.
+```text
+SiteShell
+  MainFrame
+    ReadingBody | BrowsingBody | PageFrame
+```
+
+`SiteShell` owns chrome ordering. `MainFrame` owns the main landmark and should
+delegate detailed body constraints to `ReadingBody`, `BrowsingBody`, or
+`PageFrame`.
 
 ## Layout And Responsiveness
 
-The component owns structural relationships between regions. It must maintain skip-link access, avoid content being covered by sticky chrome, and preserve a single coherent main content flow at every viewport.
+The main frame is mobile-first and single-column by default. It may expose rail
+slots only when the child body and viewport have enough space.
+
+Rules:
+
+- no page body may overflow horizontally;
+- rails never squeeze the reading column below its readable measure;
+- rails disappear, collapse, or move after content before they overlap content;
+- browsing pages should not inherit article rail behavior.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+`MainFrame` does not own sticky behavior. Sticky rail behavior belongs to
+`MarginSidebarLayout`. Header offsets are consumed as design tokens or CSS
+variables, not guessed locally.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant.
+`MainFrame` has no direct interaction. It must preserve focus order for slotted
+content and rails.
 
 ## Accessibility Semantics
 
-Use semantic HTML first, preserve heading order when headings are rendered, and keep focus-visible states intact for any interactive descendants.
+Render as the single page `<main>` with the skip-link target. Rail slots should
+not create landmarks unless their child component has a specific labeled
+navigation role.
 
 ## Content Edge Cases
 
-Test or catalog long titles, long words, dense content, empty content, missing
-optional fields, and unusual punctuation whenever this component renders user or
-author-provided content.
+Handle empty main content for 404/catalog test states, very long articles,
+wide browsing lists, and absent rail slots.
 
 ## Theme Behavior
 
-Use semantic color tokens and Tailwind utilities. Light and dark mode must keep
-text readable, borders visible when they communicate structure, focus rings
-visible, and CTAs distinguishable from neutral actions.
+Use semantic background and border tokens only when the frame visually separates
+page regions. Avoid decorative framing around the entire main region.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
-- handles long content without clipping or overlapping neighboring components.
-- maintains exactly one reachable main region.
-- prevents sticky/fixed chrome from covering visible content during scroll.
+- Renders exactly one main landmark.
+- Works with no rail slots.
+- Does not create horizontal overflow with rails present.
+- Keeps reading content centered when a left rail is present.
+- Does not let sticky descendants slide under the sticky header.
+- Preserves focus order: header, rail if first in DOM by design, main content,
+  footer.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- The current prototype uses a category sidebar inside the frame. That should
+  be removed from `MainFrame`; category discovery belongs to navigation and
+  browsing surfaces, while article-local TOC belongs to `MarginSidebarLayout`.

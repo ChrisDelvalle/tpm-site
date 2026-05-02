@@ -10,10 +10,12 @@ title, description, and date/author metadata.
 ## Public Contract
 
 - `author?: string | undefined`
+- `authors?: readonly AuthorSummary[] | undefined`
 - `category?: ArticleCategory | undefined`
 - `date?: Date | undefined`
 - `description?: string | undefined`
 - `formattedDate?: string | undefined`
+- `legacyAuthor?: string | undefined`
 - `title: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
@@ -22,7 +24,17 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../ui/TextLink`, `./ArticleMeta`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+ArticleLayout
+  ArticleHeader
+    category TextLink
+    ArticleMeta
+      AuthorByline
+```
+
+`ArticleHeader` owns the page H1 and visible article opening. It should receive
+normalized category and author summaries from the article route/view model; it
+must not query collections directly.
 
 ## Layout And Responsiveness
 
@@ -64,7 +76,12 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, and category links semantically associated.
 - does not create an awkward header-to-body gap when no hero image is rendered.
+- links known authors through `AuthorByline` and preserves legacy byline text
+  when structured author data is not available.
 
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Article TOC heading extraction must exclude the article title rendered here.
+  The article title remains the page H1; Markdown body headings should begin
+  below it.

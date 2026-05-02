@@ -60,3 +60,7 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - The prototype header had brittle collision behavior. Future changes should prefer simpler information architecture, responsive disclosure, and explicit layout invariants over width-specific patches.
+- Category discovery should move into a deliberate `DiscoveryMenu`/section-nav
+  surface on desktop and into `MobileMenu` on constrained widths. Do not
+  re-create the brittle single row that tried to fit brand, search, all
+  categories, theme, RSS, and support at once.

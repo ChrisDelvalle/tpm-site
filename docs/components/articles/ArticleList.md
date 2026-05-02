@@ -4,7 +4,11 @@ Source: `src/components/articles/ArticleList.astro`
 
 ## Purpose
 
-`ArticleList` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`ArticleList` renders a reusable list of article summaries.
+
+It is the shared display primitive for archive pages, category pages, author
+pages, search results, homepage sections, and article-end discovery. Filtering,
+sorting, and route construction happen before data reaches this component.
 
 ## Public Contract
 
@@ -17,7 +21,15 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/article-list`, `./ArticleCard`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+Archive / Category / Search / Author / Discovery block
+  ArticleList
+    ArticleCard[]
+```
+
+`ArticleList` owns list semantics, spacing, empty-state handling, and optional
+Pagefind opt-out behavior. It does not fetch content, filter by category,
+filter by author, or infer routes.
 
 ## Layout And Responsiveness
 
@@ -56,7 +68,11 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
 - keeps article body, continuation, and support surfaces in the intended order.
+- can be reused by `AuthorArticleList` with prefiltered author-specific data.
+- renders a useful empty state only when the parent supplies one or the design
+  chooses a default for that page type.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Keep this component boring and reusable. Page-specific section headings,
+  filters, and explanatory copy belong in parent browsing blocks.

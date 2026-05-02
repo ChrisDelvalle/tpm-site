@@ -60,3 +60,6 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- `CategoryTree` remains useful inside mobile navigation and category pages.
+  It should not be used as the persistent desktop article sidebar once the
+  article-local table of contents replaces that rail.

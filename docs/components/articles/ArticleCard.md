@@ -4,15 +4,18 @@ Source: `src/components/articles/ArticleCard.astro`
 
 ## Purpose
 
-`ArticleCard` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`ArticleCard` renders one article summary in archive, category, author, search,
+related-reading, and homepage list contexts.
 
 ## Public Contract
 
 - `author?: string | undefined`
+- `authors?: readonly AuthorSummary[] | undefined`
 - `category?: ArticleCardCategory | undefined`
 - `date?: string | undefined`
 - `description?: string | undefined`
 - `href: string`
+- `legacyAuthor?: string | undefined`
 - `title: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
@@ -21,7 +24,17 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../ui/Card`, `../ui/TextLink`, `./ArticleMeta`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+ArticleList / discovery blocks
+  ArticleCard
+    Card
+    TextLink
+    ArticleMeta
+```
+
+`ArticleCard` should consume an already-normalized article summary. It should
+not compute category routes, author routes, publication status, or search
+snippets internally.
 
 ## Layout And Responsiveness
 
@@ -60,7 +73,10 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
 - keeps article body, continuation, and support surfaces in the intended order.
+- uses the same metadata/byline component as the article header so author
+  linking stays consistent across archive, category, author, and related lists.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Search-result highlighting belongs to a dedicated snippet/highlight boundary,
+  not raw HTML strings inside the article title.

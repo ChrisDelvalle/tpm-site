@@ -61,3 +61,6 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Primary navigation should stay focused on durable top-level destinations such
+  as Articles, Categories, About, Search, and Support. Category preview
+  behavior belongs to `DiscoveryMenu`, not this component.

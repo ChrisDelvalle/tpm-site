@@ -5,6 +5,11 @@ Meme. The current UI is a useful prototype for tone, content, and palette, but
 it is not the final architecture. Prefer this plan when decomposing the site,
 rewriting navigation, moving page content into Markdown, or building new blocks.
 
+The site anatomy contract lives in `docs/SITE_ANATOMY.md`. When there is a
+question about whether a page should use a reading body, browsing body, margin
+rail, navigation discovery surface, or article-end surface, prefer that anatomy
+contract and update both documents if the decision changes.
+
 The goal is a conventional, static-first Astro site built from responsive
 Tailwind components. Authors should add Markdown or MDX content. Developers and
 agents should compose pages from well-scoped blocks and primitives.
@@ -130,6 +135,12 @@ src/components/
     SiteHeader.astro
     SiteFooter.astro
     PageFrame.astro
+    ReadingBody.astro
+    BrowsingBody.astro
+    SectionStack.astro
+    ContentRail.astro
+    EndcapStack.astro
+    MarginSidebarLayout.astro
 
   navigation/
     BrandLink.astro
@@ -170,6 +181,24 @@ src/components/
     MarkdownPage.astro
     PageHeader.astro
     PageProse.astro
+
+  bibliography/
+    BibliographyPage.astro
+    BibliographyList.astro
+    BibliographyEntry.astro
+    BibliographySourceArticles.astro
+    BibliographyFilters.astro
+    BibliographyEmptyState.astro
+
+  authors/
+    AuthorLink.astro
+    AuthorByline.astro
+    AuthorBioBlock.astro
+    AuthorProfileHeader.astro
+    AuthorArticleList.astro
+    AuthorSocialLinks.astro
+    AuthorPage.astro
+    AuthorsIndexPage.astro
 
   blocks/
     HomeHeroBlock.astro

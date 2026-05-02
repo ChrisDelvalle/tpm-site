@@ -61,3 +61,7 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Section navigation should expose publication categories as normal links.
+  Preview dropdown composition belongs to `DiscoveryMenu` and
+  `CategoryDropdown`; this component should stay usable as a simple
+  no-JavaScript category link row.

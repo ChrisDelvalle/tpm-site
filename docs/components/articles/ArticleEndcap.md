@@ -12,6 +12,7 @@ more-in-category links, and related reading.
 - `categoryHref?: string | undefined`
 - `categoryTitle?: string | undefined`
 - `idPrefix?: string`
+- `authorProfiles?: readonly AuthorProfile[] | undefined`
 - `moreInCategory?: readonly ArticleListItem[] | undefined`
 - `related?: readonly ArticleListItem[] | undefined`
 
@@ -21,13 +22,25 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/article-list`, `../blocks/SupportBlock`, `./MoreInCategoryBlock`, `./RelatedArticlesBlock`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+EndcapStack
+  ArticleEndcap
+    SupportBlock
+    MoreInCategoryBlock
+    RelatedArticlesBlock
+    optional AuthorBioBlock
+```
+
+`ArticleEndcap` owns editorial continuation surfaces only. References,
+bibliography, and tags are article apparatus/final metadata and live outside
+this component.
 
 ## Layout And Responsiveness
 
 The component must respect a readable prose measure, keep continuation surfaces
 visually subordinate to the article body, and render support before
-same-category discovery, followed by related reading.
+same-category discovery, followed by related reading and optional author bio
+surfaces when useful author profile metadata exists.
 
 ## Layering And Scrolling
 
@@ -66,6 +79,8 @@ visible, and CTAs distinguishable from neutral actions.
 - keeps article title, metadata, tags, and links semantically associated.
 - renders Support The Philosopher's Meme before More in Category.
 - renders related discovery after same-category discovery.
+- renders author bio surfaces only when there is real approved profile
+  metadata, never placeholder text.
 - leaves article apparatus such as notes/bibliography and final metadata such
   as tags outside the endcap.
 

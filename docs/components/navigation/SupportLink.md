@@ -60,3 +60,6 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Support should remain visible in header, mobile menu, article endcaps, and
+  footer, but it should not force navigation collision. It may move into mobile
+  disclosure at constrained widths as long as it remains easy to find.

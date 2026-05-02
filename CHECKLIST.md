@@ -477,123 +477,123 @@ Scope rules:
 
 ## Milestone 16: Site Anatomy Technical Design
 
-- [ ] Add a site anatomy technical design doc at `docs/SITE_ANATOMY.md`.
-- [ ] Inventory every route in `src/pages/` and document its current anatomy:
+- [x] Add a site anatomy technical design doc at `docs/SITE_ANATOMY.md`.
+- [x] Inventory every route in `src/pages/` and document its current anatomy:
       document shell, site shell, header/nav, sidebar/discovery, content frame,
       page body, blocks, end surfaces, and footer.
-- [ ] Inventory every public component in `src/components/` and classify it as
+- [x] Inventory every public component in `src/components/` and classify it as
       a document shell, layout primitive, page body, page section, content
       block, article part, navigation part, media part, UI primitive, or island.
-- [ ] Document the current component tree for each major page type: homepage,
+- [x] Document the current component tree for each major page type: homepage,
       article detail, article archive, category index, category detail, search,
       about/generic Markdown page, 404, and catalog.
-- [ ] Identify every place where routes or blocks reimplement page width,
+- [x] Identify every place where routes or blocks reimplement page width,
       gutters, vertical rhythm, sidebar placement, archive/list layout,
       discovery ordering, support CTA placement, or footer-like surfaces.
-- [ ] Propose a simpler target anatomy that makes sitewide consistency the
+- [x] Propose a simpler target anatomy that makes sitewide consistency the
       default, with a small set of reusable page-body primitives instead of
       bespoke route layouts.
-- [ ] Decide and document the final page-body taxonomy. The expected direction
+- [x] Decide and document the final page-body taxonomy. The expected direction
       is a reading body for article/prose-first pages and a browsing body for
       homepage, archives, categories, search, and other discovery-first pages,
       but use the most conventional names after design review.
-- [ ] Define the target article anatomy, including article header, article
+- [x] Define the target article anatomy, including article header, article
       body/prose, optional article media/hero ownership, article
       support/discovery surfaces, references/related surfaces, tags, article
       table of contents, and article footer/end metadata.
-- [ ] Define the target browsing-page anatomy, including page header, optional
+- [x] Define the target browsing-page anatomy, including page header, optional
       intro/prose, primary listing/grid region, filters/search or category
       discovery, support/discovery surfaces, and footer handoff.
-- [ ] Define the target site-shell anatomy, including sticky header, mobile
+- [x] Define the target site-shell anatomy, including sticky header, mobile
       navigation, category discovery in navigation surfaces, article-local
       margin/sidebar surfaces, centered content column, right margin, footer,
       skip link, and theme/search islands.
-- [ ] Document the navigation decision that category discovery moves into the
+- [x] Document the navigation decision that category discovery moves into the
       site-wide navigation, mobile menu, footer/homepage discovery, and category
       pages; the desktop margin sidebar becomes article-local table of contents
       where article headings make that useful.
-- [ ] Name every new or changed layout/navigation/article component that needs a
+- [x] Name every new or changed layout/navigation/article component that needs a
       component one-pager before implementation.
-- [ ] Define the test strategy for the anatomy refactor: render tests,
+- [x] Define the test strategy for the anatomy refactor: render tests,
       catalog examples, accessibility checks, Playwright layout invariants, and
       build-output guards.
-- [ ] Update `docs/COMPONENT_ARCHITECTURE.md` with the final site anatomy and
+- [x] Update `docs/COMPONENT_ARCHITECTURE.md` with the final site anatomy and
       make it clear that future pages must compose existing anatomy primitives
       before adding new bespoke layout.
-- [ ] Update `CHECKLIST.md` if the anatomy design discovers additional required
+- [x] Update `CHECKLIST.md` if the anatomy design discovers additional required
       design or implementation milestones.
 
 ## Milestone 17: Layout Primitive Component Designs
 
-- [ ] Update or create component one-pagers under `docs/components/layout/` for
+- [x] Update or create component one-pagers under `docs/components/layout/` for
       every layout primitive chosen in Milestone 16 before implementation.
-- [ ] Update or create component one-pagers for the shared site shell, main
+- [x] Update or create component one-pagers for the shared site shell, main
       frame, page frame, reading body, browsing body, section stack, content
       rail, endcap stack, and margin/sidebar layout as applicable.
-- [ ] Document parent-child relationships, slot ownership, content measure,
+- [x] Document parent-child relationships, slot ownership, content measure,
       gutters, vertical rhythm, sidebar/margin placement, sticky offsets,
       overflow rules, responsive breakpoints, and no-sidebar behavior for each
       layout primitive.
-- [ ] Document mobile, tablet, desktop, wide desktop, and short-viewport
+- [x] Document mobile, tablet, desktop, wide desktop, and short-viewport
       behavior for every layout-sensitive primitive.
-- [ ] Document catalog examples required for every new or changed anatomy
+- [x] Document catalog examples required for every new or changed anatomy
       primitive: reading body, browsing body, section stack, content rail,
       endcap stack, margin/sidebar layout, empty states, dense states, and
       long-content states.
-- [ ] Document render, accessibility, and Playwright invariants for each layout
+- [x] Document render, accessibility, and Playwright invariants for each layout
       primitive before implementation begins.
-- [ ] Record any brittle prototype layout decisions that must be removed during
+- [x] Record any brittle prototype layout decisions that must be removed during
       implementation.
 
 ## Milestone 18: Category Navigation Component Designs
 
-- [ ] Update or create component one-pagers before implementation for
+- [x] Update or create component one-pagers before implementation for
       `src/components/navigation/DiscoveryMenu.astro`,
       `src/components/navigation/CategoryDropdown.astro`, and
       `src/components/navigation/CategoryPreviewList.astro`.
-- [ ] Update existing one-pagers for affected navigation components such as
+- [x] Update existing one-pagers for affected navigation components such as
       `SiteHeader`, `PrimaryNav`, `MobileMenu`, `SectionNav`, `CategoryTree`,
       `CategoryGroup`, `SearchForm`, `SupportLink`, `ThemeToggle`, and
       `SiteFooter` where their contracts change.
-- [ ] Choose and document the dropdown primitive: native `details`/`summary`,
+- [x] Choose and document the dropdown primitive: native `details`/`summary`,
       HTML `popover`, or a small Radix/shadcn island based on accessibility,
       no-JavaScript behavior, browser support, and testing complexity.
-- [ ] Document the category dropdown contract: category labels, direct category
+- [x] Document the category dropdown contract: category labels, direct category
       links, recent or featured article previews if used, View All links,
       no-full-archive rule, empty preview states, and data ownership.
-- [ ] Document keyboard, pointer, touch, focus, dismissal, reduced-motion,
+- [x] Document keyboard, pointer, touch, focus, dismissal, reduced-motion,
       no-JavaScript fallback, and assistive-technology behavior.
-- [ ] Document responsive behavior and visibility exclusivity so desktop
+- [x] Document responsive behavior and visibility exclusivity so desktop
       dropdowns, mobile menus, and footer/homepage discovery do not compete.
-- [ ] Document catalog examples and render/Playwright tests required before
+- [x] Document catalog examples and render/Playwright tests required before
       production navigation uses the dropdown.
 
 ## Milestone 19: Article Table Of Contents Component Designs
 
-- [ ] Update or create component one-pagers before implementation for the
+- [x] Update or create component one-pagers before implementation for the
       article table-of-contents components, using names such as
       `ArticleTableOfContents`, `TableOfContentsItem`, `TableOfContentsToggle`,
       and `MarginSidebarLayout` unless Milestone 16 chooses better conventional
       names.
-- [ ] Update existing one-pagers for affected article/layout components such as
+- [x] Update existing one-pagers for affected article/layout components such as
       `ArticleLayout`, `ArticleHeader`, `ArticleProse`, `ArticleEndcap`,
       `ArticleTags`, `MainFrame`, and `PageFrame` where their contracts change.
-- [ ] Document how article headings are discovered, which heading levels are
+- [x] Document how article headings are discovered, which heading levels are
       included, how duplicate heading IDs are handled, how generated Markdown
       IDs stay stable, and how malformed heading order should be reported.
-- [ ] Document no-headings and too-few-headings behavior: no empty sidebar, no
+- [x] Document no-headings and too-few-headings behavior: no empty sidebar, no
       reserved blank margin, and no broken layout on articles that do not need a
       contents surface.
-- [ ] Document hide/show behavior: visible label, keyboard behavior, focus
+- [x] Document hide/show behavior: visible label, keyboard behavior, focus
       behavior, reduced-motion behavior, state persistence decision, and the
       smallest acceptable client-side boundary.
-- [ ] Document sticky and layering rules: the TOC stays below the sticky header,
+- [x] Document sticky and layering rules: the TOC stays below the sticky header,
       never hides underneath it while scrolling, never overlays article prose,
       and never competes with mobile navigation.
-- [ ] Document active-section behavior if included, including scroll-spy
+- [x] Document active-section behavior if included, including scroll-spy
       thresholds, URL hash behavior, focus/target behavior, and the
       no-JavaScript fallback.
-- [ ] Document catalog examples and render/Playwright tests required before the
+- [x] Document catalog examples and render/Playwright tests required before the
       article TOC ships.
 
 ## Milestone 20: Bibliography And Article References Technical Design
@@ -611,39 +611,39 @@ Scope rules:
 - [x] Document the preferred metadata output path, documented AST-injection
       fallback, validation rules, author-readable diagnostics, test fixtures,
       and implementation file structure for article references.
-- [ ] Add a bibliography technical design doc at `docs/BIBLIOGRAPHY.md`.
-- [ ] Inventory every article in `src/content/articles/` for bibliography or
+- [x] Add a bibliography technical design doc at `docs/BIBLIOGRAPHY.md`.
+- [x] Inventory every article in `src/content/articles/` for bibliography or
       citation-like content, including explicit references sections, footnotes,
       inline Markdown links used as citations, blockquote attributions, raw HTML
       links, bibliography-style lists, and article-specific unusual formats.
-- [ ] Record every bibliography/citation format found, the articles that use it,
+- [x] Record every bibliography/citation format found, the articles that use it,
       whether it is parseable without ambiguity, and whether it appears to be a
       real source entry, a normal prose link, media credit, archive link, or
       editorial aside.
-- [ ] Determine whether there is a consistent existing bibliography format
+- [x] Determine whether there is a consistent existing bibliography format
       across the corpus; if not, propose the smallest canonical Markdown/MDX
       bibliography format authors can realistically follow.
-- [ ] Define the canonical bibliography entry data model: source text/title, URL
+- [x] Define the canonical bibliography entry data model: source text/title, URL
       or non-URL source, optional author/publication/date fields, optional note,
       source article title, source article URL, article category, and article
       publication date.
-- [ ] Decide whether bibliography entries should be parsed from Markdown AST,
+- [x] Decide whether bibliography entries should be parsed from Markdown AST,
       MDX AST, frontmatter, explicit bibliography/reference blocks, or another
       structured source; avoid fragile regex-only parsing unless the design doc
       proves it is sufficient.
-- [ ] Document how bad or legacy bibliography/citation formats should be adapted
+- [x] Document how bad or legacy bibliography/citation formats should be adapted
       to the canonical format while preserving article wording and author
       intent.
-- [ ] Document which article edits are required for bibliography normalization
+- [x] Document which article edits are required for bibliography normalization
       and mark them as article-content work requiring careful manual
       verification.
-- [ ] Define validation/enforcement for future articles: content checks,
+- [x] Define validation/enforcement for future articles: content checks,
       markdown/MDX linting, parser tests, author-facing error messages, and
       documentation in the article submission tutorial.
-- [ ] Define technical tests needed before implementation: parser fixtures for
+- [x] Define technical tests needed before implementation: parser fixtures for
       every bibliography/citation format, duplicate/invalid bibliography tests,
       content-validation tests, and route data tests.
-- [ ] Identify open questions and risks: ambiguous source/link distinction, dead
+- [x] Identify open questions and risks: ambiguous source/link distinction, dead
       external links, non-URL sources, generated IDs, duplicates across
       articles, and whether normalization should be blocking or review-only.
 
@@ -664,88 +664,88 @@ Scope rules:
       citations only, repeated citation references, optional display labels,
       long source text, long URLs, rich Markdown definitions, and backlink
       accessibility.
-- [ ] Update or create component one-pagers before implementation for the
+- [x] Update or create component one-pagers before implementation for the
       bibliography page and bibliography UI components, using names such as
       `BibliographyPage`, `BibliographyList`, `BibliographyEntry`,
       `BibliographySourceArticles`, `BibliographyFilters`, and
       `BibliographyEmptyState` unless Milestone 20 chooses better names.
-- [ ] Update existing one-pagers for affected footer/navigation components so
+- [x] Update existing one-pagers for affected footer/navigation components so
       the bibliography page is reachable site-wide without cluttering the
       primary header navigation.
-- [ ] Design the `/bibliography/` page information architecture: grouping,
+- [x] Design the `/bibliography/` page information architecture: grouping,
       sorting, duplicate handling, source display, search/filter behavior if
       any, and article back-links for every bibliography entry.
-- [ ] Document empty, malformed, duplicate, external-link, non-URL source, long
+- [x] Document empty, malformed, duplicate, external-link, non-URL source, long
       source title, many-source, and no-JavaScript states.
-- [ ] Document SEO, JSON-LD, canonical URL, sitemap, RSS/feed, and Pagefind
+- [x] Document SEO, JSON-LD, canonical URL, sitemap, RSS/feed, and Pagefind
       implications for bibliography pages.
-- [ ] Document catalog examples and render/Playwright/accessibility tests
+- [x] Document catalog examples and render/Playwright/accessibility tests
       required before implementation.
 
 ## Milestone 22: Author Metadata Technical Design
 
-- [ ] Add an author metadata technical design doc at `docs/AUTHORS.md`.
-- [ ] Inventory all current article author values in `src/content/articles/`,
+- [x] Add an author metadata technical design doc at `docs/AUTHORS.md`.
+- [x] Inventory all current article author values in `src/content/articles/`,
       including spelling variants, legacy metadata shapes, group authors,
       multiple-author articles if any, and articles with missing or ambiguous
       author data.
-- [ ] Decide the canonical author model and where it lives. The expected
+- [x] Decide the canonical author model and where it lives. The expected
       direction is an `authors` content collection or similarly structured
       source under `src/content/`, but the design doc should compare options
       before choosing.
-- [ ] Define stable author identity rules: slug generation, display name,
+- [x] Define stable author identity rules: slug generation, display name,
       aliases, legacy names, duplicate names, group authors, and how article
       frontmatter references an author without relying on fragile free-text
       matching.
-- [ ] Define optional author metadata fields: short bio for article pages,
+- [x] Define optional author metadata fields: short bio for article pages,
       longer profile description for author pages, avatar/image if used,
       website, social links, affiliations, location/time period if relevant,
       and any privacy/consent rules for public links.
-- [ ] Define graceful fallback behavior for authors with no profile metadata:
+- [x] Define graceful fallback behavior for authors with no profile metadata:
       author links should still be useful, at minimum showing the author's
       article list, without requiring placeholder bios or broken profile boxes.
-- [ ] Define how author data participates in machine-readable metadata: Article
+- [x] Define how author data participates in machine-readable metadata: Article
       JSON-LD author references, optional Person/Organization schema, Open Graph
       metadata, RSS author fields, and canonical URLs.
-- [ ] Define validation/enforcement for future articles: every published
+- [x] Define validation/enforcement for future articles: every published
       article should reference a known author or use an explicitly documented
       fallback; aliases and unknown authors should fail or warn according to the
       design decision.
-- [ ] Document any article frontmatter edits required to normalize author
+- [x] Document any article frontmatter edits required to normalize author
       references and mark them as article-content work requiring careful manual
       verification.
-- [ ] Define technical tests needed before implementation: author metadata
+- [x] Define technical tests needed before implementation: author metadata
       schema tests, alias/duplicate resolution tests, article-author
       relationship tests, structured-data tests, RSS tests, and route data tests.
-- [ ] Identify open questions and risks: public personal data, authors who do
+- [x] Identify open questions and risks: public personal data, authors who do
       not want profile pages, group authors, pseudonyms, dead social links,
       author name changes, and whether missing author metadata should block
       publishing or remain review-only.
 
 ## Milestone 23: Author Page Component Designs
 
-- [ ] Update or create component one-pagers before implementation for author UI
+- [x] Update or create component one-pagers before implementation for author UI
       components, using names such as `AuthorLink`, `AuthorByline`,
       `AuthorBioBlock`, `AuthorProfileHeader`, `AuthorArticleList`,
       `AuthorSocialLinks`, `AuthorPage`, and `AuthorsIndexPage` unless
       Milestone 22 chooses better names.
-- [ ] Update existing one-pagers for affected article components such as
+- [x] Update existing one-pagers for affected article components such as
       `ArticleMeta`, `ArticleHeader`, `ArticleCard`, `ArticleList`,
       `ArticleEndcap`, and `ArticleJsonLd` where author behavior changes.
-- [ ] Design the article-page author interaction: author name links from
+- [x] Design the article-page author interaction: author name links from
       article metadata, optional "About the author" surface, placement relative
       to article endcaps/tags, and behavior for multiple authors.
-- [ ] Design the author detail page route, likely `/authors/[author]/`,
+- [x] Design the author detail page route, likely `/authors/[author]/`,
       including page header, short/long bio, external links, article count,
       chronological article list, category/tag summaries if useful, and SEO
       metadata.
-- [ ] Decide whether an `/authors/` index page is needed now or deferred; if
+- [x] Decide whether an `/authors/` index page is needed now or deferred; if
       included, design grouping, sorting, empty states, and navigation from the
       footer or other discovery surfaces.
-- [ ] Document empty metadata, missing bio, no social links, long author names,
+- [x] Document empty metadata, missing bio, no social links, long author names,
       group authors, multiple authors, dark/light mode, mobile, and wide layout
       states.
-- [ ] Document catalog examples and render/Playwright/accessibility tests
+- [x] Document catalog examples and render/Playwright/accessibility tests
       required before implementation.
 
 ## Milestone 24: Site-Wide Anatomy Layout Refactor
@@ -754,6 +754,10 @@ Scope rules:
 - [ ] Create or refactor the reusable layout primitives named in the design:
       site shell, main frame, page frame, reading body, browsing body, section
       stack, content rail, endcap stack, and margin/sidebar layout as needed.
+- [ ] Add `src/components/layout/ReadingBody.astro`,
+      `BrowsingBody.astro`, `SectionStack.astro`, `ContentRail.astro`,
+      `EndcapStack.astro`, and `MarginSidebarLayout.astro` according to their
+      component one-pagers.
 - [ ] Make layout primitives own reusable constraints: content measure, gutters,
       vertical rhythm, sidebar/margin placement, sticky offsets, overflow rules,
       and responsive breakpoints.
@@ -788,6 +792,9 @@ Scope rules:
       no horizontal overflow, no duplicated critical landmarks, no competing
       sidebars/mobile menus, support/discovery surfaces keep intended order,
       and centered content stays centered when sidebars are present.
+- [ ] Confirm implementation still matches `docs/SITE_ANATOMY.md`; update the
+      design doc before implementation if a route cannot fit either
+      `ReadingBody` or `BrowsingBody`.
 
 ## Milestone 25: Category Dropdown Discovery
 
@@ -795,6 +802,9 @@ Scope rules:
 - [ ] Add or update `src/components/navigation/DiscoveryMenu.astro`,
       `CategoryDropdown.astro`, and `CategoryPreviewList.astro` according to
       the documented component contracts.
+- [ ] Use the documented HTML `popover` desktop disclosure pattern unless a
+      focused proof shows it cannot satisfy accessibility, browser, or layout
+      requirements.
 - [ ] Move primary desktop category discovery from the left category sidebar
       into the site-wide navigation while keeping a normal `/categories/` link
       and direct category links reachable.
@@ -838,6 +848,9 @@ Scope rules:
 - [ ] Build a heading extraction boundary in `src/lib/` or the article view
       model so visual TOC components receive normalized heading data and do not
       parse content themselves.
+- [ ] Use Astro-rendered heading metadata as the source of truth for TOC links;
+      do not query rendered DOM or parse article Markdown source in visual
+      components.
 - [ ] Include only the heading levels chosen in the design doc and preserve
       stable heading IDs for hash links.
 - [ ] Handle duplicate heading text deterministically and add tests for the
@@ -847,6 +860,9 @@ Scope rules:
 - [ ] Add a visible hide button for the TOC with keyboard support, accessible
       name, sensible focus return, and the smallest practical client-side
       behavior.
+- [ ] Start hide/show with native `details`/`summary`; add JavaScript only for
+      explicitly approved progressive enhancements such as active-section
+      highlighting or persistence.
 - [ ] Ensure hiding the TOC does not reflow the reading column in a way that
       makes the article jump or lose scroll position.
 - [ ] If active-section highlighting is implemented, keep it progressive:
@@ -1051,6 +1067,9 @@ Scope rules:
       such as `BibliographyPage`, `BibliographyList`, `BibliographyEntry`,
       `BibliographySourceArticles`, `BibliographyFilters`, and
       `BibliographyEmptyState` unless the design chooses better names.
+- [ ] Add `src/components/bibliography/` for bibliography page components
+      rather than mixing global bibliography UI into article-local reference
+      components.
 - [ ] Implement grouping, sorting, duplicate handling, non-URL source display,
       long source display, and empty states according to the approved global
       bibliography design.
@@ -1070,13 +1089,26 @@ Scope rules:
 - [ ] Implement only after Milestones 22 and 23 are complete.
 - [ ] Add the author metadata source and content schema chosen in the technical
       design.
+- [ ] Add `src/content/authors/` as the canonical author collection, with
+      author IDs as stable entry slugs and Markdown body content available for
+      long profile pages.
 - [ ] Normalize article author references only according to the approved
       article-content plan and preserve article wording and author intent.
-- [ ] Add author routes, likely `/authors/[author]/`, and an `/authors/` index
-      if the design includes one.
-- [ ] Implement author UI components according to their one-pagers.
+- [ ] Add `/authors/[author]/` routes for all public author profiles.
+- [ ] Add an `/authors/` index route because the component design includes it
+      as a useful footer/discovery destination.
+- [ ] Implement `src/components/authors/AuthorLink.astro`,
+      `AuthorByline.astro`, `AuthorBioBlock.astro`,
+      `AuthorProfileHeader.astro`, `AuthorArticleList.astro`,
+      `AuthorSocialLinks.astro`, `AuthorPage.astro`, and
+      `AuthorsIndexPage.astro` according to their component one-pagers.
 - [ ] Link article bylines to author pages when author data is known and use the
       approved fallback behavior when it is not.
+- [ ] Reuse `AuthorByline` through `ArticleMeta`, `ArticleHeader`,
+      `ArticleCard`, article lists, author pages, and related-reading surfaces
+      so author display does not fork by page type.
+- [ ] Render optional article-page author bio surfaces only when approved
+      profile metadata exists; do not render placeholder author copy.
 - [ ] Add author metadata to JSON-LD, RSS, canonical metadata, and other
       machine-readable surfaces according to the technical design.
 - [ ] Add schema, relationship, route smoke, render, accessibility, RSS, JSON-LD,

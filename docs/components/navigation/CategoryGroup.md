@@ -59,3 +59,6 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- `CategoryGroup` may keep native disclosure for mobile/category-page trees.
+  Desktop preview dropdown behavior belongs to `CategoryDropdown`, so this
+  component should not grow popover-specific logic.

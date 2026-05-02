@@ -61,3 +61,6 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Mobile menu is the complete constrained-width navigation fallback. It should
+  expose category discovery, search, support, articles, categories, about, RSS,
+  and future bibliography/authors links without relying on desktop dropdowns.

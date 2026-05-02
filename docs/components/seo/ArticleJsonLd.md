@@ -4,12 +4,17 @@ Source: `src/components/seo/ArticleJsonLd.astro`
 
 ## Purpose
 
-`ArticleJsonLd` serves as a metadata component for machine-readable publication surfaces.
+`ArticleJsonLd` emits deterministic machine-readable metadata for an article.
+
+It should reflect the same canonical URL, title, dates, category, images, and
+authors that visible article surfaces use.
 
 ## Public Contract
 
 - `article: ArticleEntry`
+- `authors?: readonly AuthorProfile[] | undefined`
 - `category?: CategorySummary | undefined`
+- `legacyAuthor?: string | undefined`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -17,7 +22,16 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/routes`, `../../lib/seo`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+ArticleLayout / SEO head boundary
+  ArticleJsonLd
+    route helpers
+    SEO helpers
+```
+
+This component should consume normalized article and author data from the route
+or article view model. It should not free-text match author names or fetch
+author profiles itself.
 
 ## Layout And Responsiveness
 
@@ -56,7 +70,11 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - outputs valid escaped JSON or metadata.
 - uses canonical URLs derived from route helpers/site config.
+- emits structured `Person` or `Organization` author objects only when author
+  metadata supports that interpretation.
+- falls back conservatively while legacy `author` strings still exist.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Do not infer personal websites, social profiles, avatars, or real identities
+  in JSON-LD. Public author metadata requires explicit content-owner approval.

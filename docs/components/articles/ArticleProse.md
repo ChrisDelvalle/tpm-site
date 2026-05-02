@@ -64,3 +64,6 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Article TOC data should come from Astro's rendered heading metadata or a
+  normalized view model, not from this component querying rendered DOM or
+  parsing Markdown source.
