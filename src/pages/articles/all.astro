@@ -1,0 +1,30 @@
+---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
+import { getArticles, getCategories } from "../../lib/content";
+import { articlesArchiveUrl } from "../../lib/routes";
+
+const archiveItems = articleArchiveItems(
+  await getArticles(),
+  await getCategories(),
+);
+const articleItems = articleListItemsFromArchive(archiveItems);
+---
+
+<BaseLayout
+  title="All Articles | The Philosopher's Meme"
+  description="Complete chronological article archive for The Philosopher's Meme."
+  canonicalPath={articlesArchiveUrl()}
+>
+  <BrowsingBody>
+    <ArchiveListBlock
+      title="All Articles"
+      description="The complete chronological archive."
+      items={articleItems}
+      pagefindIgnore
+    />
+  </BrowsingBody>
+</BaseLayout>

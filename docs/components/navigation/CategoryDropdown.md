@@ -9,13 +9,14 @@ article preview. It gives readers both a direct path to the category page and a
 quick sense of recent or featured material in that category.
 
 It must not fetch articles, infer previews, or render a complete category
-archive.
+archive. The preview should not repeat the category heading already visible in
+the trigger; it shows article previews plus the `View all <category>` link.
 
 ## Public Contract
 
 - `category: CategoryDiscoveryItem`
 - `currentPath?: string`
-- `popoverId: string`
+- `previewId: string`
 
 `CategoryDiscoveryItem` should include category title, href, optional
 description, optional preview articles, and a View All href.
@@ -28,9 +29,9 @@ SiteHeader or DiscoveryMenu
     CategoryPreviewList
 ```
 
-The parent owns category ordering. `CategoryDropdown` owns link/disclosure
-markup and the visual dropdown affordance. `CategoryPreviewList` owns preview
-list semantics.
+The parent owns category ordering. `CategoryDropdown` owns the category link,
+chevron affordance, preview surface, hover/focus disclosure behavior, and
+current-page state. `CategoryPreviewList` owns preview list semantics.
 
 ## Layout And Responsiveness
 
@@ -47,24 +48,13 @@ category discovery.
 
 ## Layering And Scrolling
 
-CSS hover/focus, native `popover`, native `details`, or a small processed
-script are acceptable only if they preserve the public behavior: hover/focus
-exposes preview content and clicking the category text navigates.
+The current implementation uses CSS `group-hover` and `group-focus-within`.
+Hover/focus exposes preview content and clicking the category text navigates.
+Do not replace the category link with a button-only trigger.
 
-If HTML `popover` is used, keep the navigation link separate from the popover
-action:
-
-```html
-<a href="/categories/memeculture/">Memeculture</a>
-<button popovertarget="category-memeculture" aria-label="Preview Memeculture">
-  ...
-</button>
-<div id="category-memeculture" popover>...</div>
-```
-
-The popover must not overlap the sticky header in a way that hides the trigger
-or content. It should not require client-side JavaScript for basic open/close
-behavior.
+The preview surface must not overlap the sticky header in a way that hides the
+trigger or content. It should not require client-side JavaScript for basic
+open/close behavior.
 
 ## Interaction States
 
@@ -77,9 +67,9 @@ category link without relying on hover.
 
 ## Accessibility Semantics
 
-A separate disclosure trigger, if used, needs an accessible name. The preview
-surface should use normal document links and headings. Do not use `menu`,
-`menuitem`, or complex ARIA menu patterns for ordinary navigation links.
+The preview surface should use normal document links and headings. Do not use
+`menu`, `menuitem`, or complex ARIA menu patterns for ordinary navigation
+links.
 
 If the category is the current page, use `aria-current="page"` on the category
 link, not on the disclosure button.
@@ -104,7 +94,8 @@ Open and focus states must be visible in light and dark mode.
 ## Testable Invariants
 
 - The component provides a no-JavaScript path to the category page.
-- Preview surface contains a direct category link.
+- Preview surface contains a `View all <category>` link without repeating the
+  trigger heading.
 - Preview list never renders more than the chosen preview count.
 - Empty preview state still offers View All.
 - Focus ring is visible on trigger and links.

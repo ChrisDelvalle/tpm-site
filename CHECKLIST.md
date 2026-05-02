@@ -1071,65 +1071,88 @@ Scope rules:
 
 ## Milestone 33: Header Navigation Redesign Implementation
 
-- [ ] Update navigation data helpers so categories, primary links, and utility
+- [x] Update navigation data helpers so categories, primary links, and utility
       actions are separate typed groups instead of one noisy nav list.
-- [ ] Refactor `SiteHeader`, `PrimaryNav`, and `SectionNav` so the desktop
-      header renders: left brand plus category dropdowns plus `Articles` and
-      `About`; right search button/reveal, theme toggle, and support CTA.
-- [ ] Keep RSS out of the primary header unless the design explicitly restores
+- [x] Refactor `SiteHeader`, `PrimaryNav`, and `SectionNav` into the approved
+      two-row header: row 1 left search icon and light/dark toggle, center The
+      Philosopher's Meme brand, right `Articles`, `About`, and `Support Us`;
+      row 2 centered category dropdowns.
+- [x] At mobile widths, collapse the header to one row: left sandwich menu,
+      centered Philosopher's Meme brand, and right `Support Us`; move search
+      and theme into the mobile menu or another reachable mobile surface as
+      needed.
+- [x] Keep RSS out of the primary header unless the design explicitly restores
       it; make RSS available through the footer or another low-noise surface.
-- [ ] Update `CategoryDropdown` to look and behave like a dropdown, including a
+- [x] Update `CategoryDropdown` to look and behave like a dropdown, including a
       chevron/down indicator, hover/focus preview, click-through category link,
       and accessible keyboard behavior.
-- [ ] Implement the search button reveal with the smallest static-first
+- [x] Keep `CategoryDropdown` preview content concise: do not repeat the hovered
+      category heading inside the dropdown; show article previews and the
+      `View all <category>` link.
+- [x] Make `CategoryDropdown` pointer behavior forgiving enough that moving
+      from the category label to the preview surface does not close the
+      dropdown through small hover gaps.
+- [x] Implement the search button reveal with the smallest static-first
       interaction boundary that satisfies focus management and escape/close
       behavior.
-- [ ] Update `MobileMenu` so all hidden desktop destinations remain reachable:
-      categories, `Articles`, `About`, search, theme toggle, and support.
-- [ ] Remove any obsolete header/category navigation markup, CSS, catalog
+- [x] Update `MobileMenu` so hidden desktop destinations remain reachable:
+      categories, `Articles`, `About`, search, and theme toggle.
+- [x] Keep `SupportLink` visible in the constrained-width header when the
+      mobile menu replaces desktop category/primary navigation.
+- [x] Remove RSS from `MobileMenu`; keep RSS in secondary surfaces such as the
+      footer.
+- [x] In mobile category disclosures, make the `View all <category>` category
+      destination visually distinct from article links rather than highlighting
+      the whole current category group.
+- [x] Make the mobile menu panel scrollable for short viewport heights without
+      letting it escape the viewport.
+- [x] Remove any obsolete header/category navigation markup, CSS, catalog
       examples, and tests that preserve the old noisier navigation structure.
-- [ ] Add or update component render tests, catalog examples, Playwright
+- [x] Add or update component render tests, catalog examples, Playwright
       interaction tests, accessibility checks, and responsive invariants for the
       new header and dropdown behavior.
 
 ## Milestone 34: Articles Hub And Archive Route Consolidation
 
-- [ ] Refactor `/articles/` into the primary articles hub: category browsing,
+- [x] Refactor `/articles/` into the primary articles hub: category browsing,
       a clear `View all articles` path, and useful browsing/discovery blocks.
-- [ ] Move or preserve the flat all-articles archive according to the approved
+- [x] Move or preserve the flat all-articles archive according to the approved
       route contract from Milestone 32, without creating ambiguous article slug
       conflicts.
-- [ ] Update `/categories/` according to the approved compatibility decision:
+- [x] Update `/categories/` according to the approved compatibility decision:
       remove from navigation, redirect, or keep only as a non-primary fallback.
-- [ ] Keep category detail pages reachable from category dropdowns, mobile
+- [x] Keep category detail pages reachable from category dropdowns, mobile
       navigation, article category links, article hub blocks, and footer
       discovery surfaces.
-- [ ] Reuse `BrowsingBody`, `PageFrame`, `SectionStack`,
+- [x] Rename the `memeculture` category display label to `Culture` through
+      category metadata and update tests/docs/catalog examples programmatically
+      so user-facing labels do not fork.
+- [x] Reuse `BrowsingBody`, `PageFrame`, `SectionStack`,
       `CategoryOverviewBlock`, `ArchiveListBlock`, `ArticleList`, and
       `SupportBlock`; do not create new page-specific listing widths.
-- [ ] Update site header links, footer links, sitemap expectations, route smoke
+- [x] Update site header links, footer links, sitemap expectations, route smoke
       tests, Pagefind/search assumptions, and any catalog examples affected by
       the route consolidation.
-- [ ] Add tests proving `/articles/` exposes categories and `View all articles`,
+- [x] Add tests proving `/articles/` exposes categories and `View all articles`,
       the flat archive route renders all published articles, category detail
       links still work, and no route conflicts are introduced.
 
 ## Milestone 35: Homepage Browsing Layout Alignment
 
-- [ ] Audit `src/pages/index.astro` and home blocks for any route-level width,
+- [x] Audit `src/pages/index.astro` and home blocks for any route-level width,
       gutter, or centering decisions that should belong to `BrowsingBody`,
       `PageFrame`, `SectionStack`, or block components.
-- [ ] Refactor the homepage to use the same browsing page anatomy and centered
+- [x] Refactor the homepage to use the same browsing page anatomy and centered
       content measure as the articles hub, archive, category detail, and search
       pages.
-- [ ] Keep any deliberate hero-width or feature-block exceptions documented in
+- [x] Keep any deliberate hero-width or feature-block exceptions documented in
       the owning component, not as page-level layout patches.
-- [ ] Ensure homepage category browsing, archive links, and support blocks align
+- [x] Ensure homepage category browsing, archive links, and support blocks align
       with the same content column unless a component design explicitly
       documents a different width.
-- [ ] Remove obsolete homepage-specific layout hacks and duplicated container
+- [x] Remove obsolete homepage-specific layout hacks and duplicated container
       markup once shared browsing primitives own the geometry.
-- [ ] Add Playwright layout invariants proving the homepage body is centered,
+- [x] Add Playwright layout invariants proving the homepage body is centered,
       home blocks share the expected measure, support does not escape the
       content column, and mobile/tablet/desktop/wide layouts have no horizontal
       overflow.
@@ -1223,3 +1246,37 @@ Scope rules:
       reference and metadata guidance.
 - [ ] Update `CHECKLIST.md` with any remaining author metadata follow-up
       discovered during implementation.
+
+## Milestone 39: Article Anchor Navigation Alignment
+
+- [ ] Audit article heading anchors, generated heading IDs, TOC links, sticky
+      header height, scroll margins, and any scroll-padding behavior that
+      affects direct hash navigation.
+- [ ] Fix anchor navigation so loading an article with a hash URL and clicking
+      an article TOC link positions the target heading fully visible below the
+      sticky header, with sensible breathing room.
+- [ ] Add progressive current-section highlighting to the article table of
+      contents so the active heading link uses the standard link/primary color
+      while preserving static hash-link behavior without JavaScript.
+- [ ] Implement the fix in the owning article/prose/layout component or shared
+      token rather than as a route-specific patch.
+- [ ] Add Playwright coverage for direct hash navigation and TOC click
+      navigation across desktop, tablet, and mobile widths.
+- [ ] Include a regression case for headings near the top of an article and for
+      articles with no hero image, where sticky-header offset mistakes are most
+      visible.
+
+## Milestone 40: Overlay Positioning And Navigation Breakpoint Hardening
+
+- [ ] Audit dropdown, popover, and mobile-menu panels for assumptions about
+      trigger horizontal position.
+- [ ] Refactor menu panels so they are viewport-constrained by default and
+      cannot fall off-screen merely because the trigger is near an edge.
+- [ ] Keep mobile-menu search and theme controls in the top control area of the
+      panel while preserving all reachable destinations.
+- [ ] Move the category-discovery desktop breakpoint to the least aggressive
+      standard Tailwind breakpoint that avoids collisions and horizontal
+      overflow.
+- [ ] Update component docs, catalog examples, render tests, and Playwright
+      responsive invariants for the hardened panel positioning and breakpoint
+      contract.

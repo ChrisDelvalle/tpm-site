@@ -132,7 +132,7 @@ Current article category folders are:
 - `src/content/articles/game-studies/`
 - `src/content/articles/history/`
 - `src/content/articles/irony/`
-- `src/content/articles/memeculture/`
+- `src/content/articles/memeculture/` (`Culture`)
 - `src/content/articles/metamemetics/`
 - `src/content/articles/philosophy/`
 - `src/content/articles/politics/`

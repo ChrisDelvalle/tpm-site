@@ -12,6 +12,7 @@ import {
 
 const archiveRoutes = [
   "/articles/",
+  "/articles/all/",
   "/categories/",
   "/categories/metamemetics/",
   "/search/",
@@ -65,8 +66,8 @@ test.describe("component layout invariants", () => {
       supportBlock,
       "homepage support block",
     );
-    expect(categoryBox.width).toBeLessThanOrEqual(800);
-    expect(supportBox.width).toBeLessThanOrEqual(800);
+    expect(categoryBox.width).toBeGreaterThan(700);
+    expect(supportBox.width).toBeGreaterThan(700);
     expect(Math.abs(categoryBox.width - supportBox.width)).toBeLessThanOrEqual(
       1,
     );

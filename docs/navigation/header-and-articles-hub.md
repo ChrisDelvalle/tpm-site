@@ -31,19 +31,25 @@ Target desktop anatomy:
 
 ```text
 SiteHeader
-  left cluster
-    BrandLink
-    CategoryDropdown[]  // Memeculture, Metamemetics, ...
-    PrimaryNav          // Articles, About
-  right cluster
-    SearchReveal
-    ThemeToggle
-    SupportLink
+  row 1
+    left utility cluster
+      SearchReveal
+      ThemeToggle
+    centered brand
+      BrandLink
+    right navigation cluster
+      PrimaryNav        // Articles, About
+      SupportLink       // Support Us
+  row 2
+    centered category discovery
+      CategoryDropdown[]  // Culture, Metamemetics, ...
 ```
 
-The desktop header is one coherent row. The left cluster is aligned to the
-left. The right utility cluster is aligned to the right. The center is flexible
-space, not a layout slot that must hold search.
+The desktop header is a coherent two-row system. Row 1 separates utilities,
+identity, and durable navigation: search/theme left, brand centered, and
+`Articles`, `About`, `Support Us` right. Row 2 centers category discovery as a
+section navigation row. This avoids the collision-prone one-row prototype while
+keeping high-value categories visible.
 
 This intentionally removes `Topics`, `RSS`, and a permanently visible search
 input from the primary desktop row:
@@ -81,16 +87,19 @@ site links.
 
 Preview content should include:
 
-- a direct category link;
 - a short list of recent or featured articles;
 - a `View all <category>` link;
 - a useful empty state if no preview articles exist.
 
+Do not repeat the category heading inside the dropdown. The trigger already
+shows the category name, and the `View all <category>` link provides the direct
+category path from the preview surface.
+
 ## Search Reveal Contract
 
-Desktop search starts as a compact icon/button in the right utility cluster.
-Activating it reveals a search form without pushing category links into
-collision.
+Search starts as a compact icon/button in the left utility cluster. Activating
+it reveals a search form without pushing category links or primary navigation
+into collision.
 
 Acceptable implementation paths, in order:
 
@@ -106,23 +115,25 @@ Required behavior:
 - the search input has a real label;
 - opening search does not create horizontal overflow;
 - closing search returns focus predictably when possible;
-- mobile menu includes a full-width search form so hidden desktop search is not
-  the only path.
+- search remains available inside the mobile menu when the mobile menu is
+  visible.
 
 ## Mobile Navigation Contract
 
 At constrained widths, use a complete mobile menu rather than progressively
 dropping controls without replacement.
 
-The mobile menu must include:
+The mobile menu must include hidden navigation destinations:
 
 - category discovery;
 - `Articles`;
 - `About`;
-- search;
-- theme toggle;
-- support;
-- secondary links such as RSS if they are not in the desktop header.
+
+At mobile widths, row 1 collapses to a single row: mobile menu left, brand
+centered, and `Support Us` right. Search and theme move into the mobile menu.
+RSS remains a footer-level secondary link. The mobile panel must scroll
+internally on short viewport heights and stay within the viewport regardless of
+where the trigger is placed.
 
 Desktop dropdown previews may be hidden on mobile. Category links and article
 links must remain available through mobile navigation and page content.
@@ -224,12 +235,15 @@ Route files should not implement header internals or browsing widths.
 
 ## Responsive Requirements
 
-- Mobile base: brand plus mobile menu entry, with all destinations inside the
-  menu.
-- Desktop enhancement: one row with left category/navigation cluster and right
-  utility cluster.
+- Mobile base: mobile menu left, brand centered, and `Support Us` right; search
+  and theme live in the menu's top utility area.
+- Tablet/desktop enhancement: two rows, with utilities/brand/primary links in
+  row 1 and centered category discovery in row 2.
 - The header must not rely on brittle collision thresholds between search,
   categories, brand, and support.
+- Use the least aggressive standard Tailwind breakpoint that keeps the layout
+  stable; category discovery should not disappear on ordinary laptop
+  split-screen widths when wrapping is sufficient.
 - Category dropdown surfaces must stay within viewport width and below sticky
   header chrome.
 - Search reveal must not push links into overlap or horizontal overflow.
@@ -240,8 +254,8 @@ Route files should not implement header internals or browsing widths.
 
 Component tests:
 
-- `SiteHeader` renders brand, category dropdowns, `Articles`, `About`, search
-  reveal entry, theme toggle, and support in the correct clusters.
+- `SiteHeader` renders search/theme left, brand centered, `Articles`, `About`,
+  and `Support Us` right, and centered category dropdowns on the second row.
 - `CategoryDropdown` renders a chevron, category link, preview links, and empty
   state.
 - `PrimaryNav` renders only durable top-level links in header mode.
@@ -253,7 +267,8 @@ Playwright tests:
 
 - desktop category dropdown opens on hover/focus and category click navigates;
 - search reveal opens, focuses input, closes, and does not overflow;
-- mobile menu exposes categories, articles, about, search, theme, and support;
+- mobile menu exposes categories, articles, about, search, and theme while
+  Support Us remains visible in the mobile header row;
 - header does not overlap or collide at mobile, tablet, desktop, and wide
   desktop;
 - `/articles/` renders category discovery and `View all articles`;

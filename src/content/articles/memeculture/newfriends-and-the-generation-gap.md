@@ -18,6 +18,7 @@ tags:
   - "memetics"
   - "subculture"
   - "culture"
+  - memeculture
 legacyPermalink: 2016/05/12/newfriends-and-the-generation-gap/
 ---
 

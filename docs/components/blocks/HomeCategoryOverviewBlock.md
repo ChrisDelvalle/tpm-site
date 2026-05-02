@@ -23,10 +23,11 @@ It composes local components: `../../lib/navigation`, `./CategoryOverviewBlock`.
 
 ## Layout And Responsiveness
 
-The block uses the compact category grid variant and a `max-w-3xl` measure so
-it aligns with homepage featured, archive, and support sections. It should not
-inherit the wider archive/category-page grid unless the homepage layout is
-explicitly redesigned around a wider content measure.
+The block uses the compact category grid variant while inheriting its width from
+`BrowsingBody`. It aligns with homepage featured, archive, and support sections
+because the shared browsing body owns the page measure. It should not introduce
+its own max-width or inherit a denser archive/category-page grid unless the
+homepage layout is explicitly redesigned around that wider content measure.
 
 ## Layering And Scrolling
 

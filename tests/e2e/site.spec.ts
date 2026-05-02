@@ -11,6 +11,7 @@ import {
 const keyRoutes = [
   "/",
   "/articles/",
+  "/articles/all/",
   "/articles/gamergate-as-metagaming/",
   "/categories/",
   "/categories/history/",
@@ -128,11 +129,15 @@ test("wide category discovery popover stays below sticky header", async ({
   await page.setViewportSize({ height: viewportHeight, width: 1800 });
   await page.goto("/");
 
-  const trigger = page.getByRole("button", {
-    name: "Browse Memeculture articles",
+  const categoryDiscovery = page.getByRole("navigation", {
+    name: "Category discovery",
+  });
+  const trigger = categoryDiscovery.getByRole("link", {
+    exact: true,
+    name: "Culture",
   });
   await expect(trigger).toBeVisible();
-  await trigger.click();
+  await trigger.hover();
 
   const headerBox = await visibleBoundingBox(
     page.locator("[data-site-header]"),
@@ -159,31 +164,92 @@ test("wide category discovery popover stays below sticky header", async ({
   );
 });
 
-test("category discovery opens article previews without navigation", async ({
+test("category discovery previews on hover and links to category pages", async ({
   page,
 }) => {
   await page.setViewportSize({ height: 900, width: 1800 });
   await page.goto("/");
 
-  const trigger = page.getByRole("button", {
-    name: "Browse Memeculture articles",
+  const categoryDiscovery = page.getByRole("navigation", {
+    name: "Category discovery",
+  });
+  const trigger = categoryDiscovery.getByRole("link", {
+    exact: true,
+    name: "Culture",
   });
   const popover = page.locator("#category-discovery-memeculture");
 
-  await expect(
-    page.getByRole("navigation", { name: "Category discovery" }),
-  ).toBeVisible();
+  await expect(categoryDiscovery).toBeVisible();
   await expect(popover).toBeHidden();
 
-  await trigger.click();
+  await expect(trigger).toHaveAttribute("href", "/categories/memeculture/");
+  await trigger.hover();
   await expect(popover).toBeVisible();
   await expect(
-    popover.getByRole("link", { exact: true, name: "Memeculture" }),
-  ).toHaveAttribute("href", "/categories/memeculture/");
-  await expect(
-    popover.getByRole("link", { name: /View all Memeculture/ }),
+    popover.getByRole("link", { name: /View all Culture/ }),
   ).toBeVisible();
   await expect(page).toHaveURL("/");
+});
+
+test("category discovery category click navigates to the category page", async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 900, width: 1800 });
+  await page.goto("/");
+
+  await page
+    .getByRole("navigation", { name: "Category discovery" })
+    .getByRole("link", { exact: true, name: "Culture" })
+    .click();
+
+  await expect(page).toHaveURL("/categories/memeculture/");
+});
+
+test("articles hub links category discovery and the flat article archive", async ({
+  page,
+}) => {
+  await page.goto("/articles/");
+
+  await expect(
+    page.getByRole("heading", { exact: true, name: "Articles" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Browse Categories" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "View all articles" }),
+  ).toHaveAttribute("href", "/articles/all/");
+  await expect(
+    page
+      .getByLabel("Browse Categories")
+      .getByRole("link", { exact: true, name: "Metamemetics" }),
+  ).toHaveAttribute("href", "/categories/metamemetics/");
+
+  const archiveResponse = await page.goto("/articles/all/");
+
+  expect(archiveResponse?.ok()).toBe(true);
+  await expect(
+    page.getByRole("heading", { exact: true, name: "All Articles" }),
+  ).toBeVisible();
+  expect(await page.locator("article").count()).toBeGreaterThan(50);
+});
+
+test("desktop search reveal opens a labeled search form without overflow", async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 900, width: 1800 });
+  await page.goto("/");
+
+  const searchReveal = page.locator("#site-search-reveal");
+  await expect(searchReveal).toBeHidden();
+
+  await page.getByLabel("Open search").click();
+  await expect(searchReveal).toBeVisible();
+  await expect(searchReveal.getByRole("search")).toBeVisible();
+  await expect(
+    searchReveal.getByRole("searchbox", { name: "Site search" }),
+  ).toBeFocused();
+  await expectNoHorizontalOverflow(page);
 });
 
 test("mobile navigation exposes primary and category links", async ({
@@ -199,8 +265,13 @@ test("mobile navigation exposes primary and category links", async ({
 
   const mobileNav = page.getByLabel("Mobile primary navigation");
   await expect(mobileNav.getByRole("link", { name: "Articles" })).toBeVisible();
+  await expect(mobileNav.getByRole("link", { name: "About" })).toBeVisible();
+  await expect(mobileNav.getByRole("link", { name: "RSS" })).toHaveCount(0);
+  await expect(menu.getByRole("link", { name: "RSS" })).toHaveCount(0);
   await expect(
-    mobileNav.getByRole("link", { name: "Categories" }),
+    page
+      .locator("[data-site-header]")
+      .getByRole("link", { name: "Support Us" }),
   ).toBeVisible();
   await expect(page.getByLabel("Mobile category navigation")).toContainText(
     "Metamemetics",
@@ -208,6 +279,25 @@ test("mobile navigation exposes primary and category links", async ({
 
   await page.getByLabel("Open navigation menu").click();
   await expect(menu).not.toHaveAttribute("open", "");
+});
+
+test("mobile navigation panel stays viewport-constrained from the left trigger", async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 520, width: 320 });
+  await page.goto("/");
+
+  await page.getByLabel("Open navigation menu").click();
+
+  const panel = page.locator("[data-mobile-menu-panel]");
+  const box = await visibleBoundingBox(panel, "mobile navigation panel");
+
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(320);
+  expect(box.y).toBeGreaterThan(0);
+  expect(box.y + box.height).toBeLessThanOrEqual(520);
+  await expect(panel.getByRole("searchbox")).toBeVisible();
+  await expect(panel.locator(".theme-toggle")).toBeVisible();
 });
 
 test("theme toggle switches the document theme", async ({ page }) => {

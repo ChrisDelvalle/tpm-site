@@ -52,6 +52,9 @@ describe("build verifier helpers", () => {
       "articles/interactive-post/index.html",
     );
     expect(requiredPathsForSource(publication(), ["history"])).toContain(
+      "articles/all/index.html",
+    );
+    expect(requiredPathsForSource(publication(), ["history"])).toContain(
       "categories/history/index.html",
     );
   });
@@ -84,6 +87,7 @@ describe("build verifier helpers", () => {
       "index.html",
       "about/index.html",
       "articles/index.html",
+      "articles/all/index.html",
       "articles/markdown-post/index.html",
       "categories/history/index.html",
     ]);
@@ -183,6 +187,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -219,6 +224,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -259,6 +265,7 @@ describe("build verifier helpers", () => {
           await writeText(root, "dist/404.html", "");
           await writeText(root, "dist/about/index.html", "");
           await writeText(root, "dist/articles/index.html", "");
+          await writeText(root, "dist/articles/all/index.html", "");
           await writeText(
             root,
             "dist/articles/published/index.html",
@@ -311,6 +318,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -365,6 +373,7 @@ describe("build verifier helpers", () => {
           );
           await writeText(root, "dist/index.html", "");
           await writeText(root, "dist/articles/index.html", "");
+          await writeText(root, "dist/articles/all/index.html", "");
           await writeText(root, "dist/articles/published/index.html", "");
 
           const exitCode = await runBuildVerificationCli(["--quiet"], root);
@@ -415,6 +424,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -460,6 +470,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -502,6 +513,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -542,6 +554,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -585,6 +598,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
+      await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",

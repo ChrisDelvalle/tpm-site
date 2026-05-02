@@ -16,6 +16,7 @@ tags:
   - 4chan
   - "/pol/"
   - ironist
+  - memeculture
 legacyPermalink: 2017/02/15/early-trash-dove/
 ---
 

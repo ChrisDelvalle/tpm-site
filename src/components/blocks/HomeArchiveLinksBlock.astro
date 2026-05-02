@@ -2,8 +2,8 @@
 import LinkButton from "../ui/LinkButton.astro";
 import TextLink from "../ui/TextLink.astro";
 import {
+  articlesArchiveUrl,
   articlesIndexUrl,
-  categoriesIndexUrl,
   feedUrl,
 } from "../../lib/routes";
 
@@ -14,7 +14,7 @@ interface Props {
 const { title = "Explore the Archive" } = Astro.props;
 ---
 
-<section class="grid max-w-3xl gap-3" aria-labelledby="home-archive-heading">
+<section class="grid gap-3" aria-labelledby="home-archive-heading">
   <h2
     id="home-archive-heading"
     class="text-foreground m-0 text-2xl font-semibold tracking-normal"
@@ -22,17 +22,18 @@ const { title = "Explore the Archive" } = Astro.props;
     {title}
   </h2>
   <p class="text-muted-foreground">
-    Browse the full <TextLink href={articlesIndexUrl()}
+    Browse the full <TextLink href={articlesArchiveUrl()}
       >article archive</TextLink
-    >, explore <TextLink href={categoriesIndexUrl()}>categories</TextLink>, or
-    subscribe to the <TextLink href={feedUrl()}>RSS feed</TextLink>.
+    >, explore <TextLink href={articlesIndexUrl()}
+      >articles by category</TextLink
+    >, or subscribe to the <TextLink href={feedUrl()}>RSS feed</TextLink>.
   </p>
   <div class="flex flex-wrap gap-3">
     <LinkButton href={articlesIndexUrl()} variant="outline" tone="neutral">
-      Articles
+      Articles Hub
     </LinkButton>
-    <LinkButton href={categoriesIndexUrl()} variant="outline" tone="neutral">
-      Categories
+    <LinkButton href={articlesArchiveUrl()} variant="outline" tone="neutral">
+      All Articles
     </LinkButton>
   </div>
 </section>

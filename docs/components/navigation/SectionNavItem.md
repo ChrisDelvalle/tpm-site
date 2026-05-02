@@ -30,7 +30,11 @@ container is part of this component's public design and needs an invariant test.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant.
+Default, long-content, missing optional content, hover, focus-visible, current
+article, current category, and dark-mode states should be represented in the
+catalog when relevant. When an article inside a category is current, the
+`View all <category>` link carries the primary visual cue so the category
+destination is distinguishable from article links.
 
 ## Accessibility Semantics
 
@@ -55,6 +59,8 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps desktop and mobile controls from exposing conflicting visible states.
 - supports keyboard disclosure and focus order.
+- highlights the `View all <category>` category destination when the current
+  page belongs to that category.
 
 ## Follow-Up Notes
 

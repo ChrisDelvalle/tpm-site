@@ -46,22 +46,24 @@ category overview, category pages, and `SiteFooter`.
 
 Mobile base: do not show desktop discovery menu; use `MobileMenu`.
 
-Desktop and wider: show category labels in a section navigation row or compact
-category group. Long category labels may wrap only if the whole row still
-remains deliberate and readable; otherwise use fewer visible labels plus a
-clear Categories entry.
+Tablet and wider: show category labels in a section navigation row or compact
+category group. The standard breakpoint is intentionally not over-aggressive;
+category discovery should remain visible on ordinary laptop split-screen widths
+when it can wrap without collisions. Long category labels may wrap only if the
+whole row still remains deliberate and readable; otherwise use fewer visible
+labels plus a clear Categories entry.
 
 The menu should not force brand, search, support, and every category into one
 fragile row.
 
 ## Layering And Scrolling
 
-Desktop category previews should use HTML `popover` for no-JavaScript light
-dismissal and escape behavior where supported. Avoid a hydrated menu library
-unless tests prove native popover cannot satisfy accessibility and browser
+Desktop category previews currently use CSS hover/focus disclosure through
+`CategoryDropdown`. Avoid a hydrated menu library unless tests prove semantic
+links plus CSS disclosure cannot satisfy accessibility and browser
 requirements.
 
-Popover surfaces must layer above normal content and below any truly modal
+Preview surfaces must layer above normal content and below any truly modal
 surface. They must not hide under the sticky header or create horizontal
 overflow.
 
@@ -86,10 +88,9 @@ enforce exclusivity, overlapping popovers must still be impossible.
 ## Accessibility Semantics
 
 Use a labeled navigation region. Category names should remain normal links to
-category pages. The preview disclosure control should be keyboard reachable and
-have an accessible name such as "Browse Memeculture articles".
+category pages with a visible dropdown affordance.
 
-The popover content should contain normal links, not application-menu roles.
+The preview content should contain normal links, not application-menu roles.
 This is document navigation, not a desktop app menu.
 
 ## Content Edge Cases
@@ -115,8 +116,8 @@ cards.
 
 - Does not render on mobile when `MobileMenu` owns category discovery.
 - Every category has a direct normal link.
-- Popover opens with keyboard and pointer.
-- Popover links are reachable by keyboard.
+- Preview opens with keyboard focus and pointer hover.
+- Preview links are reachable by keyboard.
 - No horizontal overflow at desktop or wide desktop widths.
 - Preview content does not include the full archive.
 - Footer/homepage/category pages remain fallback discovery paths.

@@ -16,5 +16,6 @@ describe("SectionNavItem", () => {
     expect(view).toContain('href="/categories/metamemetics/"');
     expect(view).toContain('href="/articles/current-article/"');
     expect(view).toContain('aria-current="page"');
+    expect(view).toContain("View all Metamemetics");
   });
 });

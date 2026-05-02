@@ -15,6 +15,7 @@ tags:
   - anime
   - autist
   - subculture
+  - memeculture
 legacyPermalink: 2017/11/23/moe-to-memes-otaku-to-autist/
 ---
 

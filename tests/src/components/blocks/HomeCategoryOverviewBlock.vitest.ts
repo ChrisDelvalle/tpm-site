@@ -15,7 +15,7 @@ describe("HomeCategoryOverviewBlock", () => {
     expect(view).toContain("Metamemetics");
     expect(view).toMatch(/2\s+articles/);
     expect(view).toContain("data-home-category-overview");
-    expect(view).toContain("max-w-3xl");
+    expect(view).not.toContain("max-w-3xl");
     expect(view).not.toContain("xl:grid-cols-4");
   });
 });

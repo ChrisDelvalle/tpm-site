@@ -1,10 +1,12 @@
 import {
+  articlesIndexUrl,
   articleSlug,
   articleUrl,
   type CategorySummary,
   categoryUrl,
   entryTitle,
   excerpt,
+  pageUrl,
 } from "./routes";
 
 /** Article data rendered inside navigation and discovery surfaces. */
@@ -25,6 +27,24 @@ export interface SectionNavItem {
   isOpen: boolean;
   slug: string;
   title: string;
+}
+
+/** Top-level navigation link rendered separately from category discovery. */
+export interface PrimaryNavItem {
+  href: string;
+  label: string;
+}
+
+/**
+ * Builds durable top-level publication navigation.
+ *
+ * @returns Primary navigation links that are not category discovery or utility actions.
+ */
+export function primaryNavigationItems(): PrimaryNavItem[] {
+  return [
+    { href: articlesIndexUrl(), label: "Articles" },
+    { href: pageUrl("about"), label: "About" },
+  ];
 }
 
 /**

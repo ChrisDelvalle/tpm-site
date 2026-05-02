@@ -12,6 +12,7 @@ tags:
   - 4chan
   - memepages
   - internet culture
+  - memeculture
 legacyPermalink: 2022/04/04/homesteading-the-memeosphere/
 ---
 

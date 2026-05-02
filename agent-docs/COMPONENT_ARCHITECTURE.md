@@ -251,7 +251,7 @@ The header should have two conceptual rows on sufficiently wide screens:
 
 ```text
 brand / utility actions / support
-section navigation: Memeculture, Metamemetics, Aesthetics, Irony, ...
+section navigation: Culture, Metamemetics, Aesthetics, Irony, ...
 ```
 
 On narrow screens, this should collapse into a small brand plus a complete menu.
@@ -611,7 +611,7 @@ Target desktop publication nav:
 
 ```text
 The Philosopher's Meme          Search  About  Support
-Memeculture  Metamemetics  Aesthetics  Irony  Game Studies  History  Philosophy  Politics
+Culture  Metamemetics  Aesthetics  Irony  Game Studies  History  Philosophy  Politics
 ```
 
 Future dropdown direction:

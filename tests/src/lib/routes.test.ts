@@ -2,8 +2,10 @@ import { describe, expect, test } from "bun:test";
 
 import {
   type ArticleEntry,
+  articlesArchiveUrl,
   articlesIndexUrl,
   articleUrl,
+  assertUniqueArticleSlugs,
   categoriesIndexUrl,
   categorySlug,
   categoryUrl,
@@ -40,12 +42,19 @@ function article(
 describe("route helpers", () => {
   test("builds stable public URLs with expected trailing slash behavior", () => {
     expect(articlesIndexUrl()).toBe("/articles/");
+    expect(articlesArchiveUrl()).toBe("/articles/all/");
     expect(articleUrl("article-title")).toBe("/articles/article-title/");
     expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("history")).toBe("/categories/history/");
     expect(pageUrl("About")).toBe("/about/");
     expect(searchUrl()).toBe("/search/");
     expect(feedUrl()).toBe("/feed.xml");
+  });
+
+  test("rejects article slugs reserved for static article routes", () => {
+    expect(() =>
+      assertUniqueArticleSlugs([article("all", new Date("2022-01-01"))]),
+    ).toThrow('Article slug "all" is reserved for a site route.');
   });
 
   test("sorts newest first with stable slug tiebreakers", () => {

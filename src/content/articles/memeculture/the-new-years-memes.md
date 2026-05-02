@@ -20,6 +20,7 @@ tags:
   - hyperstition
   - meme magic
   - ontology
+  - memeculture
 legacyPermalink: 2019/01/03/the-new-years-memes/
 ---
 

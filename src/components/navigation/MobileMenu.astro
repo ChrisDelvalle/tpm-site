@@ -4,17 +4,26 @@ import { Menu, X } from "lucide-astro";
 import CategoryTree from "./CategoryTree.astro";
 import PrimaryNav from "./PrimaryNav.astro";
 import SearchForm from "./SearchForm.astro";
-import SupportLink from "./SupportLink.astro";
 import ThemeToggle from "./ThemeToggle.astro";
-import type { SectionNavItem } from "../../lib/navigation";
+import {
+  primaryNavigationItems,
+  type PrimaryNavItem,
+  type SectionNavItem,
+} from "../../lib/navigation";
 
 interface Props {
+  categoryItems: readonly SectionNavItem[];
   currentPath?: string;
-  items: readonly SectionNavItem[];
   label?: string;
+  primaryItems?: readonly PrimaryNavItem[];
 }
 
-const { currentPath = "", items, label = "Open navigation menu" } = Astro.props;
+const {
+  categoryItems,
+  currentPath = "",
+  label = "Open navigation menu",
+  primaryItems = primaryNavigationItems(),
+} = Astro.props;
 ---
 
 <details class="group relative">
@@ -26,14 +35,18 @@ const { currentPath = "", items, label = "Open navigation menu" } = Astro.props;
     <X class="hidden size-5 group-open:block" aria-hidden="true" />
   </summary>
   <div
-    class="border-border bg-background absolute end-0 top-full z-50 mt-3 grid w-[min(22rem,calc(100vw-2rem))] gap-5 rounded-sm border p-4 shadow-lg"
+    class="border-border bg-background fixed inset-x-4 top-16 z-50 grid max-h-[min(34rem,calc(100dvh-5rem))] gap-5 overflow-y-auto overscroll-contain rounded-sm border p-4 shadow-lg"
+    data-mobile-menu-panel
   >
-    <SearchForm inputId="mobile-site-search" label="Mobile site search" />
-    <div class="flex items-center justify-between gap-4">
-      <PrimaryNav currentPath={currentPath} label="Mobile primary navigation" />
+    <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+      <SearchForm inputId="mobile-site-search" label="Mobile site search" />
       <ThemeToggle />
     </div>
-    <SupportLink />
-    <CategoryTree items={items} label="Mobile category navigation" />
+    <PrimaryNav
+      currentPath={currentPath}
+      items={primaryItems}
+      label="Mobile primary navigation"
+    />
+    <CategoryTree items={categoryItems} label="Mobile category navigation" />
   </div>
 </details>

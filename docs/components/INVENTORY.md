@@ -36,6 +36,7 @@ component has a matching one-pager in this directory.
 - `src/components/navigation/MobileMenu.astro`
 - `src/components/navigation/PrimaryNav.astro`
 - `src/components/navigation/SearchForm.astro`
+- `src/components/navigation/SearchReveal.astro`
 - `src/components/navigation/SectionNav.astro`
 - `src/components/navigation/SectionNavItem.astro`
 - `src/components/navigation/SupportLink.astro`

@@ -13,10 +13,7 @@ interface Props {
 const { image, imageAlt, title = "Announcements" } = Astro.props;
 ---
 
-<section
-  class="grid max-w-3xl gap-4"
-  aria-labelledby="home-announcement-heading"
->
+<section class="grid gap-4" aria-labelledby="home-announcement-heading">
   <h2
     id="home-announcement-heading"
     class="text-foreground m-0 text-2xl font-semibold tracking-normal"

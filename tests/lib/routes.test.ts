@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   type ArticleEntry,
+  articlesArchiveUrl,
   articlesIndexUrl,
   articleSlug,
   articleUrl,
@@ -51,6 +52,7 @@ describe("route helpers", () => {
 
   test("keeps canonical routes trailing-slashed", () => {
     expect(articlesIndexUrl()).toBe("/articles/");
+    expect(articlesArchiveUrl()).toBe("/articles/all/");
     expect(articleUrl("gamergate-as-metagaming")).toBe(
       "/articles/gamergate-as-metagaming/",
     );
@@ -83,6 +85,12 @@ describe("route helpers", () => {
     expect(() => {
       assertUniqueArticleSlugs([entry("same"), entry("same")]);
     }).toThrow('Duplicate article slug "same"');
+  });
+
+  test("detects article slugs reserved for static routes", () => {
+    expect(() => {
+      assertUniqueArticleSlugs([entry("all")]);
+    }).toThrow('Article slug "all" is reserved for a site route.');
   });
 
   test("derives categories from source folders", () => {

@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { item } = Astro.props;
+const hasCurrentArticle = item.articles.some((article) => article.isCurrent);
 ---
 
 <li>
@@ -16,7 +17,10 @@ const { item } = Astro.props;
     >
       <span>{item.title}</span>
       <span
-        class="text-muted-foreground text-xs transition-transform group-open:rotate-90"
+        class:list={[
+          "text-muted-foreground text-xs transition-transform group-open:rotate-90",
+          hasCurrentArticle && "text-primary",
+        ]}
         aria-hidden="true"
       >
         &rsaquo;
@@ -27,7 +31,7 @@ const { item } = Astro.props;
         <TextLink
           href={item.href}
           variant="subtle"
-          tone={item.isCurrent ? "primary" : "muted"}
+          tone={item.isCurrent || hasCurrentArticle ? "primary" : "muted"}
           aria-current={item.isCurrent ? "page" : undefined}
           class="text-xs"
         >

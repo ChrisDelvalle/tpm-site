@@ -3,45 +3,54 @@ import BrandLink from "../navigation/BrandLink.astro";
 import DiscoveryMenu from "../navigation/DiscoveryMenu.astro";
 import MobileMenu from "../navigation/MobileMenu.astro";
 import PrimaryNav from "../navigation/PrimaryNav.astro";
-import SearchForm from "../navigation/SearchForm.astro";
+import SearchReveal from "../navigation/SearchReveal.astro";
 import SupportLink from "../navigation/SupportLink.astro";
 import ThemeToggle from "../navigation/ThemeToggle.astro";
-import type { SectionNavItem } from "../../lib/navigation";
+import type { PrimaryNavItem, SectionNavItem } from "../../lib/navigation";
 
 interface Props {
+  categoryItems: readonly SectionNavItem[];
   currentPath: string;
-  navigationItems: readonly SectionNavItem[];
+  primaryItems: readonly PrimaryNavItem[];
 }
 
-const { currentPath, navigationItems } = Astro.props;
+const { categoryItems, currentPath, primaryItems } = Astro.props;
 ---
 
 <header
   data-site-header
   class="border-border bg-background/95 sticky top-0 z-40 border-b backdrop-blur-sm"
 >
-  <div
-    class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 lg:grid-cols-[minmax(max-content,1fr)_minmax(12rem,32rem)_minmax(max-content,1fr)] lg:px-8"
-  >
-    <div class="min-w-0 justify-self-start">
-      <BrandLink />
-    </div>
-
-    <div class="hidden min-w-0 justify-self-center lg:block lg:w-full">
-      <SearchForm />
-    </div>
-
+  <div class="grid gap-2 px-4 py-3 lg:px-8">
     <div
-      class="hidden min-w-max justify-self-end lg:flex lg:items-center lg:gap-4"
+      class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3"
     >
-      <PrimaryNav currentPath={currentPath} />
-      <DiscoveryMenu currentPath={currentPath} items={navigationItems} />
-      <ThemeToggle />
-      <SupportLink />
+      <div class="hidden min-w-0 items-center justify-start gap-1 md:flex">
+        <SearchReveal />
+        <ThemeToggle />
+      </div>
+      <div class="flex min-w-0 items-center justify-start md:hidden">
+        <MobileMenu
+          currentPath={currentPath}
+          categoryItems={categoryItems}
+          primaryItems={primaryItems}
+        />
+      </div>
+
+      <div class="max-w-[42vw] min-w-0 justify-self-center md:max-w-none">
+        <BrandLink />
+      </div>
+
+      <div class="flex min-w-0 items-center justify-end gap-2">
+        <div class="hidden min-w-0 items-center md:flex">
+          <PrimaryNav currentPath={currentPath} items={primaryItems} />
+        </div>
+        <SupportLink />
+      </div>
     </div>
 
-    <div class="justify-self-end lg:hidden">
-      <MobileMenu currentPath={currentPath} items={navigationItems} />
+    <div class="hidden justify-center md:flex">
+      <DiscoveryMenu currentPath={currentPath} items={categoryItems} />
     </div>
   </div>
 </header>

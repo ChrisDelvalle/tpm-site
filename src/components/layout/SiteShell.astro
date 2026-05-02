@@ -3,21 +3,29 @@ import MainFrame from "./MainFrame.astro";
 import SiteFooter from "./SiteFooter.astro";
 import SiteHeader from "./SiteHeader.astro";
 import { getCategories } from "../../lib/content";
-import { sectionNavigationItems } from "../../lib/navigation";
+import {
+  primaryNavigationItems,
+  sectionNavigationItems,
+} from "../../lib/navigation";
 
 const currentPath = Astro.url.pathname;
-const navigationItems = sectionNavigationItems(
+const categoryItems = sectionNavigationItems(
   await getCategories(),
   currentPath,
 );
+const primaryItems = primaryNavigationItems();
 ---
 
 <div
   class="bg-background text-foreground grid min-h-dvh grid-rows-[auto_1fr_auto]"
 >
-  <SiteHeader currentPath={currentPath} navigationItems={navigationItems} />
+  <SiteHeader
+    currentPath={currentPath}
+    categoryItems={categoryItems}
+    primaryItems={primaryItems}
+  />
   <MainFrame>
     <slot />
   </MainFrame>
-  <SiteFooter navigationItems={navigationItems} />
+  <SiteFooter navigationItems={categoryItems} />
 </div>

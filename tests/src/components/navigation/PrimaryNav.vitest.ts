@@ -12,6 +12,8 @@ describe("PrimaryNav", () => {
 
     expect(view).toContain('aria-label="Primary navigation"');
     expect(view).toContain('href="/articles/"');
+    expect(view).toContain('href="/about/"');
+    expect(view).not.toContain('href="/categories/"');
     expect(view).toContain('aria-current="page"');
   });
 });

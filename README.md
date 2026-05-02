@@ -179,7 +179,7 @@ historical metadata. They do not control routing, publishing, or rendering.
 
 Current article category folders:
 
-- `src/content/articles/memeculture/` -> `/categories/memeculture/`
+- `src/content/articles/memeculture/` -> `/categories/memeculture/` (`Culture`)
 - `src/content/articles/metamemetics/` -> `/categories/metamemetics/`
 - `src/content/articles/aesthetics/` -> `/categories/aesthetics/`
 - `src/content/articles/irony/` -> `/categories/irony/`

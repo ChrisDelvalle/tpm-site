@@ -13,6 +13,7 @@ describe("navigation catalog examples", () => {
       "src/components/navigation/CategoryDropdown.astro",
       "src/components/navigation/CategoryPreviewList.astro",
       "src/components/navigation/SearchForm.astro",
+      "src/components/navigation/SearchReveal.astro",
       "src/components/navigation/SupportLink.astro",
       "src/components/navigation/ThemeToggle.astro",
       "src/components/navigation/SectionNavItem.astro",

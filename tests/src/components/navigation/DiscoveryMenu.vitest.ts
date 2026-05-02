@@ -13,9 +13,10 @@ describe("DiscoveryMenu", () => {
 
     expect(view).toContain('aria-label="Category discovery"');
     expect(view).toContain("data-discovery-menu");
-    expect(view).toContain("Browse Metamemetics articles");
-    expect(view).toContain("Browse History articles");
-    expect(view).toContain("2xl:flex");
+    expect(view).toContain("Metamemetics");
+    expect(view).toContain("History");
+    expect(view).toContain("md:flex");
+    expect(view).toContain("flex-wrap");
   });
 
   test("omits the discovery nav when there are no categories", async () => {

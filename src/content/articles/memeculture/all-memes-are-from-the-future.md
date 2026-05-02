@@ -8,6 +8,7 @@ author: "Seong-Young Her"
 image: "../../../assets/articles/all-memes-are-from-the-future/000000000.jpeg"
 tags:
   - memetics
+  - memeculture
 legacyPermalink: 2019/10/12/all-memes-are-from-the-future/
 ---
 

@@ -18,12 +18,13 @@ export const navigationCatalogExamples = [
   },
   {
     componentPath: "src/components/navigation/DiscoveryMenu.astro",
-    description: "Wide-viewport category discovery navigation with popovers.",
+    description:
+      "Wide-viewport category discovery navigation with hover/focus previews.",
     title: "DiscoveryMenu",
   },
   {
     componentPath: "src/components/navigation/CategoryDropdown.astro",
-    description: "Native popover preview for one category.",
+    description: "Dropdown category link with hover/focus article preview.",
     title: "CategoryDropdown",
   },
   {
@@ -35,6 +36,11 @@ export const navigationCatalogExamples = [
     componentPath: "src/components/navigation/SearchForm.astro",
     description: "Semantic search form shared by header and mobile menu.",
     title: "SearchForm",
+  },
+  {
+    componentPath: "src/components/navigation/SearchReveal.astro",
+    description: "Compact header search action that reveals the search form.",
+    title: "SearchReveal",
   },
   {
     componentPath: "src/components/navigation/SupportLink.astro",
@@ -69,7 +75,7 @@ export const navigationCatalogExamples = [
   {
     componentPath: "src/components/navigation/MobileMenu.astro",
     description:
-      "Native mobile menu disclosure with search, nav, and category tree.",
+      "Viewport-constrained mobile menu disclosure with search, theme, nav, and category tree.",
     title: "MobileMenu",
   },
 ] as const satisfies NavigationCatalogExample[];

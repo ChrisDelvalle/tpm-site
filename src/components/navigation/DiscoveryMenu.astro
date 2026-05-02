@@ -15,16 +15,16 @@ const { currentPath = "", items, label = "Category discovery" } = Astro.props;
   items.length > 0 && (
     <nav
       aria-label={label}
-      class="hidden min-w-0 items-center gap-3 2xl:flex"
+      class="hidden min-w-0 items-center justify-center gap-2 md:flex"
       data-discovery-menu
     >
-      <ul class="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+      <ul class="flex min-w-0 flex-wrap items-center justify-center gap-x-2 gap-y-1">
         {items.map((item) => (
           <li class="min-w-0">
             <CategoryDropdown
               category={item}
               currentPath={currentPath}
-              popoverId={`category-discovery-${item.slug}`}
+              previewId={`category-discovery-${item.slug}`}
             />
           </li>
         ))}

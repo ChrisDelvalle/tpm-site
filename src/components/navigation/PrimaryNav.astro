@@ -1,15 +1,9 @@
 ---
 import TextLink from "../ui/TextLink.astro";
 import {
-  articlesIndexUrl,
-  categoriesIndexUrl,
-  pageUrl,
-} from "../../lib/routes";
-
-interface PrimaryNavItem {
-  href: string;
-  label: string;
-}
+  primaryNavigationItems,
+  type PrimaryNavItem,
+} from "../../lib/navigation";
 
 interface Props {
   currentPath?: string;
@@ -19,11 +13,7 @@ interface Props {
 
 const {
   currentPath = "",
-  items = [
-    { href: articlesIndexUrl(), label: "Articles" },
-    { href: categoriesIndexUrl(), label: "Categories" },
-    { href: pageUrl("about"), label: "About" },
-  ],
+  items = primaryNavigationItems(),
   label = "Primary navigation",
 } = Astro.props;
 ---

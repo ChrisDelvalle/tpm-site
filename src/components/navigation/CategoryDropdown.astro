@@ -1,56 +1,47 @@
 ---
+import { ChevronDown } from "lucide-astro";
+
 import CategoryPreviewList from "./CategoryPreviewList.astro";
-import TextLink from "../ui/TextLink.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 
 interface Props {
   category: SectionNavItem;
   currentPath?: string;
-  popoverId: string;
+  previewId: string;
 }
 
-const { category, currentPath = "", popoverId } = Astro.props;
-const isCurrent = currentPath.startsWith(category.href);
-const anchorName = `--${popoverId}`;
+const { category, currentPath = "", previewId } = Astro.props;
+const isCurrent =
+  currentPath.startsWith(category.href) ||
+  category.articles.some((article) => article.isCurrent);
 ---
 
-<div class="relative" data-category-dropdown={category.slug}>
-  <button
-    type="button"
-    popovertarget={popoverId}
+<div class="group relative" data-category-dropdown={category.slug}>
+  <a
+    href={category.href}
     class:list={[
-      "rounded-xs px-1 py-1 text-sm font-medium tracking-normal transition-colors",
+      "inline-flex items-center gap-1 rounded-xs px-1 py-1 text-sm font-medium tracking-normal transition-colors",
       "focus-visible:outline-ring focus-visible:outline-2 focus-visible:outline-offset-2",
       isCurrent
         ? "text-primary hover:text-primary/80"
         : "text-muted-foreground hover:text-foreground",
     ]}
-    aria-label={`Browse ${category.title} articles`}
-    style={`anchor-name: ${anchorName};`}
+    aria-current={isCurrent ? "page" : undefined}
   >
-    {category.title}
-  </button>
+    <span>{category.title}</span>
+    <ChevronDown
+      class="size-3 transition-transform group-focus-within:rotate-180 group-hover:rotate-180"
+      aria-hidden="true"
+    />
+  </a>
   <div
-    id={popoverId}
-    popover="auto"
-    class="border-border bg-popover text-popover-foreground m-0 mt-3 max-h-[min(32rem,calc(100dvh-6rem))] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto rounded-sm border p-4 shadow-lg"
-    style={`position: absolute; position-anchor: ${anchorName}; inset: auto; top: calc(anchor(bottom) + 0.75rem); left: anchor(left);`}
+    class="absolute -start-2 top-full z-50 hidden w-[min(22rem,calc(100vw-2rem))] px-2 pt-4 group-focus-within:block group-hover:block"
   >
-    <div class="grid gap-3">
-      <div class="grid gap-1">
-        <TextLink
-          href={category.href}
-          tone={isCurrent ? "primary" : "neutral"}
-          aria-current={isCurrent ? "page" : undefined}
-        >
-          {category.title}
-        </TextLink>
-        {
-          category.description && (
-            <p class="text-muted-foreground text-xs">{category.description}</p>
-          )
-        }
-      </div>
+    <div
+      id={previewId}
+      class="border-border bg-popover text-popover-foreground grid max-h-[min(32rem,calc(100dvh-6rem))] gap-3 overflow-y-auto rounded-sm border p-4 shadow-lg"
+      data-category-preview
+    >
       <CategoryPreviewList
         articles={category.articles}
         categoryHref={category.href}

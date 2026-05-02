@@ -1,29 +1,61 @@
 ---
 import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import CategoryOverviewBlock from "../../components/blocks/CategoryOverviewBlock.astro";
 import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import LinkButton from "../../components/ui/LinkButton.astro";
+import TextLink from "../../components/ui/TextLink.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { articleListItemsFromArchive } from "../../lib/article-list";
 import { articleArchiveItems } from "../../lib/archive";
 import { getArticles, getCategories } from "../../lib/content";
-import { articlesIndexUrl } from "../../lib/routes";
+import { sectionNavigationItems } from "../../lib/navigation";
+import { articlesArchiveUrl, articlesIndexUrl } from "../../lib/routes";
 
-const archiveItems = articleArchiveItems(
-  await getArticles(),
-  await getCategories(),
-);
-const articleItems = articleListItemsFromArchive(archiveItems);
+const articles = await getArticles();
+const categories = await getCategories();
+const archiveItems = articleArchiveItems(articles, categories);
+const latestItems = articleListItemsFromArchive(archiveItems.slice(0, 8));
+const categoryItems = sectionNavigationItems(categories, articlesIndexUrl());
 ---
 
 <BaseLayout
   title="Articles | The Philosopher's Meme"
-  description="Complete article archive for The Philosopher's Meme."
+  description="Browse The Philosopher's Meme by category, recent writing, and full archive."
   canonicalPath={articlesIndexUrl()}
 >
   <BrowsingBody>
+    <section class="grid gap-4">
+      <header class="grid gap-3">
+        <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
+          Articles
+        </h1>
+        <p class="text-muted-foreground max-w-3xl text-lg">
+          Browse essays and notes by category, start with recent writing, or go
+          straight to the <TextLink href={articlesArchiveUrl()}
+            >complete article archive</TextLink
+          >.
+        </p>
+      </header>
+      <div class="flex flex-wrap gap-3">
+        <LinkButton
+          href={articlesArchiveUrl()}
+          variant="outline"
+          tone="neutral"
+        >
+          View all articles
+        </LinkButton>
+      </div>
+    </section>
+    <CategoryOverviewBlock
+      title="Browse Categories"
+      description="Find articles by subject."
+      headingLevel={2}
+      items={categoryItems}
+    />
     <ArchiveListBlock
-      title="Articles"
-      description="Essays and notes on memes, cyberculture, and the Internet."
-      items={articleItems}
+      title="Latest Articles"
+      description="Recent writing from the archive."
+      items={latestItems}
       pagefindIgnore
     />
   </BrowsingBody>

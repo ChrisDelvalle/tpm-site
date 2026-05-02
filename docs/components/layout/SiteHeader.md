@@ -15,7 +15,7 @@ header geometry.
 ## Public Contract
 
 - `currentPath: string`
-- `categories: readonly CategoryDiscoveryItem[]`
+- `categoryItems: readonly SectionNavItem[]`
 - `primaryItems: readonly PrimaryNavItem[]`
 - optional semantic props for support/search labels and hrefs only when needed
 
@@ -27,29 +27,41 @@ make invalid states harder to express.
 
 ```text
 SiteHeader
-  left cluster
-    BrandLink
-    CategoryDropdown[]
-    PrimaryNav
-  right cluster
-    SearchForm or SearchReveal
-    ThemeToggle
-    SupportLink
+  row 1
+    left utility cluster
+      SearchReveal
+      ThemeToggle
+    centered brand
+      BrandLink
+    right navigation cluster
+      PrimaryNav
+      SupportLink
+      MobileMenu
+  row 2
+    centered category discovery
+      DiscoveryMenu
+        CategoryDropdown[]
   MobileMenu
 ```
 
 It composes local navigation data helpers, `BrandLink`, `CategoryDropdown`,
-`PrimaryNav`, `SearchForm`, `SupportLink`, `ThemeToggle`, and `MobileMenu`.
+`PrimaryNav`, `SearchReveal`, `SupportLink`, `ThemeToggle`, and `MobileMenu`.
 Children should not patch header spacing or stacking from outside.
 
 ## Layout And Responsiveness
 
-Desktop: one coherent row. The left cluster is aligned left and contains brand,
-category dropdowns, `Articles`, and `About`. The right cluster is aligned right
-and contains search reveal, theme toggle, and support.
+Desktop: two rows. Row 1 has search and theme aligned left, brand centered, and
+`Articles`, `About`, and `Support Us` aligned right. Row 2 centers category
+dropdowns. This separates utilities, identity, durable pages, and section
+discovery instead of forcing every control into one crowded row.
 
-Mobile/constrained: brand plus one mobile menu entry. All hidden desktop
-destinations must remain available in `MobileMenu`.
+Mobile/constrained: one row with mobile menu left, brand centered, and visible
+`Support Us` right. Search, theme, categories, `Articles`, and `About` remain
+available in `MobileMenu`; footer-only RSS stays out of the menu.
+
+Tablet and wider: desktop controls return and categories appear in the second
+row. This uses the standard `md` Tailwind breakpoint so category discovery is
+not hidden too aggressively on ordinary laptop split-screen widths.
 
 The center of the row is flexible space, not a permanent search slot. The
 header must not depend on fragile breakpoint guesses to prevent brand,

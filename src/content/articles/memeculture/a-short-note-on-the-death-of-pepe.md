@@ -17,6 +17,7 @@ tags:
   - Pepe
   - post-irony
   - Wojak
+  - memeculture
 legacyPermalink: 2015/09/14/a-short-note-on-the-death-of-pepe/
 ---
 

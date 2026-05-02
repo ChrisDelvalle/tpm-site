@@ -4,13 +4,13 @@ import HomeArchiveLinksBlock from "../../../../src/components/blocks/HomeArchive
 import { createAstroTestContainer } from "../../../helpers/astro-container";
 
 describe("HomeArchiveLinksBlock", () => {
-  test("renders archive, category, and feed links", async () => {
+  test("renders article hub, archive, and feed links", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(HomeArchiveLinksBlock);
 
     expect(view).toContain("Explore the Archive");
     expect(view).toContain("/articles/");
-    expect(view).toContain("/categories/");
+    expect(view).toContain("/articles/all/");
     expect(view).toContain("/feed.xml");
   });
 });

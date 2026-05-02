@@ -9,6 +9,7 @@ const requiredBasePaths = [
   "404.html",
   "about/index.html",
   "articles/index.html",
+  "articles/all/index.html",
   "categories/index.html",
   "feed.xml",
   "sitemap-index.xml",
@@ -18,6 +19,7 @@ const staticReadingBasePages = [
   "index.html",
   "about/index.html",
   "articles/index.html",
+  "articles/all/index.html",
 ];
 
 /** Source-content publication state used to verify generated output. */
@@ -401,7 +403,9 @@ export async function verifyBuild({
 }
 
 function articlePageFiles(files: string[]): string[] {
-  return files.filter((file) => /\/articles\/[^/]+\/index\.html$/.test(file));
+  return files.filter((file) =>
+    /\/articles\/(?!all\/)[^/]+\/index\.html$/.test(file),
+  );
 }
 
 function categorySlugFromArticlePath(articleDir: string, file: string): string {
@@ -604,7 +608,7 @@ async function inspectHtmlFile(
   }
 
   if (
-    /^articles\/[^/]+\/index\.html$/.test(relativeHtmlPath) &&
+    /^articles\/(?!all\/)[^/]+\/index\.html$/.test(relativeHtmlPath) &&
     !text.includes('"@type":"BlogPosting"')
   ) {
     issues.missingArticleJsonLd.push(relativeHtmlPath);

@@ -18,14 +18,24 @@ export interface CategorySummary {
 export const SITE_TITLE = "The Philosopher's Meme";
 export const SITE_DESCRIPTION =
   "The philosophy of memes, cyberculture, and the Internet.";
+const RESERVED_ARTICLE_SLUGS = new Set(["all"]);
 
 /**
- * Builds the public article archive URL.
+ * Builds the public articles hub URL.
  *
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function articlesIndexUrl(): string {
   return withTrailingSlash("/articles");
+}
+
+/**
+ * Builds the public URL for the flat all-articles archive.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function articlesArchiveUrl(): string {
+  return withTrailingSlash(`${articlesIndexUrl()}all`);
 }
 
 /**
@@ -64,6 +74,10 @@ export function assertUniqueArticleSlugs(entries: ArticleEntry[]): void {
       throw new Error(
         `Duplicate article slug "${slug}" for "${previous}" and "${entry.id}".`,
       );
+    }
+
+    if (RESERVED_ARTICLE_SLUGS.has(slug)) {
+      throw new Error(`Article slug "${slug}" is reserved for a site route.`);
     }
 
     seen.set(slug, entry.id);

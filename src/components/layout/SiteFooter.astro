@@ -3,8 +3,8 @@ import SupportLink from "../navigation/SupportLink.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 import {
+  articlesArchiveUrl,
   articlesIndexUrl,
-  categoriesIndexUrl,
   feedUrl,
   pageUrl,
   SITE_TITLE,
@@ -35,8 +35,8 @@ const footerCategories = navigationItems.slice(0, 8);
             >
           </li>
           <li>
-            <TextLink href={categoriesIndexUrl()} variant="subtle" tone="muted"
-              >Categories</TextLink
+            <TextLink href={articlesArchiveUrl()} variant="subtle" tone="muted"
+              >All Articles</TextLink
             >
           </li>
           <li>

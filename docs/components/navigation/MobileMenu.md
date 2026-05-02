@@ -6,13 +6,14 @@ Source: `src/components/navigation/MobileMenu.astro`
 
 `MobileMenu` provides the complete constrained-layout navigation fallback. Any
 destination hidden from the desktop header at smaller widths must remain
-reachable here.
+reachable here, except support remains visible in the mobile header row and RSS
+remains in the footer.
 
 ## Public Contract
 
 - `currentPath?: string`
-- `categories: readonly SectionNavItem[]`
-- `primaryItems: readonly PrimaryNavItem[]`
+- `categoryItems: readonly SectionNavItem[]`
+- `primaryItems?: readonly PrimaryNavItem[]`
 - `label?: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
@@ -22,17 +23,22 @@ make invalid states harder to express.
 ## Composition Relationships
 
 It composes local navigation data helpers, `CategoryTree` or `SectionNav`,
-`PrimaryNav`, `SearchForm`, `SupportLink`, and `ThemeToggle`.
+`PrimaryNav`, `SearchForm`, and `ThemeToggle`.
 
 `SiteHeader` owns when the mobile menu is shown. `MobileMenu` owns the contents
 and internal grouping of the constrained-width navigation surface.
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and
-keyboard targets, and avoid horizontal overflow. It may be a disclosure,
-popover, drawer, or simple expanded panel, but it must be the single complete
-fallback rather than a partial mirror of desktop navigation.
+The component must remain usable regardless of the trigger's horizontal
+position. Its panel is viewport-constrained rather than trigger-aligned, so it
+cannot fall off-screen when the trigger is near the left or right edge.
+
+The search form and theme toggle sit together at the top of the panel as the
+utility control area. The panel must preserve touch and keyboard targets, avoid
+horizontal overflow, and scroll internally on short viewport heights. It may be
+a disclosure, popover, drawer, or simple expanded panel, but it must be the
+single complete fallback rather than a partial mirror of desktop navigation.
 
 ## Layering And Scrolling
 
@@ -69,9 +75,13 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps desktop and mobile controls from exposing conflicting visible states.
 - supports keyboard disclosure and focus order.
-- includes categories, `Articles`, `About`, search, theme, support, and
-  secondary links such as RSS when those links are not visible in the desktop
-  header.
+- keeps the panel inside the viewport regardless of whether the trigger appears
+  left, center, or right.
+- keeps search and theme controls in the top utility area.
+- includes categories, `Articles`, `About`, search, and theme.
+- does not include RSS; RSS belongs in the footer.
+- does not include support while support remains visible beside the mobile
+  trigger.
 
 ## Follow-Up Notes
 
