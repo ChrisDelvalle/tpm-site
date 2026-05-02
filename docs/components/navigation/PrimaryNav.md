@@ -4,7 +4,9 @@ Source: `src/components/navigation/PrimaryNav.astro`
 
 ## Purpose
 
-`PrimaryNav` serves as a navigation component for site discovery, wayfinding, search, category browsing, or support actions.
+`PrimaryNav` renders durable top-level publication links. In the desktop
+header, that means `Articles` and `About`; category discovery, search, theme,
+support, and RSS belong to other components or secondary surfaces.
 
 ## Public Contract
 
@@ -18,11 +20,16 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../ui/TextLink`. It must remain interchangeable between header, mobile menu, sidebar, and footer contexts where the public contract allows it.
+It composes local components such as `../ui/TextLink`. It can appear in the
+header, mobile menu, or footer, but each context should pass an explicit item
+list rather than asking `PrimaryNav` to decide information architecture.
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and keyboard targets, and avoid horizontal overflow. Desktop-only surfaces must have an equivalent mobile or fallback navigation path.
+The component must remain usable in constrained containers, preserve touch and
+keyboard targets, and avoid horizontal overflow. It should wrap or collapse
+only through parent-owned navigation mode changes, not through local
+breakpoint patches.
 
 ## Layering And Scrolling
 
@@ -56,11 +63,10 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps desktop and mobile controls from exposing conflicting visible states.
-- supports keyboard disclosure and focus order.
+- applies `aria-current="page"` only to the current destination link.
+- header mode does not render categories, search, theme, support, or RSS.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
-- Primary navigation should stay focused on durable top-level destinations such
-  as Articles, Categories, About, Search, and Support. Category preview
-  behavior belongs to `DiscoveryMenu`, not this component.
+- If a later design promotes more top-level destinations, add them through the
+  parent item list and update the navigation design first.

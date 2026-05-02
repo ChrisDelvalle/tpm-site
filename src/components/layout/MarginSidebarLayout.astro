@@ -1,0 +1,71 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type RailVisibility = "auto" | "always" | "never";
+
+interface Props extends HTMLAttributes<"div"> {
+  leftVisibility?: RailVisibility;
+  rightVisibility?: RailVisibility;
+}
+
+const {
+  leftVisibility = "auto",
+  rightVisibility = "auto",
+  class: className,
+  ...attrs
+} = Astro.props;
+const hasLeft = Astro.slots.has("left") && leftVisibility !== "never";
+const hasRight = Astro.slots.has("right") && rightVisibility !== "never";
+const hasAnyRail = hasLeft || hasRight;
+const railVisibilityClasses = {
+  always: "block",
+  auto: "hidden 2xl:block",
+  never: "hidden",
+} as const;
+---
+
+<div
+  {...attrs}
+  data-margin-sidebar-layout
+  class:list={[
+    "mx-auto grid w-full min-w-0 gap-8",
+    hasAnyRail
+      ? "2xl:grid-cols-[minmax(0,14rem)_minmax(0,48rem)_minmax(0,14rem)] 2xl:justify-center"
+      : "justify-items-center",
+    className,
+  ]}
+>
+  {
+    hasAnyRail && (
+      <div
+        data-margin-sidebar-left
+        class:list={[
+          "min-w-0",
+          hasLeft ? railVisibilityClasses[leftVisibility] : "hidden 2xl:block",
+        ]}
+      >
+        {hasLeft && <slot name="left" />}
+      </div>
+    )
+  }
+
+  <div class="w-full max-w-3xl min-w-0" data-margin-sidebar-content>
+    <slot />
+  </div>
+
+  {
+    hasAnyRail && (
+      <div
+        data-margin-sidebar-right
+        class:list={[
+          "min-w-0",
+          hasRight
+            ? railVisibilityClasses[rightVisibility]
+            : "hidden 2xl:block",
+        ]}
+      >
+        {hasRight && <slot name="right" />}
+      </div>
+    )
+  }
+</div>

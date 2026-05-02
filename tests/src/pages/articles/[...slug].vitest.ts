@@ -1,3 +1,4 @@
+import { getCollection } from "astro:content";
 import { describe, expect, test } from "vitest";
 
 import { getArticles } from "../../../../src/lib/content";
@@ -24,5 +25,51 @@ describe("article page", () => {
     expect(view).toContain(article.data.title);
     expect(view).toContain("Article tags");
     expect(view).toContain("Support The Philosopher&#39;s Meme");
+  });
+
+  test("uses Astro rendered headings for the article table of contents", async () => {
+    const article = (await getArticles()).find(
+      (entry) => entry.id === "facebook-groups",
+    );
+
+    if (article === undefined) {
+      throw new Error("Expected the facebook-groups article fixture.");
+    }
+
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticlePage, {
+      props: { article },
+      request: new Request(`${testSiteUrl}/articles/${article.id}/`),
+    });
+
+    expect(view).toContain("data-article-toc");
+    expect(view).toContain('href="#facebook-as-a-platform"');
+    expect(view).toContain("Facebook as a platform");
+  });
+
+  test("wires Markdown and MDX article reference metadata into the article route", async () => {
+    const fixtures = await getCollection("articleReferenceArticleFixtures");
+
+    expect(fixtures.map((fixture) => fixture.id).sort()).toEqual([
+      "reference-md",
+      "reference-mdx",
+    ]);
+
+    const container = await createAstroTestContainer();
+
+    for (const article of fixtures) {
+      const view = await container.renderToString(ArticlePage, {
+        props: { article },
+        request: new Request(`${testSiteUrl}/articles/${article.id}/`),
+      });
+
+      expect(view).toContain(article.data.title);
+      expect(view).toContain("data-article-reference-marker");
+      expect(view).toContain("data-article-references");
+      expect(view).toContain(">Notes<");
+      expect(view).toContain(">Bibliography<");
+      expect(view).not.toContain('data-footnotes="true"');
+      expect(view).not.toContain("[@");
+    }
   });
 });

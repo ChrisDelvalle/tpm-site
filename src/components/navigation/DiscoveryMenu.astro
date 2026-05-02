@@ -1,0 +1,34 @@
+---
+import CategoryDropdown from "./CategoryDropdown.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props {
+  currentPath?: string;
+  items: readonly SectionNavItem[];
+  label?: string;
+}
+
+const { currentPath = "", items, label = "Category discovery" } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <nav
+      aria-label={label}
+      class="hidden min-w-0 items-center gap-3 2xl:flex"
+      data-discovery-menu
+    >
+      <ul class="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+        {items.map((item) => (
+          <li class="min-w-0">
+            <CategoryDropdown
+              category={item}
+              currentPath={currentPath}
+              popoverId={`category-discovery-${item.slug}`}
+            />
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

@@ -16,7 +16,7 @@ const navigationItems = sectionNavigationItems(
   class="bg-background text-foreground grid min-h-dvh grid-rows-[auto_1fr_auto]"
 >
   <SiteHeader currentPath={currentPath} navigationItems={navigationItems} />
-  <MainFrame navigationItems={navigationItems}>
+  <MainFrame>
     <slot />
   </MainFrame>
   <SiteFooter navigationItems={navigationItems} />

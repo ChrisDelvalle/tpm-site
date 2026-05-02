@@ -11,6 +11,15 @@ describe("article catalog examples", () => {
     expect(paths).toContain("src/components/articles/ArticleHeader.astro");
     expect(paths).toContain("src/components/articles/ArticleList.astro");
     expect(paths).toContain("src/components/articles/ArticleEndcap.astro");
+    expect(paths).toContain(
+      "src/components/articles/ArticleTableOfContents.astro",
+    );
+    expect(paths).toContain(
+      "src/components/articles/TableOfContentsItem.astro",
+    );
+    expect(paths).toContain(
+      "src/components/articles/TableOfContentsToggle.astro",
+    );
     expect(paths).toContain("src/components/blocks/SupportBlock.astro");
     expect(new Set(paths).size).toBe(paths.length);
   });

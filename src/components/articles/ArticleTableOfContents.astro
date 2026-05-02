@@ -1,0 +1,38 @@
+---
+import TableOfContentsItem from "./TableOfContentsItem.astro";
+import TableOfContentsToggle from "./TableOfContentsToggle.astro";
+import {
+  hasUsefulTableOfContents,
+  type ArticleTableOfContentsHeading,
+} from "../../lib/article-toc";
+
+interface Props {
+  headings: readonly ArticleTableOfContentsHeading[];
+  initiallyOpen?: boolean;
+  label?: string;
+}
+
+const {
+  headings,
+  initiallyOpen = true,
+  label = "Article contents",
+} = Astro.props;
+const shouldRender = hasUsefulTableOfContents(headings);
+---
+
+{
+  shouldRender && (
+    <nav aria-label={label} data-article-toc>
+      <details class="group grid gap-2" open={initiallyOpen}>
+        <TableOfContentsToggle label={label} />
+        <ol class="border-border grid gap-0.5 border-s ps-3 group-open:block">
+          {headings.map((heading) => (
+            <li>
+              <TableOfContentsItem heading={heading} />
+            </li>
+          ))}
+        </ol>
+      </details>
+    </nav>
+  )
+}

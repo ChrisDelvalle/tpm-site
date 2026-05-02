@@ -1,6 +1,6 @@
 ---
 import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
-import PageFrame from "../components/layout/PageFrame.astro";
+import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { searchUrl } from "../lib/routes";
 ---
@@ -10,8 +10,8 @@ import { searchUrl } from "../lib/routes";
   description="Search The Philosopher's Meme archive."
   canonicalPath={searchUrl()}
 >
-  <PageFrame size="md">
+  <BrowsingBody>
     <SearchResultsBlock />
-  </PageFrame>
+  </BrowsingBody>
   <script src="../scripts/search-page.ts"></script>
 </BaseLayout>

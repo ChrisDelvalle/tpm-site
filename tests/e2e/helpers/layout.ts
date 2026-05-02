@@ -149,10 +149,19 @@ export async function expectFocusVisible(page: Page): Promise<Locator> {
   const focused = page.locator(":focus-visible").first();
   await expect(focused).toBeVisible();
 
-  const outlineStyle = await focused.evaluate(
-    (element) => getComputedStyle(element).outlineStyle,
-  );
-  expect(outlineStyle).not.toBe("none");
+  const focusStyles = await focused.evaluate((element) => {
+    const styles = getComputedStyle(element);
+    return {
+      boxShadow: styles.boxShadow,
+      outlineStyle: styles.outlineStyle,
+      outlineWidth: styles.outlineWidth,
+    };
+  });
+  const hasVisibleOutline =
+    focusStyles.outlineStyle !== "none" && focusStyles.outlineWidth !== "0px";
+  const hasVisibleRing = focusStyles.boxShadow !== "none";
+
+  expect(hasVisibleOutline || hasVisibleRing).toBe(true);
 
   return focused;
 }

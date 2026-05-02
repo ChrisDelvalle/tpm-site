@@ -4,7 +4,9 @@ Source: `src/components/navigation/SearchForm.astro`
 
 ## Purpose
 
-`SearchForm` serves as a navigation component for site discovery, wayfinding, search, category browsing, or support actions.
+`SearchForm` owns search form semantics: label, input, action, query value, and
+submit behavior. It does not own whether search is permanently visible,
+revealed by a header control, or displayed inside the mobile menu.
 
 ## Public Contract
 
@@ -19,11 +21,15 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../ui/Input`. It must remain interchangeable between header, mobile menu, sidebar, and footer contexts where the public contract allows it.
+It composes local components such as `../ui/Input`. `SiteHeader` or a future
+`SearchReveal` wrapper owns open/close behavior. `MobileMenu` may render the
+same form full-width.
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and keyboard targets, and avoid horizontal overflow. Desktop-only surfaces must have an equivalent mobile or fallback navigation path.
+The form must fill the space its parent gives it without forcing header
+collision. In a header reveal surface, it should use a compact, bounded width.
+In mobile navigation, it should use the full available menu width.
 
 ## Layering And Scrolling
 
@@ -33,11 +39,14 @@ container is part of this component's public design and needs an invariant test.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant.
+Represent empty query, populated query, focus-visible, disabled submit if used,
+light/dark, and narrow parent states in the catalog.
 
 ## Accessibility Semantics
 
-Use labeled navigation landmarks, native links/details where possible, keyboard-reachable controls, and `aria-current` only for the current destination.
+Always provide a real accessible label for the input. Placeholder text is not a
+label. Submit controls need an accessible name. If a wrapper reveals the form,
+the wrapper owns focus return and escape/close behavior.
 
 ## Content Edge Cases
 
@@ -56,12 +65,12 @@ visible, and CTAs distinguishable from neutral actions.
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
-- keeps desktop and mobile controls from exposing conflicting visible states.
-- supports keyboard disclosure and focus order.
+- label and input remain associated.
+- query submission targets the configured search route.
+- long placeholder or query text does not resize the header row.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
 - Search should be available from header/mobile navigation, but it should not
   force the desktop header into fragile collision behavior. A compact search
   entry or dedicated search page is preferable to a permanent oversized field

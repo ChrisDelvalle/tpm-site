@@ -9,6 +9,12 @@ describe("layout catalog examples", () => {
     ).toEqual([
       "src/components/layout/SiteHeader.astro",
       "src/components/layout/MainFrame.astro",
+      "src/components/layout/ReadingBody.astro",
+      "src/components/layout/BrowsingBody.astro",
+      "src/components/layout/SectionStack.astro",
+      "src/components/layout/ContentRail.astro",
+      "src/components/layout/EndcapStack.astro",
+      "src/components/layout/MarginSidebarLayout.astro",
       "src/components/layout/SiteFooter.astro",
       "src/components/layout/PageFrame.astro",
     ]);

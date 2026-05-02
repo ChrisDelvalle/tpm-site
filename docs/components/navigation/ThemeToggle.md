@@ -4,7 +4,8 @@ Source: `src/components/navigation/ThemeToggle.astro`
 
 ## Purpose
 
-`ThemeToggle` serves as a navigation component for site discovery, wayfinding, search, category browsing, or support actions.
+`ThemeToggle` owns the light/dark theme action. It is a compact utility
+control, not a primary discovery item.
 
 ## Public Contract
 
@@ -16,11 +17,14 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It should not depend on sibling internals beyond normal slot/prop composition. It must remain interchangeable between header, mobile menu, sidebar, and footer contexts where the public contract allows it.
+It should not depend on sibling internals beyond normal slot/prop composition.
+It can appear in the desktop header utility cluster and in `MobileMenu`.
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and keyboard targets, and avoid horizontal overflow. Desktop-only surfaces must have an equivalent mobile or fallback navigation path.
+The component must remain compact, keyboard reachable, and visually clear
+without determining header breakpoints. Prefer an icon-sized control with a
+stable accessible name.
 
 ## Layering And Scrolling
 
@@ -54,10 +58,11 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps desktop and mobile controls from exposing conflicting visible states.
-- supports keyboard disclosure and focus order.
+- toggles the document theme state and exposes the correct accessible name or
+  pressed/state text.
+- remains visible against both header themes.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
 - Theme toggle is a utility action, not a primary discovery item. It should
   remain compact and should not determine header layout breakpoints.

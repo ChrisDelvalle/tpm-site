@@ -10,6 +10,10 @@ readers choose what to read next.
 It should be used for homepage, archives, category pages, search, author pages,
 and the global bibliography page.
 
+For the navigation redesign, it is the shared body primitive for `/`, the
+`/articles/` hub, `/articles/all/`, `/categories/<category>/`, search, and
+compatibility category pages.
+
 ## Public Contract
 
 - default slot for browsing sections
@@ -34,6 +38,9 @@ MainFrame
 `BrowsingBody` owns page-level width and gutters. `SectionStack` owns vertical
 rhythm between sections. Blocks own their own internal card/list/grid behavior.
 
+Route files should not wrap individual browsing blocks in independent max-width
+containers. The body owns the measure; blocks fill the measure they receive.
+
 ## Layout And Responsiveness
 
 Mobile base: one column, comfortable gutters, no side rail.
@@ -44,6 +51,10 @@ category, search, author, and bibliography pages.
 
 Wide desktop: do not stretch text or cards to fill the screen. Use whitespace
 deliberately.
+
+The homepage may have stronger editorial blocks than archive pages, but those
+blocks still align to the shared browsing measure unless a block one-pager
+documents an intentional full-bleed exception.
 
 ## Layering And Scrolling
 
@@ -81,7 +92,10 @@ avoid nesting cards inside cards.
 ## Testable Invariants
 
 - Browsing routes share the same content width by default.
+- Homepage, articles hub, flat archive, category detail, and search pages align
+  to the same browsing measure.
 - Support blocks align with the browsing measure.
+- Category overview blocks align with the browsing measure.
 - List/card grids do not overflow at mobile, tablet, desktop, or wide desktop.
 - Empty states remain useful and visible.
 - Search/filter controls remain associated with results.

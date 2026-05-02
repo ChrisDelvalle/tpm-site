@@ -17,6 +17,21 @@ export const navigationCatalogExamples = [
     title: "PrimaryNav",
   },
   {
+    componentPath: "src/components/navigation/DiscoveryMenu.astro",
+    description: "Wide-viewport category discovery navigation with popovers.",
+    title: "DiscoveryMenu",
+  },
+  {
+    componentPath: "src/components/navigation/CategoryDropdown.astro",
+    description: "Native popover preview for one category.",
+    title: "CategoryDropdown",
+  },
+  {
+    componentPath: "src/components/navigation/CategoryPreviewList.astro",
+    description: "Restrained list of category article preview links.",
+    title: "CategoryPreviewList",
+  },
+  {
     componentPath: "src/components/navigation/SearchForm.astro",
     description: "Semantic search form shared by header and mobile menu.",
     title: "SearchForm",
@@ -50,11 +65,6 @@ export const navigationCatalogExamples = [
     componentPath: "src/components/navigation/SectionNav.astro",
     description: "Reusable section navigation block with heading and tree.",
     title: "SectionNav",
-  },
-  {
-    componentPath: "src/components/navigation/CategorySidebar.astro",
-    description: "Desktop category discovery sidebar shell.",
-    title: "CategorySidebar",
   },
   {
     componentPath: "src/components/navigation/MobileMenu.astro",

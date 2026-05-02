@@ -2,12 +2,17 @@
 import { Search } from "lucide-astro";
 
 import ArticleCard from "../components/articles/ArticleCard.astro";
+import ArticleBibliography from "../components/articles/ArticleBibliography.astro";
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
+import ArticleFootnotes from "../components/articles/ArticleFootnotes.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
 import ArticleImage from "../components/articles/ArticleImage.astro";
 import ArticleList from "../components/articles/ArticleList.astro";
 import ArticleMeta from "../components/articles/ArticleMeta.astro";
 import ArticleProse from "../components/articles/ArticleProse.astro";
+import ArticleReferenceBacklinks from "../components/articles/ArticleReferenceBacklinks.astro";
+import ArticleReferences from "../components/articles/ArticleReferences.astro";
+import ArticleTableOfContents from "../components/articles/ArticleTableOfContents.astro";
 import ArticleTags from "../components/articles/ArticleTags.astro";
 import ArchiveListBlock from "../components/blocks/ArchiveListBlock.astro";
 import CategoryOverviewBlock from "../components/blocks/CategoryOverviewBlock.astro";
@@ -29,7 +34,6 @@ import EmbedFrame from "../components/media/EmbedFrame.astro";
 import ResponsiveIframe from "../components/media/ResponsiveIframe.astro";
 import BrandLink from "../components/navigation/BrandLink.astro";
 import CategoryGroup from "../components/navigation/CategoryGroup.astro";
-import CategorySidebar from "../components/navigation/CategorySidebar.astro";
 import CategoryTree from "../components/navigation/CategoryTree.astro";
 import MobileMenu from "../components/navigation/MobileMenu.astro";
 import PrimaryNav from "../components/navigation/PrimaryNav.astro";
@@ -60,6 +64,130 @@ import {
   catalogNavigationItems,
   catalogTags,
 } from "./examples/hostile-fixtures";
+
+const catalogTocHeadings = [
+  {
+    depth: 2,
+    href: "#first-major-heading",
+    id: "first-major-heading",
+    level: 1,
+    order: 0,
+    text: "First major heading",
+  },
+  {
+    depth: 3,
+    href: "#nested-heading-with-a-long-title-that-wraps-inside-the-rail",
+    id: "nested-heading-with-a-long-title-that-wraps-inside-the-rail",
+    level: 2,
+    order: 1,
+    text: "Nested heading with a long title that wraps inside the rail",
+  },
+  {
+    depth: 2,
+    href: "#duplicate-heading",
+    id: "duplicate-heading",
+    level: 1,
+    order: 2,
+    text: "Duplicate heading",
+  },
+  {
+    depth: 2,
+    href: "#duplicate-heading-1",
+    id: "duplicate-heading-1",
+    level: 1,
+    order: 3,
+    text: "Duplicate heading",
+  },
+] as const;
+
+const catalogReferences = {
+  citations: [
+    {
+      definition: {
+        children: [
+          {
+            children: [
+              { kind: "text", text: "Baudrillard, Jean. " },
+              {
+                children: [{ kind: "text", text: "Simulacra and Simulation" }],
+                kind: "emphasis",
+                text: "Simulacra and Simulation",
+              },
+              { kind: "text", text: ". " },
+              {
+                children: [{ kind: "text", text: "Archive source" }],
+                kind: "link",
+                text: "Archive source",
+                url: "https://example.com/source-with-a-very-long-path-that-wraps",
+              },
+              { kind: "text", text: ". " },
+              { kind: "inlineCode", text: "1981" },
+            ],
+            kind: "paragraph",
+            text: "Baudrillard, Jean. Simulacra and Simulation. Archive source. 1981",
+          },
+        ],
+      },
+      displayLabel: "Baudrillard 1981",
+      id: "cite-baudrillard-1981",
+      kind: "citation",
+      label: "cite-baudrillard-1981",
+      order: 1,
+      references: [
+        {
+          backlinkId: "cite-backref-baudrillard-1981",
+          displayText: "Baudrillard 1981",
+          entryId: "cite-baudrillard-1981",
+          id: "cite-ref-baudrillard-1981",
+          kind: "citation",
+          label: "cite-baudrillard-1981",
+          order: 1,
+        },
+        {
+          backlinkId: "cite-backref-baudrillard-1981-2",
+          displayText: "Baudrillard 1981",
+          entryId: "cite-baudrillard-1981",
+          id: "cite-ref-baudrillard-1981-2",
+          kind: "citation",
+          label: "cite-baudrillard-1981",
+          order: 2,
+        },
+      ],
+    },
+  ],
+  notes: [
+    {
+      definition: {
+        children: [
+          {
+            children: [
+              { kind: "text", text: "A compact explanatory note with " },
+              { kind: "inlineCode", text: "inline code" },
+              { kind: "text", text: " and ordinary prose." },
+            ],
+            kind: "paragraph",
+            text: "A compact explanatory note with inline code and ordinary prose.",
+          },
+        ],
+      },
+      id: "note-term-scope",
+      kind: "note",
+      label: "note-term-scope",
+      order: 1,
+      references: [
+        {
+          backlinkId: "note-backref-term-scope",
+          displayText: "1",
+          entryId: "note-term-scope",
+          id: "note-ref-term-scope",
+          kind: "note",
+          label: "note-term-scope",
+          order: 1,
+        },
+      ],
+    },
+  ],
+} as const;
 ---
 
 <main class="bg-background text-foreground">
@@ -297,6 +425,85 @@ import {
             contract.
           </p>
         </ArticleProse>
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleTableOfContents"
+        description="Article-local heading navigation for the reading margin rail."
+        componentPath="src/components/articles/ArticleTableOfContents.astro"
+      >
+        <div class="max-w-64">
+          <ArticleTableOfContents headings={catalogTocHeadings} />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleReferences"
+        description="Composed notes and bibliography with repeated citations."
+        componentPath="src/components/articles/ArticleReferences.astro"
+      >
+        <div class="grid gap-6">
+          <p
+            class="max-w-prose text-base leading-7"
+            data-catalog-reference-markers
+          >
+            A catalog paragraph can point to an explanatory note
+            <a
+              id="note-ref-term-scope"
+              href="#note-term-scope"
+              class="text-primary focus-visible:outline-ring rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label="Note 1"
+              data-article-reference-marker="true"
+              data-reference-kind="note">[1]</a
+            >
+            and a repeated citation
+            <a
+              id="cite-ref-baudrillard-1981"
+              href="#cite-baudrillard-1981"
+              class="text-primary focus-visible:outline-ring rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label="Citation Baudrillard 1981"
+              data-article-reference-marker="true"
+              data-reference-kind="citation">[Baudrillard 1981]</a
+            >
+            with another marker
+            <a
+              id="cite-ref-baudrillard-1981-2"
+              href="#cite-baudrillard-1981"
+              class="text-primary focus-visible:outline-ring rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label="Citation Baudrillard 1981"
+              data-article-reference-marker="true"
+              data-reference-kind="citation">[Baudrillard 1981]</a
+            >.
+          </p>
+          <ArticleReferences references={catalogReferences} />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleFootnotes"
+        description="Notes-only article reference apparatus."
+        componentPath="src/components/articles/ArticleFootnotes.astro"
+      >
+        <ArticleFootnotes notes={catalogReferences.notes} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleBibliography"
+        description="Bibliography-only article reference apparatus."
+        componentPath="src/components/articles/ArticleBibliography.astro"
+      >
+        <ArticleBibliography citations={catalogReferences.citations} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleReferenceBacklinks"
+        description="Compact return links for note and citation entries."
+        componentPath="src/components/articles/ArticleReferenceBacklinks.astro"
+      >
+        <ArticleReferenceBacklinks
+          kind="citation"
+          references={catalogReferences.citations[0].references}
+        />
       </CatalogExample>
 
       <CatalogExample
@@ -633,16 +840,6 @@ import {
       >
         <div class="max-w-sm">
           <SectionNav items={catalogNavigationItems} />
-        </div>
-      </CatalogExample>
-
-      <CatalogExample
-        title="CategorySidebar"
-        description="Desktop sidebar shell for content discovery."
-        componentPath="src/components/navigation/CategorySidebar.astro"
-      >
-        <div class="max-h-96 max-w-sm overflow-hidden border">
-          <CategorySidebar items={catalogNavigationItems} />
         </div>
       </CatalogExample>
 

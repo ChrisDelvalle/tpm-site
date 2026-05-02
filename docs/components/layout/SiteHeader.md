@@ -4,12 +4,20 @@ Source: `src/components/layout/SiteHeader.astro`
 
 ## Purpose
 
-`SiteHeader` owns the top publication header layout and composes brand, navigation, search, theme, and support controls
+`SiteHeader` owns the persistent publication header. It composes brand,
+category discovery, durable top-level navigation, search access, theme, support,
+and the constrained-width mobile menu.
+
+It implements the header contract in
+`docs/navigation/header-and-articles-hub.md`; route files should not rebuild
+header geometry.
 
 ## Public Contract
 
 - `currentPath: string`
-- `navigationItems: readonly SectionNavItem[]`
+- `categories: readonly CategoryDiscoveryItem[]`
+- `primaryItems: readonly PrimaryNavItem[]`
+- optional semantic props for support/search labels and hrefs only when needed
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -17,11 +25,35 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/navigation`, `../navigation/BrandLink`, `../navigation/MobileMenu`, `../navigation/PrimaryNav`, `../navigation/SearchForm`, `../navigation/SupportLink`, `../navigation/ThemeToggle`. It defines region relationships for children; children should not patch its spacing or stacking from outside.
+```text
+SiteHeader
+  left cluster
+    BrandLink
+    CategoryDropdown[]
+    PrimaryNav
+  right cluster
+    SearchForm or SearchReveal
+    ThemeToggle
+    SupportLink
+  MobileMenu
+```
+
+It composes local navigation data helpers, `BrandLink`, `CategoryDropdown`,
+`PrimaryNav`, `SearchForm`, `SupportLink`, `ThemeToggle`, and `MobileMenu`.
+Children should not patch header spacing or stacking from outside.
 
 ## Layout And Responsiveness
 
-The component owns structural relationships between regions. It must maintain skip-link access, avoid content being covered by sticky chrome, and preserve a single coherent main content flow at every viewport.
+Desktop: one coherent row. The left cluster is aligned left and contains brand,
+category dropdowns, `Articles`, and `About`. The right cluster is aligned right
+and contains search reveal, theme toggle, and support.
+
+Mobile/constrained: brand plus one mobile menu entry. All hidden desktop
+destinations must remain available in `MobileMenu`.
+
+The center of the row is flexible space, not a permanent search slot. The
+header must not depend on fragile breakpoint guesses to prevent brand,
+category, search, and support collision.
 
 ## Layering And Scrolling
 
@@ -31,11 +63,16 @@ container is part of this component's public design and needs an invariant test.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant.
+Represent default, long category lists, long category names, open dropdown,
+search-open, mobile-open, hover, focus-visible, current page, and light/dark
+states in the catalog.
 
 ## Accessibility Semantics
 
-Use semantic HTML first, preserve heading order when headings are rendered, and keep focus-visible states intact for any interactive descendants.
+Use a labeled site navigation landmark. Use links for destinations and buttons
+only for actions such as opening search or mobile navigation. Do not use ARIA
+menu patterns for ordinary navigation links. `aria-current="page"` belongs on
+the current destination link.
 
 ## Content Edge Cases
 
@@ -54,13 +91,17 @@ visible, and CTAs distinguishable from neutral actions.
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
-- maintains exactly one reachable main region.
+- does not create extra main/content landmarks.
 - prevents sticky/fixed chrome from covering visible content during scroll.
+- category text clicks navigate to category pages while hover/focus exposes
+  preview content.
+- search opens without moving header links into overlap.
+- desktop and mobile navigation are not simultaneously exposed as competing
+  controls.
 
 ## Follow-Up Notes
 
-- The prototype header had brittle collision behavior. Future changes should prefer simpler information architecture, responsive disclosure, and explicit layout invariants over width-specific patches.
-- Category discovery should move into a deliberate `DiscoveryMenu`/section-nav
-  surface on desktop and into `MobileMenu` on constrained widths. Do not
-  re-create the brittle single row that tried to fit brand, search, all
-  categories, theme, RSS, and support at once.
+- Do not re-create the prototype row with permanent search input, Topics, RSS,
+  theme, and support all competing for the same space.
+- RSS belongs in secondary surfaces such as footer/mobile menu unless a later
+  design explicitly promotes it.

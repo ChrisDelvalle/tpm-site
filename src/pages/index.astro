@@ -11,7 +11,7 @@ import HomeFeaturedArticlesBlock from "../components/blocks/HomeFeaturedArticles
 import HomeHeroBlock from "../components/blocks/HomeHeroBlock.astro";
 import HomeLatestArticleBlock from "../components/blocks/HomeLatestArticleBlock.astro";
 import SupportBlock from "../components/blocks/SupportBlock.astro";
-import PageFrame from "../components/layout/PageFrame.astro";
+import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleArchiveItems } from "../lib/archive";
@@ -41,7 +41,7 @@ const description =
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/">
-  <PageFrame size="lg">
+  <BrowsingBody width="wide">
     <HomeHeroBlock
       image={heroImage}
       imageAlt={home.data.title}
@@ -62,5 +62,5 @@ const description =
     <HomeCategoryOverviewBlock items={categoryItems} />
     <HomeArchiveLinksBlock />
     <SupportBlock />
-  </PageFrame>
+  </BrowsingBody>
 </BaseLayout>

@@ -72,6 +72,16 @@ export const componentCatalogIgnoreList = [
     reason: "Article-specific MDX wrapper pending article catalog examples.",
   },
   {
+    path: "src/components/articles/ArticleReferenceDefinitionContent.astro",
+    reason:
+      "Internal article-reference renderer covered by parent reference component examples and tests.",
+  },
+  {
+    path: "src/components/articles/ArticleReferenceInlineContent.astro",
+    reason:
+      "Internal article-reference inline renderer covered by parent reference component examples and tests.",
+  },
+  {
     path: "src/components/seo/ArticleJsonLd.astro",
     reason: "Non-visual SEO component covered by SEO and page render tests.",
   },

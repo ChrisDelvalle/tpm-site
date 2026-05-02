@@ -137,9 +137,10 @@ that compete with the support block.
 - Keeps every backlink target associated with the originating inline marker.
 - Maintains visible focus states in light and dark mode.
 
-## Follow-Up Notes
+## Integration Notes
 
-- The exact data bridge from `render(entry).remarkPluginFrontmatter` to
-  `ArticleLayout` must be proven during plugin implementation. If the fallback
-  AST-injection path is used, this component should still describe the intended
-  rendered structure and tests should enforce the same relationships.
+`src/pages/articles/[...slug].astro` reads normalized data from
+`render(article).remarkPluginFrontmatter` with
+`articleReferencesFromFrontmatter()` and passes it to `ArticleLayout`.
+`ArticleLayout` renders this component after `ArticleEndcap` and before
+`ArticleTags`.

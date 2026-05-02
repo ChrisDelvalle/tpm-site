@@ -1,0 +1,21 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"summary"> {
+  label?: string;
+}
+
+const { label = "Article contents", class: className, ...attrs } = Astro.props;
+---
+
+<summary
+  {...attrs}
+  class:list={[
+    "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:outline-ring flex cursor-pointer list-none items-center justify-between gap-3 rounded-sm py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-offset-2 focus-visible:outline-solid",
+    "marker:hidden [&::-webkit-details-marker]:hidden",
+    className,
+  ]}
+>
+  <span>{label}</span>
+  <span aria-hidden="true" class="text-muted-foreground text-xs">Hide</span>
+</summary>

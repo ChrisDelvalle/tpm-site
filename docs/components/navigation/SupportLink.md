@@ -4,7 +4,9 @@ Source: `src/components/navigation/SupportLink.astro`
 
 ## Purpose
 
-`SupportLink` serves as a navigation component for site discovery, wayfinding, search, category browsing, or support actions.
+`SupportLink` renders the publication support call to action in navigation
+surfaces. It should feel visible and dignified without dominating the reading
+or browsing task.
 
 ## Public Contract
 
@@ -17,11 +19,16 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../ui/LinkButton`. It must remain interchangeable between header, mobile menu, sidebar, and footer contexts where the public contract allows it.
+It composes local components such as `../ui/LinkButton`. Header, mobile menu,
+article endcap, homepage, and footer contexts may choose different surrounding
+layout, but the CTA treatment should remain recognizable.
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and keyboard targets, and avoid horizontal overflow. Desktop-only surfaces must have an equivalent mobile or fallback navigation path.
+The component must remain usable in constrained containers, preserve touch and
+keyboard targets, and avoid horizontal overflow. In the desktop header, it lives
+in the right utility cluster. At constrained widths, it may move into
+`MobileMenu`, but it should stay easy to find.
 
 ## Layering And Scrolling
 
@@ -35,7 +42,8 @@ Default, long-content, missing optional content, hover, focus-visible, and dark-
 
 ## Accessibility Semantics
 
-Use labeled navigation landmarks, native links/details where possible, keyboard-reachable controls, and `aria-current` only for the current destination.
+Use a normal link. Do not use button semantics for navigation. The label should
+be clear without depending on surrounding context.
 
 ## Content Edge Cases
 
@@ -55,11 +63,11 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps desktop and mobile controls from exposing conflicting visible states.
-- supports keyboard disclosure and focus order.
+- uses primary CTA colors with readable text in light and dark themes.
+- does not force header navigation collision.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
 - Support should remain visible in header, mobile menu, article endcaps, and
   footer, but it should not force navigation collision. It may move into mobile
   disclosure at constrained widths as long as it remains easy to find.

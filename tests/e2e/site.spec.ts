@@ -4,7 +4,6 @@ import {
   expectElementAtViewportPoint,
   expectFocusVisible,
   expectNoHorizontalOverflow,
-  scrollToY,
   viewportMatrix,
   visibleBoundingBox,
 } from "./helpers/layout";
@@ -121,59 +120,69 @@ test("keyboard focus is visible", async ({ page }) => {
   await expect(focused).toHaveCount(1);
 });
 
-test("desktop sticky sidebar stays below sticky header", async ({ page }) => {
+test("wide category discovery popover stays below sticky header", async ({
+  page,
+}) => {
   const viewportHeight = 900;
 
-  await page.setViewportSize({ height: viewportHeight, width: 1280 });
-  await page.goto("/articles/gamergate-as-metagaming/");
+  await page.setViewportSize({ height: viewportHeight, width: 1800 });
+  await page.goto("/");
 
-  await scrollToY(page, 600);
+  const trigger = page.getByRole("button", {
+    name: "Browse Memeculture articles",
+  });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
 
   const headerBox = await visibleBoundingBox(
     page.locator("[data-site-header]"),
     "sticky header",
   );
-  const sidebar = page.locator('aside[aria-label="Category navigation"]');
-  const sidebarBox = await visibleBoundingBox(
-    sidebar,
-    "desktop category sidebar",
+  const popover = page.locator("#category-discovery-memeculture");
+  const popoverBox = await visibleBoundingBox(
+    popover,
+    "category discovery popover",
   );
   const headerBottom = headerBox.y + headerBox.height;
 
-  expect(sidebarBox.y).toBeGreaterThanOrEqual(headerBottom - 1);
-  expect(sidebarBox.height).toBeLessThanOrEqual(
+  expect(popoverBox.y).toBeGreaterThanOrEqual(headerBottom - 1);
+  expect(popoverBox.height).toBeLessThanOrEqual(
     viewportHeight - headerBottom + 1,
   );
   await expectElementAtViewportPoint(
-    sidebar,
+    popover,
     {
-      x: sidebarBox.x + Math.min(sidebarBox.width / 2, 32),
-      y: sidebarBox.y + 12,
+      x: popoverBox.x + Math.min(popoverBox.width / 2, 32),
+      y: popoverBox.y + 12,
     },
-    "desktop category sidebar",
+    "category discovery popover",
   );
 });
 
-test("category disclosure toggles article links without navigation", async ({
+test("category discovery opens article previews without navigation", async ({
   page,
 }) => {
+  await page.setViewportSize({ height: 900, width: 1800 });
   await page.goto("/");
 
-  const categoryNav = page.getByLabel("Desktop category navigation");
-  const group = categoryNav.locator("details", {
-    has: page.locator("summary", { hasText: "Memeculture" }),
+  const trigger = page.getByRole("button", {
+    name: "Browse Memeculture articles",
   });
-  await expect(group).not.toHaveAttribute("open", "");
+  const popover = page.locator("#category-discovery-memeculture");
 
-  await group.locator("summary").click();
-  await expect(group).toHaveAttribute("open", "");
   await expect(
-    group.getByRole("link", { name: /View all Memeculture/ }),
+    page.getByRole("navigation", { name: "Category discovery" }),
   ).toBeVisible();
-  await expect(page).toHaveURL("/");
+  await expect(popover).toBeHidden();
 
-  await group.locator("summary").click();
-  await expect(group).not.toHaveAttribute("open", "");
+  await trigger.click();
+  await expect(popover).toBeVisible();
+  await expect(
+    popover.getByRole("link", { exact: true, name: "Memeculture" }),
+  ).toHaveAttribute("href", "/categories/memeculture/");
+  await expect(
+    popover.getByRole("link", { name: /View all Memeculture/ }),
+  ).toBeVisible();
   await expect(page).toHaveURL("/");
 });
 

@@ -4,9 +4,14 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
+import { remarkArticleReferences } from "./src/remark-plugins/articleReferences";
+
 export default defineConfig({
   compressHTML: true,
   integrations: [mdx(), sitemap(), react()],
+  markdown: {
+    remarkPlugins: [remarkArticleReferences],
+  },
   prerenderConflictBehavior: "error",
   redirects: {
     "/2015/06/18/tmnh/": "/articles/tmnh/",

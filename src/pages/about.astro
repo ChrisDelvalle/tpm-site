@@ -1,7 +1,7 @@
 ---
 import { getEntry, render } from "astro:content";
 
-import PageFrame from "../components/layout/PageFrame.astro";
+import ReadingBody from "../components/layout/ReadingBody.astro";
 import MarkdownPage from "../components/pages/MarkdownPage.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { pageUrl } from "../lib/routes";
@@ -21,9 +21,9 @@ const description = about.data.description ?? "About The Philosopher's Meme.";
   description={description}
   canonicalPath={pageUrl("about")}
 >
-  <PageFrame size="prose">
+  <ReadingBody>
     <MarkdownPage title={about.data.title} description={description}>
       <Content />
     </MarkdownPage>
-  </PageFrame>
+  </ReadingBody>
 </BaseLayout>

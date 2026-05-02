@@ -3,7 +3,17 @@ import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
 import ArticleProse from "../components/articles/ArticleProse.astro";
+import ArticleReferences from "../components/articles/ArticleReferences.astro";
+import ArticleTableOfContents from "../components/articles/ArticleTableOfContents.astro";
 import ArticleTags from "../components/articles/ArticleTags.astro";
+import ContentRail from "../components/layout/ContentRail.astro";
+import EndcapStack from "../components/layout/EndcapStack.astro";
+import ReadingBody from "../components/layout/ReadingBody.astro";
+import type { ArticleReferenceData } from "../lib/article-references/model";
+import {
+  hasUsefulTableOfContents,
+  type ArticleTableOfContentsHeading,
+} from "../lib/article-toc";
 import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleViewModel } from "../lib/article-view";
 import { articleArchiveItems } from "../lib/archive";
@@ -13,10 +23,22 @@ import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
   article: ArticleEntry;
+  articleReferences?: ArticleReferenceData | undefined;
+  tableOfContentsHeadings?: readonly ArticleTableOfContentsHeading[];
 }
 
-const { article } = Astro.props;
+const emptyArticleReferences = {
+  citations: [],
+  notes: [],
+} as const satisfies ArticleReferenceData;
+
+const {
+  article,
+  articleReferences = emptyArticleReferences,
+  tableOfContentsHeadings = [],
+} = Astro.props;
 const articleView = articleViewModel(article);
+const showTableOfContents = hasUsefulTableOfContents(tableOfContentsHeadings);
 const category = await getCategory(articleView.categorySlug);
 const categoryHref = category ? categoryUrl(category.slug) : undefined;
 const moreInCategory =
@@ -41,34 +63,51 @@ const moreInCategory =
   type="article"
 >
   <ArticleJsonLd slot="head" article={article} category={category} />
-  <article
-    class="mx-auto grid w-full max-w-3xl gap-8 px-4 py-8 lg:px-8 lg:py-12"
-    data-pagefind-body
-  >
-    <ArticleHeader
-      author={articleView.author}
-      category={category && categoryHref
-        ? { href: categoryHref, title: category.title }
-        : undefined}
-      date={articleView.date}
-      description={articleView.description}
-      formattedDate={articleView.formattedDate}
-      title={articleView.title}
-    />
-    <ArticleProse data-article-prose>
-      <slot />
-    </ArticleProse>
-    <ArticleEndcap
-      categoryHref={categoryHref}
-      categoryTitle={category?.title}
-      moreInCategory={moreInCategory}
-    />
+  <ReadingBody>
     {
-      article.data.tags.length > 0 && (
-        <div class="border-border border-t pt-6" data-article-tags-placement>
-          <ArticleTags tags={article.data.tags} />
-        </div>
+      showTableOfContents && (
+        <ContentRail
+          slot="toc"
+          label="Article table of contents"
+          position="left"
+          sticky="below-header"
+        >
+          <ArticleTableOfContents headings={tableOfContentsHeadings} />
+        </ContentRail>
       )
     }
-  </article>
+    <article class="grid w-full gap-8" data-pagefind-body>
+      <ArticleHeader
+        author={articleView.author}
+        category={category && categoryHref
+          ? { href: categoryHref, title: category.title }
+          : undefined}
+        date={articleView.date}
+        description={articleView.description}
+        formattedDate={articleView.formattedDate}
+        title={articleView.title}
+      />
+      <ArticleProse data-article-prose>
+        <slot />
+      </ArticleProse>
+      <EndcapStack spacing="relaxed">
+        <ArticleEndcap
+          categoryHref={categoryHref}
+          categoryTitle={category?.title}
+          moreInCategory={moreInCategory}
+        />
+        <ArticleReferences references={articleReferences} />
+        {
+          article.data.tags.length > 0 && (
+            <div
+              class="border-border border-t pt-6"
+              data-article-tags-placement
+            >
+              <ArticleTags tags={article.data.tags} />
+            </div>
+          )
+        }
+      </EndcapStack>
+    </article>
+  </ReadingBody>
 </BaseLayout>

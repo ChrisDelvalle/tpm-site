@@ -7,6 +7,11 @@ interface ArticleCatalogExample {
 
 export const articleCatalogExamples = [
   {
+    componentPath: "src/components/articles/ArticleBibliography.astro",
+    description: "Article-local bibliography section for cite-* definitions.",
+    title: "ArticleBibliography",
+  },
+  {
     componentPath: "src/components/articles/ArticleCard.astro",
     description: "Compact article teaser used in archives and discovery lists.",
     title: "ArticleCard",
@@ -15,6 +20,11 @@ export const articleCatalogExamples = [
     componentPath: "src/components/articles/ArticleEndcap.astro",
     description: "Article footer discovery and support composition.",
     title: "ArticleEndcap",
+  },
+  {
+    componentPath: "src/components/articles/ArticleFootnotes.astro",
+    description: "Article-local explanatory notes section.",
+    title: "ArticleFootnotes",
   },
   {
     componentPath: "src/components/articles/ArticleHeader.astro",
@@ -40,6 +50,32 @@ export const articleCatalogExamples = [
     componentPath: "src/components/articles/ArticleProse.astro",
     description: "Tailwind Typography wrapper for rendered Markdown prose.",
     title: "ArticleProse",
+  },
+  {
+    componentPath: "src/components/articles/ArticleReferenceBacklinks.astro",
+    description: "Accessible return links from references to inline markers.",
+    title: "ArticleReferenceBacklinks",
+  },
+  {
+    componentPath: "src/components/articles/ArticleReferences.astro",
+    description: "Composed article notes and bibliography apparatus.",
+    title: "ArticleReferences",
+  },
+  {
+    componentPath: "src/components/articles/ArticleTableOfContents.astro",
+    description:
+      "Article-local heading navigation for the reading margin rail.",
+    title: "ArticleTableOfContents",
+  },
+  {
+    componentPath: "src/components/articles/TableOfContentsItem.astro",
+    description: "One article heading link inside the table of contents.",
+    title: "TableOfContentsItem",
+  },
+  {
+    componentPath: "src/components/articles/TableOfContentsToggle.astro",
+    description: "Native summary control for hiding article contents.",
+    title: "TableOfContentsToggle",
   },
   {
     componentPath: "src/components/articles/ArticleTags.astro",

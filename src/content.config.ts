@@ -34,7 +34,27 @@ const pages = defineCollection({
   schema: pageSchema(),
 });
 
+const articleReferenceArticleFixtures = defineCollection({
+  loader: glob({
+    base: "./tests/fixtures/article-reference-articles",
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: articleSchema,
+});
+
+const articleReferenceProofFixtures = defineCollection({
+  loader: glob({
+    base: "./tests/fixtures/article-references",
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: pageSchema(),
+});
+
 export const collections = {
+  articleReferenceArticleFixtures,
+  articleReferenceProofFixtures,
   articles,
   categories,
   pages,

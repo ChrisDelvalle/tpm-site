@@ -152,7 +152,6 @@ src/components/
     ThemeToggle.astro
     MobileMenu.astro
     DiscoveryMenu.astro
-    CategorySidebar.astro
     CategoryTree.astro
     CategoryGroup.astro
     CategoryDropdown.astro
@@ -257,10 +256,6 @@ BaseLayout
         ThemeToggle
         SupportLink
     MainFrame
-      CategorySidebar
-        CategoryTree
-          CategoryGroup
-            ArticleLinkList
       main slot
     SiteFooter
       FooterNav
@@ -297,6 +292,7 @@ link into one fragile row.
 src/pages/articles/[...slug].astro
   load article
   render(article)
+  read articleReferences from remarkPluginFrontmatter
   ArticleLayout
     ArticleJsonLd
     ArticleHeader
@@ -325,6 +321,12 @@ should orchestrate the article shell and defer display details to
 
 `ArticleProse` is the only place where Tailwind Typography defaults for article
 body HTML should live.
+
+Article-local notes and bibliography are produced by the article references
+remark plugin as serializable data on `render(article).remarkPluginFrontmatter`.
+The route passes that data through; it must not parse Markdown or inspect
+article source. `ArticleLayout` owns the placement of `ArticleReferences` after
+support/discovery and before final tags.
 
 `ArticleImage` should become the default component for future MDX/article image
 blocks that need captions, `Image`/`Picture`, or strict image behavior. Plain
@@ -502,7 +504,6 @@ Navigation should be redesigned as a real system rather than one header patch.
 - `MobileMenu`: all-items fallback for constrained layouts.
 - `DiscoveryMenu`: complete topic/article discovery surface for constrained
   viewports or nav-triggered browsing.
-- `CategorySidebar`: desktop category navigation region.
 - `CategoryTree`: reusable nested category/article tree.
 - `CategoryGroup`: one disclosure group for a category.
 - `CategoryDropdown`: future desktop category preview menu.
@@ -647,7 +648,7 @@ wide:
   ThemeToggle
   SupportLink
   SectionNav
-  optional CategorySidebar in page frame
+  category dropdown discovery
 ```
 
 Avoid trying to preserve every desktop header item at every width. Instead,
@@ -897,9 +898,9 @@ Where components accept entries, they should do so deliberately. For example,
 domain. `Button` should never receive article entries.
 
 Navigation should have a normalized data boundary. The same category/link data
-should feed `SectionNav`, `MobileMenu`, `CategorySidebar`, homepage category
-blocks, and footer category links. Avoid each component independently shaping
-content collection entries.
+should feed `SectionNav`, `MobileMenu`, `DiscoveryMenu`, homepage category
+blocks, category pages, and footer category links. Avoid each component
+independently shaping content collection entries.
 
 Recommended navigation data:
 
@@ -1318,15 +1319,17 @@ This sequence minimizes risk and keeps visual changes reviewable.
 12. Add article-local reference components after the references technical
     design is approved: `ArticleReferences`, `ArticleFootnotes`,
     `ArticleBibliography`, and `ArticleReferenceBacklinks`.
-13. Add `PageLayout`, `PageHeader`, and `PageProse` for non-article Markdown
+13. Wire article-local references from `render(article).remarkPluginFrontmatter`
+    into `ArticleLayout` without route-level Markdown parsing.
+14. Add `PageLayout`, `PageHeader`, and `PageProse` for non-article Markdown
     pages.
-14. Move homepage prose/data into `src/content/pages/index.md`.
-15. Replace homepage section markup with home blocks: hero, announcements,
+15. Move homepage prose/data into `src/content/pages/index.md`.
+16. Replace homepage section markup with home blocks: hero, announcements,
     latest, featured/start-here, category overview, support.
-16. Move remaining component-specific global CSS into Tailwind component
+17. Move remaining component-specific global CSS into Tailwind component
     classes.
-17. Revisit sidebar/header visual design once ownership boundaries are clean.
-18. Add category dropdown previews only after section nav and discovery blocks
+18. Revisit sidebar/header visual design once ownership boundaries are clean.
+19. Add category dropdown previews only after section nav and discovery blocks
     are stable.
 
 Each step should be independently buildable and testable. Avoid combining a

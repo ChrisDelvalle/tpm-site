@@ -6,6 +6,11 @@ This document defines the structural anatomy of The Philosopher's Meme. It is
 the source of truth for how pages should be assembled before developers add new
 page-specific layout.
 
+The concrete navigation and route-consolidation contract lives in
+`docs/navigation/header-and-articles-hub.md`. When this document and that
+document overlap, use the navigation document for header, category dropdown,
+search reveal, `/articles/`, `/articles/all/`, and `/categories/` decisions.
+
 The site has two primary reader tasks:
 
 - browsing: find something worth reading;
@@ -39,9 +44,10 @@ Every file route should map to a page family or endpoint:
 | Route file                              | Current role                 | Target anatomy                                               |
 | --------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
 | `src/pages/index.astro`                 | homepage and archive gateway | `BrowsingBody` with home blocks                              |
-| `src/pages/articles/index.astro`        | article archive              | `BrowsingBody` with archive blocks                           |
+| `src/pages/articles/index.astro`        | articles hub                 | `BrowsingBody` with category discovery and archive gateway   |
+| `src/pages/articles/all.astro`          | flat article archive         | `BrowsingBody` with archive blocks                           |
 | `src/pages/articles/[...slug].astro`    | article detail               | `ReadingBody`                                                |
-| `src/pages/categories/index.astro`      | category index               | `BrowsingBody` with category overview                        |
+| `src/pages/categories/index.astro`      | compatibility category index | redirect to `/articles/` or non-primary `BrowsingBody` page  |
 | `src/pages/categories/[category].astro` | category detail              | `BrowsingBody` with archive/list blocks                      |
 | `src/pages/search.astro`                | Pagefind search page         | `BrowsingBody` with search blocks                            |
 | `src/pages/about.astro`                 | generic Markdown page        | `ReadingBody` if essay-like; otherwise narrow `BrowsingBody` |
@@ -56,17 +62,17 @@ support/discovery ordering. Their job is data loading and composition.
 
 Current public components classify into these anatomy roles:
 
-| Role          | Components                                                                                                                                                                                          |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| layout shell  | `SiteShell`, `SiteHeader`, `SiteFooter`, `MainFrame`, `PageFrame`                                                                                                                                   |
-| navigation    | `BrandLink`, `PrimaryNav`, `SectionNav`, `SectionNavItem`, `SearchForm`, `SupportLink`, `ThemeToggle`, `MobileMenu`, `CategoryTree`, `CategoryGroup`, `CategorySidebar`                             |
-| article parts | `ArticleHeader`, `ArticleMeta`, `ArticleProse`, `ArticleImage`, `ArticleCard`, `ArticleList`, `ArticleTags`, `ArticleEndcap`, `MoreInCategoryBlock`, `RelatedArticlesBlock`, hover image components |
-| page parts    | `MarkdownPage`, `PageHeader`, `PageProse`                                                                                                                                                           |
-| blocks        | homepage blocks, archive/category/search blocks, `SupportBlock`                                                                                                                                     |
-| media         | `ResponsiveIframe`, `EmbedFrame`                                                                                                                                                                    |
-| SEO           | `SiteHead`, `ArticleJsonLd`                                                                                                                                                                         |
-| UI primitives | `Button`, `LinkButton`, `IconButton`, `TextLink`, `Input`, `Badge`, `Separator`, `Container`, `Section`, `Card`, `hover-card`                                                                       |
-| compatibility | `src/components/article/*` legacy MDX import path wrappers                                                                                                                                          |
+| Role          | Components                                                                                                                                                                                                                    |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| layout shell  | `SiteShell`, `SiteHeader`, `SiteFooter`, `MainFrame`, `PageFrame`                                                                                                                                                             |
+| navigation    | `BrandLink`, `PrimaryNav`, `SectionNav`, `SectionNavItem`, `SearchForm`, `SupportLink`, `ThemeToggle`, `MobileMenu`, `DiscoveryMenu`, `CategoryDropdown`, `CategoryPreviewList`, `CategoryTree`, `CategoryGroup`              |
+| article parts | `ArticleHeader`, `ArticleMeta`, `ArticleProse`, `ArticleImage`, `ArticleCard`, `ArticleList`, `ArticleTags`, `ArticleEndcap`, `MoreInCategoryBlock`, `RelatedArticlesBlock`, `ArticleTableOfContents`, hover image components |
+| page parts    | `MarkdownPage`, `PageHeader`, `PageProse`                                                                                                                                                                                     |
+| blocks        | homepage blocks, archive/category/search blocks, `SupportBlock`                                                                                                                                                               |
+| media         | `ResponsiveIframe`, `EmbedFrame`                                                                                                                                                                                              |
+| SEO           | `SiteHead`, `ArticleJsonLd`                                                                                                                                                                                                   |
+| UI primitives | `Button`, `LinkButton`, `IconButton`, `TextLink`, `Input`, `Badge`, `Separator`, `Container`, `Section`, `Card`, `hover-card`                                                                                                 |
+| compatibility | `src/components/article/*` legacy MDX import path wrappers                                                                                                                                                                    |
 
 Missing target anatomy components:
 
@@ -164,6 +170,9 @@ The anatomy refactor should remove these repeated decisions:
   surfaces;
 - header/menu/category discovery behavior split between layout and navigation
   components;
+- `/articles/` and `/categories/` competing as separate top-level category
+  indexes;
+- homepage category and support blocks escaping the shared browsing measure;
 - global CSS or page-level patches deciding component geometry.
 
 ## Page Families
@@ -298,19 +307,24 @@ single row.
 
 Target model:
 
-- A compact utility row owns brand, search entry, theme toggle, and support.
-- A section navigation row owns publication categories on screens where that
-  improves discovery.
+- The desktop header has one row with a left cluster and a right utility
+  cluster.
+- The left cluster owns `BrandLink`, category dropdown links, `Articles`, and
+  `About`.
+- The right cluster owns search reveal, theme toggle, and support.
 - A complete mobile menu owns all high-value destinations when space is
   constrained.
-- Category dropdowns may show a restrained preview, but never the full archive.
-- Footer and homepage category sections provide stable no-JavaScript fallbacks.
+- Category dropdowns visually read as dropdowns, open on hover/focus where
+  appropriate, and keep category text as a normal navigation link.
+- RSS is a secondary/footer destination, not primary header chrome.
+- Footer, homepage, and `/articles/` category sections provide stable
+  no-JavaScript fallbacks.
 
 Category discovery should be available through:
 
-- site-wide section navigation;
+- desktop category dropdowns;
 - mobile menu;
-- `/categories/` and category detail pages;
+- `/articles/` and category detail pages;
 - homepage category overview;
 - footer category links.
 
@@ -368,6 +382,17 @@ Browsing blocks should share:
 - the same card/list density;
 - the same empty and long-content behavior;
 - the same support placement rules.
+
+Route-specific contracts:
+
+- The homepage is a browsing page and should use the same centered browsing
+  measure as archive, category, and search pages.
+- `/articles/` is the primary articles hub: page header, category overview,
+  useful article discovery, and a clear `View all articles` link.
+- `/articles/all/` is the flat chronological archive.
+- `/categories/<category>/` remains the category detail route.
+- `/categories/` should not be a primary navigation destination; redirect it to
+  `/articles/` or keep it only as an explicitly tested compatibility page.
 
 ## Layout Primitive Set
 
@@ -458,6 +483,11 @@ Useful browser invariants:
 - Support blocks align with their surrounding page-body measure.
 - Mobile menu and desktop navigation are not simultaneously exposed as
   competing controls.
+- Category dropdown text click navigates while hover/focus exposes the preview.
+- Search reveal opens without pushing header links into overlap.
+- `/articles/` and `/articles/all/` render distinct, unambiguous page purposes.
+- Homepage category, archive, and support sections align to the same browsing
+  measure.
 
 ## Prototype Decisions To Remove
 
@@ -469,6 +499,9 @@ explicitly re-approves them:
 - page-specific width patches for archive, category, search, or homepage
   sections;
 - header behavior that depends on fragile single-row collision thresholds;
+- a permanent desktop search input that competes with brand, categories, and
+  support for horizontal space;
+- keeping `/articles/` and `/categories/` as competing primary category indexes;
 - reserving hero-image space when no hero exists;
 - support blocks that escape the page body's content measure;
 - tags appearing before article-end continuation or references;

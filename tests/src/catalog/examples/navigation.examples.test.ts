@@ -9,6 +9,9 @@ describe("navigation catalog examples", () => {
     ).toEqual([
       "src/components/navigation/BrandLink.astro",
       "src/components/navigation/PrimaryNav.astro",
+      "src/components/navigation/DiscoveryMenu.astro",
+      "src/components/navigation/CategoryDropdown.astro",
+      "src/components/navigation/CategoryPreviewList.astro",
       "src/components/navigation/SearchForm.astro",
       "src/components/navigation/SupportLink.astro",
       "src/components/navigation/ThemeToggle.astro",
@@ -16,7 +19,6 @@ describe("navigation catalog examples", () => {
       "src/components/navigation/CategoryGroup.astro",
       "src/components/navigation/CategoryTree.astro",
       "src/components/navigation/SectionNav.astro",
-      "src/components/navigation/CategorySidebar.astro",
       "src/components/navigation/MobileMenu.astro",
     ]);
   });

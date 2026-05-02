@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import type { ArticleTableOfContentsHeading } from "../../lib/article-toc";
+
+interface Props extends HTMLAttributes<"a"> {
+  current?: boolean;
+  heading: ArticleTableOfContentsHeading;
+}
+
+const { current = false, heading, class: className, ...attrs } = Astro.props;
+const indentationClasses = {
+  1: "",
+  2: "ps-3",
+  3: "ps-6",
+  4: "ps-9",
+} as const;
+const indentClass =
+  indentationClasses[
+    Math.min(heading.level, 4) as keyof typeof indentationClasses
+  ];
+---
+
+<a
+  {...attrs}
+  aria-current={current ? "location" : undefined}
+  class:list={[
+    "text-muted-foreground hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:outline-ring block rounded-sm py-1.5 text-sm leading-snug underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-offset-2 focus-visible:outline-solid",
+    current && "text-foreground font-semibold",
+    indentClass,
+    className,
+  ]}
+  data-toc-heading-level={heading.level}
+  data-toc-heading-order={heading.order}
+  href={heading.href}
+>
+  {heading.text}
+</a>

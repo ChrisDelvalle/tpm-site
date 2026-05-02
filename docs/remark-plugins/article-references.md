@@ -316,15 +316,19 @@ src/remark-plugins/
   articleReferences.ts
 
 src/lib/article-references/
+  display-label.ts
+  ids.ts
   model.ts
   normalize.ts
-  render-nodes.ts
   validate.ts
 
 tests/src/remark-plugins/
   articleReferences.test.ts
 
 tests/src/lib/article-references/
+  display-label.test.ts
+  ids.test.ts
+  model.test.ts
   normalize.test.ts
   validate.test.ts
 ```
@@ -367,19 +371,25 @@ interface ArticleNote {
 
 interface ArticleReferenceMarker {
   id: string;
+  backlinkId: string;
+  displayText: string;
+  entryId: string;
+  kind: "citation" | "note";
+  label: string;
   order: number;
 }
 
 interface ArticleReferenceDefinitionContent {
-  id: string;
-  children: readonly unknown[];
+  children: readonly ArticleReferenceBlockContent[];
 }
 ```
 
-`children` should remain AST content or a similarly renderable representation
-until the implementation proves the exact rendering path. Avoid flattening rich
-Markdown definitions to plain strings too early; citation entries may contain
-italics, links, punctuation, or non-URL sources.
+`children` is a serializable rich-content model, not Astro components. It must
+preserve enough structure for rendering emphasis, links, inline code, line
+breaks, code blocks, unknown node text, and block order without re-parsing
+Markdown in components. Avoid flattening rich Markdown definitions to plain
+strings too early; citation entries may contain italics, links, punctuation, or
+non-URL sources.
 
 The data must support:
 
@@ -447,29 +457,122 @@ prose. Only the explicit `[@...]` syntax controls display-label metadata.
 
 ## Output Strategy
 
-Preferred implementation:
+Implemented strategy:
 
 1. The remark plugin validates labels and reference/definition relationships.
 2. It suppresses Astro's default combined GFM footnote output by consuming or
    replacing the relevant footnote nodes.
-3. It exposes structured notes/citations metadata through the safest Astro
-   metadata path available.
+3. It exposes structured notes/citations metadata through
+   `render(entry).remarkPluginFrontmatter.articleReferences`.
 4. `ArticleReferences` renders `ArticleFootnotes` and `ArticleBibliography`
    after `ArticleEndcap` and before `ArticleTags`.
 
-If the proof demonstrates that rich rendered citation content cannot be passed
-cleanly to components through `remarkPluginFrontmatter`, use this fallback:
+The documented AST-injection fallback is not needed based on the proof and
+integration work. Reconsider it only if a future requirement cannot be expressed
+through the serializable model.
 
-1. The plugin still validates and classifies references.
-2. The plugin injects generated note and bibliography sections into the mdast
-   tree at a controlled location.
-3. The generated sections use stable IDs and data attributes so components/tests
-   can reason about them.
-4. This fallback must still satisfy the same article rendering, accessibility,
-   validation, and ordering requirements as the component-rendered path.
+## Data-Path Proof Result
 
-Do not choose the fallback until the proof of concept confirms that metadata
-cannot be passed cleanly from the Markdown pipeline to the article layout.
+Milestone 27 proved that the metadata path works for both Markdown and MDX
+content.
+
+The proof implementation lives in:
+
+```text
+src/remark-plugins/articleReferencesProof.ts
+tests/fixtures/article-references/proof-md.md
+tests/fixtures/article-references/proof-mdx.mdx
+tests/src/remark-plugins/articleReferencesProof.test.ts
+tests/src/remark-plugins/articleReferencesProof.vitest.ts
+```
+
+The fixture collection is `articleReferenceProofFixtures`. It is test-only and
+not routed into the public site.
+
+The proof confirms:
+
+- a remark plugin can read GFM `footnoteReference` and `footnoteDefinition`
+  nodes for canonical `note-*` and `cite-*` labels;
+- the plugin can inject structured metadata into
+  `vfile.data.astro.frontmatter`;
+- Astro exposes that injected object through
+  `render(entry).remarkPluginFrontmatter`;
+- the same path works for `.md` and `.mdx` content because MDX extends the
+  project Markdown config;
+- canonical references can be replaced with controlled marker links;
+- canonical definitions can be removed before Astro/GFM emits the default
+  combined footnotes section;
+- rich definition content can be preserved as structured serializable data
+  containing text, emphasis, links, inline code, and block node types;
+- ordinary noncanonical footnote labels can remain untouched until full
+  validation is enabled.
+
+The proof payload is intentionally named `articleReferencesProof` so it cannot
+be mistaken for the final public data model. Its current shape is:
+
+```ts
+interface ArticleReferencesProofPayload {
+  entries: readonly {
+    blocks: readonly {
+      children: readonly ArticleReferencesProofInline[];
+      kind: "code" | "heading" | "list" | "paragraph" | "unknown";
+      nodeType: string;
+      text: string;
+    }[];
+    definitionNodeTypes: readonly string[];
+    displayLabel?: string;
+    id: string;
+    kind: "citation" | "note";
+    label: string;
+    markerIds: readonly string[];
+  }[];
+  markers: readonly {
+    displayText: string;
+    entryId: string;
+    id: string;
+    kind: "citation" | "note";
+    label: string;
+  }[];
+  source: "remark-plugin-frontmatter";
+  version: 1;
+}
+```
+
+Important implication: `remarkPluginFrontmatter` can carry JSON-serializable
+rich data, not Astro components or already-rendered component instances. The
+final implementation should therefore normalize definitions into a typed
+serializable reference model that article-reference components can render
+deterministically. The documented AST-injection fallback is not needed based on
+this proof unless a later requirement needs Markdown features that the
+serializable model cannot represent cleanly.
+
+## Article Route Integration
+
+The article route owns the Markdown render call and passes reference metadata
+through without parsing source text:
+
+```astro
+---
+const { Content, headings, remarkPluginFrontmatter } = await render(article);
+const articleReferences = articleReferencesFromFrontmatter(
+  remarkPluginFrontmatter,
+);
+---
+
+<ArticleLayout article={article} articleReferences={articleReferences}>
+  <Content />
+</ArticleLayout>
+```
+
+`ArticleLayout` owns final placement. It renders `ArticleReferences` inside the
+article end stack after `ArticleEndcap` and before `ArticleTags`. If no
+canonical references exist, the layout receives `undefined` or an empty model
+and renders no reference apparatus.
+
+Invalid canonical reference fixtures are tested at the plugin boundary. Strict
+validation for legacy, noncanonical footnote labels remains disabled in
+`astro.config.ts` until the article corpus is normalized or explicit exceptions
+are recorded.
 
 ## Article Footer Placement
 

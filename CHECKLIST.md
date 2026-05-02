@@ -123,8 +123,8 @@ Scope rules:
       separate processed script boundary.
 - [x] Add `src/components/navigation/MobileMenu.astro` with all core
       destinations and category discovery available at narrow sizes.
-- [x] Add `src/components/navigation/CategoryTree.astro`,
-      `CategoryGroup.astro`, and `CategorySidebar.astro`.
+- [x] Add `src/components/navigation/CategoryTree.astro` and
+      `CategoryGroup.astro` for reusable category discovery.
 - [x] Use native `details`/`summary` for category disclosure unless a later test
       proves a small island is required.
 - [x] Keep RSS out of crowded header surfaces unless the final navigation design
@@ -750,285 +750,391 @@ Scope rules:
 
 ## Milestone 24: Site-Wide Anatomy Layout Refactor
 
-- [ ] Implement only after Milestones 16 and 17 are complete.
-- [ ] Create or refactor the reusable layout primitives named in the design:
+- [x] Implement only after Milestones 16 and 17 are complete.
+- [x] Create or refactor the reusable layout primitives named in the design:
       site shell, main frame, page frame, reading body, browsing body, section
       stack, content rail, endcap stack, and margin/sidebar layout as needed.
-- [ ] Add `src/components/layout/ReadingBody.astro`,
+- [x] Add `src/components/layout/ReadingBody.astro`,
       `BrowsingBody.astro`, `SectionStack.astro`, `ContentRail.astro`,
       `EndcapStack.astro`, and `MarginSidebarLayout.astro` according to their
       component one-pagers.
-- [ ] Make layout primitives own reusable constraints: content measure, gutters,
+- [x] Make layout primitives own reusable constraints: content measure, gutters,
       vertical rhythm, sidebar/margin placement, sticky offsets, overflow rules,
       and responsive breakpoints.
-- [ ] Keep route files thin: each route should load data, choose the correct
+- [x] Keep route files thin: each route should load data, choose the correct
       page body, pass normalized props, and avoid implementing custom layout
       structure inline.
-- [ ] Refactor article detail pages to use the reading-body anatomy and remove
+- [x] Refactor article detail pages to use the reading-body anatomy and remove
       duplicated layout decisions from `ArticleLayout.astro` and article route
       composition.
-- [ ] Refactor homepage, article archive, category index, category detail,
+- [x] Refactor homepage, article archive, category index, category detail,
       search, and generic Markdown pages to use the browsing/prose body
       primitives where appropriate.
-- [ ] Ensure support CTAs, category discovery, related reading, archive links,
+- [x] Ensure support CTAs, category discovery, related reading, archive links,
       and tags are placed through named reusable surfaces rather than ad hoc
       per-page markup.
-- [ ] Ensure category detail pages, article archive pages, category index pages,
+- [x] Ensure category detail pages, article archive pages, category index pages,
       and search pages share the same browsing body and archive/list section
       primitives unless the design doc explicitly justifies a difference.
-- [ ] Ensure article pages and generic Markdown pages share prose/readability
+- [x] Ensure article pages and generic Markdown pages share prose/readability
       primitives without coupling generic pages to article-only metadata or
       article-only endcaps.
-- [ ] Remove obsolete one-off width, spacing, and grid patches after the shared
+- [x] Remove obsolete one-off width, spacing, and grid patches after the shared
       anatomy primitives own those decisions.
-- [ ] Add or update catalog examples for every new or changed anatomy primitive.
-- [ ] Add render tests for new anatomy primitives proving semantic structure,
+- [x] Add or update catalog examples for every new or changed anatomy primitive.
+- [x] Add render tests for new anatomy primitives proving semantic structure,
       slots, required labels, heading levels, and empty/missing-content states.
-- [ ] Add Playwright invariants proving reading pages preserve readable measure,
+- [x] Add Playwright invariants proving reading pages preserve readable measure,
       browsing pages preserve comfortable listing width, and both page-body
       types remain consistent across mobile, tablet, desktop, wide desktop, and
       short viewport heights.
-- [ ] Add Playwright invariants proving shared anatomy prevents regressions:
+- [x] Add Playwright invariants proving shared anatomy prevents regressions:
       no horizontal overflow, no duplicated critical landmarks, no competing
       sidebars/mobile menus, support/discovery surfaces keep intended order,
       and centered content stays centered when sidebars are present.
-- [ ] Confirm implementation still matches `docs/SITE_ANATOMY.md`; update the
+- [x] Confirm implementation still matches `docs/SITE_ANATOMY.md`; update the
       design doc before implementation if a route cannot fit either
       `ReadingBody` or `BrowsingBody`.
 
 ## Milestone 25: Category Dropdown Discovery
 
-- [ ] Implement only after Milestones 16, 17, and 18 are complete.
-- [ ] Add or update `src/components/navigation/DiscoveryMenu.astro`,
+- [x] Implement only after Milestones 16, 17, and 18 are complete.
+- [x] Add or update `src/components/navigation/DiscoveryMenu.astro`,
       `CategoryDropdown.astro`, and `CategoryPreviewList.astro` according to
       the documented component contracts.
-- [ ] Use the documented HTML `popover` desktop disclosure pattern unless a
+- [x] Use the documented HTML `popover` desktop disclosure pattern unless a
       focused proof shows it cannot satisfy accessibility, browser, or layout
       requirements.
-- [ ] Move primary desktop category discovery from the left category sidebar
+- [x] Move primary desktop category discovery from the left category sidebar
       into the site-wide navigation while keeping a normal `/categories/` link
       and direct category links reachable.
-- [ ] Ensure the mobile menu exposes equivalent category discovery without
+- [x] Ensure the mobile menu exposes equivalent category discovery without
       rendering a competing desktop sidebar at mobile/tablet widths.
-- [ ] Source dropdown data from the shared navigation/content boundary rather
+- [x] Source dropdown data from the shared navigation/content boundary rather
       than fetching or shaping article data inside visual components.
-- [ ] Show category labels, a restrained set of recent or featured article
+- [x] Show category labels, a restrained set of recent or featured article
       previews where the design calls for them, and a clear View All link.
-- [ ] Do not render the full archive inside the header dropdown.
-- [ ] Ensure every dropdown destination remains accessible through normal links
+- [x] Do not render the full archive inside the header dropdown.
+- [x] Ensure every dropdown destination remains accessible through normal links
       when JavaScript is disabled.
-- [ ] Ensure dropdown controls are keyboard reachable, dismissible, focus-safe,
+- [x] Ensure dropdown controls are keyboard reachable, dismissible, focus-safe,
       pointer/touch usable, and named correctly for assistive technology.
-- [ ] Add catalog examples for desktop, mobile, long category labels, many
+- [x] Add catalog examples for desktop, mobile, long category labels, many
       categories, empty preview data, dark mode, light mode, and no-JavaScript
       fallback behavior.
-- [ ] Add render tests for semantic structure, labels, links, empty preview
+- [x] Add render tests for semantic structure, labels, links, empty preview
       behavior, and stable data boundaries.
-- [ ] Add Playwright keyboard/focus/pointer tests before using the dropdown in
+- [x] Add Playwright keyboard/focus/pointer tests before using the dropdown in
       production navigation.
-- [ ] Add Playwright responsive invariants proving category discovery does not
+- [x] Add Playwright responsive invariants proving category discovery does not
       collide with the header, does not create horizontal overflow, and does not
       duplicate visible desktop/mobile controls.
-- [ ] Remove or disable the old desktop category sidebar as a category discovery
+- [x] Remove or disable the old desktop category sidebar as a category discovery
       surface after the dropdown and fallback category paths are working.
-- [ ] Update affected component one-pagers and `docs/COMPONENT_ARCHITECTURE.md`
+- [x] Update affected component one-pagers and `docs/COMPONENT_ARCHITECTURE.md`
       after implementation if the final behavior differs from the design docs.
 
 ## Milestone 26: Article Table Of Contents Margin Sidebar
 
-- [ ] Implement only after Milestones 16, 17, and 19 are complete.
-- [ ] Create or refactor the shared margin/sidebar layout primitive so the left
+- [x] Implement only after Milestones 16, 17, and 19 are complete.
+- [x] Create or refactor the shared margin/sidebar layout primitive so the left
       margin can host article-local navigation without affecting the centered
       reading measure.
-- [ ] Replace the old category-sidebar usage on article pages with the article
+- [x] Replace the old category-sidebar usage on article pages with the article
       table-of-contents surface.
-- [ ] Keep category discovery available through the site navigation, mobile
+- [x] Keep category discovery available through the site navigation, mobile
       menu, footer/homepage discovery, and category pages after the article TOC
       replaces the desktop sidebar.
-- [ ] Build a heading extraction boundary in `src/lib/` or the article view
+- [x] Build a heading extraction boundary in `src/lib/` or the article view
       model so visual TOC components receive normalized heading data and do not
       parse content themselves.
-- [ ] Use Astro-rendered heading metadata as the source of truth for TOC links;
+- [x] Use Astro-rendered heading metadata as the source of truth for TOC links;
       do not query rendered DOM or parse article Markdown source in visual
       components.
-- [ ] Include only the heading levels chosen in the design doc and preserve
+- [x] Include only the heading levels chosen in the design doc and preserve
       stable heading IDs for hash links.
-- [ ] Handle duplicate heading text deterministically and add tests for the
+- [x] Handle duplicate heading text deterministically and add tests for the
       generated labels/links.
-- [ ] Do not render an empty TOC sidebar when an article has no headings or too
+- [x] Do not render an empty TOC sidebar when an article has no headings or too
       few headings for useful local navigation.
-- [ ] Add a visible hide button for the TOC with keyboard support, accessible
+- [x] Add a visible hide button for the TOC with keyboard support, accessible
       name, sensible focus return, and the smallest practical client-side
       behavior.
-- [ ] Start hide/show with native `details`/`summary`; add JavaScript only for
+- [x] Start hide/show with native `details`/`summary`; add JavaScript only for
       explicitly approved progressive enhancements such as active-section
       highlighting or persistence.
-- [ ] Ensure hiding the TOC does not reflow the reading column in a way that
+- [x] Ensure hiding the TOC does not reflow the reading column in a way that
       makes the article jump or lose scroll position.
-- [ ] If active-section highlighting is implemented, keep it progressive:
+- [x] If active-section highlighting is implemented, keep it progressive:
       static hash links must work without JavaScript, and the enhancement must
       not block reading.
-- [ ] Add catalog examples for article TOC with many headings, no headings, long
+- [x] Add catalog examples for article TOC with many headings, no headings, long
       headings, duplicate headings, hidden state, short viewport, mobile,
       tablet, desktop, and wide desktop.
-- [ ] Add render tests for TOC structure, heading-link normalization,
+- [x] Add render tests for TOC structure, heading-link normalization,
       no-headings behavior, hidden-state markup, and accessible labels.
-- [ ] Add Playwright invariants proving the TOC stays below the sticky header,
+- [x] Add Playwright invariants proving the TOC stays below the sticky header,
       never overlays prose, never creates horizontal overflow, and keeps the
       reading column centered.
-- [ ] Add Playwright interaction tests for hide/show behavior, keyboard
+- [x] Add Playwright interaction tests for hide/show behavior, keyboard
       navigation, hash-link navigation, focus-visible states, and mobile/tablet
       absence or compact behavior.
-- [ ] Remove obsolete category-sidebar tests, catalog examples, docs, or route
+- [x] Remove obsolete category-sidebar tests, catalog examples, docs, or route
       wiring that no longer match the new category navigation plus article TOC
       architecture.
 
 ## Milestone 27: Article References Data Path Proof
 
-- [ ] Implement only after the article-local reference portions of Milestones
+- [x] Implement only after the article-local reference portions of Milestones
       20 and 21 are complete.
-- [ ] Add focused fixtures for one Markdown article and one MDX article that use
+- [x] Add focused fixtures for one Markdown article and one MDX article that use
       canonical `note-*` and `cite-*` labels with rich definition content.
-- [ ] Prove whether `render(entry).remarkPluginFrontmatter` can carry
-      normalized note/citation data and rich renderable definition content from
-      the Markdown pipeline to `ArticleLayout`.
-- [ ] Document the result in `docs/remark-plugins/article-references.md`,
+- [x] Prove whether `render(entry).remarkPluginFrontmatter` can carry
+      normalized note/citation data and a rich JSON-serializable definition
+      model from the Markdown pipeline to `ArticleLayout`.
+- [x] Document the result in `docs/remark-plugins/article-references.md`,
       including the exact data shape available to article routes/layouts.
-- [ ] Choose the component-rendered metadata path if it can preserve rich
-      definitions safely.
-- [ ] Choose the documented AST-injection fallback only if the proof shows the
-      metadata path cannot preserve renderable definition content.
-- [ ] Keep the proof isolated from the published article corpus; do not enable
+- [x] Choose the component-rendered metadata path because the proof can preserve
+      rich serializable definitions safely.
+- [x] Confirm the documented AST-injection fallback is not needed unless a
+      future requirement cannot be represented in the serializable model.
+- [x] Keep the proof isolated from the published article corpus; do not enable
       release-blocking validation or edit article content in this milestone.
-- [ ] Add focused tests for the proof path so future Astro upgrades cannot
+- [x] Add focused tests for the proof path so future Astro upgrades cannot
       silently break reference data transport.
 
 ## Milestone 28: Article References Model And Pure Normalization
 
-- [ ] Add `src/lib/article-references/` with the smallest useful split for
+- [x] Add `src/lib/article-references/` with the smallest useful split for
       `model.ts`, `normalize.ts`, `validate.ts`, and ID/display-label helpers.
-- [ ] Model references with discriminated, type-safe shapes for notes,
+- [x] Model references with discriminated, type-safe shapes for notes,
       citations, definitions, source markers, generated IDs, display labels,
       and diagnostics.
-- [ ] Make invalid states unrepresentable after normalization: unknown label
+- [x] Make the normalized model JSON-serializable: no Astro components,
+      functions, JSX, rendered component instances, live Markdown AST nodes, or
+      other values that cannot safely pass through
+      `remarkPluginFrontmatter`.
+- [x] Make invalid states unrepresentable after normalization: unknown label
       kind, malformed slug, duplicate definitions, missing definitions,
       unreferenced definitions, repeated notes, ID collisions, and ambiguous
       classification should not survive as renderable data.
-- [ ] Implement label classification for `note-*` and `cite-*` labels using
+- [x] Implement label classification for `note-*` and `cite-*` labels using
       lowercase ASCII slug rules.
-- [ ] Implement deterministic first-reference ordering and deterministic IDs
+- [x] Implement deterministic first-reference ordering and deterministic IDs
       for note entries, citation entries, source markers, and citation backrefs.
-- [ ] Implement display-label extraction only for a valid leading `[@...]`
+- [x] Implement display-label extraction only for a valid leading `[@...]`
       marker at the first inline position of `note-*` or `cite-*`
       definitions.
-- [ ] Preserve rich definition children after removing leading display-label
-      metadata; do not flatten definitions to plain strings too early.
-- [ ] Keep pure helpers independent of Astro so they can be tested without
+- [x] Preserve rich definition children as typed serializable content nodes
+      after removing leading display-label metadata; do not flatten definitions
+      to plain strings too early.
+- [x] Keep pure helpers independent of Astro so they can be tested without
       building the site.
-- [ ] Add table-driven unit tests for accepted and rejected labels, duplicate
+- [x] Add table-driven unit tests for accepted and rejected labels, duplicate
       detection, missing reference/definition detection, ordering, repeated
       citation handling, repeated note failure, ID generation, display-label
       extraction, and rich definition preservation.
 
 ## Milestone 29: Article References Remark Plugin
 
-- [ ] Add direct dependencies where needed instead of relying on transitive
+- [x] Add direct dependencies where needed instead of relying on transitive
       packages: `unist-util-visit`, explicit mdast types if needed, and
       `remark`/`remark-gfm` for isolated plugin tests if those tests require
       them.
-- [ ] Add `src/remark-plugins/articleReferences.ts` as a thin unified remark
+- [x] Add `src/remark-plugins/articleReferences.ts` as a thin unified remark
       transformer that orchestrates the pure article-reference helpers.
-- [ ] Visit every `footnoteReference` and `footnoteDefinition` node through the
+- [x] Visit every `footnoteReference` and `footnoteDefinition` node through the
       parsed Markdown AST rather than regexing source text or post-render HTML.
-- [ ] Classify labels by `note-*` and `cite-*`; fail on any other published
+- [x] Classify labels by `note-*` and `cite-*`; fail on any other published
       article footnote label once validation is enabled.
-- [ ] Extract optional leading display labels from valid note/citation
+- [x] Extract optional leading display labels from valid note/citation
       definitions and preserve later `[@...]` text as ordinary definition
       content.
-- [ ] Preserve rich Markdown definition content, including emphasis, links,
-      inline code, punctuation, and GFM continuation blocks.
-- [ ] Suppress or replace Astro/GFM's default combined footnote output so custom
+- [x] Preserve rich Markdown definition content as the normalized serializable
+      model, including emphasis, links, inline code, punctuation, and GFM
+      continuation blocks.
+- [x] Suppress or replace Astro/GFM's default combined footnote output so custom
       note and bibliography sections do not duplicate it.
-- [ ] Replace inline footnote reference nodes with accessible marker links, or
-      produce the equivalent renderable marker representation chosen in
-      Milestone 27.
-- [ ] Use `file.fail(...)` for blocking errors and `file.message(...)` only for
+- [x] Replace inline footnote reference nodes with accessible marker links, or
+      produce equivalent accessible marker links while storing marker metadata
+      in the normalized serializable model.
+- [x] Use `file.fail(...)` for blocking errors and `file.message(...)` only for
       review-only warnings; messages must be author-readable and include how to
       fix the problem.
-- [ ] Add plugin integration tests using `remark`, `remark-gfm`, and the plugin
+- [x] Add plugin integration tests using `remark`, `remark-gfm`, and the plugin
       for valid notes, valid citations, mixed notes/citations, repeated
       citations, repeated-note failure, display labels, malformed display
       labels, invalid legacy labels, missing definitions, unreferenced
       definitions, duplicate definitions, and rich definitions.
-- [ ] Wire the plugin into `astro.config.ts` under `markdown.remarkPlugins`
+- [x] Wire the plugin into `astro.config.ts` under `markdown.remarkPlugins`
       only after isolated plugin tests pass.
-- [ ] Verify MDX inherits the same plugin behavior as Markdown.
+- [x] Verify MDX inherits the same plugin behavior as Markdown.
 
 ## Milestone 30: Article Reference Rendering Components
 
-- [ ] Implement only after Milestones 27, 28, and 29 establish the data path and
-      normalized model.
-- [ ] Implement `src/components/articles/ArticleReferences.astro` according to
+- [x] Implement only after Milestones 27, 28, and 29 establish the data path and
+      normalized serializable model.
+- [x] Implement `src/components/articles/ArticleReferences.astro` according to
       `docs/components/articles/ArticleReferences.md`.
-- [ ] Implement `src/components/articles/ArticleFootnotes.astro` according to
+- [x] Implement `src/components/articles/ArticleFootnotes.astro` according to
       `docs/components/articles/ArticleFootnotes.md`.
-- [ ] Implement `src/components/articles/ArticleBibliography.astro` according
+- [x] Implement `src/components/articles/ArticleBibliography.astro` according
       to `docs/components/articles/ArticleBibliography.md`.
-- [ ] Implement `src/components/articles/ArticleReferenceBacklinks.astro`
+- [x] Implement `src/components/articles/ArticleReferenceBacklinks.astro`
       according to `docs/components/articles/ArticleReferenceBacklinks.md`.
-- [ ] Keep visual components data-driven: they must not parse Markdown, inspect
+- [x] Keep visual components data-driven: they must not parse Markdown, inspect
       article source, fetch global content, or infer citations from inline
       prose links.
-- [ ] Render nothing for no references, only notes for notes-only articles, only
+- [x] Render from the normalized serializable model produced by the plugin; do
+      not expect components, JSX, functions, or live AST nodes from
+      `remarkPluginFrontmatter`.
+- [x] Render nothing for no references, only notes for notes-only articles, only
       bibliography for citation-only articles, and notes before bibliography
       when both exist.
-- [ ] Render notes as numbered article footnotes by default while preserving
+- [x] Render notes as numbered article footnotes by default while preserving
       optional note display labels as metadata.
-- [ ] Render citations numerically by default and with explicit display labels
+- [x] Render citations numerically by default and with explicit display labels
       when the normalized citation data provides them.
-- [ ] Render stable entry IDs and accessible backlinks from each note/citation
+- [x] Render stable entry IDs and accessible backlinks from each note/citation
       entry to the originating inline marker or markers.
-- [ ] Keep reference sections in the article reading measure, with long labels,
+- [x] Keep reference sections in the article reading measure, with long labels,
       titles, URLs, and many backlinks wrapping without horizontal overflow.
-- [ ] Use semantic headings, ordered lists, links, and Tailwind semantic tokens;
+- [x] Use semantic headings, ordered lists, links, and Tailwind semantic tokens;
       do not create extra landmarks or CTA/card styling for reference
       apparatus.
-- [ ] Add catalog examples for no references, notes only, citations only, both,
+- [x] Add catalog examples for no references, notes only, citations only, both,
       repeated citations, display labels, long URLs, rich definitions, dark
       mode, light mode, mobile, desktop, and wide desktop.
-- [ ] Add Astro render tests for empty states, section ordering, default
+- [x] Add Astro render tests for empty states, section ordering, default
       headings, ordered-list output, stable IDs, backlinks, accessible labels,
-      long content, and preserved rich definition content.
+      long content, and preserved rich definition content rendered from the
+      serializable model.
 
 ## Milestone 31: Article Reference Article Integration And Gates
 
-- [ ] Wire normalized article reference data from `render(article)` into
-      `ArticleLayout` or the article route without making route files parse
-      Markdown or inspect article source.
-- [ ] Place `ArticleReferences` after `ArticleEndcap` and before `ArticleTags`
+- [x] Wire normalized article reference data from
+      `render(article).remarkPluginFrontmatter` into `ArticleLayout` or the
+      article route without making route files parse Markdown or inspect
+      article source.
+- [x] Place `ArticleReferences` after `ArticleEndcap` and before `ArticleTags`
       on article pages.
-- [ ] Verify article end ordering remains prose, support CTA, more-in-category
+- [x] Verify article end ordering remains prose, support CTA, more-in-category
       and related discovery, notes/bibliography, then tags as the final article
       surface.
-- [ ] Ensure article pages do not render Astro's default combined GFM footnote
+- [x] Ensure article pages do not render Astro's default combined GFM footnote
       section alongside custom note/bibliography sections.
-- [ ] Add Astro integration tests for `.md` and `.mdx` article content running
+- [x] Add Astro integration tests for `.md` and `.mdx` article content running
       through the plugin.
-- [ ] Add route/build tests proving invalid published article references fail
+- [x] Add route/build tests proving invalid published article references fail
       only after the corpus is normalized or explicitly excepted.
-- [ ] Add Playwright checks that reference markers and backlinks are keyboard
+- [x] Add Playwright checks that reference markers and backlinks are keyboard
       focusable links, have visible focus states, and navigate to the intended
       entry/marker targets.
-- [ ] Add accessibility checks for sensible headings, no duplicate IDs, no
+- [x] Add accessibility checks for sensible headings, no duplicate IDs, no
       competing landmarks, and readable links in light and dark mode.
-- [ ] Add responsive checks proving reference sections do not create horizontal
+- [x] Add responsive checks proving reference sections do not create horizontal
       overflow at mobile, tablet, desktop, wide desktop, and short viewport
       heights.
-- [ ] Update `docs/remark-plugins/article-references.md`,
+- [x] Update `docs/remark-plugins/article-references.md`,
       `docs/COMPONENT_ARCHITECTURE.md`, and component one-pagers if the final
       integration differs from the design.
 
-## Milestone 32: Article Reference Corpus Normalization
+## Milestone 32: Header Navigation And Articles Hub Design Update
+
+- [x] Update `docs/SITE_ANATOMY.md` with the target header anatomy: left
+      aligned brand, category dropdowns, `Articles`, and `About`; right aligned
+      search reveal, theme toggle, and support CTA.
+- [x] Update the relevant component one-pagers for `SiteHeader`, `PrimaryNav`,
+      `SectionNav`, `CategoryDropdown`, `SearchForm`, `SupportLink`,
+      `ThemeToggle`, and `MobileMenu` before implementation.
+- [x] Define the desktop category dropdown contract: visible down chevron or
+      equivalent dropdown affordance, opens on hover and keyboard focus, click
+      on the category navigates to the category page, and the preview never
+      becomes the only way to reach category content.
+- [x] Define the touch and mobile navigation fallback for category dropdowns,
+      search reveal, theme toggle, support CTA, `Articles`, and `About`.
+- [x] Define the route consolidation contract: `/articles/` becomes the primary
+      articles hub with category browsing and a clear `View all articles`
+      destination, replacing `/categories/` as the top-level category index.
+- [x] Decide and document the flat archive destination if it no longer owns
+      `/articles/`, including route-conflict handling for any reserved slug
+      such as `/articles/all/`.
+- [x] Decide whether `/categories/` remains as a compatibility route, redirects
+      to `/articles/`, or is removed from public navigation; category detail
+      route behavior must be documented separately.
+- [x] Document responsive invariants for the new header: one coherent desktop
+      row until the mobile menu breakpoint, no collisions, no horizontal
+      overflow, and no hidden controls that lack a mobile equivalent.
+- [x] Document test coverage needed for hover, focus, click-through category
+      links, search reveal, mobile fallback, route smoke tests, sitemap behavior,
+      and browsing-page width consistency.
+
+## Milestone 33: Header Navigation Redesign Implementation
+
+- [ ] Update navigation data helpers so categories, primary links, and utility
+      actions are separate typed groups instead of one noisy nav list.
+- [ ] Refactor `SiteHeader`, `PrimaryNav`, and `SectionNav` so the desktop
+      header renders: left brand plus category dropdowns plus `Articles` and
+      `About`; right search button/reveal, theme toggle, and support CTA.
+- [ ] Keep RSS out of the primary header unless the design explicitly restores
+      it; make RSS available through the footer or another low-noise surface.
+- [ ] Update `CategoryDropdown` to look and behave like a dropdown, including a
+      chevron/down indicator, hover/focus preview, click-through category link,
+      and accessible keyboard behavior.
+- [ ] Implement the search button reveal with the smallest static-first
+      interaction boundary that satisfies focus management and escape/close
+      behavior.
+- [ ] Update `MobileMenu` so all hidden desktop destinations remain reachable:
+      categories, `Articles`, `About`, search, theme toggle, and support.
+- [ ] Remove any obsolete header/category navigation markup, CSS, catalog
+      examples, and tests that preserve the old noisier navigation structure.
+- [ ] Add or update component render tests, catalog examples, Playwright
+      interaction tests, accessibility checks, and responsive invariants for the
+      new header and dropdown behavior.
+
+## Milestone 34: Articles Hub And Archive Route Consolidation
+
+- [ ] Refactor `/articles/` into the primary articles hub: category browsing,
+      a clear `View all articles` path, and useful browsing/discovery blocks.
+- [ ] Move or preserve the flat all-articles archive according to the approved
+      route contract from Milestone 32, without creating ambiguous article slug
+      conflicts.
+- [ ] Update `/categories/` according to the approved compatibility decision:
+      remove from navigation, redirect, or keep only as a non-primary fallback.
+- [ ] Keep category detail pages reachable from category dropdowns, mobile
+      navigation, article category links, article hub blocks, and footer
+      discovery surfaces.
+- [ ] Reuse `BrowsingBody`, `PageFrame`, `SectionStack`,
+      `CategoryOverviewBlock`, `ArchiveListBlock`, `ArticleList`, and
+      `SupportBlock`; do not create new page-specific listing widths.
+- [ ] Update site header links, footer links, sitemap expectations, route smoke
+      tests, Pagefind/search assumptions, and any catalog examples affected by
+      the route consolidation.
+- [ ] Add tests proving `/articles/` exposes categories and `View all articles`,
+      the flat archive route renders all published articles, category detail
+      links still work, and no route conflicts are introduced.
+
+## Milestone 35: Homepage Browsing Layout Alignment
+
+- [ ] Audit `src/pages/index.astro` and home blocks for any route-level width,
+      gutter, or centering decisions that should belong to `BrowsingBody`,
+      `PageFrame`, `SectionStack`, or block components.
+- [ ] Refactor the homepage to use the same browsing page anatomy and centered
+      content measure as the articles hub, archive, category detail, and search
+      pages.
+- [ ] Keep any deliberate hero-width or feature-block exceptions documented in
+      the owning component, not as page-level layout patches.
+- [ ] Ensure homepage category browsing, archive links, and support blocks align
+      with the same content column unless a component design explicitly
+      documents a different width.
+- [ ] Remove obsolete homepage-specific layout hacks and duplicated container
+      markup once shared browsing primitives own the geometry.
+- [ ] Add Playwright layout invariants proving the homepage body is centered,
+      home blocks share the expected measure, support does not escape the
+      content column, and mobile/tablet/desktop/wide layouts have no horizontal
+      overflow.
+
+## Milestone 36: Article Reference Corpus Normalization
 
 - [ ] Implement only after Milestone 31 proves the canonical format and gates
       against fixtures; article-content edits require explicit instruction and
@@ -1053,9 +1159,9 @@ Scope rules:
 - [ ] Update author-facing article submission documentation with the canonical
       `note-*`, `cite-*`, and optional `[@Display Label]` syntax.
 
-## Milestone 33: Global Bibliography Page Implementation
+## Milestone 37: Global Bibliography Page Implementation
 
-- [ ] Implement only after Milestones 20, 21, and 32 provide approved global
+- [ ] Implement only after Milestones 20, 21, and 36 provide approved global
       bibliography requirements and normalized citation data.
 - [ ] Add the `/bibliography/` route and footer navigation link without
       cluttering the primary header navigation.
@@ -1084,7 +1190,7 @@ Scope rules:
 - [ ] Update `CHECKLIST.md` with any remaining bibliography follow-up
       discovered during implementation.
 
-## Milestone 34: Author Pages Implementation And Metadata Normalization
+## Milestone 38: Author Pages Implementation And Metadata Normalization
 
 - [ ] Implement only after Milestones 22 and 23 are complete.
 - [ ] Add the author metadata source and content schema chosen in the technical

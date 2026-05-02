@@ -1,8 +1,10 @@
 import { existsSync } from "node:fs";
 
+import { AxeBuilder } from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
 
 import {
+  expectFocusVisible,
   expectHorizontallyContained,
   expectNoHorizontalOverflow,
   viewportMatrix,
@@ -85,4 +87,111 @@ if (!catalogIsBuilt) {
       buttonExample.getByRole("button", { name: "Danger" }),
     ).toBeVisible();
   });
+
+  test("catalog article references keep markers and backlinks keyboard navigable", async ({
+    page,
+  }) => {
+    await page.goto("/catalog/");
+
+    const example = page.locator(
+      '[data-catalog-component="src/components/articles/ArticleReferences.astro"]',
+    );
+    const marker = example.locator("#cite-ref-baudrillard-1981");
+    const entry = example.locator("#cite-baudrillard-1981");
+    const backlink = example.locator("#cite-backref-baudrillard-1981");
+
+    await expect(marker).toBeVisible();
+    await expect(entry).toBeVisible();
+    await expect(backlink).toBeVisible();
+
+    await marker.focus();
+    await expectFocusVisible(page);
+    await marker.click();
+    await expect(page).toHaveURL(/#cite-baudrillard-1981$/u);
+
+    await backlink.focus();
+    await expectFocusVisible(page);
+    await backlink.click();
+    await expect(page).toHaveURL(/#cite-ref-baudrillard-1981$/u);
+  });
+
+  test("catalog article references have sensible accessibility structure", async ({
+    page,
+  }) => {
+    await page.goto("/catalog/");
+
+    const exampleSelector =
+      '[data-catalog-component="src/components/articles/ArticleReferences.astro"]';
+    const example = page.locator(exampleSelector);
+
+    await expect(example.getByRole("heading", { name: "Notes" })).toBeVisible();
+    await expect(
+      example.getByRole("heading", { name: "Bibliography" }),
+    ).toBeVisible();
+    await expect(
+      example.getByRole("navigation", {
+        name: "Backlinks for citation references",
+      }),
+    ).toBeVisible();
+    await expect(example.locator("main")).toHaveCount(0);
+
+    const duplicateIds = await example.evaluate((element) => {
+      const seen = new Set<string>();
+      const duplicates = new Set<string>();
+
+      for (const elementWithId of element.querySelectorAll("[id]")) {
+        const id = elementWithId.id;
+
+        if (seen.has(id)) {
+          duplicates.add(id);
+        }
+
+        seen.add(id);
+      }
+
+      return Array.from(duplicates);
+    });
+
+    expect(duplicateIds).toEqual([]);
+
+    const results = await new AxeBuilder({ page })
+      .include(exampleSelector)
+      .analyze();
+    const severeViolations = results.violations.filter(
+      (violation) =>
+        violation.impact === "serious" || violation.impact === "critical",
+    );
+
+    expect(severeViolations).toEqual([]);
+
+    await setTheme(page, "light");
+    await expect(example.locator("#cite-ref-baudrillard-1981")).toBeVisible();
+    await expect(
+      example.locator("#cite-backref-baudrillard-1981"),
+    ).toBeVisible();
+  });
+
+  for (const viewport of viewportMatrix) {
+    test(`catalog article references stay contained at ${viewport.label}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({
+        height: viewport.height,
+        width: viewport.width,
+      });
+      await page.goto("/catalog/");
+
+      const example = page.locator(
+        '[data-catalog-component="src/components/articles/ArticleReferences.astro"]',
+      );
+      const references = example.locator("[data-article-references]");
+
+      await expect(references).toBeVisible();
+      await expectHorizontallyContained(references, example, {
+        inner: "article references",
+        outer: "article references catalog example",
+      });
+      await expectNoHorizontalOverflow(page);
+    });
+  }
 }

@@ -1,6 +1,6 @@
 ---
 import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
-import PageFrame from "../../components/layout/PageFrame.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { articleListItemsFromArchive } from "../../lib/article-list";
 import { articleArchiveItems } from "../../lib/archive";
@@ -29,7 +29,7 @@ const categoryItems = articleListItemsFromArchive(
     `Articles filed under ${category.title}.`}
   canonicalPath={categoryUrl(category.slug)}
 >
-  <PageFrame size="md">
+  <BrowsingBody>
     <ArchiveListBlock
       eyebrow="Category"
       title={category.title}
@@ -37,5 +37,5 @@ const categoryItems = articleListItemsFromArchive(
         `Articles filed under ${category.title}.`}
       items={categoryItems}
     />
-  </PageFrame>
+  </BrowsingBody>
 </BaseLayout>

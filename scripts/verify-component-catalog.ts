@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 import {
@@ -222,7 +223,10 @@ function listRepositoryFiles(rootDir: string): string[] {
     );
   }
 
-  return result.stdout.split(/\r?\n/).filter((line) => line !== "");
+  return result.stdout
+    .split(/\r?\n/)
+    .filter((line) => line !== "")
+    .filter((line) => existsSync(path.join(rootDir, line)));
 }
 
 function toPosix(file: string): string {

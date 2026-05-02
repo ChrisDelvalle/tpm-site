@@ -16,7 +16,7 @@ describe("SiteShell", () => {
 
     expect(view).toContain("Shell Content");
     expect(view).toContain("Mobile site search");
-    expect(view).toContain("Category navigation");
+    expect(view).toContain("Footer category navigation");
     expect(view).toContain("Support Our Research");
   });
 });

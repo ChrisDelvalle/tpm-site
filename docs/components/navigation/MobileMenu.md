@@ -4,12 +4,15 @@ Source: `src/components/navigation/MobileMenu.astro`
 
 ## Purpose
 
-`MobileMenu` provides the complete constrained-layout navigation fallback
+`MobileMenu` provides the complete constrained-layout navigation fallback. Any
+destination hidden from the desktop header at smaller widths must remain
+reachable here.
 
 ## Public Contract
 
 - `currentPath?: string`
-- `items: readonly SectionNavItem[]`
+- `categories: readonly SectionNavItem[]`
+- `primaryItems: readonly PrimaryNavItem[]`
 - `label?: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
@@ -18,11 +21,18 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/navigation`, `./CategoryTree`, `./PrimaryNav`, `./SearchForm`, `./SupportLink`, `./ThemeToggle`. It must remain interchangeable between header, mobile menu, sidebar, and footer contexts where the public contract allows it.
+It composes local navigation data helpers, `CategoryTree` or `SectionNav`,
+`PrimaryNav`, `SearchForm`, `SupportLink`, and `ThemeToggle`.
+
+`SiteHeader` owns when the mobile menu is shown. `MobileMenu` owns the contents
+and internal grouping of the constrained-width navigation surface.
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and keyboard targets, and avoid horizontal overflow. Desktop-only surfaces must have an equivalent mobile or fallback navigation path.
+The component must remain usable in constrained containers, preserve touch and
+keyboard targets, and avoid horizontal overflow. It may be a disclosure,
+popover, drawer, or simple expanded panel, but it must be the single complete
+fallback rather than a partial mirror of desktop navigation.
 
 ## Layering And Scrolling
 
@@ -36,7 +46,9 @@ Default, long-content, missing optional content, hover, focus-visible, and dark-
 
 ## Accessibility Semantics
 
-Use labeled navigation landmarks, native links/details where possible, keyboard-reachable controls, and `aria-current` only for the current destination.
+Use a labeled navigation landmark or labeled disclosure region. Use links for
+destinations and buttons only for toggles. `aria-current="page"` belongs on
+current links. Do not use ARIA menu patterns for ordinary document navigation.
 
 ## Content Edge Cases
 
@@ -57,10 +69,12 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - keeps desktop and mobile controls from exposing conflicting visible states.
 - supports keyboard disclosure and focus order.
+- includes categories, `Articles`, `About`, search, theme, support, and
+  secondary links such as RSS when those links are not visible in the desktop
+  header.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
 - Mobile menu is the complete constrained-width navigation fallback. It should
-  expose category discovery, search, support, articles, categories, about, RSS,
-  and future bibliography/authors links without relying on desktop dropdowns.
+  expose future bibliography/authors links when those destinations become part
+  of the site without relying on desktop dropdowns.

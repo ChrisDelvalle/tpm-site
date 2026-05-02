@@ -1,5 +1,6 @@
 ---
 import BrandLink from "../navigation/BrandLink.astro";
+import DiscoveryMenu from "../navigation/DiscoveryMenu.astro";
 import MobileMenu from "../navigation/MobileMenu.astro";
 import PrimaryNav from "../navigation/PrimaryNav.astro";
 import SearchForm from "../navigation/SearchForm.astro";
@@ -34,6 +35,7 @@ const { currentPath, navigationItems } = Astro.props;
       class="hidden min-w-max justify-self-end lg:flex lg:items-center lg:gap-4"
     >
       <PrimaryNav currentPath={currentPath} />
+      <DiscoveryMenu currentPath={currentPath} items={navigationItems} />
       <ThemeToggle />
       <SupportLink />
     </div>

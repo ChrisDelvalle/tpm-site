@@ -4,7 +4,12 @@ Source: `src/components/navigation/SectionNav.astro`
 
 ## Purpose
 
-`SectionNav` serves as a navigation component for site discovery, wayfinding, search, category browsing, or support actions.
+`SectionNav` renders a simple category/section link list when a plain
+no-dropdown navigation surface is needed. It is useful for footer category
+links, mobile menu category sections, and fallback category discovery.
+
+It should not own desktop category previews; `CategoryDropdown` owns that
+behavior.
 
 ## Public Contract
 
@@ -18,11 +23,16 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/navigation`, `./CategoryTree`. It must remain interchangeable between header, mobile menu, sidebar, and footer contexts where the public contract allows it.
+It composes local navigation data and may compose `CategoryTree` where a nested
+article list is intentionally needed. It must remain a plain navigation
+surface, not a popover/dropdown manager.
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and keyboard targets, and avoid horizontal overflow. Desktop-only surfaces must have an equivalent mobile or fallback navigation path.
+The component must remain usable in constrained containers, preserve touch and
+keyboard targets, and avoid horizontal overflow. It should support vertical and
+compact inline presentations through explicit variants only if implementation
+needs both.
 
 ## Layering And Scrolling
 
@@ -55,13 +65,11 @@ visible, and CTAs distinguishable from neutral actions.
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
-- keeps desktop and mobile controls from exposing conflicting visible states.
-- supports keyboard disclosure and focus order.
+- renders ordinary links with correct current state.
+- does not render dropdown preview surfaces.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
 - Section navigation should expose publication categories as normal links.
-  Preview dropdown composition belongs to `DiscoveryMenu` and
-  `CategoryDropdown`; this component should stay usable as a simple
-  no-JavaScript category link row.
+  Preview dropdown composition belongs to `CategoryDropdown`; this component
+  should stay usable as a simple no-JavaScript category link row.

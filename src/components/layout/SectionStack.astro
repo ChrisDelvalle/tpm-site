@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
+  spacing?: "compact" | "normal" | "relaxed";
+}
+
+const { spacing = "normal", class: className, ...attrs } = Astro.props;
+const spacingClasses = {
+  compact: "gap-6",
+  normal: "gap-8",
+  relaxed: "gap-10 lg:gap-12",
+} as const;
+---
+
+<div
+  {...attrs}
+  data-section-stack
+  class:list={["grid min-w-0", spacingClasses[spacing], className]}
+>
+  <slot />
+</div>

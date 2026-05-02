@@ -13,8 +13,42 @@ export const layoutCatalogExamples = [
   },
   {
     componentPath: "src/components/layout/MainFrame.astro",
-    description: "Main content and desktop category-sidebar composition.",
+    description: "Single main landmark that receives page-body primitives.",
     title: "MainFrame",
+  },
+  {
+    componentPath: "src/components/layout/ReadingBody.astro",
+    description:
+      "Readable article and prose page body with optional rail slot.",
+    title: "ReadingBody",
+  },
+  {
+    componentPath: "src/components/layout/BrowsingBody.astro",
+    description:
+      "Standard browsing page body for archives, categories, and search.",
+    title: "BrowsingBody",
+  },
+  {
+    componentPath: "src/components/layout/SectionStack.astro",
+    description: "Reusable vertical rhythm between page sections.",
+    title: "SectionStack",
+  },
+  {
+    componentPath: "src/components/layout/ContentRail.astro",
+    description: "Quiet secondary rail for article-local navigation or tools.",
+    title: "ContentRail",
+  },
+  {
+    componentPath: "src/components/layout/EndcapStack.astro",
+    description:
+      "Ordered stack for support, discovery, references, and metadata.",
+    title: "EndcapStack",
+  },
+  {
+    componentPath: "src/components/layout/MarginSidebarLayout.astro",
+    description:
+      "Centered content layout with optional side rails in page margin space.",
+    title: "MarginSidebarLayout",
   },
   {
     componentPath: "src/components/layout/SiteFooter.astro",

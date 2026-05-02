@@ -2,8 +2,10 @@
 import { render } from "astro:content";
 
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import { articleTableOfContentsHeadings } from "../../lib/article-toc";
 import { getArticles } from "../../lib/content";
 import { articleStaticPaths } from "../../lib/static-paths";
+import { articleReferencesFromFrontmatter } from "../../remark-plugins/articleReferences";
 
 /**
  * Generates one static article route for each published article.
@@ -15,9 +17,17 @@ export async function getStaticPaths() {
 }
 
 const { article } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings, remarkPluginFrontmatter } = await render(article);
+const articleReferences = articleReferencesFromFrontmatter(
+  remarkPluginFrontmatter,
+);
+const tableOfContentsHeadings = articleTableOfContentsHeadings(headings);
 ---
 
-<ArticleLayout article={article}>
+<ArticleLayout
+  article={article}
+  articleReferences={articleReferences}
+  tableOfContentsHeadings={tableOfContentsHeadings}
+>
   <Content />
 </ArticleLayout>

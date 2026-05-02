@@ -28,9 +28,11 @@ component has a matching one-pager in this directory.
 ## Navigation
 
 - `src/components/navigation/BrandLink.astro`
+- `src/components/navigation/CategoryDropdown.astro`
 - `src/components/navigation/CategoryGroup.astro`
-- `src/components/navigation/CategorySidebar.astro`
+- `src/components/navigation/CategoryPreviewList.astro`
 - `src/components/navigation/CategoryTree.astro`
+- `src/components/navigation/DiscoveryMenu.astro`
 - `src/components/navigation/MobileMenu.astro`
 - `src/components/navigation/PrimaryNav.astro`
 - `src/components/navigation/SearchForm.astro`
@@ -48,12 +50,15 @@ component has a matching one-pager in this directory.
 - `src/components/articles/ArticleList.astro`
 - `src/components/articles/ArticleMeta.astro`
 - `src/components/articles/ArticleProse.astro`
+- `src/components/articles/ArticleTableOfContents.astro`
 - `src/components/articles/ArticleTags.astro`
 - `src/components/articles/HoverImageCard.tsx`
 - `src/components/articles/HoverImageLink.astro`
 - `src/components/articles/HoverImageParagraph.astro`
 - `src/components/articles/MoreInCategoryBlock.astro`
 - `src/components/articles/RelatedArticlesBlock.astro`
+- `src/components/articles/TableOfContentsItem.astro`
+- `src/components/articles/TableOfContentsToggle.astro`
 
 ## Legacy Article Compatibility
 

@@ -1,9 +1,12 @@
 import { expect, test } from "@playwright/test";
 
 import {
+  expectFocusVisible,
   expectHorizontallyContained,
   expectNoHorizontalOverflow,
+  expectNoOverlap,
   expectVerticallyBefore,
+  scrollToY,
   visibleBoundingBox,
 } from "./helpers/layout";
 
@@ -123,6 +126,88 @@ test.describe("component layout invariants", () => {
 
     expect(headerToBodyGap).toBeGreaterThanOrEqual(0);
     expect(headerToBodyGap).toBeLessThanOrEqual(64);
+  });
+
+  test("article table of contents occupies the reading margin without overlaying prose", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 2560 });
+    await page.goto("/articles/facebook-groups/");
+    await scrollToY(page, 600);
+
+    const headerBox = await visibleBoundingBox(
+      page.locator("[data-site-header]"),
+      "site header",
+    );
+    const toc = page.locator("[data-article-toc]");
+    const prose = page.locator("[data-article-prose]");
+    const contentColumn = page.locator("[data-margin-sidebar-content]");
+    const tocBox = await visibleBoundingBox(toc, "article table of contents");
+
+    expect(tocBox.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height);
+    await expectNoOverlap(toc, prose, {
+      first: "article table of contents",
+      second: "article prose",
+    });
+    await expectHorizontallyContained(prose, contentColumn, {
+      inner: "article prose",
+      outer: "reading content column",
+    });
+    await expectNoHorizontalOverflow(page);
+  });
+
+  test("article table of contents hide and hash-link behavior is keyboard safe", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 2560 });
+    await page.goto("/articles/facebook-groups/");
+
+    const details = page.locator("[data-article-toc] details");
+    const summary = page.locator("[data-article-toc] summary");
+    const firstLink = page
+      .locator("[data-article-toc]")
+      .getByRole("link", { name: "Facebook as a platform" });
+    const contentColumn = page.locator("[data-margin-sidebar-content]");
+    const openContentBox = await visibleBoundingBox(
+      contentColumn,
+      "open reading content column",
+    );
+
+    await summary.focus();
+    await expectFocusVisible(page);
+    await page.keyboard.press("Enter");
+    await expect(details).not.toHaveAttribute("open", "");
+
+    const closedContentBox = await visibleBoundingBox(
+      contentColumn,
+      "closed reading content column",
+    );
+    expect(Math.abs(openContentBox.x - closedContentBox.x)).toBeLessThanOrEqual(
+      1,
+    );
+    expect(
+      Math.abs(openContentBox.width - closedContentBox.width),
+    ).toBeLessThanOrEqual(1);
+
+    await page.keyboard.press("Enter");
+    await expect(details).toHaveAttribute("open", "");
+    await firstLink.click();
+    await expect(page).toHaveURL(/#facebook-as-a-platform$/u);
+  });
+
+  test("article table of contents is not a competing visible surface on mobile and tablet", async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { height: 844, width: 390 },
+      { height: 1024, width: 768 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto("/articles/facebook-groups/");
+
+      await expect(page.locator("[data-article-toc]")).toBeHidden();
+      await expectNoHorizontalOverflow(page);
+    }
   });
 
   test("search result highlights render as mark elements, not escaped text", async ({
