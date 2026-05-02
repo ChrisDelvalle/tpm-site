@@ -361,7 +361,8 @@ src/content/pages/index.md
   frontmatter:
     title
     description
-    heroImage
+    heroLightImage
+    heroDarkImage
     heroAlt
     announcementImage
     announcementAlt
@@ -581,7 +582,8 @@ Recommended frontmatter shape:
 ```yaml
 title: The Philosopher's Meme
 description: The philosophy of memes, cyberculture, and the Internet.
-heroImage: ../../assets/site/2022-04-05_tpm-header_trnp_dm.png
+heroLightImage: ../../assets/site/tpm_home_hero_light.png
+heroDarkImage: ../../assets/site/tpm_home_hero_dark.png
 heroAlt: The Philosopher's Meme
 announcementImage: ../../assets/site/r2021-03-22.png
 announcementAlt: Announcement artwork for The Philosopher's Meme
@@ -1000,6 +1002,8 @@ Examples:
   visually hidden depending on context.
 - `HomeHeroBlock`: image fills its container, actions wrap, text remains readable
   without viewport-scaled font sizes.
+- `ThemedImage`: uses equivalent light/dark artwork through Astro's image
+  pipeline and lets the parent own measure, caption, and semantic placement.
 - `SupportBlock`: visible without dominating the reading flow; clear CTA;
   secondary copy stays short and does not push article continuation below
   unrelated promotional content.

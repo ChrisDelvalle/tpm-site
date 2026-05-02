@@ -80,6 +80,7 @@ imports require that path.
 
 - `src/components/media/EmbedFrame.astro`
 - `src/components/media/ResponsiveIframe.astro`
+- `src/components/media/ThemedImage.astro`
 
 ## SEO Components
 

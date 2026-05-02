@@ -2,8 +2,9 @@
 import { getEntry, render } from "astro:content";
 
 import recentImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
-import heroImage from "../assets/site/2022-04-05_tpm-header_trnp_dm.png";
 import announcementImage from "../assets/site/r2021-03-22.png";
+import heroDarkImage from "../assets/site/tpm_home_hero_dark.png";
+import heroLightImage from "../assets/site/tpm_home_hero_light.png";
 import HomeAnnouncementBlock from "../components/blocks/HomeAnnouncementBlock.astro";
 import HomeArchiveLinksBlock from "../components/blocks/HomeArchiveLinksBlock.astro";
 import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
@@ -43,7 +44,8 @@ const description =
 <BaseLayout title={title} description={description} canonicalPath="/">
   <BrowsingBody width="wide">
     <HomeHeroBlock
-      image={heroImage}
+      lightImage={heroLightImage}
+      darkImage={heroDarkImage}
       imageAlt={home.data.title}
       tagline={description}
     />

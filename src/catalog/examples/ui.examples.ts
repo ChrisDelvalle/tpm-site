@@ -66,4 +66,9 @@ export const uiCatalogExamples = [
     description: "Accessible iframe with responsive aspect-ratio frame.",
     title: "ResponsiveIframe",
   },
+  {
+    componentPath: "src/components/media/ThemedImage.astro",
+    description: "Theme-aware optimized image pair for equivalent artwork.",
+    title: "ThemedImage",
+  },
 ] as const satisfies UiCatalogExample[];

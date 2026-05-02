@@ -1,22 +1,24 @@
 ---
 import type { ImageMetadata } from "astro";
-import { Image } from "astro:assets";
 
+import ThemedImage from "../media/ThemedImage.astro";
 import LinkButton from "../ui/LinkButton.astro";
 
 interface Props {
-  image: ImageMetadata;
+  darkImage: ImageMetadata;
   imageAlt: string;
+  lightImage: ImageMetadata;
   tagline: string;
 }
 
-const { image, imageAlt, tagline } = Astro.props;
+const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
 ---
 
 <section class="grid max-w-3xl gap-6" aria-labelledby="home-hero-heading">
   <h1 id="home-hero-heading" class="sr-only">The Philosopher's Meme</h1>
-  <Image
-    src={image}
+  <ThemedImage
+    lightImage={lightImage}
+    darkImage={darkImage}
     alt={imageAlt}
     layout="full-width"
     loading="eager"

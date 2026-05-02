@@ -32,6 +32,7 @@ import SiteFooter from "../components/layout/SiteFooter.astro";
 import SiteHeader from "../components/layout/SiteHeader.astro";
 import EmbedFrame from "../components/media/EmbedFrame.astro";
 import ResponsiveIframe from "../components/media/ResponsiveIframe.astro";
+import ThemedImage from "../components/media/ThemedImage.astro";
 import BrandLink from "../components/navigation/BrandLink.astro";
 import CategoryGroup from "../components/navigation/CategoryGroup.astro";
 import CategoryTree from "../components/navigation/CategoryTree.astro";
@@ -55,6 +56,7 @@ import LinkButton from "../components/ui/LinkButton.astro";
 import Section from "../components/ui/Section.astro";
 import Separator from "../components/ui/Separator.astro";
 import TextLink from "../components/ui/TextLink.astro";
+import sampleDarkImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
 import sampleImage from "../assets/shared/tpm_defaultpic.jpg";
 import { catalogMetadata } from "./catalog.config";
 import CatalogExample from "./CatalogExample.astro";
@@ -356,6 +358,22 @@ const catalogReferences = {
           fallbackHref="https://example.com/video"
         />
       </CatalogExample>
+
+      <CatalogExample
+        title="ThemedImage"
+        description="Optimized image pair that switches artwork by light/dark theme."
+        componentPath="src/components/media/ThemedImage.astro"
+      >
+        <div class="max-w-3xl">
+          <ThemedImage
+            lightImage={sampleImage}
+            darkImage={sampleDarkImage}
+            alt="The Philosopher's Meme"
+            layout="full-width"
+            class="block h-auto w-full"
+          />
+        </div>
+      </CatalogExample>
     </CatalogSection>
 
     <CatalogSection
@@ -580,13 +598,15 @@ const catalogReferences = {
       >
         <div class="grid gap-8">
           <HomeHeroBlock
-            image={sampleImage}
+            lightImage={sampleImage}
+            darkImage={sampleDarkImage}
             imageAlt="The Philosopher's Meme"
             tagline="The philosophy of memes, cyberculture, and the Internet."
           />
           <div class="max-w-xs">
             <HomeHeroBlock
-              image={sampleImage}
+              lightImage={sampleImage}
+              darkImage={sampleDarkImage}
               imageAlt="The Philosopher's Meme narrow preview"
               tagline="A deliberately narrow example that checks wrapping for the homepage hero tagline."
             />

@@ -9,6 +9,7 @@ describe("UI catalog examples", () => {
     expect(paths).toContain("src/components/ui/Button.astro");
     expect(paths).toContain("src/components/ui/LinkButton.astro");
     expect(paths).toContain("src/components/media/ResponsiveIframe.astro");
+    expect(paths).toContain("src/components/media/ThemedImage.astro");
     expect(new Set(paths).size).toBe(paths.length);
   });
 });
