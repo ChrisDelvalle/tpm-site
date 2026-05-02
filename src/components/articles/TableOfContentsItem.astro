@@ -25,11 +25,11 @@ const indentClass =
   {...attrs}
   aria-current={current ? "location" : undefined}
   class:list={[
-    "text-muted-foreground hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:outline-ring block rounded-sm py-1.5 text-sm leading-snug underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-offset-2 focus-visible:outline-solid",
-    current && "text-foreground font-semibold",
+    "text-muted-foreground hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:outline-ring data-[current=true]:text-primary block rounded-sm py-1.5 text-sm leading-snug underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-offset-2 focus-visible:outline-solid data-[current=true]:font-semibold",
     indentClass,
     className,
   ]}
+  data-current={current ? "true" : undefined}
   data-toc-heading-level={heading.level}
   data-toc-heading-order={heading.order}
   href={heading.href}

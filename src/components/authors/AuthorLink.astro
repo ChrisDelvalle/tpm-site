@@ -1,0 +1,14 @@
+---
+import TextLink from "../ui/TextLink.astro";
+import type { AuthorSummary } from "../../lib/authors";
+
+interface Props {
+  author: AuthorSummary;
+}
+
+const { author } = Astro.props;
+---
+
+<TextLink href={author.href} variant="subtle" tone="primary">
+  {author.displayName}
+</TextLink>

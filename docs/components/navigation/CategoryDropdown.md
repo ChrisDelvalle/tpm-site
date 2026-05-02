@@ -41,7 +41,9 @@ category page. If a separate disclosure trigger is needed, keep it small and
 adjacent to the link.
 
 The dropdown surface should align visually with the header/navigation system
-and cap its width to a readable preview measure.
+and cap its width to a readable preview measure. The surface is
+viewport-constrained rather than trigger-edge aligned, so it remains fully
+visible when a category appears near the left or right edge.
 
 At constrained widths, hide the desktop dropdown and let `MobileMenu` own
 category discovery.
@@ -55,6 +57,10 @@ Do not replace the category link with a button-only trigger.
 The preview surface must not overlap the sticky header in a way that hides the
 trigger or content. It should not require client-side JavaScript for basic
 open/close behavior.
+
+Position the floating wrapper from `--site-header-height`, not a fixed pixel
+offset. This keeps the panel below one-row mobile headers, two-row desktop
+headers, and future header-density adjustments.
 
 ## Interaction States
 

@@ -15,7 +15,6 @@ title, description, and date/author metadata.
 - `date?: Date | undefined`
 - `description?: string | undefined`
 - `formattedDate?: string | undefined`
-- `legacyAuthor?: string | undefined`
 - `title: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration

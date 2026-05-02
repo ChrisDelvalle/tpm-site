@@ -11,7 +11,7 @@
     "assets:unused": "bun scripts/find-unused-images.ts",
     "audit": "bun audit --audit-level=high",
     "audit:all": "bun audit",
-    "build": "astro build && pagefind --site dist --quiet --glob \"{index.html,about/**/*.html,articles/**/*.html,categories/**/*.html,search/**/*.html}\"",
+    "build": "astro build && pagefind --site dist --quiet --glob \"{index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}\"",
     "catalog:build": "bun --env-file=.env.catalog --silent run build",
     "catalog:check": "bun scripts/verify-component-catalog.ts --quiet",
     "catalog:dev": "bun --env-file=.env.catalog --silent run dev",
@@ -58,7 +58,7 @@
     "typecheck": "bun --silent run typecheck:astro && bun --silent run typecheck:tools",
     "typecheck:astro": "astro check --minimumFailingSeverity warning --minimumSeverity warning",
     "typecheck:tools": "tsc --project tsconfig.tools.json --pretty false",
-    "validate:html": "html-validate --max-warnings=0 dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\"",
+    "validate:html": "html-validate --max-warnings=0 dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/authors/**/*.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\"",
     "verify": "bun scripts/verify-build.ts --quiet",
     "verify:content": "bun scripts/verify-content.ts"
   },

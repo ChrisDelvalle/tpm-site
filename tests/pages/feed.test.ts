@@ -4,67 +4,67 @@ await mock.module("astro:content", () => ({
   getCollection: async (collection: string) => {
     await Promise.resolve();
 
-    return collection === "articles"
-      ? [
-          {
-            collection: "articles",
-            data: {
-              author: "Author",
-              date: new Date("2022-01-02T00:00:00Z"),
-              description: "Newer",
-              draft: false,
-              tags: [],
-              title: "Newer Article",
-            },
-            filePath: "/repo/src/content/articles/history/newer.md",
-            id: "newer",
+    if (collection === "articles") {
+      return [
+        {
+          collection: "articles",
+          data: {
+            author: "Author",
+            date: new Date("2022-01-02T00:00:00Z"),
+            description: "Newer",
+            draft: false,
+            tags: [],
+            title: "Newer Article",
           },
-          {
-            collection: "articles",
-            data: {
-              author: "Author",
-              date: new Date("2021-01-02T00:00:00Z"),
-              description: "Draft",
-              draft: true,
-              tags: [],
-              title: "Draft Article",
-            },
-            filePath: "/repo/src/content/articles/history/draft.md",
-            id: "draft",
+          filePath: "/repo/src/content/articles/history/newer.md",
+          id: "newer",
+        },
+        {
+          collection: "articles",
+          data: {
+            author: "Author",
+            date: new Date("2021-01-02T00:00:00Z"),
+            description: "Draft",
+            draft: true,
+            tags: [],
+            title: "Draft Article",
           },
-          {
-            collection: "articles",
-            data: {
-              author: "Author",
-              date: new Date("2020-01-02T00:00:00Z"),
-              description: "Older",
-              draft: false,
-              tags: [],
-              title: "Older Article",
-            },
-            filePath: "/repo/src/content/articles/politics/older.md",
-            id: "older",
+          filePath: "/repo/src/content/articles/history/draft.md",
+          id: "draft",
+        },
+        {
+          collection: "articles",
+          data: {
+            author: "Author",
+            date: new Date("2020-01-02T00:00:00Z"),
+            description: "Older",
+            draft: false,
+            tags: [],
+            title: "Older Article",
           },
-        ]
-      : [
-          {
-            collection: "categories",
-            data: {
-              description: "History articles",
-              order: 1,
-              title: "History",
-            },
-            id: "history",
+          filePath: "/repo/src/content/articles/politics/older.md",
+          id: "older",
+        },
+      ];
+    }
+
+    if (collection === "authors") {
+      return [
+        {
+          body: "",
+          collection: "authors",
+          data: {
+            aliases: ["Author"],
+            displayName: "Author",
+            socials: [],
+            type: "person",
           },
-          {
-            collection: "categories",
-            data: {
-              order: 2,
-              title: "Politics",
-            },
-            id: "politics",
-          },
-        ];
+          id: "author",
+        },
+      ];
+    }
+
+    return [];
   },
 }));
 

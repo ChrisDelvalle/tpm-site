@@ -12,9 +12,8 @@ authors that visible article surfaces use.
 ## Public Contract
 
 - `article: ArticleEntry`
-- `authors?: readonly AuthorProfile[] | undefined`
+- `authors?: readonly AuthorSummary[] | undefined`
 - `category?: CategorySummary | undefined`
-- `legacyAuthor?: string | undefined`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -29,8 +28,8 @@ ArticleLayout / SEO head boundary
     SEO helpers
 ```
 
-This component should consume normalized article and author data from the route
-or article view model. It should not free-text match author names or fetch
+This component should consume normalized article and author summaries from the
+route or article view model. It should not free-text match author names or fetch
 author profiles itself.
 
 ## Layout And Responsiveness

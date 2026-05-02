@@ -1,0 +1,26 @@
+---
+import AuthorArticleList from "./AuthorArticleList.astro";
+import AuthorBioBlock from "./AuthorBioBlock.astro";
+import AuthorProfileHeader from "./AuthorProfileHeader.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+import type { AuthorProfile } from "../../lib/authors";
+
+interface Props {
+  hasProfileBody?: boolean;
+  items: readonly ArticleListItem[];
+  profile: AuthorProfile;
+}
+
+const { hasProfileBody = false, items, profile } = Astro.props;
+---
+
+<article class="grid gap-10" data-author-page>
+  <AuthorProfileHeader profile={profile} />
+  <AuthorBioBlock profile={profile} hasProfileBody={hasProfileBody}>
+    <slot />
+  </AuthorBioBlock>
+  <AuthorArticleList
+    title={`Articles by ${profile.displayName}`}
+    items={items}
+  />
+</article>

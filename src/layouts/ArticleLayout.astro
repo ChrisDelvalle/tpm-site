@@ -6,6 +6,7 @@ import ArticleProse from "../components/articles/ArticleProse.astro";
 import ArticleReferences from "../components/articles/ArticleReferences.astro";
 import ArticleTableOfContents from "../components/articles/ArticleTableOfContents.astro";
 import ArticleTags from "../components/articles/ArticleTags.astro";
+import AuthorBioBlock from "../components/authors/AuthorBioBlock.astro";
 import ContentRail from "../components/layout/ContentRail.astro";
 import EndcapStack from "../components/layout/EndcapStack.astro";
 import ReadingBody from "../components/layout/ReadingBody.astro";
@@ -17,7 +18,12 @@ import {
 import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleViewModel } from "../lib/article-view";
 import { articleArchiveItems } from "../lib/archive";
-import { getCategory } from "../lib/content";
+import {
+  authorProfiles,
+  authorSummariesForArticle,
+  getAuthorEntries,
+} from "../lib/authors";
+import { getArticles, getCategory } from "../lib/content";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import BaseLayout from "./BaseLayout.astro";
 
@@ -39,6 +45,18 @@ const {
 } = Astro.props;
 const articleView = articleViewModel(article);
 const showTableOfContents = hasUsefulTableOfContents(tableOfContentsHeadings);
+const authorEntries = await getAuthorEntries();
+const articleAuthors = authorSummariesForArticle(article, authorEntries);
+const allArticles = await getArticles();
+const authorProfileMap = new Map(
+  authorProfiles(authorEntries, allArticles).map((profile) => [
+    profile.id,
+    profile,
+  ]),
+);
+const articleAuthorProfiles = articleAuthors
+  .map((author) => authorProfileMap.get(author.id))
+  .filter((profile) => profile !== undefined);
 const category = await getCategory(articleView.categorySlug);
 const categoryHref = category ? categoryUrl(category.slug) : undefined;
 const moreInCategory =
@@ -50,6 +68,7 @@ const moreInCategory =
             .filter((categoryArticle) => categoryArticle.id !== article.id)
             .slice(0, 3),
           [category],
+          authorEntries,
         ),
       );
 ---
@@ -62,7 +81,12 @@ const moreInCategory =
   imageAlt={articleView.imageAlt}
   type="article"
 >
-  <ArticleJsonLd slot="head" article={article} category={category} />
+  <ArticleJsonLd
+    slot="head"
+    article={article}
+    authors={articleAuthors}
+    category={category}
+  />
   <ReadingBody>
     {
       showTableOfContents && (
@@ -79,6 +103,7 @@ const moreInCategory =
     <article class="grid w-full gap-8" data-pagefind-body>
       <ArticleHeader
         author={articleView.author}
+        authors={articleAuthors}
         category={category && categoryHref
           ? { href: categoryHref, title: category.title }
           : undefined}
@@ -91,6 +116,11 @@ const moreInCategory =
         <slot />
       </ArticleProse>
       <EndcapStack spacing="relaxed">
+        {
+          articleAuthorProfiles.map((profile) => (
+            <AuthorBioBlock profile={profile} context="article" />
+          ))
+        }
         <ArticleEndcap
           categoryHref={categoryHref}
           categoryTitle={category?.title}

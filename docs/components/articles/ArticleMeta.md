@@ -16,11 +16,10 @@ pass normalized dates, categories, and author summaries.
 - `authors?: readonly AuthorSummary[] | undefined`
 - `date?: Date | undefined`
 - `formattedDate?: string | undefined`
-- `legacyAuthor?: string | undefined`
 
-`author` is the current implementation shape. The target author design should
-move display to `authors` plus `legacyAuthor` during migration, then remove the
-legacy fallback once article frontmatter is normalized.
+`authors` is preferred when structured author metadata exists. `author` remains
+the preserved legacy byline fallback while article frontmatter still uses a
+single display string.
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would

@@ -1215,68 +1215,263 @@ Scope rules:
 
 ## Milestone 38: Author Pages Implementation And Metadata Normalization
 
-- [ ] Implement only after Milestones 22 and 23 are complete.
-- [ ] Add the author metadata source and content schema chosen in the technical
+- [x] Implement only after Milestones 22 and 23 are complete.
+- [x] Add the author metadata source and content schema chosen in the technical
       design.
-- [ ] Add `src/content/authors/` as the canonical author collection, with
+- [x] Add `src/content/authors/` as the canonical author collection, with
       author IDs as stable entry slugs and Markdown body content available for
       long profile pages.
-- [ ] Normalize article author references only according to the approved
+- [x] Normalize article author references only according to the approved
       article-content plan and preserve article wording and author intent.
-- [ ] Add `/authors/[author]/` routes for all public author profiles.
-- [ ] Add an `/authors/` index route because the component design includes it
+- [x] Add `/authors/[author]/` routes for all public author profiles.
+- [x] Add an `/authors/` index route because the component design includes it
       as a useful footer/discovery destination.
-- [ ] Implement `src/components/authors/AuthorLink.astro`,
+- [x] Implement `src/components/authors/AuthorLink.astro`,
       `AuthorByline.astro`, `AuthorBioBlock.astro`,
       `AuthorProfileHeader.astro`, `AuthorArticleList.astro`,
       `AuthorSocialLinks.astro`, `AuthorPage.astro`, and
       `AuthorsIndexPage.astro` according to their component one-pagers.
-- [ ] Link article bylines to author pages when author data is known and use the
+- [x] Link article bylines to author pages when author data is known and use the
       approved fallback behavior when it is not.
-- [ ] Reuse `AuthorByline` through `ArticleMeta`, `ArticleHeader`,
+- [x] Reuse `AuthorByline` through `ArticleMeta`, `ArticleHeader`,
       `ArticleCard`, article lists, author pages, and related-reading surfaces
       so author display does not fork by page type.
-- [ ] Render optional article-page author bio surfaces only when approved
+- [x] Render optional article-page author bio surfaces only when approved
       profile metadata exists; do not render placeholder author copy.
-- [ ] Add author metadata to JSON-LD, RSS, canonical metadata, and other
+- [x] Add author metadata to JSON-LD, RSS, canonical metadata, and other
       machine-readable surfaces according to the technical design.
-- [ ] Add schema, relationship, route smoke, render, accessibility, RSS, JSON-LD,
+- [x] Add schema, relationship, route smoke, render, accessibility, RSS, JSON-LD,
       and Playwright tests defined by the design milestones.
-- [ ] Update author-facing article submission documentation with author
+- [x] Update author-facing article submission documentation with author
       reference and metadata guidance.
-- [ ] Update `CHECKLIST.md` with any remaining author metadata follow-up
+- [x] Update `CHECKLIST.md` with any remaining author metadata follow-up
       discovered during implementation.
 
 ## Milestone 39: Article Anchor Navigation Alignment
 
-- [ ] Audit article heading anchors, generated heading IDs, TOC links, sticky
+- [x] Audit article heading anchors, generated heading IDs, TOC links, sticky
       header height, scroll margins, and any scroll-padding behavior that
       affects direct hash navigation.
-- [ ] Fix anchor navigation so loading an article with a hash URL and clicking
+- [x] Fix anchor navigation so loading an article with a hash URL and clicking
       an article TOC link positions the target heading fully visible below the
       sticky header, with sensible breathing room.
-- [ ] Add progressive current-section highlighting to the article table of
+- [x] Add progressive current-section highlighting to the article table of
       contents so the active heading link uses the standard link/primary color
       while preserving static hash-link behavior without JavaScript.
-- [ ] Implement the fix in the owning article/prose/layout component or shared
+- [x] Implement the fix in the owning article/prose/layout component or shared
       token rather than as a route-specific patch.
-- [ ] Add Playwright coverage for direct hash navigation and TOC click
+- [x] Add Playwright coverage for direct hash navigation and TOC click
       navigation across desktop, tablet, and mobile widths.
-- [ ] Include a regression case for headings near the top of an article and for
+- [x] Include a regression case for headings near the top of an article and for
       articles with no hero image, where sticky-header offset mistakes are most
       visible.
 
 ## Milestone 40: Overlay Positioning And Navigation Breakpoint Hardening
 
-- [ ] Audit dropdown, popover, and mobile-menu panels for assumptions about
+- [x] Audit dropdown, popover, and mobile-menu panels for assumptions about
       trigger horizontal position.
-- [ ] Refactor menu panels so they are viewport-constrained by default and
+- [x] Refactor menu panels so they are viewport-constrained by default and
       cannot fall off-screen merely because the trigger is near an edge.
-- [ ] Keep mobile-menu search and theme controls in the top control area of the
+- [x] Keep mobile-menu search and theme controls in the top control area of the
       panel while preserving all reachable destinations.
-- [ ] Move the category-discovery desktop breakpoint to the least aggressive
+- [x] Move the category-discovery desktop breakpoint to the least aggressive
       standard Tailwind breakpoint that avoids collisions and horizontal
       overflow.
-- [ ] Update component docs, catalog examples, render tests, and Playwright
+- [x] Update component docs, catalog examples, render tests, and Playwright
       responsive invariants for the hardened panel positioning and breakpoint
       contract.
+
+## Milestone 41: Anchored Positioning System Design
+
+- [x] Audit current header, search, dropdown, mobile menu, and hover-image
+      popup behavior for positioning assumptions, including vertical gaps,
+      incorrect center alignment, header overlap, viewport overflow, and
+      trigger/panel alignment mismatches.
+- [x] Add `docs/navigation/anchored-positioning-system.md` as the canonical
+      technical design for reusable anchored positioning primitives.
+- [x] Define the shared vocabulary: trigger, anchor, panel, placement context,
+      block-axis snap, inline-axis alignment, viewport boundary, safe gutter,
+      collision fallback, and panel ownership.
+- [x] Define context-specific placement rules for header category dropdowns,
+      search reveal, mobile navigation panels, and article hover-image panels.
+- [x] Define which behavior belongs in pure geometry helpers, Astro
+      components, processed browser scripts, and component-specific wrappers.
+- [x] Define implementation constraints: no unpositioned top-layer popovers, no
+      page-specific pixel offsets, no centered fallback unless a context
+      explicitly asks for center alignment, no header overlap, and no
+      horizontal overflow.
+- [x] Define accessibility, keyboard, pointer, hover, focus, reduced-motion,
+      resize, scroll, short-viewport, and no-JavaScript requirements.
+- [x] Define component catalog examples, render tests, unit tests, and
+      Playwright invariants required before implementation is complete.
+- [x] Add a testing plan to the design covering unit tests for geometry
+      decisions, render tests for component contracts, and e2e tests for
+      browser behavior, component relationships, viewport boundaries, layering,
+      resizing, scrolling, keyboard, pointer, hover, focus, and theme states.
+- [x] Critically review the design for ambiguous rules, edge cases, and
+      conflicts with Astro static-first and Tailwind-first architecture, then
+      revise it until it is ready for development.
+
+## Milestone 42: Anchored Positioning Engine And Adapter Foundation
+
+- [ ] Implement only after Milestone 41 is complete.
+- [ ] Add a pure `src/lib/` anchored positioning engine with typed rectangles,
+      placements, placement operations, deterministic collision fallback,
+      sizing results, and explicit placement state.
+- [ ] Implement placement operations as small testable functions:
+      `initialPlacement`, `offset`, `flipSide`, `flipAlignment`,
+      `shiftIntoBoundary`, `sizeToBoundary`, and `detectDetach`.
+- [ ] Add preset definitions for `header-dropdown`, `header-search-start`,
+      `header-search-end`, `mobile-shell-panel`, and
+      `inline-hover-preview`.
+- [ ] Document the required migration scope in code/docs: `CategoryDropdown`,
+      `SearchReveal`, `MobileMenu`, and article hover-image previews are the
+      required consumers; ordinary sticky rails, in-flow disclosures, controls,
+      media, references, and document-flow content must stay outside the
+      anchored system unless they become trigger-attached floating surfaces.
+- [ ] Add unit tests for every placement operation, every preset, split
+      block/inline anchors, edge triggers, collision fallback, sizing,
+      clamping, detach states, and subpixel tolerance.
+- [ ] Add the smallest processed browser adapter needed to bind anchored roots,
+      triggers, and panels, publish measured geometry as CSS custom
+      properties, and update on open, resize, scroll, header-size changes,
+      font/layout changes, and visual viewport changes where applicable.
+- [ ] Keep the DOM adapter generic: it measures, calls the pure engine, writes
+      CSS variables and data attributes, and does not own content, route data,
+      open-state semantics, or component-specific visuals.
+- [ ] Keep the DOM adapter Lighthouse-sensitive: one shared processed script,
+      no hydration boundary, no eager measurement of closed surfaces, no
+      polling, delegated/passive listeners where practical, batched
+      read/write work with `requestAnimationFrame`, and cleanup for
+      disconnected surfaces.
+- [ ] Add thin `AnchoredRoot`, `AnchoredTrigger`, and `AnchoredPanel`
+      primitives if they make the shared data-attribute and CSS-variable
+      contract harder to misuse.
+- [ ] Add render tests proving anchored primitives emit the shared attributes,
+      CSS variable hooks, accessible semantics, and preset names expected by
+      the design.
+- [ ] Add a minimal catalog section showing each preset's default, edge,
+      constrained, light-mode, dark-mode, hover, focus, and open states.
+- [ ] Update `docs/navigation/anchored-positioning-system.md` if
+      implementation proves any design detail needs clarification.
+
+## Milestone 43: Header Search, Category Dropdown, And Mobile Menu Fixes
+
+- [ ] Refactor `SearchReveal`, `CategoryDropdown`, and `MobileMenu` to use the
+      shared anchored positioning primitives and presets instead of
+      component-local fixed, centered, or magic-offset positioning.
+- [ ] Keep `SiteHeader`, `SearchForm`, `ThemeToggle`, `SupportLink`, sticky
+      layout rails, and in-flow `details`/`summary` navigation out of the
+      anchored system because they are not trigger-attached floating surfaces.
+- [ ] Fix the desktop search reveal so its top edge snaps to the bottom of the
+      sticky header with no visible gap.
+- [ ] Fix the desktop search reveal so it horizontally aligns to the search
+      trigger's logical edge: start-aligned when the trigger is on the left,
+      end-aligned when the trigger is on the right.
+- [ ] Fix desktop category dropdowns so their top edges snap to the bottom of
+      the sticky header and their inline edges align with the category trigger
+      according to the documented `header-dropdown` fallback rules.
+- [ ] Ensure category dropdowns never fall back to viewport centering unless a
+      future preset explicitly allows centering.
+- [ ] Preserve category trigger behavior: hover and focus reveal the dropdown,
+      pointer movement from trigger to panel is forgiving, keyboard access
+      works, and clicking the category still navigates to the category page.
+- [ ] Keep the mobile menu viewport-safe, attached to the sticky header,
+      internally scrollable on short screens, and independent of the horizontal
+      position of the sandwich trigger.
+- [ ] Keep the mobile support button outside the panel when visible, omit RSS
+      from the mobile panel, and keep search/theme controls in the panel's top
+      utility area.
+- [ ] Add Playwright regression tests that fail against the known broken nav
+      behavior: centered category panels, search panel gap, search panel wrong
+      side, header overlap, off-screen mobile panel, and short-viewport mobile
+      overflow.
+- [ ] Add render tests proving header/search/mobile components emit anchored
+      presets and no longer emit component-local centered fixed wrappers or
+      final positioning styles.
+- [ ] Update component one-pagers and header/navigation docs with the final
+      anchored positioning contract.
+
+## Milestone 44: Native Astro Hover Image Preview
+
+- [ ] Reimplement article hover-image previews with Astro components and the
+      `inline-hover-preview` anchored preset instead of React, Radix, or a
+      hydrated shadcn hover card.
+- [ ] Confirm no other production component still needs the anchored system
+      before removing React/Radix hover-card dependencies; future candidates
+      such as citation previews or share panels should be deferred until those
+      features exist.
+- [ ] Preserve the existing author-facing MDX API for hover-image links unless
+      article-specific work is explicitly approved separately.
+- [ ] Keep `src/components/article/` compatibility wrappers working if existing
+      MDX imports still depend on those paths.
+- [ ] Preserve hover-image semantics: inline prose trigger, real link fallback
+      to the image source, useful alt text on the preview image, focus-visible
+      access, and readable no-JavaScript behavior.
+- [ ] Preserve the existing `expanded` behavior as a size variant that affects
+      preview dimensions without changing the positioning algorithm.
+- [ ] Ensure previews remain visually tethered to their inline trigger, never
+      become centered viewport overlays, avoid covering the trigger, and fit
+      within viewport gutters when possible.
+- [ ] Add unit tests for the `inline-hover-preview` preset's side flip,
+      clamping, sizing, and detach behavior.
+- [ ] Add render tests for hover-image components proving they emit anchored
+      attributes, preserve link semantics, preserve alt text, and avoid React
+      hydration directives.
+- [ ] Add Playwright coverage for hover-image previews near the left edge,
+      right edge, top of viewport, bottom of viewport, after scroll, in light
+      mode, and in dark mode.
+- [ ] Remove the shadcn/Radix hover-card primitive and React hover-image card
+      only after no production component imports them.
+- [ ] Remove `@astrojs/react`, `react`, `react-dom`, `@types/react`,
+      `@types/react-dom`, and `radix-ui` only if no remaining approved feature
+      uses them.
+- [ ] Update hover-image component docs, the component inventory, package
+      script docs if needed, and the catalog example for article previews.
+
+## Milestone 45: Anchored Surface Regression Suite And Documentation
+
+- [ ] Add shared Playwright geometry helpers such as
+      `expectTopAlignedToBottom`, `expectInlineStartAligned`,
+      `expectInlineEndAligned`, `expectViewportGutters`,
+      `expectPanelBelowHeader`, `expectTopmostAtPanelPoints`,
+      `expectNoVisibleGap`, `expectRelationshipPreserved`, and
+      `expectPlacementState`.
+- [ ] Replace scattered raw coordinate assertions with named relationship
+      helpers so the tests read like design invariants.
+- [ ] Test anchored surfaces across mobile, short mobile, tablet, constrained
+      laptop widths, desktop, and wide desktop viewports.
+- [ ] Test first, middle, last, and edge-positioned triggers for category
+      dropdowns, search reveal, mobile menu, and hover-image previews where
+      applicable.
+- [ ] Test anchored behavior after scroll, after resize, after theme changes,
+      and after moving between mobile and desktop layout modes.
+- [ ] Test that no anchored surface creates page-level horizontal overflow.
+- [ ] Add regression coverage or review checks proving closed anchored
+      surfaces are not eagerly measured on page load and that the adapter does
+      not introduce unexpected client JavaScript growth.
+- [ ] Add component catalog examples for every anchored preset and every
+      meaningful placement state, including constrained and clamped states.
+- [ ] Update affected component one-pagers, navigation docs, catalog docs, and
+      testing docs so future developers know which relationships are public
+      invariants.
+
+## Milestone 46: Playwright Screenshot Inspection Pass
+
+- [ ] Build the site and run it through Playwright for manual screenshot-based
+      inspection after Milestones 42-45 are complete.
+- [ ] Capture desktop, constrained laptop, tablet, mobile, short-mobile, and
+      wide-desktop screenshots for the home page, articles hub, category page,
+      search page, representative article page, catalog page, and author page.
+- [ ] Capture screenshots at the top, mid-scroll, near footer, with the sticky
+      header visible, and with relevant anchored surfaces open.
+- [ ] Capture light-mode and dark-mode screenshots for representative pages and
+      anchored surfaces.
+- [ ] Inspect screenshots for visual gaps, overlap, off-screen panels, wrong
+      stacking, inconsistent widths, excessive whitespace, unreadable contrast,
+      broken focus/current states, horizontal overflow, and cramped short
+      viewport behavior.
+- [ ] Convert any issue found during screenshot review into a specific
+      checklist item or fix it before marking the milestone complete.
+- [ ] Update component docs or tests when screenshot review reveals an
+      invariant that should be permanently enforced.

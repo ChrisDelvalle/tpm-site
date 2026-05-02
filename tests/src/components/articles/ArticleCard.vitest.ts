@@ -13,6 +13,7 @@ describe("ArticleCard", () => {
 
     expect(view).toContain("<article");
     expect(view).toContain("/articles/article-title/");
+    expect(view).toContain("/authors/seong-young-her/");
     expect(view).toContain("Article Title");
     expect(view).toContain("Article description.");
   });

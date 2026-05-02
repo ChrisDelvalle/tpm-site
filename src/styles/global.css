@@ -176,6 +176,10 @@
     overflow-x: hidden;
   }
 
+  html {
+    scroll-padding-top: calc(var(--site-header-height) + 1.25rem);
+  }
+
   body,
   button,
   input {

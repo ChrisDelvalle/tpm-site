@@ -271,7 +271,8 @@ Notes:
 - `title` is the article title shown on the page.
 - `description` should be brief and useful.
 - `date` should use `YYYY-MM-DD`.
-- `author` should be the display name.
+- `author` should match an existing author display name or alias in
+  `src/content/authors/`.
 - `tags` are optional, but useful.
 - `image` and `imageAlt` are optional, but recommended when the article has a
   preview image.
@@ -279,6 +280,11 @@ Notes:
 
 Do not add `slug`, `category`, or `topic` frontmatter. The slug comes from the
 filename. The category comes from the folder.
+
+If this is a new author, ask a maintainer before submitting. The maintainer may
+add a new file in `src/content/authors/<author-slug>.md` with the author's
+display name, type, and approved aliases. Do not invent biographies, websites,
+or social links for an author.
 
 ## 8. Write The Article Body
 
@@ -510,6 +516,8 @@ Before asking for review:
 - New categories, if any, have a matching folder and JSON metadata file.
 - The filename slug is URL-safe.
 - The frontmatter has `title`, `description`, `date`, and `author`.
+- The `author` value matches an existing author profile or a maintainer has
+  added the new author metadata.
 - Images live under `src/assets/`.
 - Meaningful images have alt text.
 - Body headings start at `##`, not `#`.

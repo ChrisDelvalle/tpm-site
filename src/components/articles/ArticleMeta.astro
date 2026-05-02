@@ -1,18 +1,23 @@
 ---
+import AuthorByline from "../authors/AuthorByline.astro";
+import type { AuthorSummary } from "../../lib/authors";
+
 interface Props {
   author?: string | undefined;
+  authors?: readonly AuthorSummary[] | undefined;
   date?: Date | undefined;
   formattedDate?: string | undefined;
 }
 
-const { author, date, formattedDate } = Astro.props;
+const { author, authors = [], date, formattedDate } = Astro.props;
 const dateTime = date?.toISOString();
+const hasAuthor = author || authors.length > 0;
 ---
 
 {
-  (author || formattedDate) && (
+  (hasAuthor || formattedDate) && (
     <div class="text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 text-sm">
-      {author && <span>{author}</span>}
+      {hasAuthor && <AuthorByline authors={authors} legacyAuthor={author} />}
       {formattedDate && <time datetime={dateTime}>{formattedDate}</time>}
     </div>
   )

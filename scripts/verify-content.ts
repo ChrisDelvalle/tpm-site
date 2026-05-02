@@ -6,6 +6,7 @@ import matter from "gray-matter";
 /** Inputs needed to verify source content conventions. */
 export interface ContentVerificationOptions {
   articleDir: string;
+  authorDir: string;
   categoryDir: string;
   rootDir: string;
 }
@@ -31,6 +32,7 @@ export async function runContentVerificationCli(
   const quiet = args.includes("--quiet");
   const result = await verifyContent({
     articleDir: path.resolve(rootDir, "src/content/articles"),
+    authorDir: path.resolve(rootDir, "src/content/authors"),
     categoryDir: path.resolve(rootDir, "src/content/categories"),
     rootDir,
   });
@@ -53,20 +55,28 @@ export async function runContentVerificationCli(
  *
  * @param options Article, category, and repository-root directories.
  * @param options.articleDir Source article directory.
+ * @param options.authorDir Source author metadata directory.
  * @param options.categoryDir Source category metadata directory.
  * @param options.rootDir Repository root for relative error paths.
  * @returns Content verification result with counts and issues.
  */
 export async function verifyContent({
   articleDir,
+  authorDir,
   categoryDir,
   rootDir,
 }: ContentVerificationOptions): Promise<ContentVerificationResult> {
   const articleFiles = await listFiles(articleDir, /\.mdx?$/i);
+  const authorFiles = await listFiles(authorDir, /\.md$/i);
   const categoryFiles = await listFiles(categoryDir, /\.json$/i);
   const issues: string[] = [];
   const seenSlugs = new Map<string, string>();
+  const authorAliases = await loadAuthorAliases(rootDir, authorFiles, issues);
   let draftCount = 0;
+
+  for (const file of authorFiles) {
+    validateAuthorMetadataFilename(rootDir, file, issues);
+  }
 
   for (const file of categoryFiles) {
     validateCategoryMetadataFilename(rootDir, file, issues);
@@ -75,10 +85,11 @@ export async function verifyContent({
   for (const file of articleFiles) {
     validateArticlePath(articleDir, file, seenSlugs, issues);
 
-    const { data } = matter(await readFile(file, "utf8"));
+    const data = frontmatterData(await readFile(file, "utf8"));
     if (isDraft(data)) {
       draftCount += 1;
     }
+    validateArticleAuthor(rootDir, file, data, authorAliases, issues);
   }
 
   return {
@@ -109,6 +120,50 @@ function formatContentVerificationResult(result: ContentVerificationResult) {
 
 function isDraft(data: Record<string, unknown>) {
   return data["draft"] === true;
+}
+
+function frontmatterData(text: string): Record<string, unknown> {
+  const rawData: unknown = matter(text).data;
+
+  return isRecord(rawData) ? rawData : {};
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+async function loadAuthorAliases(
+  rootDir: string,
+  authorFiles: readonly string[],
+  issues: string[],
+): Promise<Set<string>> {
+  const aliases = new Set<string>();
+
+  for (const file of authorFiles) {
+    const data = frontmatterData(await readFile(file, "utf8"));
+    const displayName = data["displayName"];
+    const authorAliases = data["aliases"];
+
+    if (typeof displayName === "string") {
+      addAuthorAlias(aliases, displayName);
+    } else {
+      issues.push(
+        `${toPosix(path.relative(rootDir, file))}: author metadata needs a displayName`,
+      );
+    }
+
+    if (Array.isArray(authorAliases)) {
+      authorAliases
+        .filter((alias): alias is string => typeof alias === "string")
+        .forEach((alias) => addAuthorAlias(aliases, alias));
+    }
+  }
+
+  return aliases;
+}
+
+function addAuthorAlias(aliases: Set<string>, value: string): void {
+  aliases.add(normalizeAuthorAlias(value));
 }
 
 function isLowercaseAsciiLetterOrDigit(character: string): boolean {
@@ -186,6 +241,49 @@ function validateArticlePath(
   }
 }
 
+function validateArticleAuthor(
+  rootDir: string,
+  file: string,
+  data: Record<string, unknown>,
+  authorAliases: Set<string>,
+  issues: string[],
+) {
+  const author = data["author"];
+
+  if (typeof author !== "string" || author.trim() === "") {
+    issues.push(
+      `${toPosix(path.relative(rootDir, file))}: article frontmatter needs an author string`,
+    );
+    return;
+  }
+
+  author
+    .split(/\s*&\s*/u)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0)
+    .forEach((part) => {
+      if (!authorAliases.has(normalizeAuthorAlias(part))) {
+        issues.push(
+          `${toPosix(path.relative(rootDir, file))}: author "${part}" does not match src/content/authors/ aliases; add an author profile or approved alias`,
+        );
+      }
+    });
+}
+
+function validateAuthorMetadataFilename(
+  rootDir: string,
+  file: string,
+  issues: string[],
+) {
+  const slug = path.basename(file, ".md");
+
+  if (!isUrlSafeSlug(slug)) {
+    issues.push(
+      `${toPosix(path.relative(rootDir, file))}: author metadata filename is not URL-safe`,
+    );
+  }
+}
+
 function validateCategoryMetadataFilename(
   rootDir: string,
   file: string,
@@ -198,6 +296,10 @@ function validateCategoryMetadataFilename(
       `${toPosix(path.relative(rootDir, file))}: category metadata filename is not URL-safe`,
     );
   }
+}
+
+function normalizeAuthorAlias(value: string): string {
+  return value.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
 // Coverage note: this wrapper only wires the exported CLI workflow to process

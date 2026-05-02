@@ -7,6 +7,8 @@ import {
   articleSlug,
   articleUrl,
   assertUniqueArticleSlugs,
+  authorsIndexUrl,
+  authorUrl,
   categoriesIndexUrl,
   categorySlug,
   categoryUrl,
@@ -56,6 +58,8 @@ describe("route helpers", () => {
     expect(articleUrl("gamergate-as-metagaming")).toBe(
       "/articles/gamergate-as-metagaming/",
     );
+    expect(authorsIndexUrl()).toBe("/authors/");
+    expect(authorUrl("seong-young-her")).toBe("/authors/seong-young-her/");
     expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("memeculture")).toBe("/categories/memeculture/");
     expect(pageUrl("About")).toBe("/about/");

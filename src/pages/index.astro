@@ -16,6 +16,7 @@ import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleArchiveItems } from "../lib/archive";
+import { getAuthorEntries } from "../lib/authors";
 import { getArticles, getCategories } from "../lib/content";
 import { sectionNavigationItems } from "../lib/navigation";
 
@@ -28,8 +29,9 @@ if (!home) {
 const { Content } = await render(home);
 const articles = await getArticles();
 const categories = await getCategories();
+const authors = await getAuthorEntries();
 const articleItems = articleListItemsFromArchive(
-  articleArchiveItems(articles, categories),
+  articleArchiveItems(articles, categories, authors),
 );
 const [latestArticle] = articleItems;
 const featuredArticles = articleItems.slice(1, 4);

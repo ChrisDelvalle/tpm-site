@@ -69,9 +69,13 @@ category, search, and support collision.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+The header is sticky chrome and owns the `--site-header-height` runtime token
+used by hash navigation, TOC scrollspy, and sticky rails. The processed
+`src/scripts/site-header-offset.ts` enhancement keeps that token aligned with
+the rendered header height across desktop/mobile rows and theme changes.
+
+Any `z-index`, sticky offset, fixed size, or scroll container in the header is
+part of this component's public design and needs an invariant test.
 
 ## Interaction States
 
@@ -105,6 +109,8 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - does not create extra main/content landmarks.
 - prevents sticky/fixed chrome from covering visible content during scroll.
+- keeps direct hash targets and TOC link targets visible below the sticky
+  header.
 - category text clicks navigate to category pages while hover/focus exposes
   preview content.
 - search opens without moving header links into overlap.

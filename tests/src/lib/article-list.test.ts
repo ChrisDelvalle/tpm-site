@@ -11,6 +11,14 @@ describe("article list helpers", () => {
   const archiveItem = {
     article: articleEntry({ id: "article-title" }),
     author: "Author",
+    authors: [
+      {
+        displayName: "Author",
+        href: "/authors/author/",
+        id: "author",
+        type: "person",
+      },
+    ],
     category: {
       title: "History",
       url: "/categories/history/",
@@ -24,6 +32,14 @@ describe("article list helpers", () => {
   test("maps archive fields into article-list component props", () => {
     expect(articleListItemFromArchive(archiveItem)).toEqual({
       author: "Author",
+      authors: [
+        {
+          displayName: "Author",
+          href: "/authors/author/",
+          id: "author",
+          type: "person",
+        },
+      ],
       category: {
         href: "/categories/history/",
         title: "History",
@@ -44,6 +60,14 @@ describe("article list helpers", () => {
     expect(articleListItemsFromArchive([uncategorized])).toEqual([
       {
         author: "Author",
+        authors: [
+          {
+            displayName: "Author",
+            href: "/authors/author/",
+            id: "author",
+            type: "person",
+          },
+        ],
         category: undefined,
         date: "April 6, 2022",
         description: "Description",

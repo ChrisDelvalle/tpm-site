@@ -1,6 +1,7 @@
 ---
 import ArticleMeta from "./ArticleMeta.astro";
 import TextLink from "../ui/TextLink.astro";
+import type { AuthorSummary } from "../../lib/authors";
 
 interface ArticleCategory {
   href: string;
@@ -9,6 +10,7 @@ interface ArticleCategory {
 
 interface Props {
   author?: string | undefined;
+  authors?: readonly AuthorSummary[] | undefined;
   category?: ArticleCategory | undefined;
   date?: Date | undefined;
   description?: string | undefined;
@@ -16,8 +18,15 @@ interface Props {
   title: string;
 }
 
-const { author, category, date, description, formattedDate, title } =
-  Astro.props;
+const {
+  author,
+  authors = [],
+  category,
+  date,
+  description,
+  formattedDate,
+  title,
+} = Astro.props;
 ---
 
 <header class="grid gap-4">
@@ -36,7 +45,12 @@ const { author, category, date, description, formattedDate, title } =
   <h1 class="text-foreground m-0 max-w-4xl text-4xl font-bold tracking-normal">
     {title}
   </h1>
-  <ArticleMeta author={author} date={date} formattedDate={formattedDate} />
+  <ArticleMeta
+    author={author}
+    authors={authors}
+    date={date}
+    formattedDate={formattedDate}
+  />
   {
     description && (
       <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>

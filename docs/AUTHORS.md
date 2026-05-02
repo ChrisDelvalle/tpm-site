@@ -75,9 +75,10 @@ authors:
   - masha-zharova
 ```
 
-The current `author` string should be treated as legacy frontmatter during
-migration. Preserve it for posterity until the article-content plan explicitly
-removes or renames it.
+The current `author` string is preserved article content. The Astro layer maps
+that string through author aliases while article-content migration is deferred.
+Do not rewrite article bylines unless an article-content milestone explicitly
+requires it.
 
 ## Author Model
 
@@ -90,8 +91,7 @@ interface AuthorProfile {
   website: string | undefined;
   socials: readonly AuthorSocialLink[];
   aliases: readonly string[];
-  avatar: ImageMetadata | undefined;
-  profileBody: RenderedContent | undefined;
+  articles: readonly ArticleEntry[];
 }
 ```
 

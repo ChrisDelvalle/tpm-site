@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   articleSchema,
+  authorSchema,
   categorySchema,
   filenameStem,
   pageSchema,
@@ -97,6 +98,31 @@ describe("content schemas", () => {
         title: "About",
       }).success,
     ).toBe(true);
+  });
+
+  test("validates author metadata frontmatter", () => {
+    expect(
+      authorSchema().safeParse({
+        aliases: ["Seong-Young Her"],
+        displayName: "Seong-Young Her",
+        socials: [{ href: "https://example.com", label: "Website" }],
+        type: "person",
+        website: "https://example.com",
+      }).success,
+    ).toBe(true);
+    expect(
+      authorSchema().safeParse({
+        displayName: "Seong-Young Her",
+        handle: "@not-approved-metadata",
+        type: "person",
+      }).success,
+    ).toBe(false);
+    expect(
+      authorSchema().safeParse({
+        displayName: "Seong-Young Her",
+        type: "unknown",
+      }).success,
+    ).toBe(false);
   });
 
   test("derives article IDs from Markdown and MDX filenames", () => {

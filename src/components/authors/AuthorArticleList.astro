@@ -1,0 +1,18 @@
+---
+import ArticleList from "../articles/ArticleList.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+
+interface Props {
+  items: readonly ArticleListItem[];
+  title: string;
+}
+
+const { items, title } = Astro.props;
+---
+
+<section class="grid gap-4" data-author-article-list>
+  <h2 class="text-foreground m-0 text-2xl font-bold tracking-normal">
+    {title}
+  </h2>
+  <ArticleList items={items} pagefindIgnore />
+</section>

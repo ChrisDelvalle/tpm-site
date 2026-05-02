@@ -27,9 +27,10 @@ permanent prose offset.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+The component should avoid creating a stacking context unless it owns an
+overlay, sticky region, or popover. Anchor offset is owned globally through
+document `scroll-padding-top`, not by per-heading margins in prose, so direct
+hash navigation and TOC links share one sticky-header contract.
 
 ## Interaction States
 

@@ -4,12 +4,15 @@ import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { articleListItemsFromArchive } from "../../lib/article-list";
 import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries } from "../../lib/authors";
 import { getArticles, getCategories } from "../../lib/content";
 import { articlesArchiveUrl } from "../../lib/routes";
 
+const authors = await getAuthorEntries();
 const archiveItems = articleArchiveItems(
   await getArticles(),
   await getCategories(),
+  authors,
 );
 const articleItems = articleListItemsFromArchive(archiveItems);
 ---

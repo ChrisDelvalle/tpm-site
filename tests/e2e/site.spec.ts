@@ -13,6 +13,8 @@ const keyRoutes = [
   "/articles/",
   "/articles/all/",
   "/articles/gamergate-as-metagaming/",
+  "/authors/",
+  "/authors/seong-young-her/",
   "/categories/",
   "/categories/history/",
   "/about/",
@@ -290,11 +292,15 @@ test("mobile navigation panel stays viewport-constrained from the left trigger",
   await page.getByLabel("Open navigation menu").click();
 
   const panel = page.locator("[data-mobile-menu-panel]");
+  const headerBox = await visibleBoundingBox(
+    page.locator("[data-site-header]"),
+    "site header",
+  );
   const box = await visibleBoundingBox(panel, "mobile navigation panel");
 
   expect(box.x).toBeGreaterThanOrEqual(0);
   expect(box.x + box.width).toBeLessThanOrEqual(320);
-  expect(box.y).toBeGreaterThan(0);
+  expect(box.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height);
   expect(box.y + box.height).toBeLessThanOrEqual(520);
   await expect(panel.getByRole("searchbox")).toBeVisible();
   await expect(panel.locator(".theme-toggle")).toBeVisible();

@@ -18,7 +18,9 @@ describe("CategoryDropdown", () => {
     });
 
     expect(view).toContain(`href="${category.href}"`);
+    expect(view).toContain("data-floating-panel");
     expect(view).toContain("data-category-preview");
+    expect(view).toContain("inset-x-4");
     expect(view).toContain("lucide-chevron-down");
     expect(view).toContain('aria-current="page"');
     expect(view).toContain("View all Metamemetics");

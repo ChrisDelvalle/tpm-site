@@ -1,3 +1,4 @@
+import type { AuthorSummary } from "./authors";
 import {
   type ArticleEntry,
   articleUrl,
@@ -42,12 +43,14 @@ export function absoluteUrl(
  * @param article Article content entry.
  * @param category Category summary for the article, when available.
  * @param site Astro site origin when available.
+ * @param authors Optional structured author summaries.
  * @returns Schema.org BlogPosting object ready for serialization.
  */
 export function articleBlogPostingJsonLd(
   article: ArticleEntry,
   category: CategorySummary | undefined,
   site: string | undefined | URL,
+  authors: readonly AuthorSummary[] = [],
 ): Record<string, unknown> {
   const canonicalUrl = absoluteUrl(articleUrl(article.id), site);
   const articleImage = imageUrl(article);
@@ -58,10 +61,13 @@ export function articleBlogPostingJsonLd(
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     articleSection: category?.title ?? category?.slug,
-    author: {
-      "@type": "Person",
-      name: authorName(article),
-    },
+    author:
+      authors.length > 0
+        ? authors.map((author) => authorJsonLd(author, site))
+        : {
+            "@type": "Person",
+            name: authorName(article),
+          },
     datePublished: entryDate(article).toISOString(),
     description: excerpt(article),
     headline: entryTitle(article),
@@ -120,4 +126,18 @@ function isUrlSchemeCharacter(character: string, index: number): boolean {
         character === "." ||
         character === "-"))
   );
+}
+
+function authorJsonLd(
+  author: AuthorSummary,
+  site: string | undefined | URL,
+): Record<string, string> {
+  return {
+    "@type":
+      author.type === "organization" || author.type === "collective"
+        ? "Organization"
+        : "Person",
+    name: author.displayName,
+    url: absoluteUrl(author.href, site),
+  };
 }

@@ -30,7 +30,8 @@ SiteHeader
 
 The trigger is compact and belongs in the desktop header utility cluster. The
 popover surface must stay within the viewport and should not push header links
-into collision.
+into collision. Its vertical offset should come from `--site-header-height`
+rather than a fixed pixel value.
 
 At constrained widths, `MobileMenu` should render `SearchForm` directly rather
 than using the compact reveal.

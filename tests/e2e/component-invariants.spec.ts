@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 import {
   expectFocusVisible,
@@ -17,6 +17,24 @@ const archiveRoutes = [
   "/categories/metamemetics/",
   "/search/",
 ] as const;
+
+async function expectHashTargetBelowHeader(
+  page: Page,
+  targetSelector: string,
+): Promise<void> {
+  const headerBox = await visibleBoundingBox(
+    page.locator("[data-site-header]"),
+    "site header",
+  );
+  const targetBox = await visibleBoundingBox(
+    page.locator(targetSelector),
+    "hash target heading",
+  );
+  const minimumY = headerBox.y + headerBox.height + 8;
+
+  expect(targetBox.y).toBeGreaterThanOrEqual(minimumY);
+  expect(targetBox.y).toBeLessThanOrEqual(minimumY + 112);
+}
 
 test.describe("component layout invariants", () => {
   for (const route of archiveRoutes) {
@@ -194,6 +212,24 @@ test.describe("component layout invariants", () => {
     await expect(details).toHaveAttribute("open", "");
     await firstLink.click();
     await expect(page).toHaveURL(/#facebook-as-a-platform$/u);
+    await expect(firstLink).toHaveAttribute("data-current", "true");
+    await expect(firstLink).toHaveAttribute("aria-current", "location");
+    await expectHashTargetBelowHeader(page, "#facebook-as-a-platform");
+  });
+
+  test("article direct hash navigation keeps target headings below the sticky header", async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { height: 844, width: 390 },
+      { height: 1024, width: 768 },
+      { height: 900, width: 1280 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto("/articles/facebook-groups/#facebook-as-a-platform");
+      await expect(page.locator("#facebook-as-a-platform")).toBeVisible();
+      await expectHashTargetBelowHeader(page, "#facebook-as-a-platform");
+    }
   });
 
   test("article table of contents is not a competing visible surface on mobile and tablet", async ({
@@ -207,6 +243,48 @@ test.describe("component layout invariants", () => {
       await page.goto("/articles/facebook-groups/");
 
       await expect(page.locator("[data-article-toc]")).toBeHidden();
+      await expectNoHorizontalOverflow(page);
+    }
+  });
+
+  test("category discovery panels stay viewport-constrained at tablet and desktop widths", async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { height: 1024, width: 768 },
+      { height: 900, width: 1280 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+
+      const discovery = page.locator("[data-discovery-menu]");
+      const firstCategory = page.locator("[data-category-dropdown]").first();
+      const firstCategoryLink = firstCategory.getByRole("link").first();
+      const preview = firstCategory.locator("[data-category-preview]");
+
+      await expect(discovery).toBeVisible();
+      await firstCategoryLink.hover();
+      await expect(preview).toBeVisible();
+
+      const headerBox = await visibleBoundingBox(
+        page.locator("[data-site-header]"),
+        "site header",
+      );
+      const previewBox = await visibleBoundingBox(
+        preview,
+        "category preview panel",
+      );
+
+      expect(previewBox.x).toBeGreaterThanOrEqual(0);
+      expect(previewBox.x + previewBox.width).toBeLessThanOrEqual(
+        viewport.width,
+      );
+      expect(previewBox.y).toBeGreaterThanOrEqual(
+        headerBox.y + headerBox.height - 1,
+      );
+      expect(previewBox.y + previewBox.height).toBeLessThanOrEqual(
+        viewport.height,
+      );
       await expectNoHorizontalOverflow(page);
     }
   });

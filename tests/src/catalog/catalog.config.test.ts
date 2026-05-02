@@ -25,6 +25,9 @@ describe("catalog config", () => {
       "src/components/layout/SiteHeader.astro",
     );
     expect(catalogExampleComponentPaths).toContain(
+      "src/components/authors/AuthorPage.astro",
+    );
+    expect(catalogExampleComponentPaths).toContain(
       "src/components/articles/ArticleHeader.astro",
     );
     expect(catalogExampleComponentPaths).toContain(

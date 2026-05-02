@@ -1,0 +1,46 @@
+---
+import AuthorSocialLinks from "./AuthorSocialLinks.astro";
+import type { AuthorProfile, AuthorSocialLink } from "../../lib/authors";
+
+interface Props {
+  profile: AuthorProfile;
+}
+
+const { profile } = Astro.props;
+const articleCount = profile.articles.length;
+const articleCountLabel =
+  articleCount === 1 ? "1 article" : `${articleCount} articles`;
+const typeLabels = {
+  anonymous: "Anonymous",
+  collective: "Collective",
+  organization: "Organization",
+  person: "Author",
+} as const satisfies Record<AuthorProfile["type"], string>;
+const profileLinks: AuthorSocialLink[] =
+  profile.website === undefined
+    ? [...profile.socials]
+    : [{ href: profile.website, label: "Website" }, ...profile.socials];
+---
+
+<header class="grid gap-3" data-author-profile-header>
+  <p class="text-primary text-sm font-semibold uppercase">
+    {typeLabels[profile.type]}
+  </p>
+  <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
+    {profile.displayName}
+  </h1>
+  <p class="text-muted-foreground text-sm">{articleCountLabel}</p>
+  {
+    profile.shortBio && (
+      <p class="text-muted-foreground max-w-3xl text-lg">{profile.shortBio}</p>
+    )
+  }
+  {
+    profileLinks.length > 0 && (
+      <AuthorSocialLinks
+        links={profileLinks}
+        label={`${profile.displayName} profile links`}
+      />
+    )
+  }
+</header>

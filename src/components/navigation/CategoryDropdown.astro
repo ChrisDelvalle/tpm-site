@@ -35,11 +35,12 @@ const isCurrent =
     />
   </a>
   <div
-    class="absolute -start-2 top-full z-50 hidden w-[min(22rem,calc(100vw-2rem))] px-2 pt-4 group-focus-within:block group-hover:block"
+    class="fixed inset-x-4 top-[calc(var(--site-header-height)+0.25rem)] z-50 hidden pt-2 group-focus-within:block group-hover:block"
+    data-floating-panel
   >
     <div
       id={previewId}
-      class="border-border bg-popover text-popover-foreground grid max-h-[min(32rem,calc(100dvh-6rem))] gap-3 overflow-y-auto rounded-sm border p-4 shadow-lg"
+      class="border-border bg-popover text-popover-foreground mx-auto grid max-h-[calc(100dvh-var(--site-header-height)-2rem)] w-full max-w-sm gap-3 overflow-y-auto rounded-sm border p-4 shadow-lg"
       data-category-preview
     >
       <CategoryPreviewList

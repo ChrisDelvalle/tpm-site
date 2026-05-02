@@ -1,7 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
 import { articleArchiveItems } from "../../../src/lib/archive";
-import { articleEntry, categorySummary } from "../../helpers/content";
+import {
+  articleEntry,
+  authorEntry,
+  categorySummary,
+} from "../../helpers/content";
 
 describe("articleArchiveItems", () => {
   test("combines article data with category display metadata", () => {
@@ -27,6 +31,7 @@ describe("articleArchiveItems", () => {
 
     expect(archiveItem).toMatchObject({
       author: "Seong-Young Her",
+      authors: [],
       category: {
         title: "History",
         url: "/categories/history/",
@@ -50,5 +55,32 @@ describe("articleArchiveItems", () => {
     );
 
     expect(archiveItem?.category).toBeUndefined();
+  });
+
+  test("adds structured author summaries when author metadata is available", () => {
+    const article = articleEntry({
+      data: { author: "Seong-Young Her" },
+      id: "article-title",
+    });
+    const [archiveItem] = articleArchiveItems(
+      [article],
+      [],
+      [
+        authorEntry({
+          displayName: "Seong-Young Her",
+          id: "seong-young-her",
+        }),
+      ],
+    );
+
+    expect(archiveItem).toMatchObject({
+      author: "Seong-Young Her",
+      authors: [
+        {
+          displayName: "Seong-Young Her",
+          href: "/authors/seong-young-her/",
+        },
+      ],
+    });
   });
 });

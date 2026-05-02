@@ -3,6 +3,9 @@ import type { CollectionEntry } from "astro:content";
 /** Astro content collection entry for a published or draft article. */
 export type ArticleEntry = CollectionEntry<"articles">;
 
+/** Astro content collection entry for author metadata. */
+export type AuthorEntry = CollectionEntry<"authors">;
+
 /** Astro content collection entry for category metadata. */
 export type CategoryEntry = CollectionEntry<"categories">;
 
@@ -36,6 +39,25 @@ export function articlesIndexUrl(): string {
  */
 export function articlesArchiveUrl(): string {
   return withTrailingSlash(`${articlesIndexUrl()}all`);
+}
+
+/**
+ * Builds the public authors index URL.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function authorsIndexUrl(): string {
+  return withTrailingSlash("/authors");
+}
+
+/**
+ * Builds the canonical site URL path for an author profile.
+ *
+ * @param slug Stable author content entry ID.
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function authorUrl(slug: string): string {
+  return withTrailingSlash(`${authorsIndexUrl()}${slug}`);
 }
 
 /**

@@ -139,6 +139,7 @@ comes from the first folder below `src/content/articles/`.
 2. Add a URL-safe `.md` or `.mdx` file whose filename stem is the desired public
    slug.
 3. Add frontmatter with `title`, `description`, `date`, and `author`.
+   `author` should match an existing entry or alias in `src/content/authors/`.
 4. Put new article images under `src/assets/articles/<article-slug>/` unless
    they are shared assets.
 5. Run the validation commands.
@@ -168,6 +169,10 @@ The public Astro URL will be:
 
 Use `draft: true` to keep an article unpublished. Draft articles are excluded
 from generated article routes, archives, categories, RSS, sitemap, and search.
+
+If an article introduces a new author, add or request a matching author profile
+under `src/content/authors/<author-slug>.md`. Keep author metadata factual:
+display name, type, aliases, and explicitly approved public links only.
 
 Do not add `slug`, `topic`, or `category` frontmatter. The article slug comes
 from the filename. The category comes from the source folder.

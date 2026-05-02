@@ -56,8 +56,8 @@ if its content is taller than available space.
 ## Layering And Scrolling
 
 The TOC does not own sticky positioning directly; `ContentRail` does. Links use
-hash navigation to existing heading IDs. Global scroll-margin behavior should
-keep heading targets below the sticky header.
+hash navigation to existing heading IDs. Global document `scroll-padding-top`
+keeps heading targets below the sticky header.
 
 ## Interaction States
 
@@ -67,9 +67,11 @@ Use native `details`/`summary` for hide/show where possible:
 - collapsed;
 - focus-visible summary;
 - long-heading wrapping;
-- current section if progressive active highlighting is later added.
+- current section as progressive enhancement.
 
 Do not require JavaScript for basic navigation or hide/show behavior.
+`src/scripts/article-table-of-contents.ts` only enhances visible active-section
+state and must not be required for hash links or disclosure behavior to work.
 
 ## Accessibility Semantics
 
@@ -77,9 +79,8 @@ Render a labeled navigation region such as `aria-label="Article contents"`.
 Use normal anchor links. Do not use app-menu roles.
 
 The summary/toggle text must be visible and keyboard reachable. If active
-section highlighting is added, it must not replace `aria-current` on the
-current article link; use a scoped state such as `aria-current="location"` only
-if testing confirms it is appropriate for in-page anchors.
+section highlighting is available, use `data-current="true"` for styling and
+`aria-current="location"` for the active in-page anchor.
 
 ## Content Edge Cases
 
@@ -110,8 +111,10 @@ prose. Current/focus states must be visible in light and dark mode.
 - Hide/show works without JavaScript.
 - Rail never overlaps prose or hides under the sticky header.
 - Links navigate to visible heading targets.
+- Current-section highlighting follows scroll position and direct hash/TOC
+  navigation without changing static navigation behavior.
 
 ## Follow-Up Notes
 
-- Active-section scrollspy is optional progressive enhancement. Do not block the
-  static TOC on scrollspy work.
+- Active-section scrollspy is progressive enhancement. Do not make the static
+  TOC dependent on it.

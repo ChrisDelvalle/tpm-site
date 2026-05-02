@@ -1,4 +1,8 @@
-import type { ArticleEntry, CategorySummary } from "../../src/lib/routes";
+import type {
+  ArticleEntry,
+  AuthorEntry,
+  CategorySummary,
+} from "../../src/lib/routes";
 
 /** Options for building article-entry test fixtures. */
 export interface ArticleEntryFixtureOptions {
@@ -15,6 +19,17 @@ export interface CategorySummaryFixtureOptions {
   order?: number;
   slug?: string;
   title?: string;
+}
+
+/** Options for building author-entry test fixtures. */
+export interface AuthorEntryFixtureOptions {
+  aliases?: string[];
+  displayName?: string;
+  id?: string;
+  shortBio?: string;
+  socials?: Array<{ href: string; label: string }>;
+  type?: AuthorEntry["data"]["type"];
+  website?: string;
 }
 
 /**
@@ -73,5 +88,43 @@ export function categorySummary({
     order,
     slug,
     title,
+  };
+}
+
+/**
+ * Builds a minimal Astro content author entry for unit tests.
+ *
+ * @param options Author entry overrides.
+ * @param options.aliases Author alias override.
+ * @param options.displayName Author display-name override.
+ * @param options.id Author entry ID override.
+ * @param options.shortBio Optional short-bio override.
+ * @param options.socials Optional social/profile-link override.
+ * @param options.type Author type override.
+ * @param options.website Optional website override.
+ * @returns Test author entry.
+ */
+export function authorEntry({
+  aliases,
+  displayName = "Author",
+  id = "author",
+  shortBio,
+  socials = [],
+  type = "person",
+  website,
+}: AuthorEntryFixtureOptions = {}): AuthorEntry {
+  return {
+    body: "",
+    collection: "authors",
+    data: {
+      aliases: aliases ?? [displayName],
+      displayName,
+      shortBio,
+      socials,
+      type,
+      website,
+    },
+    filePath: `/repo/src/content/authors/${id}.md`,
+    id,
   };
 }

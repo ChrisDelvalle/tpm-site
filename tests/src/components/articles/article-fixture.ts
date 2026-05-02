@@ -4,6 +4,14 @@ import type { ArticleListItem } from "../../../../src/lib/article-list";
 export const articleItems = [
   {
     author: "Seong-Young Her",
+    authors: [
+      {
+        displayName: "Seong-Young Her",
+        href: "/authors/seong-young-her/",
+        id: "seong-young-her",
+        type: "person",
+      },
+    ],
     category: {
       href: "/categories/history/",
       title: "History",
@@ -15,6 +23,14 @@ export const articleItems = [
   },
   {
     author: "Seong-Young Her",
+    authors: [
+      {
+        displayName: "Seong-Young Her",
+        href: "/authors/seong-young-her/",
+        id: "seong-young-her",
+        type: "person",
+      },
+    ],
     category: {
       href: "/categories/metamemetics/",
       title: "Metamemetics",

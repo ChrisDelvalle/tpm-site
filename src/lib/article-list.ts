@@ -1,8 +1,10 @@
 import type { ArticleArchiveItem } from "./archive";
+import type { AuthorSummary } from "./authors";
 
 /** Display-ready item consumed by article cards and article lists. */
 export interface ArticleListItem {
   author?: string | undefined;
+  authors?: readonly AuthorSummary[] | undefined;
   category?:
     | undefined
     | {
@@ -26,6 +28,7 @@ export function articleListItemFromArchive(
 ): ArticleListItem {
   return {
     author: item.author,
+    authors: item.authors,
     category:
       item.category === undefined
         ? undefined

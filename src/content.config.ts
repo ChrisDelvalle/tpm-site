@@ -3,6 +3,7 @@ import { defineCollection } from "astro:content";
 
 import {
   articleSchema,
+  authorSchema,
   categorySchema,
   filenameStem,
   pageSchema,
@@ -23,6 +24,15 @@ const categories = defineCollection({
     pattern: "*.json",
   }),
   schema: categorySchema(),
+});
+
+const authors = defineCollection({
+  loader: glob({
+    base: "./src/content/authors",
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "*.md",
+  }),
+  schema: authorSchema(),
 });
 
 const pages = defineCollection({
@@ -56,6 +66,7 @@ export const collections = {
   articleReferenceArticleFixtures,
   articleReferenceProofFixtures,
   articles,
+  authors,
   categories,
   pages,
 };

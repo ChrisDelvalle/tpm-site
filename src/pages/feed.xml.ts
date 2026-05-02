@@ -1,10 +1,10 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
 
+import { authorDisplayNameForArticle, getAuthorEntries } from "../lib/authors";
 import { getArticles } from "../lib/content";
 import {
   articleUrl,
-  authorName,
   entryDate,
   entryTitle,
   excerpt,
@@ -24,6 +24,7 @@ type FeedContext = Pick<APIContext, "site">;
  */
 export async function GET(context: FeedContext): Promise<Response> {
   const articles = await getArticles();
+  const authors = await getAuthorEntries();
   const site = context.site?.toString() ?? "https://thephilosophersmeme.com";
 
   return rss({
@@ -40,7 +41,7 @@ export async function GET(context: FeedContext): Promise<Response> {
         pubDate: entryDate(article),
         description: excerpt(article),
         link: articleUrl(article.id),
-        author: authorName(article),
+        author: authorDisplayNameForArticle(article, authors),
         customData:
           absoluteImage === undefined
             ? undefined

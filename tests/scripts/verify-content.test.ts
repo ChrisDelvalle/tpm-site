@@ -28,17 +28,49 @@ describe("content verifier", () => {
       await writeText(root, "src/content/categories/history.json", "{}");
       await writeText(
         root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
         "src/content/articles/history/example.md",
-        "---\ntitle: Example\n---\n",
+        "---\ntitle: Example\nauthor: Author\n---\n",
       );
 
       const result = await verifyContent({
         articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
         categoryDir: path.join(root, "src/content/categories"),
         rootDir: root,
       });
 
       expect(result.issues).toEqual([]);
       expect(result.publishedCount).toBe(1);
+    }));
+
+  test("reports article authors that lack author metadata aliases", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/authors/known-author.md",
+        "---\ndisplayName: Known Author\naliases:\n  - Known Author\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/example.md",
+        "---\ntitle: Example\nauthor: Unknown Author\n---\n",
+      );
+
+      const result = await verifyContent({
+        articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
+        categoryDir: path.join(root, "src/content/categories"),
+        rootDir: root,
+      });
+
+      expect(result.issues).toContain(
+        'src/content/articles/history/example.md: author "Unknown Author" does not match src/content/authors/ aliases; add an author profile or approved alias',
+      );
     }));
 });

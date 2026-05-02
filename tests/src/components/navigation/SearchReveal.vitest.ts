@@ -13,8 +13,10 @@ describe("SearchReveal", () => {
     expect(view).toContain('aria-label="Open search"');
     expect(view).toContain('popovertarget="search-reveal-test"');
     expect(view).toContain('popover="auto"');
+    expect(view).toContain("data-floating-panel");
     expect(view).toContain("data-search-reveal-trigger");
     expect(view).toContain("data-search-reveal-panel");
+    expect(view).toContain("var(--site-header-height)");
     expect(view).toContain("Site search");
   });
 });

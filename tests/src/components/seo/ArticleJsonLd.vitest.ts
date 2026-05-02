@@ -18,6 +18,14 @@ describe("ArticleJsonLd", () => {
     const view = await container.renderToString(ArticleJsonLd, {
       props: {
         article,
+        authors: [
+          {
+            displayName: "Seong-Young Her",
+            href: "/authors/seong-young-her/",
+            id: "seong-young-her",
+            type: "person",
+          },
+        ],
         category: categorySummary({ articles: [article] }),
       },
     });
@@ -25,5 +33,6 @@ describe("ArticleJsonLd", () => {
     expect(view).toContain('type="application/ld+json"');
     expect(view).toContain('"@type":"BlogPosting"');
     expect(view).toContain('"headline":"Article Title"');
+    expect(view).toContain('"url":"https://thephilosophersmeme.com/authors/');
   });
 });

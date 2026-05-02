@@ -16,6 +16,11 @@ src/content/pages/**
 # content schemas, content verification, build checks, and category-page tests.
 src/content/categories/**
 
+# Approved exception: Author Markdown files are content data validated by Astro
+# content schemas, author relationship tests, build checks, and manual profile
+# review rather than mirrored unit tests.
+src/content/authors/**
+
 # Approved exception: Static image and public assets are validated by
 # asset-location, shared-asset, duplicate-asset, unused-asset, build, and browser
 # review checks rather than mirrored unit tests.

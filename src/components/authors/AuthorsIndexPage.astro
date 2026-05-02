@@ -1,0 +1,49 @@
+---
+import Card from "../ui/Card.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { AuthorProfile } from "../../lib/authors";
+
+interface Props {
+  profiles: readonly AuthorProfile[];
+}
+
+const { profiles } = Astro.props;
+---
+
+<section class="grid gap-6" data-authors-index-page>
+  <header class="grid gap-3">
+    <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
+      Authors
+    </h1>
+    <p class="text-muted-foreground max-w-3xl text-lg">
+      Browse contributors and collectives in The Philosopher's Meme archive.
+    </p>
+  </header>
+  {
+    profiles.length > 0 ? (
+      <ol class="grid gap-4 sm:grid-cols-2">
+        {profiles.map((profile) => (
+          <li>
+            <Card class="grid h-full gap-2">
+              <h2 class="text-foreground m-0 text-xl font-semibold tracking-normal">
+                <TextLink href={profile.href} variant="subtle" tone="neutral">
+                  {profile.displayName}
+                </TextLink>
+              </h2>
+              <p class="text-muted-foreground text-sm">
+                {profile.articles.length === 1
+                  ? "1 article"
+                  : `${profile.articles.length} articles`}
+              </p>
+              {profile.shortBio && (
+                <p class="text-muted-foreground text-sm">{profile.shortBio}</p>
+              )}
+            </Card>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="text-muted-foreground">No author profiles are available yet.</p>
+    )
+  }
+</section>

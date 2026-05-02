@@ -1,15 +1,17 @@
 ---
 import type { ArticleEntry, CategorySummary } from "../../lib/routes";
+import type { AuthorSummary } from "../../lib/authors";
 import { articleBlogPostingJsonLd, safeJsonLd } from "../../lib/seo";
 
 interface Props {
   article: ArticleEntry;
+  authors?: readonly AuthorSummary[] | undefined;
   category?: CategorySummary | undefined;
 }
 
-const { article, category } = Astro.props;
+const { article, authors = [], category } = Astro.props;
 const jsonLd = safeJsonLd(
-  articleBlogPostingJsonLd(article, category, Astro.site),
+  articleBlogPostingJsonLd(article, category, Astro.site, authors),
 );
 ---
 

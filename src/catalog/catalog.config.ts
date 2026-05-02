@@ -1,5 +1,6 @@
 import { archiveCatalogExamples } from "./examples/archive.examples";
 import { articleCatalogExamples } from "./examples/article.examples";
+import { authorCatalogExamples } from "./examples/author.examples";
 import { homeCatalogExamples } from "./examples/home.examples";
 import { layoutCatalogExamples } from "./examples/layout.examples";
 import { navigationCatalogExamples } from "./examples/navigation.examples";
@@ -33,6 +34,7 @@ export const catalogMetadata = {
 
 export const catalogExampleComponentPaths = [
   ...archiveCatalogExamples,
+  ...authorCatalogExamples,
   ...articleCatalogExamples,
   ...homeCatalogExamples,
   ...uiCatalogExamples,

@@ -41,4 +41,25 @@ describe("SEO helpers", () => {
       url: "https://thephilosophersmeme.com/articles/title/",
     });
   });
+
+  test("uses structured author metadata when available", () => {
+    expect(
+      articleBlogPostingJsonLd(article(), undefined, "https://example.com", [
+        {
+          displayName: "The Philosopher's Meme",
+          href: "/authors/the-philosophers-meme/",
+          id: "the-philosophers-meme",
+          type: "organization",
+        },
+      ]),
+    ).toMatchObject({
+      author: [
+        {
+          "@type": "Organization",
+          name: "The Philosopher's Meme",
+          url: "https://example.com/authors/the-philosophers-meme/",
+        },
+      ],
+    });
+  });
 });

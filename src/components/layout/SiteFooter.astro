@@ -5,6 +5,7 @@ import type { SectionNavItem } from "../../lib/navigation";
 import {
   articlesArchiveUrl,
   articlesIndexUrl,
+  authorsIndexUrl,
   feedUrl,
   pageUrl,
   SITE_TITLE,
@@ -37,6 +38,11 @@ const footerCategories = navigationItems.slice(0, 8);
           <li>
             <TextLink href={articlesArchiveUrl()} variant="subtle" tone="muted"
               >All Articles</TextLink
+            >
+          </li>
+          <li>
+            <TextLink href={authorsIndexUrl()} variant="subtle" tone="muted"
+              >Authors</TextLink
             >
           </li>
           <li>

@@ -29,6 +29,15 @@ export function categorySchema(): ReturnType<typeof createCategorySchema> {
 }
 
 /**
+ * Creates the author metadata schema.
+ *
+ * @returns Strict author metadata schema.
+ */
+export function authorSchema(): ReturnType<typeof createAuthorSchema> {
+  return createAuthorSchema();
+}
+
+/**
  * Converts a content entry path into the generated article ID.
  *
  * @param entry Content loader entry path.
@@ -70,6 +79,26 @@ function createCategorySchema() {
       description: z.string().optional(),
       order: z.number().int().nonnegative(),
       title: z.string().min(1),
+    })
+    .strict();
+}
+
+function createAuthorSchema() {
+  const socialLinkSchema = z
+    .object({
+      href: z.string().url(),
+      label: z.string().min(1),
+    })
+    .strict();
+
+  return z
+    .object({
+      aliases: z.array(z.string().min(1)).default([]),
+      displayName: z.string().min(1),
+      shortBio: z.string().optional(),
+      socials: z.array(socialLinkSchema).default([]),
+      type: z.enum(["anonymous", "collective", "organization", "person"]),
+      website: z.string().url().optional(),
     })
     .strict();
 }

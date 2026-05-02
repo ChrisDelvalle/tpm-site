@@ -15,7 +15,6 @@ related-reading, and homepage list contexts.
 - `date?: string | undefined`
 - `description?: string | undefined`
 - `href: string`
-- `legacyAuthor?: string | undefined`
 - `title: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration

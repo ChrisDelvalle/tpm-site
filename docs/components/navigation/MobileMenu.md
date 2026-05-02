@@ -33,6 +33,8 @@ and internal grouping of the constrained-width navigation surface.
 The component must remain usable regardless of the trigger's horizontal
 position. Its panel is viewport-constrained rather than trigger-aligned, so it
 cannot fall off-screen when the trigger is near the left or right edge.
+Position the panel from `--site-header-height` instead of a fixed top value so
+header row changes cannot cover the menu.
 
 The search form and theme toggle sit together at the top of the panel as the
 utility control area. The panel must preserve touch and keyboard targets, avoid

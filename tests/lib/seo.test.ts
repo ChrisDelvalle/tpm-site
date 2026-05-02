@@ -54,4 +54,25 @@ describe("SEO helpers", () => {
   test("escapes JSON-LD script content", () => {
     expect(safeJsonLd({ value: "</script>" })).toContain("\\u003c/script>");
   });
+
+  test("can emit structured author profile URLs", () => {
+    expect(
+      articleBlogPostingJsonLd(article(), category(), "https://example.com", [
+        {
+          displayName: "Seong-Young Her",
+          href: "/authors/seong-young-her/",
+          id: "seong-young-her",
+          type: "person",
+        },
+      ]),
+    ).toMatchObject({
+      author: [
+        {
+          "@type": "Person",
+          name: "Seong-Young Her",
+          url: "https://example.com/authors/seong-young-her/",
+        },
+      ],
+    });
+  });
 });

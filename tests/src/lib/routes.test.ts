@@ -6,6 +6,8 @@ import {
   articlesIndexUrl,
   articleUrl,
   assertUniqueArticleSlugs,
+  authorsIndexUrl,
+  authorUrl,
   categoriesIndexUrl,
   categorySlug,
   categoryUrl,
@@ -44,6 +46,8 @@ describe("route helpers", () => {
     expect(articlesIndexUrl()).toBe("/articles/");
     expect(articlesArchiveUrl()).toBe("/articles/all/");
     expect(articleUrl("article-title")).toBe("/articles/article-title/");
+    expect(authorsIndexUrl()).toBe("/authors/");
+    expect(authorUrl("seong-young-her")).toBe("/authors/seong-young-her/");
     expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("history")).toBe("/categories/history/");
     expect(pageUrl("About")).toBe("/about/");

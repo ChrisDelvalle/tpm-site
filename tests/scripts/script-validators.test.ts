@@ -85,8 +85,13 @@ describe("content verification script", () => {
           await writeText(root, "src/content/categories/history.json", "{}");
           await writeText(
             root,
+            "src/content/authors/author.md",
+            "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+          );
+          await writeText(
+            root,
             "src/content/articles/history/published.md",
-            "---\ntitle: Published\n---\n",
+            "---\ntitle: Published\nauthor: Author\n---\n",
           );
 
           const exitCode = await runContentVerificationCli([], root);
@@ -109,8 +114,13 @@ describe("content verification script", () => {
         await writeText(root, "src/content/categories/Bad Name.json", "{}");
         await writeText(
           root,
+          "src/content/authors/author.md",
+          "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+        );
+        await writeText(
+          root,
           "src/content/articles/Bad Category/Bad Slug.md",
-          "---\ntitle: Bad\n---\n",
+          "---\ntitle: Bad\nauthor: Author\n---\n",
         );
 
         const exitCode = await runContentVerificationCli([], root);
@@ -130,17 +140,23 @@ describe("content verification script", () => {
       await writeText(root, "src/content/categories/Bad Name.json", "{}");
       await writeText(
         root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
         "src/content/articles/history/same.md",
-        "---\ntitle: One\n---\n",
+        "---\ntitle: One\nauthor: Author\n---\n",
       );
       await writeText(
         root,
         "src/content/articles/politics/same.md",
-        "---\ntitle: Two\n---\n",
+        "---\ntitle: Two\nauthor: Author\n---\n",
       );
 
       const result = await verifyContent({
         articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
         categoryDir: path.join(root, "src/content/categories"),
         rootDir: root,
       });
@@ -160,17 +176,23 @@ describe("content verification script", () => {
       await writeText(root, "src/content/categories/history.json", "{}");
       await writeText(
         root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
         "src/content/articles/history/published.md",
-        "---\ntitle: Published\n---\n",
+        "---\ntitle: Published\nauthor: Author\n---\n",
       );
       await writeText(
         root,
         "src/content/articles/history/draft.md",
-        "---\ntitle: Draft\ndraft: true\n---\n",
+        "---\ntitle: Draft\nauthor: Author\ndraft: true\n---\n",
       );
 
       const result = await verifyContent({
         articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
         categoryDir: path.join(root, "src/content/categories"),
         rootDir: root,
       });

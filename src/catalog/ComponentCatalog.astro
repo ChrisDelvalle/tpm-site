@@ -1,6 +1,14 @@
 ---
 import { Search } from "lucide-astro";
 
+import AuthorArticleList from "../components/authors/AuthorArticleList.astro";
+import AuthorBioBlock from "../components/authors/AuthorBioBlock.astro";
+import AuthorByline from "../components/authors/AuthorByline.astro";
+import AuthorLink from "../components/authors/AuthorLink.astro";
+import AuthorPage from "../components/authors/AuthorPage.astro";
+import AuthorProfileHeader from "../components/authors/AuthorProfileHeader.astro";
+import AuthorSocialLinks from "../components/authors/AuthorSocialLinks.astro";
+import AuthorsIndexPage from "../components/authors/AuthorsIndexPage.astro";
 import ArticleCard from "../components/articles/ArticleCard.astro";
 import ArticleBibliography from "../components/articles/ArticleBibliography.astro";
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
@@ -67,6 +75,7 @@ import {
   catalogNavigationItems,
   catalogTags,
 } from "./examples/hostile-fixtures";
+import { getAuthorProfiles } from "../lib/authors";
 import { primaryNavigationItems } from "../lib/navigation";
 
 const catalogTocHeadings = [
@@ -192,6 +201,49 @@ const catalogReferences = {
     },
   ],
 } as const;
+const realAuthorProfiles = await getAuthorProfiles();
+const [realAuthorProfile] = realAuthorProfiles;
+
+if (realAuthorProfile === undefined) {
+  throw new Error(
+    "The component catalog requires at least one author profile.",
+  );
+}
+
+const catalogAuthorProfile = {
+  ...realAuthorProfile,
+  shortBio:
+    "Catalog-only profile metadata demonstrates optional author biography surfaces.",
+  socials: [
+    {
+      href: "https://example.com/author-profile",
+      label: "Profile",
+    },
+  ],
+  website: "https://example.com",
+};
+const catalogAuthorProfiles = [
+  catalogAuthorProfile,
+  ...realAuthorProfiles
+    .filter((profile) => profile.id !== catalogAuthorProfile.id)
+    .slice(0, 3),
+];
+const catalogAuthorSummaries = catalogAuthorProfiles
+  .slice(0, 2)
+  .map(({ displayName, href, id, shortBio, type }) => ({
+    displayName,
+    href,
+    id,
+    shortBio,
+    type,
+  }));
+const [primaryCatalogAuthor] = catalogAuthorSummaries;
+
+if (primaryCatalogAuthor === undefined) {
+  throw new Error(
+    "The component catalog requires at least one author summary.",
+  );
+}
 ---
 
 <main class="bg-background text-foreground">
@@ -588,6 +640,100 @@ const catalogReferences = {
         componentPath="src/components/blocks/SupportBlock.astro"
       >
         <SupportBlock headingId="catalog-support-block-heading" />
+      </CatalogExample>
+    </CatalogSection>
+
+    <CatalogSection
+      title="Author Components"
+      description="Structured byline, profile, and author-discovery components."
+    >
+      <CatalogExample
+        title="AuthorLink"
+        description="Single author profile link."
+        componentPath="src/components/authors/AuthorLink.astro"
+      >
+        <AuthorLink author={primaryCatalogAuthor} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="AuthorByline"
+        description="One or more linked authors with a legacy fallback."
+        componentPath="src/components/authors/AuthorByline.astro"
+      >
+        <div class="grid gap-3">
+          <AuthorByline authors={catalogAuthorSummaries} />
+          <AuthorByline legacyAuthor="Legacy Author String" />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="AuthorSocialLinks"
+        description="Approved public profile links."
+        componentPath="src/components/authors/AuthorSocialLinks.astro"
+      >
+        <AuthorSocialLinks
+          links={[
+            { href: "https://example.com", label: "Website" },
+            {
+              href: "https://example.com/profile",
+              label: "Long profile label for wrapping behavior",
+            },
+          ]}
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="AuthorProfileHeader"
+        description="Author identity, type, article count, and optional links."
+        componentPath="src/components/authors/AuthorProfileHeader.astro"
+      >
+        <AuthorProfileHeader profile={catalogAuthorProfile} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="AuthorBioBlock"
+        description="Optional author bio surface; renders only with useful profile content."
+        componentPath="src/components/authors/AuthorBioBlock.astro"
+      >
+        <AuthorBioBlock profile={catalogAuthorProfile} hasProfileBody>
+          <p>
+            Longer profile body content is rendered from author Markdown when
+            the author profile provides it.
+          </p>
+        </AuthorBioBlock>
+      </CatalogExample>
+
+      <CatalogExample
+        title="AuthorArticleList"
+        description="Author-profile article listing backed by shared cards."
+        componentPath="src/components/authors/AuthorArticleList.astro"
+      >
+        <AuthorArticleList
+          title={`Articles by ${catalogAuthorProfile.displayName}`}
+          items={catalogArticleItems}
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="AuthorsIndexPage"
+        description="Browsing page for all public author profiles."
+        componentPath="src/components/authors/AuthorsIndexPage.astro"
+      >
+        <AuthorsIndexPage profiles={catalogAuthorProfiles} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="AuthorPage"
+        description="Composed author detail page."
+        componentPath="src/components/authors/AuthorPage.astro"
+      >
+        <AuthorPage
+          profile={catalogAuthorProfile}
+          items={catalogArticleItems}
+          hasProfileBody
+        >
+          <p>Longer author profile Markdown appears here when provided.</p>
+        </AuthorPage>
       </CatalogExample>
     </CatalogSection>
 

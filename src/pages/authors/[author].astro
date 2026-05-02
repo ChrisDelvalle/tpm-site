@@ -1,0 +1,52 @@
+---
+import { render } from "astro:content";
+
+import AuthorPage from "../../components/authors/AuthorPage.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries, getAuthorProfiles } from "../../lib/authors";
+import { getCategories } from "../../lib/content";
+
+/**
+ * Generates one static author route for each public author profile.
+ *
+ * @returns Static route parameters and author-profile props for Astro.
+ */
+export async function getStaticPaths() {
+  const profiles = await getAuthorProfiles();
+
+  return profiles.map((profile) => ({
+    params: { author: profile.id },
+    props: { profile },
+  }));
+}
+
+const { profile } = Astro.props;
+const { Content } = await render(profile.entry);
+const authors = await getAuthorEntries();
+const articleItems = articleListItemsFromArchive(
+  articleArchiveItems(profile.articles, await getCategories(), authors),
+);
+const hasProfileBody = (profile.entry.body ?? "").trim().length > 0;
+const description =
+  profile.shortBio ??
+  `Articles by ${profile.displayName} in The Philosopher's Meme archive.`;
+---
+
+<BaseLayout
+  title={`${profile.displayName} | The Philosopher's Meme`}
+  description={description}
+  canonicalPath={profile.href}
+>
+  <BrowsingBody>
+    <AuthorPage
+      profile={profile}
+      items={articleItems}
+      hasProfileBody={hasProfileBody}
+    >
+      <Content />
+    </AuthorPage>
+  </BrowsingBody>
+</BaseLayout>
