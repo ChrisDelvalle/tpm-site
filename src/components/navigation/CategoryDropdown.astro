@@ -21,14 +21,14 @@ const isCurrent =
 
 <AnchoredRoot
   preset="header-dropdown"
-  class="group relative max-w-full min-w-0"
+  class="group relative"
   data-category-dropdown={category.slug}
 >
   <AnchoredTrigger
     as="a"
     href={category.href}
     class:list={[
-      "inline-flex max-w-full min-w-0 items-center gap-1 rounded-xs px-1 py-1 text-sm font-medium tracking-normal transition-colors",
+      "inline-flex items-center gap-0.5 rounded-xs px-1 py-1 text-xs font-medium tracking-normal transition-colors lg:gap-1 lg:text-sm",
       "focus-visible:outline-ring focus-visible:outline-2 focus-visible:outline-offset-2",
       isCurrent
         ? "text-primary hover:text-primary/80"
@@ -36,9 +36,9 @@ const isCurrent =
     ]}
     aria-current={isCurrent ? "page" : undefined}
   >
-    <span class="truncate">{category.title}</span>
+    <span>{category.title}</span>
     <ChevronDown
-      class="size-3 transition-transform group-focus-within:rotate-180 group-hover:rotate-180"
+      class="size-2.5 transition-transform group-focus-within:rotate-180 group-hover:rotate-180 lg:size-3"
       aria-hidden="true"
     />
   </AnchoredTrigger>

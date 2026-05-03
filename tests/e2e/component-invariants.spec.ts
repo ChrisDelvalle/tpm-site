@@ -270,12 +270,48 @@ test.describe("component layout invariants", () => {
   test("site header keeps category discovery on one locked-height row", async ({
     page,
   }) => {
+    const expectedCategoryLabels = [
+      "Culture",
+      "Metamemetics",
+      "Aesthetics",
+      "Irony",
+      "Game Studies",
+      "History",
+      "Philosophy",
+      "Politics",
+    ];
+
     for (const viewport of [
-      { height: 1024, width: 768 },
-      { height: 900, width: 900 },
-      { height: 900, width: 1024 },
-      { height: 900, width: 1280 },
-      { height: 1100, width: 1800 },
+      {
+        height: 1024,
+        maxCategoryFontSize: 12.1,
+        minCategoryFontSize: 0,
+        width: 768,
+      },
+      {
+        height: 900,
+        maxCategoryFontSize: 12.1,
+        minCategoryFontSize: 0,
+        width: 900,
+      },
+      {
+        height: 900,
+        maxCategoryFontSize: 99,
+        minCategoryFontSize: 13.9,
+        width: 1024,
+      },
+      {
+        height: 900,
+        maxCategoryFontSize: 99,
+        minCategoryFontSize: 13.9,
+        width: 1280,
+      },
+      {
+        height: 1100,
+        maxCategoryFontSize: 99,
+        minCategoryFontSize: 13.9,
+        width: 1800,
+      },
     ] as const) {
       await page.setViewportSize(viewport);
       await page.goto("/");
@@ -298,8 +334,40 @@ test.describe("component layout invariants", () => {
             top: rect.top,
           })),
       );
+      const categoryLabels = await categoryTriggers.evaluateAll((elements) =>
+        elements.map((element) => {
+          const label = element.querySelector("span");
+
+          if (label === null) {
+            throw new Error("Expected category trigger to render a label.");
+          }
+
+          const styles = window.getComputedStyle(label);
+
+          return {
+            clientWidth: label.clientWidth,
+            fontSize: Number.parseFloat(styles.fontSize),
+            scrollWidth: label.scrollWidth,
+            text: label.textContent.trim(),
+            textOverflow: styles.textOverflow,
+          };
+        }),
+      );
 
       expect(triggerRows.length).toBeGreaterThan(0);
+      expect(categoryLabels.map((label) => label.text)).toStrictEqual(
+        expectedCategoryLabels,
+      );
+      for (const label of categoryLabels) {
+        expect(label.textOverflow).not.toBe("ellipsis");
+        expect(label.scrollWidth).toBeLessThanOrEqual(label.clientWidth + 1);
+      }
+      expect(
+        Math.max(...categoryLabels.map((label) => label.fontSize)),
+      ).toBeLessThanOrEqual(viewport.maxCategoryFontSize);
+      expect(
+        Math.min(...categoryLabels.map((label) => label.fontSize)),
+      ).toBeGreaterThanOrEqual(viewport.minCategoryFontSize);
       expect(headerBox.height).toBeLessThanOrEqual(104);
       expect(rowBox.height).toBeLessThanOrEqual(28);
       expect(listBox.height).toBeLessThanOrEqual(rowBox.height + 1);
@@ -329,14 +397,45 @@ test.describe("component layout invariants", () => {
       await page.setViewportSize(viewport);
       await page.goto("/");
 
-      const headerBox = await visibleBoundingBox(
-        page.locator("[data-site-header]"),
-        "mobile site header",
-      );
+      const header = page.locator("[data-site-header]");
+      const menuButton = page.getByLabel("Open navigation menu");
+      const brand = page.locator("[data-brand-link]");
+      const brandLabel = brand.locator("span");
+      const support = header.locator("[data-support-link]");
+      const headerBox = await visibleBoundingBox(header, "mobile site header");
+      const brandLabelMetrics = await brandLabel.evaluate((element) => ({
+        clientWidth: element.clientWidth,
+        scrollWidth: element.scrollWidth,
+      }));
 
       expect(headerBox.height).toBeLessThanOrEqual(72);
       await expect(page.locator("[data-discovery-menu]")).toBeHidden();
-      await expect(page.getByLabel("Open navigation menu")).toBeVisible();
+      await expect(menuButton).toBeVisible();
+      await expect(brand).toBeVisible();
+      await expect(support).toBeVisible();
+      expect(brandLabelMetrics.scrollWidth).toBeLessThanOrEqual(
+        brandLabelMetrics.clientWidth + 1,
+      );
+      await expectNoOverlap(menuButton, brand, {
+        first: "mobile menu button",
+        second: "brand link",
+      });
+      await expectNoOverlap(brand, support, {
+        first: "brand link",
+        second: "support link",
+      });
+      await expectHorizontallyContained(menuButton, header, {
+        inner: "mobile menu button",
+        outer: "mobile site header",
+      });
+      await expectHorizontallyContained(brand, header, {
+        inner: "brand link",
+        outer: "mobile site header",
+      });
+      await expectHorizontallyContained(support, header, {
+        inner: "support link",
+        outer: "mobile site header",
+      });
       await expectNoHorizontalOverflow(page);
     }
   });

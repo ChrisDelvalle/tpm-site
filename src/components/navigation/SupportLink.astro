@@ -1,15 +1,27 @@
 ---
+import type { HTMLAttributes } from "astro/types";
 import LinkButton from "../ui/LinkButton.astro";
 
-interface Props {
+interface Props extends Omit<HTMLAttributes<"a">, "href"> {
+  class?: string;
   href?: string;
   label?: string;
 }
 
 const {
+  class: className,
   href = "https://patreon.com/thephilosophersmeme",
   label = "Support Us",
+  ...attrs
 } = Astro.props;
 ---
 
-<LinkButton href={href} size="md">{label}</LinkButton>
+<LinkButton
+  {...attrs}
+  href={href}
+  size="md"
+  class:list={[className]}
+  data-support-link
+>
+  {label}
+</LinkButton>

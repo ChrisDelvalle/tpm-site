@@ -23,7 +23,7 @@ const { categoryItems, currentPath, primaryItems } = Astro.props;
 >
   <div class="grid gap-2 px-4 py-3 lg:px-8" data-site-header-inner>
     <div
-      class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3"
+      class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
       data-site-header-primary-row
     >
       <div class="hidden min-w-0 items-center justify-start gap-1 md:flex">
@@ -38,15 +38,21 @@ const { categoryItems, currentPath, primaryItems } = Astro.props;
         />
       </div>
 
-      <div class="max-w-[42vw] min-w-0 justify-self-center md:max-w-none">
-        <BrandLink />
+      <div
+        class="w-full min-w-0 justify-self-center text-center md:w-auto md:max-w-none"
+      >
+        <BrandLink
+          class="mx-auto max-w-full max-sm:text-xs sm:text-sm md:text-lg"
+        />
       </div>
 
-      <div class="flex min-w-0 items-center justify-end gap-2">
+      <div class="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
         <div class="hidden min-w-0 items-center md:flex">
           <PrimaryNav currentPath={currentPath} items={primaryItems} />
         </div>
-        <SupportLink />
+        <SupportLink
+          class="max-sm:min-h-8 max-sm:px-1.5 max-sm:py-1.5 max-sm:text-xs"
+        />
       </div>
     </div>
 

@@ -1,20 +1,29 @@
 ---
+import type { HTMLAttributes } from "astro/types";
 import TextLink from "../ui/TextLink.astro";
 import { SITE_TITLE } from "../../lib/routes";
 
-interface Props {
+interface Props extends Omit<HTMLAttributes<"a">, "href"> {
+  class?: string;
   href?: string;
   label?: string;
 }
 
-const { href = "/", label = SITE_TITLE } = Astro.props;
+const {
+  class: className,
+  href = "/",
+  label = SITE_TITLE,
+  ...attrs
+} = Astro.props;
 ---
 
 <TextLink
+  {...attrs}
   href={href}
   variant="nav"
   tone="neutral"
-  class="inline-flex min-w-0 items-center text-lg font-bold"
+  class:list={["inline-flex min-w-0 items-center text-lg font-bold", className]}
+  data-brand-link
 >
   <span class="truncate">{label}</span>
 </TextLink>

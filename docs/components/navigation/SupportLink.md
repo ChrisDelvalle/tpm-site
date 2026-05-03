@@ -27,8 +27,9 @@ layout, but the CTA treatment should remain recognizable.
 
 The component must remain usable in constrained containers, preserve touch and
 keyboard targets, and avoid horizontal overflow. In the desktop header, it lives
-in the right utility cluster. At constrained widths, it may move into
-`MobileMenu`, but it should stay easy to find.
+in the right utility cluster. In the mobile header, it remains visible to the
+right of the centered brand and may use compact mobile spacing, but it must not
+overlap the brand or force horizontal overflow.
 
 ## Layering And Scrolling
 
@@ -65,9 +66,11 @@ visible, and CTAs distinguishable from neutral actions.
 - keeps desktop and mobile controls from exposing conflicting visible states.
 - uses primary CTA colors with readable text in light and dark themes.
 - does not force header navigation collision.
+- accepts contextual compact sizing from header/footer/layout parents without
+  changing destination semantics.
 
 ## Follow-Up Notes
 
-- Support should remain visible in header, mobile menu, article endcaps, and
-  footer, but it should not force navigation collision. It may move into mobile
-  disclosure at constrained widths as long as it remains easy to find.
+- Support should remain visible in the header, article endcaps, and footer, but
+  it should not force navigation collision. The mobile header keeps it visible
+  instead of moving it behind disclosure.

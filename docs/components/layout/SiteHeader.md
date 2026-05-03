@@ -59,15 +59,26 @@ Mobile/constrained: one row with mobile menu left, brand centered, and visible
 `Support Us` right. Search, theme, categories, `Articles`, and `About` remain
 available in `MobileMenu`; footer-only RSS stays out of the menu.
 
+The mobile primary row uses left and right intrinsic controls around a flexible
+center brand slot. The brand and support CTA may use smaller mobile typography
+and spacing, but they must not overlap. Preserve the normal desktop sizing and
+rhythm when width allows; compact only inside constrained mobile widths.
+
 Tablet and wider: desktop controls return and categories appear in the second
 row. This uses the standard `md` Tailwind breakpoint so category discovery is
 not hidden too aggressively on ordinary laptop split-screen widths.
 
-The desktop category row is a locked-height single line. Category labels may
-truncate inside their available cells as width shrinks, but they must not wrap
-into a third header row or increase sticky-header height. The fallback for
-limited space is compression/truncation plus the mobile menu at smaller
-breakpoints, not multi-line header growth.
+The desktop category row is a locked-height single line with intrinsic category
+labels and the normal editorial spacing as its default. Category labels must
+remain fully readable while the desktop row is visible; do not ellipsize labels
+such as `Philosophy` into `Philos...`.
+
+When the viewport is constrained but still within the desktop/tablet header
+mode, the category row may proportionally compact typography, chevrons, and
+spacing as one visual system. Preserve full labels and avoid CSS transforms
+that would break anchored dropdown positioning. The fallback for space that
+cannot support full labels is the mobile menu at smaller breakpoints, not
+truncation or multi-line header growth.
 
 The center of the row is flexible space, not a permanent search slot. The
 header must not depend on fragile breakpoint guesses to prevent brand,
@@ -111,8 +122,13 @@ visible, and CTAs distinguishable from neutral actions.
 ## Testable Invariants
 
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
+- keeps the mobile menu trigger, brand, and support CTA visible and
+  non-overlapping at iPhone-width viewports.
 - keeps the desktop category row to one line and the header within its
   documented height contract.
+- keeps full category labels visible while the category row is visible.
+- compacts constrained category discovery proportionally instead of compressing
+  or truncating individual labels.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - does not create extra main/content landmarks.

@@ -50,11 +50,16 @@ Tablet and wider: show category labels in a compact section navigation row. The
 standard breakpoint is intentionally not over-aggressive; category discovery
 should remain visible on ordinary laptop split-screen widths.
 
-The category row is a single-line contract. Labels may shrink and truncate
-inside equal flexible cells as the viewport narrows, but the list must not wrap
-into another row, create horizontal overflow, or change sticky-header height.
-If category discovery truly no longer fits, the responsive fallback is the
-mobile menu at smaller breakpoints, not a taller desktop header.
+The category row is a single-line contract. Labels use their intrinsic width
+and normal spacing by default; items are not equal-width tabs. As available
+space gets tighter, compact typography, chevrons, and spacing together so the
+row reads like the same object at a smaller size. Do not use CSS transforms for
+this behavior because transformed ancestors break fixed anchored dropdown
+positioning. Do not truncate category names.
+
+If full category discovery truly no longer fits, the responsive fallback is the
+mobile menu at smaller breakpoints, not a taller desktop header, hidden
+overflow, or ellipsized labels.
 
 The menu should not force brand, search, support, and every category into one
 fragile row.
@@ -122,7 +127,10 @@ cards.
 - Preview opens with keyboard focus and pointer hover.
 - Preview links are reachable by keyboard.
 - No horizontal overflow at desktop or wide desktop widths.
-- Category labels stay on one row and do not increase header height.
+- Category labels stay full, stay on one row, and do not increase header
+  height.
+- Constrained desktop/tablet widths proportionally compact the row rather than
+  rearranging or truncating individual category items.
 - Preview content does not include the full archive.
 - Footer/homepage/category pages remain fallback discovery paths.
 

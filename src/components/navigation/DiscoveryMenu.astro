@@ -15,15 +15,15 @@ const { currentPath = "", items, label = "Category discovery" } = Astro.props;
   items.length > 0 && (
     <nav
       aria-label={label}
-      class="hidden h-full w-full min-w-0 items-center justify-center overflow-visible md:flex"
+      class="hidden h-full w-full min-w-0 items-center justify-center overflow-hidden md:flex"
       data-discovery-menu
     >
       <ul
-        class="flex h-full w-full max-w-5xl min-w-0 flex-nowrap items-center justify-center gap-1 overflow-hidden"
+        class="flex h-full w-max flex-nowrap items-center justify-center gap-x-1.5 overflow-visible lg:gap-x-2"
         data-discovery-menu-list
       >
         {items.map((item) => (
-          <li class="flex min-w-0 flex-1 basis-0 justify-center">
+          <li class="shrink-0">
             <CategoryDropdown
               category={item}
               currentPath={currentPath}

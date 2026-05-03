@@ -16,7 +16,8 @@ describe("DiscoveryMenu", () => {
     expect(view).toContain("Metamemetics");
     expect(view).toContain("History");
     expect(view).toContain("md:flex");
-    expect(view).toContain("flex-wrap");
+    expect(view).toContain("flex-nowrap");
+    expect(view).toContain("lg:gap-x-2");
   });
 
   test("omits the discovery nav when there are no categories", async () => {

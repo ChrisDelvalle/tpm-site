@@ -21,7 +21,12 @@ It composes local components: `../../lib/routes`, `../ui/TextLink`. It must rema
 
 ## Layout And Responsiveness
 
-The component must remain usable in constrained containers, preserve touch and keyboard targets, and avoid horizontal overflow. Desktop-only surfaces must have an equivalent mobile or fallback navigation path.
+The component must remain usable in constrained containers, preserve touch and
+keyboard targets, and avoid horizontal overflow. In the mobile header, it lives
+in the flexible center slot between the menu trigger and support CTA, so it must
+accept contextual typography and width classes without forcing overlap.
+Desktop-only surfaces must have an equivalent mobile or fallback navigation
+path.
 
 ## Layering And Scrolling
 
@@ -52,6 +57,8 @@ visible, and CTAs distinguishable from neutral actions.
 ## Testable Invariants
 
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
+- can be constrained by a parent without overlapping neighboring header
+  controls.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps desktop and mobile controls from exposing conflicting visible states.

@@ -17,7 +17,7 @@ describe("ContentRail", () => {
 
     expect(view).toContain('aria-label="Article contents"');
     expect(view).toContain('data-content-rail="left"');
-    expect(view).toContain("2xl:sticky");
+    expect(view).toContain("xl:sticky");
     expect(view).toContain("Contents");
   });
 

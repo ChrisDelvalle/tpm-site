@@ -1527,23 +1527,31 @@ Scope rules:
 
 ## Milestone 50: Header Category Nav Proportions And Constrained Scaling
 
-- [ ] Revisit the Milestone 48 category-row implementation and restore the
+- [x] Revisit the Milestone 48 category-row implementation and restore the
       earlier desktop visual rhythm as the default: normal category spacing,
       normal label proportions, and no compressed equal-width tab look.
-- [ ] Preserve full category labels at every desktop/tablet width where the
+- [x] Preserve full category labels at every desktop/tablet width where the
       category row is visible; category names must not truncate into strings
       such as `Philos...`.
-- [ ] When inline space becomes constrained, scale the category row down as a
-      whole, like resizing an image, preserving label text and relationships
-      rather than rearranging items, changing proportions, or truncating
-      individual labels.
-- [ ] Choose a clear fallback point where the full-label category row is no
+- [x] When inline space becomes constrained, proportionally compact the
+      category row's typography, chevrons, and spacing as one visual system,
+      preserving label text and relationships rather than rearranging items,
+      changing proportions, using transform-based scaling that breaks anchored
+      panels, or truncating individual labels.
+- [x] Choose a clear fallback point where the full-label category row is no
       longer viable and switch to the mobile navigation pattern instead of
       wrapping, overflowing, or ellipsizing labels.
-- [ ] Update the header/navigation component docs to describe the visual
+- [x] Update the header/navigation component docs to describe the visual
       rhythm, proportional shrink behavior, full-label invariant, and fallback
       behavior.
-- [ ] Add Playwright coverage across constrained laptop, tablet, and desktop
+- [x] Add Playwright coverage across constrained laptop, tablet, and desktop
       widths proving the category row keeps full labels, preserves the locked
       header height, avoids overflow, and switches to mobile navigation before
       labels need truncation.
+- [x] Apply the same constrained-space principle to the primary header row:
+      preserve the normal brand, utility, and support sizing where possible,
+      then scale or constrain the row before any brand/support overlap can make
+      `The Philosopher's Meme` unreadable.
+- [x] Add mobile-width Playwright coverage proving the brand and Support Us
+      button do not overlap at iPhone-width resolutions and the primary row
+      remains readable without horizontal overflow.

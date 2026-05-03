@@ -237,6 +237,10 @@ Route files should not implement header internals or browsing widths.
 
 - Mobile base: mobile menu left, brand centered, and `Support Us` right; search
   and theme live in the menu's top utility area.
+- On narrow mobile widths, the primary row should preserve the existing visual
+  hierarchy while compacting typography/spacing just enough to keep the mobile
+  menu trigger, brand, and support CTA visible and non-overlapping. Do not let
+  the support CTA cover the brand.
 - Tablet/desktop enhancement: two rows, with utilities/brand/primary links in
   row 1 and centered category discovery in row 2.
 - The header must not rely on brittle collision thresholds between search,
@@ -244,9 +248,15 @@ Route files should not implement header internals or browsing widths.
 - Use the least aggressive standard Tailwind breakpoint that keeps the layout
   stable; category discovery should not disappear on ordinary laptop
   split-screen widths.
-- The category discovery row is locked to one line. Category labels may shrink
-  and truncate inside the row, but they must not wrap into a third header row
-  or increase sticky-header height.
+- The category discovery row is locked to one line. Category labels remain full
+  while the row is visible. At constrained tablet/desktop widths, the row may
+  compact typography, chevrons, and spacing proportionally, preserving
+  category-label text and relative relationships. Do not ellipsize category
+  labels, compress items into equal-width tabs, or use CSS transforms that
+  break anchored dropdown positioning.
+- If the row cannot support full labels even after the approved proportional
+  compaction, switch to the mobile navigation pattern rather than wrapping,
+  overflowing, or truncating category names.
 - Category dropdown surfaces must stay within viewport width and below sticky
   header chrome.
 - Search reveal must not push links into overlap or horizontal overflow.
@@ -276,6 +286,8 @@ Playwright tests:
   pointer moves from trigger to panel;
 - mobile menu exposes categories, articles, about, search, and theme while
   Support Us remains visible in the mobile header row;
+- mobile header keeps the mobile menu trigger, brand, and support CTA visible,
+  contained, and non-overlapping at iPhone-width viewports;
 - header does not overlap or collide at mobile, tablet, desktop, and wide
   desktop;
 - `/articles/` renders category discovery and `View all articles`;
