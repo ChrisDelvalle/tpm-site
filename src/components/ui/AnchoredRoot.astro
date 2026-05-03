@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import type { AnchoredPreset } from "../../lib/anchored-positioning";
+
+interface Props extends HTMLAttributes<"div"> {
+  as?: "details" | "div";
+  preset: AnchoredPreset;
+}
+
+const { as = "div", class: className, preset, ...attrs } = Astro.props;
+---
+
+{
+  as === "details" ? (
+    <details
+      {...attrs}
+      data-anchor-root
+      data-anchor-preset={preset}
+      class:list={[className]}
+    >
+      <slot />
+    </details>
+  ) : (
+    <div
+      {...attrs}
+      data-anchor-root
+      data-anchor-preset={preset}
+      class:list={[className]}
+    >
+      <slot />
+    </div>
+  )
+}
+
+<script src="../../scripts/anchored-positioning.ts"></script>

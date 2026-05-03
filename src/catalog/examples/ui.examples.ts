@@ -7,6 +7,22 @@ interface UiCatalogExample {
 
 export const uiCatalogExamples = [
   {
+    componentPath: "src/components/ui/AnchoredPanel.astro",
+    description:
+      "Fixed floating surface that consumes shared anchor CSS variables.",
+    title: "AnchoredPanel",
+  },
+  {
+    componentPath: "src/components/ui/AnchoredRoot.astro",
+    description: "Data-attribute boundary for one anchored relationship.",
+    title: "AnchoredRoot",
+  },
+  {
+    componentPath: "src/components/ui/AnchoredTrigger.astro",
+    description: "Semantic trigger marker for anchored positioning.",
+    title: "AnchoredTrigger",
+  },
+  {
     componentPath: "src/components/ui/Badge.astro",
     description: "Compact metadata label for categories, tags, and states.",
     title: "Badge",

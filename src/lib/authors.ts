@@ -7,7 +7,7 @@ import {
 } from "./routes";
 
 /** Public author type values used by author metadata and JSON-LD. */
-export type AuthorType = AuthorEntry["data"]["type"];
+type AuthorType = AuthorEntry["data"]["type"];
 
 /** Public author social/profile link. */
 export interface AuthorSocialLink {
@@ -39,7 +39,7 @@ export interface AuthorProfile extends AuthorSummary {
  * @param entry Author content entry.
  * @returns Author summary for bylines and compact links.
  */
-export function authorSummary(entry: AuthorEntry): AuthorSummary {
+function authorSummary(entry: AuthorEntry): AuthorSummary {
   return {
     displayName: entry.data.displayName,
     href: authorUrl(entry.id),

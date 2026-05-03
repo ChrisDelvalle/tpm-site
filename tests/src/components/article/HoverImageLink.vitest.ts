@@ -4,7 +4,7 @@ import HoverImageLink from "../../../../src/components/article/HoverImageLink.as
 import { createAstroTestContainer } from "../../../helpers/astro-container";
 
 describe("HoverImageLink", () => {
-  test("renders a hydrated hover-image link with image metadata", async () => {
+  test("renders a native anchored hover-image link with image metadata", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(HoverImageLink, {
       props: {
@@ -20,5 +20,7 @@ describe("HoverImageLink", () => {
 
     expect(view).toContain("preview");
     expect(view).toContain("/assets/preview.png");
+    expect(view).toContain('data-anchor-preset="inline-hover-preview"');
+    expect(view).not.toContain("client:idle");
   });
 });

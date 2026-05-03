@@ -12,9 +12,12 @@ category navigation, support, and brand space.
 
 - `label?: string`
 - `popoverId?: string`
+- `align?: "start" | "end"`
 
 Public props should remain narrow and semantic. Do not add route-specific
-layout props; the parent header owns placement.
+layout props. `align` is limited to the anchored-positioning relationship:
+`start` means the panel starts at the trigger edge, and `end` means the panel
+ends at the trigger edge.
 
 ## Composition Relationships
 
@@ -25,23 +28,25 @@ SiteHeader
 ```
 
 `SearchReveal` owns open/close disclosure. `SearchForm` owns form semantics.
+The reveal uses `AnchoredRoot`, `AnchoredTrigger`, and `AnchoredPanel` with the
+`header-search-start` or `header-search-end` preset.
 
 ## Layout And Responsiveness
 
 The trigger is compact and belongs in the desktop header utility cluster. The
 popover surface must stay within the viewport and should not push header links
 into collision. Its vertical offset should come from `--site-header-height`
-rather than a fixed pixel value.
+rather than a fixed pixel value. The panel top edge snaps to the sticky header
+bottom and its inline edge aligns to the trigger edge selected by `align`.
 
 At constrained widths, `MobileMenu` should render `SearchForm` directly rather
 than using the compact reveal.
 
 ## Layering And Scrolling
 
-Uses native `popover` so the browser owns basic close behavior, including
-escape and outside-click behavior where supported. A tiny external processed
-script moves focus into the revealed search input after opening; it must not
-take over popover state or layout.
+Uses the shared anchored-positioning adapter for geometry. CSS state owns
+visibility. The adapter may write runtime CSS variables for measured position
+and viewport limits, but it must not take over search form behavior.
 
 ## Interaction States
 
@@ -66,6 +71,8 @@ Use semantic tokens for trigger, popover, input, border, and focus states.
 - Trigger points at the configured popover ID.
 - Popover contains a labeled `SearchForm`.
 - Opening search does not create horizontal overflow.
+- The panel top edge snaps to the sticky header bottom without a visual gap.
+- The panel inline edge aligns with the configured trigger edge.
 - Search remains available in mobile navigation when this desktop reveal is
   hidden.
 

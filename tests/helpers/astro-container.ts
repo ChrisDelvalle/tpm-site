@@ -1,5 +1,4 @@
 import { getContainerRenderer as getMdxContainerRenderer } from "@astrojs/mdx";
-import { getContainerRenderer } from "@astrojs/react";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { loadRenderers } from "astro:container";
 
@@ -17,10 +16,7 @@ let renderersPromise:
  * @returns Astro container configured for component rendering tests.
  */
 export async function createAstroTestContainer(): Promise<AstroContainer> {
-  renderersPromise ??= loadRenderers([
-    getMdxContainerRenderer(),
-    getContainerRenderer(),
-  ]);
+  renderersPromise ??= loadRenderers([getMdxContainerRenderer()]);
   const renderers = await renderersPromise;
 
   return AstroContainer.create({

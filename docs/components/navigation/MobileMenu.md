@@ -22,8 +22,9 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local navigation data helpers, `CategoryTree` or `SectionNav`,
-`PrimaryNav`, `SearchForm`, and `ThemeToggle`.
+It composes local navigation data helpers, `AnchoredRoot`, `AnchoredTrigger`,
+`AnchoredPanel`, `CategoryTree` or `SectionNav`, `PrimaryNav`, `SearchForm`,
+and `ThemeToggle`.
 
 `SiteHeader` owns when the mobile menu is shown. `MobileMenu` owns the contents
 and internal grouping of the constrained-width navigation surface.
@@ -34,7 +35,9 @@ The component must remain usable regardless of the trigger's horizontal
 position. Its panel is viewport-constrained rather than trigger-aligned, so it
 cannot fall off-screen when the trigger is near the left or right edge.
 Position the panel from `--site-header-height` instead of a fixed top value so
-header row changes cannot cover the menu.
+header row changes cannot cover the menu. The mobile shell uses the
+`mobile-shell-panel` anchored-positioning preset and may render as native
+`details`/`summary` so disclosure remains semantic without a hydrated island.
 
 The search form and theme toggle sit together at the top of the panel as the
 utility control area. The panel must preserve touch and keyboard targets, avoid
@@ -44,9 +47,11 @@ single complete fallback rather than a partial mirror of desktop navigation.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+The component should avoid creating a stacking context unless it owns an
+overlay, sticky region, or anchored panel. Any `z-index`, sticky offset, fixed
+size, or scroll container is part of this component's public design and needs
+an invariant test. The panel must scroll internally on short screens rather
+than pushing controls off-screen.
 
 ## Interaction States
 
@@ -79,6 +84,7 @@ visible, and CTAs distinguishable from neutral actions.
 - supports keyboard disclosure and focus order.
 - keeps the panel inside the viewport regardless of whether the trigger appears
   left, center, or right.
+- snaps the panel top edge to the sticky header bottom.
 - keeps search and theme controls in the top utility area.
 - includes categories, `Articles`, `About`, search, and theme.
 - does not include RSS; RSS belongs in the footer.

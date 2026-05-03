@@ -49,7 +49,7 @@ export const componentCatalogIgnoreList = [
     reason: "Legacy compatibility wrapper for existing imports.",
   },
   {
-    path: "src/components/article/HoverImageCard.tsx",
+    path: "src/components/article/HoverImageCard.astro",
     reason: "Legacy compatibility wrapper for existing imports.",
   },
   {
@@ -59,11 +59,6 @@ export const componentCatalogIgnoreList = [
   {
     path: "src/components/article/HoverImageParagraph.astro",
     reason: "Legacy compatibility wrapper for existing MDX imports.",
-  },
-  {
-    path: "src/components/articles/HoverImageCard.tsx",
-    reason:
-      "Article-specific interactive MDX component pending article catalog examples.",
   },
   {
     path: "src/components/articles/HoverImageLink.astro",
@@ -90,10 +85,6 @@ export const componentCatalogIgnoreList = [
   {
     path: "src/components/seo/SiteHead.astro",
     reason: "Non-visual SEO component covered by SEO and page render tests.",
-  },
-  {
-    path: "src/components/ui/hover-card.tsx",
-    reason: "Internal shadcn/Radix primitive used by HoverImageCard.",
   },
   {
     path: "src/components/layout/SiteShell.astro",

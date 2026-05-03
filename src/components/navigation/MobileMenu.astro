@@ -1,6 +1,9 @@
 ---
 import { Menu, X } from "lucide-astro";
 
+import AnchoredPanel from "../ui/AnchoredPanel.astro";
+import AnchoredRoot from "../ui/AnchoredRoot.astro";
+import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
 import CategoryTree from "./CategoryTree.astro";
 import PrimaryNav from "./PrimaryNav.astro";
 import SearchForm from "./SearchForm.astro";
@@ -26,17 +29,17 @@ const {
 } = Astro.props;
 ---
 
-<details class="group relative">
-  <summary
+<AnchoredRoot as="details" preset="mobile-shell-panel" class="group relative">
+  <AnchoredTrigger
+    as="summary"
     class="text-foreground hover:text-primary focus-visible:outline-ring inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 [&::-webkit-details-marker]:hidden"
     aria-label={label}
   >
     <Menu class="block size-5 group-open:hidden" aria-hidden="true" />
     <X class="hidden size-5 group-open:block" aria-hidden="true" />
-  </summary>
-  <div
-    class="border-border bg-background fixed inset-x-4 top-[calc(var(--site-header-height)+0.5rem)] z-50 grid max-h-[calc(100dvh-var(--site-header-height)-1rem)] gap-5 overflow-y-auto overscroll-contain rounded-sm border p-4 shadow-lg"
-    data-floating-panel
+  </AnchoredTrigger>
+  <AnchoredPanel
+    class="border-border bg-background z-50 grid w-[var(--anchor-max-width,calc(100vw-2rem))] gap-5 overflow-y-auto overscroll-contain rounded-sm border p-4 shadow-lg"
     data-mobile-menu-panel
   >
     <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
@@ -49,5 +52,5 @@ const {
       label="Mobile primary navigation"
     />
     <CategoryTree items={categoryItems} label="Mobile category navigation" />
-  </div>
-</details>
+  </AnchoredPanel>
+</AnchoredRoot>

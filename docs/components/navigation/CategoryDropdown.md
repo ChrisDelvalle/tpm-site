@@ -26,12 +26,16 @@ description, optional preview articles, and a View All href.
 ```text
 SiteHeader or DiscoveryMenu
   CategoryDropdown
+    AnchoredRoot
+      AnchoredTrigger
+      AnchoredPanel
     CategoryPreviewList
 ```
 
 The parent owns category ordering. `CategoryDropdown` owns the category link,
 chevron affordance, preview surface, hover/focus disclosure behavior, and
-current-page state. `CategoryPreviewList` owns preview list semantics.
+current-page state. `CategoryPreviewList` owns preview list semantics. The
+dropdown uses the `header-dropdown` anchored-positioning preset.
 
 ## Layout And Responsiveness
 
@@ -41,18 +45,22 @@ category page. If a separate disclosure trigger is needed, keep it small and
 adjacent to the link.
 
 The dropdown surface should align visually with the header/navigation system
-and cap its width to a readable preview measure. The surface is
-viewport-constrained rather than trigger-edge aligned, so it remains fully
-visible when a category appears near the left or right edge.
+and cap its width to a readable preview measure. Its top edge snaps to the
+sticky header bottom. Its inline edge starts from the trigger when there is
+space and uses the shared anchored-positioning fallback/shift rules to stay
+inside the viewport near left and right edges. It must never fall back to
+viewport centering as its normal placement.
 
 At constrained widths, hide the desktop dropdown and let `MobileMenu` own
 category discovery.
 
 ## Layering And Scrolling
 
-The current implementation uses CSS `group-hover` and `group-focus-within`.
-Hover/focus exposes preview content and clicking the category text navigates.
-Do not replace the category link with a button-only trigger.
+The implementation uses CSS `group-hover` and `group-focus-within` on top of
+the anchored primitives. Hover/focus exposes preview content and clicking the
+category text navigates. A small CSS hover bridge may keep the panel forgiving
+while the pointer moves from trigger to panel. Do not replace the category link
+with a button-only trigger.
 
 The preview surface must not overlap the sticky header in a way that hides the
 trigger or content. It should not require client-side JavaScript for basic
@@ -106,6 +114,8 @@ Open and focus states must be visible in light and dark mode.
 - Empty preview state still offers View All.
 - Focus ring is visible on trigger and links.
 - Surface stays within viewport and does not create horizontal overflow.
+- Surface top edge snaps to the sticky header bottom.
+- Surface placement is trigger-relative, not viewport-centered.
 - Clicking category text navigates to the category page.
 - Hover and keyboard focus expose the preview where the chosen implementation
   supports preview disclosure.

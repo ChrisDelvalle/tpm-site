@@ -12,6 +12,10 @@ describe("MobileMenu", () => {
     });
 
     expect(view).toContain("<details");
+    expect(view).toContain("data-anchor-root");
+    expect(view).toContain('data-anchor-preset="mobile-shell-panel"');
+    expect(view).toContain("data-anchor-trigger");
+    expect(view).toContain("data-anchor-panel");
     expect(view).toContain("Mobile site search");
     expect(view).toContain("theme-toggle");
     expect(view).toContain("Mobile primary navigation");
@@ -21,8 +25,8 @@ describe("MobileMenu", () => {
     expect(view).not.toContain("Support Us");
     expect(view).toContain("data-floating-panel");
     expect(view).toContain("data-mobile-menu-panel");
-    expect(view).toContain("fixed inset-x-4");
-    expect(view).toContain("var(--site-header-height)");
+    expect(view).not.toContain("fixed inset-x-4");
+    expect(view).toContain("--site-header-height");
     expect(view).toContain("grid-cols-[minmax(0,1fr)_auto]");
     expect(view).toContain("overflow-y-auto");
     expect(view).toContain("Metamemetics");

@@ -17,6 +17,8 @@ export const viewportMatrix = [
   { height: 1200, label: "wide desktop", width: 2560 },
 ] as const;
 
+const defaultGeometryTolerance = 2;
+
 /**
  * Returns a visible element bounding box and fails with a useful label when the
  * element is missing or not visible.
@@ -50,6 +52,127 @@ export async function expectNoHorizontalOverflow(page: Page): Promise<void> {
   });
 
   expect(overflow).toBeLessThanOrEqual(1);
+}
+
+/**
+ * Compares two CSS pixel values with a small subpixel tolerance.
+ *
+ * @param actual Actual pixel value.
+ * @param expected Expected pixel value.
+ * @param tolerance Pixel tolerance for subpixel rounding.
+ */
+export function expectApproximatelyEqual(
+  actual: number,
+  expected: number,
+  tolerance = defaultGeometryTolerance,
+): void {
+  expect(Math.abs(actual - expected)).toBeLessThanOrEqual(tolerance);
+}
+
+/**
+ * Asserts that a floating surface stays inside viewport gutters.
+ *
+ * @param page Current Playwright page.
+ * @param locator Floating surface locator.
+ * @param label Human-readable element name for failure messages.
+ * @param gutter Minimum viewport gutter in CSS pixels.
+ */
+export async function expectViewportContained(
+  page: Page,
+  locator: Locator,
+  label: string,
+  gutter = 0,
+): Promise<void> {
+  const viewport = page.viewportSize();
+
+  if (viewport === null) {
+    throw new Error("Expected Playwright viewport to be configured.");
+  }
+
+  const box = await visibleBoundingBox(locator, label);
+
+  expect(box.x).toBeGreaterThanOrEqual(gutter);
+  expect(box.x + box.width).toBeLessThanOrEqual(viewport.width - gutter);
+  expect(box.y).toBeGreaterThanOrEqual(gutter);
+  expect(box.y + box.height).toBeLessThanOrEqual(viewport.height - gutter);
+}
+
+/**
+ * Asserts that one element's top edge touches another element's bottom edge.
+ *
+ * @param topElement Element expected to sit below.
+ * @param bottomOfElement Element whose bottom edge is the snap line.
+ * @param labels Human-readable names for failure messages.
+ * @param labels.bottomOf Human-readable upper element name.
+ * @param labels.top Human-readable lower element name.
+ * @param tolerance Pixel tolerance for subpixel rounding.
+ */
+export async function expectTopAlignedToBottom(
+  topElement: Locator,
+  bottomOfElement: Locator,
+  labels: { readonly bottomOf: string; readonly top: string },
+  tolerance = defaultGeometryTolerance,
+): Promise<void> {
+  const topBox = await visibleBoundingBox(topElement, labels.top);
+  const bottomBox = await visibleBoundingBox(bottomOfElement, labels.bottomOf);
+
+  expectApproximatelyEqual(topBox.y, bottomBox.y + bottomBox.height, tolerance);
+}
+
+/**
+ * Asserts that a panel's inline start aligns with its trigger.
+ *
+ * @param trigger Trigger locator.
+ * @param panel Anchored panel locator.
+ * @param tolerance Pixel tolerance for subpixel rounding.
+ */
+export async function expectInlineStartAligned(
+  trigger: Locator,
+  panel: Locator,
+  tolerance = defaultGeometryTolerance,
+): Promise<void> {
+  const triggerBox = await visibleBoundingBox(trigger, "anchored trigger");
+  const panelBox = await visibleBoundingBox(panel, "anchored panel");
+
+  expectApproximatelyEqual(panelBox.x, triggerBox.x, tolerance);
+}
+
+/**
+ * Asserts that a panel's inline end aligns with its trigger.
+ *
+ * @param trigger Trigger locator.
+ * @param panel Anchored panel locator.
+ * @param tolerance Pixel tolerance for subpixel rounding.
+ */
+export async function expectInlineEndAligned(
+  trigger: Locator,
+  panel: Locator,
+  tolerance = defaultGeometryTolerance,
+): Promise<void> {
+  const triggerBox = await visibleBoundingBox(trigger, "anchored trigger");
+  const panelBox = await visibleBoundingBox(panel, "anchored panel");
+
+  expectApproximatelyEqual(
+    panelBox.x + panelBox.width,
+    triggerBox.x + triggerBox.width,
+    tolerance,
+  );
+}
+
+/**
+ * Asserts that a header-anchored surface snaps to the sticky header bottom.
+ *
+ * @param page Current Playwright page.
+ * @param panel Anchored panel locator.
+ */
+export async function expectPanelBelowHeader(
+  page: Page,
+  panel: Locator,
+): Promise<void> {
+  await expectTopAlignedToBottom(panel, page.locator("[data-site-header]"), {
+    bottomOf: "site header",
+    top: "anchored panel",
+  });
 }
 
 /**

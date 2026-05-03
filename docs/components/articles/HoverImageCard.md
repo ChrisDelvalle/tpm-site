@@ -1,61 +1,68 @@
 # Hover Image Card
 
-Source: `src/components/articles/HoverImageCard.tsx`
+Source: `src/components/articles/HoverImageCard.astro`
 
 ## Purpose
 
-`HoverImageCard` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`HoverImageCard` renders an inline article link that previews an image on hover
+or keyboard focus. It exists for MDX article prose that intentionally embeds
+image previews inside a sentence.
 
 ## Public Contract
 
-- This component exposes no explicit local `Props` interface; treat its imported component API or framework primitive as the public contract.
+- `image: ImageMetadata`
+- `label: string`
+- `alt?: string`
+- `expanded?: boolean`
 
-Public props should remain narrow and semantic. Do not add broad configuration
-objects or boolean clusters when a named variant or a smaller component would
-make invalid states harder to express.
+The label is author-visible prose and must render unchanged. The link always
+points to `image.src` so readers have a no-JavaScript fallback.
 
 ## Composition Relationships
 
-It should not depend on sibling internals beyond normal slot/prop composition. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+MDX article prose
+  HoverImageLink or HoverImageParagraph
+    HoverImageCard
+      AnchoredRoot preset="inline-hover-preview"
+        AnchoredTrigger as="a"
+        AnchoredPanel
+          img
+```
+
+`HoverImageCard` owns the preview surface, size variant, and anchored
+relationship. It does not parse Markdown or load article data.
 
 ## Layout And Responsiveness
 
-The component must respect a readable prose measure, keep metadata visually subordinate to the article title/body, and allow long titles, author names, tags, and images to wrap without layout collision.
+The trigger remains inline and must not start a new paragraph or line by
+itself. The preview is fixed-positioned by the shared anchored adapter, remains
+visually tethered to the trigger, and uses viewport max-size variables to avoid
+horizontal overflow. `expanded` increases the preview cap only; it must not
+change the inline trigger.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+Uses the shared `inline-hover-preview` preset. The panel may sit above or below
+the trigger depending on viewport space. It must not hydrate React/Radix or use
+component-local placement math.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant. Empty lists, missing image/description, many tags, one-item lists, and dense lists should have catalog examples or tests where applicable.
+Support default, hover, focus-within, expanded, narrow viewport, left-edge,
+right-edge, bottom-edge, light, and dark states.
 
 ## Accessibility Semantics
 
-Use semantic HTML first, preserve heading order when headings are rendered, and keep focus-visible states intact for any interactive descendants.
-
-## Content Edge Cases
-
-Test or catalog long titles, long words, dense content, empty content, missing
-optional fields, and unusual punctuation whenever this component renders user or
-author-provided content.
-
-## Theme Behavior
-
-Use semantic color tokens and Tailwind utilities. Light and dark mode must keep
-text readable, borders visible when they communicate structure, focus rings
-visible, and CTAs distinguishable from neutral actions.
+The trigger is a real link to the image. The preview image uses the supplied
+alt text, or empty alt when the preview is decorative relative to the link
+label. Focus must reveal the same preview available on hover.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
-- handles long content without clipping or overlapping neighboring components.
-- keeps article title, metadata, tags, and links semantically associated.
-- keeps article body, continuation, and support surfaces in the intended order.
-
-## Follow-Up Notes
-
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Renders `data-anchor-preset="inline-hover-preview"`.
+- Renders a real link whose `href` is `image.src`.
+- Renders no React hydration directive and no Radix/shadcn hover-card markup.
+- Keeps the trigger inline in prose and preserves the exact label text.
+- Preview remains viewport-contained at left, right, and bottom edges.
+- `expanded` changes preview sizing without changing trigger semantics.

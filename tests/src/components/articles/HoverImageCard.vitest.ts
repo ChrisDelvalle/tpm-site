@@ -1,0 +1,47 @@
+import { describe, expect, test } from "vitest";
+
+import HoverImageCard from "../../../../src/components/articles/HoverImageCard.astro";
+import { createAstroTestContainer } from "../../../helpers/astro-container";
+
+describe("HoverImageCard", () => {
+  test("renders an anchored inline link and preview image", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(HoverImageCard, {
+      props: {
+        alt: "Screenshot of a text message conversation",
+        image: {
+          height: 600,
+          src: "/src/assets/articles/example/image.png",
+          width: 800,
+        },
+        label: "inline preview",
+      },
+    });
+
+    expect(view).toContain('data-anchor-preset="inline-hover-preview"');
+    expect(view).toContain("data-hover-image-trigger");
+    expect(view).toContain("data-hover-image-panel");
+    expect(view).toContain('href="/src/assets/articles/example/image.png"');
+    expect(view).toContain('alt="Screenshot of a text message conversation"');
+    expect(view).not.toContain("client:idle");
+    expect(view).not.toContain('data-slot="hover-card');
+  });
+
+  test("uses the larger size variant only when expanded", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(HoverImageCard, {
+      props: {
+        expanded: true,
+        image: {
+          height: 400,
+          src: "/assets/wide.png",
+          width: 800,
+        },
+        label: "wide preview",
+      },
+    });
+
+    expect(view).toContain('data-hover-image-expanded="true"');
+    expect(view).toContain("--hover-image-max-height: 34rem");
+  });
+});

@@ -71,7 +71,7 @@ Current public components classify into these anatomy roles:
 | blocks        | homepage blocks, archive/category/search blocks, `SupportBlock`                                                                                                                                                               |
 | media         | `ResponsiveIframe`, `EmbedFrame`                                                                                                                                                                                              |
 | SEO           | `SiteHead`, `ArticleJsonLd`                                                                                                                                                                                                   |
-| UI primitives | `Button`, `LinkButton`, `IconButton`, `TextLink`, `Input`, `Badge`, `Separator`, `Container`, `Section`, `Card`, `hover-card`                                                                                                 |
+| UI primitives | `Button`, `LinkButton`, `IconButton`, `TextLink`, `Input`, `Badge`, `Separator`, `Container`, `Section`, `Card`, anchored positioning primitives                                                                              |
 | compatibility | `src/components/article/*` legacy MDX import path wrappers                                                                                                                                                                    |
 
 Missing target anatomy components:

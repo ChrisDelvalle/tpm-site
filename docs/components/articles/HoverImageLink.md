@@ -4,7 +4,8 @@ Source: `src/components/articles/HoverImageLink.astro`
 
 ## Purpose
 
-`HoverImageLink` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`HoverImageLink` is the stable author-facing MDX wrapper for an inline
+hover-image preview link.
 
 ## Public Contract
 
@@ -19,11 +20,13 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `./HoverImageCard`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+It composes `./HoverImageCard.astro` and forwards the author-facing props
+unchanged.
 
 ## Layout And Responsiveness
 
-The component must respect a readable prose measure, keep metadata visually subordinate to the article title/body, and allow long titles, author names, tags, and images to wrap without layout collision.
+The component must stay inline inside article prose. It must not add paragraph
+or block wrappers around the trigger.
 
 ## Layering And Scrolling
 
@@ -53,11 +56,9 @@ visible, and CTAs distinguishable from neutral actions.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
-- handles long content without clipping or overlapping neighboring components.
-- keeps article title, metadata, tags, and links semantically associated.
-- keeps article body, continuation, and support surfaces in the intended order.
+- Preserves the author-facing `image`, `label`, `alt`, and `expanded` API.
+- Emits the native anchored preview component without React hydration.
+- Keeps the trigger inline with surrounding prose.
 
 ## Follow-Up Notes
 

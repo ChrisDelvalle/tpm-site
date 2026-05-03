@@ -1314,164 +1314,213 @@ Scope rules:
 
 ## Milestone 42: Anchored Positioning Engine And Adapter Foundation
 
-- [ ] Implement only after Milestone 41 is complete.
-- [ ] Add a pure `src/lib/` anchored positioning engine with typed rectangles,
+- [x] Implement only after Milestone 41 is complete.
+- [x] Add a pure `src/lib/` anchored positioning engine with typed rectangles,
       placements, placement operations, deterministic collision fallback,
       sizing results, and explicit placement state.
-- [ ] Implement placement operations as small testable functions:
+- [x] Implement placement operations as small testable functions:
       `initialPlacement`, `offset`, `flipSide`, `flipAlignment`,
       `shiftIntoBoundary`, `sizeToBoundary`, and `detectDetach`.
-- [ ] Add preset definitions for `header-dropdown`, `header-search-start`,
+- [x] Add preset definitions for `header-dropdown`, `header-search-start`,
       `header-search-end`, `mobile-shell-panel`, and
       `inline-hover-preview`.
-- [ ] Document the required migration scope in code/docs: `CategoryDropdown`,
+- [x] Document the required migration scope in code/docs: `CategoryDropdown`,
       `SearchReveal`, `MobileMenu`, and article hover-image previews are the
       required consumers; ordinary sticky rails, in-flow disclosures, controls,
       media, references, and document-flow content must stay outside the
       anchored system unless they become trigger-attached floating surfaces.
-- [ ] Add unit tests for every placement operation, every preset, split
+- [x] Add unit tests for every placement operation, every preset, split
       block/inline anchors, edge triggers, collision fallback, sizing,
       clamping, detach states, and subpixel tolerance.
-- [ ] Add the smallest processed browser adapter needed to bind anchored roots,
+- [x] Add the smallest processed browser adapter needed to bind anchored roots,
       triggers, and panels, publish measured geometry as CSS custom
       properties, and update on open, resize, scroll, header-size changes,
       font/layout changes, and visual viewport changes where applicable.
-- [ ] Keep the DOM adapter generic: it measures, calls the pure engine, writes
+- [x] Keep the DOM adapter generic: it measures, calls the pure engine, writes
       CSS variables and data attributes, and does not own content, route data,
       open-state semantics, or component-specific visuals.
-- [ ] Keep the DOM adapter Lighthouse-sensitive: one shared processed script,
+- [x] Keep the DOM adapter Lighthouse-sensitive: one shared processed script,
       no hydration boundary, no eager measurement of closed surfaces, no
       polling, delegated/passive listeners where practical, batched
       read/write work with `requestAnimationFrame`, and cleanup for
       disconnected surfaces.
-- [ ] Add thin `AnchoredRoot`, `AnchoredTrigger`, and `AnchoredPanel`
+- [x] Add thin `AnchoredRoot`, `AnchoredTrigger`, and `AnchoredPanel`
       primitives if they make the shared data-attribute and CSS-variable
       contract harder to misuse.
-- [ ] Add render tests proving anchored primitives emit the shared attributes,
+- [x] Add render tests proving anchored primitives emit the shared attributes,
       CSS variable hooks, accessible semantics, and preset names expected by
       the design.
-- [ ] Add a minimal catalog section showing each preset's default, edge,
+- [x] Add a minimal catalog section showing each preset's default, edge,
       constrained, light-mode, dark-mode, hover, focus, and open states.
-- [ ] Update `docs/navigation/anchored-positioning-system.md` if
+- [x] Update `docs/navigation/anchored-positioning-system.md` if
       implementation proves any design detail needs clarification.
 
 ## Milestone 43: Header Search, Category Dropdown, And Mobile Menu Fixes
 
-- [ ] Refactor `SearchReveal`, `CategoryDropdown`, and `MobileMenu` to use the
+- [x] Refactor `SearchReveal`, `CategoryDropdown`, and `MobileMenu` to use the
       shared anchored positioning primitives and presets instead of
       component-local fixed, centered, or magic-offset positioning.
-- [ ] Keep `SiteHeader`, `SearchForm`, `ThemeToggle`, `SupportLink`, sticky
+- [x] Keep `SiteHeader`, `SearchForm`, `ThemeToggle`, `SupportLink`, sticky
       layout rails, and in-flow `details`/`summary` navigation out of the
       anchored system because they are not trigger-attached floating surfaces.
-- [ ] Fix the desktop search reveal so its top edge snaps to the bottom of the
+- [x] Fix the desktop search reveal so its top edge snaps to the bottom of the
       sticky header with no visible gap.
-- [ ] Fix the desktop search reveal so it horizontally aligns to the search
+- [x] Fix the desktop search reveal so it horizontally aligns to the search
       trigger's logical edge: start-aligned when the trigger is on the left,
       end-aligned when the trigger is on the right.
-- [ ] Fix desktop category dropdowns so their top edges snap to the bottom of
+- [x] Fix desktop category dropdowns so their top edges snap to the bottom of
       the sticky header and their inline edges align with the category trigger
       according to the documented `header-dropdown` fallback rules.
-- [ ] Ensure category dropdowns never fall back to viewport centering unless a
+- [x] Ensure category dropdowns never fall back to viewport centering unless a
       future preset explicitly allows centering.
-- [ ] Preserve category trigger behavior: hover and focus reveal the dropdown,
+- [x] Preserve category trigger behavior: hover and focus reveal the dropdown,
       pointer movement from trigger to panel is forgiving, keyboard access
       works, and clicking the category still navigates to the category page.
-- [ ] Keep the mobile menu viewport-safe, attached to the sticky header,
+- [x] Keep the mobile menu viewport-safe, attached to the sticky header,
       internally scrollable on short screens, and independent of the horizontal
       position of the sandwich trigger.
-- [ ] Keep the mobile support button outside the panel when visible, omit RSS
+- [x] Keep the mobile support button outside the panel when visible, omit RSS
       from the mobile panel, and keep search/theme controls in the panel's top
       utility area.
-- [ ] Add Playwright regression tests that fail against the known broken nav
+- [x] Add Playwright regression tests that fail against the known broken nav
       behavior: centered category panels, search panel gap, search panel wrong
       side, header overlap, off-screen mobile panel, and short-viewport mobile
       overflow.
-- [ ] Add render tests proving header/search/mobile components emit anchored
+- [x] Add render tests proving header/search/mobile components emit anchored
       presets and no longer emit component-local centered fixed wrappers or
       final positioning styles.
-- [ ] Update component one-pagers and header/navigation docs with the final
+- [x] Update component one-pagers and header/navigation docs with the final
       anchored positioning contract.
 
 ## Milestone 44: Native Astro Hover Image Preview
 
-- [ ] Reimplement article hover-image previews with Astro components and the
+- [x] Reimplement article hover-image previews with Astro components and the
       `inline-hover-preview` anchored preset instead of React, Radix, or a
       hydrated shadcn hover card.
-- [ ] Confirm no other production component still needs the anchored system
+- [x] Confirm no other production component still needs the anchored system
       before removing React/Radix hover-card dependencies; future candidates
       such as citation previews or share panels should be deferred until those
       features exist.
-- [ ] Preserve the existing author-facing MDX API for hover-image links unless
+- [x] Preserve the existing author-facing MDX API for hover-image links unless
       article-specific work is explicitly approved separately.
-- [ ] Keep `src/components/article/` compatibility wrappers working if existing
+- [x] Keep `src/components/article/` compatibility wrappers working if existing
       MDX imports still depend on those paths.
-- [ ] Preserve hover-image semantics: inline prose trigger, real link fallback
+- [x] Preserve hover-image semantics: inline prose trigger, real link fallback
       to the image source, useful alt text on the preview image, focus-visible
       access, and readable no-JavaScript behavior.
-- [ ] Preserve the existing `expanded` behavior as a size variant that affects
+- [x] Preserve the existing `expanded` behavior as a size variant that affects
       preview dimensions without changing the positioning algorithm.
-- [ ] Ensure previews remain visually tethered to their inline trigger, never
+- [x] Ensure previews remain visually tethered to their inline trigger, never
       become centered viewport overlays, avoid covering the trigger, and fit
       within viewport gutters when possible.
-- [ ] Add unit tests for the `inline-hover-preview` preset's side flip,
+- [x] Add unit tests for the `inline-hover-preview` preset's side flip,
       clamping, sizing, and detach behavior.
-- [ ] Add render tests for hover-image components proving they emit anchored
+- [x] Add render tests for hover-image components proving they emit anchored
       attributes, preserve link semantics, preserve alt text, and avoid React
       hydration directives.
-- [ ] Add Playwright coverage for hover-image previews near the left edge,
+- [x] Add Playwright coverage for hover-image previews near the left edge,
       right edge, top of viewport, bottom of viewport, after scroll, in light
       mode, and in dark mode.
-- [ ] Remove the shadcn/Radix hover-card primitive and React hover-image card
+- [x] Remove the shadcn/Radix hover-card primitive and React hover-image card
       only after no production component imports them.
-- [ ] Remove `@astrojs/react`, `react`, `react-dom`, `@types/react`,
+- [x] Remove `@astrojs/react`, `react`, `react-dom`, `@types/react`,
       `@types/react-dom`, and `radix-ui` only if no remaining approved feature
       uses them.
-- [ ] Update hover-image component docs, the component inventory, package
+- [x] Update hover-image component docs, the component inventory, package
       script docs if needed, and the catalog example for article previews.
 
 ## Milestone 45: Anchored Surface Regression Suite And Documentation
 
-- [ ] Add shared Playwright geometry helpers such as
+- [x] Add shared Playwright geometry helpers such as
       `expectTopAlignedToBottom`, `expectInlineStartAligned`,
       `expectInlineEndAligned`, `expectViewportGutters`,
       `expectPanelBelowHeader`, `expectTopmostAtPanelPoints`,
       `expectNoVisibleGap`, `expectRelationshipPreserved`, and
       `expectPlacementState`.
-- [ ] Replace scattered raw coordinate assertions with named relationship
+- [x] Replace scattered raw coordinate assertions with named relationship
       helpers so the tests read like design invariants.
-- [ ] Test anchored surfaces across mobile, short mobile, tablet, constrained
+- [x] Test anchored surfaces across mobile, short mobile, tablet, constrained
       laptop widths, desktop, and wide desktop viewports.
-- [ ] Test first, middle, last, and edge-positioned triggers for category
+- [x] Test first, middle, last, and edge-positioned triggers for category
       dropdowns, search reveal, mobile menu, and hover-image previews where
       applicable.
-- [ ] Test anchored behavior after scroll, after resize, after theme changes,
+- [x] Test anchored behavior after scroll, after resize, after theme changes,
       and after moving between mobile and desktop layout modes.
-- [ ] Test that no anchored surface creates page-level horizontal overflow.
-- [ ] Add regression coverage or review checks proving closed anchored
+- [x] Test that no anchored surface creates page-level horizontal overflow.
+- [x] Add regression coverage or review checks proving closed anchored
       surfaces are not eagerly measured on page load and that the adapter does
       not introduce unexpected client JavaScript growth.
-- [ ] Add component catalog examples for every anchored preset and every
+- [x] Add component catalog examples for every anchored preset and every
       meaningful placement state, including constrained and clamped states.
-- [ ] Update affected component one-pagers, navigation docs, catalog docs, and
+- [x] Update affected component one-pagers, navigation docs, catalog docs, and
       testing docs so future developers know which relationships are public
       invariants.
 
 ## Milestone 46: Playwright Screenshot Inspection Pass
 
-- [ ] Build the site and run it through Playwright for manual screenshot-based
+- [x] Build the site and run it through Playwright for manual screenshot-based
       inspection after Milestones 42-45 are complete.
-- [ ] Capture desktop, constrained laptop, tablet, mobile, short-mobile, and
+- [x] Capture desktop, constrained laptop, tablet, mobile, short-mobile, and
       wide-desktop screenshots for the home page, articles hub, category page,
       search page, representative article page, catalog page, and author page.
-- [ ] Capture screenshots at the top, mid-scroll, near footer, with the sticky
+- [x] Capture screenshots at the top, mid-scroll, near footer, with the sticky
       header visible, and with relevant anchored surfaces open.
-- [ ] Capture light-mode and dark-mode screenshots for representative pages and
+- [x] Capture light-mode and dark-mode screenshots for representative pages and
       anchored surfaces.
-- [ ] Inspect screenshots for visual gaps, overlap, off-screen panels, wrong
+- [x] Inspect screenshots for visual gaps, overlap, off-screen panels, wrong
       stacking, inconsistent widths, excessive whitespace, unreadable contrast,
       broken focus/current states, horizontal overflow, and cramped short
       viewport behavior.
-- [ ] Convert any issue found during screenshot review into a specific
+- [x] Convert any issue found during screenshot review into a specific
       checklist item or fix it before marking the milestone complete.
-- [ ] Update component docs or tests when screenshot review reveals an
+- [x] Update component docs or tests when screenshot review reveals an
       invariant that should be permanently enforced.
+
+## Milestone 47: Article TOC Responsive Rail And Centering Contract
+
+- [ ] Audit the article reading layout, table-of-contents rail, and margin
+      sidebar behavior across tablet, constrained laptop, desktop, and wide
+      desktop widths.
+- [ ] Decide whether the TOC issue is caused by rail width, responsive rail
+      sizing, breakpoint timing, article-grid anatomy, or a combination of
+      those constraints.
+- [ ] Adjust the TOC rail so it can narrow or collapse gracefully as available
+      width changes, using layout relationships rather than one-off breakpoint
+      guesses.
+- [ ] Preserve the invariant that the article content column remains visually
+      centered in the reading area whether the TOC is visible or hidden.
+- [ ] Ensure hiding or collapsing the TOC does not cause the article body to
+      jump, drift left/right, or inherit a browsing-page width.
+- [ ] Document the intended article/TOC rail relationship in the relevant
+      component one-pagers and site anatomy docs.
+- [ ] Add Playwright layout invariants for representative articles proving the
+      reading column stays centered with the TOC visible, with the TOC narrowed
+      or hidden by responsive constraints, and after toggling the TOC
+      disclosure.
+
+## Milestone 48: Header Height Lock And Category Overflow Contract
+
+- [ ] Define the intended desktop and mobile header height contract in the
+      header/navigation component docs, including what happens when categories
+      have less inline space than expected.
+- [ ] Refactor the category row so category links shrink, compress, or
+      gracefully hide behind the existing disclosure behavior instead of
+      wrapping into an extra row or changing the header height.
+- [ ] Ensure the sticky header keeps a stable height across desktop,
+      constrained laptop, tablet, mobile, zoomed text, long category labels,
+      and light/dark modes.
+- [ ] Add Playwright layout invariants proving category navigation never
+      creates horizontal overflow, never wraps into a third header row, and
+      keeps the header height within the documented contract.
+
+## Milestone 49: Image-Only Hover Preview Styling
+
+- [ ] Refine the native Astro hover-image preview so it displays the image
+      itself without a card-like background.
+- [ ] Keep only media-appropriate treatment such as a subtle shadow, optional
+      outline, and sensible image radius if needed for contrast.
+- [ ] Ensure the image-only preview still uses the anchored positioning system,
+      remains viewport-contained, preserves useful alt text, and does not
+      introduce layout shift.
+- [ ] Update hover-image component docs, catalog examples, and Playwright
+      screenshots/tests to reflect the image-only visual contract.

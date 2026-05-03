@@ -32,6 +32,11 @@ export const articleCatalogExamples = [
     title: "ArticleHeader",
   },
   {
+    componentPath: "src/components/articles/HoverImageCard.astro",
+    description: "Native anchored inline image preview for MDX article prose.",
+    title: "HoverImageCard",
+  },
+  {
     componentPath: "src/components/articles/ArticleImage.astro",
     description: "Optimized article image with required alt text and caption.",
     title: "ArticleImage",

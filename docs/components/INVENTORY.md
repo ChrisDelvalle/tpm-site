@@ -15,7 +15,6 @@ component has a matching one-pager in this directory.
 - `src/components/ui/Section.astro`
 - `src/components/ui/Separator.astro`
 - `src/components/ui/TextLink.astro`
-- `src/components/ui/hover-card.tsx`
 
 ## Layout
 
@@ -53,7 +52,7 @@ component has a matching one-pager in this directory.
 - `src/components/articles/ArticleProse.astro`
 - `src/components/articles/ArticleTableOfContents.astro`
 - `src/components/articles/ArticleTags.astro`
-- `src/components/articles/HoverImageCard.tsx`
+- `src/components/articles/HoverImageCard.astro`
 - `src/components/articles/HoverImageLink.astro`
 - `src/components/articles/HoverImageParagraph.astro`
 - `src/components/articles/MoreInCategoryBlock.astro`
@@ -64,7 +63,7 @@ component has a matching one-pager in this directory.
 ## Legacy Article Compatibility
 
 - `src/components/article/ArticleProse.astro`
-- `src/components/article/HoverImageCard.tsx`
+- `src/components/article/HoverImageCard.astro`
 - `src/components/article/HoverImageLink.astro`
 - `src/components/article/HoverImageParagraph.astro`
 

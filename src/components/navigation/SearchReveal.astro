@@ -1,18 +1,28 @@
 ---
 import { Search } from "lucide-astro";
 
+import AnchoredPanel from "../ui/AnchoredPanel.astro";
+import AnchoredRoot from "../ui/AnchoredRoot.astro";
+import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
 import SearchForm from "./SearchForm.astro";
 
 interface Props {
+  align?: "end" | "start";
   label?: string;
   popoverId?: string;
 }
 
-const { label = "Open search", popoverId = "site-search-reveal" } = Astro.props;
+const {
+  align = "start",
+  label = "Open search",
+  popoverId = "site-search-reveal",
+} = Astro.props;
+const preset = align === "end" ? "header-search-end" : "header-search-start";
 ---
 
-<div data-search-reveal>
-  <button
+<AnchoredRoot preset={preset} data-search-reveal>
+  <AnchoredTrigger
+    as="button"
     type="button"
     popovertarget={popoverId}
     data-search-reveal-trigger
@@ -20,17 +30,15 @@ const { label = "Open search", popoverId = "site-search-reveal" } = Astro.props;
     aria-label={label}
   >
     <Search class="size-5" aria-hidden="true" />
-  </button>
-  <div
+  </AnchoredTrigger>
+  <AnchoredPanel
     id={popoverId}
     popover="auto"
-    data-floating-panel
     data-search-reveal-panel
     class="border-border bg-popover text-popover-foreground m-0 w-[min(26rem,calc(100vw-2rem))] rounded-sm border p-3 shadow-lg"
-    style="inset: calc(var(--site-header-height) + 0.5rem) 1rem auto auto;"
   >
     <SearchForm inputId={`${popoverId}-input`} label="Site search" />
-  </div>
-</div>
+  </AnchoredPanel>
+</AnchoredRoot>
 
 <script src="./search-reveal.ts"></script>

@@ -65,11 +65,10 @@ layout, and internal component layout remain simple CSS/Tailwind.
   constrained header-attached shell panel. It should use the shared mobile
   preset so it stays viewport-safe, scrolls on short screens, and does not
   depend on the sandwich trigger's horizontal position.
-- `src/components/articles/HoverImageCard.tsx` and its Astro wrappers: must
+- `src/components/articles/HoverImageCard.astro` and its Astro wrappers: must
   migrate because article hover-image previews are inline trigger-attached
-  floating previews. Replacing the React/Radix hover card with native Astro
-  markup plus the `inline-hover-preview` preset removes unnecessary hydration
-  while preserving robust positioning.
+  floating previews. Native Astro markup plus the `inline-hover-preview` preset
+  removes unnecessary hydration while preserving robust positioning.
 
 ### Components That Should Stay Out Of Scope
 
@@ -443,8 +442,8 @@ behavior.
 ## Performance Guardrails
 
 Anchored positioning must preserve the site's static-first performance model.
-The implementation should improve the current hover-image path by removing
-React/Radix hydration, not replace it with a heavier custom runtime.
+Hover-image previews should remain native Astro markup. Do not reintroduce
+React/Radix hydration or a heavier custom runtime only to position the preview.
 
 Required performance patterns:
 
@@ -778,6 +777,7 @@ Article hover preview tests:
 
 Global anchored-surface tests:
 
+- use shared geometry helpers instead of repeated raw coordinate assertions;
 - no route-level horizontal overflow while a surface is open;
 - light and dark mode keep borders, text, and focus indicators visible;
 - behavior still works after scroll;
@@ -787,18 +787,16 @@ Global anchored-surface tests:
 
 ### E2E Helper Requirements
 
-Add named helpers so tests read like design assertions:
+Use named helpers so tests read like design assertions. Current helpers include:
 
 - `expectTopAlignedToBottom(panel, anchor, tolerance)`;
-- `expectInlineStartAligned(panel, trigger, tolerance)`;
-- `expectInlineEndAligned(panel, trigger, tolerance)`;
-- `expectCenteredOn(panel, trigger, tolerance)`;
-- `expectViewportGutters(panel, gutter, tolerance)`;
-- `expectPanelBelowHeader(panel, header)`;
-- `expectTopmostAtPanelPoints(panel)`;
-- `expectNoVisibleGap(panel, header)`;
-- `expectRelationshipPreserved(panel, trigger, preset)`;
-- `expectPlacementState(panel, expectedState)`.
+- `expectInlineStartAligned(trigger, panel, tolerance)`;
+- `expectInlineEndAligned(trigger, panel, tolerance)`;
+- `expectViewportContained(page, panel, label, gutter)`;
+- `expectPanelBelowHeader(page, panel)`;
+- `expectElementAtViewportPoint(locator, point, label)`;
+
+Add more helpers only when a new invariant repeats across multiple specs.
 
 Raw coordinate expectations scattered through tests are discouraged. Named
 helpers keep intent reviewable and harder to weaken accidentally.

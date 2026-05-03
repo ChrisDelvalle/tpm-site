@@ -1,6 +1,9 @@
 ---
 import { ChevronDown } from "lucide-astro";
 
+import AnchoredPanel from "../ui/AnchoredPanel.astro";
+import AnchoredRoot from "../ui/AnchoredRoot.astro";
+import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
 import CategoryPreviewList from "./CategoryPreviewList.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 
@@ -16,8 +19,13 @@ const isCurrent =
   category.articles.some((article) => article.isCurrent);
 ---
 
-<div class="group relative" data-category-dropdown={category.slug}>
-  <a
+<AnchoredRoot
+  preset="header-dropdown"
+  class="group relative"
+  data-category-dropdown={category.slug}
+>
+  <AnchoredTrigger
+    as="a"
     href={category.href}
     class:list={[
       "inline-flex items-center gap-1 rounded-xs px-1 py-1 text-sm font-medium tracking-normal transition-colors",
@@ -33,21 +41,16 @@ const isCurrent =
       class="size-3 transition-transform group-focus-within:rotate-180 group-hover:rotate-180"
       aria-hidden="true"
     />
-  </a>
-  <div
-    class="fixed inset-x-4 top-[calc(var(--site-header-height)+0.25rem)] z-50 hidden pt-2 group-focus-within:block group-hover:block"
-    data-floating-panel
+  </AnchoredTrigger>
+  <AnchoredPanel
+    id={previewId}
+    class="border-border bg-popover text-popover-foreground z-50 hidden w-[min(24rem,var(--anchor-max-width,calc(100vw-2rem)))] gap-3 overflow-y-auto rounded-sm border p-4 shadow-lg group-focus-within:grid group-hover:grid before:fixed before:inset-x-0 before:top-[calc(var(--anchor-y,0rem)-1rem)] before:h-4 before:content-['']"
+    data-category-preview
   >
-    <div
-      id={previewId}
-      class="border-border bg-popover text-popover-foreground mx-auto grid max-h-[calc(100dvh-var(--site-header-height)-2rem)] w-full max-w-sm gap-3 overflow-y-auto rounded-sm border p-4 shadow-lg"
-      data-category-preview
-    >
-      <CategoryPreviewList
-        articles={category.articles}
-        categoryHref={category.href}
-        categoryTitle={category.title}
-      />
-    </div>
-  </div>
-</div>
+    <CategoryPreviewList
+      articles={category.articles}
+      categoryHref={category.href}
+      categoryTitle={category.title}
+    />
+  </AnchoredPanel>
+</AnchoredRoot>

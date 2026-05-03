@@ -14,6 +14,7 @@ import ArticleBibliography from "../components/articles/ArticleBibliography.astr
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
 import ArticleFootnotes from "../components/articles/ArticleFootnotes.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
+import HoverImageCard from "../components/articles/HoverImageCard.astro";
 import ArticleImage from "../components/articles/ArticleImage.astro";
 import ArticleList from "../components/articles/ArticleList.astro";
 import ArticleMeta from "../components/articles/ArticleMeta.astro";
@@ -55,6 +56,9 @@ import ThemeToggle from "../components/navigation/ThemeToggle.astro";
 import MarkdownPage from "../components/pages/MarkdownPage.astro";
 import PageHeader from "../components/pages/PageHeader.astro";
 import PageProse from "../components/pages/PageProse.astro";
+import AnchoredPanel from "../components/ui/AnchoredPanel.astro";
+import AnchoredRoot from "../components/ui/AnchoredRoot.astro";
+import AnchoredTrigger from "../components/ui/AnchoredTrigger.astro";
 import Badge from "../components/ui/Badge.astro";
 import Button from "../components/ui/Button.astro";
 import Card from "../components/ui/Card.astro";
@@ -111,6 +115,13 @@ const catalogTocHeadings = [
     order: 3,
     text: "Duplicate heading",
   },
+] as const;
+const anchoredPresetMatrix = [
+  "header-dropdown",
+  "header-search-start",
+  "header-search-end",
+  "mobile-shell-panel",
+  "inline-hover-preview",
 ] as const;
 
 const catalogReferences = {
@@ -271,6 +282,108 @@ if (primaryCatalogAuthor === undefined) {
           <Button>Primary</Button>
           <Button variant="outline" tone="neutral">Neutral</Button>
           <Button variant="ghost" tone="danger">Danger</Button>
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="AnchoredRoot"
+        description="Anchored relationship boundary with an explicit product preset."
+        componentPath="src/components/ui/AnchoredRoot.astro"
+      >
+        <AnchoredRoot
+          preset="header-dropdown"
+          class="group relative inline-block"
+        >
+          <AnchoredTrigger
+            as="button"
+            type="button"
+            class="border-border bg-background text-foreground rounded-sm border px-3 py-2 text-sm"
+          >
+            Root Example
+          </AnchoredTrigger>
+          <AnchoredPanel
+            class="border-border bg-popover text-popover-foreground z-30 hidden w-64 overflow-y-auto rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block"
+          >
+            AnchoredRoot scopes the trigger and panel relationship.
+          </AnchoredPanel>
+        </AnchoredRoot>
+      </CatalogExample>
+
+      <CatalogExample
+        title="AnchoredTrigger"
+        description="Semantic trigger marker; it can render as a link, button, span, or summary."
+        componentPath="src/components/ui/AnchoredTrigger.astro"
+      >
+        <AnchoredRoot
+          preset="header-search-start"
+          class="group relative inline-block"
+        >
+          <AnchoredTrigger
+            as="button"
+            type="button"
+            class="text-primary hover:text-foreground focus-visible:ring-ring rounded-sm text-sm font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:outline-none"
+          >
+            Focus Or Hover
+          </AnchoredTrigger>
+          <AnchoredPanel
+            class="border-border bg-popover text-popover-foreground z-30 hidden w-72 rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block"
+          >
+            The trigger owns semantics; the adapter owns geometry.
+          </AnchoredPanel>
+        </AnchoredRoot>
+      </CatalogExample>
+
+      <CatalogExample
+        title="AnchoredPanel"
+        description="Floating surface with CSS-variable hooks for position and viewport-safe size limits."
+        componentPath="src/components/ui/AnchoredPanel.astro"
+      >
+        <AnchoredRoot
+          preset="inline-hover-preview"
+          class="group relative inline-block"
+        >
+          <AnchoredTrigger
+            as="a"
+            href="#anchored-panel-example"
+            class="text-primary hover:text-foreground text-sm underline underline-offset-4"
+          >
+            Inline preview trigger
+          </AnchoredTrigger>
+          <AnchoredPanel
+            id="anchored-panel-example"
+            class="border-border bg-popover text-popover-foreground z-30 hidden w-80 overflow-y-auto rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block"
+          >
+            Panels stay fixed to computed CSS variables and size themselves to
+            available viewport gutters.
+          </AnchoredPanel>
+        </AnchoredRoot>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Anchored Preset Matrix"
+        description="Canonical anchored presets for header, mobile shell, and inline preview surfaces."
+        componentPath="src/components/ui/AnchoredRoot.astro"
+      >
+        <div class="grid gap-4 md:grid-cols-2">
+          {
+            anchoredPresetMatrix.map((preset) => (
+              <AnchoredRoot
+                preset={preset}
+                class="group relative inline-block justify-self-start"
+              >
+                <AnchoredTrigger
+                  as="button"
+                  type="button"
+                  class="border-border bg-background text-foreground rounded-sm border px-3 py-2 text-sm"
+                >
+                  {preset}
+                </AnchoredTrigger>
+                <AnchoredPanel class="border-border bg-popover text-popover-foreground z-30 hidden w-72 rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block">
+                  Preset example: <code>{preset}</code>
+                </AnchoredPanel>
+              </AnchoredRoot>
+            ))
+          }
         </div>
       </CatalogExample>
 
@@ -481,6 +594,24 @@ if (primaryCatalogAuthor === undefined) {
           alt="The Philosopher's Meme default preview image"
           caption="Article image caption example."
         />
+      </CatalogExample>
+
+      <CatalogExample
+        title="HoverImageCard"
+        description="Native anchored inline image preview for MDX article prose."
+        componentPath="src/components/articles/HoverImageCard.astro"
+      >
+        <ArticleProse>
+          <p>
+            Hover or focus this
+            <HoverImageCard
+              image={sampleImage}
+              label="inline preview"
+              alt="The Philosopher's Meme default preview image"
+            />
+            without leaving the paragraph flow.
+          </p>
+        </ArticleProse>
       </CatalogExample>
 
       <CatalogExample

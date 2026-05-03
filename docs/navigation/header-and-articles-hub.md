@@ -266,7 +266,11 @@ Component tests:
 Playwright tests:
 
 - desktop category dropdown opens on hover/focus and category click navigates;
-- search reveal opens, focuses input, closes, and does not overflow;
+- search reveal opens, snaps to the sticky header bottom, aligns to the search
+  trigger edge chosen by its `align` prop, and does not overflow;
+- category dropdown panels snap to the sticky header bottom, remain
+  trigger-relative rather than viewport-centered, and stay open while the
+  pointer moves from trigger to panel;
 - mobile menu exposes categories, articles, about, search, and theme while
   Support Us remains visible in the mobile header row;
 - header does not overlap or collide at mobile, tablet, desktop, and wide
@@ -284,22 +288,13 @@ Accessibility tests:
 - no duplicate IDs from dropdown/popover surfaces;
 - no competing unlabeled navigation landmarks.
 
-## Open Decisions
+## Resolved Implementation Decisions
 
-Implementation must resolve these before completing Milestone 34:
-
-- whether `/categories/` redirects to `/articles/` or stays as a non-primary
-  compatibility page;
-- whether the search reveal uses native `popover`, `details`, or a small
-  processed script;
-- whether category hover previews use CSS-only hover/focus behavior, native
-  popover, or a minimal script for robust close behavior.
-
-Recommended defaults:
-
-- use `/articles/all/` for the flat archive;
-- keep `/categories/<category>/` for category detail pages;
-- remove `/categories/` from primary navigation and redirect it to `/articles/`
-  if redirect support remains clean in static output;
-- start with CSS/native dropdown behavior and add minimal JavaScript only if
-  keyboard/focus behavior is not robust.
+- `/articles/all/` owns the flat archive.
+- `/categories/<category>/` remains reachable for category detail pages.
+- `/categories/` is not a primary navigation destination.
+- `SearchReveal`, `CategoryDropdown`, and `MobileMenu` use the shared anchored
+  positioning primitives instead of local fixed/centered placement.
+- Category dropdown disclosure remains CSS/native hover and focus behavior,
+  with a small CSS bridge to make pointer movement from trigger to panel
+  forgiving.

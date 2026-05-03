@@ -4,7 +4,8 @@ Source: `src/components/articles/HoverImageParagraph.astro`
 
 ## Purpose
 
-`HoverImageParagraph` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`HoverImageParagraph` renders the legacy paragraph shape used by existing MDX
+articles: a hover-image link followed by continuation text.
 
 ## Public Contract
 
@@ -20,11 +21,13 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `./HoverImageLink`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+It composes `./HoverImageLink.astro` and appends the `after` text in the same
+paragraph.
 
 ## Layout And Responsiveness
 
-The component must respect a readable prose measure, keep metadata visually subordinate to the article title/body, and allow long titles, author names, tags, and images to wrap without layout collision.
+The component must keep the preview link and `after` copy in one paragraph so
+the original sentence reads naturally.
 
 ## Layering And Scrolling
 
@@ -54,11 +57,10 @@ visible, and CTAs distinguishable from neutral actions.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
-- handles long content without clipping or overlapping neighboring components.
-- keeps article title, metadata, tags, and links semantically associated.
-- keeps article body, continuation, and support surfaces in the intended order.
+- Renders exactly one paragraph wrapper.
+- Keeps the hover-image link inline with the continuation text.
+- Preserves the author-facing `after`, `image`, `label`, `alt`, and `expanded`
+  API.
 
 ## Follow-Up Notes
 
