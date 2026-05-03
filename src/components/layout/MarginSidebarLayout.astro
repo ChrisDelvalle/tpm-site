@@ -19,7 +19,7 @@ const hasRight = Astro.slots.has("right") && rightVisibility !== "never";
 const hasAnyRail = hasLeft || hasRight;
 const railVisibilityClasses = {
   always: "block",
-  auto: "hidden 2xl:block",
+  auto: "hidden xl:block",
   never: "hidden",
 } as const;
 ---
@@ -30,7 +30,7 @@ const railVisibilityClasses = {
   class:list={[
     "mx-auto grid w-full min-w-0 gap-8",
     hasAnyRail
-      ? "2xl:grid-cols-[minmax(0,14rem)_minmax(0,48rem)_minmax(0,14rem)] 2xl:justify-center"
+      ? "justify-items-center xl:grid-cols-[minmax(0,10rem)_minmax(0,48rem)_minmax(0,10rem)] xl:justify-center 2xl:grid-cols-[minmax(0,12rem)_minmax(0,48rem)_minmax(0,12rem)]"
       : "justify-items-center",
     className,
   ]}
@@ -41,7 +41,7 @@ const railVisibilityClasses = {
         data-margin-sidebar-left
         class:list={[
           "min-w-0",
-          hasLeft ? railVisibilityClasses[leftVisibility] : "hidden 2xl:block",
+          hasLeft ? railVisibilityClasses[leftVisibility] : "hidden xl:block",
         ]}
       >
         {hasLeft && <slot name="left" />}
@@ -59,9 +59,7 @@ const railVisibilityClasses = {
         data-margin-sidebar-right
         class:list={[
           "min-w-0",
-          hasRight
-            ? railVisibilityClasses[rightVisibility]
-            : "hidden 2xl:block",
+          hasRight ? railVisibilityClasses[rightVisibility] : "hidden xl:block",
         ]}
       >
         {hasRight && <slot name="right" />}

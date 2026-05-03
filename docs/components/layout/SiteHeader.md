@@ -63,6 +63,12 @@ Tablet and wider: desktop controls return and categories appear in the second
 row. This uses the standard `md` Tailwind breakpoint so category discovery is
 not hidden too aggressively on ordinary laptop split-screen widths.
 
+The desktop category row is a locked-height single line. Category labels may
+truncate inside their available cells as width shrinks, but they must not wrap
+into a third header row or increase sticky-header height. The fallback for
+limited space is compression/truncation plus the mobile menu at smaller
+breakpoints, not multi-line header growth.
+
 The center of the row is flexible space, not a permanent search slot. The
 header must not depend on fragile breakpoint guesses to prevent brand,
 category, search, and support collision.
@@ -105,6 +111,8 @@ visible, and CTAs distinguishable from neutral actions.
 ## Testable Invariants
 
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
+- keeps the desktop category row to one line and the header within its
+  documented height contract.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - does not create extra main/content landmarks.

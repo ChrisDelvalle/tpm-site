@@ -48,7 +48,7 @@ function aspectRatioOrFallback(image: ImageMetadata): number {
   </AnchoredTrigger>
   <AnchoredPanel
     data-hover-image-panel
-    class="border-border bg-popover z-50 hidden overflow-hidden rounded-sm border p-1 shadow-lg group-focus-within/hover-image:block group-hover/hover-image:block before:fixed before:top-[calc(var(--anchor-y,0rem)-0.5rem)] before:left-[var(--anchor-x,0rem)] before:h-2 before:w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] before:content-['']"
+    class="ring-border/45 z-50 hidden overflow-hidden rounded-xs shadow-lg ring-1 group-focus-within/hover-image:block group-hover/hover-image:block before:fixed before:top-[calc(var(--anchor-y,0rem)-0.5rem)] before:left-[var(--anchor-x,0rem)] before:h-2 before:w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] before:content-['']"
     style={imageStyle}
   >
     <img
@@ -58,7 +58,7 @@ function aspectRatioOrFallback(image: ImageMetadata): number {
       height={image.height}
       loading="lazy"
       decoding="async"
-      class="block h-auto max-h-[min(var(--hover-image-max-height),var(--anchor-max-height,calc(100svh-2rem)))] w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] max-w-none rounded-sm object-contain"
+      class="!m-0 block h-auto max-h-[min(var(--hover-image-max-height),var(--anchor-max-height,calc(100svh-2rem)))] w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] max-w-none object-contain"
     />
   </AnchoredPanel>
 </AnchoredRoot>

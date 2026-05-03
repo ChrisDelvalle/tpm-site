@@ -1,6 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
 import {
+  expectCenteredInViewport,
   expectFocusVisible,
   expectHorizontallyContained,
   expectNoHorizontalOverflow,
@@ -150,29 +151,40 @@ test.describe("component layout invariants", () => {
   test("article table of contents occupies the reading margin without overlaying prose", async ({
     page,
   }) => {
-    await page.setViewportSize({ height: 900, width: 2560 });
-    await page.goto("/articles/facebook-groups/");
-    await scrollToY(page, 600);
+    for (const viewport of [
+      { height: 900, width: 1280 },
+      { height: 1000, width: 1800 },
+      { height: 1200, width: 2560 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto("/articles/facebook-groups/");
+      await scrollToY(page, 600);
 
-    const headerBox = await visibleBoundingBox(
-      page.locator("[data-site-header]"),
-      "site header",
-    );
-    const toc = page.locator("[data-article-toc]");
-    const prose = page.locator("[data-article-prose]");
-    const contentColumn = page.locator("[data-margin-sidebar-content]");
-    const tocBox = await visibleBoundingBox(toc, "article table of contents");
+      const headerBox = await visibleBoundingBox(
+        page.locator("[data-site-header]"),
+        "site header",
+      );
+      const toc = page.locator("[data-article-toc]");
+      const prose = page.locator("[data-article-prose]");
+      const contentColumn = page.locator("[data-margin-sidebar-content]");
+      const tocBox = await visibleBoundingBox(toc, "article table of contents");
 
-    expect(tocBox.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height);
-    await expectNoOverlap(toc, prose, {
-      first: "article table of contents",
-      second: "article prose",
-    });
-    await expectHorizontallyContained(prose, contentColumn, {
-      inner: "article prose",
-      outer: "reading content column",
-    });
-    await expectNoHorizontalOverflow(page);
+      expect(tocBox.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height);
+      await expectNoOverlap(toc, prose, {
+        first: "article table of contents",
+        second: "article prose",
+      });
+      await expectHorizontallyContained(prose, contentColumn, {
+        inner: "article prose",
+        outer: "reading content column",
+      });
+      await expectCenteredInViewport(
+        page,
+        contentColumn,
+        "reading content column with TOC visible",
+      );
+      await expectNoHorizontalOverflow(page);
+    }
   });
 
   test("article table of contents hide and hash-link behavior is keyboard safe", async ({
@@ -232,17 +244,99 @@ test.describe("component layout invariants", () => {
     }
   });
 
-  test("article table of contents is not a competing visible surface on mobile and tablet", async ({
+  test("article table of contents collapse keeps the reading column centered on mobile and tablet", async ({
     page,
   }) => {
     for (const viewport of [
       { height: 844, width: 390 },
       { height: 1024, width: 768 },
+      { height: 900, width: 1024 },
     ] as const) {
       await page.setViewportSize(viewport);
       await page.goto("/articles/facebook-groups/");
 
+      const contentColumn = page.locator("[data-margin-sidebar-content]");
+
       await expect(page.locator("[data-article-toc]")).toBeHidden();
+      await expectCenteredInViewport(
+        page,
+        contentColumn,
+        "reading content column without visible TOC",
+      );
+      await expectNoHorizontalOverflow(page);
+    }
+  });
+
+  test("site header keeps category discovery on one locked-height row", async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { height: 1024, width: 768 },
+      { height: 900, width: 900 },
+      { height: 900, width: 1024 },
+      { height: 900, width: 1280 },
+      { height: 1100, width: 1800 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+
+      const header = page.locator("[data-site-header]");
+      const categoryRow = page.locator("[data-site-header-category-row]");
+      const categoryList = page.locator("[data-discovery-menu-list]");
+      const categoryTriggers = page.locator(
+        "[data-category-dropdown] [data-anchor-trigger]",
+      );
+      const headerBox = await visibleBoundingBox(header, "site header");
+      const rowBox = await visibleBoundingBox(categoryRow, "category row");
+      const listBox = await visibleBoundingBox(categoryList, "category list");
+      const triggerRows = await categoryTriggers.evaluateAll((elements) =>
+        elements
+          .map((element) => element.getBoundingClientRect())
+          .filter((rect) => rect.width > 0 && rect.height > 0)
+          .map((rect) => ({
+            bottom: rect.bottom,
+            top: rect.top,
+          })),
+      );
+
+      expect(triggerRows.length).toBeGreaterThan(0);
+      expect(headerBox.height).toBeLessThanOrEqual(104);
+      expect(rowBox.height).toBeLessThanOrEqual(28);
+      expect(listBox.height).toBeLessThanOrEqual(rowBox.height + 1);
+      expect(
+        Math.max(...triggerRows.map((row) => row.top)) -
+          Math.min(...triggerRows.map((row) => row.top)),
+      ).toBeLessThanOrEqual(2);
+      expect(
+        Math.max(...triggerRows.map((row) => row.bottom)) -
+          Math.min(...triggerRows.map((row) => row.bottom)),
+      ).toBeLessThanOrEqual(2);
+      await expectHorizontallyContained(categoryList, header, {
+        inner: "category list",
+        outer: "site header",
+      });
+      await expectNoHorizontalOverflow(page);
+    }
+  });
+
+  test("mobile header keeps discovery in the menu without exposing the desktop category row", async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { height: 568, width: 320 },
+      { height: 844, width: 390 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+
+      const headerBox = await visibleBoundingBox(
+        page.locator("[data-site-header]"),
+        "mobile site header",
+      );
+
+      expect(headerBox.height).toBeLessThanOrEqual(72);
+      await expect(page.locator("[data-discovery-menu]")).toBeHidden();
+      await expect(page.getByLabel("Open navigation menu")).toBeVisible();
       await expectNoHorizontalOverflow(page);
     }
   });

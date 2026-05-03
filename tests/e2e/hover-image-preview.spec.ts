@@ -1,9 +1,11 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
 import {
+  expectApproximatelyEqual,
   expectInlineStartAligned,
   expectNoHorizontalOverflow,
   expectViewportContained,
+  visibleBoundingBox,
 } from "./helpers/layout";
 
 const articleWithHoverImages = "/articles/social-media-freedom/";
@@ -54,6 +56,38 @@ async function rightmostHoverTrigger(page: Page): Promise<Locator> {
   return page.locator("[data-hover-image-trigger]").nth(triggerIndex);
 }
 
+/**
+ * Asserts that the hover preview renders as image-only media, not a padded
+ * popover/card surface.
+ *
+ * @param panel Visible hover-image panel.
+ */
+async function expectImageOnlyPanel(panel: Locator): Promise<void> {
+  const image = panel.locator("img");
+  const panelMetrics = await panel.evaluate((element) => {
+    const styles = window.getComputedStyle(element);
+
+    return {
+      backgroundColor: styles.backgroundColor,
+      height: element.clientHeight,
+      paddingBlockEnd: styles.paddingBlockEnd,
+      paddingBlockStart: styles.paddingBlockStart,
+      paddingInlineEnd: styles.paddingInlineEnd,
+      paddingInlineStart: styles.paddingInlineStart,
+      width: element.clientWidth,
+    };
+  });
+  const imageBox = await visibleBoundingBox(image, "hover-image preview image");
+
+  expect(panelMetrics.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+  expect(panelMetrics.paddingBlockEnd).toBe("0px");
+  expect(panelMetrics.paddingBlockStart).toBe("0px");
+  expect(panelMetrics.paddingInlineEnd).toBe("0px");
+  expect(panelMetrics.paddingInlineStart).toBe("0px");
+  expectApproximatelyEqual(panelMetrics.width, imageBox.width);
+  expectApproximatelyEqual(panelMetrics.height, imageBox.height);
+}
+
 test.describe("native Astro hover-image previews", () => {
   test("stay inline, anchored, and viewport-contained on desktop", async ({
     page,
@@ -65,6 +99,7 @@ test.describe("native Astro hover-image previews", () => {
 
     await expectInlineStartAligned(trigger, panel);
     await expect(panel.locator("img")).toHaveAttribute("loading", "lazy");
+    await expectImageOnlyPanel(panel);
     await expectViewportContained(page, panel, "hover-image panel");
     await expectNoHorizontalOverflow(page);
   });

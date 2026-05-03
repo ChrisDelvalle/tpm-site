@@ -44,11 +44,14 @@ rail geometry and sticky behavior.
 
 ## Layout And Responsiveness
 
-Mobile base: no persistent side rail. The TOC should be absent or rendered as a
-compact in-flow disclosure only if a later design chooses that.
+Mobile/tablet base: no persistent side rail. The TOC should be absent or
+rendered as a compact in-flow disclosure only if a later design chooses that.
+Hiding the rail must not cause the reading column to drift off center.
 
 Desktop: render in the left margin rail only when at least two useful headings
-exist. The rail must not squeeze or overlap article prose.
+exist and there is enough room for a symmetric reading grid. The rail starts
+compact on constrained desktop widths and may widen on larger screens. The rail
+must not squeeze, overlap, or visually pull article prose off center.
 
 Short viewport: the rail must stay below the sticky header and become scrollable
 if its content is taller than available space.
@@ -110,6 +113,8 @@ prose. Current/focus states must be visible in light and dark mode.
 - Keeps long headings inside rail width.
 - Hide/show works without JavaScript.
 - Rail never overlaps prose or hides under the sticky header.
+- Reading content remains centered with the TOC visible, hidden by responsive
+  constraints, or collapsed with the native disclosure.
 - Links navigate to visible heading targets.
 - Current-section highlighting follows scroll position and direct hash/TOC
   navigation without changing static navigation behavior.

@@ -1478,49 +1478,72 @@ Scope rules:
 
 ## Milestone 47: Article TOC Responsive Rail And Centering Contract
 
-- [ ] Audit the article reading layout, table-of-contents rail, and margin
+- [x] Audit the article reading layout, table-of-contents rail, and margin
       sidebar behavior across tablet, constrained laptop, desktop, and wide
       desktop widths.
-- [ ] Decide whether the TOC issue is caused by rail width, responsive rail
+- [x] Decide whether the TOC issue is caused by rail width, responsive rail
       sizing, breakpoint timing, article-grid anatomy, or a combination of
       those constraints.
-- [ ] Adjust the TOC rail so it can narrow or collapse gracefully as available
+- [x] Adjust the TOC rail so it can narrow or collapse gracefully as available
       width changes, using layout relationships rather than one-off breakpoint
       guesses.
-- [ ] Preserve the invariant that the article content column remains visually
+- [x] Preserve the invariant that the article content column remains visually
       centered in the reading area whether the TOC is visible or hidden.
-- [ ] Ensure hiding or collapsing the TOC does not cause the article body to
+- [x] Ensure hiding or collapsing the TOC does not cause the article body to
       jump, drift left/right, or inherit a browsing-page width.
-- [ ] Document the intended article/TOC rail relationship in the relevant
+- [x] Document the intended article/TOC rail relationship in the relevant
       component one-pagers and site anatomy docs.
-- [ ] Add Playwright layout invariants for representative articles proving the
+- [x] Add Playwright layout invariants for representative articles proving the
       reading column stays centered with the TOC visible, with the TOC narrowed
       or hidden by responsive constraints, and after toggling the TOC
       disclosure.
 
 ## Milestone 48: Header Height Lock And Category Overflow Contract
 
-- [ ] Define the intended desktop and mobile header height contract in the
+- [x] Define the intended desktop and mobile header height contract in the
       header/navigation component docs, including what happens when categories
       have less inline space than expected.
-- [ ] Refactor the category row so category links shrink, compress, or
+- [x] Refactor the category row so category links shrink, compress, or
       gracefully hide behind the existing disclosure behavior instead of
       wrapping into an extra row or changing the header height.
-- [ ] Ensure the sticky header keeps a stable height across desktop,
+- [x] Ensure the sticky header keeps a stable height across desktop,
       constrained laptop, tablet, mobile, zoomed text, long category labels,
       and light/dark modes.
-- [ ] Add Playwright layout invariants proving category navigation never
+- [x] Add Playwright layout invariants proving category navigation never
       creates horizontal overflow, never wraps into a third header row, and
       keeps the header height within the documented contract.
 
 ## Milestone 49: Image-Only Hover Preview Styling
 
-- [ ] Refine the native Astro hover-image preview so it displays the image
+- [x] Refine the native Astro hover-image preview so it displays the image
       itself without a card-like background.
-- [ ] Keep only media-appropriate treatment such as a subtle shadow, optional
+- [x] Keep only media-appropriate treatment such as a subtle shadow, optional
       outline, and sensible image radius if needed for contrast.
-- [ ] Ensure the image-only preview still uses the anchored positioning system,
+- [x] Ensure the image-only preview still uses the anchored positioning system,
       remains viewport-contained, preserves useful alt text, and does not
       introduce layout shift.
-- [ ] Update hover-image component docs, catalog examples, and Playwright
+- [x] Update hover-image component docs, catalog examples, and Playwright
       screenshots/tests to reflect the image-only visual contract.
+
+## Milestone 50: Header Category Nav Proportions And Constrained Scaling
+
+- [ ] Revisit the Milestone 48 category-row implementation and restore the
+      earlier desktop visual rhythm as the default: normal category spacing,
+      normal label proportions, and no compressed equal-width tab look.
+- [ ] Preserve full category labels at every desktop/tablet width where the
+      category row is visible; category names must not truncate into strings
+      such as `Philos...`.
+- [ ] When inline space becomes constrained, scale the category row down as a
+      whole, like resizing an image, preserving label text and relationships
+      rather than rearranging items, changing proportions, or truncating
+      individual labels.
+- [ ] Choose a clear fallback point where the full-label category row is no
+      longer viable and switch to the mobile navigation pattern instead of
+      wrapping, overflowing, or ellipsizing labels.
+- [ ] Update the header/navigation component docs to describe the visual
+      rhythm, proportional shrink behavior, full-label invariant, and fallback
+      behavior.
+- [ ] Add Playwright coverage across constrained laptop, tablet, and desktop
+      widths proving the category row keeps full labels, preserves the locked
+      header height, avoids overflow, and switches to mobile navigation before
+      labels need truncation.

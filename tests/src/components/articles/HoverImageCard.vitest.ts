@@ -23,6 +23,10 @@ describe("HoverImageCard", () => {
     expect(view).toContain("data-hover-image-panel");
     expect(view).toContain('href="/src/assets/articles/example/image.png"');
     expect(view).toContain('alt="Screenshot of a text message conversation"');
+    expect(view).toContain("shadow-lg");
+    expect(view).toContain("ring-1");
+    expect(view).not.toContain("bg-popover");
+    expect(view).not.toContain("p-1");
     expect(view).not.toContain("client:idle");
     expect(view).not.toContain('data-slot="hover-card');
   });

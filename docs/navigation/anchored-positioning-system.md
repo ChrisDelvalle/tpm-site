@@ -444,6 +444,7 @@ behavior.
 Anchored positioning must preserve the site's static-first performance model.
 Hover-image previews should remain native Astro markup. Do not reintroduce
 React/Radix hydration or a heavier custom runtime only to position the preview.
+They should render as image-only media, not as card-like popovers.
 
 Required performance patterns:
 
@@ -587,6 +588,7 @@ Rules:
 - Offset: tokenized prose preview gap.
 - Fallback order: `flip`, `shift-then-size`.
 - Panel remains visually related to the inline trigger.
+- Panel is an image-only preview surface with no background or padding.
 - Panel may overlap prose, but should not cover the trigger itself.
 - Panel should not become a centered viewport overlay.
 - Long images respect max dimensions and viewport gutters.

@@ -160,6 +160,33 @@ export async function expectInlineEndAligned(
 }
 
 /**
+ * Asserts that an element's horizontal center matches the viewport center.
+ *
+ * @param page Current Playwright page.
+ * @param locator Element expected to be centered in the viewport.
+ * @param label Human-readable element name for failure messages.
+ * @param tolerance Pixel tolerance for subpixel rounding or scrollbar gutters.
+ */
+export async function expectCenteredInViewport(
+  page: Page,
+  locator: Locator,
+  label: string,
+  tolerance = defaultGeometryTolerance,
+): Promise<void> {
+  const viewport = page.viewportSize();
+
+  if (viewport === null) {
+    throw new Error("Expected Playwright viewport to be configured.");
+  }
+
+  const box = await visibleBoundingBox(locator, label);
+  const elementCenter = box.x + box.width / 2;
+  const viewportCenter = viewport.width / 2;
+
+  expectApproximatelyEqual(elementCenter, viewportCenter, tolerance);
+}
+
+/**
  * Asserts that a header-anchored surface snaps to the sticky header bottom.
  *
  * @param page Current Playwright page.

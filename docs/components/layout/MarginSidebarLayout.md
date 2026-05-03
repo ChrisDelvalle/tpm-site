@@ -37,13 +37,17 @@ semantics.
 
 ## Layout And Responsiveness
 
-Mobile base: render only the primary content, with rail content hidden,
-collapsed, or moved according to the child component design.
+Mobile and tablet base: render only the primary content, with rail content
+hidden, collapsed, or moved according to the child component design. The
+primary content column stays centered even when a rail slot exists but is not
+currently visible.
 
-Desktop: rails occupy margin space outside the primary content measure. The
-primary content must not shift unexpectedly when a rail is toggled.
+Desktop: rails occupy margin space outside the primary content measure as soon
+as there is enough room for a symmetric reading grid. The rail starts narrow and
+may widen on very large screens. The primary content must not shift
+unexpectedly when a rail is toggled.
 
-Wide desktop: rails may become visible if useful, but whitespace remains
+Wide desktop: rails may become wider if useful, but whitespace remains
 acceptable. Do not stretch the reading column.
 
 Short viewport: sticky rails must account for header height and allow their own
@@ -86,6 +90,8 @@ decorative frame around the article.
 ## Testable Invariants
 
 - Primary content stays centered when the left rail is present.
+- Primary content stays centered when an automatic rail is hidden by responsive
+  constraints.
 - Rail does not reduce reading measure below the intended content width.
 - Rail never overlaps article prose.
 - Rail stays below sticky header during scroll.

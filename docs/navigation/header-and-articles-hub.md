@@ -243,7 +243,10 @@ Route files should not implement header internals or browsing widths.
   categories, brand, and support.
 - Use the least aggressive standard Tailwind breakpoint that keeps the layout
   stable; category discovery should not disappear on ordinary laptop
-  split-screen widths when wrapping is sufficient.
+  split-screen widths.
+- The category discovery row is locked to one line. Category labels may shrink
+  and truncate inside the row, but they must not wrap into a third header row
+  or increase sticky-header height.
 - Category dropdown surfaces must stay within viewport width and below sticky
   header chrome.
 - Search reveal must not push links into overlap or horizontal overflow.

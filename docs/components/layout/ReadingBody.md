@@ -39,8 +39,10 @@ placement. `ArticleLayout` owns article header/prose/end ordering.
 Mobile base: one column with shared gutters.
 
 Tablet/desktop: preserve readable measure first. Add a left rail only when
-there is enough margin space. Wide desktop may increase outer whitespace, not
-article measure.
+there is enough margin space for a symmetric grid. When the rail is hidden by
+responsive constraints, the article column must remain centered rather than
+falling back to the left edge of a full-width grid. Wide desktop may increase
+outer whitespace, not article measure.
 
 Short viewport: sticky TOC must remain scrollable or non-sticky; it must not
 hide under the header.
@@ -81,6 +83,8 @@ card. The article content should remain the visual focus in light and dark mode.
 - Keeps article prose within readable measure.
 - Does not reserve blank TOC space when no TOC exists.
 - Keeps the reading column centered when a rail exists.
+- Keeps the reading column centered when an available rail is hidden or
+  collapsed.
 - Does not create horizontal overflow with wide media or long words.
 - Preserves scroll target visibility below the sticky header.
 

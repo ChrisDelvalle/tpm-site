@@ -44,6 +44,10 @@ chevron or equivalent down marker. The category text is a normal link to the
 category page. If a separate disclosure trigger is needed, keep it small and
 adjacent to the link.
 
+The trigger must be shrinkable inside the single-line discovery row. Long
+category labels truncate before they force wrapping or push sibling categories
+out of the row. The chevron remains visible as the dropdown affordance.
+
 The dropdown surface should align visually with the header/navigation system
 and cap its width to a readable preview measure. Its top edge snaps to the
 sticky header bottom. Its inline edge starts from the trigger when there is
@@ -110,6 +114,8 @@ Open and focus states must be visible in light and dark mode.
 - The component provides a no-JavaScript path to the category page.
 - Preview surface contains a `View all <category>` link without repeating the
   trigger heading.
+- Trigger text can shrink/truncate inside the header row without causing row
+  wrap or horizontal overflow.
 - Preview list never renders more than the chosen preview count.
 - Empty preview state still offers View All.
 - Focus ring is visible on trigger and links.

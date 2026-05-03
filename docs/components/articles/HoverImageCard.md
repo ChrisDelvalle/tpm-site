@@ -30,7 +30,7 @@ MDX article prose
           img
 ```
 
-`HoverImageCard` owns the preview surface, size variant, and anchored
+`HoverImageCard` owns the preview media, size variant, and anchored
 relationship. It does not parse Markdown or load article data.
 
 ## Layout And Responsiveness
@@ -40,6 +40,11 @@ itself. The preview is fixed-positioned by the shared anchored adapter, remains
 visually tethered to the trigger, and uses viewport max-size variables to avoid
 horizontal overflow. `expanded` increases the preview cap only; it must not
 change the inline trigger.
+
+The visible preview is image-only. It must not render as a card, popover, or
+padded box. A subtle shadow, outline/ring, and image radius are acceptable when
+needed for contrast, but the panel background stays transparent and the panel
+box should match the image box.
 
 ## Layering And Scrolling
 
@@ -64,5 +69,6 @@ label. Focus must reveal the same preview available on hover.
 - Renders a real link whose `href` is `image.src`.
 - Renders no React hydration directive and no Radix/shadcn hover-card markup.
 - Keeps the trigger inline in prose and preserves the exact label text.
+- Renders as image-only media, with no popover background or padding.
 - Preview remains viewport-contained at left, right, and bottom edges.
 - `expanded` changes preview sizing without changing trigger semantics.

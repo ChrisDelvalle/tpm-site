@@ -46,12 +46,15 @@ category overview, category pages, and `SiteFooter`.
 
 Mobile base: do not show desktop discovery menu; use `MobileMenu`.
 
-Tablet and wider: show category labels in a section navigation row or compact
-category group. The standard breakpoint is intentionally not over-aggressive;
-category discovery should remain visible on ordinary laptop split-screen widths
-when it can wrap without collisions. Long category labels may wrap only if the
-whole row still remains deliberate and readable; otherwise use fewer visible
-labels plus a clear Categories entry.
+Tablet and wider: show category labels in a compact section navigation row. The
+standard breakpoint is intentionally not over-aggressive; category discovery
+should remain visible on ordinary laptop split-screen widths.
+
+The category row is a single-line contract. Labels may shrink and truncate
+inside equal flexible cells as the viewport narrows, but the list must not wrap
+into another row, create horizontal overflow, or change sticky-header height.
+If category discovery truly no longer fits, the responsive fallback is the
+mobile menu at smaller breakpoints, not a taller desktop header.
 
 The menu should not force brand, search, support, and every category into one
 fragile row.
@@ -119,6 +122,7 @@ cards.
 - Preview opens with keyboard focus and pointer hover.
 - Preview links are reachable by keyboard.
 - No horizontal overflow at desktop or wide desktop widths.
+- Category labels stay on one row and do not increase header height.
 - Preview content does not include the full archive.
 - Footer/homepage/category pages remain fallback discovery paths.
 

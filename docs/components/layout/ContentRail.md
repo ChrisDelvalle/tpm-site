@@ -32,8 +32,10 @@ measure, sticky offset, and overflow behavior. Child components own semantics.
 
 ## Layout And Responsiveness
 
-Rails are absent or below content on narrow screens. They appear only when the
-page has enough margin space.
+Rails are absent on narrow screens. They appear only when the page has enough
+margin space for the symmetric reading grid. Automatic rails should start at a
+compact width and may widen on larger screens; the rail must adapt before the
+reading column is allowed to drift.
 
 If sticky, the rail must have a max height and internal scroll behavior when
 the viewport is short.
@@ -67,6 +69,8 @@ article prose.
 
 - Does not render visible rail space when empty.
 - Stays below the sticky header when sticky.
+- Uses the shared responsive rail breakpoint so sticky behavior and visibility
+  begin together.
 - Does not cover or squeeze reading prose.
 - Handles short viewport with internal scroll or non-sticky fallback.
 - Provides no global category discovery on article pages.

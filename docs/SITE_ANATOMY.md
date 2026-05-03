@@ -203,7 +203,7 @@ SiteShell
   MainFrame
     ReadingBody
       MarginSidebarLayout
-        left rail: ArticleTableOfContents when useful
+        left rail: ArticleTableOfContents when useful and width allows
         content: ArticleLayout
           ArticleHeader
           ArticleProse
@@ -329,7 +329,9 @@ Category discovery should be available through:
 - footer category links.
 
 The desktop article margin rail should not duplicate global category discovery.
-It becomes article-local table of contents when headings make that useful.
+It becomes article-local table of contents when headings make that useful and
+the reading grid has enough width. If the rail is hidden or collapsed, the
+article content column remains centered.
 
 ## Article Anatomy
 
