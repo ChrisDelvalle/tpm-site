@@ -35,4 +35,18 @@ describe("ArchiveListBlock", () => {
     expect(view).toContain("Category");
     expect(view).toContain("History");
   });
+
+  test("can render as a subsection heading when nested below a page h1", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArchiveListBlock, {
+      props: {
+        headingLevel: 2,
+        items: articleItems,
+        title: "Latest Articles",
+      },
+    });
+
+    expect(view).toContain("<h2");
+    expect(view).not.toContain("<h1");
+  });
 });

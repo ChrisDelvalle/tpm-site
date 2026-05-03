@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -308,7 +309,7 @@ function expectedMirrorTests(file: string): string[] {
   if (file === "playwright.config.ts") {
     return ["tests/config/playwright.config.test.ts"];
   }
-  if (file === "prettier.config.ts") {
+  if (file === "prettier.config.mjs") {
     return ["tests/config/prettier.config.test.ts"];
   }
   if (
@@ -360,7 +361,10 @@ function listRepositoryFiles(rootDir: string): string[] {
     );
   }
 
-  return result.stdout.split(/\r?\n/).filter((line) => line !== "");
+  return result.stdout
+    .split(/\r?\n/)
+    .filter((line) => line !== "")
+    .filter((line) => existsSync(path.resolve(rootDir, line)));
 }
 
 function requiresMirroredTest(file: string): boolean {

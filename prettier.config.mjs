@@ -1,5 +1,4 @@
-import type { Config } from "prettier";
-
+/** @type {import("prettier").Config} */
 const config = {
   endOfLine: "lf",
   overrides: [
@@ -15,6 +14,6 @@ const config = {
   singleQuote: false,
   tabWidth: 2,
   trailingComma: "all",
-} satisfies Config;
+};
 
 export default config;

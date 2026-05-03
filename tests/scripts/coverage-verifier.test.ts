@@ -227,7 +227,7 @@ describe("coverage inventory verifier", () => {
         await writeText(root, "eslint.config.ts", "export default [];\n");
         await writeText(root, "knip.ts", "export default {};\n");
         await writeText(root, "playwright.config.ts", "export default {};\n");
-        await writeText(root, "prettier.config.ts", "export default {};\n");
+        await writeText(root, "prettier.config.mjs", "export default {};\n");
         await writeText(root, "eslint/example.ts", "export const value = 1;\n");
         await writeText(root, "src/example.ts", "export const value = 1;\n");
         await writeText(
@@ -271,7 +271,7 @@ describe("coverage inventory verifier", () => {
             "SF:eslint.config.ts",
             "SF:knip.ts",
             "SF:playwright.config.ts",
-            "SF:prettier.config.ts",
+            "SF:prettier.config.mjs",
             "SF:eslint/example.ts",
             "SF:scripts/covered.ts",
             "SF:src/example.ts",
@@ -282,7 +282,7 @@ describe("coverage inventory verifier", () => {
         await writeText(root, "eslint.config.ts", "export default [];\n");
         await writeText(root, "knip.ts", "export default {};\n");
         await writeText(root, "playwright.config.ts", "export default {};\n");
-        await writeText(root, "prettier.config.ts", "export default {};\n");
+        await writeText(root, "prettier.config.mjs", "export default {};\n");
         await writeText(root, "eslint/example.ts", "export const value = 1;\n");
         await writeText(
           root,

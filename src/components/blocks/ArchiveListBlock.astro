@@ -5,6 +5,7 @@ import type { ArticleListItem } from "../../lib/article-list";
 interface Props {
   description?: string | undefined;
   eyebrow?: string | undefined;
+  headingLevel?: 1 | 2;
   items: readonly ArticleListItem[];
   pagefindIgnore?: boolean;
   title: string;
@@ -13,6 +14,7 @@ interface Props {
 const {
   description,
   eyebrow,
+  headingLevel = 1,
   items,
   pagefindIgnore = false,
   title,
@@ -22,9 +24,17 @@ const {
 <section class="grid gap-6">
   <header class="grid gap-3">
     {eyebrow && <p class="text-primary text-sm font-semibold">{eyebrow}</p>}
-    <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
-      {title}
-    </h1>
+    {
+      headingLevel === 1 ? (
+        <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
+          {title}
+        </h1>
+      ) : (
+        <h2 class="text-foreground m-0 text-2xl font-semibold tracking-normal">
+          {title}
+        </h2>
+      )
+    }
     {
       description && (
         <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>

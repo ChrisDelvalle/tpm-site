@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -266,6 +266,36 @@ public/**
             ".test-accountability-ignore",
             "# Accountability fixture file is covered by this command-line test.\n.test-accountability-ignore\n",
           );
+
+          const exitCode = await runTestAccountabilityCli([], root);
+
+          expect(exitCode).toBe(0);
+          expect(String(log.mock.calls[0]?.[0])).toContain(
+            "Test accountability passed",
+          );
+        } finally {
+          log.mockRestore();
+        }
+      }),
+  );
+
+  test.serial(
+    "ignores tracked files that have been deleted before a rename is staged",
+    async () =>
+      withTempRoot(async (root) => {
+        const log = spyOn(console, "log").mockImplementation(() => undefined);
+
+        try {
+          await runGit(root, ["init"]);
+          await writeText(
+            root,
+            ".test-accountability-ignore",
+            "# Accountability fixture file is covered by this command-line test.\n.test-accountability-ignore\n",
+          );
+          await writeText(root, "stale.config.ts", "export default {};\n");
+          await runGit(root, ["add", ".test-accountability-ignore"]);
+          await runGit(root, ["add", "stale.config.ts"]);
+          await unlink(path.join(root, "stale.config.ts"));
 
           const exitCode = await runTestAccountabilityCli([], root);
 

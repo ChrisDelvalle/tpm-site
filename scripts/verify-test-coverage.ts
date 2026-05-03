@@ -12,7 +12,7 @@ const defaultRoots = [
   "eslint.config.ts",
   "knip.ts",
   "playwright.config.ts",
-  "prettier.config.ts",
+  "prettier.config.mjs",
   "scripts",
   "src",
   "types",

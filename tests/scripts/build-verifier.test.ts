@@ -311,9 +311,14 @@ describe("build verifier helpers", () => {
       await writeText(
         root,
         "dist/index.html",
-        '<script src="/_astro/index.js"></script><astro-island></astro-island><a href="/missing/">Missing</a><a href="relative">Relative</a>',
+        '<script src="/_astro/index.js"></script><script type="module" src="/_astro/AnchoredRoot.astro_astro_type_script_index_0_lang.Abc123.js"></script><astro-island></astro-island><a href="/missing/">Missing</a><a href="relative">Relative</a>',
       );
       await writeText(root, "dist/_astro/index.js", "");
+      await writeText(
+        root,
+        "dist/_astro/AnchoredRoot.astro_astro_type_script_index_0_lang.Abc123.js",
+        "",
+      );
       await writeText(root, "dist/_astro/index.js.map", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
@@ -352,7 +357,9 @@ describe("build verifier helpers", () => {
       expect(result.issues.unexpectedHydrationBoundaries).toEqual([
         "index.html",
       ]);
-      expect(result.issues.unexpectedClientScripts).toEqual(["index.html"]);
+      expect(result.issues.unexpectedClientScripts).toEqual([
+        "index.html -> /_astro/index.js",
+      ]);
     }));
 
   test.serial(

@@ -3,7 +3,6 @@ export const typedFiles = [
   "eslint.config.ts",
   "eslint/**/*.ts",
   "knip.ts",
-  "prettier.config.ts",
   "src/**/*.{ts,tsx}",
   "scripts/**/*.ts",
   "tests/**/*.{ts,tsx}",

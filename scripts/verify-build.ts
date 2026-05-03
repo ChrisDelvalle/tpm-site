@@ -21,6 +21,9 @@ const staticReadingBasePages = [
   "articles/index.html",
   "articles/all/index.html",
 ];
+const allowedStaticClientScriptPatterns = [
+  /^\/_astro\/AnchoredRoot\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u,
+] as const;
 
 /** Source-content publication state used to verify generated output. */
 export interface ArticlePublication {
@@ -638,13 +641,42 @@ function inspectStaticReadingPageHtml(
     return;
   }
 
-  if (/<script[^>]+src=["']\/_astro\/[^"']+\.js["']/i.test(text)) {
-    issues.unexpectedClientScripts.push(relativeHtmlPath);
+  const unexpectedScriptSources = scriptSources(text).filter(
+    (source) =>
+      /^\/_astro\/[^"']+\.js$/iu.test(source) &&
+      !isAllowedStaticClientScript(source),
+  );
+
+  if (unexpectedScriptSources.length > 0) {
+    issues.unexpectedClientScripts.push(
+      `${relativeHtmlPath} -> ${unexpectedScriptSources.join(", ")}`,
+    );
   }
 
   if (/<astro-island\b/i.test(text)) {
     issues.unexpectedHydrationBoundaries.push(relativeHtmlPath);
   }
+}
+
+function isAllowedStaticClientScript(source: string): boolean {
+  return allowedStaticClientScriptPatterns.some((pattern) =>
+    pattern.test(source),
+  );
+}
+
+function scriptSources(html: string): string[] {
+  const sources: string[] = [];
+  const scriptSourcePattern = /<script\b[^>]*\ssrc=["']([^"']+)["'][^>]*>/giu;
+  let match: null | RegExpExecArray;
+
+  while ((match = scriptSourcePattern.exec(html)) !== null) {
+    const source = match[1];
+    if (source !== undefined) {
+      sources.push(source);
+    }
+  }
+
+  return sources;
 }
 
 async function internalTargetExists(
