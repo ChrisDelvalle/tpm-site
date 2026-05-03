@@ -754,7 +754,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 async function listFiles(dir: string): Promise<string[]> {
-  const entries = await readdir(dir, { withFileTypes: true });
+  const entries = (await readdir(dir, { withFileTypes: true })).sort(
+    (left, right) => left.name.localeCompare(right.name),
+  );
   const files: string[] = [];
 
   for (const entry of entries) {
