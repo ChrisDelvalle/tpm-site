@@ -2,10 +2,20 @@ import { describe, expect, test } from "bun:test";
 
 import {
   type ArticleSummary,
+  primaryNavigationItems,
   sectionNavigationItems,
   type SectionNavItem,
 } from "../../../src/lib/navigation";
 import { articleEntry, categorySummary } from "../../helpers/content";
+
+describe("primaryNavigationItems", () => {
+  test("builds durable non-category navigation links", () => {
+    expect(primaryNavigationItems()).toEqual([
+      { href: "/articles/", label: "Articles" },
+      { href: "/about/", label: "About" },
+    ]);
+  });
+});
 
 describe("sectionNavigationItems", () => {
   test("preserves category ordering and maps display-ready section links", () => {

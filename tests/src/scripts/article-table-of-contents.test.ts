@@ -7,6 +7,7 @@ describe("article table of contents browser script", () => {
       url: "https://example.com/articles/post/#second-section",
     });
     Reflect.set(window, "SyntaxError", SyntaxError);
+    Reflect.set(window, "innerHeight", 900);
     const document = window.document;
 
     document.documentElement.style.setProperty("--site-header-height", "72px");
@@ -27,23 +28,15 @@ describe("article table of contents browser script", () => {
     }
 
     Reflect.set(firstHeading, "getBoundingClientRect", () =>
-      domRect({ top: 40 }),
+      domRect({ top: 96 }),
     );
     Reflect.set(secondHeading, "getBoundingClientRect", () =>
-      domRect({ top: 120 }),
+      domRect({ top: 280 }),
     );
-    Reflect.set(
-      window,
-      "requestAnimationFrame",
-      (callback: FrameRequestCallback) => {
-        callback(0);
-
-        return 1;
-      },
-    );
+    installImmediateAnimationFrame(window);
 
     await withBrowserGlobals(window, async () => {
-      await import("../../../src/scripts/article-table-of-contents");
+      await importTocScript("hash-target");
     });
 
     const current = browserAnchor(
@@ -61,6 +54,131 @@ describe("article table of contents browser script", () => {
     expect(current.outerHTML).toContain('aria-current="location"');
     expect(previous.outerHTML).not.toContain("data-current");
   });
+
+  test("falls back to the nearest scrolled heading when the hash target is out of range", async () => {
+    const window = new Window({
+      url: "https://example.com/articles/post/#second-section",
+    });
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    Reflect.set(window, "innerHeight", 900);
+    const document = window.document;
+
+    document.documentElement.style.setProperty("--site-header-height", "72px");
+    document.body.innerHTML = `
+      <nav data-article-toc>
+        <a href="/articles/post/">Article</a>
+        <a href="#missing-section">Missing</a>
+        <a href="#first-section">First</a>
+        <a href="#second-section">Second</a>
+      </nav>
+      <h2 id="first-section">First</h2>
+      <h2 id="second-section">Second</h2>
+    `;
+
+    const firstHeading = document.getElementById("first-section");
+    const secondHeading = document.getElementById("second-section");
+
+    if (firstHeading === null || secondHeading === null) {
+      throw new Error("Expected table-of-contents heading fixtures.");
+    }
+
+    Reflect.set(firstHeading, "getBoundingClientRect", () =>
+      domRect({ top: 96 }),
+    );
+    Reflect.set(secondHeading, "getBoundingClientRect", () =>
+      domRect({ top: 640 }),
+    );
+    installImmediateAnimationFrame(window);
+
+    await withBrowserGlobals(window, async () => {
+      await importTocScript("fallback");
+    });
+
+    const current = browserAnchor(
+      document.querySelector('a[href="#first-section"]'),
+    );
+    const outOfRange = browserAnchor(
+      document.querySelector('a[href="#second-section"]'),
+    );
+
+    if (current === null || outOfRange === null) {
+      throw new Error("Expected table-of-contents link fixtures.");
+    }
+
+    expect(current.getAttribute("aria-current")).toBe("location");
+    expect(outOfRange.hasAttribute("aria-current")).toBe(false);
+  });
+
+  test("updates the current heading when scrolling changes the active section", async () => {
+    const window = new Window({
+      url: "https://example.com/articles/post/",
+    });
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    Reflect.set(window, "innerHeight", 900);
+    const document = window.document;
+
+    let firstTop = 96;
+    let secondTop = 640;
+
+    document.documentElement.style.setProperty("--site-header-height", "72px");
+    document.body.innerHTML = `
+      <nav data-article-toc>
+        <a href="#first-section">First</a>
+        <a href="#second-section">Second</a>
+      </nav>
+      <h2 id="first-section">First</h2>
+      <h2 id="second-section">Second</h2>
+    `;
+
+    const firstHeading = document.getElementById("first-section");
+    const secondHeading = document.getElementById("second-section");
+
+    if (firstHeading === null || secondHeading === null) {
+      throw new Error("Expected table-of-contents heading fixtures.");
+    }
+
+    Reflect.set(firstHeading, "getBoundingClientRect", () =>
+      domRect({ top: firstTop }),
+    );
+    Reflect.set(secondHeading, "getBoundingClientRect", () =>
+      domRect({ top: secondTop }),
+    );
+    const frameCallbacks: FrameRequestCallback[] = [];
+    Reflect.set(
+      window,
+      "requestAnimationFrame",
+      (callback: FrameRequestCallback) => {
+        frameCallbacks.push(callback);
+
+        return frameCallbacks.length;
+      },
+    );
+
+    await withBrowserGlobals(window, async () => {
+      await importTocScript("scroll-update");
+
+      firstTop = -240;
+      secondTop = 128;
+      window.dispatchEvent(new window.Event("scroll"));
+      frameCallbacks.forEach((callback) => {
+        callback(0);
+      });
+    });
+
+    const previous = browserAnchor(
+      document.querySelector('a[href="#first-section"]'),
+    );
+    const current = browserAnchor(
+      document.querySelector('a[href="#second-section"]'),
+    );
+
+    if (current === null || previous === null) {
+      throw new Error("Expected table-of-contents link fixtures.");
+    }
+
+    expect(previous.hasAttribute("aria-current")).toBe(false);
+    expect(current.getAttribute("data-current")).toBe("true");
+  });
 });
 
 function domRect({ top }: { top: number }): DOMRect {
@@ -75,6 +193,25 @@ function domRect({ top }: { top: number }): DOMRect {
     x: 0,
     y: top,
   };
+}
+
+function installImmediateAnimationFrame(window: Window): void {
+  Reflect.set(
+    window,
+    "requestAnimationFrame",
+    (callback: FrameRequestCallback) => {
+      callback(0);
+
+      return 1;
+    },
+  );
+}
+
+async function importTocScript(
+  testCase: "fallback" | "hash-target" | "scroll-update",
+): Promise<void> {
+  // eslint-disable-next-line no-unsanitized/method -- Closed test-case union appends cache-busting query strings to a repository-local module path.
+  await import(`../../../src/scripts/article-table-of-contents.ts?${testCase}`);
 }
 
 function browserAnchor(element: unknown): HTMLAnchorElement | null {

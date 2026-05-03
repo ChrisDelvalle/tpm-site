@@ -72,6 +72,88 @@ describe("anchored positioning browser script", () => {
     expect(panel.style.getPropertyValue("--anchor-x")).toBe("");
   });
 
+  test("positions focus-owned search panels with visual viewport geometry", () => {
+    const window = browserWindow();
+    const document = window.document;
+
+    Reflect.set(window, "visualViewport", {
+      addEventListener: () => undefined,
+      height: 700,
+      offsetLeft: 20,
+      offsetTop: 10,
+      width: 500,
+    });
+    document.body.innerHTML = `
+      <header data-site-header>Header</header>
+      <div data-anchor-root data-anchor-preset="header-search-end">
+        <button data-anchor-trigger>Search</button>
+        <div data-anchor-panel popover>Panel</div>
+      </div>
+    `;
+
+    const header = requiredElement(window, "[data-site-header]");
+    const trigger = requiredElement(window, "[data-anchor-trigger]");
+    const panel = requiredElement(window, "[data-anchor-panel]");
+
+    setRect(header, { height: 96, width: 500, x: 0, y: 0 });
+    setRect(trigger, { height: 40, width: 40, x: 420, y: 28 });
+    setRect(panel, { height: 120, width: 300, x: 0, y: 0 });
+    installImmediateAnimationFrame(window);
+
+    installAnchoredPositioning(runtimeFor(window));
+    trigger.focus();
+    dispatchWindowEvent(trigger, window, "focusin");
+
+    expect(panel.style.getPropertyValue("--anchor-x")).toBe("160px");
+    expect(panel.style.getPropertyValue("--anchor-y")).toBe("96px");
+    expect(panel.style.getPropertyValue("--anchor-max-width")).toBe("468px");
+    expect(panel.style.getPropertyValue("--anchor-max-height")).toBe("598px");
+    expect(panel.dataset["anchorPlacement"]).toBe("bottom-end");
+  });
+
+  test("ignores unrelated events and invalid root contracts", () => {
+    const window = browserWindow();
+    const document = window.document;
+
+    document.body.innerHTML = `
+      <button id="outside">Outside</button>
+      <details id="invalid-preset" data-anchor-root data-anchor-preset="unknown" open>
+        <summary data-anchor-trigger>Invalid</summary>
+        <div data-anchor-panel>Invalid panel</div>
+      </details>
+      <details id="missing-trigger" data-anchor-root data-anchor-preset="header-dropdown" open>
+        <div data-anchor-panel>Missing trigger panel</div>
+      </details>
+      <details id="missing-panel" data-anchor-root data-anchor-preset="header-dropdown" open>
+        <summary data-anchor-trigger>Missing panel</summary>
+      </details>
+    `;
+
+    const outside = requiredElement(window, "#outside");
+    const invalidPreset = requiredElement(window, "#invalid-preset");
+    const invalidPanel = requiredElement(
+      window,
+      "#invalid-preset [data-anchor-panel]",
+    );
+    const missingTrigger = requiredElement(window, "#missing-trigger");
+    const missingTriggerPanel = requiredElement(
+      window,
+      "#missing-trigger [data-anchor-panel]",
+    );
+    const missingPanel = requiredElement(window, "#missing-panel");
+
+    installImmediateAnimationFrame(window);
+    installAnchoredPositioning(runtimeFor(window));
+    dispatchWindowEvent(document, window, "click");
+    dispatchWindowEvent(outside, window, "click");
+    dispatchWindowEvent(invalidPreset, window, "toggle");
+    dispatchWindowEvent(missingTrigger, window, "toggle");
+    dispatchWindowEvent(missingPanel, window, "toggle");
+
+    expect(invalidPanel.style.getPropertyValue("--anchor-x")).toBe("");
+    expect(missingTriggerPanel.style.getPropertyValue("--anchor-x")).toBe("");
+  });
+
   test("observes header and panel size changes and disconnects removed roots", () => {
     const window = browserWindow();
     const document = window.document;
@@ -159,14 +241,33 @@ function installImmediateAnimationFrame(window: Window): void {
 }
 
 function dispatchWindowEvent(
-  element: HTMLElement,
+  element: unknown,
   window: Window,
   eventName: string,
 ): void {
+  if (!isDispatchableEventTarget(element)) {
+    throw new Error("Expected fixture target to dispatch browser events.");
+  }
+
   const event = new window.Event(eventName, { bubbles: true });
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Happy DOM events satisfy DOM Event at runtime for dispatch.
   element.dispatchEvent(event as unknown as Event);
+}
+
+interface DispatchableEventTarget {
+  readonly dispatchEvent: (event: Event) => boolean;
+}
+
+function isDispatchableEventTarget(
+  value: unknown,
+): value is DispatchableEventTarget {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "dispatchEvent" in value &&
+    typeof value.dispatchEvent === "function"
+  );
 }
 
 interface TestRect {

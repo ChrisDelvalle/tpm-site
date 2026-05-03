@@ -61,6 +61,36 @@ describe("search reveal browser script", () => {
       Reflect.deleteProperty(globalThis, "window");
     }
   });
+
+  test("ignores non-element targets and triggers without popover targets", () => {
+    const window = new HappyWindow();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const button = window.document.createElement("button");
+
+    button.setAttribute("data-search-reveal-trigger", "");
+    window.document.body.append(button);
+    Reflect.set(globalThis, "document", window.document);
+    Reflect.set(globalThis, "window", window);
+
+    try {
+      const clickHandler = installAndReturnClickHandler();
+      const textTargetEvent = new Event("click");
+      const missingPopoverTargetEvent = new Event("click");
+
+      Object.defineProperty(textTargetEvent, "target", { value: "search" });
+      Object.defineProperty(missingPopoverTargetEvent, "target", {
+        value: button,
+      });
+
+      clickHandler(textTargetEvent);
+      clickHandler(missingPopoverTargetEvent);
+
+      expect(window.document.activeElement).toBe(window.document.body);
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+      Reflect.deleteProperty(globalThis, "window");
+    }
+  });
 });
 
 function installAndReturnClickHandler(): EventListener {

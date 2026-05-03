@@ -29,8 +29,9 @@ describe("component catalog verifier", () => {
   });
 
   test("reports missing examples, stale paths, duplicate entries, and weak reasons", () => {
+    const missingComponent = "src/components/ui/Input.astro";
     const result = verifyComponentCatalog({
-      componentFiles: [exampleComponent, ignoredComponent],
+      componentFiles: [exampleComponent, ignoredComponent, missingComponent],
       examplePaths: [
         exampleComponent,
         exampleComponent,
@@ -51,6 +52,7 @@ describe("component catalog verifier", () => {
     const report = formatComponentCatalogReport(result);
 
     expect(result.duplicateConfiguredPaths).toEqual([exampleComponent]);
+    expect(result.missingComponents).toEqual([missingComponent]);
     expect(result.unknownExamplePaths).toEqual([
       "src/components/ui/Missing.astro",
     ]);
@@ -61,6 +63,12 @@ describe("component catalog verifier", () => {
       `- ${ignoredComponent}: Too short`,
     ]);
     expect(report).toContain("Component catalog check failed.");
+    expect(report).toContain("Missing catalog coverage:");
+    expect(report).toContain(missingComponent);
+    expect(report).toContain("Weak ignore reasons:");
+    expect(report).toContain("Catalog examples for missing files:");
+    expect(report).toContain("Catalog ignores for missing files:");
+    expect(report).toContain("Duplicate catalog configuration paths:");
   });
 
   test.serial("prints command usage without scanning components", () => {
@@ -89,6 +97,19 @@ describe("component catalog verifier", () => {
       );
     } finally {
       error.mockRestore();
+    }
+  });
+
+  test.serial("prints a success report from the command-line workflow", () => {
+    const log = spyOn(console, "log").mockImplementation(() => undefined);
+
+    try {
+      expect(runComponentCatalogCli([], process.cwd())).toBe(0);
+      expect(String(log.mock.calls[0]?.[0])).toContain(
+        "Component catalog passed",
+      );
+    } finally {
+      log.mockRestore();
     }
   });
 });

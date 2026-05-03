@@ -25,7 +25,7 @@ const separatorClass = mode === "stacked" ? "hidden" : "text-muted-foreground";
         <Fragment>
           <AuthorLink author={author} />
           {index < authors.length - 1 && (
-            <span class:list={separatorClass}>&</span>
+            <span class:list={separatorClass}>&amp;</span>
           )}
         </Fragment>
       ))}
