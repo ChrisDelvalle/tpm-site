@@ -10,6 +10,7 @@ Source: `src/components/navigation/BrandLink.astro`
 
 - `href?: string`
 - `label?: string`
+- `compactLabel?: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -25,6 +26,8 @@ The component must remain usable in constrained containers, preserve touch and
 keyboard targets, and avoid horizontal overflow. In the mobile header, it lives
 in the flexible center slot between the menu trigger and support CTA, so it must
 accept contextual typography and width classes without forcing overlap.
+`compactLabel` may be used for constrained header contexts; when present, keep
+the link's accessible name as the full brand label.
 Desktop-only surfaces must have an equivalent mobile or fallback navigation
 path.
 

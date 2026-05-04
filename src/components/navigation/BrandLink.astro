@@ -5,25 +5,53 @@ import { SITE_TITLE } from "../../lib/routes";
 
 interface Props extends Omit<HTMLAttributes<"a">, "href"> {
   class?: string;
+  compactLabel?: string | undefined;
   href?: string;
   label?: string;
 }
 
 const {
   class: className,
+  compactLabel,
   href = "/",
   label = SITE_TITLE,
+  "aria-label": ariaLabel = label,
   ...attrs
 } = Astro.props;
+
+const hasCompactLabel =
+  compactLabel !== undefined &&
+  compactLabel.length > 0 &&
+  compactLabel !== label;
 ---
 
 <TextLink
   {...attrs}
   href={href}
+  aria-label={ariaLabel}
   variant="nav"
   tone="neutral"
   class:list={["inline-flex min-w-0 items-center text-lg font-bold", className]}
   data-brand-link
 >
-  <span class="truncate">{label}</span>
+  {
+    hasCompactLabel ? (
+      <>
+        <span class="truncate sm:hidden" aria-hidden="true" data-brand-label>
+          {compactLabel}
+        </span>
+        <span
+          class="hidden truncate sm:inline"
+          aria-hidden="true"
+          data-brand-label
+        >
+          {label}
+        </span>
+      </>
+    ) : (
+      <span class="truncate" data-brand-label>
+        {label}
+      </span>
+    )
+  }
 </TextLink>
