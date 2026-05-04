@@ -11,6 +11,10 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkArticleReferences],
   },
+  prefetch: {
+    defaultStrategy: "hover",
+    prefetchAll: false,
+  },
   prerenderConflictBehavior: "error",
   redirects: {
     "/2015/06/18/tmnh/": "/articles/tmnh/",

@@ -24,5 +24,6 @@ describe("AuthorSocialLinks", () => {
     expect(view).toContain("Author links");
     expect(view).toContain("Website");
     expect(view).toContain("https://example.com");
+    expect(view).not.toContain("data-astro-prefetch");
   });
 });

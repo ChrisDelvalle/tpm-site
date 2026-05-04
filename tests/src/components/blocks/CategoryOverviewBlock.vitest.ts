@@ -20,6 +20,7 @@ describe("CategoryOverviewBlock", () => {
     expect(view).toContain("Metamemetics");
     expect(view).toMatch(/2\s+articles/);
     expect(view).toContain("xl:grid-cols-4");
+    expect(view).toContain('data-astro-prefetch="hover"');
   });
 
   test("supports a compact two-column variant for constrained surfaces", async () => {

@@ -4,6 +4,7 @@ import type { HTMLAttributes } from "astro/types";
 /** Public props for links styled as call-to-action buttons. */
 interface Props extends HTMLAttributes<"a"> {
   href: string;
+  prefetch?: "hover" | "load" | "tap" | "viewport" | boolean;
   size?: "sm" | "md" | "lg";
   tone?: "danger" | "neutral" | "primary";
   variant?: "ghost" | "outline" | "solid";
@@ -11,6 +12,7 @@ interface Props extends HTMLAttributes<"a"> {
 
 const {
   href,
+  prefetch,
   variant = "solid",
   size = "md",
   tone = "primary",
@@ -21,6 +23,14 @@ const {
 } = Astro.props;
 
 const safeRel = target === "_blank" && rel === undefined ? "noreferrer" : rel;
+const prefetchAttribute =
+  prefetch === undefined
+    ? undefined
+    : prefetch === false
+      ? "false"
+      : prefetch === true
+        ? "hover"
+        : prefetch;
 const baseClasses =
   "inline-flex shrink-0 items-center justify-center gap-2 rounded-sm border font-semibold tracking-normal no-underline transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-disabled:pointer-events-none aria-disabled:opacity-60";
 const sizeClasses = {
@@ -57,6 +67,7 @@ const variantClasses = {
   href={href}
   target={target}
   rel={safeRel}
+  data-astro-prefetch={prefetchAttribute}
   class:list={[
     baseClasses,
     sizeClasses[size],

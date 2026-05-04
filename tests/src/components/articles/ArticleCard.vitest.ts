@@ -16,5 +16,9 @@ describe("ArticleCard", () => {
     expect(view).toContain("/authors/seong-young-her/");
     expect(view).toContain("Article Title");
     expect(view).toContain("Article description.");
+    expect(view).toContain('data-astro-prefetch="hover"');
+    expect(view).toMatch(
+      /href="\/categories\/history\/"[^>]*data-astro-prefetch="hover"/,
+    );
   });
 });

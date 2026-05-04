@@ -18,7 +18,8 @@ import { articlesIndexUrl } from "../lib/routes";
         description="The page you were looking for is not available at this address."
       />
       <p>
-        <TextLink href={articlesIndexUrl()}>Browse the article archive</TextLink
+        <TextLink href={articlesIndexUrl()} prefetch="hover"
+          >Browse the article archive</TextLink
         >
       </p>
     </div>

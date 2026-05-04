@@ -24,6 +24,9 @@ const staticReadingBasePages = [
 const allowedStaticClientScriptPatterns = [
   /^\/_astro\/AnchoredRoot\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u,
 ] as const;
+const astroPrefetchPageScriptPattern = /^\/_astro\/page\.[\w-]+\.js$/u;
+const astroPrefetchChunkImportPattern =
+  /from\s*["']\.\/(_astro_prefetch\.[\w-]+\.js)["']/u;
 
 /** Source-content publication state used to verify generated output. */
 export interface ArticlePublication {
@@ -617,10 +620,11 @@ async function inspectHtmlFile(
     issues.missingArticleJsonLd.push(relativeHtmlPath);
   }
 
-  inspectStaticReadingPageHtml(
+  await inspectStaticReadingPageHtml(
     text,
     relativeHtmlPath,
     staticReadingPages,
+    distDir,
     issues,
   );
 
@@ -631,21 +635,27 @@ async function inspectHtmlFile(
   }
 }
 
-function inspectStaticReadingPageHtml(
+async function inspectStaticReadingPageHtml(
   text: string,
   relativeHtmlPath: string,
   staticReadingPages: string[],
+  distDir: string,
   issues: BuildVerificationIssues,
-): void {
+): Promise<void> {
   if (!staticReadingPages.includes(relativeHtmlPath)) {
     return;
   }
 
-  const unexpectedScriptSources = scriptSources(text).filter(
-    (source) =>
+  const unexpectedScriptSources: string[] = [];
+
+  for (const source of scriptSources(text)) {
+    if (
       /^\/_astro\/[^"']+\.js$/iu.test(source) &&
-      !isAllowedStaticClientScript(source),
-  );
+      !(await isAllowedStaticClientScript(distDir, source))
+    ) {
+      unexpectedScriptSources.push(source);
+    }
+  }
 
   if (unexpectedScriptSources.length > 0) {
     issues.unexpectedClientScripts.push(
@@ -658,10 +668,63 @@ function inspectStaticReadingPageHtml(
   }
 }
 
-function isAllowedStaticClientScript(source: string): boolean {
-  return allowedStaticClientScriptPatterns.some((pattern) =>
-    pattern.test(source),
+async function isAllowedStaticClientScript(
+  distDir: string,
+  source: string,
+): Promise<boolean> {
+  if (
+    allowedStaticClientScriptPatterns.some((pattern) => pattern.test(source))
+  ) {
+    return true;
+  }
+
+  if (!astroPrefetchPageScriptPattern.test(source)) {
+    return false;
+  }
+
+  const scriptText = await staticClientScriptText(distDir, source);
+  if (isAstroPrefetchRuntime(scriptText)) {
+    return true;
+  }
+
+  const prefetchChunk = astroPrefetchChunkImport(scriptText);
+  if (prefetchChunk === null) {
+    return false;
+  }
+
+  return isAstroPrefetchRuntime(
+    await staticClientScriptText(distDir, `/_astro/${prefetchChunk}`),
   );
+}
+
+function isAstroPrefetchRuntime(scriptText: string): boolean {
+  return (
+    scriptText.includes("dataset.astroPrefetch") &&
+    scriptText.includes("ignoreSlowConnection") &&
+    scriptText.includes('relList?.supports?.("prefetch")') &&
+    scriptText.includes("navigator.connection")
+  );
+}
+
+function astroPrefetchChunkImport(scriptText: string): null | string {
+  const match = astroPrefetchChunkImportPattern.exec(scriptText);
+  const prefetchChunk = match?.[1];
+
+  return prefetchChunk ?? null;
+}
+
+async function staticClientScriptText(
+  distDir: string,
+  source: string,
+): Promise<string> {
+  try {
+    return await readFile(
+      path.join(distDir, source.replace(/^\//u, "")),
+      "utf8",
+    );
+  } catch {
+    return "";
+  }
 }
 
 function scriptSources(html: string): string[] {

@@ -17,5 +17,6 @@ describe("SectionNavItem", () => {
     expect(view).toContain('href="/articles/current-article/"');
     expect(view).toContain('aria-current="page"');
     expect(view).toContain("View all Metamemetics");
+    expect(view).toContain('data-astro-prefetch="tap"');
   });
 });

@@ -22,6 +22,7 @@ describe("CategoryPreviewList", () => {
     expect(view).toContain("Current Article With A Very Long Title");
     expect(view).not.toContain("Other Article");
     expect(view).toContain("View all Metamemetics");
+    expect(view).toContain('data-astro-prefetch="hover"');
   });
 
   test("renders a useful empty state without dropping the category link", async () => {

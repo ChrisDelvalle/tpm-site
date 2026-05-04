@@ -54,7 +54,12 @@ const columnClasses = {
     {
       items.map((item) => (
         <li class="border-border bg-card grid gap-1 rounded-sm border p-4">
-          <TextLink href={item.href} tone="neutral" class="font-semibold">
+          <TextLink
+            href={item.href}
+            tone="neutral"
+            class="font-semibold"
+            prefetch="hover"
+          >
             {item.title}
           </TextLink>
           {item.description && (

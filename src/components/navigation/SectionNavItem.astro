@@ -32,6 +32,7 @@ const hasCurrentArticle = item.articles.some((article) => article.isCurrent);
           href={item.href}
           variant="subtle"
           tone={item.isCurrent || hasCurrentArticle ? "primary" : "muted"}
+          prefetch="tap"
           aria-current={item.isCurrent ? "page" : undefined}
           class="text-xs"
         >
@@ -45,6 +46,7 @@ const hasCurrentArticle = item.articles.some((article) => article.isCurrent);
               href={article.href}
               variant="subtle"
               tone={article.isCurrent ? "primary" : "muted"}
+              prefetch="tap"
               aria-current={article.isCurrent ? "page" : undefined}
               class="line-clamp-2 text-xs"
             >

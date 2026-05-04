@@ -35,7 +35,9 @@ const {
     <h2
       class="text-foreground m-0 min-w-0 text-xl font-semibold tracking-normal break-words"
     >
-      <TextLink href={href} variant="subtle" tone="neutral">{title}</TextLink>
+      <TextLink href={href} variant="subtle" tone="neutral" prefetch="hover"
+        >{title}</TextLink
+      >
     </h2>
     <ArticleMeta author={author} authors={authors} formattedDate={date} />
   </div>
@@ -45,6 +47,7 @@ const {
         href={category.href}
         variant="subtle"
         tone="primary"
+        prefetch="hover"
         class="text-sm"
       >
         {category.title}

@@ -19,6 +19,8 @@ describe("MoreInCategoryBlock", () => {
     expect(view).toContain('aria-labelledby="test-more-in-category"');
     expect(view).toContain("More in History");
     expect(view).toContain("View category");
+    expect(view).toContain('href="/categories/history/"');
+    expect(view).toContain('data-astro-prefetch="hover"');
     expect(view).toContain("Article Title");
   });
 });

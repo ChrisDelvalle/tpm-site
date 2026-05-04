@@ -11,6 +11,7 @@ describe("BrandLink", () => {
     });
 
     expect(view).toContain('href="/"');
+    expect(view).toContain('data-astro-prefetch="hover"');
     expect(view).toContain("TPM");
   });
 

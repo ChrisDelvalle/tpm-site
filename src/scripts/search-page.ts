@@ -23,6 +23,9 @@ export interface PagefindSearch {
   results: PagefindResult[];
 }
 
+/** Prefetch dependency used by dynamically rendered search-result links. */
+export type SearchResultPrefetcher = (url: string) => Promise<void> | void;
+
 interface SearchErrorTarget {
   textContent: null | string;
 }
@@ -88,11 +91,13 @@ export async function loadPagefind(): Promise<PagefindModule> {
  * @param pagefind Search provider.
  * @param results Results container to replace.
  * @param value Search query text.
+ * @param prefetchLink Link prefetch dependency for dynamic result anchors.
  */
 export async function renderResults(
   pagefind: PagefindModule,
   results: HTMLElement,
   value: string,
+  prefetchLink: SearchResultPrefetcher = prefetchSearchResult,
 ): Promise<void> {
   const searchDocument = results.ownerDocument;
   results.replaceChildren();
@@ -111,6 +116,7 @@ export async function renderResults(
     item.className =
       "search-result border-border bg-card text-foreground grid gap-2 rounded-sm border p-4 no-underline transition-colors hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
     item.href = data.url;
+    item.dataset["astroPrefetch"] = "hover";
     title.className = "font-semibold";
     title.textContent = data.meta.title ?? data.url;
     excerpt.className = "text-muted-foreground text-sm";
@@ -118,8 +124,20 @@ export async function renderResults(
       searchExcerptFragment(searchDocument, data.excerpt),
     );
     item.append(title, excerpt);
+    bindSearchResultPrefetch(item, data.url, prefetchLink);
     results.append(item);
   }
+}
+
+/**
+ * Prefetches a search result through Astro's browser prefetch runtime.
+ *
+ * @param url Internal result URL to prefetch.
+ */
+export async function prefetchSearchResult(url: string): Promise<void> {
+  const { prefetch } = await import("astro:prefetch");
+
+  prefetch(url);
 }
 
 /**
@@ -291,11 +309,13 @@ function tagNameEndIndex(value: string): number {
  * @param searchDocument Browser document dependency.
  * @param locationSearch Current location search string.
  * @param pagefindLoader Loader for the Pagefind module.
+ * @param prefetchLink Search-result link prefetch dependency.
  */
 export async function runSearch(
   searchDocument = document,
   locationSearch = window.location.search,
   pagefindLoader = loadPagefind,
+  prefetchLink = prefetchSearchResult,
 ): Promise<void> {
   const container = searchDocument.querySelector("#search");
 
@@ -312,11 +332,11 @@ export async function runSearch(
   await pagefind.options({ excerptLength: 24 });
 
   input.addEventListener("input", () => {
-    renderResults(pagefind, results, input.value).catch(() => {
+    renderResults(pagefind, results, input.value, prefetchLink).catch(() => {
       renderSearchError(results);
     });
   });
-  await renderResults(pagefind, results, query);
+  await renderResults(pagefind, results, query, prefetchLink);
 }
 
 /**
@@ -347,6 +367,25 @@ function searchInput(
   container.append(input);
 
   return input;
+}
+
+function bindSearchResultPrefetch(
+  item: HTMLAnchorElement,
+  url: string,
+  prefetchLink: SearchResultPrefetcher,
+): void {
+  let didPrefetch = false;
+  const prefetchOnce = (): void => {
+    if (didPrefetch) {
+      return;
+    }
+
+    didPrefetch = true;
+    void Promise.resolve(prefetchLink(url)).catch(() => undefined);
+  };
+
+  item.addEventListener("mouseenter", prefetchOnce, { passive: true });
+  item.addEventListener("focus", prefetchOnce, { passive: true });
 }
 
 function searchResultsContainer(

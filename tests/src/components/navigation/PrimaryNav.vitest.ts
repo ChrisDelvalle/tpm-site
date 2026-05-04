@@ -15,6 +15,7 @@ describe("PrimaryNav", () => {
     expect(view).toContain('href="/about/"');
     expect(view).not.toContain('href="/categories/"');
     expect(view).toContain('aria-current="page"');
+    expect(view).toContain('data-astro-prefetch="hover"');
   });
 
   test("supports explicit spacing variants for parent-owned header rhythm", async () => {

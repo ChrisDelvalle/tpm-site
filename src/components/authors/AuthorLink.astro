@@ -9,6 +9,6 @@ interface Props {
 const { author } = Astro.props;
 ---
 
-<TextLink href={author.href} variant="subtle" tone="primary">
+<TextLink href={author.href} variant="subtle" tone="primary" prefetch="hover">
   {author.displayName}
 </TextLink>

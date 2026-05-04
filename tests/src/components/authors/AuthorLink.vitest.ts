@@ -12,6 +12,7 @@ describe("AuthorLink", () => {
     });
 
     expect(view).toContain('href="/authors/seong-young-her/"');
+    expect(view).toContain('data-astro-prefetch="hover"');
     expect(view).toContain("Seong-Young Her");
   });
 });

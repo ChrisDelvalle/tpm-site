@@ -1712,3 +1712,32 @@ Scope rules:
 - [x] Review generated output for avoidable client-script regressions,
       horizontal overflow, duplicated classes, inaccessible controls, and
       stale documentation references.
+
+## Milestone 62: Targeted Astro Prefetch
+
+- [x] Enable Astro's built-in prefetch with explicit opt-in behavior and no
+      global `prefetchAll`.
+- [x] Add typed prefetch support to shared link primitives without changing
+      external-link, hash-link, RSS, support, or media-link behavior.
+- [x] Apply prefetch only to high-intent internal navigation: article cards,
+      primary navigation, brand/home navigation, homepage archive CTAs,
+      category overview links, and category-preview links.
+- [x] Add focused tests proving prefetch attributes appear on intended links
+      and stay off excluded links.
+- [x] Run focused config/component checks and update the milestone when the
+      implementation is verified.
+
+## Milestone 63: Remaining High-Intent Prefetch
+
+- [x] Add prefetch to dynamic search result links without relying on Astro's
+      static link scan for post-load DOM content.
+- [x] Add hover prefetch to author profile links, article-header category
+      links, article-card category chips, same-category CTAs, and 404 recovery.
+- [x] Add tap prefetch to dense mobile/sidebar category-tree links so scanning
+      disclosures does not waste network traffic.
+- [x] Keep footer, RSS, support/external, citation/reference, table of
+      contents, hash-only, and media links un-prefetched.
+- [x] Add focused tests proving the intended links prefetch and excluded link
+      classes remain untouched.
+- [x] Run focused checks plus the relevant quality gates before marking the
+      milestone complete.

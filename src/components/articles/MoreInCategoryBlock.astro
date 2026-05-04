@@ -29,7 +29,12 @@ const {
           More{categoryTitle ? ` in ${categoryTitle}` : ""}
         </h2>
         {categoryHref && categoryTitle && (
-          <TextLink href={categoryHref} variant="subtle" tone="primary">
+          <TextLink
+            href={categoryHref}
+            variant="subtle"
+            tone="primary"
+            prefetch="hover"
+          >
             View category
           </TextLink>
         )}

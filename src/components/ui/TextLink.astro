@@ -4,12 +4,14 @@ import type { HTMLAttributes } from "astro/types";
 /** Public props for inline and navigation text links. */
 interface Props extends HTMLAttributes<"a"> {
   href: string;
+  prefetch?: "hover" | "load" | "tap" | "viewport" | boolean;
   tone?: "muted" | "neutral" | "primary";
   variant?: "inline" | "nav" | "subtle";
 }
 
 const {
   href,
+  prefetch,
   variant = "inline",
   tone = "primary",
   target,
@@ -19,6 +21,14 @@ const {
 } = Astro.props;
 
 const safeRel = target === "_blank" && rel === undefined ? "noreferrer" : rel;
+const prefetchAttribute =
+  prefetch === undefined
+    ? undefined
+    : prefetch === false
+      ? "false"
+      : prefetch === true
+        ? "hover"
+        : prefetch;
 const baseClasses =
   "rounded-xs tracking-normal transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 const variantClasses = {
@@ -39,6 +49,7 @@ const toneClasses = {
   href={href}
   target={target}
   rel={safeRel}
+  data-astro-prefetch={prefetchAttribute}
   class:list={[
     baseClasses,
     variantClasses[variant],

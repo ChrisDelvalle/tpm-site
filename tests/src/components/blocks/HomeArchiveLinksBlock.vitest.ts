@@ -12,5 +12,8 @@ describe("HomeArchiveLinksBlock", () => {
     expect(view).toContain("/articles/");
     expect(view).toContain("/articles/all/");
     expect(view).toContain("/feed.xml");
+    expect(view).toContain('data-astro-prefetch="hover"');
+    expect(view).toContain('href="/feed.xml"');
+    expect(view).not.toMatch(/href="\/feed\.xml"[^>]*data-astro-prefetch/);
   });
 });

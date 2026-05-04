@@ -63,7 +63,59 @@ describe("search page browser script", () => {
       expect(results.querySelector("a")?.getAttribute("href")).toBe(
         "/articles/result/",
       );
+      expect(results.querySelector("a")?.dataset["astroPrefetch"]).toBe(
+        "hover",
+      );
       expect(results.textContent).toContain("Result Title");
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+    }
+  });
+
+  test("prefetches dynamic search results on high-intent hover or focus", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const results = window.document.createElement("div");
+    const prefetchedUrls: string[] = [];
+    Reflect.set(globalThis, "document", window.document);
+
+    try {
+      await renderResults(
+        {
+          options: () => undefined,
+          search: async () =>
+            Promise.resolve({
+              results: [
+                {
+                  data: async () =>
+                    Promise.resolve({
+                      excerpt: "A result excerpt.",
+                      meta: { title: "Result Title" },
+                      url: "/articles/result/",
+                    }),
+                },
+              ],
+            }),
+        },
+        browserElement(results),
+        "query",
+        (url) => {
+          prefetchedUrls.push(url);
+        },
+      );
+
+      const link = results.querySelector("a");
+      if (link === null) {
+        throw new Error("Expected a rendered search result link.");
+      }
+
+      expect(prefetchedUrls).toEqual([]);
+
+      link.dispatchEvent(new window.Event("mouseenter"));
+      link.dispatchEvent(new window.Event("focus"));
+      await Promise.resolve();
+
+      expect(prefetchedUrls).toEqual(["/articles/result/"]);
     } finally {
       Reflect.deleteProperty(globalThis, "document");
     }

@@ -33,7 +33,7 @@ const categoryItems = sectionNavigationItems(categories, articlesIndexUrl());
         </h1>
         <p class="text-muted-foreground max-w-3xl text-lg">
           Browse essays and notes by category, start with recent writing, or go
-          straight to the <TextLink href={articlesArchiveUrl()}
+          straight to the <TextLink href={articlesArchiveUrl()} prefetch="hover"
             >complete article archive</TextLink
           >.
         </p>
@@ -43,6 +43,7 @@ const categoryItems = sectionNavigationItems(categories, articlesIndexUrl());
           href={articlesArchiveUrl()}
           variant="outline"
           tone="neutral"
+          prefetch="hover"
         >
           View all articles
         </LinkButton>

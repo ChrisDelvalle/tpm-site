@@ -23,6 +23,7 @@ describe("ArticleHeader", () => {
     expect(view).toContain("<h1");
     expect(view).toContain("Article Title");
     expect(view).toContain("/categories/history/");
+    expect(view).toContain('data-astro-prefetch="hover"');
     expect(view).toContain("Article description.");
     expect(view).not.toContain("Article tags");
   });

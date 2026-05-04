@@ -18,6 +18,22 @@ describe("LinkButton", () => {
 
     expect(view).toContain('href="https://example.com/support"');
     expect(view).toContain('rel="noreferrer"');
+    expect(view).not.toContain("data-astro-prefetch");
     expect(view).toContain("Support Us");
+  });
+
+  test("supports opt-in prefetch for internal button-style links", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(LinkButton, {
+      props: {
+        href: "/articles/",
+        prefetch: "hover",
+      },
+      slots: {
+        default: "Articles",
+      },
+    });
+
+    expect(view).toContain('data-astro-prefetch="hover"');
   });
 });

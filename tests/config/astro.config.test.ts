@@ -8,6 +8,10 @@ describe("Astro config", () => {
     expect(config.site).toBe("https://thephilosophersmeme.com");
     expect(config.trailingSlash).toBe("always");
     expect(config.compressHTML).toBe(true);
+    expect(config.prefetch).toEqual({
+      defaultStrategy: "hover",
+      prefetchAll: false,
+    });
     expect(config.prerenderConflictBehavior).toBe("error");
   });
 

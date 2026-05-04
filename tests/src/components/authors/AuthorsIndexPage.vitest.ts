@@ -14,6 +14,7 @@ describe("AuthorsIndexPage", () => {
     expect(view).toContain("Authors");
     expect(view).toContain("Seong-Young Her");
     expect(view).toContain("1 article");
+    expect(view).toContain('data-astro-prefetch="hover"');
   });
 
   test("renders a useful empty state", async () => {

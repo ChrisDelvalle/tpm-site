@@ -26,7 +26,12 @@ const { profiles } = Astro.props;
           <li>
             <Card class="grid h-full gap-2">
               <h2 class="text-foreground m-0 text-xl font-semibold tracking-normal">
-                <TextLink href={profile.href} variant="subtle" tone="neutral">
+                <TextLink
+                  href={profile.href}
+                  variant="subtle"
+                  tone="neutral"
+                  prefetch="hover"
+                >
                   {profile.displayName}
                 </TextLink>
               </h2>

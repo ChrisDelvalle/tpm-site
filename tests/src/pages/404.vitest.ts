@@ -15,5 +15,6 @@ describe("404 page", () => {
 
     expect(view).toContain("Page Not Found");
     expect(view).toContain("/articles/");
+    expect(view).toContain('data-astro-prefetch="hover"');
   });
 });

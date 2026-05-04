@@ -43,6 +43,9 @@ async function writeText(root: string, relativePath: string, text: string) {
   await writeFile(fullPath, text);
 }
 
+const astroPrefetchRuntimeFixture =
+  'document.querySelector("a")?.dataset.astroPrefetch; document.createElement("link").relList?.supports?.("prefetch"); const option = { ignoreSlowConnection: true }; navigator.connection; option.ignoreSlowConnection;';
+
 describe("build verifier helpers", () => {
   test("derives required article and category paths from source content", () => {
     expect(requiredPathsForSource(publication(), ["history"])).toContain(
@@ -311,9 +314,25 @@ describe("build verifier helpers", () => {
       await writeText(
         root,
         "dist/index.html",
-        '<script src="/_astro/index.js"></script><script type="module" src="/_astro/AnchoredRoot.astro_astro_type_script_index_0_lang.Abc123.js"></script><astro-island></astro-island><a href="/missing/">Missing</a><a href="relative">Relative</a>',
+        '<script src="/_astro/index.js"></script><script type="module" src="/_astro/page.Abc123.js"></script><script type="module" src="/_astro/page.Wrapper123.js"></script><script type="module" src="/_astro/page.NotPrefetch.js"></script><script type="module" src="/_astro/AnchoredRoot.astro_astro_type_script_index_0_lang.Abc123.js"></script><astro-island></astro-island><a href="/missing/">Missing</a><a href="relative">Relative</a>',
       );
       await writeText(root, "dist/_astro/index.js", "");
+      await writeText(
+        root,
+        "dist/_astro/page.Abc123.js",
+        astroPrefetchRuntimeFixture,
+      );
+      await writeText(
+        root,
+        "dist/_astro/page.Wrapper123.js",
+        'import{i}from"./_astro_prefetch.Abc123.js";i();',
+      );
+      await writeText(
+        root,
+        "dist/_astro/_astro_prefetch.Abc123.js",
+        astroPrefetchRuntimeFixture,
+      );
+      await writeText(root, "dist/_astro/page.NotPrefetch.js", "alert(1);");
       await writeText(
         root,
         "dist/_astro/AnchoredRoot.astro_astro_type_script_index_0_lang.Abc123.js",
@@ -358,7 +377,7 @@ describe("build verifier helpers", () => {
         "index.html",
       ]);
       expect(result.issues.unexpectedClientScripts).toEqual([
-        "index.html -> /_astro/index.js",
+        "index.html -> /_astro/index.js, /_astro/page.NotPrefetch.js",
       ]);
     }));
 
