@@ -13,4 +13,19 @@ describe("SupportLink", () => {
     expect(view).toContain('href="https://example.com/support"');
     expect(view).toContain("Support");
   });
+
+  test("can render a narrow visible label without changing the support destination", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(SupportLink, {
+      props: {
+        compactLabel: "Patreon",
+      },
+    });
+
+    expect(view).toContain('href="https://patreon.com/thephilosophersmeme"');
+    expect(view).toContain("data-support-label-full");
+    expect(view).toContain("data-support-label-compact");
+    expect(view).toContain("Support Us");
+    expect(view).toContain("Patreon");
+  });
 });

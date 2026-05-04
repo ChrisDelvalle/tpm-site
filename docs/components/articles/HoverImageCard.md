@@ -4,9 +4,9 @@ Source: `src/components/articles/HoverImageCard.astro`
 
 ## Purpose
 
-`HoverImageCard` renders an inline article link that previews an image on hover
-or keyboard focus. It exists for MDX article prose that intentionally embeds
-image previews inside a sentence.
+`HoverImageCard` renders an inline article link that previews an image on
+hover, keyboard focus, or touch tap. It exists for MDX article prose that
+intentionally embeds image previews inside a sentence.
 
 ## Public Contract
 
@@ -24,10 +24,11 @@ points to `image.src` so readers have a no-JavaScript fallback.
 MDX article prose
   HoverImageLink or HoverImageParagraph
     HoverImageCard
-      AnchoredRoot preset="inline-hover-preview"
-        AnchoredTrigger as="a"
+      AnchoredRoot preset="inline-hover-preview" disclosure="hover-focus-tap"
+        AnchoredTrigger as="a" data-disclosure-trigger
         AnchoredPanel
-          img
+          a
+            img
 ```
 
 `HoverImageCard` owns the preview media, size variant, and anchored
@@ -48,25 +49,33 @@ box should match the image box.
 
 ## Layering And Scrolling
 
-Uses the shared `inline-hover-preview` preset. The panel may sit above or below
-the trigger depending on viewport space. It must not hydrate React/Radix or use
-component-local placement math.
+Uses the shared `inline-hover-preview` preset and anchored disclosure behavior.
+The panel may sit above or below the trigger depending on viewport space. It
+must not hydrate React/Radix or use component-local placement math.
 
 ## Interaction States
 
-Support default, hover, focus-within, expanded, narrow viewport, left-edge,
-right-edge, bottom-edge, light, and dark states.
+Support default, fine-pointer hover, keyboard focus, touch tap, outside
+dismiss, Escape close, expanded, narrow viewport, left-edge, right-edge,
+bottom-edge, light, and dark states.
 
 ## Accessibility Semantics
 
-The trigger is a real link to the image. The preview image uses the supplied
-alt text, or empty alt when the preview is decorative relative to the link
-label. Focus must reveal the same preview available on hover.
+The trigger is a real link to the image. Mouse click and no-JavaScript behavior
+open that image normally. Touch tap opens the preview because touch has no
+reliable hover equivalent. The preview image is also a link to the full image
+so touch users still have a direct path to the destination.
+
+The preview image uses the supplied alt text, or empty alt when the preview is
+decorative relative to the link label. Focus must reveal the same preview
+available on hover.
 
 ## Testable Invariants
 
 - Renders `data-anchor-preset="inline-hover-preview"`.
-- Renders a real link whose `href` is `image.src`.
+- Renders a real trigger link whose `href` is `image.src`.
+- Renders shared disclosure hooks for touch and keyboard access.
+- Renders the preview image inside a second full-image link for touch users.
 - Renders no React hydration directive and no Radix/shadcn hover-card markup.
 - Keeps the trigger inline in prose and preserves the exact label text.
 - Renders as image-only media, with no popover background or padding.

@@ -4,12 +4,14 @@ import LinkButton from "../ui/LinkButton.astro";
 
 interface Props extends Omit<HTMLAttributes<"a">, "href"> {
   class?: string;
+  compactLabel?: string;
   href?: string;
   label?: string;
 }
 
 const {
   class: className,
+  compactLabel,
   href = "https://patreon.com/thephilosophersmeme",
   label = "Support Us",
   ...attrs
@@ -23,5 +25,18 @@ const {
   class:list={[className]}
   data-support-link
 >
-  {label}
+  {
+    compactLabel === undefined ? (
+      label
+    ) : (
+      <>
+        <span data-support-label-full class="max-[22.5625rem]:hidden">
+          {label}
+        </span>
+        <span data-support-label-compact class="hidden max-[22.5625rem]:inline">
+          {compactLabel}
+        </span>
+      </>
+    )
+  }
 </LinkButton>

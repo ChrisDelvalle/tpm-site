@@ -7,6 +7,11 @@ interface UiCatalogExample {
 
 export const uiCatalogExamples = [
   {
+    componentPath: "src/components/ui/ActionCluster.astro",
+    description: "One-line action grouping primitive with alignment variants.",
+    title: "ActionCluster",
+  },
+  {
     componentPath: "src/components/ui/AnchoredPanel.astro",
     description:
       "Fixed floating surface that consumes shared anchor CSS variables.",

@@ -66,10 +66,11 @@ fragile row.
 
 ## Layering And Scrolling
 
-Desktop category previews currently use CSS hover/focus disclosure through
-`CategoryDropdown`. Avoid a hydrated menu library unless tests prove semantic
-links plus CSS disclosure cannot satisfy accessibility and browser
-requirements.
+Desktop category previews use `CategoryDropdown` with the shared anchored
+disclosure runtime. Fine-pointer hover is an enhancement; focus, touch tap,
+outside dismiss, and Escape close use the shared primitive. Avoid a hydrated
+menu library unless tests prove semantic links plus native disclosure cannot
+satisfy accessibility and browser requirements.
 
 Preview surfaces must layer above normal content and below any truly modal
 surface. They must not hide under the sticky header or create horizontal

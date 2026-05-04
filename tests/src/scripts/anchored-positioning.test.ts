@@ -183,6 +183,47 @@ describe("anchored positioning browser script", () => {
     expect(observer.disconnectCount).toBe(1);
     expect(panel.style.getPropertyValue("--anchor-x")).toBe("");
   });
+
+  test("positions disclosure-open roots without treating restored focus as open", () => {
+    const window = browserWindow();
+    const document = window.document;
+
+    document.body.innerHTML = `
+      <header data-site-header>Header</header>
+      <div data-anchor-root data-anchor-preset="header-dropdown" data-disclosure-root>
+        <a data-anchor-trigger href="/categories/culture/">Culture</a>
+        <button data-disclosure-trigger aria-expanded="false">Toggle</button>
+        <div data-anchor-panel>Panel</div>
+      </div>
+    `;
+
+    const header = requiredElement(window, "[data-site-header]");
+    const root = requiredElement(window, "[data-anchor-root]");
+    const trigger = requiredElement(window, "[data-anchor-trigger]");
+    const panel = requiredElement(window, "[data-anchor-panel]");
+    const button = requiredElement(window, "[data-disclosure-trigger]");
+
+    Reflect.set(window, "innerWidth", 800);
+    setRect(header, { height: 96, width: 800, x: 0, y: 0 });
+    setRect(trigger, { height: 32, width: 80, x: 120, y: 64 });
+    setRect(panel, { height: 240, width: 320, x: 0, y: 0 });
+    installImmediateAnimationFrame(window);
+
+    installAnchoredPositioning(runtimeFor(window));
+
+    button.focus();
+    dispatchWindowEvent(button, window, "focusin");
+    expect(panel.style.getPropertyValue("--anchor-x")).toBe("");
+
+    root.setAttribute("data-disclosure-open", "true");
+    dispatchWindowEvent(root, window, "anchored-disclosure-change");
+    expect(panel.style.getPropertyValue("--anchor-x")).toBe("120px");
+    expect(panel.style.getPropertyValue("--anchor-y")).toBe("96px");
+
+    root.removeAttribute("data-disclosure-open");
+    dispatchWindowEvent(root, window, "anchored-disclosure-change");
+    expect(panel.style.getPropertyValue("--anchor-x")).toBe("120px");
+  });
 });
 
 function browserWindow(): Window {

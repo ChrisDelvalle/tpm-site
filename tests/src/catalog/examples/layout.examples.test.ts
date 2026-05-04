@@ -7,6 +7,7 @@ describe("layout catalog examples", () => {
     expect(
       layoutCatalogExamples.map((example) => example.componentPath),
     ).toEqual([
+      "src/components/layout/PriorityInlineRow.astro",
       "src/components/layout/SiteHeader.astro",
       "src/components/layout/MainFrame.astro",
       "src/components/layout/ReadingBody.astro",

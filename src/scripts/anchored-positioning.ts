@@ -11,6 +11,9 @@ const triggerSelector = "[data-anchor-trigger]";
 const panelSelector = "[data-anchor-panel]";
 const siteHeaderSelector = "[data-site-header]";
 const initializedAttribute = "data-anchor-initialized";
+const disclosureChangeEventName = "anchored-disclosure-change";
+const disclosureOpenAttribute = "data-disclosure-open";
+const disclosureRootAttribute = "data-disclosure-root";
 const rootSelectorClosest = rootSelector;
 const resizeObservers = new Map<HTMLElement, ResizeObserver>();
 
@@ -47,6 +50,9 @@ export function installAnchoredPositioning(runtime = browserRuntime()): void {
     scheduleRootFromEvent(runtime, event);
   });
   runtime.document.addEventListener("toggle", (event) => {
+    scheduleRootFromEvent(runtime, event);
+  });
+  runtime.document.addEventListener(disclosureChangeEventName, (event) => {
     scheduleRootFromEvent(runtime, event);
   });
   runtime.window.addEventListener("resize", () => scheduleOpenRoots(runtime), {
@@ -204,9 +210,10 @@ function isRootOpen(
     root.contains(activeElement);
 
   return (
+    root.getAttribute(disclosureOpenAttribute) === "true" ||
     root.matches(":hover") ||
     root.hasAttribute("open") ||
-    focusedInside ||
+    (!root.hasAttribute(disclosureRootAttribute) && focusedInside) ||
     panel?.matches(":popover-open") === true
   );
 }

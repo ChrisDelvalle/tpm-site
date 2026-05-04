@@ -327,6 +327,9 @@ test.describe("component layout invariants", () => {
       });
       const support = header.locator("[data-support-link]");
       const primaryRow = page.locator("[data-site-header-primary-row]");
+      const priorityCenter = primaryRow.locator(
+        "[data-priority-inline-center]",
+      );
       const categoryRow = page.locator("[data-site-header-category-row]");
       const categoryList = page.locator("[data-discovery-menu-list]");
       const categoryTriggers = page.locator(
@@ -337,6 +340,10 @@ test.describe("component layout invariants", () => {
       const primaryRowBox = await visibleBoundingBox(
         primaryRow,
         "primary header row",
+      );
+      const priorityCenterBox = await visibleBoundingBox(
+        priorityCenter,
+        "priority row center slot",
       );
       const rowBox = await visibleBoundingBox(categoryRow, "category row");
       const listBox = await visibleBoundingBox(categoryList, "category list");
@@ -374,9 +381,21 @@ test.describe("component layout invariants", () => {
       );
 
       expect(triggerRows.length).toBeGreaterThan(0);
+      await expect(primaryRow).toHaveAttribute("data-priority-inline-row", "");
+      await expect(
+        primaryRow.locator("[data-priority-inline-start]"),
+      ).toHaveCount(1);
+      await expect(priorityCenter).toHaveCount(1);
+      await expect(
+        primaryRow.locator("[data-priority-inline-end]"),
+      ).toHaveCount(1);
       await expect(brandLabel).toHaveText("The Philosopher's Meme");
       expectApproximatelyEqual(
         brandBox.x + brandBox.width / 2,
+        headerBox.x + headerBox.width / 2,
+      );
+      expectApproximatelyEqual(
+        priorityCenterBox.x + priorityCenterBox.width / 2,
         headerBox.x + headerBox.width / 2,
       );
       expect(brandMetrics.scrollWidth).toBeLessThanOrEqual(
@@ -435,8 +454,24 @@ test.describe("component layout invariants", () => {
     page,
   }) => {
     for (const viewport of [
-      { height: 568, width: 320 },
-      { height: 844, width: 390 },
+      {
+        compactSupportVisible: true,
+        fullSupportVisible: false,
+        height: 568,
+        width: 320,
+      },
+      {
+        compactSupportVisible: true,
+        fullSupportVisible: false,
+        height: 740,
+        width: 360,
+      },
+      {
+        compactSupportVisible: false,
+        fullSupportVisible: true,
+        height: 844,
+        width: 390,
+      },
     ] as const) {
       await page.setViewportSize(viewport);
       await page.goto("/");
@@ -446,22 +481,74 @@ test.describe("component layout invariants", () => {
       const brand = page.locator("[data-brand-link]");
       const brandLabel = brand.locator("[data-brand-label]");
       const support = header.locator("[data-support-link]");
+      const fullSupportLabel = support.locator("[data-support-label-full]");
+      const compactSupportLabel = support.locator(
+        "[data-support-label-compact]",
+      );
+      const primaryRow = page.locator("[data-site-header-primary-row]");
+      const priorityCenter = primaryRow.locator(
+        "[data-priority-inline-center]",
+      );
       const headerBox = await visibleBoundingBox(header, "mobile site header");
       const brandBox = await visibleBoundingBox(brand, "mobile brand link");
+      const priorityCenterBox = await visibleBoundingBox(
+        priorityCenter,
+        "mobile priority row center slot",
+      );
       const brandLabelMetrics = await brandLabel.evaluate((element) => ({
         clientWidth: element.clientWidth,
         fontSize: Number.parseFloat(window.getComputedStyle(element).fontSize),
         scrollWidth: element.scrollWidth,
       }));
+      const supportLabelState = await support.evaluate((element) => {
+        const fullLabel = element.querySelector("[data-support-label-full]");
+        const compactLabel = element.querySelector(
+          "[data-support-label-compact]",
+        );
+
+        if (fullLabel === null || compactLabel === null) {
+          throw new Error(
+            "Expected header support link to render both labels.",
+          );
+        }
+
+        return {
+          compactText: compactLabel.textContent.trim(),
+          compactVisible:
+            window.getComputedStyle(compactLabel).display !== "none",
+          fullText: fullLabel.textContent.trim(),
+          fullVisible: window.getComputedStyle(fullLabel).display !== "none",
+        };
+      });
 
       expect(headerBox.height).toBeLessThanOrEqual(72);
       await expect(page.locator("[data-discovery-menu]")).toBeHidden();
+      await expect(primaryRow).toHaveAttribute("data-priority-inline-row", "");
+      await expect(
+        primaryRow.locator("[data-priority-inline-start]"),
+      ).toHaveCount(1);
+      await expect(priorityCenter).toHaveCount(1);
+      await expect(
+        primaryRow.locator("[data-priority-inline-end]"),
+      ).toHaveCount(1);
       await expect(menuButton).toBeVisible();
       await expect(brand).toBeVisible();
       await expect(brandLabel).toHaveText("The Philosopher's Meme");
       await expect(support).toBeVisible();
+      await expect(fullSupportLabel).toHaveText("Support Us");
+      await expect(compactSupportLabel).toHaveText("Patreon");
+      expect(supportLabelState).toStrictEqual({
+        compactText: "Patreon",
+        compactVisible: viewport.compactSupportVisible,
+        fullText: "Support Us",
+        fullVisible: viewport.fullSupportVisible,
+      });
       expectApproximatelyEqual(
         brandBox.x + brandBox.width / 2,
+        headerBox.x + headerBox.width / 2,
+      );
+      expectApproximatelyEqual(
+        priorityCenterBox.x + priorityCenterBox.width / 2,
         headerBox.x + headerBox.width / 2,
       );
       expect(brandLabelMetrics.scrollWidth).toBeLessThanOrEqual(
@@ -493,6 +580,90 @@ test.describe("component layout invariants", () => {
       });
       await expectNoHorizontalOverflow(page);
     }
+  });
+
+  test("header interactions do not move the centered brand", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 1024, width: 768 });
+    await page.goto("/");
+
+    const header = page.locator("[data-site-header]");
+    const brand = page.locator("[data-brand-link]");
+    const searchTrigger = page.locator("[data-search-reveal-trigger]");
+    const categoryTrigger = page
+      .locator("[data-category-dropdown] [data-anchor-trigger]")
+      .first();
+    const themeToggle = header.locator(".theme-toggle").first();
+
+    await expect(brand).toBeVisible();
+    await expect(searchTrigger).toBeVisible();
+    await expect(categoryTrigger).toBeVisible();
+    await expect(themeToggle).toBeVisible();
+
+    async function headerCenter(): Promise<number> {
+      const box = await visibleBoundingBox(header, "site header");
+
+      return box.x + box.width / 2;
+    }
+
+    async function brandCenter(): Promise<number> {
+      const box = await visibleBoundingBox(brand, "brand link");
+
+      return box.x + box.width / 2;
+    }
+
+    const initialHeaderCenter = await headerCenter();
+    const initialBrandCenter = await brandCenter();
+
+    expectApproximatelyEqual(initialBrandCenter, initialHeaderCenter);
+
+    await searchTrigger.click();
+    expectApproximatelyEqual(await brandCenter(), initialHeaderCenter);
+
+    await categoryTrigger.hover();
+    expectApproximatelyEqual(await brandCenter(), initialHeaderCenter);
+
+    await themeToggle.click();
+    expectApproximatelyEqual(await brandCenter(), initialHeaderCenter);
+
+    await page.setViewportSize({ height: 844, width: 390 });
+    await page.goto("/");
+
+    const mobileHeader = page.locator("[data-site-header]");
+    const mobileBrand = page.locator("[data-brand-link]");
+    const menuButton = page.getByLabel("Open navigation menu");
+
+    await expect(mobileBrand).toBeVisible();
+    await expect(menuButton).toBeVisible();
+
+    const mobileHeaderBox = await visibleBoundingBox(
+      mobileHeader,
+      "mobile site header",
+    );
+    const mobileBrandBox = await visibleBoundingBox(
+      mobileBrand,
+      "mobile brand link",
+    );
+    const mobileHeaderCenter = mobileHeaderBox.x + mobileHeaderBox.width / 2;
+
+    expectApproximatelyEqual(
+      mobileBrandBox.x + mobileBrandBox.width / 2,
+      mobileHeaderCenter,
+    );
+
+    await menuButton.click();
+
+    const openMobileBrandBox = await visibleBoundingBox(
+      mobileBrand,
+      "open mobile brand link",
+    );
+
+    expectApproximatelyEqual(
+      openMobileBrandBox.x + openMobileBrandBox.width / 2,
+      mobileHeaderCenter,
+    );
+    await expectNoHorizontalOverflow(page);
   });
 
   test("category discovery panels stay viewport-constrained at tablet and desktop widths", async ({

@@ -7,6 +7,12 @@ interface LayoutCatalogExample {
 
 export const layoutCatalogExamples = [
   {
+    componentPath: "src/components/layout/PriorityInlineRow.astro",
+    description:
+      "Start, centered, and end slot primitive for centered identity rows.",
+    title: "PriorityInlineRow",
+  },
+  {
     componentPath: "src/components/layout/SiteHeader.astro",
     description: "Sticky site header composed from navigation primitives.",
     title: "SiteHeader",

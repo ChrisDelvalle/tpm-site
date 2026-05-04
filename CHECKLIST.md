@@ -1593,3 +1593,122 @@ Scope rules:
 - [x] Update the component documentation so future header work treats brand
       centering as a structural contract, not a breakpoint-specific visual
       adjustment.
+
+## Milestone 53: Header Priority Layout Design
+
+- [x] Design a no-JavaScript priority inline layout primitive for
+      start/center/end header anatomy.
+- [x] Specify how side slots align outward, compact before collision, and
+      preserve a small minimum gap before the centered identity shrinks.
+- [x] Specify how the centered brand remains geometrically centered and as
+      large as the row height and available inline space allow.
+- [x] Specify reusable component boundaries, slot contracts, responsive rules,
+      catalog examples, and e2e/unit invariants for the header redesign.
+- [x] Critically review the design for ambiguity, blocker risks, brittle CSS,
+      accessibility regressions, and unnecessary JavaScript before marking it
+      ready for implementation.
+
+## Milestone 54: Header Priority Layout Primitives
+
+- [x] Add `src/components/layout/PriorityInlineRow.astro` as a layout-only
+      start/center/end primitive with named slots and pass-through attributes.
+- [x] Add `src/components/ui/ActionCluster.astro` as a layout-only one-line
+      action grouping primitive with explicit alignment and gap variants.
+- [x] Add render tests proving the primitives expose stable data hooks, named
+      slot output, alignment variants, nowrap behavior, and no product-specific
+      semantics.
+- [x] Add catalog metadata and catalog examples covering balanced rows,
+      constrained side content, mobile header anatomy, and action clusters.
+
+## Milestone 55: Site Header Priority Row Refactor
+
+- [x] Refactor `SiteHeader.astro` to compose the primary row with
+      `PriorityInlineRow` and `ActionCluster` instead of bespoke grid/flex
+      wrappers.
+- [x] Preserve the current header product behavior: desktop search/theme left,
+      centered full brand, primary/support right, centered category row below,
+      and mobile menu/full brand/support in one row.
+- [x] Preserve existing data attributes and accessibility semantics used by
+      anchored surfaces, tests, skip navigation, theme, and search behavior.
+- [x] Update header/component docs if implementation clarifies any primitive or
+      SiteHeader contract detail.
+
+## Milestone 56: Header Priority Layout Verification
+
+- [x] Strengthen render and Playwright checks so header tests assert the
+      primitive-backed row relationship, not incidental class names.
+- [x] Verify the header at 320px, 390px, 768px, constrained laptop, desktop,
+      and wide desktop widths for visible full brand, no overlap, no horizontal
+      overflow, stable row height, and correct desktop/mobile mode exposure.
+- [x] Verify search reveal, category dropdowns, mobile menu, and theme changes
+      do not move the centered brand or violate the anchored-surface contracts.
+- [x] Run focused quality checks for the changed components, catalog, docs,
+      unit tests, and e2e invariants before marking the milestone complete.
+
+## Milestone 57: Anchored Disclosure Interaction Design
+
+- [x] Design a shared disclosure behavior primitive for anchored surfaces that
+      need hover, focus, touch tap, outside-dismiss, and Escape behavior.
+- [x] Specify the separation between anchored positioning and disclosure state
+      so placement math stays reusable and product components only declare
+      relationships.
+- [x] Specify touch-screen behavior for category previews and article
+      hover-image previews without making hover the required interaction.
+- [x] Specify accessibility, no-JavaScript fallback, responsive behavior,
+      input-modality rules, testing requirements, and failure modes.
+- [x] Critically review the design for ambiguity, brittle browser assumptions,
+      accessibility regressions, unnecessary JavaScript, and implementation
+      blockers before marking it ready for development.
+
+## Milestone 58: Anchored Disclosure Primitive
+
+- [x] Add the shared disclosure runtime under `src/scripts/` with event
+      delegation for tap/click toggle, focus open/close, outside dismiss,
+      sibling dismiss, Escape close, and disclosure state-change events.
+- [x] Extend the anchored-positioning runtime so `data-disclosure-open="true"`
+      is treated as an open anchored surface and disclosure state changes
+      schedule placement.
+- [x] Extend `AnchoredRoot` to opt into disclosure behavior through a narrow
+      typed prop while preserving the existing anchored-positioning contract.
+- [x] Add unit/render tests covering disclosure state, ARIA synchronization,
+      outside dismiss, focus behavior, Escape close, and primitive markup.
+- [x] Update primitive documentation to describe the disclosure contract and
+      its relationship to anchored positioning.
+
+## Milestone 59: Category Dropdown Disclosure Migration
+
+- [x] Refactor `CategoryDropdown` so the category title remains a normal link
+      and an adjacent chevron button owns explicit tap/click disclosure.
+- [x] Replace ungated hover/focus visibility classes with disclosure data-state
+      classes plus fine-pointer hover enhancement.
+- [x] Preserve current anchored placement, current-page state, preview content,
+      `View all <category>`, and no-JavaScript category navigation.
+- [x] Add render and Playwright coverage for touch tap open, outside tap close,
+      category-link navigation, keyboard focus, Escape close, mouse hover, and
+      existing placement invariants.
+- [x] Update category/dropdown/navigation design docs if implementation
+      clarifies the final interaction contract.
+
+## Milestone 60: Hover Image Disclosure Migration
+
+- [x] Refactor `HoverImageCard` so touch tap opens the preview while mouse
+      click keeps the normal full-image link behavior.
+- [x] Keep the trigger inline, preserve no-JavaScript image-link fallback, and
+      make the preview image itself link to the full image for touch users.
+- [x] Replace ungated hover/focus visibility classes with disclosure data-state
+      classes plus fine-pointer hover enhancement.
+- [x] Add render and Playwright coverage for touch tap open, outside tap close,
+      mouse hover, keyboard focus, viewport containment, image-only panel
+      styling, and full-image fallback semantics.
+- [x] Update hover-image component docs with the final mouse/touch/keyboard
+      interaction contract.
+
+## Milestone 61: Anchored Disclosure Verification
+
+- [x] Run focused checks for disclosure runtime, anchored positioning,
+      `AnchoredRoot`, `CategoryDropdown`, `HoverImageCard`, and their e2e
+      suites.
+- [x] Run full quality gates after the focused checks pass.
+- [x] Review generated output for avoidable client-script regressions,
+      horizontal overflow, duplicated classes, inaccessible controls, and
+      stale documentation references.

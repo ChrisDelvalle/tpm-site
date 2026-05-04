@@ -16,4 +16,15 @@ describe("PrimaryNav", () => {
     expect(view).not.toContain('href="/categories/"');
     expect(view).toContain('aria-current="page"');
   });
+
+  test("supports explicit spacing variants for parent-owned header rhythm", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(PrimaryNav, {
+      props: {
+        gap: "md",
+      },
+    });
+
+    expect(view).toContain("gap-x-3");
+  });
 });

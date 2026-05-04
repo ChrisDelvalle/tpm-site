@@ -12,6 +12,7 @@ or browsing task.
 
 - `href?: string`
 - `label?: string`
+- `compactLabel?: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -29,7 +30,11 @@ The component must remain usable in constrained containers, preserve touch and
 keyboard targets, and avoid horizontal overflow. In the desktop header, it lives
 in the right utility cluster. In the mobile header, it remains visible to the
 right of the centered brand and may use compact mobile spacing, but it must not
-overlap the brand or force horizontal overflow.
+overlap the brand or force horizontal overflow. Header contexts may pass
+`compactLabel` to swap only the visible label at very narrow phone widths
+(`360px` and below in the current header, implemented as `max-[22.5625rem]`
+because Tailwind max variants are exclusive at the named threshold) without
+changing the link destination or the global support CTA wording.
 
 ## Layering And Scrolling
 

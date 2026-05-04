@@ -11,6 +11,8 @@ does not own open state, route data, visual styling, or placement math.
 ## Public Contract
 
 - Requires a typed `preset` matching `src/lib/anchored-positioning.ts`.
+- Accepts `disclosure="hover-focus-tap"` when the root should opt into the
+  shared anchored disclosure runtime.
 - Accepts native `div` attributes and forwards them to the root element.
 - Renders the default slot, which should contain exactly one logical trigger
   and one logical panel.
@@ -19,7 +21,9 @@ does not own open state, route data, visual styling, or placement math.
 
 The root wraps `AnchoredTrigger` and `AnchoredPanel`. Parent components choose
 the preset and interaction semantics; the shared browser adapter measures the
-relationship and writes CSS variables to the panel.
+relationship and writes CSS variables to the panel. When `disclosure` is set,
+the root also emits `data-disclosure-root` and loads the shared disclosure
+runtime. Disclosure state is separate from placement state.
 
 ## Layout And Responsiveness
 
@@ -34,8 +38,9 @@ panel and the shared adapter.
 
 ## Interaction States
 
-The root should work with hover, focus-within, `details[open]`, and native
-popover-open descendants. It must not make hover-only content inaccessible.
+The root should work with hover, focus, `details[open]`, native popover-open
+descendants, and disclosure-owned `data-disclosure-open` state. It must not
+make hover-only content inaccessible.
 
 ## Accessibility Semantics
 
@@ -55,7 +60,10 @@ The root has no color styling. Child components should use semantic tokens.
 
 - Emits `data-anchor-root`.
 - Emits the typed `data-anchor-preset` value.
+- Emits `data-disclosure-root` only when opted into disclosure behavior.
 - Loads the shared processed anchoring script once through Astro bundling.
+- Loads the shared processed disclosure script only when disclosure behavior is
+  requested.
 - Does not force centered or viewport-specific positioning.
 
 ## Follow-Up Notes

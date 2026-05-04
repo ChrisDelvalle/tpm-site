@@ -33,6 +33,7 @@ function aspectRatioOrFallback(image: ImageMetadata): number {
 ---
 
 <AnchoredRoot
+  disclosure="hover-focus-tap"
   preset="inline-hover-preview"
   class="group/hover-image inline"
   data-hover-image-card
@@ -42,23 +43,32 @@ function aspectRatioOrFallback(image: ImageMetadata): number {
     as="a"
     href={image.src}
     data-hover-image-trigger
+    data-disclosure-trigger
+    aria-expanded="false"
     aria-label={`Open image preview: ${label}`}
   >
     {label}
   </AnchoredTrigger>
   <AnchoredPanel
     data-hover-image-panel
-    class="ring-border/45 z-50 hidden overflow-hidden rounded-xs shadow-lg ring-1 group-focus-within/hover-image:block group-hover/hover-image:block before:fixed before:top-[calc(var(--anchor-y,0rem)-0.5rem)] before:left-[var(--anchor-x,0rem)] before:h-2 before:w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] before:content-['']"
+    data-disclosure-panel
+    class="ring-border/45 z-50 hidden overflow-hidden rounded-xs shadow-lg ring-1 group-data-[disclosure-open=true]/hover-image:block before:fixed before:top-[calc(var(--anchor-y,0rem)-0.5rem)] before:left-[var(--anchor-x,0rem)] before:h-2 before:w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] before:content-[''] pointer-fine:group-hover/hover-image:block"
     style={imageStyle}
   >
-    <img
-      src={image.src}
-      alt={alt}
-      width={image.width}
-      height={image.height}
-      loading="lazy"
-      decoding="async"
-      class="!m-0 block h-auto max-h-[min(var(--hover-image-max-height),var(--anchor-max-height,calc(100svh-2rem)))] w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] max-w-none object-contain"
-    />
+    <a
+      href={image.src}
+      aria-label={`Open full image: ${label}`}
+      class="focus-visible:outline-ring block focus-visible:outline-2 focus-visible:outline-offset-2"
+    >
+      <img
+        src={image.src}
+        alt={alt}
+        width={image.width}
+        height={image.height}
+        loading="lazy"
+        decoding="async"
+        class="!m-0 block h-auto max-h-[min(var(--hover-image-max-height),var(--anchor-max-height,calc(100svh-2rem)))] w-[min(var(--hover-image-width),var(--anchor-max-width,calc(100vw-2rem)))] max-w-none object-contain"
+      />
+    </a>
   </AnchoredPanel>
 </AnchoredRoot>

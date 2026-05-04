@@ -11,6 +11,7 @@ support, and RSS belong to other components or secondary surfaces.
 ## Public Contract
 
 - `currentPath?: string`
+- `gap?: "sm" | "md" | "lg"`
 - `items?: readonly PrimaryNavItem[]`
 - `label?: string`
 
@@ -29,7 +30,8 @@ list rather than asking `PrimaryNav` to decide information architecture.
 The component must remain usable in constrained containers, preserve touch and
 keyboard targets, and avoid horizontal overflow. It should wrap or collapse
 only through parent-owned navigation mode changes, not through local
-breakpoint patches.
+breakpoint patches. Parent compositions can pass `gap` when the nav needs to
+share rhythm with adjacent controls such as a header CTA.
 
 ## Layering And Scrolling
 

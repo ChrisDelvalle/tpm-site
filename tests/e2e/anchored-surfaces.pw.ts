@@ -8,6 +8,8 @@ import {
   visibleBoundingBox,
 } from "./helpers/layout";
 
+const previewBaseUrl = "http://127.0.0.1:4322";
+
 /**
  * Opens the visible category dropdown at an index.
  *
@@ -27,6 +29,26 @@ async function openCategoryDropdown(
   await expect(panel).toBeVisible();
 
   return { panel, trigger };
+}
+
+/**
+ * Reads a required attribute from a locator.
+ *
+ * @param locator Element locator.
+ * @param name Attribute name.
+ * @returns Attribute value.
+ */
+async function requiredAttribute(
+  locator: Locator,
+  name: string,
+): Promise<string> {
+  const value = await locator.getAttribute(name);
+
+  if (value === null) {
+    throw new Error(`Expected ${name} attribute to be present.`);
+  }
+
+  return value;
 }
 
 test.describe("anchored header surfaces", () => {
@@ -125,6 +147,64 @@ test.describe("anchored header surfaces", () => {
     await page.mouse.move(panelBox.x + 16, panelBox.y + 8, { steps: 12 });
 
     await expect(panel).toBeVisible();
+  });
+
+  test("category disclosure button opens with keyboard focus and closes with Escape", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await page.goto("/");
+
+    const dropdown = page.locator("[data-category-dropdown]").first();
+    const button = dropdown.locator("[data-category-disclosure-trigger]");
+    const panel = dropdown.locator("[data-category-preview]");
+
+    await button.focus();
+    await expect(panel).toBeVisible();
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+    await expectPanelBelowHeader(page, panel);
+
+    await page.keyboard.press("Escape");
+    await expect(panel).toBeHidden();
+    await expect(button).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("touch users can open category previews without losing direct category navigation", async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({
+      baseURL: previewBaseUrl,
+      hasTouch: true,
+      viewport: { height: 768, width: 1024 },
+    });
+    const page = await context.newPage();
+
+    try {
+      await page.goto("/");
+
+      const dropdown = page.locator("[data-category-dropdown]").first();
+      const categoryLink = dropdown.locator("[data-anchor-trigger]");
+      const button = dropdown.locator("[data-category-disclosure-trigger]");
+      const panel = dropdown.locator("[data-category-preview]");
+      const categoryHref = await requiredAttribute(categoryLink, "href");
+
+      await button.tap();
+      await expect(panel).toBeVisible();
+      await expect(button).toHaveAttribute("aria-expanded", "true");
+      await expectPanelBelowHeader(page, panel);
+      await expectViewportContained(page, panel, "touch category panel");
+
+      await page.touchscreen.tap(16, 740);
+      await expect(panel).toBeHidden();
+      await expect(button).toHaveAttribute("aria-expanded", "false");
+
+      await button.tap();
+      await expect(panel).toBeVisible();
+      await categoryLink.tap();
+      await expect(page).toHaveURL(`${previewBaseUrl}${categoryHref}`);
+    } finally {
+      await context.close();
+    }
   });
 
   test("mobile menu is viewport-safe and internally scrollable on short screens", async ({

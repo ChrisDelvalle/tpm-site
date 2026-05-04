@@ -17,6 +17,10 @@ describe("SiteHeader", () => {
     });
 
     expect(view).toContain("The Philosopher&#39;s Meme");
+    expect(view).toContain("data-priority-inline-row");
+    expect(view).toContain("data-action-cluster");
+    expect(view).toContain("gap-x-3");
+    expect(view).toContain("Patreon");
     expect(view).toContain("Category discovery");
     expect(view).toContain("Open search");
     expect(view).toContain('role="search"');

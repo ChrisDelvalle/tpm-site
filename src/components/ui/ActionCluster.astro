@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for one-line groups of inline action controls. */
+interface Props extends HTMLAttributes<"div"> {
+  align?: "end" | "start";
+  gap?: "md" | "none" | "sm" | "xs";
+}
+
+const { align = "start", gap = "sm", class: className, ...attrs } = Astro.props;
+
+const alignClasses = {
+  end: "justify-end",
+  start: "justify-start",
+} as const;
+const gapClasses = {
+  md: "gap-3",
+  none: "gap-0",
+  sm: "gap-2",
+  xs: "gap-1",
+} as const;
+---
+
+<div
+  {...attrs}
+  data-action-cluster
+  class:list={[
+    "inline-flex min-w-0 flex-nowrap items-center",
+    alignClasses[align],
+    gapClasses[gap],
+    className,
+  ]}
+>
+  <slot />
+</div>

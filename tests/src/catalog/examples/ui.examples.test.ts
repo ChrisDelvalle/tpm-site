@@ -6,6 +6,7 @@ describe("UI catalog examples", () => {
   test("cover milestone-one primitives with stable component paths", () => {
     const paths = uiCatalogExamples.map((example) => example.componentPath);
 
+    expect(paths).toContain("src/components/ui/ActionCluster.astro");
     expect(paths).toContain("src/components/ui/Button.astro");
     expect(paths).toContain("src/components/ui/LinkButton.astro");
     expect(paths).toContain("src/components/media/ResponsiveIframe.astro");

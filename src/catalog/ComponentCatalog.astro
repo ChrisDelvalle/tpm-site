@@ -37,6 +37,7 @@ import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
 import SupportBlock from "../components/blocks/SupportBlock.astro";
 import MainFrame from "../components/layout/MainFrame.astro";
 import PageFrame from "../components/layout/PageFrame.astro";
+import PriorityInlineRow from "../components/layout/PriorityInlineRow.astro";
 import SiteFooter from "../components/layout/SiteFooter.astro";
 import SiteHeader from "../components/layout/SiteHeader.astro";
 import EmbedFrame from "../components/media/EmbedFrame.astro";
@@ -59,6 +60,7 @@ import PageProse from "../components/pages/PageProse.astro";
 import AnchoredPanel from "../components/ui/AnchoredPanel.astro";
 import AnchoredRoot from "../components/ui/AnchoredRoot.astro";
 import AnchoredTrigger from "../components/ui/AnchoredTrigger.astro";
+import ActionCluster from "../components/ui/ActionCluster.astro";
 import Badge from "../components/ui/Badge.astro";
 import Button from "../components/ui/Button.astro";
 import Card from "../components/ui/Card.astro";
@@ -273,6 +275,27 @@ if (primaryCatalogAuthor === undefined) {
       title="UI Primitives"
       description="Small Astro components that provide the shared visual and accessibility contracts."
     >
+      <CatalogExample
+        title="ActionCluster"
+        description="One-line cluster for action controls that must align and compact together."
+        componentPath="src/components/ui/ActionCluster.astro"
+      >
+        <ActionCluster
+          align="end"
+          gap="xs"
+          class="border-border bg-card max-w-sm rounded-sm border p-2"
+        >
+          <TextLink href="/articles/">Articles</TextLink>
+          <TextLink href="/about/" tone="neutral">About</TextLink>
+          <LinkButton
+            href="https://patreon.com/thephilosophersmeme"
+            class="min-h-8 px-3 py-1.5 text-sm"
+          >
+            Support Us
+          </LinkButton>
+        </ActionCluster>
+      </CatalogExample>
+
       <CatalogExample
         title="Button"
         description="Native actions with variant, size, and tone props."
@@ -1171,6 +1194,33 @@ if (primaryCatalogAuthor === undefined) {
       title="Layout Components"
       description="Page-shell components that compose navigation, sidebars, content, and footer surfaces."
     >
+      <CatalogExample
+        title="PriorityInlineRow"
+        description="Start, centered, and end slots where the center remains geometrically centered."
+        componentPath="src/components/layout/PriorityInlineRow.astro"
+      >
+        <PriorityInlineRow
+          class="border-border bg-card rounded-sm border p-3"
+          aria-label="Catalog priority row"
+        >
+          <ActionCluster slot="start" gap="xs">
+            <IconButton label="Open catalog menu">
+              <Search size={18} aria-hidden="true" />
+            </IconButton>
+          </ActionCluster>
+          <BrandLink slot="center" class="max-w-full text-sm sm:text-base" />
+          <ActionCluster slot="end" align="end" gap="xs">
+            <TextLink href="/articles/">Articles</TextLink>
+            <LinkButton
+              href="https://patreon.com/thephilosophersmeme"
+              class="min-h-8 px-3 py-1.5 text-sm"
+            >
+              Support Us
+            </LinkButton>
+          </ActionCluster>
+        </PriorityInlineRow>
+      </CatalogExample>
+
       <CatalogExample
         title="SiteHeader"
         description="Responsive header composed from navigation primitives."

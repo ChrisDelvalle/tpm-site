@@ -40,4 +40,21 @@ describe("AnchoredRoot", () => {
     expect(view).toContain('data-anchor-preset="mobile-shell-panel"');
     expect(view).toContain("<summary>Menu</summary>");
   });
+
+  test("can opt into shared disclosure behavior", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(AnchoredRoot, {
+      props: {
+        disclosure: "hover-focus-tap",
+        preset: "inline-hover-preview",
+      },
+      slots: {
+        default: "Disclosure content",
+      },
+    });
+
+    expect(view).toContain("data-disclosure-root");
+    expect(view).toContain('data-disclosure-mode="hover-focus-tap"');
+    expect(view.match(/type="module"/gu)).toHaveLength(2);
+  });
 });

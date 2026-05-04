@@ -19,12 +19,25 @@ describe("HoverImageCard", () => {
     });
 
     expect(view).toContain('data-anchor-preset="inline-hover-preview"');
+    expect(view).toContain("data-disclosure-root");
+    expect(view).toContain('data-disclosure-mode="hover-focus-tap"');
+    expect(view).toContain("data-disclosure-trigger");
+    expect(view).toContain("data-disclosure-panel");
+    expect(view).toContain('aria-expanded="false"');
     expect(view).toContain("data-hover-image-trigger");
     expect(view).toContain("data-hover-image-panel");
-    expect(view).toContain('href="/src/assets/articles/example/image.png"');
+    expect(
+      view.match(/href="\/src\/assets\/articles\/example\/image\.png"/gu),
+    ).toHaveLength(2);
+    expect(view).toContain('aria-label="Open full image: inline preview"');
     expect(view).toContain('alt="Screenshot of a text message conversation"');
     expect(view).toContain("shadow-lg");
     expect(view).toContain("ring-1");
+    expect(view).toContain("pointer-fine:group-hover/hover-image:block");
+    expect(view).toContain(
+      "group-data-[disclosure-open=true]/hover-image:block",
+    );
+    expect(view).not.toContain("group-focus-within");
     expect(view).not.toContain("bg-popover");
     expect(view).not.toContain("p-1");
     expect(view).not.toContain("client:idle");

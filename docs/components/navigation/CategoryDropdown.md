@@ -35,14 +35,15 @@ SiteHeader or DiscoveryMenu
 The parent owns category ordering. `CategoryDropdown` owns the category link,
 chevron affordance, preview surface, hover/focus disclosure behavior, and
 current-page state. `CategoryPreviewList` owns preview list semantics. The
-dropdown uses the `header-dropdown` anchored-positioning preset.
+dropdown uses the `header-dropdown` anchored-positioning preset and the shared
+anchored disclosure behavior.
 
 ## Layout And Responsiveness
 
 Use a compact inline header item that visually reads as a dropdown, including a
 chevron or equivalent down marker. The category text is a normal link to the
-category page. If a separate disclosure trigger is needed, keep it small and
-adjacent to the link.
+category page. The adjacent chevron button owns explicit tap/click disclosure
+so touch users do not need a first-tap-preview, second-tap-navigate rule.
 
 The trigger keeps the full category label while the desktop category row is
 visible. Do not truncate or ellipsize category names. Constrained-width
@@ -62,11 +63,12 @@ category discovery.
 
 ## Layering And Scrolling
 
-The implementation uses CSS `group-hover` and `group-focus-within` on top of
-the anchored primitives. Hover/focus exposes preview content and clicking the
-category text navigates. A small CSS hover bridge may keep the panel forgiving
-while the pointer moves from trigger to panel. Do not replace the category link
-with a button-only trigger.
+The implementation uses shared disclosure state on top of the anchored
+primitives. Fine-pointer hover is a CSS enhancement; focus, tap/click, outside
+dismiss, and Escape are owned by the shared disclosure runtime. Clicking the
+category text navigates. Clicking the chevron toggles the preview. A small CSS
+hover bridge may keep the panel forgiving while the pointer moves from trigger
+to panel. Do not replace the category link with a button-only trigger.
 
 The preview surface must not overlap the sticky header in a way that hides the
 trigger or content. It should not require client-side JavaScript for basic
@@ -128,6 +130,8 @@ Open and focus states must be visible in light and dark mode.
 - Clicking category text navigates to the category page.
 - Hover and keyboard focus expose the preview where the chosen implementation
   supports preview disclosure.
+- Touch users can open the preview with the chevron button and close it by
+  tapping outside.
 
 ## Follow-Up Notes
 

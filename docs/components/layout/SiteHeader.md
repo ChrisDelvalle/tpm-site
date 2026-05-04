@@ -28,15 +28,18 @@ make invalid states harder to express.
 ```text
 SiteHeader
   row 1
-    left utility cluster
-      SearchReveal
-      ThemeToggle
-    centered brand
-      BrandLink
-    right navigation cluster
-      PrimaryNav
-      SupportLink
-      MobileMenu
+    PriorityInlineRow
+      left utility cluster
+        ActionCluster
+          SearchReveal
+          ThemeToggle
+          or MobileMenu
+      centered brand
+        BrandLink
+      right navigation cluster
+        ActionCluster
+          PrimaryNav
+          SupportLink
   row 2
     centered category discovery
       DiscoveryMenu
@@ -44,9 +47,10 @@ SiteHeader
   MobileMenu
 ```
 
-It composes local navigation data helpers, `BrandLink`, `CategoryDropdown`,
-`PrimaryNav`, `SearchReveal`, `SupportLink`, `ThemeToggle`, and `MobileMenu`.
-Children should not patch header spacing or stacking from outside.
+It composes local navigation data helpers, `PriorityInlineRow`,
+`ActionCluster`, `BrandLink`, `CategoryDropdown`, `PrimaryNav`,
+`SearchReveal`, `SupportLink`, `ThemeToggle`, and `MobileMenu`. Children
+should not patch header spacing or stacking from outside.
 
 ## Layout And Responsiveness
 
@@ -80,6 +84,22 @@ left utilities and right navigation/support must compact within their side
 tracks rather than moving the brand. If a future control cannot fit beside the
 centered brand, the header composition must change intentionally instead of
 falling back to an off-center logo.
+
+`PriorityInlineRow` owns the start/center/end spatial contract. `ActionCluster`
+owns one-line grouping for each side. `SiteHeader` decides which controls
+appear in each slot at each breakpoint. Keep that separation intact: do not
+teach the row primitive about search, support, categories, or branding, and do
+not make navigation components patch the row's grid geometry.
+
+The right-side row uses one shared spacing rhythm between `Articles`, `About`,
+and `Support Us`. Keep the `PrimaryNav` gap and the surrounding `ActionCluster`
+gap in sync so the support CTA does not look detached or crowded relative to
+the text links.
+
+At `360px` and below, the header support CTA may show the short visible label
+`Patreon` to protect the centered brand. This fallback is header-specific;
+article, homepage, footer, and other support CTAs keep their normal editorial
+labels.
 
 The desktop category row is a locked-height single line with intrinsic category
 labels and the normal editorial spacing as its default. Category labels must

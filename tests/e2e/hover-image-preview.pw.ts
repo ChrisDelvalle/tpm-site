@@ -9,6 +9,7 @@ import {
 } from "./helpers/layout";
 
 const articleWithHoverImages = "/articles/social-media-freedom/";
+const previewBaseUrl = "http://127.0.0.1:4322";
 
 /**
  * Opens the hover-image preview at the provided index.
@@ -88,6 +89,26 @@ async function expectImageOnlyPanel(panel: Locator): Promise<void> {
   expectApproximatelyEqual(panelMetrics.height, imageBox.height);
 }
 
+/**
+ * Returns a required attribute value with a useful failure message.
+ *
+ * @param locator Locator expected to have the attribute.
+ * @param name Attribute name.
+ * @returns Attribute value.
+ */
+async function requiredAttribute(
+  locator: Locator,
+  name: string,
+): Promise<string> {
+  const value = await locator.getAttribute(name);
+
+  if (value === null) {
+    throw new Error(`Expected ${name} attribute to be present.`);
+  }
+
+  return value;
+}
+
 test.describe("native Astro hover-image previews", () => {
   test("stay inline, anchored, and viewport-contained on desktop", async ({
     page,
@@ -160,5 +181,61 @@ test.describe("native Astro hover-image previews", () => {
     await expect(panel).toBeVisible();
     await expect(panel).toHaveAttribute("data-anchor-placement", "top-start");
     await expectViewportContained(page, panel, "hover-image panel");
+  });
+
+  test("open on keyboard focus and close with Escape", async ({ page }) => {
+    await page.setViewportSize({ height: 720, width: 900 });
+    await page.goto(articleWithHoverImages);
+
+    const card = page.locator("[data-hover-image-card]").first();
+    const trigger = card.locator("[data-hover-image-trigger]");
+    const panel = card.locator("[data-hover-image-panel]");
+
+    await trigger.focus();
+    await expect(panel).toBeVisible();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await expectImageOnlyPanel(panel);
+    await expectViewportContained(page, panel, "hover-image panel");
+
+    await page.keyboard.press("Escape");
+    await expect(panel).toBeHidden();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(trigger).toBeFocused();
+  });
+
+  test("open on touch tap, dismiss outside, and keep a full-image path", async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({
+      baseURL: previewBaseUrl,
+      hasTouch: true,
+      viewport: { height: 720, width: 390 },
+    });
+    const page = await context.newPage();
+
+    try {
+      await page.goto(articleWithHoverImages);
+
+      const card = page.locator("[data-hover-image-card]").first();
+      const trigger = card.locator("[data-hover-image-trigger]");
+      const panel = card.locator("[data-hover-image-panel]");
+      const triggerHref = await requiredAttribute(trigger, "href");
+
+      await trigger.tap();
+      await expect(page).toHaveURL(
+        new RegExp(`${articleWithHoverImages}$`, "u"),
+      );
+      await expect(panel).toBeVisible();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(panel.locator(`a[href="${triggerHref}"]`)).toHaveCount(1);
+      await expectImageOnlyPanel(panel);
+      await expectViewportContained(page, panel, "hover-image panel");
+
+      await page.touchscreen.tap(16, 700);
+      await expect(panel).toBeHidden();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    } finally {
+      await context.close();
+    }
   });
 });
