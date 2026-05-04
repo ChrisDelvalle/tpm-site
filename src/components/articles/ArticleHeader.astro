@@ -29,7 +29,7 @@ const {
 } = Astro.props;
 ---
 
-<header class="grid gap-4">
+<header class="grid min-w-0 gap-4">
   {
     category && (
       <TextLink
@@ -42,7 +42,9 @@ const {
       </TextLink>
     )
   }
-  <h1 class="text-foreground m-0 max-w-4xl text-4xl font-bold tracking-normal">
+  <h1
+    class="text-foreground m-0 max-w-4xl min-w-0 text-4xl font-bold tracking-normal break-words"
+  >
     {title}
   </h1>
   <ArticleMeta
@@ -53,7 +55,9 @@ const {
   />
   {
     description && (
-      <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
+      <p class="text-muted-foreground max-w-3xl min-w-0 text-lg break-words">
+        {description}
+      </p>
     )
   }
 </header>

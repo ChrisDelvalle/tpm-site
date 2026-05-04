@@ -10,10 +10,13 @@ interface Props {
 const { items, pagefindIgnore = false } = Astro.props;
 ---
 
-<ol class="grid gap-4" data-pagefind-ignore={pagefindIgnore ? true : undefined}>
+<ol
+  class="grid min-w-0 gap-4"
+  data-pagefind-ignore={pagefindIgnore ? true : undefined}
+>
   {
     items.map((item) => (
-      <li>
+      <li class="min-w-0">
         <ArticleCard
           author={item.author}
           authors={item.authors}

@@ -30,9 +30,11 @@ const {
 } = Astro.props;
 ---
 
-<Card as="article" class="grid gap-3">
-  <div class="grid gap-2">
-    <h2 class="text-foreground m-0 text-xl font-semibold tracking-normal">
+<Card as="article" class="grid min-w-0 gap-3">
+  <div class="grid min-w-0 gap-2">
+    <h2
+      class="text-foreground m-0 min-w-0 text-xl font-semibold tracking-normal break-words"
+    >
       <TextLink href={href} variant="subtle" tone="neutral">{title}</TextLink>
     </h2>
     <ArticleMeta author={author} authors={authors} formattedDate={date} />
@@ -49,5 +51,11 @@ const {
       </TextLink>
     )
   }
-  {description && <p class="text-muted-foreground text-sm">{description}</p>}
+  {
+    description && (
+      <p class="text-muted-foreground min-w-0 text-sm break-words">
+        {description}
+      </p>
+    )
+  }
 </Card>

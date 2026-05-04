@@ -10,7 +10,7 @@ const { class: className, ...attrs } = Astro.props;
 <div
   {...attrs}
   class:list={[
-    "prose prose-neutral dark:prose-invert max-w-none",
+    "prose prose-neutral dark:prose-invert max-w-none min-w-0 break-words",
     "prose-headings:text-[var(--title)] prose-headings:tracking-normal",
     "prose-a:text-[var(--link)] hover:prose-a:text-[var(--accent-strong)]",
     "prose-strong:text-foreground prose-code:text-foreground",
