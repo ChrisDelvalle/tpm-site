@@ -65,11 +65,21 @@ and spacing, but they must not overlap. Preserve the normal desktop sizing and
 rhythm when width allows; compact only inside constrained mobile widths. The
 full `The Philosopher's Meme` brand is the visual default at supported mobile
 widths. Reclaim space from row gaps and adjacent controls before changing the
-brand label.
+brand label. The primary row, not the auto-sized brand item, is the query
+container for bounded mobile typography. Do not put size containment on the
+centered brand wrapper; that lets CSS Grid treat the brand's intrinsic width as
+zero and makes off-center or disappearing states representable.
 
 Tablet and wider: desktop controls return and categories appear in the second
 row. This uses the standard `md` Tailwind breakpoint so category discovery is
 not hidden too aggressively on ordinary laptop split-screen widths.
+
+The primary row uses equal flexible side tracks around the brand at every
+supported width. This makes the brand geometrically centered by construction;
+left utilities and right navigation/support must compact within their side
+tracks rather than moving the brand. If a future control cannot fit beside the
+centered brand, the header composition must change intentionally instead of
+falling back to an off-center logo.
 
 The desktop category row is a locked-height single line with intrinsic category
 labels and the normal editorial spacing as its default. Category labels must
@@ -125,6 +135,8 @@ visible, and CTAs distinguishable from neutral actions.
 ## Testable Invariants
 
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
+- keeps the brand visible, untruncated, and horizontally centered in the
+  header at mobile, tablet, desktop, and wide desktop widths.
 - keeps the mobile menu trigger, brand, and support CTA visible and
   non-overlapping at iPhone-width viewports.
 - keeps the desktop category row to one line and the header within its

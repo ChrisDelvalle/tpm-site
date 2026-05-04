@@ -1,6 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
 import {
+  expectApproximatelyEqual,
   expectCenteredInViewport,
   expectFocusVisible,
   expectHorizontallyContained,
@@ -317,14 +318,32 @@ test.describe("component layout invariants", () => {
       await page.goto("/");
 
       const header = page.locator("[data-site-header]");
+      const brand = page.locator("[data-brand-link]");
+      const brandLabel = brand.locator("[data-brand-label]");
+      const searchTrigger = page.locator("[data-search-reveal-trigger]");
+      const themeToggle = header.locator(".theme-toggle").first();
+      const primaryNav = page.getByRole("navigation", {
+        name: "Primary navigation",
+      });
+      const support = header.locator("[data-support-link]");
+      const primaryRow = page.locator("[data-site-header-primary-row]");
       const categoryRow = page.locator("[data-site-header-category-row]");
       const categoryList = page.locator("[data-discovery-menu-list]");
       const categoryTriggers = page.locator(
         "[data-category-dropdown] [data-anchor-trigger]",
       );
       const headerBox = await visibleBoundingBox(header, "site header");
+      const brandBox = await visibleBoundingBox(brand, "brand link");
+      const primaryRowBox = await visibleBoundingBox(
+        primaryRow,
+        "primary header row",
+      );
       const rowBox = await visibleBoundingBox(categoryRow, "category row");
       const listBox = await visibleBoundingBox(categoryList, "category list");
+      const brandMetrics = await brandLabel.evaluate((element) => ({
+        clientWidth: element.clientWidth,
+        scrollWidth: element.scrollWidth,
+      }));
       const triggerRows = await categoryTriggers.evaluateAll((elements) =>
         elements
           .map((element) => element.getBoundingClientRect())
@@ -355,6 +374,30 @@ test.describe("component layout invariants", () => {
       );
 
       expect(triggerRows.length).toBeGreaterThan(0);
+      await expect(brandLabel).toHaveText("The Philosopher's Meme");
+      expectApproximatelyEqual(
+        brandBox.x + brandBox.width / 2,
+        headerBox.x + headerBox.width / 2,
+      );
+      expect(brandMetrics.scrollWidth).toBeLessThanOrEqual(
+        brandMetrics.clientWidth + 1,
+      );
+      await expectNoOverlap(searchTrigger, brand, {
+        first: "search trigger",
+        second: "brand link",
+      });
+      await expectNoOverlap(themeToggle, brand, {
+        first: "theme toggle",
+        second: "brand link",
+      });
+      await expectNoOverlap(brand, primaryNav, {
+        first: "brand link",
+        second: "primary navigation",
+      });
+      await expectNoOverlap(brand, support, {
+        first: "brand link",
+        second: "support link",
+      });
       expect(categoryLabels.map((label) => label.text)).toStrictEqual(
         expectedCategoryLabels,
       );
@@ -369,6 +412,7 @@ test.describe("component layout invariants", () => {
         Math.min(...categoryLabels.map((label) => label.fontSize)),
       ).toBeGreaterThanOrEqual(viewport.minCategoryFontSize);
       expect(headerBox.height).toBeLessThanOrEqual(104);
+      expect(primaryRowBox.height).toBeLessThanOrEqual(40);
       expect(rowBox.height).toBeLessThanOrEqual(28);
       expect(listBox.height).toBeLessThanOrEqual(rowBox.height + 1);
       expect(
@@ -403,8 +447,10 @@ test.describe("component layout invariants", () => {
       const brandLabel = brand.locator("[data-brand-label]");
       const support = header.locator("[data-support-link]");
       const headerBox = await visibleBoundingBox(header, "mobile site header");
+      const brandBox = await visibleBoundingBox(brand, "mobile brand link");
       const brandLabelMetrics = await brandLabel.evaluate((element) => ({
         clientWidth: element.clientWidth,
+        fontSize: Number.parseFloat(window.getComputedStyle(element).fontSize),
         scrollWidth: element.scrollWidth,
       }));
 
@@ -414,9 +460,17 @@ test.describe("component layout invariants", () => {
       await expect(brand).toBeVisible();
       await expect(brandLabel).toHaveText("The Philosopher's Meme");
       await expect(support).toBeVisible();
+      expectApproximatelyEqual(
+        brandBox.x + brandBox.width / 2,
+        headerBox.x + headerBox.width / 2,
+      );
       expect(brandLabelMetrics.scrollWidth).toBeLessThanOrEqual(
         brandLabelMetrics.clientWidth + 1,
       );
+      expect(brandLabelMetrics.fontSize).toBeGreaterThanOrEqual(
+        viewport.width === 320 ? 12 : 13.5,
+      );
+      expect(brandLabelMetrics.fontSize).toBeLessThanOrEqual(14.5);
       await expectNoOverlap(menuButton, brand, {
         first: "mobile menu button",
         second: "brand link",

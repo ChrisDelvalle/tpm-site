@@ -1567,6 +1567,11 @@ Scope rules:
       constrained.
 - [x] Use a stable header font so local and CI font differences do not decide
       whether the mobile brand fits.
+- [x] Let the mobile brand use bounded row-container typography instead of
+      adding finicky width breakpoints or putting size containment on the
+      auto-sized brand item.
+- [x] Preserve the full brand at the `md` desktop-header boundary by using a
+      centered grid contract that cannot collapse the brand slot to zero.
 - [x] Keep `Support Us` visible in the mobile header unless measurement proves
       it cannot coexist with the full brand at supported phone widths; any
       support-label fallback must be scoped to the header only.
@@ -1575,3 +1580,16 @@ Scope rules:
       mobile.
 - [x] Verify the header at 320px and modern phone widths with Playwright
       before marking the milestone complete.
+
+## Milestone 52: Header Brand Centering Invariant Hardening
+
+- [x] Make the primary header row center the brand by construction at mobile,
+      tablet, desktop, and wide desktop widths.
+- [x] Compact adjacent utility, navigation, and support controls within their
+      side tracks instead of changing the brand's horizontal center.
+- [x] Add Playwright invariants proving the brand is visible, untruncated,
+      horizontally centered in the header, non-overlapping, and overflow-free
+      at the 768px boundary and the rest of the header viewport matrix.
+- [x] Update the component documentation so future header work treats brand
+      centering as a structural contract, not a breakpoint-specific visual
+      adjustment.

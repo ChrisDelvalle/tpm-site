@@ -27,7 +27,10 @@ in the flexible center slot between the menu trigger and support CTA, so it must
 accept contextual typography and width classes without forcing overlap.
 The visual brand should remain the full publication title wherever the header
 can reasonably support it; compact adjacent controls before replacing the
-brand text with an abbreviation.
+brand text with an abbreviation. Header contexts may pass bounded fluid
+typography classes such as `clamp(...cqw...)` from a parent query container;
+keep that behavior contextual instead of baking viewport-specific typography
+into `BrandLink`.
 Desktop-only surfaces must have an equivalent mobile or fallback navigation
 path.
 
