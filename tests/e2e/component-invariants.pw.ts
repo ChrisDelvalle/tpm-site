@@ -400,7 +400,7 @@ test.describe("component layout invariants", () => {
       const header = page.locator("[data-site-header]");
       const menuButton = page.getByLabel("Open navigation menu");
       const brand = page.locator("[data-brand-link]");
-      const brandLabel = brand.locator("[data-brand-label]:visible");
+      const brandLabel = brand.locator("[data-brand-label]");
       const support = header.locator("[data-support-link]");
       const headerBox = await visibleBoundingBox(header, "mobile site header");
       const brandLabelMetrics = await brandLabel.evaluate((element) => ({
@@ -412,6 +412,7 @@ test.describe("component layout invariants", () => {
       await expect(page.locator("[data-discovery-menu]")).toBeHidden();
       await expect(menuButton).toBeVisible();
       await expect(brand).toBeVisible();
+      await expect(brandLabel).toHaveText("The Philosopher's Meme");
       await expect(support).toBeVisible();
       expect(brandLabelMetrics.scrollWidth).toBeLessThanOrEqual(
         brandLabelMetrics.clientWidth + 1,

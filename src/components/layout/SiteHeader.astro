@@ -19,11 +19,11 @@ const { categoryItems, currentPath, primaryItems } = Astro.props;
 
 <header
   data-site-header
-  class="border-border bg-background/95 sticky top-0 z-40 border-b backdrop-blur-sm"
+  class="border-border bg-background/95 sticky top-0 z-40 border-b font-sans backdrop-blur-sm"
 >
   <div class="grid gap-2 px-4 py-3 lg:px-8" data-site-header-inner>
     <div
-      class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
+      class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-1 sm:gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
       data-site-header-primary-row
     >
       <div class="hidden min-w-0 items-center justify-start gap-1 md:flex">
@@ -42,7 +42,6 @@ const { categoryItems, currentPath, primaryItems } = Astro.props;
         class="w-full min-w-0 justify-self-center text-center md:w-auto md:max-w-none"
       >
         <BrandLink
-          compactLabel="TPM"
           class="mx-auto max-w-full max-sm:text-xs sm:text-sm md:text-lg"
         />
       </div>

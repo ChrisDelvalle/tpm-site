@@ -63,8 +63,9 @@ The mobile primary row uses left and right intrinsic controls around a flexible
 center brand slot. The brand and support CTA may use smaller mobile typography
 and spacing, but they must not overlap. Preserve the normal desktop sizing and
 rhythm when width allows; compact only inside constrained mobile widths. The
-current constrained brand label is `TPM`, while the link keeps the full site
-title as its accessible name.
+full `The Philosopher's Meme` brand is the visual default at supported mobile
+widths. Reclaim space from row gaps and adjacent controls before changing the
+brand label.
 
 Tablet and wider: desktop controls return and categories appear in the second
 row. This uses the standard `md` Tailwind breakpoint so category discovery is

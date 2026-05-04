@@ -628,8 +628,9 @@ navigation system should follow these rules:
   discovery must always exist somewhere on the page.
 - Mobile category navigation should share the same `CategoryTree` as desktop.
 - Header layout should not depend on fragile collision breakpoints.
-- The full brand name can be used on wide screens, but smaller screens may use
-  `TPM` or a monogram if that preserves layout integrity.
+- Preserve the full brand name on supported phone widths. Compact surrounding
+  controls before abbreviating the publication title, and only add a brand
+  abbreviation after an explicit product decision.
 
 Preferred responsive model:
 

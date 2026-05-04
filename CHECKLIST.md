@@ -1555,3 +1555,23 @@ Scope rules:
 - [x] Add mobile-width Playwright coverage proving the brand and Support Us
       button do not overlap at iPhone-width resolutions and the primary row
       remains readable without horizontal overflow.
+
+## Milestone 51: Mobile Header Full-Brand Fit Hardening
+
+- [x] Restore the mobile header's visual brand text to
+      `The Philosopher's Meme`; do not use `TPM` as a normal responsive
+      fallback.
+- [x] Make the header's mobile-width budget explicit: keep the existing
+      centered three-column anatomy, compact adjacent controls before the
+      brand, preserve edge inset, and shrink rather than overlap when space is
+      constrained.
+- [x] Use a stable header font so local and CI font differences do not decide
+      whether the mobile brand fits.
+- [x] Keep `Support Us` visible in the mobile header unless measurement proves
+      it cannot coexist with the full brand at supported phone widths; any
+      support-label fallback must be scoped to the header only.
+- [x] Update component docs and tests so the contract is full brand first,
+      no overlap, no horizontal overflow, and no desktop category row on
+      mobile.
+- [x] Verify the header at 320px and modern phone widths with Playwright
+      before marking the milestone complete.

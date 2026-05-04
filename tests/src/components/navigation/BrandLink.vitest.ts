@@ -14,19 +14,12 @@ describe("BrandLink", () => {
     expect(view).toContain("TPM");
   });
 
-  test("keeps a full accessible name when a compact visual label is provided", async () => {
+  test("renders the full publication title by default", async () => {
     const container = await createAstroTestContainer();
-    const view = await container.renderToString(BrandLink, {
-      props: {
-        compactLabel: "TPM",
-        href: "/",
-        label: "The Philosopher's Meme",
-      },
-    });
+    const view = await container.renderToString(BrandLink);
 
     expect(view).toContain('aria-label="The Philosopher\'s Meme"');
-    expect(view).toContain("TPM");
-    expect(view).toContain("sm:hidden");
-    expect(view).toContain("sm:inline");
+    expect(view).toContain("The Philosopher&#39;s Meme");
+    expect(view).not.toContain("TPM");
   });
 });
