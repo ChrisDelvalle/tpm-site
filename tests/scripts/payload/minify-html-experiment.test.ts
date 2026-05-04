@@ -16,7 +16,7 @@ import {
   formatMinifyHtmlExperimentReport,
   runMinifyHtmlExperiment,
   runMinifyHtmlExperimentCli,
-} from "../../scripts/minify-html-experiment";
+} from "../../../scripts/payload/minify-html-experiment";
 
 function withBuildOutput<T>(
   run: (paths: { outputDir: string; sourceDir: string }) => T,

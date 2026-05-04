@@ -2,21 +2,21 @@ import { spawn } from "node:child_process";
 import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import astroConfig from "../astro.config";
+import astroConfig from "../../astro.config";
 import {
   type BuildOutputTransformName,
   optimizeBuildOutput,
-} from "./build-output-optimizer";
+} from "../build/build-output-optimizer";
+import {
+  type BuildVerificationIssues,
+  formatBuildVerificationReport,
+  verifyBuild,
+} from "../build/verify-build";
 import {
   collectPayloadReport,
   type PayloadGroup,
   type PayloadReport,
 } from "./report-payload";
-import {
-  type BuildVerificationIssues,
-  formatBuildVerificationReport,
-  verifyBuild,
-} from "./verify-build";
 
 /** Command used by a generated-output optimization gate. */
 export interface PostBuildOptimizationGateCommand {
@@ -642,7 +642,7 @@ async function runVerifyBuildGate(
   cwd: string,
 ): Promise<PostBuildOptimizationGateResult> {
   const command = {
-    args: ["scripts/verify-build.ts", "--quiet"],
+    args: ["scripts/build/verify-build.ts", "--quiet"],
     binary: "bunx",
     label: "Build verification",
   } satisfies PostBuildOptimizationGateCommand;

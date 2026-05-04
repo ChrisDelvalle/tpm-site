@@ -10,7 +10,7 @@ import {
   runQualityCli,
   runQualityWorkflow,
   shouldPrintResult,
-} from "../../scripts/run-quality";
+} from "../../../scripts/quality/run-quality";
 
 function command(label: string, blocking: boolean): QualityCommand {
   return {

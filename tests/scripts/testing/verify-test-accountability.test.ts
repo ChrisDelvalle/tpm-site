@@ -11,7 +11,7 @@ import {
   parseAccountabilityIgnore,
   runTestAccountabilityCli,
   verifyTestAccountability,
-} from "../../scripts/verify-test-accountability";
+} from "../../../scripts/testing/verify-test-accountability";
 
 async function runGit(root: string, args: string[]): Promise<void> {
   return new Promise<void>((resolve, reject) => {

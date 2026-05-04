@@ -7,7 +7,7 @@ import {
   runTestWorkflow,
   type TestCommand,
   type TestCommandResult,
-} from "../../scripts/run-tests";
+} from "../../../scripts/testing/run-tests";
 
 function command(label: string): TestCommand {
   return {

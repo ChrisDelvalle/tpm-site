@@ -14,7 +14,7 @@ import { describe, expect, test } from "bun:test";
 import {
   optimizeBuildOutput,
   productionBuildOutputTransforms,
-} from "../../scripts/build-output-optimizer";
+} from "../../../scripts/build/build-output-optimizer";
 
 function withBuildOutput<T>(run: (outputDir: string) => T): T {
   const rootDir = mkdtempSync(path.join(tmpdir(), "tpm-build-optimizer-test-"));

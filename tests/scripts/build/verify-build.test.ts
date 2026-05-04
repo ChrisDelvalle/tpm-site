@@ -5,7 +5,7 @@ import {
   isExternal,
   linkTargets,
   requiredPathsForSource,
-} from "../../scripts/verify-build";
+} from "../../../scripts/build/verify-build";
 
 describe("build verifier", () => {
   test("derives required built paths from source publication state", () => {

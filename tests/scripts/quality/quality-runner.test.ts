@@ -5,7 +5,7 @@ import {
   outputHasWarningOrError,
   resultIsBlockingFailure,
   shouldPrintResult,
-} from "../../scripts/run-quality";
+} from "../../../scripts/quality/run-quality";
 
 const blockingCommand = {
   args: ["--silent", "run", "check"],

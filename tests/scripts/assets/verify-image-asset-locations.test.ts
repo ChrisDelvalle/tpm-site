@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   formatImageAssetLocationReport,
   globToRegExp,
-} from "../../scripts/verify-image-asset-locations";
+} from "../../../scripts/assets/verify-image-asset-locations";
 
 describe("image asset location verifier", () => {
   test("formats repair guidance and supports glob ignores", () => {

@@ -20,8 +20,6 @@ desired design.
 
 Mirrored folders:
 
-- `article/`: older article-specific compatibility components still present in
-  the codebase.
 - `articles/`: article display, metadata, lists, prose, and after-article
   discovery.
 - `blocks/`: page-level editorial sections.

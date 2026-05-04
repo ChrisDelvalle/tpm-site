@@ -4,7 +4,7 @@ import {
   formatComponentCatalogReport,
   runComponentCatalogCli,
   verifyComponentCatalog,
-} from "../../scripts/verify-component-catalog";
+} from "../../../scripts/quality/verify-component-catalog";
 
 const exampleComponent = "src/components/ui/Button.astro";
 const ignoredComponent = "src/components/seo/SiteHead.astro";

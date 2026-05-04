@@ -45,22 +45,6 @@ export const catalogExampleComponentPaths = [
 
 export const componentCatalogIgnoreList = [
   {
-    path: "src/components/article/ArticleProse.astro",
-    reason: "Legacy compatibility wrapper for existing imports.",
-  },
-  {
-    path: "src/components/article/HoverImageCard.astro",
-    reason: "Legacy compatibility wrapper for existing imports.",
-  },
-  {
-    path: "src/components/article/HoverImageLink.astro",
-    reason: "Legacy compatibility wrapper for existing MDX imports.",
-  },
-  {
-    path: "src/components/article/HoverImageParagraph.astro",
-    reason: "Legacy compatibility wrapper for existing MDX imports.",
-  },
-  {
     path: "src/components/articles/HoverImageLink.astro",
     reason: "Article-specific MDX wrapper pending article catalog examples.",
   },

@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { describe, expect, test } from "bun:test";
 
-import { syncAstroTestStore } from "../../scripts/sync-astro-test-store";
+import { syncAstroTestStore } from "../../../scripts/testing/sync-astro-test-store";
 
 async function withTempRoot<T>(callback: (root: string) => Promise<T>) {
   const root = await mkdtemp(path.join(tmpdir(), "tpm-astro-store-test-"));

@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   formatUnusedImageReport,
   globToRegExp,
-} from "../../scripts/find-unused-images";
+} from "../../../scripts/assets/find-unused-images";
 
 describe("unused image finder", () => {
   test("formats actionable review output and glob ignore patterns", () => {

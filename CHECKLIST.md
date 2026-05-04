@@ -18,8 +18,7 @@ Scope rules:
       `src/components/layout/`, `src/components/navigation/`,
       `src/components/articles/`, `src/components/pages/`,
       `src/components/blocks/`, and `src/components/islands/`.
-- [x] Move or wrap the existing article components from
-      `src/components/article/` into the long-term
+- [x] Move or wrap the existing article components into the long-term
       `src/components/articles/` namespace, preserving imports and behavior.
 - [x] Add `src/components/ui/Button.astro` for button actions with typed
       `variant`, `size`, and `tone` props.
@@ -62,7 +61,7 @@ Scope rules:
 - [x] Treat `TPM_COMPONENT_CATALOG` as `false` when it is unset, empty, or any
       value other than `true`.
 - [x] Ensure normal `bun run build` output does not include `dist/catalog`.
-- [x] Add `scripts/verify-component-catalog.ts` to scan
+- [x] Add `scripts/quality/verify-component-catalog.ts` to scan
       `src/components/**/*.{astro,tsx}` for public components.
 - [x] Require every public component to have a catalog example or an ignore-list
       entry with a short reason.
@@ -1403,8 +1402,8 @@ Scope rules:
       features exist.
 - [x] Preserve the existing author-facing MDX API for hover-image links unless
       article-specific work is explicitly approved separately.
-- [x] Keep `src/components/article/` compatibility wrappers working if existing
-      MDX imports still depend on those paths.
+- [x] Preserve the existing hover-image author-facing MDX API while migrating
+      existing imports to the canonical `src/components/articles/` namespace.
 - [x] Preserve hover-image semantics: inline prose trigger, real link fallback
       to the image source, useful alt text on the preview image, focus-visible
       access, and readable no-JavaScript behavior.
@@ -1895,14 +1894,27 @@ Scope rules:
 
 ## Milestone 73: Scripts Folder Organization Design And Refactor
 
-- [ ] Audit every script in `scripts/` and group it by responsibility:
+- [x] Audit every script in `scripts/` and group it by responsibility:
       build/output optimization, content verification, asset verification,
       test/quality orchestration, payload experiments, and maintenance helpers.
-- [ ] Design a target folder structure that keeps package scripts stable where
+- [x] Design a target folder structure that keeps package scripts stable where
       practical, uses thin root-level wrappers only when they improve
       compatibility, and avoids breaking CI or author-facing commands.
-- [ ] Move scripts with `git mv` where paths change, update imports, tests,
+- [x] Move scripts with `git mv` where paths change, update imports, tests,
       package scripts, docs, CI references, and accountability coverage.
-- [ ] Add or update tests that lock the script entrypoint contract so future
+- [x] Add or update tests that lock the script entrypoint contract so future
       organization work cannot silently break package scripts.
-- [ ] Run the normal and release quality gates after the refactor.
+- [x] Run the normal and release quality gates after the refactor.
+
+## Milestone 74: Legacy Article Component Compatibility Cleanup
+
+- [x] Audit `src/components/article/` compatibility wrappers and every import
+      path that still references the legacy singular article namespace.
+- [x] If no published Markdown/MDX or source module requires the compatibility
+      wrappers, remove the legacy `src/components/article/` files and their
+      mirrored tests.
+- [x] Update catalog metadata, component docs, test-accountability coverage,
+      and dead-code expectations so `src/components/articles/` is the single
+      article component namespace.
+- [x] Run focused component, catalog, dead-code, and release checks after the
+      cleanup.

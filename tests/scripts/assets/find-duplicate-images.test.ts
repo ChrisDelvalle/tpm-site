@@ -4,7 +4,7 @@ import {
   formatDuplicateImageReport,
   globToRegExp,
   groupDuplicateImages,
-} from "../../scripts/find-duplicate-images";
+} from "../../../scripts/assets/find-duplicate-images";
 
 describe("duplicate image finder", () => {
   test("groups identical image hashes and ignores unique files", () => {

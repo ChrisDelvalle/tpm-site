@@ -9,25 +9,25 @@ import {
   findDuplicateImages,
   formatDuplicateImageReport,
   runDuplicateImageCli,
-} from "../../scripts/find-duplicate-images";
+} from "../../scripts/assets/find-duplicate-images";
 import {
   findSharedAssets,
   runSharedAssetsCli,
-} from "../../scripts/find-shared-assets";
+} from "../../scripts/assets/find-shared-assets";
 import {
   findUnusedImages,
   formatUnusedImageReport,
   runUnusedImageCli,
-} from "../../scripts/find-unused-images";
-import {
-  runContentVerificationCli,
-  verifyContent,
-} from "../../scripts/verify-content";
+} from "../../scripts/assets/find-unused-images";
 import {
   formatImageAssetLocationReport,
   runImageAssetLocationCli,
   verifyImageAssetLocations,
-} from "../../scripts/verify-image-asset-locations";
+} from "../../scripts/assets/verify-image-asset-locations";
+import {
+  runContentVerificationCli,
+  verifyContent,
+} from "../../scripts/content/verify-content";
 
 async function runGit(root: string, args: string[]): Promise<void> {
   return new Promise<void>((resolve, reject) => {

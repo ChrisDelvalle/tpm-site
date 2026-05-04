@@ -18,7 +18,7 @@ import {
   type PostBuildOptimizationVerifyRunner,
   runPostBuildOptimizationSuite,
   runPostBuildOptimizationSuiteCli,
-} from "../../scripts/run-post-build-optimization-experiments";
+} from "../../../scripts/payload/run-post-build-optimization-experiments";
 
 const cssScenario = {
   name: "css",
@@ -93,7 +93,7 @@ const passingVerifyRunner: PostBuildOptimizationVerifyRunner = async () => {
 
   return {
     command: {
-      args: ["scripts/verify-build.ts", "--quiet"],
+      args: ["scripts/build/verify-build.ts", "--quiet"],
       binary: "bunx",
       label: "Build verification",
     },

@@ -110,7 +110,7 @@ occur:
 
 ## Experiment Finding
 
-The reproducible suite in `scripts/run-minify-html-experiments.ts` found that
+The reproducible suite in `scripts/payload/run-minify-html-experiments.ts` found that
 the tested standard-library configurations are not production-eligible for this
 repo today.
 

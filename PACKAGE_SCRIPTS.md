@@ -3,6 +3,15 @@
 Run scripts with `bun run <script>`. The package scripts are the source of truth
 for local checks and GitHub Actions.
 
+Script sources are grouped by responsibility:
+
+- `scripts/assets/`: image and asset inventory checks.
+- `scripts/build/`: generated build output verification and optimization.
+- `scripts/content/`: content collection validation helpers.
+- `scripts/payload/`: payload measurement and optimization experiments.
+- `scripts/quality/`: quality orchestration and catalog accountability.
+- `scripts/testing/`: test orchestration, coverage, and accountability checks.
+
 | Script                            | Intended use                                                                                                                                                                          |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `assets:duplicates`               | Finds image files with identical byte content. Review signal by default; can fail with `--fail-on-duplicates`.                                                                        |

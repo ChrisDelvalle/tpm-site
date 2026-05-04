@@ -316,7 +316,7 @@ function readValueArg(args: string[], flag: string): string | undefined {
 }
 
 function usage(): string {
-  return `Usage: bun scripts/minify-html-experiment.ts [--config <name>] [--source <dir>] [--out <dir>] [--json]
+  return `Usage: bun scripts/payload/minify-html-experiment.ts [--config <name>] [--source <dir>] [--out <dir>] [--json]
 
 Run a named minify-html experiment against a copied build output directory.
 Use --list-configs to show available experiment configurations.`;

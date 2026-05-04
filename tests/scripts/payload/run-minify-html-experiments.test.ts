@@ -17,7 +17,7 @@ import {
   type MinifyHtmlScenario,
   runMinifyHtmlExperimentSuite,
   runMinifyHtmlExperimentSuiteCli,
-} from "../../scripts/run-minify-html-experiments";
+} from "../../../scripts/payload/run-minify-html-experiments";
 
 async function withBuildOutput<T>(
   run: (paths: {

@@ -12,7 +12,7 @@ import {
   resolveAssetReference,
   runSharedAssetsCli,
   sharedAssetViolations,
-} from "../../scripts/find-shared-assets";
+} from "../../../scripts/assets/find-shared-assets";
 
 async function withTempRoot<T>(callback: (root: string) => Promise<T>) {
   const root = await mkdtemp(path.join(tmpdir(), "tpm-shared-assets-test-"));

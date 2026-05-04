@@ -7,7 +7,7 @@ import {
   randomizedUnitTestCommand,
   runRandomizedTestsCli,
   runRandomizedTestWorkflow,
-} from "../../scripts/run-randomized-tests";
+} from "../../../scripts/testing/run-randomized-tests";
 
 describe("randomized test runner", () => {
   test.serial("prints command usage without running tests", async () => {

@@ -60,16 +60,6 @@ component has a matching one-pager in this directory.
 - `src/components/articles/TableOfContentsItem.astro`
 - `src/components/articles/TableOfContentsToggle.astro`
 
-## Legacy Article Compatibility
-
-- `src/components/article/ArticleProse.astro`
-- `src/components/article/HoverImageCard.astro`
-- `src/components/article/HoverImageLink.astro`
-- `src/components/article/HoverImageParagraph.astro`
-
-These remain separate from `src/components/articles/` only while existing MDX
-imports require that path.
-
 ## Page Components
 
 - `src/components/pages/MarkdownPage.astro`

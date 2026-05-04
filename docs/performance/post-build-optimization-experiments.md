@@ -58,7 +58,7 @@ Compressed delta vs baseline: -1,330 B Brotli, -1,766 B gzip.
 Gates:
 
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/post-build-optimization/lightning-css/index.html tmp/post-build-optimization/lightning-css/404.html tmp/post-build-optimization/lightning-css/about/**/*.html tmp/post-build-optimization/lightning-css/articles/index.html tmp/post-build-optimization/lightning-css/authors/**/*.html tmp/post-build-optimization/lightning-css/categories/**/*.html tmp/post-build-optimization/lightning-css/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### svgo
 
@@ -80,7 +80,7 @@ Compressed delta vs baseline: -23 B Brotli, -22 B gzip.
 Gates:
 
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/post-build-optimization/svgo/index.html tmp/post-build-optimization/svgo/404.html tmp/post-build-optimization/svgo/about/**/*.html tmp/post-build-optimization/svgo/articles/index.html tmp/post-build-optimization/svgo/authors/**/*.html tmp/post-build-optimization/svgo/categories/**/*.html tmp/post-build-optimization/svgo/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### oxc-js-conservative
 
@@ -102,7 +102,7 @@ Compressed delta vs baseline: -2,657 B Brotli, -2,028 B gzip.
 Gates:
 
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/post-build-optimization/oxc-js-conservative/index.html tmp/post-build-optimization/oxc-js-conservative/404.html tmp/post-build-optimization/oxc-js-conservative/about/**/*.html tmp/post-build-optimization/oxc-js-conservative/articles/index.html tmp/post-build-optimization/oxc-js-conservative/authors/**/*.html tmp/post-build-optimization/oxc-js-conservative/categories/**/*.html tmp/post-build-optimization/oxc-js-conservative/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### safe-stack
 
@@ -124,7 +124,7 @@ Compressed delta vs baseline: -4,010 B Brotli, -3,816 B gzip.
 Gates:
 
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/post-build-optimization/safe-stack/index.html tmp/post-build-optimization/safe-stack/404.html tmp/post-build-optimization/safe-stack/about/**/*.html tmp/post-build-optimization/safe-stack/articles/index.html tmp/post-build-optimization/safe-stack/authors/**/*.html tmp/post-build-optimization/safe-stack/categories/**/*.html tmp/post-build-optimization/safe-stack/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### oxc-js-aggressive
 
@@ -146,7 +146,7 @@ Compressed delta vs baseline: -9,468 B Brotli, -9,431 B gzip.
 Gates:
 
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/post-build-optimization/oxc-js-aggressive/index.html tmp/post-build-optimization/oxc-js-aggressive/404.html tmp/post-build-optimization/oxc-js-aggressive/about/**/*.html tmp/post-build-optimization/oxc-js-aggressive/articles/index.html tmp/post-build-optimization/oxc-js-aggressive/authors/**/*.html tmp/post-build-optimization/oxc-js-aggressive/categories/**/*.html tmp/post-build-optimization/oxc-js-aggressive/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ## Conclusion
 

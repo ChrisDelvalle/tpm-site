@@ -63,7 +63,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/baseline/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/baseline/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/baseline/dist/index.html tmp/vite-build-experiments/baseline/dist/404.html tmp/vite-build-experiments/baseline/dist/about/**/*.html tmp/vite-build-experiments/baseline/dist/articles/index.html tmp/vite-build-experiments/baseline/dist/authors/**/*.html tmp/vite-build-experiments/baseline/dist/categories/**/*.html tmp/vite-build-experiments/baseline/dist/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### css-minify-lightningcss
 
@@ -86,7 +86,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/css-minify-lightningcss/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/css-minify-lightningcss/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/css-minify-lightningcss/dist/index.html tmp/vite-build-experiments/css-minify-lightningcss/dist/404.html tmp/vite-build-experiments/css-minify-lightningcss/dist/about/**/*.html tmp/vite-build-experiments/css-minify-lightningcss/dist/articles/index.html tmp/vite-build-experiments/css-minify-lightningcss/dist/authors/**/*.html tmp/vite-build-experiments/css-minify-lightningcss/dist/categories/**/*.html tmp/vite-build-experiments/css-minify-lightningcss/dist/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### css-minify-esbuild
 
@@ -109,7 +109,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/css-minify-esbuild/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/css-minify-esbuild/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/css-minify-esbuild/dist/index.html tmp/vite-build-experiments/css-minify-esbuild/dist/404.html tmp/vite-build-experiments/css-minify-esbuild/dist/about/**/*.html tmp/vite-build-experiments/css-minify-esbuild/dist/articles/index.html tmp/vite-build-experiments/css-minify-esbuild/dist/authors/**/*.html tmp/vite-build-experiments/css-minify-esbuild/dist/categories/**/*.html tmp/vite-build-experiments/css-minify-esbuild/dist/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### assets-inline-never
 
@@ -132,7 +132,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/assets-inline-never/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/assets-inline-never/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/assets-inline-never/dist/index.html tmp/vite-build-experiments/assets-inline-never/dist/404.html tmp/vite-build-experiments/assets-inline-never/dist/about/**/*.html tmp/vite-build-experiments/assets-inline-never/dist/articles/index.html tmp/vite-build-experiments/assets-inline-never/dist/authors/**/*.html tmp/vite-build-experiments/assets-inline-never/dist/categories/**/*.html tmp/vite-build-experiments/assets-inline-never/dist/search/**/*.html`
-- Build verification: fail (1) via `bunx scripts/verify-build.ts --quiet`
+- Build verification: fail (1) via `bunx scripts/build/verify-build.ts --quiet`
 
 Failure excerpt:
 
@@ -162,7 +162,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/modulepreload-polyfill-false/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/modulepreload-polyfill-false/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/modulepreload-polyfill-false/dist/index.html tmp/vite-build-experiments/modulepreload-polyfill-false/dist/404.html tmp/vite-build-experiments/modulepreload-polyfill-false/dist/about/**/*.html tmp/vite-build-experiments/modulepreload-polyfill-false/dist/articles/index.html tmp/vite-build-experiments/modulepreload-polyfill-false/dist/authors/**/*.html tmp/vite-build-experiments/modulepreload-polyfill-false/dist/categories/**/*.html tmp/vite-build-experiments/modulepreload-polyfill-false/dist/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### target-baseline
 
@@ -185,7 +185,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/target-baseline/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/target-baseline/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/target-baseline/dist/index.html tmp/vite-build-experiments/target-baseline/dist/404.html tmp/vite-build-experiments/target-baseline/dist/about/**/*.html tmp/vite-build-experiments/target-baseline/dist/articles/index.html tmp/vite-build-experiments/target-baseline/dist/authors/**/*.html tmp/vite-build-experiments/target-baseline/dist/categories/**/*.html tmp/vite-build-experiments/target-baseline/dist/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### minify-disabled
 
@@ -208,7 +208,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/minify-disabled/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/minify-disabled/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/minify-disabled/dist/index.html tmp/vite-build-experiments/minify-disabled/dist/404.html tmp/vite-build-experiments/minify-disabled/dist/about/**/*.html tmp/vite-build-experiments/minify-disabled/dist/articles/index.html tmp/vite-build-experiments/minify-disabled/dist/authors/**/*.html tmp/vite-build-experiments/minify-disabled/dist/categories/**/*.html tmp/vite-build-experiments/minify-disabled/dist/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ### client-sourcemap-hidden
 
@@ -231,7 +231,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/client-sourcemap-hidden/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/client-sourcemap-hidden/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/client-sourcemap-hidden/dist/index.html tmp/vite-build-experiments/client-sourcemap-hidden/dist/404.html tmp/vite-build-experiments/client-sourcemap-hidden/dist/about/**/*.html tmp/vite-build-experiments/client-sourcemap-hidden/dist/articles/index.html tmp/vite-build-experiments/client-sourcemap-hidden/dist/authors/**/*.html tmp/vite-build-experiments/client-sourcemap-hidden/dist/categories/**/*.html tmp/vite-build-experiments/client-sourcemap-hidden/dist/search/**/*.html`
-- Build verification: fail (1) via `bunx scripts/verify-build.ts --quiet`
+- Build verification: fail (1) via `bunx scripts/build/verify-build.ts --quiet`
 
 Failure excerpt:
 
@@ -261,7 +261,7 @@ Gates:
 - Astro build: pass via `bunx astro --config tmp/vite-build-experiments/oxc-minify/astro.config.ts build`
 - Pagefind indexing: pass via `bunx pagefind --site tmp/vite-build-experiments/oxc-minify/dist --quiet --glob {index.html,about/**/*.html,articles/**/*.html,authors/**/*.html,categories/**/*.html,search/**/*.html}`
 - HTML validation: pass via `bunx html-validate --max-warnings=0 tmp/vite-build-experiments/oxc-minify/dist/index.html tmp/vite-build-experiments/oxc-minify/dist/404.html tmp/vite-build-experiments/oxc-minify/dist/about/**/*.html tmp/vite-build-experiments/oxc-minify/dist/articles/index.html tmp/vite-build-experiments/oxc-minify/dist/authors/**/*.html tmp/vite-build-experiments/oxc-minify/dist/categories/**/*.html tmp/vite-build-experiments/oxc-minify/dist/search/**/*.html`
-- Build verification: pass via `bunx scripts/verify-build.ts --quiet`
+- Build verification: pass via `bunx scripts/build/verify-build.ts --quiet`
 
 ## Conclusion
 

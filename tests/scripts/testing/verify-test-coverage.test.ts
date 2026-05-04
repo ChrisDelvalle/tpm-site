@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { formatCoverageInventoryReport } from "../../scripts/verify-test-coverage";
+import { formatCoverageInventoryReport } from "../../../scripts/testing/verify-test-coverage";
 
 describe("coverage verifier", () => {
   test("reports unapproved coverage gaps with repair guidance", () => {

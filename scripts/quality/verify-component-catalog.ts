@@ -6,7 +6,7 @@ import {
   catalogExampleComponentPaths,
   type ComponentCatalogIgnore,
   componentCatalogIgnoreList,
-} from "../src/catalog/catalog.config";
+} from "../../src/catalog/catalog.config";
 
 const componentFilePattern = /^src\/components\/.*\.(?:astro|tsx)$/u;
 

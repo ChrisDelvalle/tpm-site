@@ -17,7 +17,7 @@ import {
   runViteBuildExperimentSuiteCli,
   type ViteBuildScenario,
   type ViteBuildScenarioRunner,
-} from "../../scripts/run-vite-build-experiments";
+} from "../../../scripts/payload/run-vite-build-experiments";
 
 const baselineScenario = {
   config: {},

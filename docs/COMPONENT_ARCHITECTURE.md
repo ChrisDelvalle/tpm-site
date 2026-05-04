@@ -1231,7 +1231,7 @@ Catalog build rules:
 
 Catalog coverage:
 
-- Add `scripts/verify-component-catalog.ts`.
+- Add `scripts/quality/verify-component-catalog.ts`.
 - Scan `src/components/**/*.{astro,tsx}` for public components.
 - Compare discovered components with explicit catalog entries.
 - Allow an ignore list for internal wrappers, generated components, or

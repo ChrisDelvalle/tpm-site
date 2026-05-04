@@ -3,17 +3,17 @@ import { existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import astroConfig from "../astro.config";
+import astroConfig from "../../astro.config";
+import {
+  type BuildVerificationIssues,
+  formatBuildVerificationReport,
+  verifyBuild,
+} from "../build/verify-build";
 import {
   collectPayloadReport,
   type PayloadGroup,
   type PayloadReport,
 } from "./report-payload";
-import {
-  type BuildVerificationIssues,
-  formatBuildVerificationReport,
-  verifyBuild,
-} from "./verify-build";
 
 /** Command used by a Vite build experiment gate. */
 export interface ViteBuildGateCommand {
@@ -812,7 +812,7 @@ async function runVerifyBuildGate(
   cwd: string,
 ): Promise<ViteBuildGateResult> {
   const command = {
-    args: ["scripts/verify-build.ts", "--quiet"],
+    args: ["scripts/build/verify-build.ts", "--quiet"],
     binary: "bunx",
     label: "Build verification",
   } satisfies ViteBuildGateCommand;

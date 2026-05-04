@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { describe, expect, test } from "bun:test";
 
-import { verifyContent } from "../../scripts/verify-content";
+import { verifyContent } from "../../../scripts/content/verify-content";
 
 async function withTempRoot<T>(callback: (root: string) => Promise<T>) {
   const root = await mkdtemp(path.join(tmpdir(), "tpm-content-test-"));

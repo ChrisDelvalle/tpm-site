@@ -8,7 +8,7 @@ import {
   formatCoverageInventoryReport,
   runCoverageVerificationCli,
   verifyCoverageInventory,
-} from "../../scripts/verify-test-coverage";
+} from "../../../scripts/testing/verify-test-coverage";
 
 async function withTempRoot<T>(callback: (root: string) => Promise<T>) {
   const root = await mkdtemp(path.join(tmpdir(), "tpm-coverage-test-"));

@@ -10,7 +10,7 @@ import path from "node:path";
 
 import { describe, expect, spyOn, test } from "bun:test";
 
-import { runOptimizeBuildOutputCli } from "../../scripts/optimize-build-output";
+import { runOptimizeBuildOutputCli } from "../../../scripts/build/optimize-build-output";
 
 function withBuildOutput<T>(
   run: (paths: { cwd: string; outputDir: string }) => T,

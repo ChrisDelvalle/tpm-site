@@ -8,7 +8,7 @@ import {
   collectPayloadReport,
   formatPayloadReport,
   runPayloadReportCli,
-} from "../../scripts/report-payload";
+} from "../../../scripts/payload/report-payload";
 
 function withBuildOutput<T>(run: (distDir: string) => T): T {
   const rootDir = mkdtempSync(path.join(tmpdir(), "tpm-payload-test-"));

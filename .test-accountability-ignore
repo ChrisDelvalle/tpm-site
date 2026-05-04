@@ -3,7 +3,7 @@
 tests/**
 
 # The accountability policy file is parsed and validated by
-# scripts/verify-test-accountability.ts on every accountability run.
+# scripts/testing/verify-test-accountability.ts on every accountability run.
 .test-accountability-ignore
 
 # Approved exception: Article and page bodies are human-authored editorial

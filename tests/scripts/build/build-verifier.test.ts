@@ -14,7 +14,7 @@ import {
   runBuildVerificationCli,
   staticReadingPagesForSource,
   verifyBuild,
-} from "../../scripts/verify-build";
+} from "../../../scripts/build/verify-build";
 
 function publication(): ArticlePublication {
   return {
