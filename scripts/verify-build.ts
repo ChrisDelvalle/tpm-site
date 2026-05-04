@@ -26,7 +26,7 @@ const allowedStaticClientScriptPatterns = [
 ] as const;
 const astroPrefetchPageScriptPattern = /^\/_astro\/page\.[\w-]+\.js$/u;
 const astroPrefetchChunkImportPattern =
-  /from\s*["']\.\/(_astro_prefetch\.[\w-]+\.js)["']/u;
+  /from\s*["'`]\.\/(_astro_prefetch\.[\w-]+\.js)["'`]/u;
 
 /** Source-content publication state used to verify generated output. */
 export interface ArticlePublication {
@@ -699,10 +699,9 @@ async function isAllowedStaticClientScript(
 
 function isAstroPrefetchRuntime(scriptText: string): boolean {
   return (
-    scriptText.includes("dataset.astroPrefetch") &&
-    scriptText.includes("ignoreSlowConnection") &&
-    scriptText.includes('relList?.supports?.("prefetch")') &&
-    scriptText.includes("navigator.connection")
+    readsAstroPrefetchDataset(scriptText) &&
+    supportsPrefetchLinkCapabilityCheck(scriptText) &&
+    preservesSlowConnectionGuard(scriptText)
   );
 }
 
@@ -711,6 +710,23 @@ function astroPrefetchChunkImport(scriptText: string): null | string {
   const prefetchChunk = match?.[1];
 
   return prefetchChunk ?? null;
+}
+
+function preservesSlowConnectionGuard(scriptText: string): boolean {
+  return (
+    scriptText.includes("ignoreSlowConnection") &&
+    scriptText.includes("navigator.connection")
+  );
+}
+
+function readsAstroPrefetchDataset(scriptText: string): boolean {
+  return /dataset\s*\.\s*astroPrefetch/u.test(scriptText);
+}
+
+function supportsPrefetchLinkCapabilityCheck(scriptText: string): boolean {
+  return /relList\s*\??\.\s*supports\s*\??\.\s*\(\s*["'`]prefetch["'`]\s*\)/u.test(
+    scriptText,
+  );
 }
 
 async function staticClientScriptText(

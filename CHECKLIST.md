@@ -1741,3 +1741,168 @@ Scope rules:
       classes remain untouched.
 - [x] Run focused checks plus the relevant quality gates before marking the
       milestone complete.
+
+## Milestone 64: minify-html Research
+
+- [x] Research `minify-html`, `@minify-html/node`, and the one-pass variant
+      from upstream documentation.
+- [x] Document whether one-pass should be a production candidate, an
+      experiment-only path, or out of scope.
+- [x] Document every `minify-html` configuration option, what it does, and the
+      hard blockers for enabling it in this repo.
+- [x] Define production blockers around validation, search, structured data,
+      article prose fidelity, accessibility, Lighthouse-sensitive behavior,
+      cross-platform CI, and gzip/Brotli-relevant size.
+- [x] Add an initial conservative candidate configuration and the follow-up
+      questions that must be answered by experiments.
+
+## Milestone 65: minify-html Adoption Plan
+
+- [x] Add a documented adoption plan that separates research, measurement,
+      standard-library experiments, one-pass feasibility, and production
+      integration.
+- [x] Define the exact build, validation, e2e, a11y, coverage, search, and
+      structured-data gates that every production candidate must pass.
+- [x] Define how experiment results should be recorded before a production
+      configuration is chosen.
+- [x] Keep the plan ambitious about output size while rejecting noncompliant or
+      behavior-changing output unless explicitly approved.
+
+## Milestone 66: Payload Measurement Harness
+
+- [x] Add a read-only payload reporting script for `dist` that reports raw,
+      gzip, and Brotli sizes by asset type, with focused HTML totals and top
+      contributors.
+- [x] Add package scripts for baseline payload reporting and document them in
+      `PACKAGE_SCRIPTS.md`.
+- [x] Add tests for payload size aggregation, gzip/Brotli measurement,
+      deterministic sorting, quiet output, and failure handling for missing
+      build output.
+- [x] Capture a baseline payload report before any post-build minification
+      experiment changes production output.
+
+## Milestone 67: minify-html Experiment Harness And Results
+
+- [x] Add `@minify-html/node` as a dev dependency only after the measurement
+      harness exists.
+- [x] Add an explicit experiment script that can minify copied build output
+      with named configurations without obscuring the baseline.
+- [x] Add a reproducible suite script that runs all minify-html scenarios,
+      validates each copied output, measures raw/gzip/Brotli deltas, writes a
+      Markdown report, and can be rerun when the site or requirements change.
+- [x] Test conservative, inline-JS, optional-tag, and noncompliant measurement
+      configurations against the same baseline.
+- [x] Check one-pass feasibility and record whether it has a maintained,
+      cross-platform, Bun-friendly path that is worth testing.
+- [x] Record raw/gzip/Brotli deltas, validation failures, and conclusions in
+      generated `docs/performance/minify-html-experiments.md`.
+- [x] Choose the smallest configuration that passes every required gate, or
+      reject production adoption if savings do not justify the new dependency.
+
+## Milestone 68: Production HTML Minification Integration (Deferred)
+
+- [x] Defer production integration because Milestone 67 found no
+      production-safe `minify-html` configuration.
+- [ ] Reopen only after a future reproducible suite run identifies a
+      production-safe
+      configuration.
+- [ ] Add the production post-build HTML minification script using the chosen
+      explicit configuration.
+- [ ] Run minification after Astro build and Pagefind indexing so final
+      generated HTML is optimized while search indexing stays stable.
+- [ ] Ensure production output remains plain static files; do not add `.gz` or
+      `.br` sidecars for GitHub Pages.
+- [ ] Update `bun run build`, verification scripts, package script docs, and
+      tests so minification is deterministic, quiet on success, and
+      release-blocking on failure.
+- [ ] Verify the full release gate passes with minified output before marking
+      the milestone complete.
+
+## Milestone 69: Vite/Oxc Build Optimization Experiments
+
+- [x] Research the installed Astro/Vite build-option surface, current Vite
+      docs, and Oxc/Rolldown direction before changing production config.
+- [x] Add a reproducible Vite build experiment harness that generates
+      temporary Astro configs, builds each scenario, runs Pagefind, validates
+      HTML, verifies generated output, and measures raw/gzip/Brotli payloads.
+- [x] Test candidate and measurement-only scenarios against the same baseline,
+      including current Oxc minification feasibility.
+- [x] Record results and adoption conclusions in
+      `docs/performance/vite-build-experiments.md`.
+- [x] Update package script documentation and focused tests for the new
+      experiment harness.
+- [x] Adopt no production Vite config changes unless a scenario passes every
+      gate and shows meaningful compressed-payload savings.
+
+## Milestone 70: Asset Inlining Delivery Strategy Follow-Up
+
+- [ ] Design whether `assetsInlineLimit: 0` is desirable despite changing
+      Astro processed scripts from inlined page scripts into external static
+      assets.
+- [ ] Evaluate the tradeoff with Lighthouse, browser network waterfalls,
+      repeat-page cache behavior, no-JavaScript fallback behavior, and existing
+      static-page client-script verification policy.
+- [ ] If the delivery model is approved, update build verification to encode
+      the new allowed script contract instead of treating the extra scripts as
+      accidental hydration.
+- [ ] Rerun `bun run payload:vite:experiments`, browser tests, accessibility
+      tests, and release checks before adopting the config.
+
+## Milestone 71: Standalone Post-Build Optimization Experiments
+
+- [x] Research standalone generated-output optimizers that do not require
+      direct Astro/Vite integration, including Oxc JS minification, Lightning
+      CSS, SVGO, and the already-tested HTML minification path.
+- [x] Add a documented plan for standalone post-build optimization, including
+      adoption gates and why JS output requires browser behavior proof.
+- [x] Add a reproducible experiment harness that copies `dist/`, applies named
+      standalone transforms, validates HTML, verifies build output, and measures
+      raw/gzip/Brotli payload deltas.
+- [x] Test standalone CSS, SVG, conservative Oxc JS, combined safe-stack, and
+      aggressive Oxc measurement scenarios against the same baseline.
+- [x] Record results and recommendations in
+      `docs/performance/post-build-optimization-experiments.md`.
+- [x] Update package script documentation and focused tests for the new
+      standalone optimizer experiment harness.
+- [x] Adopt no production post-build optimization until an optimized output
+      passes full browser, accessibility, release, and payload gates.
+
+## Milestone 72: Production Post-Build Optimization Adoption Follow-Up
+
+- [x] Decide to adopt the passing `safe-stack` standalone transform stack:
+      Lightning CSS, SVGO, and conservative Oxc JS whitespace optimization.
+- [x] Add a deterministic post-build script that runs after Astro build and
+      Pagefind without mutating source files or emitting `.gz`/`.br` sidecars.
+- [x] Add tests proving the production optimizer is quiet on success, preserves
+      required SVG `viewBox` data, keeps console behavior under conservative JS
+      optimization, emits no compressed sidecars, and fails clearly when build
+      output is missing.
+- [x] Follow up on Oxc JS optimization by investigating whether the current
+      verification failure is a real behavior issue or a syntactic verifier
+      limitation around Astro's prefetch runtime.
+- [x] If Oxc output is behavior-equivalent, replace brittle exact-string
+      runtime checks with behavior-oriented or AST-aware verification before
+      rerunning browser, accessibility, release, and payload gates.
+- [x] Rerun standalone post-build experiments and confirm conservative Oxc JS
+      and the combined safe-stack pass generated-output verification.
+- [x] Serve the optimized safe-stack output directly and verify browser e2e and
+      axe accessibility checks pass against optimized JavaScript/CSS/SVG.
+- [x] Verify the full release gate passes with the production optimizer wired
+      into `bun run build`.
+- [x] Add a fresh release preview script that builds optimized output, verifies
+      generated output, validates HTML, and then serves the release-like
+      `dist/`.
+
+## Milestone 73: Scripts Folder Organization Design And Refactor
+
+- [ ] Audit every script in `scripts/` and group it by responsibility:
+      build/output optimization, content verification, asset verification,
+      test/quality orchestration, payload experiments, and maintenance helpers.
+- [ ] Design a target folder structure that keeps package scripts stable where
+      practical, uses thin root-level wrappers only when they improve
+      compatibility, and avoids breaking CI or author-facing commands.
+- [ ] Move scripts with `git mv` where paths change, update imports, tests,
+      package scripts, docs, CI references, and accountability coverage.
+- [ ] Add or update tests that lock the script entrypoint contract so future
+      organization work cannot silently break package scripts.
+- [ ] Run the normal and release quality gates after the refactor.

@@ -1,0 +1,147 @@
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+
+import { describe, expect, spyOn, test } from "bun:test";
+
+import {
+  collectPayloadReport,
+  formatPayloadReport,
+  runPayloadReportCli,
+} from "../../scripts/report-payload";
+
+function withBuildOutput<T>(run: (distDir: string) => T): T {
+  const rootDir = mkdtempSync(path.join(tmpdir(), "tpm-payload-test-"));
+  const distDir = path.join(rootDir, "dist");
+
+  try {
+    mkdirSync(path.join(distDir, "articles", "sample"), { recursive: true });
+    mkdirSync(path.join(distDir, "assets"), { recursive: true });
+    writeFileSync(
+      path.join(distDir, "index.html"),
+      "<!doctype html><html><body><main>Hello world</main></body></html>",
+    );
+    writeFileSync(
+      path.join(distDir, "articles", "sample", "index.html"),
+      "<!doctype html><html><body><article>Long article text ".repeat(20),
+    );
+    writeFileSync(
+      path.join(distDir, "assets", "site.css"),
+      "body { color: red; }",
+    );
+    writeFileSync(path.join(distDir, "assets", "app.js"), "console.log('x');");
+    writeFileSync(
+      path.join(distDir, "assets", "image.png"),
+      Buffer.from([1, 2, 3]),
+    );
+
+    return run(distDir);
+  } finally {
+    rmSync(rootDir, { force: true, recursive: true });
+  }
+}
+
+describe("payload reporter", () => {
+  test("aggregates raw, gzip, and Brotli sizes by extension", () => {
+    withBuildOutput((distDir) => {
+      const report = collectPayloadReport({ distDir, topCount: 1 });
+      const htmlGroup = report.byExtension.find(
+        (group) => group.extension === ".html",
+      );
+      const imageGroup = report.byExtension.find(
+        (group) => group.extension === ".png",
+      );
+
+      expect(report.allFiles.files).toBe(5);
+      expect(report.htmlFiles.files).toBe(2);
+      expect(report.topHtmlByRaw).toHaveLength(1);
+      expect(report.topHtmlByGzip).toHaveLength(1);
+      expect(report.topHtmlByBrotli).toHaveLength(1);
+      expect(htmlGroup?.gzipBytes).toBeGreaterThan(0);
+      expect(htmlGroup?.brotliBytes).toBeGreaterThan(0);
+      expect(imageGroup?.gzipBytes).toBeUndefined();
+      expect(imageGroup?.brotliBytes).toBeUndefined();
+    });
+  });
+
+  test("formats deterministic human-readable output", () => {
+    withBuildOutput((distDir) => {
+      const report = collectPayloadReport({ distDir, topCount: 2 });
+      const output = formatPayloadReport(report);
+
+      expect(output).toContain("Payload report:");
+      expect(output).toContain("Gzip-eligible assets:");
+      expect(output).toContain("By extension:");
+      expect(output).toContain("- .html:");
+      expect(output).toContain("Largest HTML by Brotli:");
+      expect(output).toContain("Largest HTML by gzip:");
+      expect(output).toContain("articles/sample/index.html");
+    });
+  });
+
+  test.serial("prints JSON from the command-line workflow", () => {
+    withBuildOutput((distDir) => {
+      const log = spyOn(console, "log").mockImplementation(() => undefined);
+
+      try {
+        expect(runPayloadReportCli(["--dist", distDir, "--json"])).toBe(0);
+        const htmlFileCount = parseHtmlFileCount(
+          String(log.mock.calls[0]?.[0]),
+        );
+
+        expect(htmlFileCount).toBe(2);
+      } finally {
+        log.mockRestore();
+      }
+    });
+  });
+
+  test.serial("prints command usage without reading dist", () => {
+    const log = spyOn(console, "log").mockImplementation(() => undefined);
+
+    try {
+      expect(runPayloadReportCli(["--help"], "/definitely/missing")).toBe(0);
+      expect(String(log.mock.calls[0]?.[0])).toContain("Usage:");
+    } finally {
+      log.mockRestore();
+    }
+  });
+
+  test.serial("reports missing build output and invalid flags", () => {
+    const error = spyOn(console, "error").mockImplementation(() => undefined);
+
+    try {
+      expect(runPayloadReportCli(["--dist", "/definitely/missing"])).toBe(1);
+      expect(String(error.mock.calls[0]?.[0])).toContain(
+        "Build output directory not found",
+      );
+
+      expect(runPayloadReportCli(["--top", "0"])).toBe(1);
+      expect(String(error.mock.calls[1]?.[0])).toContain(
+        "--top must be a positive integer",
+      );
+    } finally {
+      error.mockRestore();
+    }
+  });
+});
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function parseHtmlFileCount(value: string): number {
+  const parsed: unknown = JSON.parse(value);
+
+  if (!isRecord(parsed) || !isRecord(parsed["htmlFiles"])) {
+    throw new Error("Payload JSON did not include htmlFiles.");
+  }
+
+  const htmlFiles = parsed["htmlFiles"];
+
+  if (typeof htmlFiles["files"] !== "number") {
+    throw new Error("Payload JSON did not include an HTML file count.");
+  }
+
+  return htmlFiles["files"];
+}

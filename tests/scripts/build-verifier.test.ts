@@ -45,6 +45,8 @@ async function writeText(root: string, relativePath: string, text: string) {
 
 const astroPrefetchRuntimeFixture =
   'document.querySelector("a")?.dataset.astroPrefetch; document.createElement("link").relList?.supports?.("prefetch"); const option = { ignoreSlowConnection: true }; navigator.connection; option.ignoreSlowConnection;';
+const oxcNormalizedAstroPrefetchRuntimeFixture =
+  "document.querySelector(`a`)?.dataset.astroPrefetch; document.createElement(`link`).relList?.supports?.(`prefetch`); const option = { ignoreSlowConnection: true }; navigator.connection; option.ignoreSlowConnection;";
 
 describe("build verifier helpers", () => {
   test("derives required article and category paths from source content", () => {
@@ -330,7 +332,7 @@ describe("build verifier helpers", () => {
       await writeText(
         root,
         "dist/_astro/_astro_prefetch.Abc123.js",
-        astroPrefetchRuntimeFixture,
+        oxcNormalizedAstroPrefetchRuntimeFixture,
       );
       await writeText(root, "dist/_astro/page.NotPrefetch.js", "alert(1);");
       await writeText(
