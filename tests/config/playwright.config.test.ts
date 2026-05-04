@@ -6,6 +6,7 @@ describe("Playwright config", () => {
   test("uses a built static preview server for browser tests", () => {
     expect(config.forbidOnly).toBe(true);
     expect(config.fullyParallel).toBe(true);
+    expect(config.testMatch).toBe("**/*.pw.ts");
     expect(config.webServer).toMatchObject({
       command: "bun run preview --host 127.0.0.1 --port 4322",
       url: "http://127.0.0.1:4322",

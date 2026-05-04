@@ -1,8 +1,24 @@
 const currentAttribute = "data-current";
 const currentValue = "true";
 
-function siteHeaderOffset(): number {
-  const value = getComputedStyle(document.documentElement)
+/**
+ * Installs current-section highlighting for article table-of-contents links.
+ *
+ * @param rootDocument Browser document that owns the article table of contents.
+ */
+export function installArticleTableOfContents(
+  rootDocument: Document = document,
+): void {
+  rootDocument
+    .querySelectorAll<HTMLElement>("[data-article-toc]")
+    .forEach((toc) => {
+      bindTableOfContents(toc, rootDocument);
+    });
+}
+
+function siteHeaderOffset(rootDocument: Document, rootWindow: Window): number {
+  const value = rootWindow
+    .getComputedStyle(rootDocument.documentElement)
     .getPropertyValue("--site-header-height")
     .trim();
   const parsed = Number.parseFloat(value);
@@ -20,12 +36,17 @@ function headingIdFromHref(href: string): string | undefined {
 
 function articleHeadingsForToc(
   links: readonly HTMLAnchorElement[],
+  rootDocument: Document,
 ): HTMLElement[] {
+  const rootWindow = rootDocument.defaultView;
+
   return links.flatMap((link) => {
     const id = headingIdFromHref(link.hash);
-    const target = id === undefined ? null : document.getElementById(id);
+    const target = id === undefined ? null : rootDocument.getElementById(id);
 
-    return target instanceof HTMLElement ? [target] : [];
+    return rootWindow !== null && target instanceof rootWindow.HTMLElement
+      ? [target]
+      : [];
   });
 }
 
@@ -49,8 +70,10 @@ function setCurrentLink(
 
 function currentHeadingId(
   headings: readonly HTMLElement[],
+  rootDocument: Document,
+  rootWindow: Window,
 ): string | undefined {
-  const hashId = headingIdFromHref(window.location.hash);
+  const hashId = headingIdFromHref(rootWindow.location.hash);
   const hashHeading =
     hashId === undefined
       ? undefined
@@ -58,10 +81,10 @@ function currentHeadingId(
 
   if (hashHeading !== undefined) {
     const hashHeadingBox = hashHeading.getBoundingClientRect();
-    const viewportThreshold = Math.min(window.innerHeight * 0.45, 320);
+    const viewportThreshold = Math.min(rootWindow.innerHeight * 0.45, 320);
 
     if (
-      hashHeadingBox.top >= siteHeaderOffset() &&
+      hashHeadingBox.top >= siteHeaderOffset(rootDocument, rootWindow) &&
       hashHeadingBox.top <= viewportThreshold
     ) {
       return hashHeading.id;
@@ -69,7 +92,8 @@ function currentHeadingId(
   }
 
   const activationLine =
-    siteHeaderOffset() + Math.min(window.innerHeight * 0.2, 160);
+    siteHeaderOffset(rootDocument, rootWindow) +
+    Math.min(rootWindow.innerHeight * 0.2, 160);
 
   return (
     headings
@@ -80,29 +104,35 @@ function currentHeadingId(
   );
 }
 
-function bindTableOfContents(toc: HTMLElement): void {
+function bindTableOfContents(toc: HTMLElement, rootDocument: Document): void {
+  const rootWindow = rootDocument.defaultView;
+
+  if (rootWindow === null) {
+    return;
+  }
+
   const links = Array.from(
     toc.querySelectorAll<HTMLAnchorElement>("a[href^='#']"),
   );
-  const headings = articleHeadingsForToc(links);
+  const headings = articleHeadingsForToc(links, rootDocument);
   const frame = { id: 0 };
 
   const update = (): void => {
     frame.id = 0;
-    setCurrentLink(links, currentHeadingId(headings));
+    setCurrentLink(links, currentHeadingId(headings, rootDocument, rootWindow));
   };
   const scheduleUpdate = (): void => {
     if (frame.id === 0) {
-      frame.id = window.requestAnimationFrame(update);
+      frame.id = rootWindow.requestAnimationFrame(update);
     }
   };
 
   update();
-  window.addEventListener("hashchange", scheduleUpdate);
-  window.addEventListener("resize", scheduleUpdate);
-  window.addEventListener("scroll", scheduleUpdate, { passive: true });
+  rootWindow.addEventListener("hashchange", scheduleUpdate);
+  rootWindow.addEventListener("resize", scheduleUpdate);
+  rootWindow.addEventListener("scroll", scheduleUpdate, { passive: true });
 }
 
-document
-  .querySelectorAll<HTMLElement>("[data-article-toc]")
-  .forEach(bindTableOfContents);
+if (typeof document !== "undefined") {
+  installArticleTableOfContents();
+}

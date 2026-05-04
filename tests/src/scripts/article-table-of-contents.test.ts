@@ -1,8 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import { Window } from "happy-dom";
 
+import { installArticleTableOfContents } from "../../../src/scripts/article-table-of-contents";
+
 describe("article table of contents browser script", () => {
-  test("marks the current heading link from the hash target", async () => {
+  test("marks the current heading link from the hash target", () => {
     const window = new Window({
       url: "https://example.com/articles/post/#second-section",
     });
@@ -35,9 +37,7 @@ describe("article table of contents browser script", () => {
     );
     installImmediateAnimationFrame(window);
 
-    await withBrowserGlobals(window, async () => {
-      await importTocScript("hash-target");
-    });
+    installArticleTableOfContents(browserDocument(document));
 
     const current = browserAnchor(
       document.querySelector('a[href="#second-section"]'),
@@ -55,7 +55,7 @@ describe("article table of contents browser script", () => {
     expect(previous.outerHTML).not.toContain("data-current");
   });
 
-  test("falls back to the nearest scrolled heading when the hash target is out of range", async () => {
+  test("falls back to the nearest scrolled heading when the hash target is out of range", () => {
     const window = new Window({
       url: "https://example.com/articles/post/#second-section",
     });
@@ -90,9 +90,7 @@ describe("article table of contents browser script", () => {
     );
     installImmediateAnimationFrame(window);
 
-    await withBrowserGlobals(window, async () => {
-      await importTocScript("fallback");
-    });
+    installArticleTableOfContents(browserDocument(document));
 
     const current = browserAnchor(
       document.querySelector('a[href="#first-section"]'),
@@ -109,7 +107,7 @@ describe("article table of contents browser script", () => {
     expect(outOfRange.hasAttribute("aria-current")).toBe(false);
   });
 
-  test("updates the current heading when scrolling changes the active section", async () => {
+  test("updates the current heading when scrolling changes the active section", () => {
     const window = new Window({
       url: "https://example.com/articles/post/",
     });
@@ -154,15 +152,13 @@ describe("article table of contents browser script", () => {
       },
     );
 
-    await withBrowserGlobals(window, async () => {
-      await importTocScript("scroll-update");
+    installArticleTableOfContents(browserDocument(document));
 
-      firstTop = -240;
-      secondTop = 128;
-      window.dispatchEvent(new window.Event("scroll"));
-      frameCallbacks.forEach((callback) => {
-        callback(0);
-      });
+    firstTop = -240;
+    secondTop = 128;
+    window.dispatchEvent(new window.Event("scroll"));
+    frameCallbacks.forEach((callback) => {
+      callback(0);
     });
 
     const previous = browserAnchor(
@@ -207,13 +203,6 @@ function installImmediateAnimationFrame(window: Window): void {
   );
 }
 
-async function importTocScript(
-  testCase: "fallback" | "hash-target" | "scroll-update",
-): Promise<void> {
-  // eslint-disable-next-line no-unsanitized/method -- Closed test-case union appends cache-busting query strings to a repository-local module path.
-  await import(`../../../src/scripts/article-table-of-contents.ts?${testCase}`);
-}
-
 function browserAnchor(element: unknown): HTMLAnchorElement | null {
   if (element === null) {
     return null;
@@ -223,25 +212,7 @@ function browserAnchor(element: unknown): HTMLAnchorElement | null {
   return element as HTMLAnchorElement;
 }
 
-async function withBrowserGlobals(
-  window: Window,
-  callback: () => Promise<void>,
-): Promise<void> {
-  Reflect.set(globalThis, "document", window.document);
-  Reflect.set(globalThis, "HTMLElement", window.HTMLElement);
-  Reflect.set(
-    globalThis,
-    "getComputedStyle",
-    window.getComputedStyle.bind(window),
-  );
-  Reflect.set(globalThis, "window", window);
-
-  try {
-    await callback();
-  } finally {
-    Reflect.deleteProperty(globalThis, "document");
-    Reflect.deleteProperty(globalThis, "HTMLElement");
-    Reflect.deleteProperty(globalThis, "getComputedStyle");
-    Reflect.deleteProperty(globalThis, "window");
-  }
+function browserDocument(document: unknown): Document {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Happy DOM implements browser documents at runtime but exposes package-local DOM types.
+  return document as Document;
 }
