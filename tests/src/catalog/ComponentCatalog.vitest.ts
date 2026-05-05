@@ -13,6 +13,7 @@ describe("ComponentCatalog", () => {
     expect(view).toContain("src/components/ui/Button.astro");
     expect(view).toContain("Media Primitives");
     expect(view).toContain("Article Components");
+    expect(view).toContain("Bibliography Components");
     expect(view).toContain("Homepage Blocks");
     expect(view).toContain("Archive, Category, And Search Blocks");
     expect(view).toContain("Page Components");

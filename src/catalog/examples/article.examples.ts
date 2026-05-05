@@ -8,7 +8,8 @@ interface ArticleCatalogExample {
 export const articleCatalogExamples = [
   {
     componentPath: "src/components/articles/ArticleBibliography.astro",
-    description: "Article-local bibliography section for cite-* definitions.",
+    description:
+      "Article-local bibliography section for parsed citation entries.",
     title: "ArticleBibliography",
   },
   {
@@ -16,6 +17,12 @@ export const articleCatalogExamples = [
     description:
       "Flat editorial article row used in archive and discovery lists.",
     title: "ArticleCard",
+  },
+  {
+    componentPath: "src/components/articles/ArticleCitationMenu.astro",
+    description:
+      "Article-header utility for copying generated reader citations.",
+    title: "ArticleCitationMenu",
   },
   {
     componentPath: "src/components/articles/ArticleEndcap.astro",
@@ -29,7 +36,8 @@ export const articleCatalogExamples = [
   },
   {
     componentPath: "src/components/articles/ArticleHeader.astro",
-    description: "Article title, category, metadata, description, and tags.",
+    description:
+      "Article title, category, metadata, citation utility, and description.",
     title: "ArticleHeader",
   },
   {

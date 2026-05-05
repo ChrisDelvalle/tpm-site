@@ -6,6 +6,7 @@ import {
   articlesArchiveUrl,
   articlesIndexUrl,
   authorsIndexUrl,
+  bibliographyUrl,
   feedUrl,
   pageUrl,
   SITE_TITLE,
@@ -43,6 +44,11 @@ const footerCategories = navigationItems.slice(0, 8);
           <li>
             <TextLink href={authorsIndexUrl()} variant="subtle" tone="muted"
               >Authors</TextLink
+            >
+          </li>
+          <li>
+            <TextLink href={bibliographyUrl()} variant="subtle" tone="muted"
+              >Bibliography</TextLink
             >
           </li>
           <li>

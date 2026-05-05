@@ -149,6 +149,49 @@ test.describe("component layout invariants", () => {
     expect(headerToBodyGap).toBeLessThanOrEqual(64);
   });
 
+  test("article citation menu stays in header flow and exposes selectable citations", async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { height: 700, width: 320 },
+      { height: 1024, width: 768 },
+      { height: 900, width: 1280 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto(
+        "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+      );
+
+      const header = page.locator("article > header").first();
+      const title = header.getByRole("heading", { level: 1 });
+      const citationMenu = header.locator("[data-article-citation-menu]");
+      const citationSummary = citationMenu.getByText("Cite this article");
+
+      await expect(citationSummary).toBeVisible();
+      await expectVerticallyBefore(title, citationMenu, {
+        after: "article citation menu",
+        before: "article title",
+      });
+      await expectHorizontallyContained(citationMenu, header, {
+        inner: "article citation menu",
+        outer: "article header",
+      });
+
+      await citationSummary.click();
+
+      const bibtex = citationMenu.locator(
+        'textarea[data-article-citation-text][id$="-bibtex"]',
+      );
+
+      await expect(bibtex).toBeVisible();
+      await expect(bibtex).toHaveValue(/@online\{/u);
+      await expect(
+        citationMenu.getByRole("button", { name: "Copy BibTeX citation" }),
+      ).toBeVisible();
+      await expectNoHorizontalOverflow(page);
+    }
+  });
+
   test("article table of contents occupies the reading margin without overlaying prose", async ({
     page,
   }) => {

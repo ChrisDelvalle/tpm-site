@@ -1,0 +1,67 @@
+---
+import { Copy, Quote } from "lucide-astro";
+
+import type { ArticleCitationMenuViewModel } from "../../lib/citations/article-citation";
+
+interface Props {
+  citation: ArticleCitationMenuViewModel;
+}
+
+const { citation } = Astro.props;
+const citationDomId = citation.articleId.replace(/[^\w-]/g, "-");
+const citationTextClass =
+  "border-border bg-background text-foreground max-h-48 min-w-0 resize-y overflow-auto rounded-sm border p-3 font-mono text-xs leading-5 whitespace-pre-wrap";
+---
+
+<details
+  class="border-border bg-card text-card-foreground group grid min-w-0 gap-3 rounded-sm border p-3"
+  data-article-citation-menu
+>
+  <summary
+    class="text-muted-foreground hover:text-foreground focus-visible:outline-ring flex cursor-pointer list-none items-center gap-2 rounded-xs text-sm font-semibold tracking-normal transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 [&::-webkit-details-marker]:hidden"
+  >
+    <Quote class="size-4" aria-hidden="true" />
+    <span>Cite this article</span>
+  </summary>
+  <div class="mt-3 grid min-w-0 gap-4" data-article-citation-formats>
+    {
+      citation.formats.map((format) => {
+        const textId = `article-citation-${citationDomId}-${format.id}`;
+        const statusId = `${textId}-status`;
+
+        return (
+          <section
+            class="grid min-w-0 gap-2"
+            data-article-citation-format={format.id}
+          >
+            <div class="flex min-w-0 items-center justify-between gap-3">
+              <h2 class="text-foreground m-0 text-sm font-semibold">
+                {format.label}
+              </h2>
+              <button
+                type="button"
+                class="border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-ring data-[article-citation-copy-state=copied]:text-primary inline-flex size-8 shrink-0 items-center justify-center rounded-sm border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                aria-describedby={statusId}
+                aria-label={`Copy ${format.label} citation`}
+                data-article-citation-copy-button
+                data-article-citation-copy-target={textId}
+              >
+                <Copy class="size-4" aria-hidden="true" />
+              </button>
+            </div>
+            {/* prettier-ignore */}
+            <textarea id={textId} readonly rows="6" class:list={[citationTextClass]} data-article-citation-text>{format.text}</textarea>
+            <p
+              id={statusId}
+              class="text-muted-foreground min-h-5 text-xs"
+              aria-live="polite"
+              data-article-citation-copy-status
+            />
+          </section>
+        );
+      })
+    }
+  </div>
+</details>
+
+<script src="../../scripts/article-citation-copy.ts"></script>

@@ -5,6 +5,7 @@ const routes = [
   "/",
   "/articles/",
   "/articles/gamergate-as-metagaming/",
+  "/bibliography/",
   "/categories/",
   "/categories/history/",
   "/about/",

@@ -15,6 +15,7 @@ const keyRoutes = [
   "/articles/gamergate-as-metagaming/",
   "/authors/",
   "/authors/seong-young-her/",
+  "/bibliography/",
   "/categories/",
   "/categories/history/",
   "/about/",

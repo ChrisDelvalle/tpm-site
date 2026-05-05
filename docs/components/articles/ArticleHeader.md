@@ -5,7 +5,8 @@ Source: `src/components/articles/ArticleHeader.astro`
 ## Purpose
 
 `ArticleHeader` renders the uncluttered article opening: category context,
-title, description, and date/author metadata.
+title, description, date/author metadata, and quiet article utilities such as
+`Cite this article`.
 
 ## Public Contract
 
@@ -16,6 +17,7 @@ title, description, and date/author metadata.
 - `description?: string | undefined`
 - `formattedDate?: string | undefined`
 - `title: string`
+- `citation?: ArticleCitationMenuViewModel | undefined`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -29,6 +31,7 @@ ArticleLayout
     category TextLink
     ArticleMeta
       AuthorByline
+    ArticleCitationMenu
 ```
 
 `ArticleHeader` owns the page H1 and visible article opening. It should receive
@@ -41,6 +44,11 @@ The component must respect a readable prose measure, keep metadata visually
 subordinate to the article title/body, and allow long titles and author names to
 wrap without layout collision. It should not reserve space for hero media; hero
 or article media spacing belongs to an explicit media component.
+
+`ArticleCitationMenu` should sit near metadata as a secondary utility. It may
+wrap under the metadata row on narrow screens, but it must not push the title,
+description, or byline into overlap. The header should remain readable when the
+citation utility is absent.
 
 ## Layering And Scrolling
 
@@ -74,6 +82,8 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, and category links semantically associated.
+- keeps the `Cite this article` utility subordinate to article metadata when
+  present and absent without layout shift when omitted.
 - does not create an awkward header-to-body gap when no hero image is rendered.
 - links known authors through `AuthorByline` and preserves legacy byline text
   when structured author data is not available.

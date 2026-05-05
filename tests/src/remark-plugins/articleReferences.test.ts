@@ -29,24 +29,30 @@ Claim with context.[^note-context]
     expect(result.html).not.toContain('data-footnotes="true"');
   });
 
-  test("normalizes repeated citations with display labels and rich content", () => {
+  test("normalizes repeated citations from hidden BibTeX data", () => {
     const result = processMarkdown(`
 First claim.[^cite-baudrillard-1981] Later claim.[^cite-baudrillard-1981]
 
-[^cite-baudrillard-1981]: [@Baudrillard 1981] Baudrillard, Jean. _Simulacra and Simulation_. [Archive](https://example.com/source). \`1981\`.
-
-    Continued citation paragraph with **publisher context**.
+\`\`\`tpm-bibtex
+@book{baudrillard-1981,
+  author = {Baudrillard, Jean},
+  title = {Simulacra and Simulation},
+  year = {1981},
+  url = {https://example.com/source}
+}
+\`\`\`
 `);
 
     const citation = result.references.citations[0];
 
     expect(citation?.label).toBe("cite-baudrillard-1981");
     expect(citation?.displayLabel).toBe("Baudrillard 1981");
+    expect(citation?.bibtex.key).toBe("baudrillard-1981");
     expect(citation?.references).toHaveLength(2);
     expect(
       citation?.references.map((reference) => reference.displayText),
     ).toEqual(["Baudrillard 1981", "Baudrillard 1981"]);
-    expect(citation?.definition.children).toHaveLength(2);
+    expect(citation?.definition.children).toHaveLength(1);
     const firstDefinitionBlock = citation?.definition.children[0];
 
     if (firstDefinitionBlock?.kind !== "paragraph") {
@@ -60,13 +66,9 @@ First claim.[^cite-baudrillard-1981] Later claim.[^cite-baudrillard-1981]
     expect(
       firstDefinitionBlock.children.some((child) => child.kind === "link"),
     ).toBe(true);
-    expect(
-      firstDefinitionBlock.children.some(
-        (child) => child.kind === "inlineCode",
-      ),
-    ).toBe(true);
     expect(result.html).toContain("Baudrillard 1981");
-    expect(result.html).not.toContain("[@Baudrillard 1981]");
+    expect(result.html).not.toContain("tpm-bibtex");
+    expect(result.html).not.toContain("@book");
   });
 
   test("normalizes mixed notes and citations into separate sections", () => {
@@ -74,7 +76,14 @@ First claim.[^cite-baudrillard-1981] Later claim.[^cite-baudrillard-1981]
 Claim.[^cite-source] Context.[^note-context]
 
 [^note-context]: Explanatory note.
-[^cite-source]: Bibliography entry.
+
+\`\`\`tpm-bibtex
+@article{source,
+  author = {Writer, A.},
+  title = {Bibliography entry},
+  year = {2024}
+}
+\`\`\`
 `);
 
     expect(result.references.notes.map((entry) => entry.label)).toEqual([
@@ -107,14 +116,14 @@ First note.[^note-repeat] Second note.[^note-repeat]
     ).toThrow("referenced more than once");
   });
 
-  test("fails malformed display labels", () => {
+  test("fails obsolete citation definitions", () => {
     expect(() =>
       processMarkdown(`
-Bad citation.[^cite-bad-display-label]
+Bad citation.[^cite-bad-definition]
 
-[^cite-bad-display-label]: [@] Missing display label.
+[^cite-bad-definition]: Obsolete citation prose.
 `),
-    ).toThrow("Malformed display label");
+    ).toThrow("obsolete Markdown footnote definition");
   });
 
   test("fails invalid labels when strict validation is enabled", () => {
@@ -137,17 +146,52 @@ Legacy claim.[^Old-Source]
   });
 
   test("fails unreferenced and duplicate definitions", () => {
-    expect(() => processMarkdown("[^cite-unused]: Unused source.")).toThrow(
+    expect(() => processMarkdown("[^note-unused]: Unused note.")).toThrow(
       "is never used",
     );
     expect(() =>
       processMarkdown(`
-Claim.[^cite-duplicate]
+Claim.[^note-duplicate]
 
-[^cite-duplicate]: First.
-[^cite-duplicate]: Second.
+[^note-duplicate]: First.
+[^note-duplicate]: Second.
 `),
     ).toThrow("Duplicate article reference definition");
+  });
+
+  test("fails missing, unused, duplicate, and malformed BibTeX entries", () => {
+    expect(() => processMarkdown("Claim.[^cite-missing]")).toThrow(
+      "has no matching BibTeX entry",
+    );
+
+    expect(() =>
+      processMarkdown(`
+\`\`\`tpm-bibtex
+@article{unused, title = {Unused}}
+\`\`\`
+`),
+    ).toThrow("is never cited");
+
+    expect(() =>
+      processMarkdown(`
+Claim.[^cite-source]
+
+\`\`\`tpm-bibtex
+@article{source, title = {First}}
+@book{source, title = {Second}}
+\`\`\`
+`),
+    ).toThrow("Duplicate BibTeX key");
+
+    expect(() =>
+      processMarkdown(`
+Claim.[^cite-broken]
+
+\`\`\`tpm-bibtex
+@article{broken title = {Broken}}
+\`\`\`
+`),
+    ).toThrow("Malformed BibTeX");
   });
 
   test("fails the invalid repeated-note fixture before it can become published content", async () => {
@@ -179,8 +223,8 @@ function missingDefinitionTree(): Root {
         children: [
           { type: "text", value: "Missing." },
           {
-            identifier: "cite-missing",
-            label: "cite-missing",
+            identifier: "note-missing",
+            label: "note-missing",
             type: "footnoteReference",
           },
         ],

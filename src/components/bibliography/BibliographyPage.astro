@@ -1,0 +1,35 @@
+---
+import type { BibliographyEntry } from "../../lib/bibliography";
+import { articlesArchiveUrl } from "../../lib/routes";
+import PageHeader from "../pages/PageHeader.astro";
+import BibliographyEmptyState from "./BibliographyEmptyState.astro";
+import BibliographyList from "./BibliographyList.astro";
+
+interface Props {
+  entries: readonly BibliographyEntry[];
+}
+
+const { entries } = Astro.props;
+const entryCount = entries.length;
+---
+
+<section class="grid gap-8" data-bibliography-page>
+  <div class="grid gap-3">
+    <PageHeader
+      title="Bibliography"
+      description="Sources cited by articles in The Philosopher's Meme."
+    />
+    <p class="text-muted-foreground text-sm" aria-live="polite">
+      {entryCount}
+      {entryCount === 1 ? "source" : "sources"}
+    </p>
+  </div>
+
+  {
+    entryCount === 0 ? (
+      <BibliographyEmptyState auditHref={articlesArchiveUrl()} />
+    ) : (
+      <BibliographyList entries={entries} />
+    )
+  }
+</section>

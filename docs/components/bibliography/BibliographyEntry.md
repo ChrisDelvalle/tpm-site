@@ -13,8 +13,8 @@ It must not decide whether two sources are duplicates.
 
 - `entry: BibliographyEntry`
 
-The entry includes stable ID, label, optional display label, rich citation
-content, and source article backlinks.
+The entry includes stable ID, parsed source display fields, fallback citation
+text, optional external source links, and source article backlinks.
 
 ## Composition Relationships
 
@@ -45,12 +45,14 @@ source, and many source articles.
 ## Accessibility Semantics
 
 Use semantic article/list item markup if useful. Preserve link semantics inside
-rich citation content. The source article backlinks should have clear text.
+generated citation display content. The source article backlinks should have
+clear text.
 
 ## Content Edge Cases
 
-Handle rich Markdown citation content, bare URLs, non-URL sources, very long
-titles, punctuation, repeated use across articles, and missing display labels.
+Handle bare URLs, non-URL sources, very long titles, punctuation, repeated use
+across articles, missing authors, missing years, and incomplete optional BibTeX
+fields.
 
 ## Theme Behavior
 
@@ -59,7 +61,7 @@ as promotional cards.
 
 ## Testable Invariants
 
-- Renders rich citation content without flattening it to plain text.
+- Renders generated citation display content without exposing raw BibTeX.
 - Renders one source article section when source articles exist.
 - Long URLs wrap.
 - Entry ID is stable and unique.

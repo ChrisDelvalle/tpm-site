@@ -12,12 +12,14 @@ import type {
   ArticleReferenceDefinitionInput,
   ArticleReferenceDiagnostic,
   ArticleReferenceDisplayLabel,
+  ArticleReferenceInlineContent,
   ArticleReferenceKind,
   ArticleReferenceKindPrefix,
   ArticleReferenceLabel,
   ArticleReferenceMarker,
   ArticleReferenceOccurrenceInput,
   ArticleReferencesNormalizeResult,
+  ParsedBibtexEntry,
 } from "./model";
 import { hasArticleReferenceDiagnostics } from "./validate";
 
@@ -50,11 +52,13 @@ export function classifyArticleReferenceLabel(
  *
  * @param references Raw body reference occurrences in document order.
  * @param definitions Raw footnote definitions in document order.
+ * @param bibtexEntries Parsed BibTeX entries collected from hidden data blocks.
  * @returns Renderable reference data or blocking diagnostics.
  */
 export function normalizeArticleReferences(
   references: readonly ArticleReferenceOccurrenceInput[],
   definitions: readonly ArticleReferenceDefinitionInput[],
+  bibtexEntries: readonly ParsedBibtexEntry[] = [],
 ): ArticleReferencesNormalizeResult {
   const referenceClassifications = references.map((reference) => ({
     classification: classifyArticleReferenceLabel(reference.label),
@@ -95,27 +99,43 @@ export function normalizeArticleReferences(
     ({ classification, raw }) =>
       classification === undefined ? [] : [{ ...classification, raw }],
   );
+  const citationDefinitions = validDefinitions
+    .filter((definition) => definition.kind === "citation")
+    .map(
+      (definition) =>
+        ({ code: "citation-definition", label: definition.label }) as const,
+    );
+  const noteDefinitions = validDefinitions.filter(
+    (definition) => definition.kind === "note",
+  );
   const definitionDuplicates = duplicateLabels(
     validDefinitions.map((definition) => definition.label),
   ).map((label) => ({ code: "duplicate-definition", label }) as const);
   const definitionMap = new Map(
-    validDefinitions.map(
+    noteDefinitions.map(
       (definition) => [definition.label, definition] as const,
     ),
   );
-  const referencedLabels = new Set(
-    validReferences.map((reference) => reference.label),
+  const referencedNoteLabels = new Set(
+    validReferences
+      .filter((reference) => reference.kind === "note")
+      .map((reference) => reference.label),
   );
-  const missingDefinitions = Array.from(referencedLabels)
+  const referencedCitationKeys = new Set(
+    validReferences
+      .filter((reference) => reference.kind === "citation")
+      .map((reference) => citationKeyFromLabel(reference.label)),
+  );
+  const missingDefinitions = Array.from(referencedNoteLabels)
     .filter((label) => !definitionMap.has(label))
     .map((label) => ({ code: "missing-definition", label }) as const);
-  const unreferencedDefinitions = validDefinitions
+  const unreferencedDefinitions = noteDefinitions
     .map((definition) => definition.label)
     .filter((label, index, labels) => labels.indexOf(label) === index)
-    .filter((label) => !referencedLabels.has(label))
+    .filter((label) => !referencedNoteLabels.has(label))
     .map((label) => ({ code: "unreferenced-definition", label }) as const);
   const repeatedNotes = repeatedNoteDiagnostics(validReferences);
-  const displayLabelResults = validDefinitions.map((definition) => ({
+  const displayLabelResults = noteDefinitions.map((definition) => ({
     definition,
     result: extractLeadingDisplayLabel(
       definition.label,
@@ -133,14 +153,39 @@ export function normalizeArticleReferences(
         ? [{ code: "empty-definition", label: definition.label } as const]
         : [],
   );
+  const duplicateBibtexKeys = duplicateValues(
+    bibtexEntries.map((entry) => entry.normalizedKey),
+  ).map((key) => ({ code: "duplicate-bibtex-key", key }) as const);
+  const bibtexMap = new Map(
+    bibtexEntries.map((entry) => [entry.normalizedKey, entry] as const),
+  );
+  const missingBibtexEntries = Array.from(referencedCitationKeys)
+    .filter((key) => !bibtexMap.has(key))
+    .map(
+      (key) =>
+        ({
+          code: "missing-bibtex-entry",
+          key,
+          label: `cite-${key}`,
+        }) as const,
+    );
+  const unusedBibtexEntries = Array.from(
+    new Set(bibtexEntries.map((entry) => entry.normalizedKey)),
+  )
+    .filter((key) => !referencedCitationKeys.has(key))
+    .map((key) => ({ code: "unused-bibtex-entry", key }) as const);
   const preflightDiagnostics = [
     ...invalidDiagnostics,
+    ...citationDefinitions,
     ...definitionDuplicates,
     ...missingDefinitions,
     ...unreferencedDefinitions,
     ...repeatedNotes,
     ...malformedDisplayLabels,
     ...emptyDefinitions,
+    ...duplicateBibtexKeys,
+    ...missingBibtexEntries,
+    ...unusedBibtexEntries,
   ];
 
   if (hasArticleReferenceDiagnostics(preflightDiagnostics)) {
@@ -172,7 +217,7 @@ export function normalizeArticleReferences(
       label,
       index + 1,
       referencesByLabel.get(label) ?? [],
-      displayLabelMap,
+      bibtexMap,
     ),
   );
   const notes = orderedNoteLabels.map((label, index) =>
@@ -214,18 +259,19 @@ function citationFromLabel(
   label: ArticleReferenceLabel,
   order: number,
   references: readonly LabelOccurrence[],
-  displayLabelMap: ReadonlyMap<ArticleReferenceLabel, NormalizedDefinition>,
+  bibtexMap: ReadonlyMap<string, ParsedBibtexEntry>,
 ): ArticleCitation {
-  const definition = requiredDefinition(label, displayLabelMap);
+  const bibtex = requiredBibtex(label, bibtexMap);
+  const definition = definitionFromBibtex(bibtex);
+  const displayLabel = citationDisplayLabel(bibtex);
   const markers = references.map((reference) =>
-    markerFromOccurrence(reference, "citation", order, definition.displayLabel),
+    markerFromOccurrence(reference, "citation", order, displayLabel),
   );
 
   return {
-    definition: { children: definition.children },
-    ...(definition.displayLabel === undefined
-      ? {}
-      : { displayLabel: definition.displayLabel }),
+    bibtex,
+    definition,
+    ...(displayLabel === undefined ? {} : { displayLabel }),
     id: articleReferenceEntryId(label),
     kind: "citation",
     label,
@@ -454,4 +500,148 @@ function requiredDefinition(
   }
 
   return definition;
+}
+
+function requiredBibtex(
+  label: ArticleReferenceLabel,
+  bibtexMap: ReadonlyMap<string, ParsedBibtexEntry>,
+): ParsedBibtexEntry {
+  const bibtex = bibtexMap.get(citationKeyFromLabel(label));
+
+  if (bibtex === undefined) {
+    throw new Error(`Missing normalized BibTeX entry for ${label}.`);
+  }
+
+  return bibtex;
+}
+
+function citationKeyFromLabel(label: ArticleReferenceLabel): string {
+  return label.slice("cite-".length);
+}
+
+function definitionFromBibtex(entry: ParsedBibtexEntry): {
+  children: readonly ArticleReferenceBlockContent[];
+} {
+  const children: ArticleReferenceInlineContent[] = [];
+  const contributor = field(entry, "author") ?? field(entry, "editor");
+  const title = field(entry, "title");
+  const container =
+    field(entry, "journal") ??
+    field(entry, "journaltitle") ??
+    field(entry, "booktitle");
+  const publisher = field(entry, "publisher");
+  const year = field(entry, "year") ?? yearFromDate(field(entry, "date"));
+  const url = field(entry, "url");
+  const doi = field(entry, "doi");
+
+  appendText(children, contributor === undefined ? "" : `${contributor}. `);
+
+  if (title === undefined) {
+    appendText(children, `${entry.key}. `);
+  } else {
+    children.push({
+      children: [{ kind: "text", text: title }],
+      kind: "emphasis",
+      text: title,
+    });
+    appendText(children, ". ");
+  }
+
+  appendText(children, container === undefined ? "" : `${container}. `);
+  appendText(children, publisher === undefined ? "" : `${publisher}. `);
+  appendText(children, year === undefined ? "" : `${year}. `);
+
+  if (url !== undefined) {
+    appendLink(children, "Source", url);
+    appendText(children, ".");
+  } else if (doi !== undefined) {
+    const doiUrl = `https://doi.org/${doi}`;
+    appendLink(children, doi, doiUrl);
+    appendText(children, ".");
+  }
+
+  if (children.length === 0) {
+    appendText(children, entry.key);
+  }
+
+  return {
+    children: [
+      {
+        children,
+        kind: "paragraph",
+        text: children.map((child) => child.text).join(""),
+      },
+    ],
+  };
+}
+
+function citationDisplayLabel(
+  entry: ParsedBibtexEntry,
+): ArticleReferenceDisplayLabel | undefined {
+  const contributor = field(entry, "author") ?? field(entry, "editor");
+  const year = field(entry, "year") ?? yearFromDate(field(entry, "date"));
+  const name =
+    contributor === undefined ? undefined : firstLastName(contributor);
+
+  if (name === undefined) {
+    return undefined;
+  }
+
+  return year === undefined ? name : `${name} ${year}`;
+}
+
+function field(entry: ParsedBibtexEntry, name: string): string | undefined {
+  const value = Object.entries(entry.fields)
+    .find(([key]) => key === name)
+    ?.at(1);
+  const cleaned = value === undefined ? undefined : cleanBibtexValue(value);
+
+  return cleaned === "" ? undefined : cleaned;
+}
+
+function cleanBibtexValue(value: string): string {
+  return value.replace(/[{}]/gu, "").replace(/\s+/gu, " ").trim();
+}
+
+function firstLastName(contributors: string): string | undefined {
+  const firstContributor = contributors
+    .split(/\s+and\s+/iu)
+    .at(0)
+    ?.trim();
+
+  if (firstContributor === undefined || firstContributor === "") {
+    return undefined;
+  }
+
+  if (firstContributor.includes(",")) {
+    return firstContributor.split(",").at(0)?.trim();
+  }
+
+  return firstContributor.split(/\s+/u).at(-1);
+}
+
+function yearFromDate(date: string | undefined): string | undefined {
+  return date?.match(/\d{4}/u)?.at(0);
+}
+
+function appendText(
+  children: ArticleReferenceInlineContent[],
+  text: string,
+): void {
+  if (text !== "") {
+    children.push({ kind: "text", text });
+  }
+}
+
+function appendLink(
+  children: ArticleReferenceInlineContent[],
+  text: string,
+  url: string,
+): void {
+  children.push({
+    children: [{ kind: "text", text }],
+    kind: "link",
+    text,
+    url,
+  });
 }

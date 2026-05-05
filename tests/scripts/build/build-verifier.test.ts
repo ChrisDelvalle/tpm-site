@@ -93,6 +93,7 @@ describe("build verifier helpers", () => {
       "about/index.html",
       "articles/index.html",
       "articles/all/index.html",
+      "bibliography/index.html",
       "articles/markdown-post/index.html",
       "categories/history/index.html",
     ]);
@@ -193,6 +194,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -230,6 +232,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -271,6 +274,7 @@ describe("build verifier helpers", () => {
           await writeText(root, "dist/about/index.html", "");
           await writeText(root, "dist/articles/index.html", "");
           await writeText(root, "dist/articles/all/index.html", "");
+          await writeText(root, "dist/bibliography/index.html", "");
           await writeText(
             root,
             "dist/articles/published/index.html",
@@ -350,6 +354,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -429,6 +434,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles", "not a directory");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(root, "dist/categories/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed />");
@@ -458,6 +464,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -504,6 +511,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -547,6 +555,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -588,6 +597,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",
@@ -632,6 +642,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
+      await writeText(root, "dist/bibliography/index.html", "");
       await writeText(
         root,
         "dist/articles/published/index.html",

@@ -111,10 +111,9 @@ Handle:
 - long display labels;
 - long source titles;
 - long URLs;
-- rich Markdown in definitions;
+- generated citation display content from parsed BibTeX fields;
 - unusual punctuation;
-- definition content that starts with `[@...]` as metadata;
-- later `[@...]` text that remains ordinary definition content.
+- incomplete optional BibTeX fields with fallback text.
 
 ## Theme Behavior
 
@@ -132,7 +131,8 @@ that compete with the support block.
 - Renders after `ArticleEndcap` and before `ArticleTags`.
 - Keeps notes and bibliography within the article reading measure.
 - Does not create horizontal overflow with long labels, titles, or URLs.
-- Preserves rich definition content from the normalized model.
+- Preserves normalized note content and generated citation display content from
+  the normalized model.
 - Keeps every entry target ID unique.
 - Keeps every backlink target associated with the originating inline marker.
 - Maintains visible focus states in light and dark mode.

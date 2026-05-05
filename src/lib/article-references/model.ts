@@ -10,7 +10,7 @@ export type ArticleReferenceKindPrefix = "cite" | "note";
 /** Stable HTML ID generated for reference entries, markers, and backlinks. */
 export type ArticleReferenceHtmlId = string;
 
-/** Optional author-provided display label extracted from `[@...]` metadata. */
+/** Optional note metadata or generated citation label used for inline markers. */
 export type ArticleReferenceDisplayLabel = string;
 
 /** Inline serializable content preserved from a Markdown reference definition. */
@@ -36,6 +36,7 @@ export interface ArticleReferenceData {
 
 /** One normalized bibliography citation entry. */
 export interface ArticleCitation extends ArticleReferenceEntryBase {
+  bibtex: ParsedBibtexEntry;
   kind: "citation";
   references: readonly ArticleReferenceMarker[];
 }
@@ -68,6 +69,15 @@ export interface ArticleReferenceDefinitionInput {
   label: string;
 }
 
+/** Parsed structured citation data collected from `tpm-bibtex` source blocks. */
+export interface ParsedBibtexEntry {
+  entryType: string;
+  fields: Readonly<Record<string, string>>;
+  key: string;
+  normalizedKey: string;
+  raw: string;
+}
+
 /** Successful pure-normalization result. */
 interface ArticleReferencesNormalizeSuccess {
   data: ArticleReferenceData;
@@ -87,14 +97,19 @@ export type ArticleReferencesNormalizeResult =
 
 /** Blocking diagnostic emitted by pure reference normalization. */
 export type ArticleReferenceDiagnostic =
+  | CitationDefinitionDiagnostic
+  | DuplicateBibtexKeyDiagnostic
   | DuplicateDefinitionDiagnostic
   | EmptyDefinitionDiagnostic
   | IdCollisionDiagnostic
   | InvalidLabelDiagnostic
+  | MalformedBibtexDiagnostic
   | MalformedDisplayLabelDiagnostic
+  | MissingBibtexEntryDiagnostic
   | MissingDefinitionDiagnostic
   | RepeatedNoteReferenceDiagnostic
-  | UnreferencedDefinitionDiagnostic;
+  | UnreferencedDefinitionDiagnostic
+  | UnusedBibtexEntryDiagnostic;
 
 interface ArticleReferenceEntryBase {
   definition: ArticleReferenceDefinitionContent;
@@ -174,9 +189,35 @@ interface DuplicateDefinitionDiagnostic {
   label: ArticleReferenceLabel;
 }
 
+interface DuplicateBibtexKeyDiagnostic {
+  code: "duplicate-bibtex-key";
+  key: string;
+}
+
+interface CitationDefinitionDiagnostic {
+  code: "citation-definition";
+  label: ArticleReferenceLabel;
+}
+
 interface MissingDefinitionDiagnostic {
   code: "missing-definition";
   label: ArticleReferenceLabel;
+}
+
+interface MissingBibtexEntryDiagnostic {
+  code: "missing-bibtex-entry";
+  key: string;
+  label: ArticleReferenceLabel;
+}
+
+interface UnusedBibtexEntryDiagnostic {
+  code: "unused-bibtex-entry";
+  key: string;
+}
+
+interface MalformedBibtexDiagnostic {
+  code: "malformed-bibtex";
+  message: string;
 }
 
 interface UnreferencedDefinitionDiagnostic {

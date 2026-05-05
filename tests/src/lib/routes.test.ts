@@ -8,6 +8,7 @@ import {
   assertUniqueArticleSlugs,
   authorsIndexUrl,
   authorUrl,
+  bibliographyUrl,
   categoriesIndexUrl,
   categorySlug,
   categoryUrl,
@@ -48,6 +49,7 @@ describe("route helpers", () => {
     expect(articleUrl("article-title")).toBe("/articles/article-title/");
     expect(authorsIndexUrl()).toBe("/authors/");
     expect(authorUrl("seong-young-her")).toBe("/authors/seong-young-her/");
+    expect(bibliographyUrl()).toBe("/bibliography/");
     expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("history")).toBe("/categories/history/");
     expect(pageUrl("About")).toBe("/about/");

@@ -1,7 +1,9 @@
 ---
+import ArticleCitationMenu from "./ArticleCitationMenu.astro";
 import ArticleMeta from "./ArticleMeta.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { AuthorSummary } from "../../lib/authors";
+import type { ArticleCitationMenuViewModel } from "../../lib/citations/article-citation";
 
 interface ArticleCategory {
   href: string;
@@ -12,6 +14,7 @@ interface Props {
   author?: string | undefined;
   authors?: readonly AuthorSummary[] | undefined;
   category?: ArticleCategory | undefined;
+  citation?: ArticleCitationMenuViewModel | undefined;
   date?: Date | undefined;
   description?: string | undefined;
   formattedDate?: string | undefined;
@@ -22,6 +25,7 @@ const {
   author,
   authors = [],
   category,
+  citation,
   date,
   description,
   formattedDate,
@@ -54,6 +58,13 @@ const {
     date={date}
     formattedDate={formattedDate}
   />
+  {
+    citation && (
+      <div class="max-w-2xl min-w-0">
+        <ArticleCitationMenu citation={citation} />
+      </div>
+    )
+  }
   {
     description && (
       <p class="text-muted-foreground max-w-3xl min-w-0 text-lg break-words">

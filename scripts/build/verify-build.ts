@@ -10,6 +10,7 @@ const requiredBasePaths = [
   "about/index.html",
   "articles/index.html",
   "articles/all/index.html",
+  "bibliography/index.html",
   "categories/index.html",
   "feed.xml",
   "sitemap-index.xml",
@@ -20,12 +21,15 @@ const staticReadingBasePages = [
   "about/index.html",
   "articles/index.html",
   "articles/all/index.html",
+  "bibliography/index.html",
 ];
 const allowedStaticClientScriptPatterns = [
   /^\/_astro\/AnchoredRoot\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u,
 ] as const;
 const articleImageInspectorScriptPattern =
   /^\/_astro\/ArticleImageInspectorScript\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u;
+const articleCitationMenuScriptPattern =
+  /^\/_astro\/ArticleCitationMenu\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u;
 const astroPrefetchPageScriptPattern = /^\/_astro\/page\.[\w-]+\.js$/u;
 const astroPrefetchChunkImportPattern =
   /from\s*["'`]\.\/(_astro_prefetch\.[\w-]+\.js)["'`]/u;
@@ -677,7 +681,8 @@ async function isAllowedStaticClientScript(
 ): Promise<boolean> {
   if (
     isArticleHtmlPath(relativeHtmlPath) &&
-    articleImageInspectorScriptPattern.test(source)
+    (articleImageInspectorScriptPattern.test(source) ||
+      articleCitationMenuScriptPattern.test(source))
   ) {
     return true;
   }

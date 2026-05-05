@@ -1,0 +1,61 @@
+# Article Reference Authoring
+
+Use ordinary Markdown for article prose. Only use the reference syntax below
+when a note or bibliography entry should be part of the site's structured
+article-reference system.
+
+## Explanatory Notes
+
+Use `note-*` footnotes for explanatory asides.
+
+```md
+This sentence needs extra context.[^note-context]
+
+[^note-context]: This is the explanatory note.
+```
+
+Rules:
+
+- note labels use lowercase ASCII words separated by hyphens;
+- each note may be referenced once;
+- note prose can use normal Markdown;
+- notes are not bibliography sources.
+
+## Bibliography Citations
+
+Use `cite-*` markers plus a hidden `tpm-bibtex` block for bibliography sources.
+
+````md
+This claim cites a source.[^cite-baudrillard-1981]
+
+```tpm-bibtex
+@book{baudrillard-1981,
+  author = {Baudrillard, Jean},
+  title = {Simulacra and Simulation},
+  year = {1981},
+  url = {https://example.com/source}
+}
+```
+````
+
+Rules:
+
+- the marker is `[^cite-<key>]`;
+- the BibTeX key is `<key>` without the `cite-` prefix;
+- citation keys use lowercase ASCII words separated by hyphens;
+- citations may be referenced more than once;
+- do not add `[^cite-*]:` footnote definitions;
+- `tpm-bibtex` blocks are hidden source data and should never appear to
+  readers.
+
+## Ordinary Links
+
+Normal Markdown links are just prose links.
+
+```md
+Read the [archive](https://example.com/archive) for context.
+```
+
+Do not expect ordinary links to appear in the article bibliography or global
+bibliography. If a link is a cited source, use a `cite-*` marker and a matching
+BibTeX entry.

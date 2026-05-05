@@ -4,6 +4,7 @@ import type {
   ArticleReferenceDefinitionInput,
   ArticleReferenceInlineContent,
   ArticleReferenceOccurrenceInput,
+  ParsedBibtexEntry,
 } from "../../../../src/lib/article-references/model";
 import {
   classifyArticleReferenceLabel,
@@ -46,20 +47,19 @@ describe("article reference normalization", () => {
         reference("cite-first"),
         reference("cite-second"),
       ],
+      [definition("note-context", "Context note.")],
       [
-        definition("cite-first", "First citation."),
-        definition("note-context", "Context note."),
-        definition(
-          "cite-second",
-          "[@Second 2020] Second citation with _rich_ content.",
-          [
-            {
-              children: [{ kind: "text", text: "rich" }],
-              kind: "emphasis",
-              text: "rich",
-            },
-          ],
-        ),
+        bibtex("first", {
+          author: "First, A.",
+          title: "First citation",
+          year: "2019",
+        }),
+        bibtex("second", {
+          author: "Second, B.",
+          title: "Second citation with rich content",
+          url: "https://example.com/second",
+          year: "2020",
+        }),
       ],
     );
 
@@ -85,6 +85,7 @@ describe("article reference normalization", () => {
       "Second 2020",
     );
     expect(result.data.notes[0]?.references[0]?.displayText).toBe("1");
+    expect(result.data.citations[0]?.bibtex.key).toBe("second");
 
     const [firstDefinitionChild] =
       result.data.citations[0]?.definition.children ?? [];
@@ -93,7 +94,10 @@ describe("article reference normalization", () => {
       throw new Error("Expected paragraph definition content.");
     }
 
-    expect(firstDefinitionChild.children[1]?.kind).toBe("emphasis");
+    expect(firstDefinitionChild.text).toContain("Second citation");
+    expect(
+      firstDefinitionChild.children.some((child) => child.kind === "link"),
+    ).toBe(true);
   });
 
   test("fails invalid references before renderable data is returned", () => {
@@ -105,12 +109,15 @@ describe("article reference normalization", () => {
         reference("note-repeat"),
       ],
       [
-        definition("cite-unused", "Unused citation."),
-        definition("cite-unused", "Duplicate citation."),
+        definition("cite-missing", "Obsolete citation definition."),
         definition("note-repeat", "Repeated note."),
         definition("bad_label", "Bad label."),
         definition("cite-empty", ""),
         definition("cite-bad-display-label", "[@] Bad label."),
+      ],
+      [
+        bibtex("unused", { title: "Unused citation" }),
+        bibtex("unused", { title: "Duplicate citation" }),
       ],
     );
 
@@ -123,14 +130,13 @@ describe("article reference normalization", () => {
     expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
       "invalid-label",
       "invalid-label",
-      "duplicate-definition",
-      "missing-definition",
-      "unreferenced-definition",
-      "unreferenced-definition",
-      "unreferenced-definition",
+      "citation-definition",
+      "citation-definition",
+      "citation-definition",
       "repeated-note-reference",
-      "malformed-display-label",
-      "empty-definition",
+      "duplicate-bibtex-key",
+      "missing-bibtex-entry",
+      "unused-bibtex-entry",
     ]);
   });
 });
@@ -153,5 +159,18 @@ function definition(
       },
     ],
     label,
+  };
+}
+
+function bibtex(
+  key: string,
+  fields: Readonly<Record<string, string>>,
+): ParsedBibtexEntry {
+  return {
+    entryType: "article",
+    fields,
+    key,
+    normalizedKey: key.toLowerCase(),
+    raw: `@article{${key}}`,
   };
 }
