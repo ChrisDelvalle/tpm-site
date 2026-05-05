@@ -85,3 +85,14 @@ they are useful context. Explicitly deferred work belongs in
       generation and static output.
 - [x] Update this checklist only after verification passes or after documenting
       any explicit blocker.
+
+### Milestone 7: Platformization Audit
+
+- [x] Audit hard-coded site identity, content roots, asset roots, theme tokens,
+      navigation, support copy, route assumptions, tooling paths, tests, docs,
+      CI, and deployment assumptions that block reuse as a general blog
+      platform.
+- [x] Document a public platform plus separate site-instance repo strategy that
+      keeps both repos manageable in one local workspace.
+- [x] Identify implementation phases, high-risk proof points, and follow-up
+      milestones before any migration begins.
