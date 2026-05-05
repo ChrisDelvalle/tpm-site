@@ -107,6 +107,17 @@ images for the inspector and do not create nested interactive elements.
 Linked standalone images should still receive the normal bounded figure/frame
 contract when possible, but their click target remains the author's link.
 
+## Loading Priority
+
+The first standalone Markdown article image receives `loading="eager"` and
+`fetchpriority="high"`. This protects pages where the first image is visible at
+the top of the reading flow from lazy-load layout instability and slow LCP.
+
+Subsequent standalone images remain `loading="lazy"` so image-heavy articles do
+not pay the full network cost before the reader reaches them. The plugin owns
+this priority decision for generated Markdown images; authors should not need
+to think about it during normal article writing.
+
 ## Full-Screen Inspector
 
 The inspector is a progressive enhancement:
@@ -203,6 +214,8 @@ Unit tests:
 - local path resolution relative to Markdown file paths;
 - preview policy output for default and natural modes;
 - generated figure anatomy for unlinked Markdown images;
+- first generated Markdown image priority and later generated image lazy-load
+  behavior;
 - linked Markdown images preserve link behavior and are not inspectable;
 - inline Markdown images and emoji are not promoted into block figures;
 - article image render metadata reports whether an inspector script is needed.

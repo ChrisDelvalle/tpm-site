@@ -10,6 +10,8 @@ interface Props {
   layout?: "constrained" | "fixed" | "full-width";
   lightImage: ImageMetadata;
   loading?: "eager" | "lazy";
+  priorityVariant?: "both" | "dark" | "light";
+  sizes?: string;
 }
 
 const {
@@ -20,22 +22,34 @@ const {
   layout = "constrained",
   lightImage,
   loading,
+  priorityVariant = "light",
+  sizes,
 } = Astro.props;
+
+const lightIsPriority =
+  priorityVariant === "light" || priorityVariant === "both";
+const darkIsPriority = priorityVariant === "dark" || priorityVariant === "both";
+const loadingFor = (isPriority: boolean) =>
+  isPriority || loading !== "eager" ? loading : "lazy";
+const fetchPriorityFor = (isPriority: boolean) =>
+  isPriority || fetchpriority !== "high" ? fetchpriority : "low";
 ---
 
 <Image
   src={lightImage}
   alt={alt}
   layout={layout}
-  loading={loading}
-  fetchpriority={fetchpriority}
+  loading={loadingFor(lightIsPriority)}
+  fetchpriority={fetchPriorityFor(lightIsPriority)}
+  sizes={sizes}
   class:list={["block dark:hidden", className]}
 />
 <Image
   src={darkImage}
   alt={alt}
   layout={layout}
-  loading={loading}
-  fetchpriority={fetchpriority}
+  loading={loadingFor(darkIsPriority)}
+  fetchpriority={fetchPriorityFor(darkIsPriority)}
+  sizes={sizes}
   class:list={["hidden dark:block", className]}
 />

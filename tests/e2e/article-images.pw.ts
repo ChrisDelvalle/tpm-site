@@ -152,6 +152,8 @@ test.describe("article image invariants", () => {
 
         for (let index = 0; index < Math.min(figureCount, 3); index += 1) {
           const figure = figures.nth(index);
+          await figure.scrollIntoViewIfNeeded();
+          await expect(figure).toBeVisible();
           await expectHorizontallyContained(figure, prose, {
             inner: `${route} article figure ${index + 1}`,
             outer: "article prose",

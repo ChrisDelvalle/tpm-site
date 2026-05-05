@@ -23,6 +23,7 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
     layout="full-width"
     loading="eager"
     fetchpriority="high"
+    sizes="(min-width: 64rem) 56rem, calc(100vw - 2rem)"
     class="h-auto w-full"
   />
   <p class="text-muted-foreground max-w-2xl text-lg leading-8">{tagline}</p>

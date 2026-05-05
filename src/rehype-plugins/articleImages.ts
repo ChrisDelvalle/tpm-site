@@ -49,6 +49,10 @@ interface ArticleImagesFrontmatter {
   articleImages?: unknown;
 }
 
+interface ArticleImageTransformContext {
+  renderedImageCount: number;
+}
+
 const frontmatterKey = "articleImages";
 const standaloneImageProperty = "data-article-image-standalone-source";
 const standaloneImagePropertyAliases = [
@@ -101,7 +105,7 @@ export function rehypeArticleImages(
   void options.policyCacheKey;
 
   return function transformArticleImages(tree: HastParent, file: VFileLike) {
-    transformChildren(tree, [], file);
+    transformChildren(tree, [], file, { renderedImageCount: 0 });
   };
 }
 
@@ -109,6 +113,7 @@ function transformChildren(
   parent: HastParent,
   ancestors: readonly HastElement[],
   file: VFileLike,
+  context: ArticleImageTransformContext,
 ): void {
   parent.children = parent.children.map((child) => {
     if (!isElement(child) || isInsideFigure(ancestors)) {
@@ -118,7 +123,12 @@ function transformChildren(
     const standaloneImage = standaloneImageFromParagraph(child);
 
     if (standaloneImage !== undefined) {
-      return articleFigure(standaloneImage.image, file, standaloneImage.link);
+      return articleFigure(
+        standaloneImage.image,
+        file,
+        context,
+        standaloneImage.link,
+      );
     }
 
     if (child.tagName === "p") {
@@ -131,14 +141,14 @@ function transformChildren(
       linkedImage !== undefined &&
       isMarkedStandaloneImage(linkedImage.image)
     ) {
-      return articleFigure(linkedImage.image, file, child);
+      return articleFigure(linkedImage.image, file, context, child);
     }
 
     if (child.tagName === "img" && isMarkedStandaloneImage(child)) {
-      return articleFigure(child, file);
+      return articleFigure(child, file, context);
     }
 
-    transformChildren(child, [...ancestors, child], file);
+    transformChildren(child, [...ancestors, child], file, context);
     return child;
   });
 }
@@ -183,12 +193,14 @@ function standaloneImageFromParagraph(
 function articleFigure(
   image: HastElement,
   file: VFileLike,
+  context: ArticleImageTransformContext,
   link?: HastElement,
 ): HastElement {
   const title = stringProperty(image, "title");
   const alt = stringProperty(image, "alt") ?? "article image";
   const presentation = articleImagePresentation();
   const isInspectable = link === undefined && presentation.isInspectable;
+  const loadingAttributes = nextImageLoadingAttributes(context);
 
   if (isInspectable) {
     setArticleImageRenderData(file, { hasInspectableImages: true });
@@ -201,6 +213,7 @@ function articleFigure(
       presentation.imageClass,
     ),
     "data-article-image": "true",
+    ...loadingAttributes,
     sizes: presentation.previewSizes,
   };
 
@@ -240,6 +253,22 @@ function articleFigure(
     tagName: "figure",
     type: "element",
   };
+}
+
+function nextImageLoadingAttributes(
+  context: ArticleImageTransformContext,
+): Record<string, string> {
+  const isFirstRenderedImage = context.renderedImageCount === 0;
+  context.renderedImageCount += 1;
+
+  if (isFirstRenderedImage) {
+    return {
+      fetchpriority: "high",
+      loading: "eager",
+    };
+  }
+
+  return { loading: "lazy" };
 }
 
 function frameNode(

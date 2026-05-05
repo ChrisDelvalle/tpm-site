@@ -18,6 +18,8 @@ It should not choose artwork, fetch assets, or infer theme-specific alt text.
 - `layout?: "constrained" | "fixed" | "full-width"`
 - `loading?: "eager" | "lazy"`
 - `fetchpriority?: "auto" | "high" | "low"`
+- `priorityVariant?: "light" | "dark" | "both"`
+- `sizes?: string`
 - `class?: string`
 
 The light and dark images must represent the same semantic content. If the two
@@ -38,10 +40,10 @@ measure. `ThemedImage` owns only the theme switch and Astro image optimization.
 
 ## Layout And Responsiveness
 
-The component passes `layout` and shared classes to both optimized images. It
-does not add a wrapper, spacing, caption, or page measure. Parent components
-must provide stable sizing such as `layout="full-width"` and `w-full` when the
-image should fill its container.
+The component passes `layout`, `sizes`, and shared classes to both optimized
+images. It does not add a wrapper, spacing, caption, or page measure. Parent
+components must provide stable sizing such as `layout="full-width"`, an
+accurate `sizes` value, and `w-full` when the image should fill its container.
 
 ## Layering And Scrolling
 
@@ -70,6 +72,8 @@ Handle:
 - decorative images with empty alt text;
 - eager above-the-fold hero images;
 - lazy lower-priority images.
+- one prioritized variant for above-the-fold themed artwork so the hidden
+  variant does not compete with the default light-mode LCP candidate.
 
 ## Theme Behavior
 
@@ -82,8 +86,10 @@ variant and manual theme toggle behavior.
 - Renders both optimized image variants.
 - Light variant has `dark:hidden`.
 - Dark variant has `hidden dark:block`.
-- Both variants receive the same alt text, layout, loading, fetch priority, and
-  class treatment.
+- Both variants receive the same alt text, layout, `sizes`, and class
+  treatment.
+- When the parent marks the image eager/high priority, only `priorityVariant`
+  keeps that eager/high treatment; the inactive variant falls back to lazy/low.
 - The component does not create a wrapper or additional landmark.
 
 ## Follow-Up Notes

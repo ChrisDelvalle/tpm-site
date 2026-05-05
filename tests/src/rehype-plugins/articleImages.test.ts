@@ -32,6 +32,8 @@ describe("rehypeArticleImages", () => {
     expect(html).toContain(
       'sizes="(min-width: 48rem) 48rem, calc(100vw - 2rem)"',
     );
+    expect(html).toContain('loading="eager"');
+    expect(html).toContain('fetchpriority="high"');
     expect(html).toContain("max-h-[min(70svh,34rem)]");
     expect(html).toContain("Thread caption");
     expect(html).toContain('alt="Long thread screenshot"');
@@ -156,6 +158,27 @@ describe("rehypeArticleImages", () => {
     expect(image.properties["sizes"]).toBe(
       "(min-width: 48rem) 48rem, calc(100vw - 2rem)",
     );
+  });
+
+  test("prioritizes only the first rendered Markdown article image", async () => {
+    const html = await renderMarkdownImage(`
+![First article image](../assets/first.png)
+
+Introductory paragraph.
+
+![Second article image](../assets/second.png)
+`);
+
+    const imageTags = Array.from(
+      html.matchAll(/<img\b[^>]*>/gu),
+      ([tag]) => tag,
+    );
+
+    expect(imageTags).toHaveLength(2);
+    expect(imageTags[0]).toContain('loading="eager"');
+    expect(imageTags[0]).toContain('fetchpriority="high"');
+    expect(imageTags[1]).toContain('loading="lazy"');
+    expect(imageTags[1]).not.toContain("fetchpriority");
   });
 });
 
