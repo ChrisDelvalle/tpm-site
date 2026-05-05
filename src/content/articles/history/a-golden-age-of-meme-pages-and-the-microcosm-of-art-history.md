@@ -6,13 +6,13 @@ date: 2015-11-02 01:01:10 Z
 author: "Seong-Young Her"
 tags:
   # TODO(Seong): Review these tags.
-  - meme history
-  - Facebook
-  - memepages
-  - irony
-  - meta-irony
-  - internet art
-  - art
+  - "meme history"
+  - "facebook"
+  - "memepages"
+  - "irony"
+  - "meta-irony"
+  - "internet art"
+  - "art"
 legacyPermalink: 2015/11/02/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history/
 ---
 

@@ -284,6 +284,25 @@ export function searchUrl(): string {
 }
 
 /**
+ * Builds the public tag index URL.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function tagsIndexUrl(): string {
+  return withTrailingSlash("/tags");
+}
+
+/**
+ * Builds the canonical site URL path for a canonical tag label.
+ *
+ * @param tag Canonical normalized tag label.
+ * @returns Absolute-path URL with the encoded tag and configured trailing slash.
+ */
+export function tagUrl(tag: string): string {
+  return withTrailingSlash(`${tagsIndexUrl()}${encodeURIComponent(tag)}`);
+}
+
+/**
  * Sorts articles by newest publication date, with slug as a stable tiebreaker.
  *
  * @param entries Article entries to sort.

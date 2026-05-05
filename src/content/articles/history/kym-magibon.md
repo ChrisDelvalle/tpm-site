@@ -8,8 +8,8 @@ date: 2017-12-04 12:01:00 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/articles/kym-magibon/magibon.jpg"
 tags:
-  - Know Your Meme
-  - Magibon
+  - "know your meme"
+  - "magibon"
 legacyPermalink: 2017/12/04/kym-magibon/
 ---
 

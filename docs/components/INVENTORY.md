@@ -89,3 +89,4 @@ component has a matching one-pager in this directory.
 - `src/components/blocks/HomeLatestArticleBlock.astro`
 - `src/components/blocks/SearchResultsBlock.astro`
 - `src/components/blocks/SupportBlock.astro`
+- `src/components/blocks/TermOverviewBlock.astro`

@@ -6,11 +6,11 @@ author: "Seong-Young Her"
 image: "../../../assets/articles/gondola-shrine/2019-12-02_ghost-puppy_resized.png"
 tags:
   # TODO(Seong): Review these tags.
-  - art
-  - Gondola
-  - memes
-  - philosophy
-  - aesthetics
+  - "art"
+  - "gondola"
+  - "memes"
+  - "philosophy"
+  - "aesthetics"
 legacyPermalink: 2019/12/23/gondola-shrine/
 ---
 

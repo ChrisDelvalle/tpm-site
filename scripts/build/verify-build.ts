@@ -4,6 +4,8 @@ import { pathToFileURL } from "node:url";
 
 import matter from "gray-matter";
 
+import { normalizeTag } from "../../src/lib/tags";
+
 const requiredBasePaths = [
   "index.html",
   "404.html",
@@ -11,6 +13,7 @@ const requiredBasePaths = [
   "articles/index.html",
   "articles/all/index.html",
   "categories/index.html",
+  "tags/index.html",
   "feed.xml",
   "sitemap-index.xml",
   "pagefind/pagefind.js",
@@ -20,6 +23,7 @@ const staticReadingBasePages = [
   "about/index.html",
   "articles/index.html",
   "articles/all/index.html",
+  "tags/index.html",
 ];
 const allowedStaticClientScriptPatterns = [
   /^\/_astro\/AnchoredRoot\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u,
@@ -35,6 +39,7 @@ export interface ArticlePublication {
   draftSlugs: string[];
   publishedArticles: PublishedArticle[];
   publishedCategorySlugs: Set<string>;
+  publishedTagSegments: Set<string>;
 }
 
 /** Categorized build verification failures. */
@@ -89,6 +94,7 @@ export async function articlePublicationStats(
   const draftSlugs: string[] = [];
   const publishedArticles: PublishedArticle[] = [];
   const publishedCategorySlugs = new Set<string>();
+  const publishedTagSegments = new Set<string>();
 
   for (const file of articleSourceFiles) {
     const { data } = matter(await readFile(file, "utf8"));
@@ -105,6 +111,10 @@ export async function articlePublicationStats(
       if (categorySlug !== "") {
         publishedCategorySlugs.add(categorySlug);
       }
+
+      for (const tag of tagsFromFrontmatter(data)) {
+        publishedTagSegments.add(tag);
+      }
     }
   }
 
@@ -114,6 +124,7 @@ export async function articlePublicationStats(
       left.slug.localeCompare(right.slug),
     ),
     publishedCategorySlugs,
+    publishedTagSegments,
   };
 }
 
@@ -243,6 +254,9 @@ export function requiredPathsForSource(
       (article) => `articles/${article.slug}/index.html`,
     ),
     ...categorySlugs.map((slug) => `categories/${slug}/index.html`),
+    ...Array.from(articlePublication.publishedTagSegments)
+      .sort((left, right) => left.localeCompare(right))
+      .map((segment) => `tags/${segment}/index.html`),
   ];
 }
 
@@ -311,6 +325,7 @@ export function staticReadingPagesForSource(
 ): string[] {
   const representativeMarkdownArticle =
     articlePublication.publishedArticles.find((article) => !article.isMdx);
+  const representativeTagSegment = firstSortedTagSegment(articlePublication);
 
   return [
     ...staticReadingBasePages,
@@ -320,6 +335,9 @@ export function staticReadingPagesForSource(
     categorySlugs[0] === undefined
       ? undefined
       : `categories/${categorySlugs[0]}/index.html`,
+    representativeTagSegment === undefined
+      ? undefined
+      : `tags/${representativeTagSegment}/index.html`,
   ].filter((page): page is string => page !== undefined);
 }
 
@@ -524,6 +542,14 @@ function filenameStem(file: string): string {
   return path.basename(file).replace(/\.(?:md|mdx)$/i, "");
 }
 
+function firstSortedTagSegment(
+  articlePublication: ArticlePublication,
+): string | undefined {
+  return Array.from(articlePublication.publishedTagSegments).sort(
+    (left, right) => left.localeCompare(right),
+  )[0];
+}
+
 function hasIssues(issues: BuildVerificationIssues): boolean {
   return (
     issues.articleCountIssues.length > 0 ||
@@ -553,6 +579,18 @@ function htmlIncludesRedirect(
     html.includes(`<code>${source}</code>`) &&
     html.includes(`<code>${destination}</code>`)
   );
+}
+
+function tagsFromFrontmatter(data: Record<string, unknown>) {
+  const tags = data["tags"];
+  if (!Array.isArray(tags)) {
+    return [];
+  }
+
+  return tags
+    .filter((tag): tag is string => typeof tag === "string")
+    .map(normalizeTag)
+    .filter((tag) => tag !== "" && !tag.includes("/"));
 }
 
 async function inspectDraftLeaks(

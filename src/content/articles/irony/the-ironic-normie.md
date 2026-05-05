@@ -11,7 +11,7 @@ date: 2015-12-18 11:01:24
 author: "Thomas Rososchansky"
 image: "../../../assets/shared/normiesironics.png"
 tags:
-  - "Ironic meme"
+  - "ironic meme"
   - "irony"
   - "memes"
   - "memetics"

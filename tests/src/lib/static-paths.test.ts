@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   articleStaticPaths,
   categoryStaticPaths,
+  tagStaticPaths,
 } from "../../../src/lib/static-paths";
 import { articleEntry, categorySummary } from "../../helpers/content";
 
@@ -25,6 +26,23 @@ describe("static path helpers", () => {
       {
         params: { category: "history" },
         props: { category },
+      },
+    ]);
+  });
+
+  test("builds tag static path params from raw labels so Astro encodes URLs", () => {
+    const article = articleEntry({ id: "tagged" });
+    const tag = {
+      articles: [article],
+      href: "/tags/meme%20history/",
+      label: "meme history",
+      pathSegment: "meme%20history",
+    };
+
+    expect(tagStaticPaths([tag])).toEqual([
+      {
+        params: { tag: "meme history" },
+        props: { tag },
       },
     ]);
   });

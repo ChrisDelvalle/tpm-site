@@ -1,6 +1,8 @@
 import type { ImageMetadata } from "astro";
 import { z } from "astro/zod";
 
+import { tagDiagnostics } from "./tags";
+
 /** Local image schema factory supplied by Astro content collections. */
 interface ImageSchemaContext {
   image: () => z.ZodType<ImageMetadata>;
@@ -67,10 +69,25 @@ function createArticleSchema({ image }: ImageSchemaContext) {
       imageAlt: z.string().optional(),
       legacyBanner: z.string().optional(),
       legacyPermalink: z.string().optional(),
-      tags: z.array(z.string()).default([]),
+      tags: tagListSchema(),
       title: z.string().min(1),
     })
     .strict();
+}
+
+function tagListSchema() {
+  return z
+    .array(z.string())
+    .default([])
+    .superRefine((tags, context) => {
+      tagDiagnostics(tags).forEach((diagnostic) => {
+        context.addIssue({
+          code: "custom",
+          message: diagnostic.message,
+          path: [diagnostic.index],
+        });
+      });
+    });
 }
 
 function createCategorySchema() {

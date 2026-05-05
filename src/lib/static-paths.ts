@@ -1,4 +1,5 @@
 import type { ArticleEntry, CategorySummary } from "./routes";
+import type { TagSummary } from "./tags";
 
 /** Astro static path entry for article pages. */
 interface ArticleStaticPath {
@@ -17,6 +18,16 @@ interface CategoryStaticPath {
   };
   props: {
     category: CategorySummary;
+  };
+}
+
+/** Astro static path entry for tag pages. */
+interface TagStaticPath {
+  params: {
+    tag: string;
+  };
+  props: {
+    tag: TagSummary;
   };
 }
 
@@ -47,5 +58,18 @@ export function categoryStaticPaths(
   return categories.map((category) => ({
     params: { category: category.slug },
     props: { category },
+  }));
+}
+
+/**
+ * Builds Astro static paths for public tag pages.
+ *
+ * @param tags Tag summaries.
+ * @returns Static path params and props.
+ */
+export function tagStaticPaths(tags: TagSummary[]): TagStaticPath[] {
+  return tags.map((tag) => ({
+    params: { tag: tag.label },
+    props: { tag },
   }));
 }

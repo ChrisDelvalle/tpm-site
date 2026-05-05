@@ -5,6 +5,8 @@ import matter from "gray-matter";
 import type { Image, Nodes, Paragraph, Root } from "mdast";
 import { remark } from "remark";
 
+import { tagDiagnostics } from "../../src/lib/tags";
+
 /** Inputs needed to verify source content conventions. */
 export interface ContentVerificationOptions {
   articleDir: string;
@@ -93,6 +95,7 @@ export async function verifyContent({
       draftCount += 1;
     }
     validateArticleAuthor(rootDir, file, data, authorAliases, issues);
+    validateArticleTags(rootDir, file, data, issues);
     validateArticleImageParagraphs(rootDir, file, text, issues);
   }
 
@@ -282,6 +285,40 @@ function validateArticleAuthor(
         );
       }
     });
+}
+
+function validateArticleTags(
+  rootDir: string,
+  file: string,
+  data: Record<string, unknown>,
+  issues: string[],
+): void {
+  const tags = data["tags"];
+  const articlePath = toPosix(path.relative(rootDir, file));
+
+  if (tags === undefined) {
+    return;
+  }
+
+  if (!Array.isArray(tags)) {
+    issues.push(`${articlePath}: article tags must be a list of strings`);
+    return;
+  }
+
+  const nonStringIndex = tags.findIndex((tag) => typeof tag !== "string");
+
+  if (nonStringIndex >= 0) {
+    issues.push(
+      `${articlePath}: article tag at index ${nonStringIndex} must be a string`,
+    );
+    return;
+  }
+
+  tagDiagnostics(tags).forEach((diagnostic) => {
+    issues.push(
+      `${articlePath}: article tag "${diagnostic.value}" at index ${diagnostic.index} is invalid: ${diagnostic.message}`,
+    );
+  });
 }
 
 function validateArticleImageParagraphs(

@@ -24,6 +24,7 @@ function publication(): ArticlePublication {
       { isMdx: true, slug: "interactive-post" },
     ],
     publishedCategorySlugs: new Set(["history"]),
+    publishedTagSegments: new Set(["meme history"]),
   };
 }
 
@@ -62,6 +63,9 @@ describe("build verifier helpers", () => {
     expect(requiredPathsForSource(publication(), ["history"])).toContain(
       "categories/history/index.html",
     );
+    expect(requiredPathsForSource(publication(), ["history"])).toContain(
+      "tags/meme history/index.html",
+    );
   });
 
   test("sorts source article publication stats deterministically", async () =>
@@ -69,7 +73,7 @@ describe("build verifier helpers", () => {
       await writeText(
         root,
         "src/content/articles/history/z-post.md",
-        "---\ntitle: Z\n---\n",
+        "---\ntitle: Z\ntags:\n  - Meme History\n---\n",
       );
       await writeText(
         root,
@@ -85,6 +89,7 @@ describe("build verifier helpers", () => {
         "a-post",
         "z-post",
       ]);
+      expect(Array.from(result.publishedTagSegments)).toEqual(["meme history"]);
     }));
 
   test("chooses representative static pages without hardcoded migrated slugs", () => {
@@ -93,8 +98,10 @@ describe("build verifier helpers", () => {
       "about/index.html",
       "articles/index.html",
       "articles/all/index.html",
+      "tags/index.html",
       "articles/markdown-post/index.html",
       "categories/history/index.html",
+      "tags/meme history/index.html",
     ]);
   });
 
@@ -199,6 +206,7 @@ describe("build verifier helpers", () => {
         '{"@type":"BlogPosting"}',
       );
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -236,6 +244,7 @@ describe("build verifier helpers", () => {
         '{"@type":"BlogPosting"}',
       );
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -277,6 +286,7 @@ describe("build verifier helpers", () => {
             '{"@type":"BlogPosting"}',
           );
           await writeText(root, "dist/categories/index.html", "");
+          await writeText(root, "dist/tags/index.html", "");
           await writeText(root, "dist/categories/history/index.html", "");
           await writeText(root, "dist/feed.xml", "<feed>published</feed>");
           await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -357,6 +367,7 @@ describe("build verifier helpers", () => {
       );
       await writeText(root, "dist/articles/extra/index.html", "");
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>draft</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
       await writeText(root, "dist/pagefind/pagefind.js", "");
@@ -430,6 +441,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/about/index.html", "");
       await writeText(root, "dist/articles", "not a directory");
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed />");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -464,6 +476,7 @@ describe("build verifier helpers", () => {
         '{"@type":"BlogPosting"}',
       );
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -510,6 +523,7 @@ describe("build verifier helpers", () => {
         '{"@type":"BlogPosting"}',
       );
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -553,6 +567,7 @@ describe("build verifier helpers", () => {
         '{"@type":"BlogPosting"}',
       );
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -594,6 +609,7 @@ describe("build verifier helpers", () => {
         '{"@type":"BlogPosting"}',
       );
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
@@ -638,6 +654,7 @@ describe("build verifier helpers", () => {
         '{"@type":"BlogPosting"}',
       );
       await writeText(root, "dist/categories/index.html", "");
+      await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/categories/history/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");

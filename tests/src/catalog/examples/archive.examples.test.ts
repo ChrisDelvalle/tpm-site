@@ -12,6 +12,7 @@ describe("archive catalog examples", () => {
     expect(paths).toContain(
       "src/components/blocks/CategoryOverviewBlock.astro",
     );
+    expect(paths).toContain("src/components/blocks/TermOverviewBlock.astro");
     expect(paths).toContain("src/components/blocks/SearchResultsBlock.astro");
   });
 });

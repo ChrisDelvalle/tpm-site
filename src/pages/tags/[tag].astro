@@ -1,0 +1,42 @@
+---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries } from "../../lib/authors";
+import { getCategories, getTags } from "../../lib/content";
+import { tagStaticPaths } from "../../lib/static-paths";
+
+/**
+ * Generates one static tag route for each canonical public tag.
+ *
+ * @returns Static route parameters and tag props for Astro.
+ */
+export async function getStaticPaths() {
+  return tagStaticPaths(await getTags());
+}
+
+const { tag } = Astro.props;
+const authors = await getAuthorEntries();
+const categories = await getCategories();
+const tagItems = articleListItemsFromArchive(
+  articleArchiveItems(tag.articles, categories, authors),
+);
+const description = `Articles tagged ${tag.label}.`;
+---
+
+<BaseLayout
+  title={`${tag.label} | Tags | The Philosopher's Meme`}
+  description={description}
+  canonicalPath={tag.href}
+>
+  <BrowsingBody>
+    <ArchiveListBlock
+      eyebrow="Tag"
+      title={tag.label}
+      description={description}
+      items={tagItems}
+    />
+  </BrowsingBody>
+</BaseLayout>

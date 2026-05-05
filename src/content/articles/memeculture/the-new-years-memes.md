@@ -9,18 +9,18 @@ date: 2019-01-03 12:30:00 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/articles/the-new-years-memes/49121023_10215984413395083_3710986489752977408_n.jpg"
 tags:
-  - memes
-  - Australia
-  - New Zealand
-  - Finland
-  - Spurdo
-  - Gondola
-  - sociology
-  - shitposting
-  - hyperstition
-  - meme magic
-  - ontology
-  - memeculture
+  - "memes"
+  - "australia"
+  - "new zealand"
+  - "finland"
+  - "spurdo"
+  - "gondola"
+  - "sociology"
+  - "shitposting"
+  - "hyperstition"
+  - "meme magic"
+  - "ontology"
+  - "memeculture"
 legacyPermalink: 2019/01/03/the-new-years-memes/
 ---
 

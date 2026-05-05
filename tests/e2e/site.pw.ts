@@ -17,6 +17,8 @@ const keyRoutes = [
   "/authors/seong-young-her/",
   "/categories/",
   "/categories/history/",
+  "/tags/",
+  "/tags/memeculture/",
   "/about/",
   "/search/",
 ];

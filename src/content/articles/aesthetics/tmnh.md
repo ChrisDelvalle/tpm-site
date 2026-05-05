@@ -9,7 +9,7 @@ tags:
   - "art"
   - "avant-garde"
   - "beauty"
-  - "Dadaism"
+  - "dadaism"
   - "digital art"
   - "internet art"
   - "philosophy"

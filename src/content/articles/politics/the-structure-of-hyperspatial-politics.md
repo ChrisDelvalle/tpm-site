@@ -7,20 +7,20 @@ date: 2017-06-13 20:11:00 +12:00
 author: "Samuel Tannert"
 image: "../../../assets/articles/the-structure-of-hyperspatial-politics/avatars-000304348876-0xi1aa-original.jpg"
 tags:
-  - GamerGate
-  - 4chan
-  - politics
-  - philosophy
-  - cyberspace
-  - history
-  - meme history
-  - memetics
-  - Reddit
-  - economics
-  - YouTube
-  - Instagram
-  - vectoralism
-  - hyperspace
+  - "gamergate"
+  - "4chan"
+  - "politics"
+  - "philosophy"
+  - "cyberspace"
+  - "history"
+  - "meme history"
+  - "memetics"
+  - "reddit"
+  - "economics"
+  - "youtube"
+  - "instagram"
+  - "vectoralism"
+  - "hyperspace"
 legacyPermalink: 2017/06/13/the-structure-of-hyperspatial-politics/
 ---
 

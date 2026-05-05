@@ -12,7 +12,7 @@ tags:
   - "internet art"
   - "internet culture"
   - "philosophy"
-  - "Zen"
+  - "zen"
   - "creative writing"
   - "editorials"
 legacyPermalink: 2016/05/13/an-internet-koan/

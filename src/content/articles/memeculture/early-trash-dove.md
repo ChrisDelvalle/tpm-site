@@ -7,16 +7,16 @@ date: 2017-02-15 18:41:00 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/articles/early-trash-dove/16684179_1161814753936213_2457291586701613901_n.jpg"
 tags:
-  - normie
-  - definition
-  - semantics
-  - context
-  - Facebook
-  - Trash Dove
-  - 4chan
-  - "/pol/"
-  - ironist
-  - memeculture
+  - "normie"
+  - "definition"
+  - "semantics"
+  - "context"
+  - "facebook"
+  - "trash dove"
+  - "4chan"
+  - "pol"
+  - "ironist"
+  - "memeculture"
 legacyPermalink: 2017/02/15/early-trash-dove/
 ---
 

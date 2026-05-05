@@ -8,16 +8,16 @@ date: 2015-09-14 09:29:10 Z
 author: "Seong-Young Her"
 image: "../../../assets/articles/a-short-note-on-the-death-of-pepe/10881565_870360753004673_4747543608770201737_n.jpg"
 tags:
-  - aesthetics
-  - art
-  - digital art
-  - irony
-  - memes
-  - metamodernism
-  - Pepe
-  - post-irony
-  - Wojak
-  - memeculture
+  - "aesthetics"
+  - "art"
+  - "digital art"
+  - "irony"
+  - "memes"
+  - "metamodernism"
+  - "pepe"
+  - "post-irony"
+  - "wojak"
+  - "memeculture"
 legacyPermalink: 2015/09/14/a-short-note-on-the-death-of-pepe/
 ---
 

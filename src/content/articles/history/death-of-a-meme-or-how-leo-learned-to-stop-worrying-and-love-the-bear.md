@@ -9,11 +9,11 @@ author: "Thomas Rososchansky"
 image: "../../../assets/articles/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/leo-dicaprio-oscar-one1.jpg"
 tags:
   - "ironic"
-  - "Leonardo DiCaprio"
+  - "leonardo dicaprio"
   - "memes"
   - "memetics"
-  - "Oscars"
-  - "Pre-ironic"
+  - "oscars"
+  - "pre-ironic"
   - "editorials"
 legacyPermalink: 2016/03/02/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/
 ---

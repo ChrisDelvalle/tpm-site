@@ -9,6 +9,7 @@ import {
   feedUrl,
   pageUrl,
   SITE_TITLE,
+  tagsIndexUrl,
 } from "../../lib/routes";
 
 interface Props {
@@ -43,6 +44,11 @@ const footerCategories = navigationItems.slice(0, 8);
           <li>
             <TextLink href={authorsIndexUrl()} variant="subtle" tone="muted"
               >Authors</TextLink
+            >
+          </li>
+          <li>
+            <TextLink href={tagsIndexUrl()} variant="subtle" tone="muted"
+              >Tags</TextLink
             >
           </li>
           <li>

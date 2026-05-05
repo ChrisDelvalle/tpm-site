@@ -6,12 +6,12 @@ author: "Chicago School of Countercultural Inquiry"
 image: "../../../assets/articles/on-circlejerk-part-1/circlejerk_chart_of_terms-01.png"
 tags:
   # TODO(Seong): Review these tags.
-  - politics
-  - internet culture
-  - Facebook
-  - memes
-  - economics
-  - shitposting
+  - "politics"
+  - "internet culture"
+  - "facebook"
+  - "memes"
+  - "economics"
+  - "shitposting"
 legacyPermalink: 2021/12/18/on-circlejerk-part-1/
 ---
 

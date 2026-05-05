@@ -8,7 +8,7 @@ tags:
   - "backtracking"
   - "game mechanics"
   - "games"
-  - "Hotline Miami"
+  - "hotline miami"
   - "ludology"
   - "ludonarrative consonance"
   - "violence"

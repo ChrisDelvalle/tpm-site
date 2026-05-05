@@ -10,9 +10,9 @@ description: 'I think there''s a school of ‘Internet philosophy’ like there 
 date: 2017-03-27 03:16:00 +13:00
 author: "Seong-Young Her"
 tags:
-- Internet philosophy
-- philosophy
-- subculture
+  - "internet philosophy"
+  - "philosophy"
+  - "subculture"
 legacyPermalink: 2017/03/27/a-school-of-internet-philosophy/
 ---
 

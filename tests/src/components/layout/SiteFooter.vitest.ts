@@ -14,6 +14,7 @@ describe("SiteFooter", () => {
     expect(view).toContain("Footer navigation");
     expect(view).toContain("Footer category navigation");
     expect(view).toContain("Support Our Research");
+    expect(view).toContain('href="/tags/"');
     expect(view).toContain("Metamemetics");
   });
 });

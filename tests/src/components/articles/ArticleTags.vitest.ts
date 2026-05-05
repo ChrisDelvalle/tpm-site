@@ -13,5 +13,7 @@ describe("ArticleTags", () => {
     expect(view).toContain('aria-label="Article tags"');
     expect(view).toContain("history");
     expect(view).toContain("philosophy");
+    expect(view).toContain('href="/tags/history/"');
+    expect(view).toContain('data-astro-prefetch="hover"');
   });
 });

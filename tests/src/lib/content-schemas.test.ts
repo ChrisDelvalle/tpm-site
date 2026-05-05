@@ -36,6 +36,7 @@ describe("content schemas", () => {
         date: "2022-04-06",
         description: "Description",
         image: { format: "jpg", height: 640, src: "/article.jpg", width: 960 },
+        tags: ["meme history", "c++"],
         title: "Article Title",
       }).success,
     ).toBe(true);
@@ -53,6 +54,33 @@ describe("content schemas", () => {
         author: "Author",
         date: "not a date",
         description: "Description",
+        title: "Article Title",
+      }).success,
+    ).toBe(false);
+    expect(
+      schema.safeParse({
+        author: "Author",
+        date: "2022-04-06",
+        description: "Description",
+        tags: ["Meme History"],
+        title: "Article Title",
+      }).success,
+    ).toBe(false);
+    expect(
+      schema.safeParse({
+        author: "Author",
+        date: "2022-04-06",
+        description: "Description",
+        tags: ["meme history", "meme   history"],
+        title: "Article Title",
+      }).success,
+    ).toBe(false);
+    expect(
+      schema.safeParse({
+        author: "Author",
+        date: "2022-04-06",
+        description: "Description",
+        tags: ["/pol/"],
         title: "Article Title",
       }).success,
     ).toBe(false);

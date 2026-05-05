@@ -18,6 +18,8 @@ import {
   pageUrl,
   searchUrl,
   sortNewestFirst,
+  tagsIndexUrl,
+  tagUrl,
 } from "../../../src/lib/routes";
 
 function article(
@@ -52,6 +54,9 @@ describe("route helpers", () => {
     expect(categoryUrl("history")).toBe("/categories/history/");
     expect(pageUrl("About")).toBe("/about/");
     expect(searchUrl()).toBe("/search/");
+    expect(tagsIndexUrl()).toBe("/tags/");
+    expect(tagUrl("meme history")).toBe("/tags/meme%20history/");
+    expect(tagUrl("c++")).toBe("/tags/c%2B%2B/");
     expect(feedUrl()).toBe("/feed.xml");
   });
 

@@ -17,6 +17,8 @@ const archiveRoutes = [
   "/articles/all/",
   "/categories/",
   "/categories/metamemetics/",
+  "/tags/",
+  "/tags/memeculture/",
   "/search/",
 ] as const;
 
@@ -114,6 +116,10 @@ test.describe("component layout invariants", () => {
     const tags = page.locator("[data-article-tags-placement]");
 
     await expect(tags.getByLabel("Article tags")).toBeVisible();
+    await expect(tags.getByRole("link").first()).toHaveAttribute(
+      "href",
+      /^\/tags\//u,
+    );
     await expectVerticallyBefore(prose, support, {
       after: "support block",
       before: "article prose",

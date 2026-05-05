@@ -4,8 +4,8 @@ Source: `src/components/articles/ArticleTags.astro`
 
 ## Purpose
 
-`ArticleTags` renders article tags as the final secondary metadata surface at
-the bottom of an article.
+`ArticleTags` renders canonical article tags as linked badges in the final
+secondary metadata surface at the bottom of an article.
 
 ## Public Contract
 
@@ -17,7 +17,9 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../ui/Badge`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+It composes local components: `../ui/Badge`. Parent blocks should pass
+canonical tag labels rather than asking this component to normalize or fetch
+content directly.
 
 ## Layout And Responsiveness
 
@@ -37,7 +39,9 @@ Default, long-content, missing optional content, hover, focus-visible, and dark-
 
 ## Accessibility Semantics
 
-Use semantic HTML first, preserve heading order when headings are rendered, and keep focus-visible states intact for any interactive descendants.
+Use semantic HTML first, preserve heading order when headings are rendered, and
+keep focus-visible states intact for linked tag badges. Each tag link uses the
+visible tag label as its accessible name.
 
 ## Content Edge Cases
 
@@ -57,6 +61,7 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
+- links each tag to its canonical `/tags/[tag]/` page.
 - renders after prose, support, same-category discovery, related surfaces, and
   `ArticleReferences` when notes or bibliography exist.
 - remains the final visible article surface when tags exist.

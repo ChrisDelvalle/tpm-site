@@ -1,5 +1,5 @@
 ---
-import TextLink from "../ui/TextLink.astro";
+import TermOverviewBlock from "./TermOverviewBlock.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 
 interface Props {
@@ -19,58 +19,19 @@ const {
   items,
   title = "Categories",
 } = Astro.props;
-const columnClasses = {
-  compact: "sm:grid-cols-2",
-  default: "sm:grid-cols-2 xl:grid-cols-4",
-} as const;
+const terms = items.map((item) => ({
+  count: item.articles.length,
+  description: item.description,
+  href: item.href,
+  title: item.title,
+}));
 ---
 
-<section class="grid gap-4" aria-labelledby={headingId}>
-  <header class="grid gap-2">
-    {
-      headingLevel === 1 ? (
-        <h1
-          id={headingId}
-          class="text-foreground m-0 text-4xl font-bold tracking-normal"
-        >
-          {title}
-        </h1>
-      ) : (
-        <h2
-          id={headingId}
-          class="text-foreground m-0 text-2xl font-semibold tracking-normal"
-        >
-          {title}
-        </h2>
-      )
-    }
-    {
-      description && (
-        <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
-      )
-    }
-  </header>
-  <ul class:list={["grid gap-3", columnClasses[columns]]}>
-    {
-      items.map((item) => (
-        <li class="border-border bg-card grid gap-1 rounded-sm border p-4">
-          <TextLink
-            href={item.href}
-            tone="neutral"
-            class="font-semibold"
-            prefetch="hover"
-          >
-            {item.title}
-          </TextLink>
-          {item.description && (
-            <p class="text-muted-foreground text-sm">{item.description}</p>
-          )}
-          <p class="text-muted-foreground text-xs">
-            {item.articles.length}{" "}
-            {item.articles.length === 1 ? "article" : "articles"}
-          </p>
-        </li>
-      ))
-    }
-  </ul>
-</section>
+<TermOverviewBlock
+  columns={columns}
+  description={description}
+  headingId={headingId}
+  headingLevel={headingLevel}
+  items={terms}
+  title={title}
+/>

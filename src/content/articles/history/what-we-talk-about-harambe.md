@@ -9,9 +9,9 @@ date: 2016-10-13 12:00:00 Z
 author: "Thomas Rososchansky"
 image: "../../../assets/articles/what-we-talk-about-harambe/header.png"
 tags:
-  - memes
-  - Harambe
-  - post-ironic
+  - "memes"
+  - "harambe"
+  - "post-ironic"
 legacyPermalink: 2016/10/13/what-we-talk-about-harambe/
 ---
 

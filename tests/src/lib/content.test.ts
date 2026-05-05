@@ -13,7 +13,7 @@ await mock.module("astro:content", () => ({
             date: new Date("2022-01-02T00:00:00Z"),
             description: "Newer",
             draft: false,
-            tags: [],
+            tags: ["meme history", "memes"],
             title: "Newer Article",
           },
           filePath: "/repo/src/content/articles/history/newer.md",
@@ -26,7 +26,7 @@ await mock.module("astro:content", () => ({
             date: new Date("2021-01-02T00:00:00Z"),
             description: "Draft",
             draft: true,
-            tags: [],
+            tags: ["meme history"],
             title: "Draft Article",
           },
           filePath: "/repo/src/content/articles/history/draft.md",
@@ -39,7 +39,7 @@ await mock.module("astro:content", () => ({
             date: new Date("2020-01-02T00:00:00Z"),
             description: "Older",
             draft: false,
-            tags: [],
+            tags: ["meme history", "games"],
             title: "Older Article",
           },
           filePath: "/repo/src/content/articles/politics/older.md",
@@ -87,7 +87,8 @@ await mock.module("astro:content", () => ({
   },
 }));
 
-const { getCategories, getCategory } = await import("../../../src/lib/content");
+const { getCategories, getCategory, getTag, getTags } =
+  await import("../../../src/lib/content");
 
 describe("content helpers", () => {
   test("builds category summaries from metadata and article folders", async () => {
@@ -108,5 +109,27 @@ describe("content helpers", () => {
     const category = await getCategory("History");
 
     expect(category).toMatchObject({ slug: "history" });
+  });
+
+  test("builds tag summaries from published article frontmatter", async () => {
+    const tags = await getTags();
+
+    expect(tags.map((tag) => tag.label)).toEqual([
+      "games",
+      "meme history",
+      "memes",
+    ]);
+    expect(tags[1]?.articles.map((article) => article.id)).toEqual([
+      "newer",
+      "older",
+    ]);
+    expect(await getTag("meme%20history")).toMatchObject({
+      href: "/tags/meme%20history/",
+      label: "meme history",
+    });
+    expect(await getTag("meme history")).toMatchObject({
+      href: "/tags/meme%20history/",
+      label: "meme history",
+    });
   });
 });

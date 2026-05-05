@@ -14,7 +14,7 @@ tags:
   - "ludology"
   - "philosophy"
   - "review"
-  - "Undertale"
+  - "undertale"
   - "editorials"
 legacyPermalink: 2015/11/29/undertale-review/
 ---

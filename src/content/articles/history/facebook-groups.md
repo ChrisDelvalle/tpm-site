@@ -4,12 +4,12 @@ description: "This article focuses on the ironic meme community and the geograph
 date: 2017-03-26 11:17:00 Z
 author: "Seong-Young Her & Masha Zharova"
 tags:
-  - Facebook
-  - shitposting
-  - memepage
-  - platform design
-  - politics
-  - history
+  - "facebook"
+  - "shitposting"
+  - "memepage"
+  - "platform design"
+  - "politics"
+  - "history"
 legacyPermalink: 2017/03/27/facebook-groups/
 ---
 

@@ -63,7 +63,7 @@ to the active milestone.
 - `scripts/`: repository maintenance, verification, and quality scripts.
 - `tests/`: unit, e2e, accessibility, and performance tests.
 - `dist/`: generated build output. Do not edit by hand.
-- `CHECKLIST.md`: active and recent implementation work only.
+- `CHECKLIST.md`: implementation milestone tracker.
 - `DEFERRED.md`: postponed work with reasons and resume triggers.
 - `PACKAGE_SCRIPTS.md`: brief reference for every `package.json` script.
 - `agent-docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
@@ -85,9 +85,6 @@ When a project-local skill matches the task, read its `SKILL.md` and follow its
 workflow before making changes.
 
 ## Checklist And Deferred Work
-
-Keep `CHECKLIST.md` focused on active, imminent, and recent work. Do not let
-completed historical milestones or stale future ideas accumulate there.
 
 Move postponed work to `DEFERRED.md` with a concise reason and a concrete
 resume trigger. When deferred work becomes active, move it back into

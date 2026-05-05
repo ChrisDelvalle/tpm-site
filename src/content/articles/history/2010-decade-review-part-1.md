@@ -9,16 +9,16 @@ date: 2020-01-04 11:01:00 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/articles/2010-decade-review-part-1/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
 tags:
-  - memetics
-  - Ironic meme
-  - history
-  - post-irony
-  - metamemetics
-  - meme history
-  - memepages
-  - irony
-  - metairony
-  - Korea
+  - "memetics"
+  - "ironic meme"
+  - "history"
+  - "post-irony"
+  - "metamemetics"
+  - "meme history"
+  - "memepages"
+  - "irony"
+  - "metairony"
+  - "korea"
 legacyPermalink: 2020/01/04/2010-decade-review-part-1/
 legacyBanner: "/uploads/2020-01-01_thephilosophersmeme.com_decade-review-part-1_memetic-eras-03.png"
 ---

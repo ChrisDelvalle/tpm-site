@@ -10,6 +10,11 @@ import {
   normalizeSlug,
   sortNewestFirst,
 } from "./routes";
+import {
+  normalizeTag,
+  tagSummariesFromArticles,
+  type TagSummary,
+} from "./tags";
 
 /**
  * Loads all published articles in newest-first order.
@@ -62,6 +67,29 @@ export async function getCategory(
   const normalizedSlug = normalizeSlug(slug);
   const categories = await getCategories();
   return categories.find((category) => category.slug === normalizedSlug);
+}
+
+/**
+ * Loads tag summaries with their published articles.
+ *
+ * @returns Tag summaries sorted by canonical tag label.
+ */
+export async function getTags(): Promise<TagSummary[]> {
+  return tagSummariesFromArticles(await getArticles());
+}
+
+/**
+ * Looks up one tag summary by encoded route segment.
+ *
+ * @param pathSegment Encoded tag route parameter.
+ * @returns Matching tag summary when it exists.
+ */
+export async function getTag(
+  pathSegment: string,
+): Promise<TagSummary | undefined> {
+  const label = normalizeTag(decodeURIComponent(pathSegment));
+  const tags = await getTags();
+  return tags.find((tag) => tag.label === label);
 }
 
 function categoryFromMetadata(

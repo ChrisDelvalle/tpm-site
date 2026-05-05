@@ -13,20 +13,20 @@ date: 2015-11-28 17:20:00 Z
 author: "Seong-Young Her"
 image: "../../../assets/articles/a-short-note-on-gondola/d83.jpg"
 tags:
-  - art
-  - beauty
-  - Gondola
-  - Ironic meme
-  - irony
-  - Know Your Meme
-  - memes
-  - new sincerity
-  - normie
-  - Pepe
-  - philosophy
-  - post-irony
-  - rare pepe
-  - Spurdo
+  - "art"
+  - "beauty"
+  - "gondola"
+  - "ironic meme"
+  - "irony"
+  - "know your meme"
+  - "memes"
+  - "new sincerity"
+  - "normie"
+  - "pepe"
+  - "philosophy"
+  - "post-irony"
+  - "rare pepe"
+  - "spurdo"
 legacyPermalink: 2015/11/29/a-short-note-on-gondola/
 ---
 

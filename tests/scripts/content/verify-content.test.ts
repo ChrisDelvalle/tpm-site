@@ -74,6 +74,48 @@ describe("content verifier", () => {
       );
     }));
 
+  test("reports noncanonical article tags", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/example.md",
+        [
+          "---",
+          "title: Example",
+          "author: Author",
+          "tags:",
+          "  - Meme History",
+          "  - meme   history",
+          '  - "/pol/"',
+          "---",
+          "",
+        ].join("\n"),
+      );
+
+      const result = await verifyContent({
+        articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
+        categoryDir: path.join(root, "src/content/categories"),
+        rootDir: root,
+      });
+
+      expect(result.issues).toContain(
+        'src/content/articles/history/example.md: article tag "Meme History" at index 0 is invalid: tag must be canonical "meme history"',
+      );
+      expect(result.issues).toContain(
+        'src/content/articles/history/example.md: article tag "meme   history" at index 1 is invalid: duplicate canonical tag "meme history" also appears at index 0',
+      );
+      expect(result.issues).toContain(
+        'src/content/articles/history/example.md: article tag "/pol/" at index 2 is invalid: tag must not contain "/"',
+      );
+    }));
+
   test("accepts standalone local image paragraphs and remote inline images", async () =>
     withTempRoot(async (root) => {
       await writeText(root, "src/content/categories/history.json", "{}");

@@ -7,8 +7,8 @@ date: 2020-01-07 08:32:00 +13:00
 author: "Seong-Young Her"
 image: "../../../assets/articles/concept-jjalbang/291.jpg"
 tags:
-  - concept
-  - Korea
+  - "concept"
+  - "korea"
 legacyPermalink: 2020/01/07/concept-jjalbang/
 legacyBanner: "/uploads/291.jpg"
 ---

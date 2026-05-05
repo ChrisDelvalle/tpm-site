@@ -15,6 +15,7 @@ describe("build verifier", () => {
           draftSlugs: [],
           publishedArticles: [{ isMdx: false, slug: "post" }],
           publishedCategorySlugs: new Set(["history"]),
+          publishedTagSegments: new Set(["meme history"]),
         },
         ["history"],
       ),

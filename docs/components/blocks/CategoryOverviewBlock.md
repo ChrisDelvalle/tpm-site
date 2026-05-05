@@ -4,7 +4,9 @@ Source: `src/components/blocks/CategoryOverviewBlock.astro`
 
 ## Purpose
 
-`CategoryOverviewBlock` serves as a page-level block that represents a reusable editorial section.
+`CategoryOverviewBlock` adapts category navigation data into the shared
+`TermOverviewBlock` visual pattern. It keeps category-specific callers stable
+without duplicating category and tag overview markup.
 
 ## Public Contract
 
@@ -20,7 +22,9 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/navigation`, `../ui/TextLink`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+It composes local components: `../../lib/navigation`,
+`./TermOverviewBlock.astro`. Parent blocks should pass normalized props and
+slots rather than asking this component to fetch global content directly.
 
 ## Layout And Responsiveness
 
@@ -65,4 +69,5 @@ visible, and CTAs distinguishable from neutral actions.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- This is now a category-specific adapter. Shared category/tag overview layout
+  belongs in `TermOverviewBlock`.

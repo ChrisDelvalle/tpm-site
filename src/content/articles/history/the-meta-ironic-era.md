@@ -9,10 +9,10 @@ date: 2017-09-09 09:45:00 +12:00
 author: "Seong-Young Her"
 image: "../../../assets/shared/phylomemetic-tree-lamarckian.png"
 tags:
-  - meta-irony
-  - irony
-  - memepages
-  - Facebook
+  - "meta-irony"
+  - "irony"
+  - "memepages"
+  - "facebook"
 legacyPermalink: /2017/09/09/the-meta-ironic-era/
 legacyBanner: "<../../../assets/shared/phylomemetic-tree-lamarckian.png>"
 ---

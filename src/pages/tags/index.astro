@@ -1,0 +1,28 @@
+---
+import TermOverviewBlock from "../../components/blocks/TermOverviewBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getTags } from "../../lib/content";
+import { tagsIndexUrl } from "../../lib/routes";
+
+const tagItems = (await getTags()).map((tag) => ({
+  count: tag.articles.length,
+  href: tag.href,
+  title: tag.label,
+}));
+---
+
+<BaseLayout
+  title="Tags | The Philosopher's Meme"
+  description="Browse articles by tag."
+  canonicalPath={tagsIndexUrl()}
+>
+  <BrowsingBody>
+    <TermOverviewBlock
+      title="Tags"
+      description="Browse articles by recurring topics, references, and motifs."
+      items={tagItems}
+      emptyLabel="No article tags are available yet."
+    />
+  </BrowsingBody>
+</BaseLayout>

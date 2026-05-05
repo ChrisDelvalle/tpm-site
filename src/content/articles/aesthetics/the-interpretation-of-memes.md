@@ -8,10 +8,10 @@ date: 2018-02-05 08:24:00 +13:00
 author: "Mikhail Conrad Nacua"
 image: "../../../assets/articles/the-interpretation-of-memes/1.jpg"
 tags:
-  - narrative
-  - Ironic meme
-  - linguistics
-  - semantics
+  - "narrative"
+  - "ironic meme"
+  - "linguistics"
+  - "semantics"
 legacyPermalink: 2018/02/05/the-interpretation-of-memes/
 ---
 
