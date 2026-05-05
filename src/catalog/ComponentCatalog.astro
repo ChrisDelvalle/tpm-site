@@ -1,5 +1,5 @@
 ---
-import { Search } from "lucide-astro";
+import { Maximize2, Search } from "lucide-astro";
 
 import AuthorArticleList from "../components/authors/AuthorArticleList.astro";
 import AuthorBioBlock from "../components/authors/AuthorBioBlock.astro";
@@ -72,9 +72,7 @@ import Section from "../components/ui/Section.astro";
 import Separator from "../components/ui/Separator.astro";
 import TextLink from "../components/ui/TextLink.astro";
 import sampleDarkImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
-import squareArticleImage from "../assets/shared/2x2-meme-table.png";
 import tallArticleImage from "../assets/shared/catalog-tall-article-figure.svg";
-import landscapeImage from "../assets/shared/phylomemetic-tree-lamarckian.png";
 import sampleImage from "../assets/shared/tpm_defaultpic.jpg";
 import { catalogMetadata } from "./catalog.config";
 import CatalogExample from "./CatalogExample.astro";
@@ -88,7 +86,7 @@ import { getAuthorProfiles } from "../lib/authors";
 import { articleImagePresentation } from "../lib/article-image-policy";
 import { primaryNavigationItems } from "../lib/navigation";
 
-const unknownImagePresentation = articleImagePresentation(undefined);
+const generatedImagePresentation = articleImagePresentation();
 
 const catalogTocHeadings = [
   {
@@ -631,8 +629,20 @@ if (primaryCatalogAuthor === undefined) {
       </CatalogExample>
 
       <CatalogExample
-        title="ArticleImage - Portrait"
-        description="Astro-optimized portrait image with caption."
+        title="ArticleImage - Default"
+        description="Astro-optimized bounded image preview with a full-screen inspection action."
+        componentPath="src/components/articles/ArticleImage.astro"
+      >
+        <ArticleImage
+          src={tallArticleImage}
+          alt="A bounded article image preview"
+          caption="Default bounded article image example."
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleImage - Captioned"
+        description="Default article image anatomy with caption, alt text, and optimized responsive sources."
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
@@ -643,57 +653,19 @@ if (primaryCatalogAuthor === undefined) {
       </CatalogExample>
 
       <CatalogExample
-        title="ArticleImage - Landscape"
-        description="Landscape images can use the full prose measure while keeping a viewport-aware height cap."
+        title="ArticleImage - Long Alt"
+        description="Long accessible image descriptions do not change the visual article image anatomy."
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
-          src={landscapeImage}
-          alt="A two-by-two meme table"
-          caption="Landscape article image example."
-        />
-      </CatalogExample>
-
-      <CatalogExample
-        title="ArticleImage - Square"
-        description="Square images are bounded below full prose width so they do not dominate the reading flow."
-        componentPath="src/components/articles/ArticleImage.astro"
-      >
-        <ArticleImage
-          src={squareArticleImage}
-          alt="A square visual pun meme"
-          caption="Square article image example."
-        />
-      </CatalogExample>
-
-      <CatalogExample
-        title="ArticleImage - Tall"
-        description="Tall images use a square-height preview with a full-image inspection action."
-        componentPath="src/components/articles/ArticleImage.astro"
-      >
-        <ArticleImage
-          src={tallArticleImage}
-          alt="A tall loss diagram"
-          caption="Tall article image example."
-        />
-      </CatalogExample>
-
-      <CatalogExample
-        title="ArticleImage - Inspectable"
-        description="Extra-tall or explicitly inspectable images show a compact preview with a full-image inspection action."
-        componentPath="src/components/articles/ArticleImage.astro"
-      >
-        <ArticleImage
-          src={tallArticleImage}
-          alt="A long diagram preview"
-          caption="Inspectable article image example."
-          heightPolicy="inspectable"
+          src={sampleImage}
+          alt="A deliberately long article image description used to verify that accessible image text remains available without becoming visible layout content in the article flow."
         />
       </CatalogExample>
 
       <CatalogExample
         title="ArticleImage - Natural"
-        description="Natural height is an explicit escape hatch for intentionally full-height images."
+        description="Natural height is the explicit escape hatch for intentional full-height component images."
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
@@ -706,26 +678,73 @@ if (primaryCatalogAuthor === undefined) {
 
       <CatalogExample
         title="Generated Markdown Image - Unknown"
-        description="Unknown or remote dimensions use the conservative contained image contract."
+        description="Unknown-dimension generated Markdown images use the same bounded inspector contract without author components."
+        componentPath="src/components/articles/ArticleProse.astro"
+      >
+        <ArticleProse enableImageInspector>
+          <figure
+            class:list={[generatedImagePresentation.figureClass]}
+            data-article-image-figure="true"
+            data-article-image-inspectable="true"
+            data-article-image-policy="bounded"
+          >
+            <button
+              type="button"
+              class:list={[generatedImagePresentation.frameClass]}
+              data-article-image-inspect-trigger="true"
+              aria-haspopup="dialog"
+              aria-label="View full image: Generated Markdown image"
+            >
+              <img
+                src="/favicon.svg"
+                alt="Generated Markdown illustration"
+                class:list={[generatedImagePresentation.imageClass]}
+                data-article-image="true"
+                sizes={generatedImagePresentation.previewSizes}
+              />
+              <span
+                class:list={[generatedImagePresentation.inspectionClass]}
+                data-article-image-inspect-affordance="true"
+                aria-hidden="true"
+              >
+                <Maximize2 class="size-3" aria-hidden="true" />
+              </span>
+            </button>
+            <figcaption class:list={[generatedImagePresentation.captionClass]}>
+              Generated Markdown image fallback example.
+            </figcaption>
+          </figure>
+        </ArticleProse>
+      </CatalogExample>
+
+      <CatalogExample
+        title="Generated Markdown Linked Image"
+        description="Explicit image links keep their link behavior instead of becoming image inspector triggers."
         componentPath="src/components/articles/ArticleProse.astro"
       >
         <ArticleProse>
           <figure
-            class:list={[unknownImagePresentation.figureClass]}
+            class:list={[generatedImagePresentation.figureClass]}
             data-article-image-figure="true"
             data-article-image-inspectable="false"
-            data-article-image-shape="unknown"
+            data-article-image-policy="bounded"
           >
-            <div class:list={[unknownImagePresentation.frameClass]}>
-              <img
-                src="/favicon.svg"
-                alt="Unknown-dimension fallback"
-                class:list={[unknownImagePresentation.imageClass]}
-                data-article-image="true"
-              />
+            <div class:list={[generatedImagePresentation.frameClass]}>
+              <a
+                href="/favicon.svg"
+                class="focus-visible:outline-ring inline-flex max-w-full items-center justify-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                <img
+                  src="/favicon.svg"
+                  alt="Linked generated Markdown illustration"
+                  class:list={[generatedImagePresentation.imageClass]}
+                  data-article-image="true"
+                  sizes={generatedImagePresentation.previewSizes}
+                />
+              </a>
             </div>
-            <figcaption class:list={[unknownImagePresentation.captionClass]}>
-              Unknown-dimension Markdown image fallback example.
+            <figcaption class:list={[generatedImagePresentation.captionClass]}>
+              Linked Markdown image example.
             </figcaption>
           </figure>
         </ArticleProse>

@@ -4,25 +4,22 @@ Source: `src/components/articles/ArticleImage.astro`
 
 ## Purpose
 
-`ArticleImage` renders explicit MDX/article images using the same editorial
-image policy as default Markdown images.
+`ArticleImage` renders explicit MDX/article images using the same simplified
+editorial image contract as default Markdown images.
 
-Normal Markdown authors should not need this component. They should use standard
-Markdown image syntax and let the article-image rehype plugin choose the
-default presentation. `ArticleImage` exists for MDX articles, deliberate escape
-hatches, captions that need component control, and cases where the author needs
-to force a height policy.
+Normal Markdown authors should use standard Markdown image syntax. This
+component exists for MDX articles and rare explicit escape hatches.
 
 ## Public Contract
 
 - `alt: string`
 - `caption?: string | undefined`
-- `heightPolicy?: "auto" | "contained" | "inspectable" | "natural"`
+- `heightPolicy?: "auto" | "natural"`
 - `src: ImageMetadata`
 
-Public props should remain narrow and semantic. Do not add broad configuration
-objects or boolean clusters when a named variant or a smaller component would
-make invalid states harder to express.
+Keep props narrow. Do not add broad configuration objects for per-image
+styling; the default contract should be good enough for ordinary article
+images.
 
 ## Composition Relationships
 
@@ -30,77 +27,62 @@ make invalid states harder to express.
 MDX article
   ArticleProse
     ArticleImage
-      optimized Image
+      optimized Astro Image
       optional inspect trigger
 ```
 
-`ArticleImage` should call the shared article image policy helper rather than
-duplicating aspect-ratio thresholds. It should not fetch content, inspect
-Markdown source, or choose global image assets.
+`ArticleImage` calls the shared article image policy helper. It does not fetch
+content, inspect Markdown source, or choose global image assets.
 
 ## Layout And Responsiveness
 
-The component must mirror the default Markdown image policy:
+Default images render as full prose-width editorial previews with a square-height
+cap:
 
-- landscape images may use the full reading measure;
-- square images are width-capped so they do not become oversized vertical
-  blocks;
-- portrait images are centered and narrower;
-- tall images use a square-height preview with a full-image inspection action;
-- extra-tall images render a narrower square-height inspectable preview by
-  default;
-- natural images are explicit escape hatches and may render at full natural
-  height within the reading measure.
+```text
+max-width: 100%
+max-height: min(70svh, 34rem)
+fit: object-contain
+```
 
-Images should preserve content with `object-contain` by default. Only
-tall and extra-tall inspectable previews intentionally crop the image inside a
-controlled preview frame.
+The default preview is inspectable. Clicking the image opens the shared
+full-screen inspector, which can request a larger responsive candidate on
+demand.
+
+`heightPolicy="natural"` is the only approved visual escape hatch. It removes
+the preview height cap and disables the inspector for rare deliberate
+full-height MDX figures.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an
-inspect trigger overlay. The full inspection viewer is owned by the shared
-article image inspector script installed by `ArticleProse`, not by each image
-instance.
+The component should not create a card-like surface around images. It owns only
+the image trigger, optional caption, and focus states. The full-screen inspector
+is owned by the shared script installed by `ArticleProse`.
 
 ## Interaction States
 
-Default, contained, portrait, tall, inspectable, natural, captioned,
-hover/focus, long-caption, and dark-mode states should be represented in the
-catalog when relevant.
+Default, natural, captioned, long-alt, hover, focus-visible, full-screen
+inspector, and dark-mode states should be represented in tests or the catalog.
 
 ## Accessibility Semantics
 
-Use `figure`/`figcaption` semantics. Required alt text must be preserved on the
-image. Inspect triggers must have an accessible name and keep visible focus
-states. The inspector must return focus to the trigger that opened it.
-
-## Content Edge Cases
-
-Test or catalog long titles, long words, dense content, empty content, missing
-optional fields, and unusual punctuation whenever this component renders user or
-author-provided content.
-
-## Theme Behavior
-
-Use semantic color tokens and Tailwind utilities. Light and dark mode must keep
-text readable, borders visible when they communicate structure, focus rings
-visible, and CTAs distinguishable from neutral actions.
+Use `figure` and `figcaption` semantics. The image trigger must be a real
+button with an accessible name such as `View full image: <alt>`. The full-screen
+inspector must restore focus to the trigger after close.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
-- handles long content without clipping or overlapping neighboring components.
-- uses the same shape policy as Markdown-rendered images.
-- caps square and portrait images so they do not dominate the reading flow.
-- renders tall and extra-tall images as inspectable previews unless explicitly
-  told to use a different height policy.
-- preserves caption and alt text semantics.
-- keeps natural full-height display as an explicit escape hatch.
+- renders without horizontal overflow at mobile, tablet, desktop, and wide
+  desktop widths;
+- preserves alt text and caption semantics;
+- default preview does not exceed the square-height cap;
+- preview image uses accurate prose-width `sizes`;
+- default image opens the shared inspector;
+- natural images render without the cap and without inspector behavior;
+- focus states remain visible in light and dark modes.
 
 ## Follow-Up Notes
 
 - Keep this component aligned with
-  `docs/rehype-plugins/article-images.md`. If either policy changes, update
-  both documents and the shared helper tests.
+  `docs/rehype-plugins/article-images.md`. That technical design is the source
+  of truth for default article image behavior.

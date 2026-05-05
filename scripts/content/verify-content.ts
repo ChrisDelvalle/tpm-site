@@ -2,6 +2,8 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 import matter from "gray-matter";
+import type { Image, Nodes, Paragraph, Root } from "mdast";
+import { remark } from "remark";
 
 /** Inputs needed to verify source content conventions. */
 export interface ContentVerificationOptions {
@@ -85,11 +87,13 @@ export async function verifyContent({
   for (const file of articleFiles) {
     validateArticlePath(articleDir, file, seenSlugs, issues);
 
-    const data = frontmatterData(await readFile(file, "utf8"));
+    const text = await readFile(file, "utf8");
+    const data = frontmatterData(text);
     if (isDraft(data)) {
       draftCount += 1;
     }
     validateArticleAuthor(rootDir, file, data, authorAliases, issues);
+    validateArticleImageParagraphs(rootDir, file, text, issues);
   }
 
   return {
@@ -126,6 +130,16 @@ function frontmatterData(text: string): Record<string, unknown> {
   const rawData: unknown = matter(text).data;
 
   return isRecord(rawData) ? rawData : {};
+}
+
+function contentLineOffset(source: string, content: string): number {
+  const start = source.indexOf(content);
+
+  if (start < 0) {
+    return 0;
+  }
+
+  return source.slice(0, start).split("\n").length - 1;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -268,6 +282,100 @@ function validateArticleAuthor(
         );
       }
     });
+}
+
+function validateArticleImageParagraphs(
+  rootDir: string,
+  file: string,
+  text: string,
+  issues: string[],
+): void {
+  const parsed = matter(text);
+  const tree = remark().parse(parsed.content);
+  const lineOffset = contentLineOffset(text, parsed.content);
+  const articlePath = toPosix(path.relative(rootDir, file));
+
+  localImagesInMixedParagraphs(tree).forEach(({ image, paragraph }) => {
+    const line = image.position?.start.line ?? paragraph.position?.start.line;
+    const suffix = line === undefined ? "" : `:${line + lineOffset}`;
+
+    issues.push(
+      `${articlePath}${suffix}: local article image must be separated into its own paragraph; add blank lines around the image so article image tooling can render it as an inspectable figure`,
+    );
+  });
+}
+
+function localImagesInMixedParagraphs(
+  tree: Root,
+): Array<{ image: Image; paragraph: Paragraph }> {
+  const images: Array<{ image: Image; paragraph: Paragraph }> = [];
+
+  visitParagraphs(tree, (paragraph) => {
+    const meaningfulChildren = paragraph.children.filter(isMeaningfulNode);
+
+    if (
+      meaningfulChildren.length === 1 &&
+      isStandaloneImageNode(meaningfulChildren[0])
+    ) {
+      return;
+    }
+
+    paragraph.children
+      .filter(isImage)
+      .filter((image) => isLocalArticleImageUrl(image.url))
+      .forEach((image) => images.push({ image, paragraph }));
+  });
+
+  return images;
+}
+
+function visitParagraphs(
+  node: Nodes,
+  callback: (paragraph: Paragraph) => void,
+): void {
+  if (node.type === "paragraph") {
+    callback(node);
+  }
+
+  if (isParentNode(node)) {
+    node.children.forEach((child) => visitParagraphs(child, callback));
+  }
+}
+
+function isParentNode(node: Nodes): node is Nodes & { children: Nodes[] } {
+  return "children" in node && Array.isArray(node.children);
+}
+
+function isStandaloneImageNode(node: Nodes | undefined): boolean {
+  if (node === undefined) {
+    return false;
+  }
+
+  if (node.type === "image") {
+    return true;
+  }
+
+  if (node.type !== "link") {
+    return false;
+  }
+
+  const meaningfulChildren = node.children.filter(isMeaningfulNode);
+
+  return (
+    meaningfulChildren.length === 1 && meaningfulChildren[0]?.type === "image"
+  );
+}
+
+function isMeaningfulNode(node: Nodes): boolean {
+  return node.type !== "text" || node.value.trim().length > 0;
+}
+
+function isImage(node: Nodes): node is Image {
+  return node.type === "image";
+}
+
+function isLocalArticleImageUrl(url: string): boolean {
+  return url.trim() !== "" && !/^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\/)/iu.test(url);
 }
 
 function validateAuthorMetadataFilename(

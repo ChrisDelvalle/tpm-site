@@ -32,6 +32,8 @@ describe("article image inspector browser script", () => {
     expect(dialogImage.src).toBe("https://example.com/images/thread.png");
     expect(dialogImage.getAttribute("srcset")).toContain("thread-large");
     expect(document.activeElement).toBe(close);
+    expect(close.getAttribute("aria-label")).toBe("Close image viewer");
+    expect(close.textContent).toBe("");
 
     close.dispatchEvent(
       browserEvent(
@@ -53,11 +55,12 @@ describe("article image inspector browser script", () => {
 
     const dialog = requiredDialog(document);
     const caption = requiredDialogCaption(document);
+    const viewport = requiredDialogViewport(document);
 
     expect(caption.hidden).toBe(false);
     expect(caption.textContent).toBe("Full thread caption.");
 
-    dialog.dispatchEvent(
+    viewport.dispatchEvent(
       browserEvent(
         new window.MouseEvent("click", { bubbles: true, cancelable: true }),
       ),
@@ -163,6 +166,18 @@ function requiredDialogCaption(document: Document): HTMLElement {
 
   if (element === null) {
     throw new Error("Missing element: dialog caption");
+  }
+
+  return element;
+}
+
+function requiredDialogViewport(document: Document): HTMLElement {
+  const element = document.querySelector<HTMLElement>(
+    "[data-article-image-dialog-viewport]",
+  );
+
+  if (element === null) {
+    throw new Error("Missing element: dialog viewport");
   }
 
   return element;

@@ -7,6 +7,7 @@ import {
   articleImagePresentation,
   type ArticleImageHeightPolicy,
 } from "../../lib/article-image-policy";
+import ArticleImageInspectorScript from "./ArticleImageInspectorScript.astro";
 
 interface Props {
   alt: string;
@@ -16,10 +17,7 @@ interface Props {
 }
 
 const { alt, caption, heightPolicy = "auto", src } = Astro.props;
-const presentation = articleImagePresentation(
-  { height: src.height, width: src.width },
-  heightPolicy,
-);
+const presentation = articleImagePresentation(heightPolicy);
 const inspectLabel =
   alt.trim().length > 0 ? `View full image: ${alt}` : "View full image";
 ---
@@ -28,7 +26,7 @@ const inspectLabel =
   class:list={[presentation.figureClass]}
   data-article-image-figure="true"
   data-article-image-inspectable={presentation.isInspectable ? "true" : "false"}
-  data-article-image-shape={presentation.shape}
+  data-article-image-policy={presentation.policy}
 >
   {
     presentation.isInspectable ? (
@@ -43,6 +41,7 @@ const inspectLabel =
           src={src}
           alt={alt}
           layout="constrained"
+          sizes={presentation.previewSizes}
           class:list={[presentation.imageClass]}
           data-article-image="true"
         />
@@ -52,7 +51,6 @@ const inspectLabel =
           aria-hidden="true"
         >
           <Maximize2 class="size-3" aria-hidden="true" />
-          View full image
         </span>
       </button>
     ) : (
@@ -61,6 +59,7 @@ const inspectLabel =
           src={src}
           alt={alt}
           layout="constrained"
+          sizes={presentation.previewSizes}
           class:list={[presentation.imageClass]}
           data-article-image="true"
         />
@@ -76,4 +75,4 @@ const inspectLabel =
   }
 </figure>
 
-<script src="../../scripts/article-image-inspector.ts"></script>
+{presentation.isInspectable && <ArticleImageInspectorScript />}

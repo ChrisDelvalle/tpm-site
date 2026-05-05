@@ -24,6 +24,8 @@ const staticReadingBasePages = [
 const allowedStaticClientScriptPatterns = [
   /^\/_astro\/AnchoredRoot\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u,
 ] as const;
+const articleImageInspectorScriptPattern =
+  /^\/_astro\/ArticleImageInspectorScript\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u;
 const astroPrefetchPageScriptPattern = /^\/_astro\/page\.[\w-]+\.js$/u;
 const astroPrefetchChunkImportPattern =
   /from\s*["'`]\.\/(_astro_prefetch\.[\w-]+\.js)["'`]/u;
@@ -614,7 +616,7 @@ async function inspectHtmlFile(
   }
 
   if (
-    /^articles\/(?!all\/)[^/]+\/index\.html$/.test(relativeHtmlPath) &&
+    isArticleHtmlPath(relativeHtmlPath) &&
     !text.includes('"@type":"BlogPosting"')
   ) {
     issues.missingArticleJsonLd.push(relativeHtmlPath);
@@ -651,7 +653,7 @@ async function inspectStaticReadingPageHtml(
   for (const source of scriptSources(text)) {
     if (
       /^\/_astro\/[^"']+\.js$/iu.test(source) &&
-      !(await isAllowedStaticClientScript(distDir, source))
+      !(await isAllowedStaticClientScript(distDir, relativeHtmlPath, source))
     ) {
       unexpectedScriptSources.push(source);
     }
@@ -670,8 +672,16 @@ async function inspectStaticReadingPageHtml(
 
 async function isAllowedStaticClientScript(
   distDir: string,
+  relativeHtmlPath: string,
   source: string,
 ): Promise<boolean> {
+  if (
+    isArticleHtmlPath(relativeHtmlPath) &&
+    articleImageInspectorScriptPattern.test(source)
+  ) {
+    return true;
+  }
+
   if (
     allowedStaticClientScriptPatterns.some((pattern) => pattern.test(source))
   ) {
@@ -756,6 +766,10 @@ function scriptSources(html: string): string[] {
   }
 
   return sources;
+}
+
+function isArticleHtmlPath(relativeHtmlPath: string): boolean {
+  return /^articles\/(?!all\/)[^/]+\/index\.html$/.test(relativeHtmlPath);
 }
 
 async function internalTargetExists(

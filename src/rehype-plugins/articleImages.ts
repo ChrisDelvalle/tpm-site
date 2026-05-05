@@ -1,11 +1,7 @@
 /* eslint-disable security/detect-object-injection -- Markdown and HAST plugins normalize dynamic property bags from parsed article nodes. */
 import type { Image, Link, Nodes, Root, Text } from "mdast";
 
-import {
-  articleImagePresentation,
-  readLocalImageDimensions,
-  resolveLocalMarkdownImagePath,
-} from "../lib/article-image-policy";
+import { articleImagePresentation } from "../lib/article-image-policy";
 
 interface HastParent {
   children: HastNode[];
@@ -31,7 +27,6 @@ interface VFileLike {
       frontmatter?: Record<string, unknown>;
     };
   };
-  path?: string | URL;
 }
 
 type MdastParentNode = Nodes & { children: Nodes[] };
@@ -190,23 +185,14 @@ function articleFigure(
   file: VFileLike,
   link?: HastElement,
 ): HastElement {
-  const src = stringProperty(image, "src");
   const title = stringProperty(image, "title");
   const alt = stringProperty(image, "alt") ?? "article image";
-  const localPath =
-    src === undefined
-      ? undefined
-      : resolveLocalMarkdownImagePath(src, file.path);
-  const presentation = articleImagePresentation(
-    imageDimensionsFromProperties(image) ??
-      (localPath === undefined
-        ? undefined
-        : readLocalImageDimensions(localPath)),
-  );
-  if (presentation.isInspectable) {
+  const presentation = articleImagePresentation();
+  const isInspectable = link === undefined && presentation.isInspectable;
+
+  if (isInspectable) {
     setArticleImageRenderData(file, { hasInspectableImages: true });
   }
-  const frame = frameNode(image, presentation.frameClass, link);
 
   image.properties = {
     ...image.properties,
@@ -215,6 +201,7 @@ function articleFigure(
       presentation.imageClass,
     ),
     "data-article-image": "true",
+    sizes: presentation.previewSizes,
   };
 
   standaloneImagePropertyAliases.forEach((propertyName) => {
@@ -223,9 +210,14 @@ function articleFigure(
   delete image.properties["title"];
 
   const children: HastNode[] = [
-    presentation.isInspectable
-      ? inspectableFrame(frame, image, alt, link !== undefined)
-      : frame,
+    isInspectable
+      ? inspectableFrame(
+          image,
+          alt,
+          presentation.frameClass,
+          presentation.inspectionClass,
+        )
+      : frameNode(image, presentation.frameClass, link),
   ];
 
   if (title !== undefined && title.trim().length > 0) {
@@ -242,10 +234,8 @@ function articleFigure(
     properties: {
       className: presentation.figureClass,
       "data-article-image-figure": "true",
-      "data-article-image-inspectable": presentation.isInspectable
-        ? "true"
-        : "false",
-      "data-article-image-shape": presentation.shape,
+      "data-article-image-inspectable": isInspectable ? "true" : "false",
+      "data-article-image-policy": presentation.policy,
     },
     tagName: "figure",
     type: "element",
@@ -268,7 +258,10 @@ function frameNode(
 
   link.properties = {
     ...link.properties,
-    className: mergeClassName(link.properties?.["className"], "block"),
+    className: mergeClassName(
+      link.properties?.["className"],
+      "inline-flex max-w-full items-center justify-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+    ),
   };
 
   return {
@@ -280,22 +273,17 @@ function frameNode(
 }
 
 function inspectableFrame(
-  frame: HastElement,
   image: HastElement,
   alt: string,
-  hasLinkedImage: boolean,
+  frameClass: string,
+  inspectionClass: string,
 ): HastElement {
-  if (hasLinkedImage) {
-    frame.children.push(inspectButton(alt));
-    return frame;
-  }
-
   return {
-    children: [image, inspectAffordance()],
+    children: [image, inspectAffordance(inspectionClass)],
     properties: {
-      ...frame.properties,
       "aria-haspopup": "dialog",
       "aria-label": inspectLabel(alt),
+      className: frameClass,
       "data-article-image-inspect-trigger": "true",
       type: "button",
     },
@@ -304,29 +292,12 @@ function inspectableFrame(
   };
 }
 
-function inspectButton(alt: string): HastElement {
+function inspectAffordance(className: string): HastElement {
   return {
-    children: [inspectAffordance()],
-    properties: {
-      "aria-haspopup": "dialog",
-      "aria-label": inspectLabel(alt),
-      className:
-        "absolute right-2 bottom-2 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-      "data-article-image-inspect-trigger": "true",
-      type: "button",
-    },
-    tagName: "button",
-    type: "element",
-  };
-}
-
-function inspectAffordance(): HastElement {
-  return {
-    children: [expandIcon(), { type: "text", value: "View full image" }],
+    children: [expandIcon()],
     properties: {
       "aria-hidden": "true",
-      className:
-        "pointer-events-none inline-flex items-center gap-1 rounded-sm border border-border bg-background/95 px-2 py-1 text-xs font-semibold text-foreground shadow-sm",
+      className,
       "data-article-image-inspect-affordance": "true",
     },
     tagName: "span",
@@ -420,43 +391,6 @@ function stringProperty(
 ): string | undefined {
   const value = element.properties?.[propertyName];
   return typeof value === "string" ? value : undefined;
-}
-
-function imageDimensionsFromProperties(
-  image: HastElement,
-): undefined | { height: number; width: number } {
-  const width = numberProperty(image, "width");
-  const height = numberProperty(image, "height");
-
-  if (width === undefined || height === undefined) {
-    return undefined;
-  }
-
-  return { height, width };
-}
-
-function numberProperty(
-  element: HastElement,
-  propertyName: string,
-): number | undefined {
-  const value = element.properties?.[propertyName];
-  const parsedValue = numberLikeValue(value);
-
-  return Number.isFinite(parsedValue) && parsedValue > 0
-    ? parsedValue
-    : undefined;
-}
-
-function numberLikeValue(value: unknown): number {
-  if (typeof value === "number") {
-    return value;
-  }
-
-  if (typeof value === "string") {
-    return Number.parseFloat(value);
-  }
-
-  return Number.NaN;
 }
 
 function mergeClassName(existing: unknown, extraClassName: string): string {

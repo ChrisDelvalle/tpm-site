@@ -2082,3 +2082,68 @@ Scope rules:
 - [x] Fix any regressions or update the design if implementation reveals a
       better invariant.
 - [x] Update `CHECKLIST.md` only after every relevant verification step passes.
+
+## Milestone 84: Simplified Editorial Image Inspector Design
+
+- [x] Redesign the editorial article image contract around one default
+      full-prose-width preview with a square-height cap instead of shape-specific
+      visual buckets.
+- [x] Specify that standalone Markdown images use normal authoring syntax and
+      become inspectable by default, while explicitly linked images preserve
+      their link behavior.
+- [x] Specify preview loading behavior: Astro owns responsive image generation,
+      preview `sizes` must match the prose-width frame, and larger candidates
+      should only be requested when the full-screen inspector opens.
+- [x] Redesign the inspector as a full-screen image-focused viewer with no
+      card background, a top-right icon close affordance, keyboard support,
+      focus restoration, and viewport-safe scrolling for oversized images.
+- [x] Update component and plugin design docs, review them critically for
+      ambiguity or blockers, and only then break implementation into milestones.
+
+## Milestone 85: Simplified Article Image Policy And Markdown Transform
+
+- [x] Collapse `src/lib/article-image-policy.ts` to one default bounded preview
+      policy plus the `natural` escape hatch.
+- [x] Keep local image dimension parsing only where it remains useful for
+      tests, metadata, or future validation; remove shape-specific visual
+      classification from the public behavior.
+- [x] Update `src/rehype-plugins/articleImages.ts` so unlinked standalone
+      Markdown images are inspectable by default and linked images preserve
+      explicit link behavior without nested interactivity.
+- [x] Set accurate preview `sizes` on generated Markdown image nodes so Astro
+      and the browser choose prose-width preview candidates.
+- [x] Update focused policy and rehype plugin tests before marking the milestone
+      complete.
+
+## Milestone 86: Full-Screen Article Image Inspector
+
+- [x] Update `ArticleImage.astro` to use the simplified default inspectable
+      preview and `heightPolicy="natural"` escape hatch.
+- [x] Update `src/scripts/article-image-inspector.ts` to render a full-screen
+      image-focused viewer with no card background, an icon-only close button,
+      viewport-safe scrolling, `Escape`/backdrop dismissal, and focus return.
+- [x] Keep full-size candidate loading on demand by copying optimized preview
+      image source data only when the inspector opens and setting
+      `sizes="100vw"` in the viewer.
+- [x] Update component and browser-script tests before marking the milestone
+      complete.
+
+## Milestone 87: Simplified Article Image Catalog And Browser Invariants
+
+- [x] Replace shape-bucket catalog examples with the simplified default,
+      captioned, long-alt, linked, natural, and unknown/remote image examples.
+- [x] Update browser invariants so every unlinked standalone article image is
+      inspectable, previews stay under the square-height cap, linked images keep
+      link behavior, and no horizontal overflow appears across key viewports.
+- [x] Verify representative image-heavy article pages with the simplified
+      contract.
+- [x] Run focused catalog and e2e checks before marking the milestone complete.
+
+## Milestone 88: Simplified Article Image Release Verification
+
+- [x] Run formatting, linting, typechecking, content checks, catalog checks,
+      unit/component/script tests, browser tests, accessibility checks, coverage
+      review, and release build verification.
+- [x] Fix regressions or update the design if implementation reveals a better
+      invariant.
+- [x] Update `CHECKLIST.md` only after every relevant verification step passes.

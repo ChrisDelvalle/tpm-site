@@ -2,26 +2,26 @@
 
 ## Purpose
 
-Article authors should be able to use normal Markdown image syntax and receive
-beautiful, robust editorial image behavior by default:
+Article authors should use ordinary Markdown image syntax:
 
 ```md
-![Descriptive alt text](../../../assets/articles/example/thread.png)
+![Descriptive alt text](../../../assets/articles/example/image.png)
 ```
 
-The site, not the author, should choose the default presentation for ordinary
-article images. MDX or component usage is reserved for deliberate exceptions,
-custom interactions, or article-specific composition that plain Markdown cannot
-express.
+The site should turn standalone article images into a consistent editorial
+reading experience:
 
-This feature exists to preserve reading flow. Images should support the essay,
-not create accidental scroll traps, oversized square blocks, or tiny unreadable
-vertical artifacts. The default prose ceiling is approximately the height of a
-square image in the reading measure. Tall artifacts such as diagrams, thread
-screenshots, and long captures should be presented as inspectable figures:
-enough is visible in the prose to preserve context, and a clear interaction
-lets the reader take a temporary side journey to inspect the full image without
-losing their reading position.
+- the preview participates in normal article flow;
+- the preview is full prose width but cannot become taller than the square
+  reading frame;
+- the image remains optimized by Astro's normal image pipeline;
+- the reader can inspect the full image on demand;
+- Markdown authors do not need to choose components or per-image settings.
+
+This design intentionally simplifies the older shape-bucket model. The core
+product requirement is not "style every aspect ratio differently." It is
+"do not let images get too tall in the reading flow, while preserving a clean
+way to inspect the full image."
 
 ## Pipeline
 
@@ -30,163 +30,121 @@ Astro's Markdown pipeline is powered by unified:
 ```text
 Markdown source
   remark plugins
-    project article-image marker plugin
+    article image marker plugin
   remark-rehype
-  project rehype plugins
-  Astro rehype image optimizer
-  heading IDs
-  raw HTML/stringify
+  rehype plugins
+    article image wrapper plugin
+  Astro Markdown image optimizer
+  HTML output
 ```
 
-This project already uses a remark plugin for article references. Editorial
-article images use a small two-phase plugin pair:
+The article-image feature uses a small two-phase plugin pair:
 
-- a remark marker pass marks only images that are the sole meaningful content
-  of a paragraph;
-- a rehype transform turns only those marked image elements into editorial
-  figure anatomy.
+- `remarkArticleImageMarkers` marks images that are the only meaningful content
+  in a paragraph;
+- `rehypeArticleImages` wraps only those marked images in article figure
+  anatomy before Astro optimizes the image element.
 
-The marker pass is important because inline images and emoji can appear inside
-real article paragraphs. Those must remain inline content. A rehype-only
-transform cannot rely on tree shape after Astro's Markdown image handling has
-prepared images for optimization.
-
-The structural transform belongs in rehype because the desired output is HTML
-around rendered image elements:
-
-- `figure` wrappers;
-- optional `figcaption` from Markdown image titles;
-- data attributes for image shape and inspection behavior;
-- wrapper/button markup for tall and extra-tall images;
-- stable classes that Astro's later image optimizer preserves.
-
-Project rehype plugins run before Astro's Markdown image optimizer. That is the
-right boundary for wrapping: the plugin can inspect marked `img` nodes while
-`src` still points to the author-written image path, wrap the image in
-editorial markup, and leave the actual `img` element for Astro to optimize
-afterward.
-
-The implementation lives under `src/rehype-plugins/articleImages.ts` because
-the feature's main responsibility is generated HTML anatomy. The companion
-remark marker is intentionally tiny and exists only to preserve Markdown
-semantics before rehype sees the tree.
+The marker pass prevents inline images, emoji, and mixed prose images from
+being promoted into block figures. The rehype pass owns HTML anatomy because
+the output is a figure, optional caption, inspect trigger, and stable
+data/class contract around an image node that Astro can still optimize.
 
 ## Astro Image Integration
 
-This is not a custom replacement for Astro's image pipeline. The project uses
-standard Markdown `![alt](src)` syntax for article images, which Astro supports
-for local `src/` images and remote images. Local images under `src/assets` stay
-on Astro's optimized Markdown path; images from `public/` remain intentionally
-unoptimized because that is Astro's documented behavior.
+This feature does not replace Astro's image handling. Astro still owns:
 
-`astro.config.ts` should set `image.layout: "constrained"` so Markdown images
-receive responsive `srcset` and `sizes` output by default. That setting answers
-the browser-source-selection problem. It does not answer editorial questions
-such as figure anatomy, captions, shape buckets, square-height ceilings, or
-full-image inspection. Those remain project policy and belong in this plugin
-and the shared `ArticleImage` component.
+- optimized responsive output files;
+- `srcset`;
+- lazy loading;
+- async decoding;
+- constrained image dimensions;
+- static build-time image processing.
 
-Keep `image.responsiveStyles` disabled while Tailwind owns the image layout.
-Astro's docs note that generated responsive image styles can outrank Tailwind 4
-utilities because Tailwind uses cascade layers. This project deliberately lets
-Astro generate optimized sources while Tailwind utilities define the visual
-box, max height, overflow, focus, and inspection behavior.
+The project sets `image.layout: "constrained"` in `astro.config.ts`. The plugin
+must preserve the `img` element so Astro can transform it later.
 
-The rehype plugin carries a serializable policy cache key in Astro config. This
-is a defensive build-cache boundary: changes to imported helper-only image
-policy should invalidate rendered Markdown content even when Astro's content
-cache would otherwise see the same plugin function reference.
+The project keeps `image.responsiveStyles: false` because Tailwind owns layout
+and because Astro-generated responsive styles can compete with Tailwind 4's
+cascade layers. Astro should generate sources; project components should own
+the editorial box.
 
-## Image Metadata
+The plugin must set accurate preview `sizes` for generated Markdown images so
+the browser selects a candidate that matches the article preview width instead
+of assuming the image is viewport- or intrinsic-width. The full-screen
+inspector changes the dialog image to `sizes="100vw"` only after the reader
+opens it, letting the browser request a larger candidate on demand.
 
-Images should be classified from intrinsic metadata when the Markdown pipeline
-provides `width` and `height` on the image element. If those properties are not
-available, local images under `src/assets` can still be classified at build
-time by resolving the Markdown image `src` relative to the current Markdown/MDX
-file path. The plugin should read dimensions from local image headers without
-fetching remote URLs or depending on runtime browser measurement.
+## Default Preview Contract
 
-Supported local formats should include at least PNG, JPEG, GIF, and WebP. If a
-dimension cannot be read, the image must use the `unknown` policy rather than
-failing the article build.
-
-Remote images should not block the build or fetch network data. They should use
-available intrinsic `width`/`height` properties when the pipeline provides
-them; otherwise they should use the `unknown` policy unless a later explicit
-metadata convention is added.
-
-## Shape Policy
-
-Shape is determined by `height / width`.
-
-| Shape        |                 Ratio | Default Intention                                                                                          |
-| ------------ | --------------------: | ---------------------------------------------------------------------------------------------------------- |
-| `landscape`  |               `< 0.7` | Fill the reading measure only for genuinely wide images. Landscapes are naturally shallow and can breathe. |
-| `square`     |         `0.7 - < 1.2` | Cap width so square, near-square, and 4:3 images do not become oversized vertical blocks.                  |
-| `portrait`   |         `1.2 - < 1.5` | Center and narrow the figure while preserving a normal editorial image feel.                               |
-| `tall`       |         `1.5 - < 2.0` | Render a square-height preview with a full-image inspection action.                                        |
-| `extra-tall` |              `>= 2.0` | Render a narrower square-height preview with a full-image inspection action.                               |
-| `unknown`    |         no dimensions | Use a conservative contained figure that cannot overflow.                                                  |
-| `natural`    | explicit escape hatch | Preserve natural height for rare author-approved cases.                                                    |
-
-Default sizing should be expressed with Tailwind utilities and stable design
-tokens. The exact values may be tuned, but the initial contract is:
+All standalone unlinked article images use the same preview contract:
 
 ```text
-landscape:  max-width: 100%;             max-height: min(70svh, 34rem)
-square:     max-width: min(100%, 34rem); max-height: min(70svh, 34rem)
-portrait:   max-width: min(100%, 30rem); max-height: min(70svh, 34rem)
-tall:       max-width: min(100%, 26rem); max-height: min(70svh, 34rem); inspectable
-extra-tall: max-width: min(100%, 24rem); max-height: min(70svh, 34rem); inspectable
-unknown:    max-width: min(100%, 34rem); max-height: min(70svh, 34rem)
-natural:    max-width: 100%;             max-height: none
+figure:       normal article rhythm, no prose styling leak
+trigger:      full prose width, visible focus, no card treatment
+preview:      max-height: min(70svh, 34rem)
+image fit:    object-contain, centered
+sizes:        min(prose width, viewport minus gutters)
+interaction:  click/focus-visible opens the full-screen inspector
 ```
 
-Normal image shapes should use `object-contain`; they must not crop author
-content. Tall and extra-tall previews are the exception: the preview is
-intentionally a cropped viewport into a larger artifact, top-aligned because
-long screenshots, diagrams, and threads usually read top-down.
+The image must not crop by default. Memes, diagrams, screenshots, and quoted
+text images often rely on their edges and internal layout. If the image is
+taller than the square-height frame, the preview becomes a contained image
+inside that frame and the full-screen inspector gives the reader the complete
+view.
 
-## Tall Image Interaction
+The preview should not carry a visible card background. A subtle focus ring and
+hover affordance are enough. The interaction should feel like inspecting the
+image, not opening a separate UI card.
 
-Tall figures should communicate author intent without interrupting reading
-flow:
+## Linked Images
 
-- the article shows a controlled preview;
-- the preview makes it clear that more image content exists;
-- the figure exposes a visible inspect action, preferably with an expand icon
-  and accessible label;
-- activating the action opens an inspection view;
-- closing returns the reader to the same article position and restores focus to
-  the trigger.
+If an author explicitly wraps an image in a Markdown link, the link is the
+author's chosen click behavior and must be preserved. Do not hijack linked
+images for the inspector and do not create nested interactive elements.
 
-The inspection view should be a progressive enhancement. The base HTML remains
-readable without JavaScript, and the preview still appears in the article. With
-JavaScript enabled, a small controller opens a native dialog-like viewer,
-copies the optimized image source data from the preview, locks interaction to
-the viewer, supports `Escape`, supports backdrop/close-button dismissal, and
-restores focus.
+Linked standalone images should still receive the normal bounded figure/frame
+contract when possible, but their click target remains the author's link.
 
-Inline expansion should not be the default. It mutates article height, creates
-scroll jumps, and makes returning to the exact reading position harder.
+## Full-Screen Inspector
+
+The inspector is a progressive enhancement:
+
+- no React island;
+- one small browser script;
+- no hidden full-size image on page load;
+- one native dialog-like full-screen viewer;
+- dark backdrop;
+- image centered and unconstrained by article prose;
+- no card background around the image;
+- top-right icon-only close button;
+- `Escape` and backdrop dismissal where supported;
+- focus restoration to the trigger after close.
+
+On open, the script copies the already-rendered preview image's optimized
+`src`, `srcset`, `alt`, and caption text into the inspector image, then sets
+`sizes="100vw"`. That keeps page load light and lets the browser request a
+larger candidate only after the reader asks to inspect the image.
+
+Oversized images should be viewport-safe: the viewer may scroll when an image
+is taller than the viewport, but it should not horizontally overflow. The close
+button must remain reachable.
 
 ## Author Escape Hatches
 
-Plain Markdown should cover ordinary authoring. Authors should not have to
-choose components for normal images.
+Plain Markdown covers ordinary authoring. Authors should not have to choose a
+component for normal article images.
 
-Escape hatches are allowed only when the default behavior cannot express the
-author's intent:
+Allowed escape hatches:
 
-- MDX may use `ArticleImage` with an explicit `heightPolicy`.
-- `heightPolicy="natural"` is reserved for rare, deliberate full-height figures.
-- `heightPolicy="inspectable"` may force the full-image viewer for an image
-  that is not ratio-classified as tall.
-- `heightPolicy="contained"` may force conservative contained sizing.
+- MDX may use `ArticleImage` for explicit component-controlled images.
+- `heightPolicy="natural"` may disable the square-height cap for rare,
+  deliberate full-height figures.
+- Linked Markdown images preserve the author's explicit link behavior.
 
-Do not add broad per-image configuration objects to Markdown. If a Markdown
-escape hatch is later needed, prefer a narrow, documented convention with
-validation over ad hoc class names in article content.
+Do not add broad Markdown configuration objects or class-name conventions unless
+the default model fails a real article requirement.
 
 ## Component Hierarchy
 
@@ -194,108 +152,106 @@ validation over ad hoc class names in article content.
 ArticleLayout
   ArticleProse
     rendered Markdown figure markup
-    article-image-inspector script
+    ArticleImageInspectorScript
 
 MDX article
   ArticleProse
     ArticleImage
-      same policy and trigger attributes
+      optimized Image
+      inspect trigger
 ```
 
-`ArticleProse` owns the presence of the progressive enhancement script because
-it is the wrapper for article Markdown/MDX output. The rehype plugin owns the
-generated figure anatomy for plain Markdown images. `ArticleImage` owns the
-same anatomy for MDX-authored explicit image components.
-
-Visual components must not parse Markdown source. Route files must not inspect
-image paths. The rehype plugin and pure policy helpers are the only layers that
-classify raw Markdown image paths.
+`ArticleProse` owns whether the shared inspector script is installed for an
+article. The rehype plugin owns generated Markdown image anatomy. `ArticleImage`
+owns the same contract for explicit MDX images. Route files should only pass
+serializable render metadata; they should not parse Markdown or inspect image
+paths.
 
 ## Accessibility
 
-- Every image must keep meaningful `alt` text or an explicit empty alt when
-  decorative.
-- Inspect triggers must have an accessible name that includes the image alt text
-  when possible.
-- Dialog inspection must restore focus to the trigger that opened it.
-- `Escape` must close the viewer.
-- The close button must be keyboard reachable and visibly focused.
-- The image caption, if present, should be associated with the figure and remain
-  visible in article flow.
-- The preview must not rely on hover-only behavior.
+- Images preserve author-provided alt text.
+- Inspect triggers are real buttons with labels such as
+  `View full image: <alt>`.
+- Icon-only controls must have accessible labels.
+- Focus-visible states are required for the image trigger and close button.
+- `Escape` closes the viewer.
+- Closing restores focus to the original trigger.
+- Captions stay visible in article flow and can be mirrored in the inspector.
+- Hover-only affordances are enhancements; keyboard and touch users can still
+  open the image.
 
 ## Performance
 
-The default output should stay static-first:
+The performance contract is:
 
-- no React island;
-- one small browser script for all article-image inspection;
-- no network metadata fetching at build time;
-- no duplicate eager image loading for hidden dialogs;
-- Astro continues to optimize Markdown image `img` elements after the plugin
-  wraps them.
+- preview image loads through Astro's optimized responsive output;
+- preview `sizes` matches the prose-width preview frame;
+- loading remains lazy unless an image is intentionally above-the-fold and
+  separately prioritized;
+- no full-screen image candidate is preloaded on page load;
+- full-screen image loading starts only when the reader opens the inspector;
+- remote image metadata is never fetched during build.
 
-The dialog should copy optimized source data from the already rendered preview
-image when opened. This avoids rendering a second hidden image that browsers
-might load before the reader asks to inspect it.
+This keeps the simple authoring model while avoiding unnecessary large image
+downloads for readers who keep reading.
 
 ## Test Plan
 
 Unit tests:
 
-- pure shape classifier thresholds;
 - local image dimension parsing for PNG, JPEG, GIF, and WebP headers;
 - local path resolution relative to Markdown file paths;
-- generated figure anatomy for each shape;
-- linked Markdown images are not broken by wrapping;
+- preview policy output for default and natural modes;
+- generated figure anatomy for unlinked Markdown images;
+- linked Markdown images preserve link behavior and are not inspectable;
 - inline Markdown images and emoji are not promoted into block figures;
-- unknown/remote images use conservative contained behavior;
-- tall and extra-tall images get inspect trigger metadata.
+- article image render metadata reports whether an inspector script is needed.
 
 Component tests:
 
-- `ArticleImage` renders default, tall/inspectable, extra-tall/inspectable,
-  natural, and captioned variants with the same shape data contract;
-- `ArticleProse` includes the progressive enhancement hook/script while
-  preserving prose rhythm and first-child behavior.
+- `ArticleImage` renders the default bounded inspectable preview;
+- `ArticleImage` preserves captions and alt text;
+- `ArticleImage heightPolicy="natural"` renders without the height cap and
+  without inspector behavior;
+- `ArticleProse` installs the inspector script only when requested.
 
-Browser/unit script tests:
+Browser/script tests:
 
-- clicking an inspect trigger opens the viewer;
-- close button, `Escape`, and backdrop dismissal close it;
+- clicking an image trigger opens the viewer;
+- close icon, `Escape`, and backdrop dismissal close it;
 - focus returns to the trigger;
-- optimized `src`, `srcset`, `sizes`, and alt text are copied from preview to
-  dialog image;
-- unrelated clicks and missing images fail safely.
+- the inspector copies optimized `src`, `srcset`, `sizes`, alt text, and
+  caption only on open;
+- unrelated clicks and incomplete markup fail safely.
 
 E2E tests:
 
-- real article Markdown images render as standalone figures without invalid
-  empty paragraphs or nested figures;
-- tall previews do not exceed viewport/content bounds at mobile, tablet, and
-  desktop widths;
-- forced/catalog inspectable examples open and close the inspection dialog and
-  restore focus;
-- square and portrait images are not full prose width;
+- standalone Markdown images render as bounded article figures;
+- preview images stay within the square-height cap at mobile, tablet, desktop,
+  and wide widths;
+- clicking an unlinked image opens the full-screen inspector;
+- linked images keep their link behavior;
 - inline paragraph images stay inline;
 - no horizontal overflow appears.
 
 Catalog:
 
-- show landscape, square, portrait, tall, extra-tall, unknown, captioned, and
-  natural/escape-hatch examples;
-- include light/dark states and long alt/caption content.
+- show default Markdown-like, explicit `ArticleImage`, linked image, natural
+  escape hatch, captioned, long-alt, and unknown/remote examples.
+- include light/dark and mobile/desktop invariant coverage.
 
-## Blockers And Risks
+## Critical Review
 
-- Markdown anchor links around images need careful handling. If an author wraps
-  an image in a link, the transform should preserve intent and avoid invalid
-  nested interactive elements.
-- Astro's image optimizer only transforms `img` elements, not arbitrary anchor
-  `href` values. The inspect dialog should therefore read optimized data from
-  the rendered preview image rather than relying on the original Markdown path
-  as a public URL.
-- Remote images cannot be dimension-classified without network access. Treat
-  them as `unknown`.
-- Extra-tall interaction requires JavaScript. The non-JavaScript experience is
-  the readable preview, not full inspection.
+This design deliberately removes shape-specific visual buckets because they are
+not necessary for the actual requirement. A single preview frame is easier to
+test, easier to explain, and less likely to drift across Markdown, MDX, and
+catalog examples.
+
+The only meaningful complexity left is justified:
+
+- a Markdown transform is needed because Astro does not provide project-specific
+  editorial figure anatomy for normal Markdown images;
+- a small script is needed because full-screen image inspection is a runtime
+  interaction;
+- preview `sizes` are needed because Astro cannot infer project prose-width
+  layout from the generated Markdown image alone.

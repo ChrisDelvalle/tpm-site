@@ -48,17 +48,21 @@ The first kind are dilemma memes, memes wherein the central joke is the presence
 The second and third kind are about the choice/s presented, and about the decision made between the presented choices. In the former, the choice itself is posed to the reader; he is the protagonist roped inside the encounter. In the latter, the joke is the decision that has been made already, and it is often a bad or ridiculous one; this kind is what I have included in the chart above. Like dilemma memes, if memes about ‘decisions made’ aren’t sympathetic (as in encouraging personal identification or self-deprecation), it is then used for ridicule.
 
 Here, are some examples of the kind that presents choices to the reader:
+
 ![5.png](../../../assets/articles/the-interpretation-of-memes/5.png)
 
 _CHOOSE ONE PILL_
 
 Different coloured pills with different effects are laid out in front of the reader.
 
-![6.jpg](../../../assets/articles/the-interpretation-of-memes/6.jpg)_WOULD YOU DO X FOR A BILLION DOLLARS?_
+![6.jpg](../../../assets/articles/the-interpretation-of-memes/6.jpg)
+
+_WOULD YOU DO X FOR A BILLION DOLLARS?_
 
 The first iterations of these were intended as a serious question of character, interest, and value. Personally, I find the ironic iterations are more entertaining. I couldn’t find an example of that through Google, but I saw a few of those on Facebook. Those iterations are usually deep fried to help highlight their absurdity, asking questions like “WOULD YOU SIT ON A CHAIR FOR A BILLION DOLLARS?”
 
 I have not yet shown an example of the third kind, but it is worth pointing out now that all three kinds follow noticeably a trend that believes that bad judgment pays dividends in comedy. Narratives about dilemmas, for example, are about flawed reasoning and contradicting beliefs. In the choice/s presented kind, the choices often become ridiculous, nonsensical or downright opposed to well-being, suggesting that the reader’s judgment is being addressed facetiously. In the decision-made kind, which I will show, humor is predicated on the idea of having betrayed one’s good sense. That is why in the chart I constructed above I labelled this kind as “to show betrayal.” Here are examples about the decision made, notice how they play out this narrative of bad judgment:
+
 ![7.jpg](../../../assets/articles/the-interpretation-of-memes/7.jpg)
 
 _DISTRACTED BOYFRIEND_
@@ -66,6 +70,7 @@ _DISTRACTED BOYFRIEND_
 The narrative here is complex: one can either focus on the character of unfaithfulness, or distractedness, or simply being lured something by a more attractive alternative (think of the phrase “ooh shiny!”). You could then logically use this to show defiance of expectation, tradition, etc. But it can also be used to show unfaithfulness to commitment and personal responsibility.
 
 Example 1:
+
 ![8.jpg](../../../assets/articles/the-interpretation-of-memes/8.jpg)
 
 “Ooh shiny!”
@@ -73,11 +78,13 @@ Example 1:
 A demonstration of bad judgment.
 
 Example 2:
+
 ![9.jpg](../../../assets/articles/the-interpretation-of-memes/9.jpg)
 
 Attraction to a better alternative. Unfaithfulness to tradition, to what exists.
 
 Example 3:
+
 ![10.png](../../../assets/articles/the-interpretation-of-memes/10.png)
 
 This is an example I constructed about bad judgment.
@@ -89,11 +96,13 @@ _LEFT EXIT 12 OFF RAMP_
 The lack of facial expressions, body language, and social context makes this template more generic. However, it still often follows the trend of narrating bad judgment. In this case, the abstract concepts of “a straight road” and “a crooked one” come into play. Interesting note: the entire highway exit sign is photoshopped on a screenshot from a Youtube video called “How to exit freeway like a boss.” So, there can sometimes be this sense of “Why do that when you can do something cooler?” Which is something that plays into the narrative of coolness’ relation to bad judgment. The swerving car I believe helps creates this sensation of losing control, of not having the proper stability.
 
 Example 1:
+
 ![12.png](../../../assets/articles/the-interpretation-of-memes/12.png)
 
 This meme is used to ridicule certain political decisions.
 
 Example 2:
+
 ![13.png](../../../assets/articles/the-interpretation-of-memes/13.png)
 
 The continuing narrative of bad judgment.
@@ -123,6 +132,7 @@ For example, the Youtube channel _Every Frame a Painting_ describes the cinemato
 But, the shot from Snowpiercer is missing another visual characteristic present in memes about decisions made. That makes sense; Snowpiercer’s logic is of dilemmas, and the sense of being carried forward at whatever cost. It is still ongoing. And it has over an hour to tell the story. On the other hand, memes about the decision made are after the fact. The stories they tell us is, instead, done through the lens of hindsight, and examines character and irrationality. And they can usually only tell this in a single image.
 
 This narrative requirement is visually accomplished by framing these two choices unequally. In the case of memes which reframes images, they will often try to use images that have this unequal framing beforehand. This visual differentiation helps convey the sense of being “decided.” Think of how a scale judges the weight of two objects, physically shifting to indicate the relation between the two. An unequal scale is a decided scale. It has passed its judgment. If you look at the previous examples, you’ll notice this principle. Here’s an example of an image which follows this description, so I turned it into a meme:
+
 ![18.png](../../../assets/articles/the-interpretation-of-memes/18.png)
 
 Notice the element of being “decided,” being irreversible like the child neglect. Notice the poor character we would attribute to this kind of behavior. This is a perfect example of the kind of meme I have described.
@@ -142,4 +152,5 @@ Now, here is an a demonstration of what this visual decidability can do with oth
 ![20-1 - Copy.jpg](<../../../assets/articles/the-interpretation-of-memes/20-1 - Copy.jpg>)
 
 This narrative quality of being decided produces an ellipsis following this meme, because this effect is invisible, something only felt by the reader. Like a vignette from Hemingway, the narrative it forms is larger than what it has on the surface. The narrative and feeling can be concretized by adding the following image to fill in the blanks:
+
 ![20-2 - Copy.jpg](<../../../assets/articles/the-interpretation-of-memes/20-2 - Copy.jpg>)

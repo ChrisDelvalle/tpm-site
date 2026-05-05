@@ -9,7 +9,7 @@ progressive enhancement hooks for rendered article Markdown or MDX prose.
 
 ## Public Contract
 
-- This component exposes no explicit local `Props` interface; treat its imported component API or framework primitive as the public contract.
+- `enableImageInspector?: boolean`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -27,7 +27,7 @@ ArticleLayout
 `ArticleProse` should not parse Markdown source or inspect image paths. The
 article-image rehype plugin owns generated Markdown image anatomy. `ArticleProse`
 owns the prose wrapper and installs the shared client-side enhancement that lets
-inspectable figures open in a stable dialog.
+inspectable figures open in a full-screen image viewer.
 
 ## Layout And Responsiveness
 
@@ -36,10 +36,11 @@ article header. The first rendered prose child should not add extra top margin;
 hero/media-specific spacing belongs to an explicit media component, not to a
 permanent prose offset.
 
-Markdown image sizing is not a page-level patch. Editorial image shape policy is
-owned by the article-image rehype plugin and the shared `ArticleImage` helper.
-`ArticleProse` may provide fallback prose image safety classes, but it must not
-be the only layer responsible for aspect-ratio-specific behavior.
+Markdown image sizing is not a page-level patch. The simplified editorial image
+contract is owned by the article-image rehype plugin and the shared
+`ArticleImage` helper. `ArticleProse` may provide fallback prose image safety
+classes, but it must not be the only layer responsible for bounding generated
+article media.
 
 ## Layering And Scrolling
 
@@ -50,16 +51,16 @@ hash navigation and TOC links share one sticky-header contract.
 
 ## Interaction States
 
-Default prose, first-child prose, Markdown image, tall inspectable image,
-dialog-open, no-JavaScript preview, hover/focus, and dark-mode states should be
-represented in the catalog or tests when relevant.
+Default prose, first-child prose, Markdown image, linked image, full-screen
+image inspector, no-JavaScript preview, hover/focus, and dark-mode states should
+be represented in the catalog or tests when relevant.
 
 ## Accessibility Semantics
 
 Use semantic HTML first, preserve heading order when headings are rendered, and
 keep focus-visible states intact for any interactive descendants. The image
-inspector must support keyboard operation, `Escape` close, close-button focus,
-and focus return to the trigger.
+inspector must support keyboard operation, `Escape` close, icon close-button
+focus, and focus return to the trigger.
 
 ## Content Edge Cases
 
@@ -75,8 +76,10 @@ visible, and CTAs distinguishable from neutral actions.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
+- renders without horizontal overflow at mobile, tablet, desktop, and wide
+  desktop widths.
+- preserves readable text and visible focus/hover states in light and dark
+  themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
 - keeps article body close to the header when no hero image is rendered.
@@ -84,14 +87,17 @@ visible, and CTAs distinguishable from neutral actions.
   is present.
 - installs article image inspection behavior without hydrating a framework
   island.
-- keeps inspectable image dialog behavior progressive: the prose preview
-  remains useful if JavaScript fails.
+- installs the image inspector only for articles with inspectable generated or
+  explicit article images.
+- keeps inspectable image behavior progressive: the prose preview remains useful
+  if JavaScript fails.
 - does not make article routes or visual components parse Markdown source for
   image metadata.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- No component-specific brittle decision is known yet; add one here when
+  implementation review finds a questionable or fragile choice.
 - Article TOC data should come from Astro's rendered heading metadata or a
   normalized view model, not from this component querying rendered DOM or
   parsing Markdown source.

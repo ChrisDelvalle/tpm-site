@@ -72,6 +72,7 @@ I can't say for certain but older screenshot memes tended to be more comics-like
 _Leandro Vieira Steffen_:
 
 for real though... good thinking
+
 ![71144987_10219351074664957_7701413498927972352_n.jpg](../../../assets/articles/structure-and-content-in-drake-style-templates/71144987_10219351074664957_7701413498927972352_n.jpg)
 
 (Originally posted to [Diagram Memes](https://www.facebook.com/groups/diagrammemes/posts/490042968136817))

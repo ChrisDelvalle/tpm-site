@@ -100,6 +100,10 @@ The novelty of spamming it in comment sections will fade, and it will be replace
 
 **Special meme fresh**: how about you come down from your tower of cynical memE analysis and flop with the rest of us
 
-> **Special meme fresh**: ![Trash-dovesmeaning1.gif](../../../assets/articles/early-trash-dove/Trash-dovesmeaning1.gif)
+> **Special meme fresh**:
 >
-> > **TPM**: ![investigatorb-44c597.png](../../../assets/articles/early-trash-dove/investigatorb-44c597.png)
+> ![Trash-dovesmeaning1.gif](../../../assets/articles/early-trash-dove/Trash-dovesmeaning1.gif)
+>
+> > **TPM**:
+> >
+> > ![investigatorb-44c597.png](../../../assets/articles/early-trash-dove/investigatorb-44c597.png)

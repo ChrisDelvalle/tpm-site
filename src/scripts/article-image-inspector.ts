@@ -4,6 +4,12 @@ export interface ArticleImageInspectorRuntime {
 }
 
 let activeTrigger: HTMLElement | undefined;
+let activeScrollPosition: ScrollPosition | undefined;
+
+interface ScrollPosition {
+  x: number;
+  y: number;
+}
 
 /**
  * Installs progressive dialog inspection for editorial article images.
@@ -73,6 +79,7 @@ function openArticleImageDialog(
     captionElement === null ? "" : captionElement.textContent.trim();
 
   activeTrigger = trigger;
+  activeScrollPosition = scrollPosition(document);
   dialogImage.alt = image.alt;
   dialogImage.src = image.currentSrc.length > 0 ? image.currentSrc : image.src;
   copyOptionalAttribute(image, dialogImage, "srcset");
@@ -104,39 +111,42 @@ function articleImageDialog(document: Document): HTMLDialogElement {
   dialog.dataset["articleImageDialog"] = "true";
   dialog.setAttribute("aria-label", "Image viewer");
   dialog.className =
-    "m-auto max-h-[calc(100dvh-2rem)] w-[min(100vw-2rem,72rem)] max-w-none overflow-hidden rounded-sm border border-border bg-background p-0 text-foreground shadow-xl backdrop:bg-foreground/40";
+    "m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden border-0 bg-transparent p-0 text-foreground backdrop:bg-black/85";
 
   const shell = document.createElement("div");
-  shell.className =
-    "grid max-h-[calc(100dvh-2rem)] grid-rows-[auto_minmax(0,1fr)]";
-
-  const header = document.createElement("div");
-  header.className =
-    "border-border flex items-center justify-end border-b bg-background px-3 py-2";
+  shell.className = "relative h-dvh w-dvw";
 
   const close = document.createElement("button");
   close.type = "button";
   close.dataset["articleImageDialogClose"] = "true";
+  close.setAttribute("aria-label", "Close image viewer");
   close.className =
-    "inline-flex min-h-9 items-center justify-center rounded-sm px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
-  close.textContent = "Close";
+    "absolute right-3 top-3 z-10 inline-flex size-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-lg transition-colors hover:bg-black/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+  close.append(closeIcon(document));
   close.addEventListener("click", () => closeDialog(dialog));
 
   const viewport = document.createElement("div");
-  viewport.className = "overflow-auto p-4";
+  viewport.dataset["articleImageDialogViewport"] = "true";
+  viewport.className =
+    "grid h-dvh w-dvw place-items-center overflow-auto p-4 sm:p-6";
+  viewport.addEventListener("click", (event) => {
+    if (event.target === viewport) {
+      closeDialog(dialog);
+    }
+  });
 
   const image = document.createElement("img");
   image.dataset["articleImageDialogImage"] = "true";
-  image.className = "mx-auto block h-auto max-w-full rounded-sm";
+  image.className =
+    "block h-auto max-h-[calc(100dvh-2rem)] max-w-[calc(100dvw-2rem)] rounded-sm object-contain sm:max-h-[calc(100dvh-3rem)] sm:max-w-[calc(100dvw-3rem)]";
 
   const caption = document.createElement("p");
   caption.dataset["articleImageDialogCaption"] = "true";
   caption.className =
-    "text-muted-foreground mx-auto mt-3 max-w-prose text-center text-sm";
+    "mx-auto mt-3 max-w-prose text-center text-sm text-white/80";
 
-  header.append(close);
   viewport.append(image, caption);
-  shell.append(header, viewport);
+  shell.append(close, viewport);
   dialog.append(shell);
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) {
@@ -155,6 +165,36 @@ function articleImageDialog(document: Document): HTMLDialogElement {
   return dialog;
 }
 
+function closeIcon(document: Document): SVGElement {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("class", "size-5");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("height", "24");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-linecap", "round");
+  svg.setAttribute("stroke-linejoin", "round");
+  svg.setAttribute("stroke-width", "2");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("width", "24");
+
+  const firstLine = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path",
+  );
+  firstLine.setAttribute("d", "M18 6 6 18");
+
+  const secondLine = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path",
+  );
+  secondLine.setAttribute("d", "m6 6 12 12");
+
+  svg.append(firstLine, secondLine);
+
+  return svg;
+}
+
 function closeDialog(dialog: HTMLDialogElement): void {
   if (canClose(dialog) && dialog.open) {
     dialog.close();
@@ -166,8 +206,32 @@ function closeDialog(dialog: HTMLDialogElement): void {
 }
 
 function restoreTriggerFocus(): void {
-  activeTrigger?.focus();
+  const trigger = activeTrigger;
+  const scrollPosition = activeScrollPosition;
+
+  trigger?.focus({ preventScroll: true });
   activeTrigger = undefined;
+  activeScrollPosition = undefined;
+
+  if (trigger !== undefined && scrollPosition !== undefined) {
+    trigger.ownerDocument.defaultView?.scrollTo(
+      scrollPosition.x,
+      scrollPosition.y,
+    );
+  }
+}
+
+function scrollPosition(document: Document): ScrollPosition | undefined {
+  const window = document.defaultView;
+
+  if (window === null) {
+    return undefined;
+  }
+
+  return {
+    x: window.scrollX,
+    y: window.scrollY,
+  };
 }
 
 function requiredDialogImage(dialog: HTMLDialogElement): HTMLImageElement {

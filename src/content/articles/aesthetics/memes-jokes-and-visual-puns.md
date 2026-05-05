@@ -104,6 +104,7 @@ Meme templates give structure and define relationships between the elements with
 However, it's a pretty simple relationship. The images being compared are meme templates themselves, with their own complex internal systems, yet they are just treated as objects in the grand scheme of the meme, they don't have any particular role in the system beyond just being "one template, among many." Their order is arbitrary and mutually interchangeable.
 
 We must ascend higher.
+
 ![meme-jokes-puns-9.png](../../../assets/articles/memes-jokes-and-visual-puns/meme-jokes-puns-9.png)
 
 _Fig. 9: Semantic Structure in a Collage Meme_

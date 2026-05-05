@@ -73,4 +73,77 @@ describe("content verifier", () => {
         'src/content/articles/history/example.md: author "Unknown Author" does not match src/content/authors/ aliases; add an author profile or approved alias',
       );
     }));
+
+  test("accepts standalone local image paragraphs and remote inline images", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/example.md",
+        [
+          "---",
+          "title: Example",
+          "author: Author",
+          "---",
+          "",
+          "![Standalone](../../../assets/articles/example/standalone.png)",
+          "",
+          "[![Linked](../../../assets/articles/example/linked.png)](https://example.com/source)",
+          "",
+          "Plain prose stays plain.",
+          "",
+          "Inline remote emoji ![emoji](https://example.com/emoji.png) stays prose.",
+          "",
+        ].join("\n"),
+      );
+
+      const result = await verifyContent({
+        articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
+        categoryDir: path.join(root, "src/content/categories"),
+        rootDir: root,
+      });
+
+      expect(result.issues).toEqual([]);
+    }));
+
+  test("reports local article images mixed into prose paragraphs", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/example.md",
+        [
+          "---",
+          "title: Example",
+          "author: Author",
+          "---",
+          "",
+          "Text before a legacy block image.",
+          "![Mixed](../../../assets/articles/example/mixed.png)",
+          "",
+        ].join("\n"),
+      );
+
+      const result = await verifyContent({
+        articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
+        categoryDir: path.join(root, "src/content/categories"),
+        rootDir: root,
+      });
+
+      expect(result.issues).toContain(
+        "src/content/articles/history/example.md:7: local article image must be separated into its own paragraph; add blank lines around the image so article image tooling can render it as an inspectable figure",
+      );
+    }));
 });
