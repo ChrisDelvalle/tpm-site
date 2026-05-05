@@ -195,6 +195,62 @@ if (!catalogIsBuilt) {
     await expectNoHorizontalOverflow(page);
   });
 
+  test("catalog covers editorial image shapes and inspectable image behavior", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await page.goto("/catalog/");
+
+    for (const [exampleTitle, shape] of [
+      ["ArticleImage - Portrait", "portrait"],
+      ["ArticleImage - Landscape", "landscape"],
+      ["ArticleImage - Square", "square"],
+      ["ArticleImage - Tall", "tall"],
+      ["ArticleImage - Inspectable", "extra-tall"],
+      ["ArticleImage - Natural", "tall"],
+      ["Generated Markdown Image - Unknown", "unknown"],
+    ] as const) {
+      const example = page.locator(`[data-catalog-example="${exampleTitle}"]`);
+      await expect(example).toBeVisible();
+      await expect(
+        example.locator(`[data-article-image-shape="${shape}"]`),
+      ).toBeVisible();
+    }
+
+    const inspectableExample = page.locator(
+      '[data-catalog-example="ArticleImage - Inspectable"]',
+    );
+    await expect(
+      page
+        .locator('[data-catalog-example="ArticleImage - Tall"]')
+        .locator("[data-article-image-inspect-trigger]"),
+    ).toBeVisible();
+    const trigger = inspectableExample.getByRole("button", {
+      name: /View full image/u,
+    });
+    await trigger.focus();
+    await expectFocusVisible(page);
+    const scrollBeforeOpen = await page.evaluate(() => window.scrollY);
+    await trigger.click();
+
+    const dialog = page.locator("[data-article-image-dialog]");
+    await expect(dialog).toBeVisible();
+    await expect(
+      dialog.locator("[data-article-image-dialog-image]"),
+    ).toHaveAttribute("alt", "A long diagram preview");
+    await dialog
+      .locator("[data-article-image-dialog-close]")
+      .getByText("Close")
+      .click();
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+    const scrollAfterClose = await page.evaluate(() => window.scrollY);
+    expect(Math.abs(scrollAfterClose - scrollBeforeOpen)).toBeLessThanOrEqual(
+      1,
+    );
+    await expectNoHorizontalOverflow(page);
+  });
+
   test("catalog article references keep markers and backlinks keyboard navigable", async ({
     page,
   }) => {

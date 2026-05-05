@@ -29,6 +29,7 @@ import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
   article: ArticleEntry;
+  enableImageInspector?: boolean | undefined;
   articleReferences?: ArticleReferenceData | undefined;
   tableOfContentsHeadings?: readonly ArticleTableOfContentsHeading[];
 }
@@ -40,6 +41,7 @@ const emptyArticleReferences = {
 
 const {
   article,
+  enableImageInspector = false,
   articleReferences = emptyArticleReferences,
   tableOfContentsHeadings = [],
 } = Astro.props;
@@ -112,7 +114,10 @@ const moreInCategory =
         formattedDate={articleView.formattedDate}
         title={articleView.title}
       />
-      <ArticleProse data-article-prose>
+      <ArticleProse
+        data-article-prose
+        enableImageInspector={enableImageInspector}
+      >
         <slot />
       </ArticleProse>
       <EndcapStack spacing="relaxed">

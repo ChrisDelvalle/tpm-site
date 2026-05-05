@@ -2007,3 +2007,78 @@ Scope rules:
       highlighted, and hard-clamped description behavior.
 - [x] Run focused checks and the release gate before marking the milestone
       complete.
+
+## Milestone 79: Editorial Markdown Image Design
+
+- [x] Add a technical design for default editorial Markdown image handling that
+      explains the Astro Markdown/rehype pipeline, image metadata resolution,
+      aspect-ratio policy, inspectable tall-image behavior, no-JavaScript
+      fallback, and author escape hatches.
+- [x] Update `ArticleImage` and `ArticleProse` component designs so component
+      docs agree with the Markdown transform contract and explain which layer
+      owns sizing, captions, inspection, and script enhancement.
+- [x] Document the responsive image-shape bands for landscape, square,
+      portrait, tall, extra-tall, unknown, and natural/escape-hatch images.
+- [x] Define testable invariants for local Markdown images, remote/unknown
+      images, linked images, tall-image dialog inspection, focus return, scroll
+      stability, reduced-JS fallback, catalog coverage, and visual regression
+      checks.
+- [x] Review the design critically for blockers, ambiguity, brittle decisions,
+      accessibility gaps, performance risks, and authoring complexity before
+      implementation milestones are added.
+
+## Milestone 80: Article Image Policy And Rehype Transform
+
+- [x] Add a pure article-image policy helper for aspect-ratio classification,
+      shape classes, height policies, and local image dimension parsing.
+- [x] Add `src/rehype-plugins/articleImages.ts` to wrap local Markdown images
+      in editorial figure markup before Astro's Markdown image optimizer runs.
+- [x] Preserve linked-image intent without generating invalid nested
+      interactive elements.
+- [x] Treat remote or unknown-dimension images as conservative contained
+      figures without network fetches.
+- [x] Wire the rehype plugin into `astro.config.ts`.
+- [x] Add focused unit tests for shape thresholds, dimension parsing, path
+      resolution, local image transforms, linked images, unknown images, and
+      tall-image inspect metadata.
+- [x] Update docs and accountability coverage for the new policy and plugin.
+- [x] Run focused policy/plugin tests before marking the milestone complete.
+
+## Milestone 81: Article Image Component And Inspector Enhancement
+
+- [x] Update `ArticleImage.astro` to use the shared image policy, support
+      `heightPolicy`, render captions, and emit inspect triggers for tall
+      or explicitly inspectable images.
+- [x] Update `ArticleProse.astro` to install the progressive article image
+      inspector without hydrating a framework island.
+- [x] Add `src/scripts/article-image-inspector.ts` for native dialog
+      inspection, optimized source copying, close behavior, focus return,
+      backdrop dismissal, and safe no-op behavior when markup is incomplete.
+- [x] Add component and browser-script tests for default, square, tall,
+      inspectable, natural, captioned, focus-return, close, and missing-markup
+      behavior.
+- [x] Run focused component/script tests before marking the milestone complete.
+
+## Milestone 82: Editorial Image Catalog And Browser Invariants
+
+- [x] Expand the component catalog with landscape, square, portrait, tall,
+      extra-tall, unknown, captioned, and natural article image examples.
+- [x] Add browser invariants for real Markdown article images: square images
+      are not full prose width, tall previews stay bounded, inspection
+      opens/closes without moving the reading position, and no horizontal
+      overflow appears across mobile, tablet, desktop, and wide desktop widths.
+- [x] Verify representative pages with intentionally large images:
+      `/articles/kandinsky-and-loss/`,
+      `/articles/memes-jokes-and-visual-puns/`,
+      `/articles/the-post-pepe-manifesto/`,
+      `/articles/what-is-a-meme/`, and `/articles/twitch-plays-pokemon/`.
+- [x] Run focused catalog and e2e checks before marking the milestone complete.
+
+## Milestone 83: Editorial Image Release Verification
+
+- [x] Run formatting, linting, typechecking, content checks, catalog checks,
+      unit/component/script tests, browser tests, accessibility checks, and
+      coverage review for the editorial image work.
+- [x] Fix any regressions or update the design if implementation reveals a
+      better invariant.
+- [x] Update `CHECKLIST.md` only after every relevant verification step passes.

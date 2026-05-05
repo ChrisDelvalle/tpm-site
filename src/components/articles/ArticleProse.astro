@@ -1,10 +1,18 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-/** Public props for the article prose wrapper. */
-interface Props extends HTMLAttributes<"div"> {}
+import ArticleImageInspectorScript from "./ArticleImageInspectorScript.astro";
 
-const { class: className, ...attrs } = Astro.props;
+/** Public props for the article prose wrapper. */
+interface Props extends HTMLAttributes<"div"> {
+  enableImageInspector?: boolean | undefined;
+}
+
+const {
+  class: className,
+  enableImageInspector = false,
+  ...attrs
+} = Astro.props;
 ---
 
 <div
@@ -24,3 +32,5 @@ const { class: className, ...attrs } = Astro.props;
 >
   <slot />
 </div>
+
+{enableImageInspector && <ArticleImageInspectorScript />}

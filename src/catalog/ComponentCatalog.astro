@@ -72,6 +72,9 @@ import Section from "../components/ui/Section.astro";
 import Separator from "../components/ui/Separator.astro";
 import TextLink from "../components/ui/TextLink.astro";
 import sampleDarkImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
+import squareArticleImage from "../assets/shared/2x2-meme-table.png";
+import tallArticleImage from "../assets/shared/catalog-tall-article-figure.svg";
+import landscapeImage from "../assets/shared/phylomemetic-tree-lamarckian.png";
 import sampleImage from "../assets/shared/tpm_defaultpic.jpg";
 import { catalogMetadata } from "./catalog.config";
 import CatalogExample from "./CatalogExample.astro";
@@ -82,7 +85,10 @@ import {
   catalogTags,
 } from "./examples/hostile-fixtures";
 import { getAuthorProfiles } from "../lib/authors";
+import { articleImagePresentation } from "../lib/article-image-policy";
 import { primaryNavigationItems } from "../lib/navigation";
+
+const unknownImagePresentation = articleImagePresentation(undefined);
 
 const catalogTocHeadings = [
   {
@@ -625,8 +631,8 @@ if (primaryCatalogAuthor === undefined) {
       </CatalogExample>
 
       <CatalogExample
-        title="ArticleImage"
-        description="Astro-optimized image with caption."
+        title="ArticleImage - Portrait"
+        description="Astro-optimized portrait image with caption."
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
@@ -634,6 +640,95 @@ if (primaryCatalogAuthor === undefined) {
           alt="The Philosopher's Meme default preview image"
           caption="Article image caption example."
         />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleImage - Landscape"
+        description="Landscape images can use the full prose measure while keeping a viewport-aware height cap."
+        componentPath="src/components/articles/ArticleImage.astro"
+      >
+        <ArticleImage
+          src={landscapeImage}
+          alt="A two-by-two meme table"
+          caption="Landscape article image example."
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleImage - Square"
+        description="Square images are bounded below full prose width so they do not dominate the reading flow."
+        componentPath="src/components/articles/ArticleImage.astro"
+      >
+        <ArticleImage
+          src={squareArticleImage}
+          alt="A square visual pun meme"
+          caption="Square article image example."
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleImage - Tall"
+        description="Tall images use a square-height preview with a full-image inspection action."
+        componentPath="src/components/articles/ArticleImage.astro"
+      >
+        <ArticleImage
+          src={tallArticleImage}
+          alt="A tall loss diagram"
+          caption="Tall article image example."
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleImage - Inspectable"
+        description="Extra-tall or explicitly inspectable images show a compact preview with a full-image inspection action."
+        componentPath="src/components/articles/ArticleImage.astro"
+      >
+        <ArticleImage
+          src={tallArticleImage}
+          alt="A long diagram preview"
+          caption="Inspectable article image example."
+          heightPolicy="inspectable"
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleImage - Natural"
+        description="Natural height is an explicit escape hatch for intentionally full-height images."
+        componentPath="src/components/articles/ArticleImage.astro"
+      >
+        <ArticleImage
+          src={tallArticleImage}
+          alt="A full-height loss diagram"
+          caption="Natural-height article image example."
+          heightPolicy="natural"
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="Generated Markdown Image - Unknown"
+        description="Unknown or remote dimensions use the conservative contained image contract."
+        componentPath="src/components/articles/ArticleProse.astro"
+      >
+        <ArticleProse>
+          <figure
+            class:list={[unknownImagePresentation.figureClass]}
+            data-article-image-figure="true"
+            data-article-image-inspectable="false"
+            data-article-image-shape="unknown"
+          >
+            <div class:list={[unknownImagePresentation.frameClass]}>
+              <img
+                src="/favicon.svg"
+                alt="Unknown-dimension fallback"
+                class:list={[unknownImagePresentation.imageClass]}
+                data-article-image="true"
+              />
+            </div>
+            <figcaption class:list={[unknownImagePresentation.captionClass]}>
+              Unknown-dimension Markdown image fallback example.
+            </figcaption>
+          </figure>
+        </ArticleProse>
       </CatalogExample>
 
       <CatalogExample

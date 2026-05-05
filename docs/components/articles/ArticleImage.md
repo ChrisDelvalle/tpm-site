@@ -4,12 +4,20 @@ Source: `src/components/articles/ArticleImage.astro`
 
 ## Purpose
 
-`ArticleImage` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`ArticleImage` renders explicit MDX/article images using the same editorial
+image policy as default Markdown images.
+
+Normal Markdown authors should not need this component. They should use standard
+Markdown image syntax and let the article-image rehype plugin choose the
+default presentation. `ArticleImage` exists for MDX articles, deliberate escape
+hatches, captions that need component control, and cases where the author needs
+to force a height policy.
 
 ## Public Contract
 
 - `alt: string`
 - `caption?: string | undefined`
+- `heightPolicy?: "auto" | "contained" | "inspectable" | "natural"`
 - `src: ImageMetadata`
 
 Public props should remain narrow and semantic. Do not add broad configuration
@@ -18,25 +26,54 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It should not depend on sibling internals beyond normal slot/prop composition. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+MDX article
+  ArticleProse
+    ArticleImage
+      optimized Image
+      optional inspect trigger
+```
+
+`ArticleImage` should call the shared article image policy helper rather than
+duplicating aspect-ratio thresholds. It should not fetch content, inspect
+Markdown source, or choose global image assets.
 
 ## Layout And Responsiveness
 
-The component must respect a readable prose measure, keep metadata visually subordinate to the article title/body, and allow long titles, author names, tags, and images to wrap without layout collision.
+The component must mirror the default Markdown image policy:
+
+- landscape images may use the full reading measure;
+- square images are width-capped so they do not become oversized vertical
+  blocks;
+- portrait images are centered and narrower;
+- tall images use a square-height preview with a full-image inspection action;
+- extra-tall images render a narrower square-height inspectable preview by
+  default;
+- natural images are explicit escape hatches and may render at full natural
+  height within the reading measure.
+
+Images should preserve content with `object-contain` by default. Only
+tall and extra-tall inspectable previews intentionally crop the image inside a
+controlled preview frame.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+The component should avoid creating a stacking context unless it owns an
+inspect trigger overlay. The full inspection viewer is owned by the shared
+article image inspector script installed by `ArticleProse`, not by each image
+instance.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant. Empty lists, missing image/description, many tags, one-item lists, and dense lists should have catalog examples or tests where applicable.
+Default, contained, portrait, tall, inspectable, natural, captioned,
+hover/focus, long-caption, and dark-mode states should be represented in the
+catalog when relevant.
 
 ## Accessibility Semantics
 
-Use semantic HTML first, preserve heading order when headings are rendered, and keep focus-visible states intact for any interactive descendants.
+Use `figure`/`figcaption` semantics. Required alt text must be preserved on the
+image. Inspect triggers must have an accessible name and keep visible focus
+states. The inspector must return focus to the trigger that opened it.
 
 ## Content Edge Cases
 
@@ -55,9 +92,15 @@ visible, and CTAs distinguishable from neutral actions.
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
-- keeps article title, metadata, tags, and links semantically associated.
-- keeps article body, continuation, and support surfaces in the intended order.
+- uses the same shape policy as Markdown-rendered images.
+- caps square and portrait images so they do not dominate the reading flow.
+- renders tall and extra-tall images as inspectable previews unless explicitly
+  told to use a different height policy.
+- preserves caption and alt text semantics.
+- keeps natural full-height display as an explicit escape hatch.
 
 ## Follow-Up Notes
 
-- No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
+- Keep this component aligned with
+  `docs/rehype-plugins/article-images.md`. If either policy changes, update
+  both documents and the shared helper tests.

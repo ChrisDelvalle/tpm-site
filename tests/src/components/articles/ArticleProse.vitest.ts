@@ -14,6 +14,24 @@ describe("ArticleProse", () => {
 
     expect(view).toContain("prose");
     expect(view).toContain("[&#38;>*:first-child]:mt-0");
+    expect(view).not.toContain('type="module"');
     expect(view).toContain("Readable article copy.");
+  });
+
+  test("loads the image inspector only when the layout needs inspectable Markdown images", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleProse, {
+      props: {
+        enableImageInspector: true,
+      },
+      slots: {
+        default: "<p>Readable article copy.</p>",
+      },
+    });
+
+    expect(view).toContain('type="module"');
+    expect(view).toContain(
+      "ArticleImageInspectorScript.astro?astro&type=script",
+    );
   });
 });

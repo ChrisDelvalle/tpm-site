@@ -3,13 +3,25 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
+import { articleImagePolicyCacheKey } from "./src/lib/article-image-policy";
+import {
+  rehypeArticleImages,
+  remarkArticleImageMarkers,
+} from "./src/rehype-plugins/articleImages";
 import { remarkArticleReferences } from "./src/remark-plugins/articleReferences";
 
 export default defineConfig({
   compressHTML: true,
+  image: {
+    layout: "constrained",
+    responsiveStyles: false,
+  },
   integrations: [mdx(), sitemap()],
   markdown: {
-    remarkPlugins: [remarkArticleReferences],
+    rehypePlugins: [
+      [rehypeArticleImages, { policyCacheKey: articleImagePolicyCacheKey }],
+    ],
+    remarkPlugins: [remarkArticleImageMarkers, remarkArticleReferences],
   },
   prefetch: {
     defaultStrategy: "hover",

@@ -4,7 +4,8 @@ Source: `src/components/articles/ArticleProse.astro`
 
 ## Purpose
 
-`ArticleProse` contains Tailwind Typography rules and readable measure for rendered Markdown or MDX prose
+`ArticleProse` contains Tailwind Typography rules, readable measure, and shared
+progressive enhancement hooks for rendered article Markdown or MDX prose.
 
 ## Public Contract
 
@@ -16,7 +17,17 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It should not depend on sibling internals beyond normal slot/prop composition. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+```text
+ArticleLayout
+  ArticleProse
+    rendered Markdown/MDX body
+    article image inspector enhancement
+```
+
+`ArticleProse` should not parse Markdown source or inspect image paths. The
+article-image rehype plugin owns generated Markdown image anatomy. `ArticleProse`
+owns the prose wrapper and installs the shared client-side enhancement that lets
+inspectable figures open in a stable dialog.
 
 ## Layout And Responsiveness
 
@@ -24,6 +35,11 @@ The component must respect a readable prose measure and start cleanly after the
 article header. The first rendered prose child should not add extra top margin;
 hero/media-specific spacing belongs to an explicit media component, not to a
 permanent prose offset.
+
+Markdown image sizing is not a page-level patch. Editorial image shape policy is
+owned by the article-image rehype plugin and the shared `ArticleImage` helper.
+`ArticleProse` may provide fallback prose image safety classes, but it must not
+be the only layer responsible for aspect-ratio-specific behavior.
 
 ## Layering And Scrolling
 
@@ -34,11 +50,16 @@ hash navigation and TOC links share one sticky-header contract.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant. Empty lists, missing image/description, many tags, one-item lists, and dense lists should have catalog examples or tests where applicable.
+Default prose, first-child prose, Markdown image, tall inspectable image,
+dialog-open, no-JavaScript preview, hover/focus, and dark-mode states should be
+represented in the catalog or tests when relevant.
 
 ## Accessibility Semantics
 
-Use semantic HTML first, preserve heading order when headings are rendered, and keep focus-visible states intact for any interactive descendants.
+Use semantic HTML first, preserve heading order when headings are rendered, and
+keep focus-visible states intact for any interactive descendants. The image
+inspector must support keyboard operation, `Escape` close, close-button focus,
+and focus return to the trigger.
 
 ## Content Edge Cases
 
@@ -61,6 +82,12 @@ visible, and CTAs distinguishable from neutral actions.
 - keeps article body close to the header when no hero image is rendered.
 - lets article media components own their own spacing when a hero/media surface
   is present.
+- installs article image inspection behavior without hydrating a framework
+  island.
+- keeps inspectable image dialog behavior progressive: the prose preview
+  remains useful if JavaScript fails.
+- does not make article routes or visual components parse Markdown source for
+  image metadata.
 
 ## Follow-Up Notes
 
@@ -68,3 +95,6 @@ visible, and CTAs distinguishable from neutral actions.
 - Article TOC data should come from Astro's rendered heading metadata or a
   normalized view model, not from this component querying rendered DOM or
   parsing Markdown source.
+- Keep this component aligned with
+  `docs/rehype-plugins/article-images.md`; that technical design is the source
+  of truth for default Markdown image behavior.

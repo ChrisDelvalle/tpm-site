@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
 import config from "../../astro.config";
+import { articleImagePolicyCacheKey } from "../../src/lib/article-image-policy";
+import {
+  rehypeArticleImages,
+  remarkArticleImageMarkers,
+} from "../../src/rehype-plugins/articleImages";
 import { remarkArticleReferences } from "../../src/remark-plugins/articleReferences";
 
 describe("Astro config", () => {
@@ -8,6 +13,10 @@ describe("Astro config", () => {
     expect(config.site).toBe("https://thephilosophersmeme.com");
     expect(config.trailingSlash).toBe("always");
     expect(config.compressHTML).toBe(true);
+    expect(config.image).toMatchObject({
+      layout: "constrained",
+      responsiveStyles: false,
+    });
     expect(config.prefetch).toEqual({
       defaultStrategy: "hover",
       prefetchAll: false,
@@ -26,6 +35,14 @@ describe("Astro config", () => {
     expect(config.markdown?.remarkPlugins).not.toContainEqual([
       remarkArticleReferences,
       { validateLegacyFootnotes: true },
+    ]);
+  });
+
+  test("runs editorial article image handling before Astro optimizes Markdown images", () => {
+    expect(config.markdown?.remarkPlugins).toContain(remarkArticleImageMarkers);
+    expect(config.markdown?.rehypePlugins).toContainEqual([
+      rehypeArticleImages,
+      { policyCacheKey: articleImagePolicyCacheKey },
     ]);
   });
 });

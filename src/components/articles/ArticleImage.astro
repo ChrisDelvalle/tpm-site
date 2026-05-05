@@ -1,28 +1,79 @@
 ---
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
+import { Maximize2 } from "lucide-astro";
+
+import {
+  articleImagePresentation,
+  type ArticleImageHeightPolicy,
+} from "../../lib/article-image-policy";
 
 interface Props {
   alt: string;
   caption?: string | undefined;
+  heightPolicy?: ArticleImageHeightPolicy | undefined;
   src: ImageMetadata;
 }
 
-const { alt, caption, src } = Astro.props;
+const { alt, caption, heightPolicy = "auto", src } = Astro.props;
+const presentation = articleImagePresentation(
+  { height: src.height, width: src.width },
+  heightPolicy,
+);
+const inspectLabel =
+  alt.trim().length > 0 ? `View full image: ${alt}` : "View full image";
 ---
 
-<figure class="mx-auto grid gap-2">
-  <Image
-    src={src}
-    alt={alt}
-    layout="constrained"
-    class="mx-auto block h-auto rounded-sm"
-  />
+<figure
+  class:list={[presentation.figureClass]}
+  data-article-image-figure="true"
+  data-article-image-inspectable={presentation.isInspectable ? "true" : "false"}
+  data-article-image-shape={presentation.shape}
+>
+  {
+    presentation.isInspectable ? (
+      <button
+        type="button"
+        class:list={[presentation.frameClass]}
+        data-article-image-inspect-trigger="true"
+        aria-haspopup="dialog"
+        aria-label={inspectLabel}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          layout="constrained"
+          class:list={[presentation.imageClass]}
+          data-article-image="true"
+        />
+        <span
+          class:list={[presentation.inspectionClass]}
+          data-article-image-inspect-affordance="true"
+          aria-hidden="true"
+        >
+          <Maximize2 class="size-3" aria-hidden="true" />
+          View full image
+        </span>
+      </button>
+    ) : (
+      <div class:list={[presentation.frameClass]}>
+        <Image
+          src={src}
+          alt={alt}
+          layout="constrained"
+          class:list={[presentation.imageClass]}
+          data-article-image="true"
+        />
+      </div>
+    )
+  }
   {
     caption && (
-      <figcaption class="text-muted-foreground text-center text-sm">
+      <figcaption class:list={[presentation.captionClass]}>
         {caption}
       </figcaption>
     )
   }
 </figure>
+
+<script src="../../scripts/article-image-inspector.ts"></script>
