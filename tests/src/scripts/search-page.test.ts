@@ -66,7 +66,106 @@ describe("search page browser script", () => {
       expect(results.querySelector("a")?.dataset["astroPrefetch"]).toBe(
         "hover",
       );
+      expect(results.querySelector("a")?.className).toContain("border-b");
+      expect(results.querySelector("a")?.className).toContain("min-h-28");
+      expect(results.querySelector("a")?.className).not.toContain("bg-card");
+      expect(results.querySelector("a")?.className).not.toContain("rounded-sm");
+      expect(results.querySelector("strong")?.className).toContain(
+        "line-clamp-2",
+      );
+      expect(results.querySelector("strong")?.className).toContain("text-xl");
+      expect(results.querySelector("span")?.className).toContain(
+        "line-clamp-3",
+      );
+      expect(results.querySelector("span")?.className).toContain("text-sm");
+      expect(results.querySelector("span")?.className).toContain(
+        "md:text-base",
+      );
       expect(results.textContent).toContain("Result Title");
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+    }
+  });
+
+  test("uses article-list title fitting for dynamic search results", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const results = window.document.createElement("div");
+    Reflect.set(globalThis, "document", window.document);
+
+    try {
+      await renderResults(
+        {
+          options: () => undefined,
+          search: async () =>
+            Promise.resolve({
+              results: [
+                {
+                  data: async () =>
+                    Promise.resolve({
+                      excerpt: "A result excerpt.",
+                      meta: {
+                        title:
+                          "A Very Long Article Title Containing metamemeticcountercounterinterpretationwithoutnaturalbreakpoints",
+                      },
+                      url: "/articles/long-result/",
+                    }),
+                },
+              ],
+            }),
+        },
+        browserElement(results),
+        "query",
+      );
+
+      expect(results.querySelector("strong")?.className).toContain("text-sm");
+      expect(results.querySelector("strong")?.className).toContain(
+        "md:text-base",
+      );
+      expect(results.querySelector("strong")?.className).toContain(
+        "line-clamp-2",
+      );
+    } finally {
+      Reflect.deleteProperty(globalThis, "document");
+    }
+  });
+
+  test("uses article-list description fitting for dynamic search excerpts", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const results = window.document.createElement("div");
+    Reflect.set(globalThis, "document", window.document);
+
+    try {
+      await renderResults(
+        {
+          options: () => undefined,
+          search: async () =>
+            Promise.resolve({
+              results: [
+                {
+                  data: async () =>
+                    Promise.resolve({
+                      excerpt:
+                        "A very long search excerpt with <mark>highlighted</mark> text and a hostile metamemeticcountercounterinterpretationwithoutnaturalbreakpoints sequence that should use the tight description size.",
+                      meta: { title: "Result Title" },
+                      url: "/articles/long-excerpt/",
+                    }),
+                },
+              ],
+            }),
+        },
+        browserElement(results),
+        "query",
+      );
+
+      expect(results.querySelector("span")?.className).toContain("text-sm");
+      expect(results.querySelector("span")?.className).toContain("leading-5");
+      expect(results.querySelector("span")?.className).not.toContain("text-xs");
+      expect(results.querySelector("span")?.className).toContain(
+        "line-clamp-3",
+      );
+      expect(results.querySelector("mark")?.textContent).toBe("highlighted");
     } finally {
       Reflect.deleteProperty(globalThis, "document");
     }

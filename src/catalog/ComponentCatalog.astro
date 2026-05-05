@@ -125,6 +125,23 @@ const anchoredPresetMatrix = [
   "mobile-shell-panel",
   "inline-hover-preview",
 ] as const;
+const catalogArticleItemsWithMedia = [
+  {
+    ...catalogArticleItems[0],
+    image: {
+      alt: "The Philosopher's Meme default preview image",
+      src: sampleImage,
+    },
+  },
+  catalogArticleItems[1],
+  {
+    ...catalogArticleItems[2],
+    image: {
+      alt: "Fossilised bug preview image",
+      src: sampleDarkImage,
+    },
+  },
+] as const;
 
 const catalogReferences = {
   citations: [
@@ -736,18 +753,18 @@ if (primaryCatalogAuthor === undefined) {
 
       <CatalogExample
         title="ArticleCard"
-        description="One article teaser card."
+        description="One flat editorial article row with bounded preview media."
         componentPath="src/components/articles/ArticleCard.astro"
       >
-        <ArticleCard {...catalogArticleItems[0]} />
+        <ArticleCard {...catalogArticleItemsWithMedia[0]} />
       </CatalogExample>
 
       <CatalogExample
         title="ArticleList"
-        description="Ordered list of article cards."
+        description="Ordered flat editorial list with image and no-image rows."
         componentPath="src/components/articles/ArticleList.astro"
       >
-        <ArticleList items={catalogArticleItems} />
+        <ArticleList items={catalogArticleItemsWithMedia} />
       </CatalogExample>
 
       <CatalogExample
@@ -759,7 +776,7 @@ if (primaryCatalogAuthor === undefined) {
           categoryHref="/categories/metamemetics/"
           categoryTitle="Metamemetics"
           headingId="catalog-more-in-category-heading"
-          items={catalogArticleItems}
+          items={catalogArticleItemsWithMedia}
         />
       </CatalogExample>
 
@@ -770,7 +787,7 @@ if (primaryCatalogAuthor === undefined) {
       >
         <RelatedArticlesBlock
           headingId="catalog-related-articles-heading"
-          items={catalogArticleItems}
+          items={catalogArticleItemsWithMedia}
         />
       </CatalogExample>
 
@@ -783,8 +800,8 @@ if (primaryCatalogAuthor === undefined) {
           categoryHref="/categories/metamemetics/"
           categoryTitle="Metamemetics"
           idPrefix="catalog-endcap"
-          moreInCategory={catalogArticleItems}
-          related={catalogArticleItems.slice(0, 1)}
+          moreInCategory={catalogArticleItemsWithMedia}
+          related={catalogArticleItemsWithMedia.slice(0, 1)}
         />
       </CatalogExample>
 
@@ -864,7 +881,7 @@ if (primaryCatalogAuthor === undefined) {
       >
         <AuthorArticleList
           title={`Articles by ${catalogAuthorProfile.displayName}`}
-          items={catalogArticleItems}
+          items={catalogArticleItemsWithMedia}
         />
       </CatalogExample>
 
@@ -883,7 +900,7 @@ if (primaryCatalogAuthor === undefined) {
       >
         <AuthorPage
           profile={catalogAuthorProfile}
-          items={catalogArticleItems}
+          items={catalogArticleItemsWithMedia}
           hasProfileBody
         >
           <p>Longer author profile Markdown appears here when provided.</p>
@@ -961,7 +978,7 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/blocks/HomeFeaturedArticlesBlock.astro"
       >
         <div class="grid gap-8">
-          <HomeFeaturedArticlesBlock items={catalogArticleItems} />
+          <HomeFeaturedArticlesBlock items={catalogArticleItemsWithMedia} />
           <HomeFeaturedArticlesBlock items={[]} title="Featured Empty State" />
         </div>
       </CatalogExample>
@@ -996,13 +1013,13 @@ if (primaryCatalogAuthor === undefined) {
           <ArchiveListBlock
             title="Articles"
             description="Essays and notes on memes, cyberculture, and the Internet."
-            items={catalogArticleItems}
+            items={catalogArticleItemsWithMedia}
             pagefindIgnore
           />
           <ArchiveListBlock
             eyebrow="Category"
             title="A Category With A Deliberately Long Title For Wrapping"
-            items={catalogArticleItems.slice(0, 1)}
+            items={catalogArticleItemsWithMedia.slice(0, 1)}
           />
         </div>
       </CatalogExample>

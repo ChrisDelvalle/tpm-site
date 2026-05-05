@@ -18,5 +18,9 @@ describe("ArticleList", () => {
     expect(view).toContain("data-pagefind-ignore");
     expect(view).toContain("Article Title");
     expect(view).toContain("Second Article");
+    expect(view).toContain("data-article-list");
+    expect(view).toContain("border-b");
+    expect(view).toContain('data-article-card-has-image="true"');
+    expect(view).toContain('data-article-card-has-image="false"');
   });
 });

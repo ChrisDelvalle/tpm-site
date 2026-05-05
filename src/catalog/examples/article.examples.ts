@@ -13,7 +13,8 @@ export const articleCatalogExamples = [
   },
   {
     componentPath: "src/components/articles/ArticleCard.astro",
-    description: "Compact article teaser used in archives and discovery lists.",
+    description:
+      "Flat editorial article row used in archive and discovery lists.",
     title: "ArticleCard",
   },
   {
@@ -44,7 +45,7 @@ export const articleCatalogExamples = [
   },
   {
     componentPath: "src/components/articles/ArticleList.astro",
-    description: "Responsive ordered list of article cards.",
+    description: "Responsive flat editorial list of article rows.",
     title: "ArticleList",
   },
   {

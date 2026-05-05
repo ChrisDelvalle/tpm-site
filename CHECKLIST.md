@@ -1918,3 +1918,92 @@ Scope rules:
       article component namespace.
 - [x] Run focused component, catalog, dead-code, and release checks after the
       cleanup.
+
+## Milestone 75: Flat Editorial Article List Redesign
+
+- [x] Update the `ArticleCard` and `ArticleList` component design docs before
+      implementation to specify a flatter editorial row treatment for archive,
+      category, search, author, related-reading, and homepage list surfaces.
+- [x] Define the shared row anatomy: date or compact metadata column, main text
+      column, optional bounded image/media column, and separator rhythm without
+      card boxes or nested framed containers.
+- [x] Extend the normalized article-list data model only if needed for preview
+      image metadata, keeping route construction, image choice, and fallback
+      policy outside visual components where practical.
+- [x] Design the no-image fallback explicitly: text should expand into the
+      available row space without leaving an awkward empty media hole, while
+      preserving alignment with image-backed rows in dense lists.
+- [x] Implement the flat list through reusable `ArticleList`/`ArticleCard`
+      variants or replacement primitives, not page-specific archive/search
+      styling patches.
+- [x] Update archive, category, author, search, homepage, `More in Category`,
+      and related-reading surfaces to share the same list primitive unless a
+      surface has a documented functional reason to differ.
+- [x] Update catalog examples to show image-backed rows, no-image rows, long
+      titles, long bylines, dense lists, single-item lists, light and dark
+      themes, and mobile/tablet/desktop behavior.
+- [x] Add or update component, unit, and e2e invariant tests for row alignment,
+      bounded image sizing, no-image expansion, separator consistency, no
+      horizontal overflow, link focus states, Pagefind/search-result behavior,
+      and cross-surface reuse.
+- [x] Verify search-result highlighting still renders safely and accessibly
+      inside the flatter result layout.
+- [x] Run focused component/catalog/browser checks and the normal release gate
+      after the redesign.
+
+## Milestone 76: Condensed Editorial Article Row Responsiveness
+
+- [x] Update `ArticleCard` and `ArticleList` design docs to refine the flat
+      row into a condensed editorial index pattern across mobile, tablet, and
+      desktop.
+- [x] Move date/category metadata into the main text column so mobile remains a
+      concise version of the desktop row instead of switching to a separate
+      stacked article teaser.
+- [x] Use optional right-side thumbnails when image metadata exists: square and
+      compact on small screens, rectangular on larger screens, vertically
+      centered against clamped text.
+- [x] Keep no-image rows from reserving media space while preserving the same
+      scannable rhythm and minimum row height.
+- [x] Clamp title and description text to sensible defaults so dense article
+      lists remain uniform enough to scan without hiding the primary link.
+- [x] Update dynamic search-result styling to follow the same concise,
+      clamped, non-card list rhythm when no thumbnail data is available.
+- [x] Update catalog examples and e2e/component tests for mobile two-column
+      rows, desktop rectangular thumbnails, no-image fallback, row containment,
+      and clamped text behavior.
+- [x] Run focused component/catalog/browser checks and the normal release gate
+      after the refinement.
+
+## Milestone 77: Article List Title Fit Behavior
+
+- [x] Document that article-list titles should shrink through stable density
+      variants before the two-line ellipsis fallback applies.
+- [x] Add a pure, tested title-fit helper so long article-list titles can use
+      smaller type without adding browser measurement JavaScript.
+- [x] Wire `ArticleCard` and dynamic search result rows to the same title-fit
+      helper while leaving article-page headings unchanged.
+- [x] Keep row layout stable when a title shrinks: metadata, excerpt, byline,
+      and optional thumbnail should stay aligned and vertically centered.
+- [x] Update component/catalog/browser tests for normal, dense, compact,
+      minimum emergency, and hard-clamped article-list titles.
+- [x] Run focused checks and the release gate before marking the milestone
+      complete.
+
+## Milestone 78: Article List Description Fit Behavior
+
+- [x] Document that article-list descriptions should shrink through stable
+      density variants before the three-line ellipsis fallback applies.
+- [x] Add pure, tested description-fit behavior so long article-list excerpts
+      can use tighter density without browser measurement JavaScript.
+- [x] Wire `ArticleCard` and dynamic search result excerpts to the shared
+      description-fit helper while preserving sanitized search highlight
+      rendering.
+- [x] Increase article-list and search-result row rhythm so the three-line
+      description budget has real layout space instead of only a looser clamp.
+- [x] Keep row layout stable when a description shrinks: title, metadata,
+      byline, and optional thumbnail should stay aligned and vertically
+      centered.
+- [x] Update component and script tests for default, compact, tight,
+      highlighted, and hard-clamped description behavior.
+- [x] Run focused checks and the release gate before marking the milestone
+      complete.

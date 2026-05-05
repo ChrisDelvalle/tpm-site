@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "astro";
 import { describe, expect, test } from "bun:test";
 
 import type { ArticleArchiveItem } from "../../../src/lib/archive";
@@ -8,6 +9,12 @@ import {
 import { articleEntry } from "../../helpers/content";
 
 describe("article list helpers", () => {
+  const sampleImage = {
+    format: "jpg",
+    height: 600,
+    src: "/assets/article-preview.jpg",
+    width: 800,
+  } as const satisfies ImageMetadata;
   const archiveItem = {
     article: articleEntry({ id: "article-title" }),
     author: "Author",
@@ -25,6 +32,10 @@ describe("article list helpers", () => {
     },
     date: "April 6, 2022",
     description: "Description",
+    image: {
+      alt: "Article preview image",
+      src: sampleImage,
+    },
     title: "Article Title",
     url: "/articles/article-title/",
   } satisfies ArticleArchiveItem;
@@ -47,6 +58,10 @@ describe("article list helpers", () => {
       date: "April 6, 2022",
       description: "Description",
       href: "/articles/article-title/",
+      image: {
+        alt: "Article preview image",
+        src: sampleImage,
+      },
       title: "Article Title",
     });
   });
@@ -72,6 +87,10 @@ describe("article list helpers", () => {
         date: "April 6, 2022",
         description: "Description",
         href: "/articles/article-title/",
+        image: {
+          alt: "Article preview image",
+          src: sampleImage,
+        },
         title: "Article Title",
       },
     ]);

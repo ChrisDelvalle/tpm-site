@@ -11,12 +11,13 @@ const { items, pagefindIgnore = false } = Astro.props;
 ---
 
 <ol
-  class="grid min-w-0 gap-4"
+  class="grid min-w-0"
   data-pagefind-ignore={pagefindIgnore ? true : undefined}
+  data-article-list
 >
   {
     items.map((item) => (
-      <li class="min-w-0">
+      <li class="border-border min-w-0 border-b py-6 first:pt-0 last:border-b-0 last:pb-0">
         <ArticleCard
           author={item.author}
           authors={item.authors}
@@ -24,6 +25,7 @@ const { items, pagefindIgnore = false } = Astro.props;
           date={item.date}
           description={item.description}
           href={item.href}
+          image={item.image}
           title={item.title}
         />
       </li>

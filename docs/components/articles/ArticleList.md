@@ -4,7 +4,7 @@ Source: `src/components/articles/ArticleList.astro`
 
 ## Purpose
 
-`ArticleList` renders a reusable list of article summaries.
+`ArticleList` renders a reusable flat editorial list of article summaries.
 
 It is the shared display primitive for archive pages, category pages, author
 pages, search results, homepage sections, and article-end discovery. Filtering,
@@ -24,16 +24,46 @@ make invalid states harder to express.
 ```text
 Archive / Category / Search / Author / Discovery block
   ArticleList
-    ArticleCard[]
+    list row
+      ArticleCard
 ```
 
-`ArticleList` owns list semantics, spacing, empty-state handling, and optional
-Pagefind opt-out behavior. It does not fetch content, filter by category,
-filter by author, or infer routes.
+`ArticleList` owns list semantics, separator rhythm, vertical spacing,
+empty-state handling, and optional Pagefind opt-out behavior. It does not fetch
+content, filter by category, filter by author, choose images, or infer routes.
 
 ## Layout And Responsiveness
 
-The component must respect a readable prose measure, keep metadata visually subordinate to the article title/body, and allow long titles, author names, tags, and images to wrap without layout collision.
+The list should look like an editorial index, not a card grid. Repeated rows
+use full-width separators and whitespace for structure. Do not add enclosing
+cards around individual rows.
+
+Responsive behavior:
+
+- Mobile: image-backed rows stay two-column and concise, with metadata merged
+  into the text column and a compact square thumbnail on the right.
+- Tablet: rows preserve the same anatomy while giving text priority over media.
+- Desktop and wider: rows use a wider rectangular thumbnail and more generous
+  spacing without changing the information order.
+- No-image rows expand their text area instead of rendering placeholders.
+- Row height should be predictable enough for scanning. The title and excerpt
+  clamp to sensible defaults rather than allowing one item to dominate a dense
+  list.
+- Long titles should shrink through stable density variants before the two-line
+  clamp truncates. This keeps moderately long titles readable while preserving
+  row rhythm and thumbnail alignment. The minimum title-size variant is reserved
+  for hostile or very long titles that would otherwise waste the available
+  two-line space before ellipsis.
+- Long descriptions should shrink through their own stable density variants
+  before the three-line clamp truncates. The description lower bound is
+  `text-sm` with a tighter line height; after that the ellipsis fallback wins.
+- The list row minimum height and optional media frame should be sized around
+  the three-line excerpt budget, so increasing excerpt capacity remains an
+  intentional rhythm change rather than a hidden overflow risk.
+
+The component must respect a readable measure, keep metadata visually
+subordinate to the article title/body, and allow long titles, author names,
+tags, and images to wrap without layout collision.
 
 ## Layering And Scrolling
 
@@ -67,6 +97,13 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, tags, and links semantically associated.
+- renders separators consistently without double borders or nested card boxes.
+- keeps image-backed rows bounded and lets no-image rows expand naturally.
+- keeps mobile rows as condensed editorial rows rather than switching to a
+  stacked teaser.
+- keeps title and description density variants, including the title minimum and
+  description tight variants, active across list surfaces before title two-line
+  and description three-line clamps apply.
 - keeps article body, continuation, and support surfaces in the intended order.
 - can be reused by `AuthorArticleList` with prefiltered author-specific data.
 - renders a useful empty state only when the parent supplies one or the design

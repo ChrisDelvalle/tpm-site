@@ -1,3 +1,4 @@
+import sampleImage from "../../../../src/assets/shared/tpm_defaultpic.jpg";
 import type { ArticleListItem } from "../../../../src/lib/article-list";
 
 /** Article-list fixture used by article component render tests. */
@@ -19,6 +20,10 @@ export const articleItems = [
     date: "April 6, 2022",
     description: "Article description.",
     href: "/articles/article-title/",
+    image: {
+      alt: "Article preview image",
+      src: sampleImage,
+    },
     title: "Article Title",
   },
   {

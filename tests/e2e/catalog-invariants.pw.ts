@@ -88,6 +88,113 @@ if (!catalogIsBuilt) {
     ).toBeVisible();
   });
 
+  test("catalog article list uses flat rows with bounded optional media", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await page.goto("/catalog/");
+
+    const example = page.locator(
+      '[data-catalog-component="src/components/articles/ArticleList.astro"]',
+    );
+    const rows = example.locator("[data-article-card]");
+    const imageBackedRow = rows.nth(0);
+    const noImageRow = rows.nth(1);
+    const minimumTitleRow = rows.nth(2);
+
+    await expect(rows).toHaveCount(3);
+    await expect(imageBackedRow).toHaveAttribute(
+      "data-article-card-has-image",
+      "true",
+    );
+    await expect(noImageRow).toHaveAttribute(
+      "data-article-card-has-image",
+      "false",
+    );
+    await expect(
+      imageBackedRow.locator("[data-article-card-image-link]"),
+    ).toBeVisible();
+    await expect(
+      noImageRow.locator("[data-article-card-image-link]"),
+    ).toHaveCount(0);
+
+    const imageBox = await imageBackedRow
+      .locator("[data-article-card-image-link]")
+      .boundingBox();
+    expect(imageBox?.width ?? 0).toBeGreaterThan(150);
+    expect(imageBox?.width ?? 0).toBeLessThanOrEqual(300);
+    expect(imageBox?.height ?? 0).toBeGreaterThan(150);
+    expect(imageBox?.width ?? 0).toBeGreaterThan(
+      (imageBox?.height ?? 0) * 1.45,
+    );
+    await expect(
+      imageBackedRow.locator("[data-article-card-title]"),
+    ).toHaveAttribute("data-article-card-title-fit", "dense");
+    await expect(
+      minimumTitleRow.locator("[data-article-card-title]"),
+    ).toHaveAttribute("data-article-card-title-fit", "minimum");
+    await expect(
+      minimumTitleRow.locator("[data-article-card-description]"),
+    ).toHaveAttribute("data-article-card-description-fit", "compact");
+
+    const minimumTitleMetrics = await minimumTitleRow
+      .locator("[data-article-card-title]")
+      .evaluate((element) => {
+        const styles = getComputedStyle(element);
+        const lineHeight = Number(styles.lineHeight.replace("px", ""));
+        const rect = element.getBoundingClientRect();
+
+        return {
+          height: rect.height,
+          lineHeight,
+        };
+      });
+    expect(minimumTitleMetrics.height).toBeLessThanOrEqual(
+      minimumTitleMetrics.lineHeight * 2 + 2,
+    );
+    const compactDescriptionMetrics = await minimumTitleRow
+      .locator("[data-article-card-description]")
+      .evaluate((element) => {
+        const styles = getComputedStyle(element);
+        const lineHeight = Number(styles.lineHeight.replace("px", ""));
+        const rect = element.getBoundingClientRect();
+
+        return {
+          height: rect.height,
+          lineHeight,
+        };
+      });
+    expect(compactDescriptionMetrics.height).toBeLessThanOrEqual(
+      compactDescriptionMetrics.lineHeight * 3 + 2,
+    );
+
+    await expectHorizontallyContained(imageBackedRow, example, {
+      inner: "image-backed article row",
+      outer: "article list catalog example",
+    });
+    await expectHorizontallyContained(noImageRow, example, {
+      inner: "no-image article row",
+      outer: "article list catalog example",
+    });
+    await expectNoHorizontalOverflow(page);
+
+    await page.setViewportSize({ height: 740, width: 390 });
+    await expect(imageBackedRow).toBeVisible();
+    const mobileImageBox = await imageBackedRow
+      .locator("[data-article-card-image-link]")
+      .boundingBox();
+    expect(mobileImageBox?.width ?? 0).toBeGreaterThanOrEqual(78);
+    expect(mobileImageBox?.width ?? 0).toBeLessThanOrEqual(82);
+    expect(
+      Math.abs((mobileImageBox?.width ?? 0) - (mobileImageBox?.height ?? 0)),
+    ).toBeLessThanOrEqual(2);
+    await expectHorizontallyContained(imageBackedRow, example, {
+      inner: "mobile image-backed article row",
+      outer: "article list catalog example",
+    });
+    await expectNoHorizontalOverflow(page);
+  });
+
   test("catalog article references keep markers and backlinks keyboard navigable", async ({
     page,
   }) => {

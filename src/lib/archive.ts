@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 import {
   authorDisplayNameForArticle,
   authorSummariesForArticle,
@@ -17,6 +19,12 @@ import {
   formatDate,
 } from "./routes";
 
+/** Display-ready image metadata for article list previews. */
+interface ArticleArchiveImage {
+  alt: string;
+  src: ImageMetadata;
+}
+
 /** Display-ready archive item for article listing pages. */
 export interface ArticleArchiveItem {
   article: ArticleEntry;
@@ -30,6 +38,7 @@ export interface ArticleArchiveItem {
       };
   date: string;
   description: string;
+  image?: ArticleArchiveImage | undefined;
   title: string;
   url: string;
 }
@@ -71,6 +80,13 @@ export function articleArchiveItems(
             },
       date: formatDate(entryDate(article)),
       description: excerpt(article),
+      image:
+        article.data.image === undefined
+          ? undefined
+          : {
+              alt: article.data.imageAlt ?? "",
+              src: article.data.image,
+            },
       title: entryTitle(article),
       url: articleUrl(article.id),
     };

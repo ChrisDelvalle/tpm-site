@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "astro";
 import { describe, expect, test } from "bun:test";
 
 import { articleArchiveItems } from "../../../src/lib/archive";
@@ -8,12 +9,21 @@ import {
 } from "../../helpers/content";
 
 describe("articleArchiveItems", () => {
+  const sampleImage = {
+    format: "jpg",
+    height: 600,
+    src: "/assets/article-preview.jpg",
+    width: 800,
+  } as const satisfies ImageMetadata;
+
   test("combines article data with category display metadata", () => {
     const article = articleEntry({
       data: {
         author: "Seong-Young Her",
         date: new Date("2022-04-06T23:58:10.000Z"),
         description: "Article excerpt",
+        image: sampleImage,
+        imageAlt: "Article preview image",
         title: "Article Title",
       },
       id: "article-title",
@@ -38,6 +48,10 @@ describe("articleArchiveItems", () => {
       },
       date: "April 6, 2022",
       description: "Article excerpt",
+      image: {
+        alt: "Article preview image",
+        src: sampleImage,
+      },
       title: "Article Title",
       url: "/articles/article-title/",
     });

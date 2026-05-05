@@ -1,3 +1,8 @@
+import {
+  articleListDescriptionFitClass,
+  articleListTitleFitClass,
+} from "../lib/article-list-title-fit";
+
 /** Search-result payload returned by Pagefind. */
 export interface PagefindData {
   excerpt: string;
@@ -114,12 +119,13 @@ export async function renderResults(
     const excerpt = searchDocument.createElement("span");
 
     item.className =
-      "search-result border-border bg-card text-foreground grid gap-2 rounded-sm border p-4 no-underline transition-colors hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+      "search-result border-border text-foreground grid min-h-28 content-center gap-2 border-b py-6 no-underline transition-colors first:pt-0 last:border-b-0 last:pb-0 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
     item.href = data.url;
     item.dataset["astroPrefetch"] = "hover";
-    title.className = "font-semibold";
-    title.textContent = data.meta.title ?? data.url;
-    excerpt.className = "text-muted-foreground text-sm";
+    const titleText = data.meta.title ?? data.url;
+    title.className = `text-foreground line-clamp-2 leading-tight font-semibold tracking-normal ${articleListTitleFitClass(titleText, false)}`;
+    title.textContent = titleText;
+    excerpt.className = `text-muted-foreground line-clamp-3 transition-colors ${articleListDescriptionFitClass(data.excerpt, false)}`;
     excerpt.replaceChildren(
       searchExcerptFragment(searchDocument, data.excerpt),
     );
@@ -399,7 +405,7 @@ function searchResultsContainer(
   }
 
   const results = searchDocument.createElement("div");
-  results.className = "grid gap-3";
+  results.className = "grid min-w-0";
   results.dataset["searchResults"] = "";
   results.setAttribute("role", "region");
   results.setAttribute("aria-label", "Search results");

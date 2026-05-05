@@ -526,8 +526,12 @@ Article components own article display and metadata presentation.
 - `ArticleHeader`: title, category, description, hero, and meta composition.
 - `ArticleMeta`: author/date/category/tag metadata row.
 - `ArticleProse`: Tailwind Typography wrapper for rendered Markdown/MDX.
-- `ArticleCard`: archive/search/latest-post card.
-- `ArticleList`: list semantics and spacing for repeated article cards.
+- `ArticleCard`: flat editorial article row for archive/search/latest-post
+  surfaces, with condensed mobile rows and bounded thumbnails when images
+  exist. Long list titles use stable density variants before falling back to a
+  two-line ellipsis clamp.
+- `ArticleList`: list semantics, separator rhythm, and spacing for repeated
+  article rows.
 - `ArticleImage`: future MDX figure/image abstraction.
 - `ArticleTags`: optional tag display once tags become public UI.
 - `ArticleReferences`: article-local owner for notes and bibliography sections.
@@ -990,8 +994,10 @@ Each component should document or encode:
 
 Examples:
 
-- `ArticleCard`: title wraps naturally, metadata wraps below, excerpt can be
-  omitted, card never requires a fixed image size unless image variant is used.
+- `ArticleCard`: title density variants and excerpt clamps preserve
+  scannability, metadata stays subordinate inside the text column, optional
+  preview images stay bounded, and no-image rows expand instead of leaving
+  blank media space.
 - `PrimaryNav`: links wrap or collapse according to parent composition; it does
   not own the mobile menu decision.
 - `CategoryTree`: long article titles wrap inside the available width; details

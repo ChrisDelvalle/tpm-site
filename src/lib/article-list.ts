@@ -1,5 +1,13 @@
+import type { ImageMetadata } from "astro";
+
 import type { ArticleArchiveItem } from "./archive";
 import type { AuthorSummary } from "./authors";
+
+/** Image metadata consumed by article list rows. */
+interface ArticleListImage {
+  alt: string;
+  src: ImageMetadata;
+}
 
 /** Display-ready item consumed by article cards and article lists. */
 export interface ArticleListItem {
@@ -14,6 +22,7 @@ export interface ArticleListItem {
   date?: string | undefined;
   description?: string | undefined;
   href: string;
+  image?: ArticleListImage | undefined;
   title: string;
 }
 
@@ -39,6 +48,7 @@ export function articleListItemFromArchive(
     date: item.date,
     description: item.description,
     href: item.url,
+    image: item.image,
     title: item.title,
   };
 }
