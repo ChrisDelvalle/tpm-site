@@ -115,6 +115,13 @@ tests, and git history.
       blockquote attributions, media credits, archive links, and prose links.
 - [x] Record every article that needs manual normalization and the exact legacy
       pattern it uses.
+- [x] Generate a full per-article content migration catalog so every article is
+      represented before manual normalization work begins.
+- [x] Execute the approved mechanical-safe cleanup pass for simple raw HTML
+      links and simple paragraph wrappers, then stop before manual
+      citation/reference classification.
+- [x] Rerun the audit and catalog after the mechanical pass so unresolved
+      manual-review work is current.
 - [ ] Normalize one article-reference format at a time into canonical
       `note-*` footnotes and `cite-*` markers with `tpm-bibtex` source entries
       according to the approved article-content plan.

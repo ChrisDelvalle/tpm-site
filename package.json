@@ -51,6 +51,8 @@
     "quality": "bun scripts/quality/run-quality.ts",
     "quality:release": "bun scripts/quality/run-quality.ts --release",
     "references:audit": "bun scripts/content/audit-article-references.ts",
+    "references:catalog": "bun scripts/content/catalog-article-references.ts",
+    "references:migrate:mechanical": "bun scripts/content/migrate-mechanical-article-references.ts",
     "review:assets": "bun --silent run assets:duplicates -- --review --quiet && bun --silent run assets:unused -- --review --quiet",
     "review:markdown": "bun --silent run lint:markdown && bun --silent run lint:mdx && bun --silent run format:markdown",
     "secrets": "gitleaks git --redact --no-banner",
