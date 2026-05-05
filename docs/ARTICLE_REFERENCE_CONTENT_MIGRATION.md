@@ -6,6 +6,14 @@ This catalog tracks every article before manual reference normalization.
 It is intentionally conservative: ordinary prose links stay ordinary prose
 unless an article is explicitly edited to cite them.
 
+## Decision Report
+
+Migration decisions are recorded in
+[`ARTICLE_REFERENCE_MIGRATION_DECISIONS.md`](./ARTICLE_REFERENCE_MIGRATION_DECISIONS.md).
+Every catalog update that changes migration rules, article classification,
+exception handling, or content-normalization scope should add or update a
+decision record there.
+
 ## Status Legend
 
 - `clean`: no reference-like content detected by the catalog.

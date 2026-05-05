@@ -71,6 +71,9 @@ describe("article reference migration catalog", () => {
       expect(formatArticleReferenceCatalog(catalog)).toContain(
         "| `src/content/articles/culture/html.md` | `mechanical-safe` |",
       );
+      expect(formatArticleReferenceCatalog(catalog)).toContain(
+        "ARTICLE_REFERENCE_MIGRATION_DECISIONS.md",
+      );
     }));
 
   test("captures line-level review details without classifying prose links as citations", () => {

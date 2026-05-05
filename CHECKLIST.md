@@ -122,6 +122,8 @@ tests, and git history.
       citation/reference classification.
 - [x] Rerun the audit and catalog after the mechanical pass so unresolved
       manual-review work is current.
+- [x] Add a written decision report for article-reference migration decisions,
+      and keep it paired with future catalog updates.
 - [ ] Normalize one article-reference format at a time into canonical
       `note-*` footnotes and `cite-*` markers with `tpm-bibtex` source entries
       according to the approved article-content plan.
