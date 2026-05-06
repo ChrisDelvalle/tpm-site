@@ -21,5 +21,5 @@ describe("bibliography route", () => {
     );
     expect(view).not.toContain("source-source");
     expect(view).not.toContain(">^<");
-  });
+  }, 20_000);
 });

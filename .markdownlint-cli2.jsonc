@@ -21,6 +21,9 @@
       "siblings_only": true
     },
     "MD033": false,
-    "MD049": false
+    "MD049": false,
+    // TPM article citations use custom [^cite-*] labels that are validated by
+    // the article-reference verifier instead of Markdown reference definitions.
+    "MD052": false
   }
 }
