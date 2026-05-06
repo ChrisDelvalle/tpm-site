@@ -119,24 +119,19 @@ test.describe("component layout invariants", () => {
     await expect(announcements.getByRole("link").first()).toBeVisible();
     const supportCta = hero.getByRole("link", { name: "Support Us" });
     const discordCta = hero.getByRole("link", { name: "Join Discord" });
-    const youtubeCta = hero.getByRole("link", { name: "Visit YouTube" });
 
     await expect(supportCta).toBeVisible();
     await expect(discordCta).toBeVisible();
-    await expect(youtubeCta).toBeVisible();
-    await expect(youtubeCta).toHaveAttribute(
-      "href",
-      "https://www.youtube.com/@ThePhilosophersMeme",
+    await expect(hero.getByRole("link", { name: "Visit YouTube" })).toHaveCount(
+      0,
     );
     const ctaBoxes = await Promise.all([
       visibleBoundingBox(supportCta, "homepage Patreon CTA"),
       visibleBoundingBox(discordCta, "homepage Discord CTA"),
-      visibleBoundingBox(youtubeCta, "homepage YouTube CTA"),
     ]);
     const logoBoxes = await Promise.all([
       visibleBoundingBox(supportCta.locator("img"), "homepage Patreon logo"),
       visibleBoundingBox(discordCta.locator("img"), "homepage Discord logo"),
-      visibleBoundingBox(youtubeCta.locator("img"), "homepage YouTube logo"),
     ]);
     const referenceCtaBox = ctaBoxes[0];
     ctaBoxes.slice(1).forEach((box) => {
@@ -387,7 +382,6 @@ test.describe("component layout invariants", () => {
     const mobileCtaBoxes = await Promise.all([
       visibleBoundingBox(supportCta, "mobile homepage Patreon CTA"),
       visibleBoundingBox(discordCta, "mobile homepage Discord CTA"),
-      visibleBoundingBox(youtubeCta, "mobile homepage YouTube CTA"),
     ]);
     const mobileCtaReferenceBox = mobileCtaBoxes[0];
 

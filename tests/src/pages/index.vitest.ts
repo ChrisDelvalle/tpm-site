@@ -23,8 +23,6 @@ describe("home page", () => {
     expect(view).toContain("Join the TPM Discord");
     expect(view).toContain("Support Us");
     expect(view).toContain("Join Discord");
-    expect(view).toContain("Visit YouTube");
-    expect(view).toContain("https://www.youtube.com/@ThePhilosophersMeme");
     expect(view).toContain("Start Here");
     expect(view).toContain("Read");
     expect(view).toContain("Articles");
@@ -48,5 +46,7 @@ describe("home page", () => {
     expect(view).not.toContain("Most Recent Essays");
     expect(view).not.toContain("Most Recent");
     expect(view).not.toContain("GitHub");
+    expect(view).not.toContain("Visit YouTube");
+    expect(view).not.toContain("https://www.youtube.com/@ThePhilosophersMeme");
   });
 });
