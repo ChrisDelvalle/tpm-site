@@ -1,6 +1,7 @@
 import type { Root } from "mdast";
 import { visit } from "unist-util-visit";
 
+import { parseBibtexEntries } from "../lib/article-references/bibtex";
 import type {
   ArticleReferenceBlockContent,
   ArticleReferenceData,
@@ -8,6 +9,7 @@ import type {
   ArticleReferenceInlineContent,
   ArticleReferenceMarker,
   ArticleReferenceOccurrenceInput,
+  ParsedBibtexEntry,
 } from "../lib/article-references/model";
 import {
   classifyArticleReferenceLabel,
@@ -70,6 +72,11 @@ interface ReferenceMarkerQueue {
   used: number;
 }
 
+interface CollectedBibtexEntries {
+  diagnostics: ReadonlyArray<{ code: "malformed-bibtex"; message: string }>;
+  entries: readonly ParsedBibtexEntry[];
+}
+
 /**
  * Splits canonical `note-*` and `cite-*` footnotes into custom article
  * reference data plus accessible inline markers.
@@ -90,12 +97,27 @@ export function remarkArticleReferences(
       mutableTree,
       options.validateLegacyFootnotes === true,
     );
+    const bibtex = collectBibtexEntries(mutableTree);
 
-    if (references.length === 0 && definitions.length === 0) {
+    if (
+      references.length === 0 &&
+      definitions.length === 0 &&
+      bibtex.entries.length === 0 &&
+      bibtex.diagnostics.length === 0
+    ) {
       return;
     }
 
-    const normalized = normalizeArticleReferences(references, definitions);
+    if (bibtex.diagnostics.length > 0) {
+      failWithDiagnostics(file, bibtex.diagnostics);
+      return;
+    }
+
+    const normalized = normalizeArticleReferences(
+      references,
+      definitions,
+      bibtex.entries,
+    );
 
     if (!normalized.ok) {
       failWithDiagnostics(file, normalized.diagnostics);
@@ -130,15 +152,45 @@ function collectReferenceOccurrences(
 ): ArticleReferenceOccurrenceInput[] {
   const references: ArticleReferenceOccurrenceInput[] = [];
 
-  visit(root, "footnoteReference", (node: MutableMdastNode) => {
+  collectOccurrencesFromNode(root, validateLegacyFootnotes, references);
+
+  return references;
+}
+
+function collectOccurrencesFromNode(
+  node: MutableMdastNode,
+  validateLegacyFootnotes: boolean,
+  references: ArticleReferenceOccurrenceInput[],
+): void {
+  if (isFootnoteReference(node)) {
     const label = sourceLabel(node);
 
     if (validateLegacyFootnotes || isCanonicalArticleReference(label)) {
       references.push({ label });
     }
-  });
+    return;
+  }
 
-  return references;
+  if (node.type === "text") {
+    references.push(
+      ...referenceLabelsFromText(node.value ?? "", validateLegacyFootnotes).map(
+        (label) => ({ label }),
+      ),
+    );
+    return;
+  }
+
+  if (
+    isFootnoteDefinition(node) ||
+    node.type === "code" ||
+    node.type === "link"
+  ) {
+    return;
+  }
+
+  for (const child of node.children ?? []) {
+    collectOccurrencesFromNode(child, validateLegacyFootnotes, references);
+  }
 }
 
 function collectReferenceDefinitions(
@@ -161,6 +213,32 @@ function collectReferenceDefinitions(
   return definitions;
 }
 
+function collectBibtexEntries(root: MutableMdastRoot): CollectedBibtexEntries {
+  const entries: ParsedBibtexEntry[] = [];
+  const diagnostics: Array<{ code: "malformed-bibtex"; message: string }> = [];
+
+  visit(root, "code", (node: MutableMdastNode) => {
+    if (node.lang !== "tpm-bibtex") {
+      return;
+    }
+
+    const parsed = parseBibtexEntries(node.value ?? "");
+
+    if (parsed.ok) {
+      entries.push(...parsed.entries);
+    } else {
+      diagnostics.push(
+        ...parsed.diagnostics.map((diagnostic) => ({
+          code: "malformed-bibtex" as const,
+          message: `${diagnostic.message} (offset ${diagnostic.offset})`,
+        })),
+      );
+    }
+  });
+
+  return { diagnostics, entries };
+}
+
 function transformTree(
   root: MutableMdastRoot,
   data: ArticleReferenceData,
@@ -174,35 +252,48 @@ function transformChildren(
   markerQueues: ReadonlyMap<string, ReferenceMarkerQueue>,
 ): MutableMdastNode[] {
   return children
-    .filter((node) => !isConsumedDefinition(node, markerQueues))
-    .map((node) => transformNode(node, markerQueues));
+    .filter(
+      (node) =>
+        !isConsumedDefinition(node, markerQueues) &&
+        !isConsumedBibtexBlock(node),
+    )
+    .flatMap((node) => transformNode(node, markerQueues));
 }
 
 function transformNode(
   node: MutableMdastNode,
   markerQueues: ReadonlyMap<string, ReferenceMarkerQueue>,
-): MutableMdastNode {
+): MutableMdastNode[] {
   if (isFootnoteReference(node)) {
     const marker = nextMarker(sourceLabel(node), markerQueues);
 
     if (marker !== undefined) {
-      return markerLinkNode(marker);
+      return [markerLinkNode(marker)];
     }
   }
 
-  if (node.children === undefined) {
-    return node;
+  if (node.type === "text") {
+    return transformTextMarkers(node, markerQueues);
   }
 
-  return {
-    ...node,
-    children: transformChildren(node.children, markerQueues),
-  };
+  if (node.children === undefined) {
+    return [node];
+  }
+
+  return [
+    {
+      ...node,
+      children: transformChildren(node.children, markerQueues),
+    },
+  ];
 }
 
 function markerLinkNode(marker: ArticleReferenceMarker): MutableMdastNode {
+  const markerText =
+    marker.kind === "note" ? marker.displayText : `[${marker.displayText}]`;
+
   return {
-    children: [{ type: "text", value: `[${marker.displayText}]` }],
+    children: [{ type: "text", value: markerText }],
     data: {
       hProperties: {
         "aria-label": `${marker.kind === "citation" ? "Citation" : "Note"} ${marker.displayText}`,
@@ -247,6 +338,63 @@ function isConsumedDefinition(
   markerQueues: ReadonlyMap<string, ReferenceMarkerQueue>,
 ): boolean {
   return isFootnoteDefinition(node) && markerQueues.has(sourceLabel(node));
+}
+
+function isConsumedBibtexBlock(node: MutableMdastNode): boolean {
+  return node.type === "code" && node.lang === "tpm-bibtex";
+}
+
+function transformTextMarkers(
+  node: MutableMdastNode,
+  markerQueues: ReadonlyMap<string, ReferenceMarkerQueue>,
+): MutableMdastNode[] {
+  const value = node.value ?? "";
+  const markerPattern = /\[\^([^\]]+)\]/gu;
+  const transformed: MutableMdastNode[] = [];
+  let cursor = 0;
+
+  for (const match of value.matchAll(markerPattern)) {
+    const [source, label] = match;
+    const { index } = match;
+
+    if (label === undefined) {
+      continue;
+    }
+
+    const marker = nextMarker(label, markerQueues);
+
+    if (marker === undefined) {
+      continue;
+    }
+
+    if (index > cursor) {
+      transformed.push({ type: "text", value: value.slice(cursor, index) });
+    }
+
+    transformed.push(markerLinkNode(marker));
+    cursor = index + source.length;
+  }
+
+  if (transformed.length === 0) {
+    return [node];
+  }
+
+  if (cursor < value.length) {
+    transformed.push({ type: "text", value: value.slice(cursor) });
+  }
+
+  return transformed;
+}
+
+function referenceLabelsFromText(
+  text: string,
+  validateLegacyFootnotes: boolean,
+): string[] {
+  return Array.from(text.matchAll(/\[\^([^\]]+)\]/gu), (match) => match.at(1))
+    .filter((label): label is string => label !== undefined)
+    .filter(
+      (label) => validateLegacyFootnotes || isCanonicalArticleReference(label),
+    );
 }
 
 function serializeDefinitionChildren(

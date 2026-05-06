@@ -31,6 +31,9 @@ describe("catalog config", () => {
       "src/components/articles/ArticleHeader.astro",
     );
     expect(catalogExampleComponentPaths).toContain(
+      "src/components/bibliography/BibliographyPage.astro",
+    );
+    expect(catalogExampleComponentPaths).toContain(
       "src/components/blocks/SupportBlock.astro",
     );
     expect(catalogExampleComponentPaths).toContain(

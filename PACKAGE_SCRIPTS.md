@@ -22,7 +22,7 @@ Script sources are grouped by responsibility:
 | `audit:all`                       | Runs dependency audit across all severities. Review signal for maintenance.                                                                                                           |
 | `build`                           | Runs the raw Astro/Pagefind build, then applies the production-safe generated-output optimizer stack to `dist/`.                                                                      |
 | `build:optimize`                  | Applies the production generated-output optimization stack to an existing `dist/`: Lightning CSS, SVGO, and conservative Oxc JavaScript whitespace optimization.                      |
-| `build:raw`                       | Builds the static Astro site into `dist/` and generates the Pagefind search index for real content routes, excluding generated redirect fallback pages.                               |
+| `build:raw`                       | Builds the static Astro site into `dist/` and generates the Pagefind search index for real content routes, including bibliography, excluding generated redirect fallback pages.       |
 | `catalog:build`                   | Builds the site with the private component catalog enabled through `.env.catalog`.                                                                                                    |
 | `catalog:check`                   | Verifies every public component has a catalog example or a documented ignore reason.                                                                                                  |
 | `catalog:dev`                     | Starts Astro dev with the private component catalog route enabled through `.env.catalog`.                                                                                             |
@@ -59,6 +59,9 @@ Script sources are grouped by responsibility:
 | `preview:release:fresh`           | Builds optimized output, verifies generated pages/links/scripts, validates representative HTML, then starts Astro preview for release-like local inspection.                          |
 | `quality`                         | Runs the local quality path quietly, printing only failures and review warnings.                                                                                                      |
 | `quality:release`                 | Runs the release quality path quietly, with blocking release gates plus non-blocking review signals.                                                                                  |
+| `references:audit`                | Inventories article reference and citation-like patterns across Markdown/MDX content for manual normalization planning; does not rewrite article content.                             |
+| `references:catalog`              | Generates the full per-article reference migration catalog; use `-- --write` to update `docs/ARTICLE_REFERENCE_CONTENT_MIGRATION.md`.                                                 |
+| `references:migrate:mechanical`   | Dry-runs mechanical article-reference cleanup; use `-- --write` to convert simple raw HTML links and simple paragraph wrappers while leaving citation classification for review.      |
 | `review:assets`                   | Runs duplicate and unused image review checks without blocking publishing.                                                                                                            |
 | `review:markdown`                 | Runs Markdown/MDX style checks without blocking publishing.                                                                                                                           |
 | `secrets`                         | Runs Gitleaks against git history. Blocking security gate when available.                                                                                                             |
@@ -76,7 +79,7 @@ Script sources are grouped by responsibility:
 | `typecheck`                       | Runs Astro typechecking, failing on warnings, then TypeScript checks for tools/scripts/tests.                                                                                         |
 | `typecheck:astro`                 | Runs `astro check` and treats Astro warnings as failures.                                                                                                                             |
 | `typecheck:tools`                 | Runs TypeScript checking for scripts, tests, and tooling config.                                                                                                                      |
-| `validate:html`                   | Validates representative built HTML files and fails on warnings.                                                                                                                      |
+| `validate:html`                   | Validates representative built HTML files, including bibliography output, and fails on warnings.                                                                                      |
 | `verify`                          | Verifies built `dist/` output: expected pages, local links, draft exclusion, JSON-LD, and static-page script constraints.                                                             |
 | `verify:content`                  | Verifies source content invariants such as URL-safe slugs/categories and duplicate article slugs.                                                                                     |
 

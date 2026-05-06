@@ -7,6 +7,13 @@ Markdown can cite a source.[^cite-baudrillard-1981]
 
 Markdown can also carry an explanatory note.[^note-term-scope]
 
-[^cite-baudrillard-1981]: [@Baudrillard 1981] Baudrillard, Jean. _Simulacra and Simulation_. [Archive](https://example.com/source). `1981`.
-
 [^note-term-scope]: [@term scope] This note preserves _emphasis_, [links](https://example.com/note), and `inline code`.
+
+```tpm-bibtex
+@book{baudrillard-1981,
+  author = {Baudrillard, Jean},
+  title = {Simulacra and Simulation},
+  year = {1981},
+  url = {https://example.com/source}
+}
+```

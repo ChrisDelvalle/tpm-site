@@ -484,3 +484,250 @@ they are useful context. Explicitly deferred work belongs in
       `bun run verify`, `bun run validate:html`, `bun run lint`,
       `bun run format:code`, `bun run format:markdown`, and
       `bun run catalog:check`.
+
+### Milestone 36: Cite This Article Component Design
+
+- [x] Add a component design doc for a `Cite this article` article-header
+      utility that uses the Lucide `Quote` icon.
+- [x] Specify the generated citation data model for this site's own articles:
+      title, author metadata, publication date, canonical URL, site name, and
+      accessed-date behavior where a format needs it.
+- [x] Specify generated formats to support initially, including BibTeX and at
+      least one reader-facing prose citation format, with CSL JSON considered
+      as the structured intermediate or future export format.
+- [x] Specify the UI contract: visible selectable citation text, a Lucide copy
+      icon button, accessible labels, copied/error state, and no-JavaScript
+      manual-copy fallback.
+- [x] Specify placement in the article hierarchy, likely near article metadata
+      without becoming a primary visual action.
+- [x] Define unit, render, accessibility, and browser tests for citation
+      generation, escaping, copy behavior, keyboard interaction, light/dark
+      styling, long titles, multiple authors, organizations, and anonymous
+      authors.
+
+### Milestone 37: BibTeX Citation Authoring Design
+
+- [x] Update the article references and bibliography technical designs so
+      citations use hidden `tpm-bibtex` fenced blocks as structured authoring
+      data instead of parsing prose citation styles.
+- [x] Specify the authoring contract: inline citation markers reference BibTeX
+      keys, BibTeX blocks never render as article prose, and explanatory
+      footnotes remain separate from bibliographic source metadata.
+- [x] Specify the parsed citation data model, required fields by entry type,
+      fallback rendering behavior for missing optional fields, duplicate-key
+      handling, unused/missing citation diagnostics, and global bibliography
+      aggregation shape.
+- [x] Define parser architecture requirements around parse-not-validate,
+      type-driven normalized data, strict diagnostics, and avoiding fragile
+      regex-only bibliography parsing.
+- [x] Define migration and testing requirements for the current article corpus,
+      including how legacy references, footnotes, prose links, and bibliography
+      sections become either explicit BibTeX citations, explanatory notes, or
+      documented non-citation content.
+
+### Milestone 38: Cite This Article Implementation
+
+- [x] Add typed citation-generation helpers for this site's own articles,
+      including BibTeX and one prose citation format.
+- [x] Add `ArticleCitationMenu` and wire it into `ArticleHeader` without making
+      it a primary visual action.
+- [x] Add progressive-enhancement copy behavior while preserving visible,
+      selectable citation text without JavaScript.
+- [x] Add unit, component/render, accessibility, and browser tests for generated
+      formats, escaping, copy behavior, long metadata, light/dark mode, and
+      responsive header placement.
+- [x] Update component catalog/examples and package script docs if new scripts
+      or catalog entries are added.
+- [x] Run focused tests and the normal quality gate before marking complete.
+
+### Milestone 39: BibTeX Article Reference Parser And Plugin Implementation
+
+- [x] Add a small typed BibTeX parser or a vetted direct dependency that parses
+      citation-manager-shaped entries without regex-only parsing.
+- [x] Update the article-reference model so citations carry parsed BibTeX data
+      and generated display data instead of prose footnote definition content.
+- [x] Update `remarkArticleReferences` to collect `tpm-bibtex` code fences,
+      remove them from rendered prose, match `[^cite-*]` markers to BibTeX
+      keys, preserve explanatory `note-*` footnotes, and emit actionable
+      diagnostics.
+- [x] Preserve the migration mode for current published legacy content until
+      corpus normalization is explicitly completed.
+- [x] Add unit and plugin tests for parser behavior, missing/unused/duplicate
+      BibTeX entries, note/citation separation, MDX behavior, hidden data
+      removal, and no raw BibTeX prose output.
+- [x] Run focused tests and the normal quality gate before marking complete.
+
+### Milestone 39A: Article Reference Corpus Audit Design
+
+- [x] Add a technical design doc for article-reference corpus auditing that
+      defines detected legacy patterns, manual-review criteria, output shape,
+      tests, and the boundary between non-content tooling and article-content
+      normalization.
+- [x] Review the design for ambiguity around ordinary prose links versus true
+      bibliographic citations, then update it until it is ready for
+      implementation.
+
+### Milestone 40: Article Reference Corpus Audit And Normalization
+
+- [x] Article-content edits require explicit instruction and careful manual
+      verification before changing `src/content/articles/`.
+- [x] Add or update an audit script/test that inventories current article
+      reference formats: explicit references sections, Markdown footnotes,
+      bibliography footnotes, bracket-style entries, raw HTML links, MDX links,
+      blockquote attributions, media credits, archive links, and prose links.
+- [x] Record every article that needs manual normalization and the exact legacy
+      pattern it uses.
+- [x] Generate a full per-article content migration catalog so every article is
+      represented before manual normalization work begins.
+- [x] Execute the approved mechanical-safe cleanup pass for simple raw HTML
+      links and simple paragraph wrappers, then stop before manual
+      citation/reference classification.
+- [x] Rerun the audit and catalog after the mechanical pass so unresolved
+      manual-review work is current.
+- [x] Add a written decision report for article-reference migration decisions,
+      and keep it paired with future catalog updates.
+- [x] Normalize one article-reference format at a time into canonical
+      `note-*` footnotes and `cite-*` markers with `tpm-bibtex` source entries
+      according to the approved article-content plan.
+- [x] Preserve author wording and article intent; only change reference syntax
+      and section structure needed for the canonical parser.
+- [x] Keep ambiguous inline prose links out of bibliography data unless the
+      article is explicitly edited to use a canonical `cite-*` marker plus
+      BibTeX source entry.
+- [x] Confirm no explicit exceptions are needed; add explicit documented
+      exceptions only when an article cannot reasonably be normalized.
+- [x] Enable release-blocking validation for published articles only after the
+      normalized corpus and exceptions pass.
+- [x] Update author-facing article submission documentation with the canonical
+      `note-*`, `cite-*`, and `tpm-bibtex` syntax.
+
+### Milestone 41: Global Bibliography Page Implementation
+
+- [x] Implement only after Milestone 39 provides normalized parsed BibTeX
+      citation data and Milestone 40 records corpus status or approved
+      exceptions.
+- [x] Add the `/bibliography/` route and footer navigation link without
+      cluttering the primary header navigation.
+- [x] Build global bibliography data from normalized BibTeX citation entries
+      and source article metadata; do not infer sources from ordinary inline
+      links.
+- [x] Preserve article back-links for every bibliography entry so readers can
+      see which article used each source.
+- [x] Implement bibliography page UI components according to their one-pagers,
+      such as `BibliographyPage`, `BibliographyList`, `BibliographyEntry`,
+      `BibliographySourceArticles`, `BibliographyFilters`, and
+      `BibliographyEmptyState` unless the design chooses better names.
+- [x] Add `src/components/bibliography/` for bibliography page components
+      rather than mixing global bibliography UI into article-local reference
+      components.
+- [x] Implement grouping, sorting, duplicate handling, non-URL source display,
+      long source display, and empty states according to the approved global
+      bibliography design.
+- [x] Avoid fuzzy global source deduplication unless explicit canonical source
+      IDs are added; do not guess duplicates from prose.
+- [x] Add SEO, sitemap, Pagefind, canonical URL, and machine-readable metadata
+      behavior according to the design.
+- [x] Add route data tests, render tests, accessibility tests, and Playwright
+      tests for grouping, sorting, back-links, filters if present, no
+      JavaScript behavior, long sources, duplicate sources, and no horizontal
+      overflow.
+- [x] Update `CHECKLIST.md` with any remaining bibliography follow-up
+      discovered during implementation.
+
+### Milestone 42: Minimal Cite This Article Redesign
+
+- [x] Update the `ArticleCitationMenu` and `ArticleHeader` component designs so
+      the citation utility is a metadata-row trigger with an anchored popover,
+      not an in-flow panel.
+- [x] Keep the citation UI minimal: reserve only trigger space in the article
+      header, use compact four-column citation-style controls, and update one
+      citation text box in place instead of rendering per-format dropdown text
+      boxes.
+- [x] Add common citation outputs for TPM articles beyond BibTeX and MLA,
+      including APA, Chicago, Harvard, IEEE, and a citation-manager export.
+- [x] Implement the redesigned component using existing anchored-positioning
+      primitives rather than bespoke positioning.
+- [x] Update tests for placement, popover behavior, generated formats, copy
+      behavior, stable citation text-box width, and no-overflow invariants.
+- [x] Run focused tests and the normal quality gate before marking complete.
+
+### Milestone 43: Correct Article Reference Semantics And Migration
+
+- [x] Make explanatory footnote markers visually distinct from bibliography
+      citations: notes render as naked clickable superscript numbers, while
+      citations retain citation-specific label/bracket styling.
+- [x] Update article-reference docs and tests so the footnote/citation visual
+      distinction is explicit and difficult to regress.
+- [x] Reopen the corpus audit to detect visible source-list/reference content,
+      including headings such as `Source List` that are still bibliography-like
+      even if they are not named `References` or `Bibliography`.
+- [x] Regenerate the per-article migration catalog so every article is
+      represented and any remaining citation/source/reference material is
+      visible for review.
+- [x] Manually review every article flagged by the updated audit, including
+      articles already edited in the previous pass.
+- [x] Migrate every feasible citation/source/reference entry to canonical
+      `cite-*` markers plus hidden `tpm-bibtex` entries; do not satisfy this
+      milestone by renaming bibliography sections.
+- [x] Record explicit decisions for anything left as visible prose, including
+      why it is not currently feasible or correct to convert to TPM BibTeX.
+- [x] Run focused reference tests, content verification, build, audit, catalog,
+      and the normal quality gate before marking complete.
+
+### Milestone 44: Manual Article Reference Audit
+
+- [x] Manually inspect every article file, independent of the automated audit,
+      for citation/source/reference sections, manual inline citations, and
+      footnotes being used as citations.
+- [x] Record a per-article decision for every inspected article in a durable
+      manual audit report.
+- [x] Convert any missed clear inline citations or source/reference structures
+      to canonical `cite-*`, `note-*`, and hidden `tpm-bibtex` syntax.
+- [x] Record uncertain cases explicitly for user review instead of silently
+      normalizing them.
+- [x] Run reference checks, content verification, build, formatting, and focused
+      tests before marking complete.
+
+### Milestone 45: Numeric Citation Default And Appendix Preservation
+
+- [x] Make inline bibliography citation markers render numerically by default
+      while preserving generated source labels in structured data for future
+      explicit style overrides.
+- [x] Restore author-owned appendix content that was incorrectly treated as
+      disposable bibliography data.
+- [x] Remove invalid structured bibliography entries that encode visible
+      article headings or appendix structure as source metadata.
+- [x] Review changed article files for additional author-intent risks and
+      report any non-obvious cases.
+- [x] Update article-reference docs and decision records to encode the numeric
+      default and appendix-preservation rule.
+- [x] Run focused article-reference tests, content/reference checks, markdown
+      formatting, and build verification before marking complete.
+
+### Milestone 46: Bibliography Malformed Entry Cleanup
+
+- [x] Inspect the rendered global bibliography for malformed source entries.
+- [x] Remove or correct malformed structured source data without inventing
+      missing article metadata.
+- [x] Add validation/tests so placeholder literal citation fields cannot render
+      as global bibliography entries.
+- [x] Update migration/audit docs with the preservation decision.
+- [x] Run focused reference, bibliography, content, formatting, and build
+      checks before marking complete.
+
+### Milestone 47: Bibliography Merge And Generated Reference TOC Support
+
+- [x] Merge `codex/site-improvements` into `codex/architecture-overhaul` while
+      preserving bibliography, announcements, collections, tags, footer,
+      Pagefind, HTML validation, and build verification routes.
+- [x] Include generated Notes and Bibliography headings in article-local TOC
+      data when those sections render, and omit them when the corresponding
+      section is empty.
+- [x] Add focused tests for TOC extraction/rendering with notes, citations,
+      both notes and citations, and no references.
+- [x] Run release-readiness checks and inspect `/bibliography/` plus
+      citation-heavy article pages before marking complete.
+      Verified with focused article TOC/reference tests, bibliography component
+      tests, local preview inspection of `/bibliography/` and citation-heavy
+      article routes, `bun --silent run test:e2e`, and
+      `bun --silent run check:release`.

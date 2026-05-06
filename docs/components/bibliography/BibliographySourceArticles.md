@@ -11,7 +11,7 @@ It helps readers move from a source back into the publication archive.
 
 ## Public Contract
 
-- `sources: readonly BibliographySourceArticle[]`
+- `articles: readonly BibliographySourceArticle[]`
 
 Each source includes article title, href, category, publication date, and marker
 IDs where useful.
@@ -42,7 +42,9 @@ appropriate, and long article titles.
 
 ## Accessibility Semantics
 
-Use a semantic list with a visible or screen-reader label such as "Cited by".
+Use a semantic list with a visible label such as "Cited by". Do not render this
+component as a landmark section for every bibliography entry; repeated unnamed
+or duplicate-labeled landmarks make the bibliography page harder to navigate.
 Links should point to the article, optionally with fragment IDs if the source
 marker target is stable.
 
@@ -62,6 +64,7 @@ but secondary to the source itself.
 - Renders one link per source article.
 - Preserves supplied order.
 - Uses clear label text.
+- Does not create a repeated page landmark per bibliography entry.
 - Keeps long article titles inside width.
 - Handles empty array defensively without broken markup.
 

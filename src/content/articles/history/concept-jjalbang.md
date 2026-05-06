@@ -31,8 +31,26 @@ _An ASCII art version of Gaejoogi made in Japan._
 
 However, the jjalbang was first and foremost a material object, and by no means the same thing as a meme. The term does not refer to the genre itself as a collective in the way "meme" can. Purists among contemporary users still refuse to apply the term to anything other than image files, making exception for animated jjalbangs called oomjjal (움짤, lit. "moving jjalbang").
 
-### RESOURCES
+```tpm-bibtex
+@misc{namuwiki-jjalbang,
+  citation = {Namuwiki. Jjalbang. Available at: https://namu.wiki/w/%EC%A7%A4%EB%B0%A9},
+  author = {Namuwiki},
+  title = {Jjalbang},
+  url = {https://namu.wiki/w/%EC%A7%A4%EB%B0%A9},
+}
 
-- [Namuwiki entry for jjalbang](https://namu.wiki/w/%EC%A7%A4%EB%B0%A9)
-- [News article about Gaejoogi](https://news.mt.co.kr/mtview.php?no=2009042416153570569&outlink=1&ref=%3A%2F%2F)
-- [The original post made in International Meme Studies](https://www.facebook.com/groups/intmeme/permalink/554498085403987/)
+@misc{moneytoday-2009-gaejoogi,
+  citation = {Money Today. (2009). News article about Gaejoogi. Available at: https://news.mt.co.kr/mtview.php?no=2009042416153570569},
+  author = {Money Today},
+  title = {News article about Gaejoogi},
+  year = {2009},
+  url = {https://news.mt.co.kr/mtview.php?no=2009042416153570569},
+}
+
+@misc{international-meme-studies-jjalbang,
+  citation = {International Meme Studies. Original post about jjalbang. Available at: https://www.facebook.com/groups/intmeme/permalink/554498085403987/},
+  author = {International Meme Studies},
+  title = {Original post about jjalbang},
+  url = {https://www.facebook.com/groups/intmeme/permalink/554498085403987/},
+}
+```

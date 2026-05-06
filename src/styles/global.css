@@ -225,4 +225,20 @@
   .skip-link:focus {
     transform: translateY(0);
   }
+
+  a[data-article-reference-marker="true"] {
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  a[data-article-reference-marker="true"][data-reference-kind="note"] {
+    margin-inline: 0.08em;
+    vertical-align: super;
+    font-size: 0.72em;
+    line-height: 0;
+  }
+
+  a[data-article-reference-marker="true"][data-reference-kind="citation"] {
+    font-size: 0.9em;
+  }
 }

@@ -18,10 +18,11 @@ tags:
 legacyPermalink: 2016/05/13/an-internet-koan/
 ---
 
-<p>I just found a really strange <a href="http://www.heartofmeditation.com/buddhist-koans.html" target="_blank">website</a> where a guy claims Zen is a scam and that he's figured out how to solve any koan. He even provides a "Free Zen Riddle and Koan Service" through which you can email him a koan and receive an answer. There are even e-books, one on how to solve Zen riddles and another two which collect them. Here's an example of how he solves one.</p>
-<p>Q: Pick up a stone from 10000m deep in the ocean with dry hands.<br />
-A: dive in water and get it<br />
-(Explanation: How else can you pick a stone out of the water?)</p>
+I just found a really strange [website](http://www.heartofmeditation.com/buddhist-koans.html) where a guy claims Zen is a scam and that he's figured out how to solve any koan. He even provides a "Free Zen Riddle and Koan Service" through which you can email him a koan and receive an answer. There are even e-books, one on how to solve Zen riddles and another two which collect them. Here's an example of how he solves one.
+
+Q: Pick up a stone from 10000m deep in the ocean with dry hands.  
+A: dive in water and get it  
+(Explanation: How else can you pick a stone out of the water?)
 
 The whole website is weirdly formatted and full of such delightful nonsense, as well as comics that all look like ironic memes because the guy used comic sans and paint to replace the original dialogue. The earnest, cocksure way in which he's approached the ridiculous business of everything from collecting riddles to warning people against the dangers of taking them seriously is altogether profoundly charming. It made me feel like the entire site was itself one big koan and reminded me of a middle aged 'joke collector' I met on the bus.
 

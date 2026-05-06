@@ -13,6 +13,7 @@ describe("SiteFooter", () => {
 
     expect(view).toContain("Footer navigation");
     expect(view).toContain("Footer category navigation");
+    expect(view).toContain("/bibliography/");
     expect(view).toContain("Support Our Research");
     expect(view).toContain('href="/collections/"');
     expect(view).toContain('href="/announcements/"');

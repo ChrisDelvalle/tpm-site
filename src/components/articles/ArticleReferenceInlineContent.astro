@@ -27,7 +27,7 @@ function inlineText(node: InlineContent): string {
     <br />
   ) : content.kind === "link" ? (
     <a
-      class="text-primary focus-visible:outline-ring underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+      class="text-primary focus-visible:outline-ring break-words underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
       href={content.url}
       title={content.title}
     >

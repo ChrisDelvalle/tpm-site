@@ -17,7 +17,7 @@ In the typical philosophy classroom setting, most assignments consist of written
 
 It is unclear that there is a pressing need for training in collaborative work for philosophers. Depending on the view of what philosophy is and how it is supposed to be done, this individualistic approach may be acceptable. Collaboration in philosophy may be inherently less beneficial to the participants and less scalable compared to the sciences, in which the cumulative benefit of replicative study can allow for collaboration at a distance in both time and place. It may well be that the current lack of demand for collaborative learning in philosophy reflects the lack of professional demand for collaborative skills in the field.
 
-According to a dataset collected by Joshua Knobe (2015) on the citation count of the most cited articles published in the top 20 philosophy journals between 2009 and 2013, 108 of the 394 sampled articles had more than one author. According to a list collected by Brian Weatherson (2013), 11 of 34 most cited articles between 1993 and 2013 had more than one author. While these statistics do not support even a correlation between coauthorship and citation count for articles in general, let alone a causal link between the number of authors and the number of citations, it does support the case for collaboration as a viable strategy for academic research in philosophy. Despite the associated costs of introducing a new method of learning, namely resistance against group work from students, the various benefits (Laal & Ghodsi, 2011) of collaborative learning and the learning activities only available to a team of students justify the extra work. Digital methods can greatly reduce the workload on behalf of the educator and add another practical dimension to the work that will benefit the students. Furthermore, philosophy presents unique advantages to other disciplines in that arguments can be formalised in such a way that they are interoperable within the same logical system.
+According to a dataset collected by Joshua Knobe (2015)[^cite-knobe-2015] on the citation count of the most cited articles published in the top 20 philosophy journals between 2009 and 2013, 108 of the 394 sampled articles had more than one author. According to a list collected by Brian Weatherson (2013),[^cite-weatherson-2013] 11 of 34 most cited articles between 1993 and 2013 had more than one author. While these statistics do not support even a correlation between coauthorship and citation count for articles in general, let alone a causal link between the number of authors and the number of citations, it does support the case for collaboration as a viable strategy for academic research in philosophy. Despite the associated costs of introducing a new method of learning, namely resistance against group work from students, the various benefits (Laal & Ghodsi, 2011)[^cite-laal-ghodsi-2011] of collaborative learning and the learning activities only available to a team of students justify the extra work. Digital methods can greatly reduce the workload on behalf of the educator and add another practical dimension to the work that will benefit the students. Furthermore, philosophy presents unique advantages to other disciplines in that arguments can be formalised in such a way that they are interoperable within the same logical system.
 
 ## Activity Design
 
@@ -119,7 +119,7 @@ Zotero could also be used to provide additional dimensions to the activity which
 
 ## Conclusion
 
-The two tools described above, used as part of the group assignment activity, lay the foundations for a method of mass collaboration among philosophers. Whereas collaboration at scale is effectively built into the sciences, most work in the humanities is inherently unscalable. Certain scalable activities, such as contributing to a shared library or the enrichment of metadata, are discipline-agnostic and can be readily adopted by humanists. New digital methods in the humanities are promising in their potential to make scalable what was hitherto unscalable. For instance, macroanalysis (Jockers, 2013) and distant reading allow researchers to analyse an indefinite number of texts through the use of computational methods. Whereas the conventional method of close reading would have only allowed a researcher to become deeply familiar with a few hundred texts over their entire career at most, distant reading allows the researcher to analyse hundreds of thousands of texts for patterns.
+The two tools described above, used as part of the group assignment activity, lay the foundations for a method of mass collaboration among philosophers. Whereas collaboration at scale is effectively built into the sciences, most work in the humanities is inherently unscalable. Certain scalable activities, such as contributing to a shared library or the enrichment of metadata, are discipline-agnostic and can be readily adopted by humanists. New digital methods in the humanities are promising in their potential to make scalable what was hitherto unscalable. For instance, macroanalysis (Jockers, 2013)[^cite-jockers-2013] and distant reading allow researchers to analyse an indefinite number of texts through the use of computational methods. Whereas the conventional method of close reading would have only allowed a researcher to become deeply familiar with a few hundred texts over their entire career at most, distant reading allows the researcher to analyse hundreds of thousands of texts for patterns.
 
 The value of collaboration at scale in philosophy writing can be understood as a kind of writing intended to promote distant reading. In distant reading, a text must first be prepared appropriately before it can be used as part of the corpus, and the corpus must be cleaned up in advance before the computational analysis. Depending on the researcher’s needs, a deep understanding of the material may be necessary in order to maintain quality, such as by identifying false positives as they arise. Alfano (2018) in his Digital Humanities analysis of Nietzsche’s concept of drive lists these six steps to summarise his approach:
 
@@ -130,7 +130,7 @@ The value of collaboration at scale in philosophy writing can be understood as a
 5. **analyze** and **visualize** data; and
 6. **close read** relevant pages.
 
-Alfano’s use of his analysis is primarily as a supplement for close reading, such as figures of how likely it is for certain terms to appear together. There are pros and cons of using Nietzsche: while the short, numbered passages he wrote are useful to turn into visualisations (ibid., pg. 99), close reading as mere sanity check is compulsory because Nietzsche had little regard for disciplined self-consistency and frequently employed irony as part of the argument.
+Alfano’s use of his analysis[^cite-alfano-2018] is primarily as a supplement for close reading, such as figures of how likely it is for certain terms to appear together. There are pros and cons of using Nietzsche: while the short, numbered passages he wrote are useful to turn into visualisations (ibid., pg. 99), close reading as mere sanity check is compulsory because Nietzsche had little regard for disciplined self-consistency and frequently employed irony as part of the argument.
 
 The digital, citation-focused method of collaboration presented in this document differs from traditional philosophical scholarship in a way analogous to how distant reading differs from close reading. Philosophy essays are written in a way that resembles close reading: an argument is worked over by the author until it’s just right. In the activity, each student produces a modular component that can be used as part of an argument which can be modified or replaced without fundamentally affecting the other sections. In principle, the activity could be completed by just one author. It could also accommodate for an indefinitely long chain of arguments, so long as the premises and conclusions are kept consistent. As an exercise in writing, it is akin to treating each section as a function in a coding activity. Understanding that every part of an argument serves a purpose, and that it must be reflected in the essay, is a priceless lesson for a philosophy student. The opportunity to workshop just one section each but also consider its integration into a finished essay, and then to see it in action in the broader context of other essays and a counterargument will be highly instructive.
 
@@ -138,14 +138,45 @@ The most important benefit of the collaborative method introduced in the activit
 
 The model of digital philosophy founded on equating arguments with functions in a code library is epistemologically and ideologically biased towards the analytic tradition. It would naturally select for arguments that can be expressed in the standardised form of premises leading up to a conclusion, and skew the practice towards more readily digitised thought. Digital humanities as a whole is open to the same types of critique. Whether such criticisms make sense is an empirical and philosophical question, perfectly suited for digital philosophy to handle through mass collaboration.
 
-## References
+```tpm-bibtex
+@incollection{alfano-2018,
+  author = {Alfano, Mark},
+  title = {Digital Humanities for History of Philosophy: A Case Study on Nietzsche},
+  booktitle = {Research Methods for the Digital Humanities},
+  editor = {Levenberg, Lewis and Neilson, Tai and Rheams, David},
+  publisher = {Palgrave Macmillan},
+  year = {2018}
+}
 
-Alfano M. (2018). “Digital Humanities for History of Philosophy: A Case Study on Nietzsche”. In: L. levenberg, T. Neilson & D. Rheams (eds), Research Methods for the Digital Humanities. Palgrave Macmillan, Cham, Switzerland.
+@book{jockers-2013,
+  author = {Jockers, Matthew},
+  title = {Macroanalysis: Digital Methods and Literary History},
+  publisher = {University of Illinois Press},
+  year = {2013}
+}
 
-Jockers, M. (2013). Macroanalysis : Digital Methods and Literary History. University of Illinois Press.
+@article{knobe-2015,
+  author = {Knobe, Joshua},
+  title = {Philosophers are doing something different now: Quantitative data},
+  journal = {Cognition},
+  volume = {135},
+  pages = {36-38},
+  year = {2015}
+}
 
-Knobe, J. (2015). “Philosophers are doing something different now: Quantitative data”. Cognition, Volume 135, February 2015, Pages 36-38.
+@article{laal-ghodsi-2011,
+  author = {Laal, Marjan and Ghodsi, Seyed Mohammad},
+  title = {Benefits of collaborative learning},
+  journal = {Procedia - Social and Behavioral Sciences},
+  volume = {31},
+  pages = {486-490},
+  year = {2011}
+}
 
-Laal, M. & Ghodsi, S. (2011). “Benefits of collaborative learning”. Procedia - Social and Behavioral Sciences,Volume 31, 2012, Pages 486-490.
-
-Weatherson, B. (2013). “Most Cited Articles from Philosophy Journals”. Retrieved from: http://tar.weatherson.org/2013/06/26/most-cited-articles-from-philosophy-journals/
+@misc{weatherson-2013,
+  author = {Weatherson, Brian},
+  title = {Most Cited Articles from Philosophy Journals},
+  year = {2013},
+  url = {http://tar.weatherson.org/2013/06/26/most-cited-articles-from-philosophy-journals/}
+}
+```

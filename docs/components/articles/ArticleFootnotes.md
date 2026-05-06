@@ -71,8 +71,8 @@ Interactive descendants are links and backlinks only. They need default, hover,
 focus-visible, visited where appropriate, and target states.
 
 The optional note display label is metadata. The default note renderer should
-still render numeric markers unless a later component design intentionally
-changes note presentation.
+still render naked superscript numeric markers unless a later component design
+intentionally changes note presentation.
 
 ## Accessibility Semantics
 
@@ -112,6 +112,8 @@ and focus rings must be readable in both light and dark mode.
 - Renders a visible `Notes` heading by default.
 - Renders an ordered list with entry order matching normalized note order.
 - Uses stable entry IDs that match inline marker hrefs.
+- Inline note markers are naked clickable superscript numbers, not bracketed
+  citation-style markers.
 - Renders one backlink for each note.
 - Does not render optional display labels as primary markers by default.
 - Preserves rich note content.

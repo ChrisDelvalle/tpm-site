@@ -14,8 +14,8 @@ It must not parse article Markdown or infer sources from inline links.
 - `entries: readonly BibliographyEntry[]`
 - optional `filters: BibliographyFilterState`
 
-Entries are produced by the bibliography data boundary from canonical `cite-*`
-references.
+Entries are produced by the bibliography data boundary from normalized parsed
+BibTeX entries referenced by canonical `cite-*` markers.
 
 ## Composition Relationships
 
@@ -57,7 +57,7 @@ must be labeled and associated with the result count/list.
 ## Content Edge Cases
 
 Handle no citations, one citation, many citations, duplicate-looking sources,
-long URLs, non-URL sources, rich Markdown citation content, and many source
+long URLs, non-URL sources, incomplete optional BibTeX fields, and many source
 articles for one entry.
 
 ## Theme Behavior

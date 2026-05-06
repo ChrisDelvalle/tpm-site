@@ -19,7 +19,7 @@ legacyPermalink: 2016/01/18/glossary-1-dot-0/
 
 _Last updated Jan 18, 2016. A new glossary is being prepared; much of the following material is outdated!_
 
-<a name="Top"></a>
+<span id="Top"></span>
 
 ## Glossary 1.0
 
@@ -45,7 +45,7 @@ _Last updated Jan 18, 2016. A new glossary is being prepared; much of the follow
 - [The Quadrant of Ironic Memes](#TheQuadrantofIronicMemes)
 - [Traditionalist Memes](#TraditionalistMemes)
 
-<a name="Autist"></a>
+<span id="Autist"></span>
 
 ### Autist
 
@@ -57,7 +57,7 @@ self-deprecatingly -- this specialized term is useful in its conceptual
 opposition to ‘normie,’ as well as its evocation of particular thinking and
 speaking patterns found on the autism spectrum.
 
-<a name="IronicMemes"></a>
+<span id="IronicMemes"></span>
 
 ### Ironic Memes
 
@@ -68,7 +68,7 @@ Pre-Ironic memes (see ‘the decay to the meme’), which is the solidification 
 common practices into normative convention. This process is often referred to
 as ‘normification’ or ‘normies stealing the memes’.
 
-<a name="Ironist"></a>
+<span id="Ironist"></span>
 
 ### Ironist
 
@@ -80,7 +80,7 @@ normies, popularized the terminological dichotomy of normies and autists.
 
 Alternative spelling: (an) ironic
 
-<a name="MetaIronicMemes"></a>
+<span id="MetaIronicMemes"></span>
 
 ### Meta-Ironic Memes
 
@@ -92,7 +92,7 @@ that make fun of slightly less Ironic memes, ad infinitum unto
 incomprehensibility, when the normalization process cannot keep up with the
 rate of deconstruction.
 
-<a name="Mutation"></a>
+<span id="Mutation"></span>
 
 ### Mutation
 
@@ -103,14 +103,14 @@ It is far more frequently beneficial to the meme’s survival than random
 mutation is to genes. The Underground exerts a slightly stronger pressure
 towards this than towards Normalization.
 
-<a name="NarratologicalSubversion"></a>
+<span id="NarratologicalSubversion"></span>
 
 ### Narratological Subversion
 
 Violation of conventions regarding the plot, themes, or message of a meme. The
 joke is about the content, as opposed to format.
 
-<a name="NeoTraditionalistMemes"></a>
+<span id="NeoTraditionalistMemes"></span>
 
 ### Neo-Traditionalist Memes
 
@@ -125,7 +125,7 @@ networks within which emerge neo-traditionalist memes. Common examples include
 phrases such as “longcat is long” or virtually every line from the flight
 scene from The Dark Knight Rises.
 
-<a name="Normalization"></a>
+<span id="Normalization"></span>
 
 ### Normalization
 
@@ -137,7 +137,7 @@ through this process of popularization which makes an initially novel
 component conventional. The Mainstream exerts a much stronger pressure towards
 this than towards mutation.
 
-<a name="Normie"></a>
+<span id="Normie"></span>
 
 ### Normie
 
@@ -149,7 +149,7 @@ Ironists who self-identify as social outcasts.
 
 Alternative spellings: “normalfags,” “Norman,” and other derivatives of “normal”
 
-<a name="Normification"></a>
+<span id="Normification"></span>
 
 ### Normification
 
@@ -162,7 +162,7 @@ memes lost their initially subversive function and began to behave in much the
 same way as Pre-Ironic memes, thus making ‘Ironic memes’ a Pre-Ironic meme in
 itself.
 
-<a name="PostIronicMemes"></a>
+<span id="PostIronicMemes"></span>
 
 ### Post-Ironic Memes
 
@@ -185,7 +185,7 @@ post-ironic memes is whether the humor is in what is being left undone or
 unsaid; this makes them more complex than other memes, as well as resistant to
 normification.
 
-<a name="PreIronicMemes"></a>
+<span id="PreIronicMemes"></span>
 
 ### Pre-Ironic Memes
 
@@ -195,7 +195,7 @@ conventions for their humor. The majority of ‘normie’ memes fall into this
 category. They are highly normative and stress the importance of ‘using the
 meme right’.
 
-<a name="ProtoIronicMemes"></a>
+<span id="ProtoIronicMemes"></span>
 
 ### Proto-Ironic Memes
 
@@ -205,7 +205,7 @@ narrative of another meme to reference. Effectively Internet inside jokes.
 (explain how these involve much more artistic license and freedom from
 restrictive formats, but doesn’t quite go as far as it)
 
-<a name="SimplicityComplexity"></a>
+<span id="SimplicityComplexity"></span>
 
 ### Simplicity/Complexity
 
@@ -220,7 +220,7 @@ even indirectly pointed at by any given meme. The observer must be already
 familiar with the system within which the meme operates, through observation
 or participation within the respective memetic languaculture.
 
-<a name="StructuralSubversion"></a>
+<span id="StructuralSubversion"></span>
 
 ### Structural Subversion
 
@@ -240,7 +240,7 @@ conventions which emerge and overlap between different kinds of memes.
 Separated from narratological subversion, structural subversion can function
 like a play on words taking advantage of ambivalence in meaning within a meme.
 
-<a name="StylisticSubversion"></a>
+<span id="StylisticSubversion"></span>
 
 ### Stylistic Subversion
 
@@ -248,7 +248,7 @@ Violation of conventions regarding the visual elements, graphic structure,
 presentation, and manner/rhetoric of a meme. The joke is about the format, as
 opposed to content.
 
-<a name="ThePhylomemeticTree"></a>
+<span id="ThePhylomemeticTree"></span>
 
 ### The Phylomemetic Tree
 
@@ -259,7 +259,7 @@ from their inception as emoticons and chain e-mails through to increasingly
 complex forms such as baneposting, with a focus on the effects of their
 divergence into the mainstream and underground.
 
-<a name="TheQuadrantofIronicMemes"></a>
+<span id="TheQuadrantofIronicMemes"></span>
 
 ### The Quadrant of Ironic Memes
 
@@ -269,7 +269,7 @@ The Quadrant is a system aimed at the practical, easily applicable
 classification and analysis of Internet Memes, with a focus on the inherent
 tension within ‘Ironic’ memes.
 
-<a name="TraditionalistMemes"></a>
+<span id="TraditionalistMemes"></span>
 
 ### Traditionalist Memes
 

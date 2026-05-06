@@ -158,8 +158,11 @@ test.describe("article image invariants", () => {
             inner: `${route} article figure ${index + 1}`,
             outer: "article prose",
           });
+          await figure.scrollIntoViewIfNeeded();
+          const image = figure.locator("img[data-article-image]");
+          await expect(image).toBeVisible();
           const imageBox = await visibleBoundingBox(
-            figure.locator("img[data-article-image]"),
+            image,
             `${route} article image ${index + 1}`,
           );
           const trigger = figure.locator(

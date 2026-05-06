@@ -23,7 +23,9 @@ const articleImages = articleImagesFromFrontmatter(remarkPluginFrontmatter);
 const articleReferences = articleReferencesFromFrontmatter(
   remarkPluginFrontmatter,
 );
-const tableOfContentsHeadings = articleTableOfContentsHeadings(headings);
+const tableOfContentsHeadings = articleTableOfContentsHeadings(headings, {
+  references: articleReferences,
+});
 ---
 
 <ArticleLayout

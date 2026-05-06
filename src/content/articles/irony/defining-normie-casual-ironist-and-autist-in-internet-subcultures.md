@@ -18,7 +18,7 @@ tags:
 legacyPermalink: 2017/03/27/defining-normie-casual-ironist-and-autist-in-internet-subcultures/
 ---
 
-Attempts at typologizing subcultural demographics are not new (for a clear and interesting example, see [‘Geeks, MOPs, and sociopaths in subculture evolution’ on Meaningness](https://meaningness.com/geeks-mops-sociopaths)). But online subcultures are different from ordinary subcultures. The following is my take on doing the same for online subcultures. I do this by clarifying the definitions of three highly popular terms used on the Internet to describe different kinds of subcultural participants, and clarifying the concept of the ironist in the context of online subcultures.
+Attempts at typologizing subcultural demographics are not new (for a clear and interesting example, see [‘Geeks, MOPs, and sociopaths in subculture evolution’ on Meaningness](https://meaningness.com/geeks-mops-sociopaths)).[^cite-chapman-d-geeks-mops-sociopaths] But online subcultures are different from ordinary subcultures. The following is my take on doing the same for online subcultures. I do this by clarifying the definitions of three highly popular terms used on the Internet to describe different kinds of subcultural participants, and clarifying the concept of the ironist in the context of online subcultures.
 
 The Internet has a particular aesthetic disposition towards everything from the kinds of art it makes and consumes to the kind of art it consumes and makes into memes (in the loose sense). The disposition is obscure, obsessive and obstinate: the denigration of normies/casuals is a very important aspect of many online subcultures, and the in-group/out-group boundary is frequently secured by elitism regarding how difficult the activity is to discover and appreciate. An example is powerlifting, probably one of the least fun sports of all time. It's also the national sport of /fit/ because of how useful strength training is for other sports as well as because of the STEMlord-like fixation to obscure details often required of the participants in the way it is practiced. A more well-known example would be anime, but it's a confusing example because of how popular it has become in mass culture. But the effect of providing an identity for the communities doesn't disappear with the mainstream uptake of these esoteric interests. For instance, Olympic weightlifting has become increasingly more mainstream with the success of Crossfit, which offers a lower bar of initial entry for casual participants (no pun intended). Purist lifters have no trouble maintaining their identity as such.
 
@@ -62,3 +62,12 @@ It is most important to consider users online in the same light. The general tre
 [Thread 3:](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1937024236531193/?type=3&comment_id=1937047576528859&comment_tracking=%7B%22tn%22%3A%22R9%22%7D)
 
 **Andrew Crowe:** I agree with the proposed structure and it being more productive than elitism. Although I think the high expertise and low commitment column (ironists) could be redefined. I think the term irony does have a bad reputation at the moment and there are other mentalities which would fit the criteria imo. I think absurdism would be a fundamental of the category (high understanding with heavy scepticism and levels of disinterest) although the actions aren't always ironic. Irony is often employed by casuals as well in an attempt to mask a lack of expertise.
+
+```tpm-bibtex
+@online{chapman-d-geeks-mops-sociopaths,
+  citation = {Chapman, D. Geeks, MOPs, and sociopaths in subculture evolution. Meaningness. Available at: https://meaningness.com/geeks-mops-sociopaths},
+  author = {Chapman, David},
+  title = {Geeks, MOPs, and Sociopaths in Subculture Evolution},
+  url = {https://meaningness.com/geeks-mops-sociopaths}
+}
+```

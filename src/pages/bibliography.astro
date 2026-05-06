@@ -1,0 +1,34 @@
+---
+import { render } from "astro:content";
+
+import BibliographyPage from "../components/bibliography/BibliographyPage.astro";
+import BrowsingBody from "../components/layout/BrowsingBody.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { bibliographyEntriesFromArticleReferences } from "../lib/bibliography";
+import { getArticles } from "../lib/content";
+import { bibliographyUrl } from "../lib/routes";
+import { articleReferencesFromFrontmatter } from "../remark-plugins/articleReferences";
+
+const articles = await getArticles();
+const articleReferences = await Promise.all(
+  articles.map(async (article) => {
+    const { remarkPluginFrontmatter } = await render(article);
+
+    return {
+      article,
+      references: articleReferencesFromFrontmatter(remarkPluginFrontmatter),
+    };
+  }),
+);
+const entries = bibliographyEntriesFromArticleReferences(articleReferences);
+---
+
+<BaseLayout
+  title="Bibliography | The Philosopher's Meme"
+  description="Sources cited by articles in The Philosopher's Meme."
+  canonicalPath={bibliographyUrl()}
+>
+  <BrowsingBody>
+    <BibliographyPage entries={entries} />
+  </BrowsingBody>
+</BaseLayout>

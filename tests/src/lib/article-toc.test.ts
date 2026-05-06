@@ -4,6 +4,7 @@ import {
   articleTableOfContentsHeadings,
   hasUsefulTableOfContents,
 } from "../../../src/lib/article-toc";
+import { articleReferenceFixture } from "../components/articles/reference-fixtures";
 
 describe("article table of contents data", () => {
   test("normalizes Astro rendered h2 and h3 headings into hash links", () => {
@@ -80,5 +81,78 @@ describe("article table of contents data", () => {
 
     expect(hasUsefulTableOfContents(oneHeading)).toBe(false);
     expect(hasUsefulTableOfContents(twoHeadings)).toBe(true);
+  });
+
+  test("appends generated article reference sections when notes and citations exist", () => {
+    expect(
+      articleTableOfContentsHeadings(
+        [{ depth: 2, slug: "body-section", text: "Body Section" }],
+        { references: articleReferenceFixture },
+      ),
+    ).toEqual([
+      {
+        depth: 2,
+        href: "#body-section",
+        id: "body-section",
+        level: 1,
+        order: 0,
+        text: "Body Section",
+      },
+      {
+        depth: 2,
+        href: "#article-references-notes-heading",
+        id: "article-references-notes-heading",
+        level: 1,
+        order: 1,
+        text: "Notes",
+      },
+      {
+        depth: 2,
+        href: "#article-references-bibliography-heading",
+        id: "article-references-bibliography-heading",
+        level: 1,
+        order: 2,
+        text: "Bibliography",
+      },
+    ]);
+  });
+
+  test("uses only generated reference headings that have entries", () => {
+    const notesOnly = articleTableOfContentsHeadings([], {
+      references: {
+        citations: [],
+        notes: articleReferenceFixture.notes,
+      },
+    });
+    const citationsOnly = articleTableOfContentsHeadings([], {
+      references: {
+        citations: articleReferenceFixture.citations,
+        notes: [],
+      },
+    });
+    const noReferences = articleTableOfContentsHeadings([], {
+      references: {
+        citations: [],
+        notes: [],
+      },
+    });
+
+    expect(notesOnly.map((heading) => heading.text)).toEqual(["Notes"]);
+    expect(citationsOnly.map((heading) => heading.text)).toEqual([
+      "Bibliography",
+    ]);
+    expect(noReferences).toEqual([]);
+  });
+
+  test("supports a custom generated reference heading ID prefix", () => {
+    expect(
+      articleTableOfContentsHeadings([], {
+        referenceHeadingIdPrefix: "custom-references",
+        references: articleReferenceFixture,
+      }).map((heading) => heading.href),
+    ).toEqual([
+      "#custom-references-notes-heading",
+      "#custom-references-bibliography-heading",
+    ]);
   });
 });

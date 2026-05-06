@@ -24,6 +24,7 @@ const middleTrigger = rect({ height: 32, width: 80, x: 240, y: 24 });
 describe("anchored positioning", () => {
   test("maps every product preset to a documented placement contract", () => {
     const presets: readonly AnchoredPreset[] = [
+      "article-citation-menu",
       "header-dropdown",
       "header-search-end",
       "header-search-start",
@@ -223,6 +224,10 @@ function rect(rectangle: AnchorRect): AnchorRect {
 
 function expectedPlacement(preset: AnchoredPreset): AnchorPlacement {
   switch (preset) {
+    case "article-citation-menu": {
+      return "bottom-end";
+    }
+
     case "header-dropdown": {
       return "bottom-start";
     }

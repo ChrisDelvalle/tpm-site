@@ -29,6 +29,7 @@ type AnchorFallback =
 
 /** Public anchored positioning presets used by components. */
 export type AnchoredPreset =
+  | "article-citation-menu"
   | "header-dropdown"
   | "header-search-end"
   | "header-search-start"
@@ -90,6 +91,12 @@ const prosePreviewOffset = 8;
 const zeroRect = { height: 0, width: 0, x: 0, y: 0 } as const;
 
 const presetConfigs = {
+  "article-citation-menu": {
+    fallback: ["flip-alignment", "shift-then-size"],
+    offset: 4,
+    placement: "bottom-end",
+    safeGutter: defaultSafeGutter,
+  },
   "header-dropdown": {
     fallback: ["flip-alignment", "shift-then-size"],
     offset: 0,
@@ -132,6 +139,10 @@ export function anchoredPresetConfig(
   preset: AnchoredPreset,
 ): AnchoredPresetConfig {
   switch (preset) {
+    case "article-citation-menu": {
+      return presetConfigs["article-citation-menu"];
+    }
+
     case "header-dropdown": {
       return presetConfigs["header-dropdown"];
     }

@@ -4,9 +4,10 @@ Source: `src/components/articles/ArticleBibliography.astro`
 
 ## Purpose
 
-`ArticleBibliography` renders article-local bibliography entries from normalized
-`cite-*` definitions. It keeps source citations separate from explanatory notes
-and gives every in-body citation a clear destination.
+`ArticleBibliography` renders article-local bibliography entries from
+normalized `cite-*` markers and parsed BibTeX source data. It keeps source
+citations separate from explanatory notes and gives every in-body citation a
+clear destination.
 
 It must not infer citations from inline prose links, parse raw Markdown source,
 or deduplicate global sources. It consumes normalized citation data.
@@ -25,12 +26,15 @@ Each `ArticleCitation` should include:
 - stable entry ID;
 - stable label;
 - numeric order;
-- optional display label;
-- one or more source reference markers;
-- rich bibliography definition content.
+- zero or more source reference markers;
+- parsed BibTeX entry data;
+- display-ready citation text generated from BibTeX fields;
+- fallback text for incomplete but renderable sources.
 
 Repeated `cite-*` references are valid, so citations may have multiple source
-markers/backlinks.
+markers/backlinks. Bibliography-only sources are also valid when an article's
+historical source list is structured as `tpm-bibtex` without a precise inline
+claim marker; those entries render without backlinks.
 
 ## Composition Relationships
 
@@ -44,7 +48,7 @@ ArticleReferences
 
 `ArticleReferences` owns where bibliography appears relative to notes and tags.
 `ArticleBibliography` owns section heading, ordered-list structure, entry IDs,
-definition content placement, and backlink placement.
+generated citation display placement, and backlink placement.
 
 `ArticleBibliography` should not render explanatory notes, related articles,
 support CTAs, or global bibliography-page grouping/filtering.
@@ -69,9 +73,13 @@ Interactive descendants are source links and backlinks. They need default,
 hover, focus-visible, visited where appropriate, and target states.
 
 If a citation has `displayLabel`, inline citation markers may render with that
-label. The bibliography entry itself should render the bibliography definition
-content, not duplicate the display label as source prose unless a later design
-explicitly chooses to display labels in entries.
+label. The bibliography entry itself should render generated citation display
+content from parsed source data. It must not expose raw BibTeX unless a future
+explicit export/debug surface is designed.
+
+Inline citation markers must stay visually distinct from explanatory footnote
+markers. Citations use citation-specific marker styling, currently bracketed
+generated labels when possible, while notes use naked superscript numbers.
 
 ## Accessibility Semantics
 
@@ -96,14 +104,13 @@ Handle:
 - repeated citation references;
 - citation with display label;
 - citation without display label;
-- rich Markdown content;
 - source links;
 - non-URL sources;
 - long titles;
 - long URLs;
 - many backlinks for one citation;
 - unusual punctuation;
-- `[@...]` later in the bibliography body that remains ordinary content.
+- incomplete optional BibTeX fields with stable fallback display.
 
 ## Theme Behavior
 
@@ -117,10 +124,11 @@ dark mode.
 - Renders a visible `Bibliography` heading by default.
 - Renders an ordered list with entry order matching first citation order.
 - Uses stable entry IDs that match inline marker hrefs.
+- Inline citation markers are citation-styled and do not reuse the naked
+  superscript footnote presentation.
 - Supports multiple backlinks for repeated citations.
-- Preserves rich bibliography content after removing leading display-label
-  metadata.
-- Does not duplicate display labels into bibliography prose by default.
+- Renders generated bibliography display content from parsed BibTeX data.
+- Does not render raw `tpm-bibtex` source data.
 - Does not overflow horizontally with long URLs or source titles.
 - Maintains keyboard focus visibility for source links and backlinks.
 

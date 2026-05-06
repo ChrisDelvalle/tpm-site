@@ -16,7 +16,7 @@ const hasAuthor = author || authors.length > 0;
 
 {
   (hasAuthor || formattedDate) && (
-    <div class="text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 text-sm">
+    <div class="text-muted-foreground flex min-w-0 flex-1 flex-wrap gap-x-3 gap-y-1 text-sm">
       {hasAuthor && <AuthorByline authors={authors} legacyAuthor={author} />}
       {formattedDate && <time datetime={dateTime}>{formattedDate}</time>}
     </div>

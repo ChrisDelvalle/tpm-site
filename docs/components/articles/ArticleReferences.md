@@ -98,6 +98,21 @@ point to them. Inline markers rendered by the plugin must link to entries inside
 these sections, and backlink components must return readers to the exact source
 reference where feasible.
 
+When notes or citations exist, their generated section headings also
+participate in article table-of-contents data. The default heading IDs are
+`article-references-notes-heading` and
+`article-references-bibliography-heading`; if `headingIdPrefix` changes, the
+TOC normalization call must receive the same prefix so links and rendered
+sections stay in sync.
+
+Inline note and citation markers must not share the same visual treatment.
+Explanatory notes are naked clickable superscript numbers. Bibliographic
+citations are citation-styled bracketed numbers by default. Generated
+author-year labels remain structured data for future explicit style overrides,
+but the body default is numeric to avoid duplicating author-written prose
+citations. This distinction is part of the reading contract, not an incidental
+style choice.
+
 ## Content Edge Cases
 
 Handle:
@@ -111,10 +126,9 @@ Handle:
 - long display labels;
 - long source titles;
 - long URLs;
-- rich Markdown in definitions;
+- generated citation display content from parsed BibTeX fields;
 - unusual punctuation;
-- definition content that starts with `[@...]` as metadata;
-- later `[@...]` text that remains ordinary definition content.
+- incomplete optional BibTeX fields with fallback text.
 
 ## Theme Behavior
 
@@ -132,7 +146,12 @@ that compete with the support block.
 - Renders after `ArticleEndcap` and before `ArticleTags`.
 - Keeps notes and bibliography within the article reading measure.
 - Does not create horizontal overflow with long labels, titles, or URLs.
-- Preserves rich definition content from the normalized model.
+- Preserves normalized note content and generated citation display content from
+  the normalized model.
+- Keeps note markers naked and superscripted while keeping citation markers
+  visually distinct.
+- Includes visible Notes and Bibliography headings in article-local TOC data
+  when their sections render.
 - Keeps every entry target ID unique.
 - Keeps every backlink target associated with the originating inline marker.
 - Maintains visible focus states in light and dark mode.

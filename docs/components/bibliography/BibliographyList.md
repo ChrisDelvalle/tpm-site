@@ -30,7 +30,9 @@ owns list semantics and spacing.
 ## Layout And Responsiveness
 
 Use one vertical list. Avoid multi-column layout for source entries because
-citations can be long and uneven.
+citations can be long and uneven. Each list item provides a modest vertical
+inset so adjacent entries have breathing room while the ordered-list separators
+remain the visual boundary.
 
 ## Layering And Scrolling
 
@@ -59,6 +61,8 @@ Use semantic separator/border tokens if entries need separation.
 - Renders one `BibliographyEntry` per entry.
 - Preserves supplied order.
 - Does not render its own empty state.
+- Owns the vertical spacing between entries rather than relying on child
+  first/last selectors.
 - Does not overflow horizontally.
 
 ## Follow-Up Notes

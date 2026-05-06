@@ -120,6 +120,15 @@ export function authorUrl(slug: string): string {
 }
 
 /**
+ * Builds the public global bibliography URL.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function bibliographyUrl(): string {
+  return withTrailingSlash("/bibliography");
+}
+
+/**
  * Reads the stable URL slug for an article.
  *
  * @param entry Article content entry.

@@ -24,7 +24,7 @@ Trash Dove is a normie meme. That might very well change in the future. You can 
 
 ![inevitable pol.JPG](<../../../assets/articles/early-trash-dove/inevitable pol.JPG>)
 
-Image source: 4chan /pol/
+_Image credit: 4chan /pol/._
 
 The ironists' recent prank, the attempt at convincing some turbonormies into believing that Trash Dove is a racist dog-whistle, is probably the best thing that could have happened to it. The lack of complexity which made it destined for normiehood from the very beginning will be countered by the ensuing struggle over the definition of the meme. The fact that Trash Dove is a sticker set on Facebook means the normies get an advantage so that it doesn't just end up with an edgelord monopoly over the latest 'Nazi symbol' (created, in fact, by the very normies who boycott the meme for this reason). It will be very interesting to see what happens next.
 
@@ -38,7 +38,7 @@ It will be interesting to see what happens to the Trash Dove meme. The worst, pl
 
 ![Trash Doves wiki.png](<../../../assets/articles/early-trash-dove/Trash Doves wiki.png>)
 
-Image source: [Everipedia](https://www.everipedia.com/trash-doves/) (archive: [http://archive.is/vvAPJ](http://archive.is/vvAPJ) )
+_Image credit: [Everipedia](https://www.everipedia.com/trash-doves/) (archive: [http://archive.is/vvAPJ](http://archive.is/vvAPJ))._
 
 Originally posted to the [page](www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1914910985409185) on Feb 13 2017.
 

@@ -8,6 +8,7 @@ import {
   expectNoHorizontalOverflow,
   expectNoOverlap,
   expectVerticallyBefore,
+  expectViewportContained,
   scrollToY,
   visibleBoundingBox,
 } from "./helpers/layout";
@@ -445,7 +446,7 @@ test.describe("component layout invariants", () => {
     await expectNoHorizontalOverflow(page);
   });
 
-  test("article end surfaces render support, category discovery, then final tags", async ({
+  test("article end surfaces render support, discovery, references, then final tags", async ({
     page,
   }) => {
     await page.setViewportSize({ height: 1200, width: 1280 });
@@ -466,6 +467,7 @@ test.describe("component layout invariants", () => {
       name: /More in/,
     });
     const tags = page.locator("[data-article-tags-placement]");
+    const references = page.locator("[data-article-references]");
 
     await expect(tags.getByLabel("Article tags")).toBeVisible();
     await expect(tags.getByRole("link").first()).toHaveAttribute(
@@ -492,6 +494,15 @@ test.describe("component layout invariants", () => {
       after: "article tags",
       before: "article endcap",
     });
+    await expect(references).toBeVisible();
+    await expectVerticallyBefore(endcap, references, {
+      after: "article references",
+      before: "article endcap",
+    });
+    await expectVerticallyBefore(references, tags, {
+      after: "article tags",
+      before: "article references",
+    });
     await expectHorizontallyContained(stack, prose, {
       inner: "article end stack",
       outer: "article prose",
@@ -504,13 +515,22 @@ test.describe("component layout invariants", () => {
     );
     const endcapBox = await visibleBoundingBox(endcap, "article endcap");
     const tagsBox = await visibleBoundingBox(tags, "article tags");
+    const referencesBox = await visibleBoundingBox(
+      references,
+      "article references",
+    );
     const proseToSupportGap = supportBox.y - (proseBox.y + proseBox.height);
-    const endcapToTagsGap = tagsBox.y - (endcapBox.y + endcapBox.height);
+    const endcapToNextGap = referencesBox.y - (endcapBox.y + endcapBox.height);
+    const finalSurfaceBox = referencesBox;
+    const finalSurfaceToTagsGap =
+      tagsBox.y - (finalSurfaceBox.y + finalSurfaceBox.height);
 
     expect(proseToSupportGap).toBeGreaterThanOrEqual(24);
     expect(proseToSupportGap).toBeLessThanOrEqual(64);
-    expect(endcapToTagsGap).toBeGreaterThanOrEqual(32);
-    expect(endcapToTagsGap).toBeLessThanOrEqual(64);
+    expect(endcapToNextGap).toBeGreaterThanOrEqual(32);
+    expect(endcapToNextGap).toBeLessThanOrEqual(64);
+    expect(finalSurfaceToTagsGap).toBeGreaterThanOrEqual(32);
+    expect(finalSurfaceToTagsGap).toBeLessThanOrEqual(64);
   });
 
   test("article body starts close to the header when no hero image is rendered", async ({
@@ -532,6 +552,239 @@ test.describe("component layout invariants", () => {
 
     expect(headerToBodyGap).toBeGreaterThanOrEqual(0);
     expect(headerToBodyGap).toBeLessThanOrEqual(64);
+  });
+
+  test("article citation menu stays in header flow and exposes selectable citations", async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { height: 700, width: 320 },
+      { height: 1024, width: 768 },
+      { height: 900, width: 1280 },
+    ] as const) {
+      await page.setViewportSize(viewport);
+      await page.goto(
+        "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+      );
+
+      const header = page.locator("article > header").first();
+      const title = header.getByRole("heading", { level: 1 });
+      const metaRow = header.locator("[data-article-meta-row]");
+      const citationMenu = header.locator("[data-article-citation-menu]");
+      const citationTrigger = citationMenu.getByRole("button", {
+        name: "Cite this article",
+      });
+      const citationPanel = page.locator("[data-article-citation-panel]");
+      const citationText = citationPanel.locator(
+        "[data-article-citation-text]",
+      );
+      const citationTextBlock = citationPanel.locator(
+        "[data-article-citation-text-block]",
+      );
+      const styleButtons = citationPanel.locator(
+        "[data-article-citation-style-button]",
+      );
+
+      await expect(citationTrigger).toBeVisible();
+      await expectVerticallyBefore(title, metaRow, {
+        after: "article metadata row",
+        before: "article title",
+      });
+      await expectHorizontallyContained(citationMenu, header, {
+        inner: "article citation menu",
+        outer: "article header",
+      });
+      await expectHorizontallyContained(citationMenu, metaRow, {
+        inner: "article citation menu",
+        outer: "article metadata row",
+      });
+
+      const metaRowBox = await visibleBoundingBox(
+        metaRow,
+        "article metadata row",
+      );
+      const citationMenuBox = await visibleBoundingBox(
+        citationMenu,
+        "article citation menu",
+      );
+      const headerHeightBefore = (
+        await visibleBoundingBox(header, "article header")
+      ).height;
+
+      expectApproximatelyEqual(
+        citationMenuBox.x + citationMenuBox.width,
+        metaRowBox.x + metaRowBox.width,
+        2,
+      );
+      await expect(citationPanel).toBeHidden();
+      await expect(citationText).toBeHidden();
+
+      await citationTrigger.click();
+      await expect(citationPanel).toBeVisible();
+      await expect(styleButtons).toHaveCount(8);
+      const [
+        firstStyleButtonBox,
+        secondStyleButtonBox,
+        thirdStyleButtonBox,
+        fourthStyleButtonBox,
+        fifthStyleButtonBox,
+        sixthStyleButtonBox,
+        seventhStyleButtonBox,
+        eighthStyleButtonBox,
+      ] = await Promise.all([
+        visibleBoundingBox(styleButtons.nth(0), "article citation style 1"),
+        visibleBoundingBox(styleButtons.nth(1), "article citation style 2"),
+        visibleBoundingBox(styleButtons.nth(2), "article citation style 3"),
+        visibleBoundingBox(styleButtons.nth(3), "article citation style 4"),
+        visibleBoundingBox(styleButtons.nth(4), "article citation style 5"),
+        visibleBoundingBox(styleButtons.nth(5), "article citation style 6"),
+        visibleBoundingBox(styleButtons.nth(6), "article citation style 7"),
+        visibleBoundingBox(styleButtons.nth(7), "article citation style 8"),
+      ]);
+
+      for (const box of [
+        secondStyleButtonBox,
+        thirdStyleButtonBox,
+        fourthStyleButtonBox,
+      ]) {
+        expectApproximatelyEqual(box.y, firstStyleButtonBox.y, 1);
+        expectApproximatelyEqual(box.width, firstStyleButtonBox.width, 1);
+      }
+
+      for (const box of [
+        sixthStyleButtonBox,
+        seventhStyleButtonBox,
+        eighthStyleButtonBox,
+      ]) {
+        expectApproximatelyEqual(box.y, fifthStyleButtonBox.y, 1);
+        expectApproximatelyEqual(box.width, fifthStyleButtonBox.width, 1);
+      }
+
+      expect(fifthStyleButtonBox.y).toBeGreaterThan(
+        firstStyleButtonBox.y + firstStyleButtonBox.height - 1,
+      );
+      expectApproximatelyEqual(
+        fifthStyleButtonBox.width,
+        firstStyleButtonBox.width,
+        1,
+      );
+      await expect(citationText).toHaveCount(1);
+      await expect(citationText).toBeVisible();
+      await expect(citationText).toContainText("The Philosopher's Meme");
+      expectApproximatelyEqual(
+        (await visibleBoundingBox(header, "article header")).height,
+        headerHeightBefore,
+        2,
+      );
+      await expectViewportContained(
+        page,
+        citationPanel,
+        "article citation panel",
+      );
+
+      const apaCopyButton = citationPanel.getByRole("button", {
+        name: "Copy APA citation",
+      });
+
+      await expect(apaCopyButton).toBeVisible();
+      await expect(
+        citationPanel.locator("[data-article-citation-copy-button]"),
+      ).toHaveCount(1);
+      await expectHorizontallyContained(apaCopyButton, citationTextBlock, {
+        inner: "article citation copy button",
+        outer: "article citation text block",
+      });
+
+      const citationTextBlockBox = await visibleBoundingBox(
+        citationTextBlock,
+        "article citation text block",
+      );
+      const citationPanelBox = await visibleBoundingBox(
+        citationPanel,
+        "article citation panel",
+      );
+      const apaCopyButtonBox = await visibleBoundingBox(
+        apaCopyButton,
+        "article citation copy button",
+      );
+
+      expect(apaCopyButtonBox.y).toBeGreaterThanOrEqual(
+        citationTextBlockBox.y + 4,
+      );
+      expect(apaCopyButtonBox.y).toBeLessThanOrEqual(
+        citationTextBlockBox.y + 10,
+      );
+      expect(
+        apaCopyButtonBox.x + apaCopyButtonBox.width,
+      ).toBeGreaterThanOrEqual(
+        citationTextBlockBox.x + citationTextBlockBox.width - 10,
+      );
+
+      const chicagoNotesButton = citationPanel.getByRole("button", {
+        exact: true,
+        name: "Chicago Notes",
+      });
+
+      await chicagoNotesButton.click();
+
+      await expect(citationText).toBeVisible();
+      await expect(chicagoNotesButton).toHaveAttribute("aria-pressed", "true");
+      await expect(
+        citationPanel.getByRole("button", {
+          name: "Copy Chicago Notes citation",
+        }),
+      ).toBeVisible();
+
+      const chicagoPanelBox = await visibleBoundingBox(
+        citationPanel,
+        "article citation panel after Chicago Notes",
+      );
+      const chicagoTextBlockBox = await visibleBoundingBox(
+        citationTextBlock,
+        "article citation text block after Chicago Notes",
+      );
+
+      expectApproximatelyEqual(
+        chicagoPanelBox.width,
+        citationPanelBox.width,
+        1,
+      );
+      expectApproximatelyEqual(
+        chicagoTextBlockBox.width,
+        citationTextBlockBox.width,
+        1,
+      );
+
+      const bibtexButton = citationPanel.getByRole("button", {
+        exact: true,
+        name: "BibTeX",
+      });
+
+      await bibtexButton.click();
+
+      await expect(citationText).toBeVisible();
+      await expect(citationText).toContainText(/@online\{/u);
+      await expect(bibtexButton).toHaveAttribute("aria-pressed", "true");
+      await expect(
+        citationPanel.getByRole("button", { name: "Copy BibTeX citation" }),
+      ).toBeVisible();
+      const bibtexPanelBox = await visibleBoundingBox(
+        citationPanel,
+        "article citation panel after BibTeX",
+      );
+      const bibtexTextBlockBox = await visibleBoundingBox(
+        citationTextBlock,
+        "article citation text block after BibTeX",
+      );
+
+      expectApproximatelyEqual(bibtexPanelBox.width, citationPanelBox.width, 1);
+      expectApproximatelyEqual(
+        bibtexTextBlockBox.width,
+        citationTextBlockBox.width,
+        1,
+      );
+      await expectNoHorizontalOverflow(page);
+    }
   });
 
   test("article table of contents occupies the reading margin without overlaying prose", async ({

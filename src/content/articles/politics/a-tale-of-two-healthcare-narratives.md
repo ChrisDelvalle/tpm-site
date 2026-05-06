@@ -15,7 +15,7 @@ tags:
 legacyPermalink: 2020/03/16/a-tale-of-two-healthcare-narratives/
 ---
 
-The author of [this article](https://archive.is/8koZz) argues that Italy is doing worse than South Korea because supply side regulation caused the Italian system to decay while the lack of regulation allowed the Korean system to expand. It's an obscene argument, because it sets the dichotomy as between a free market and a regulated market, when:
+The author of [this article](https://archive.is/8koZz) argues that Italy is doing worse than South Korea because supply side regulation caused the Italian system to decay while the lack of regulation allowed the Korean system to expand.[^cite-archive-8kozz-healthcare-narrative] It's an obscene argument, because it sets the dichotomy as between a free market and a regulated market, when:
 
 1. the countries doing the best are the Confucian democracies with a complex, mixed healthcare system, which includes South Korea as well as Taiwan, Singapore and Hong Kong;
 2. Italy's healthcare system has been suffering from funding cuts and political turmoil in the country, and their population is older than that of Korea;
@@ -62,3 +62,11 @@ Lastly, Hong Kong, Japan, etc. are simply not good comparisons. They have no rea
 It is also a mistake to assume that because pneumonia is more prevalent in Korea, the healthcare system is failing “despite the surplus”. The commenter makes no effort to explain why this is a problem for Korea and not for Italy, but just takes it for granted. (An obvious potential factor is that Korea has a winter, while Italy doesn’t really.)
 
 (Originally posted as a [comment](https://www.facebook.com/thephilosophersmeme/posts/2668633360036940?comment_id=2668789353354674))
+
+```tpm-bibtex
+@online{archive-8kozz-healthcare-narrative,
+  citation = {Archived article on Italian and South Korean healthcare systems during COVID-19. Available at: https://archive.is/8koZz},
+  title = {Archived Article on Italian and South Korean Healthcare Systems During COVID-19},
+  url = {https://archive.is/8koZz}
+}
+```

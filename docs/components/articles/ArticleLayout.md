@@ -89,7 +89,9 @@ should not impose decorative frames.
 - Article body renders unchanged from content.
 - Article heading/H1 order is valid.
 - End order is prose, support/discovery, references, tags.
-- TOC receives normalized headings, not raw Markdown.
+- TOC receives normalized headings, not raw Markdown; generated Notes and
+  Bibliography headings are included when their article reference sections
+  render.
 - TOC has a rail placement on desktop and an inline fallback when the rail is
   hidden.
 - No blank hero gap appears when no hero exists.

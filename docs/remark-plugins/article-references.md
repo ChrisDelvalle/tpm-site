@@ -3,347 +3,194 @@
 ## Purpose
 
 The article references plugin gives The Philosopher's Meme one canonical way to
-handle explanatory footnotes and bibliographic citations in Markdown and MDX
-articles.
+handle article-local explanatory notes and bibliographic citations in Markdown
+and MDX articles.
 
-The plugin should make this true:
+It must make these things true:
 
-- authors can use normal Markdown footnote syntax;
-- explanatory notes and source citations are distinguishable by label;
-- invalid reference state fails early with clear messages;
-- article layouts can render notes, bibliography, and bibliography pages through
-  normal Astro components;
-- article wording remains author-owned and is not rewritten by incidental UI
-  work.
+- authors can keep writing normal Markdown articles;
+- explanatory notes and bibliography citations are structurally distinct;
+- citation-manager output can be pasted as structured BibTeX data;
+- BibTeX authoring blocks never render as article prose;
+- invalid citation state fails early with actionable diagnostics;
+- article-local reference components and the global bibliography page render
+  from the same normalized data model.
 
-This is publication infrastructure, not a reusable package. Implement it inside
-this repository under `src/remark-plugins/` unless it later proves useful
-outside the project.
+This is project infrastructure, not a reusable package. Keep it under
+`src/remark-plugins/` and `src/lib/article-references/` unless it later proves
+useful outside the site.
 
-## Context
+## Current Design Decision
 
-The current article corpus uses several source/citation patterns:
+Citations use inline footnote-style markers plus hidden BibTeX data blocks.
+Explanatory notes continue to use normal GFM footnote definitions.
 
-- explicit `References`, `Reference`, and `Bibliography` sections;
-- Markdown footnotes used for explanatory notes;
-- Markdown footnotes used as bibliography references;
-- bracket-style bibliography entries such as `\[1\]`;
-- plain inline links that may be citations, source links, media credits,
-  contextual links, or normal prose links;
-- raw HTML links and MDX component links in a small number of articles.
+Canonical authoring shape:
 
-The project should not infer bibliography data from every inline link. Inline
-links are too ambiguous. The canonical future format should be explicit enough
-to parse without editorial guesswork.
-
-The finished implementation should support Markdown/MDX footnote labels:
-
-```md
-This is a cited claim.[^cite-evnine-2018]
+````md
+This claim cites a source.[^cite-baudrillard-1981]
 This sentence needs an explanatory aside.[^note-context]
 
-[^cite-evnine-2018]: Evnine, Simon J. "The Anonymity of a Murmur." 2018.
+[^note-context]: This is normal explanatory note prose.
 
-[^note-context]: This term is being used in the narrower internet-meme sense.
+```tpm-bibtex
+@book{baudrillard-1981,
+  author = {Baudrillard, Jean},
+  title = {Simulacra and Simulation},
+  year = {1981}
+}
 ```
+````
 
-`cite-*` labels become bibliography entries. `note-*` labels become article
-footnotes. Other footnote labels should fail once this plugin is enabled for
-published articles.
+Rules:
 
-Notes and citations may optionally provide a display label at the start of the
-definition body:
+- `[^cite-<key>]` marks a bibliographic citation.
+- The `<key>` part after `cite-` must match a BibTeX entry key in a
+  `tpm-bibtex` fenced block. The BibTeX key itself should not include the
+  `cite-` prefix.
+- Citation markers do not require `[^cite-*]:` Markdown footnote definitions.
+- `[^note-<slug>]` remains an explanatory note and requires a normal Markdown
+  footnote definition.
+- `tpm-bibtex` fenced code blocks are source data. They are consumed by the
+  plugin and removed from rendered Markdown.
+- Ordinary `bibtex` fences are not the canonical data channel. Published
+  articles should reject visible BibTeX fences unless an explicit visible-code
+  escape hatch is later designed.
+- Ordinary inline links are not bibliography entries.
+- Legacy references sections can be migrated, but they do not define the future
+  model.
 
-```md
-This claim cites an author-year source.[^cite-baudrillard-1981]
-
-[^cite-baudrillard-1981]: [@Baudrillard 1981] Baudrillard, Jean. _Simulacra and Simulation_. 1981.
-```
-
-When no display label is provided, references render with ordinary numeric
-markers. Rendering components may choose whether to use display labels,
-depending on the reference kind and site design. Citation components will likely
-render explicit labels when present; note components may still render numeric
-markers while preserving labels as metadata for accessibility or future display
-changes. The label is explicit author-provided display text; the plugin must not
-infer labels from bibliography or note prose.
-
-This syntax deliberately stays inside normal GFM footnotes. `remark-gfm` parses
-the definition as an ordinary `footnoteDefinition`; the article references
-plugin then interprets `cite-*` definitions as bibliography entries and consumes
-an optional leading `[@Display Label]` marker from `cite-*` and `note-*`
-definitions. This avoids custom Markdown block parsing and preserves GFM
-footnote continuation behavior.
+This design keeps authoring copy-paste friendly for citation managers while
+keeping rendering decisions programmatic and site-owned.
 
 ## Non-Goals
 
-- Do not use `remark-toc` for the article sidebar. Article table-of-contents
-  components should use `render(entry).headings`.
-- Do not parse arbitrary inline links as bibliography entries.
-- Do not hide citation rendering inside article prose if component rendering is
-  feasible.
-- Do not add a git submodule or separate package for this project-specific
-  plugin.
-- Do not mutate article wording while implementing the plugin.
+- Do not parse MLA, APA, Chicago, or other prose citation styles.
+- Do not infer citations from ordinary inline links.
+- Do not expose raw BibTeX blocks to readers.
+- Do not require a new Markdown extension, file extension, or submodule.
+- Do not make visual components parse Markdown or BibTeX.
+- Do not mutate article wording during plugin implementation.
 
-## Authoring Contract
+## Markdown Plugin Model
 
-Article authors use GitHub-Flavored Markdown footnote syntax.
+Astro renders article bodies through content collections and the unified
+Markdown pipeline. The plugin receives a Markdown AST before the article body is
+rendered.
 
-Allowed labels:
+The transformer should use parsed AST nodes where the Markdown parser exposes
+them:
 
-- `[^note-<slug>]`: an explanatory article footnote.
-- `[^cite-<slug>]`: a bibliographic citation.
+- `footnoteReference` for `[^cite-*]` and `[^note-*]` markers;
+- `footnoteDefinition` for `[^note-*]: ...` explanatory notes;
+- `code` nodes with `lang === "tpm-bibtex"` for hidden BibTeX data.
 
-Label rules:
+Important parser nuance: GFM footnote references are not always exposed as
+`footnoteReference` nodes when there is no matching Markdown definition. Since
+canonical citations intentionally do not have `[^cite-*]:` definitions, the
+plugin must also recognize literal `[^cite-*]` text markers in ordinary text
+nodes and replace only the validated markers it owns. It must not scan code
+blocks, inline code, note definitions, or link text as citation markers.
 
-- Labels use lowercase ASCII slugs: `a-z`, `0-9`, and `-`.
-- Labels must start with `note-` or `cite-`.
-- Labels must be unique within an article.
-- Every reference must have exactly one definition.
-- Every definition must be referenced at least once.
-- Duplicate references to the same citation are allowed and should point to one
-  bibliography entry.
-- Note and citation definitions may start with `[@<display label>]` to provide
-  optional human display text.
-- Display labels are plain text. They must be the first inline content in the
-  definition, must not contain `]`, and should be short enough to work inline if
-  a renderer chooses to show them.
-- Display labels are declared once at the definition site and apply to every
-  body reference to that note or citation.
-- Only a valid `[@...]` marker at the first inline position is display-label
-  metadata. A malformed marker at that first position fails. A later `[@...]`
-  sequence is ordinary definition content, not metadata.
-- Duplicate references to the same note are allowed only if the design explicitly
-  chooses to support repeated note markers; otherwise fail to avoid confusing
-  note numbering.
+The plugin should:
 
-Canonical examples:
+1. collect note references and note definitions;
+2. collect citation references;
+3. collect and parse `tpm-bibtex` code blocks;
+4. normalize all parsed data into typed article-reference data;
+5. fail with diagnostics for invalid state;
+6. inject normalized data into Astro remark plugin frontmatter;
+7. replace inline note/citation markers with accessible links;
+8. remove consumed note definitions and `tpm-bibtex` blocks from the Markdown
+   body.
 
-```md
-Memes can operate as diagram games.[^cite-diagram-games]
+MDX inherits the project Markdown config, so the same behavior applies to
+`.md` and `.mdx` articles.
 
-[^cite-diagram-games]:
-    Her, Seong-Young. "Memes Are Not Jokes; They Are Diagram
-    Games." The Philosopher's Meme, 2017.
-```
+## Parser Architecture Requirements
 
-```md
-This is a source with the default numeric marker.[^cite-baudrillard-1981]
-
-[^cite-baudrillard-1981]: Baudrillard, Jean. _Simulacra and Simulation_. 1981.
-```
-
-```md
-This is a source with an explicit author-year marker.[^cite-baudrillard-1981]
-
-[^cite-baudrillard-1981]: [@Baudrillard 1981] Baudrillard, Jean. _Simulacra and Simulation_. 1981.
-```
-
-```md
-The term is being used narrowly here.[^note-term-scope]
-
-[^note-term-scope]:
-    This article uses "meme" in the internet-meme sense, not in
-    the broader Dawkinsian sense.
-```
-
-```md
-The term is being used narrowly here.[^note-term-scope]
-
-[^note-term-scope]:
-    [@term scope] This article uses "meme" in the internet-meme sense, not
-    in the broader Dawkinsian sense.
-```
-
-## Markdown Plugin Model In This Project
-
-Astro renders article bodies through content collections:
-
-```astro
----
-import { render } from "astro:content";
-
-const { Content } = await render(article);
----
-
-<Content />
-```
-
-Astro's Markdown pipeline is powered by unified/remark/rehype. A remark plugin
-is an ESM function that returns a transformer:
-
-```ts
-import type { Root } from "mdast";
-import type { Plugin } from "unified";
-
-export const remarkArticleReferences: Plugin<[], Root> = () => {
-  return (tree, file) => {
-    // inspect and transform the Markdown AST
-  };
-};
-```
-
-The transformer receives the Markdown AST and a `VFile`. The tree contains
-parsed Markdown nodes. The file carries path, messages, errors, and custom
-metadata.
-
-Astro's `markdown.gfm` option is enabled by default. GFM footnotes parse into
-mdast nodes:
-
-- `footnoteReference` where the article body contains `[^label]`;
-- `footnoteDefinition` where the article defines `[^label]: ...`.
-
-The plugin should use parsed nodes rather than regexing source text. Because
-display labels live inside normal GFM footnote definitions as `[@...]`, the
-transformer stage can classify and normalize parsed `footnoteReference` and
-`footnoteDefinition` nodes without custom micromark block parsing.
-
-The plugin is wired through `astro.config.ts`:
-
-```ts
-import { remarkArticleReferences } from "./src/remark-plugins/articleReferences";
-
-export default defineConfig({
-  markdown: {
-    remarkPlugins: [remarkArticleReferences],
-  },
-});
-```
-
-Keep GFM enabled unless a future implementation proves that disabling default
-GFM footnote output is safer than consuming/replacing the footnote nodes.
-
-MDX extends the project Markdown config by default in Astro, so the same plugin
-should apply to `.md` and `.mdx` article content.
-
-## Parser And Normalization Architecture Requirements
-
-This plugin contains real parsing and normalization work. Do not wing it with
-broad regex passes or post-render HTML manipulation. Follow normal parser
-architecture: define the syntax, parse it into typed intermediate data, then
-normalize and render from that data.
+This work is parser work. Do not implement it as a loose collection of broad
+regex replacements.
 
 Apply "parse, don't validate":
 
-- The GFM parser boundary should turn raw Markdown footnote syntax into mdast
-  nodes.
-- The project normalization boundary should turn mdast footnote nodes into typed
-  article reference data or fail with a precise diagnostic.
-- Later stages should not repeatedly ask whether a string "looks like" a
-  citation. They should receive an already-classified note or citation.
-- Invalid syntax should not survive as a loosely typed object that rendering
-  code has to defensively reinterpret.
+- The Markdown parser turns raw authoring syntax into AST nodes.
+- The BibTeX parser turns raw BibTeX text into typed entries or precise parse
+  diagnostics.
+- The article-reference normalizer turns note/citation occurrences, note
+  definitions, and parsed BibTeX entries into renderable data or blocking
+  diagnostics.
+- Components receive normalized data. They should never ask whether a string
+  "looks like" a citation.
 
-The display-label grammar should be explicit and small:
-
-```text
-display-label-marker =
-  "[@", display-label, "]"
-
-display-label-marker-position =
-  first inline content of a cite-* or note-* footnote definition paragraph
-
-display-label =
-  nonempty plain text, trimmed, with no "]" or line break
-```
-
-Definition bodies use normal GFM footnote parsing and therefore support rich
-Markdown content and GFM continuation behavior. The plugin should remove the
-display-label marker from the rendered definition content while preserving the
-remaining rich Markdown content exactly.
-
-Use type-driven design so invalid states are unrepresentable after parsing.
-Conceptually, prefer discriminated shapes:
+Use type-driven design:
 
 ```ts
-type ParsedReferenceDefinition =
-  | ParsedCitationDefinition
-  | ParsedNoteDefinition;
+type ArticleReferenceEntry = ArticleNoteReference | ArticleCitationReference;
 
-interface ParsedCitationDefinition {
+interface ArticleCitationReference {
+  bibtex: ParsedBibtexEntry;
   kind: "citation";
-  label: CitationLabel;
-  displayLabel?: CitationDisplayLabel;
-  children: readonly DefinitionChild[];
-}
-
-interface ParsedNoteDefinition {
-  kind: "note";
-  label: NoteLabel;
-  displayLabel?: NoteDisplayLabel;
-  children: readonly DefinitionChild[];
+  label: `cite-${string}`;
+  references: readonly ArticleReferenceMarker[];
 }
 ```
 
-Do not model this as one bag of optional properties where notes can accidentally
-carry citation-only state, or citations can accidentally miss their citation
-kind. Use branded/string-refined types where useful for labels, display labels,
-HTML IDs, and generated backref IDs.
+Invalid states should not be representable after normalization:
 
-Keep concerns separate:
+- a citation with no matching BibTeX entry;
+- duplicate BibTeX keys;
+- duplicate note definitions;
+- repeated note markers, unless later explicitly designed;
+- visible `tpm-bibtex` output;
+- empty note definitions;
+- malformed BibTeX.
 
-1. GFM parsing: provided by `remark-gfm`, creates `footnoteReference` and
-   `footnoteDefinition` nodes.
-2. Domain normalization: collects references and definitions, extracts optional
-   `[@...]` display labels from notes and citations, assigns order,
-   generates IDs, and creates the article-reference data model.
-3. Validation/reporting: turns missing, duplicate, repeated-note, and malformed
-   states into `VFile` diagnostics.
-4. Rendering/data bridge: serializes safe metadata for Astro components or
-   produces generated AST sections if the fallback path is required.
-5. Astro components: render notes, bibliography, markers, and backrefs from the
-   normalized model.
+## BibTeX Authoring Contract
 
-Keep pure logic pure. Label parsing, ID generation, ordering, duplicate
-detection, and display-label normalization should be deterministic functions
-tested without Astro. The remark transformer may mutate the AST because that is
-how unified plugins work, but it should mostly orchestrate pure helpers.
+Supported first-pass BibTeX should cover ordinary citation-manager exports:
 
-Use exhaustive handling. A switch on `kind` should have a `never` fallback in
-TypeScript tests or implementation so adding a new reference kind cannot silently
-skip validation or rendering.
+- entries begin with `@type{key, ...}` or `@type(key, ...)`;
+- keys use lowercase ASCII slugs when referenced from Markdown;
+- fields use `field = {value}` or `field = "value"`;
+- nested braces in values are supported;
+- comments and whitespace are ignored where BibTeX normally allows them;
+- unknown fields are preserved in `fields` instead of discarded.
 
-Parser and normalization tests should be table-driven and include both accepted
-and rejected grammar cases. Include fixtures for spacing, indentation,
-continuation blocks, rich inline Markdown, repeated references, malformed
-labels, display labels on notes, and cases that must remain ordinary prose.
+Required baseline fields:
 
-## Proposed File Structure
+- every entry: `title` unless the entry type is explicitly exempted later;
+- books: `author` or `editor`, plus `year` when available;
+- articles/in-collection entries: `author`, `title`, `year` when available;
+- web-like entries: `title`, plus `url` when the source is online.
 
-```text
-src/remark-plugins/
-  articleReferences.ts
+TPM also supports a conservative `citation` field for corpus migrations. When
+present, `citation` is the literal source-list wording to render in article and
+global bibliography views. Parsed fields such as `author`, `title`, `year`,
+`url`, and `doi` may still accompany it for sorting, deduplication, and future
+format exports, but the visible bibliography entry preserves the literal
+author-approved source text.
 
-src/lib/article-references/
-  display-label.ts
-  ids.ts
-  model.ts
-  normalize.ts
-  validate.ts
+Missing optional fields should not block rendering. Missing fields that make a
+source unusable should produce diagnostics in strict mode and clear fallback
+text in non-strict migration mode.
 
-tests/src/remark-plugins/
-  articleReferences.test.ts
+The parser should preserve:
 
-tests/src/lib/article-references/
-  display-label.test.ts
-  ids.test.ts
-  model.test.ts
-  normalize.test.ts
-  validate.test.ts
-```
+- `entryType`;
+- `key`;
+- normalized lowercase key for lookup;
+- raw BibTeX text for future export/copy behavior;
+- parsed field map;
+- author/editor names as raw field strings until a dedicated name parser exists.
 
-Keep the remark transformer thin. Put pure classification, normalization, and
-validation logic in `src/lib/article-references/` so it can be tested without
-running Astro.
+Do not add fuzzy source deduplication to the parser. Global deduplication, if
+needed, belongs to a bibliography aggregation helper with explicit deterministic
+rules.
 
-If the implementation is small enough, the `src/lib/article-references/` split
-can start with fewer files. Do not put unrelated content helpers in
-`src/remark-plugins/`; that directory is only for remark plugins.
+## Normalized Data Model
 
-## Data Model
-
-The plugin should produce normalized data shaped like this conceptually:
+Article rendering should receive serializable data:
 
 ```ts
 interface ArticleReferenceData {
@@ -352,464 +199,112 @@ interface ArticleReferenceData {
 }
 
 interface ArticleCitation {
-  id: string;
-  label: string;
-  order: number;
-  displayLabel: string | undefined;
-  references: readonly ArticleReferenceMarker[];
+  bibtex: ParsedBibtexEntry;
   definition: ArticleReferenceDefinitionContent;
-}
-
-interface ArticleNote {
-  id: string;
-  label: string;
-  order: number;
-  displayLabel: string | undefined;
+  displayLabel?: string;
+  kind: "citation";
+  label: `cite-${string}`;
   references: readonly ArticleReferenceMarker[];
-  definition: ArticleReferenceDefinitionContent;
 }
 
-interface ArticleReferenceMarker {
-  id: string;
-  backlinkId: string;
-  displayText: string;
-  entryId: string;
-  kind: "citation" | "note";
-  label: string;
-  order: number;
-}
-
-interface ArticleReferenceDefinitionContent {
-  children: readonly ArticleReferenceBlockContent[];
+interface ParsedBibtexEntry {
+  entryType: string;
+  fields: Readonly<Record<string, string>>;
+  key: string;
+  raw: string;
 }
 ```
 
-`children` is a serializable rich-content model, not Astro components. It must
-preserve enough structure for rendering emphasis, links, inline code, line
-breaks, code blocks, unknown node text, and block order without re-parsing
-Markdown in components. Avoid flattening rich Markdown definitions to plain
-strings too early; citation entries may contain italics, links, punctuation, or
-non-URL sources.
-
-The data must support:
-
-- article-local note rendering;
-- article-local bibliography rendering;
-- global `/bibliography/` generation;
-- article back-links from bibliography entries;
-- validation and author-facing error messages.
-
-In Astro, prefer exposing this data through `render(entry)`'s
-`remarkPluginFrontmatter` result. Local Astro and MDX content types expose
-`remarkPluginFrontmatter`, so implementation should start with a focused proof
-that rich citation definition nodes can be carried through this path in a form
-components can render safely.
+`definition` for a citation is generated from parsed BibTeX for article-local
+rendering. It is not copied from raw Markdown prose. Rendering components can
+later change style without editing article content.
 
 ## Rendering Contract
 
-Parsing and rendering should be separate concerns. The plugin validates and
-normalizes article references; rendering components decide how those normalized
-references appear.
-
-Notes render as ordinary numbered footnotes:
-
-```text
-Body text.1
-```
-
-Notes may carry an optional display label, but the default renderer should still
-render ordinary numeric markers unless the note component design explicitly
-chooses a different presentation.
-
-Citations render as numeric markers by default:
-
-```text
-Claim.[1]
-```
-
-Citations with an explicit definition display label render with that label:
-
-```md
-Claim.[^cite-baudrillard-1981]
-
-[^cite-baudrillard-1981]: [@Baudrillard 1981] Baudrillard, Jean. _Simulacra and Simulation_. 1981.
-```
-
-```text
-Claim.[Baudrillard 1981]
-```
-
-The display label is part of the rendering interface, not the canonical
-identity. The stable identity remains the `note-*` or `cite-*` label. The full
-note or bibliography entry is the definition content; the display label is not
-part of that rendered definition text unless the final component design
-deliberately includes it.
-
-The plugin should therefore expose both:
-
-- a stable reference identity such as `cite-baudrillard-1981` or
-  `note-term-scope`;
-- an optional display label such as `Baudrillard 1981` or `term scope`;
-- the rich note or bibliography definition content.
-
-Do not parse author, title, year, or display labels from unstructured definition
-prose. Only the explicit `[@...]` syntax controls display-label metadata.
-
-## Output Strategy
-
-Implemented strategy:
-
-1. The remark plugin validates labels and reference/definition relationships.
-2. It suppresses Astro's default combined GFM footnote output by consuming or
-   replacing the relevant footnote nodes.
-3. It exposes structured notes/citations metadata through
-   `render(entry).remarkPluginFrontmatter.articleReferences`.
-4. `ArticleReferences` renders `ArticleFootnotes` and `ArticleBibliography`
-   after `ArticleEndcap` and before `ArticleTags`.
-
-The documented AST-injection fallback is not needed based on the proof and
-integration work. Reconsider it only if a future requirement cannot be expressed
-through the serializable model.
-
-## Data-Path Proof Result
-
-Milestone 27 proved that the metadata path works for both Markdown and MDX
-content.
-
-The proof implementation lives in:
-
-```text
-src/remark-plugins/articleReferencesProof.ts
-tests/fixtures/article-references/proof-md.md
-tests/fixtures/article-references/proof-mdx.mdx
-tests/src/remark-plugins/articleReferencesProof.test.ts
-tests/src/remark-plugins/articleReferencesProof.vitest.ts
-```
-
-The fixture collection is `articleReferenceProofFixtures`. It is test-only and
-not routed into the public site.
-
-The proof confirms:
-
-- a remark plugin can read GFM `footnoteReference` and `footnoteDefinition`
-  nodes for canonical `note-*` and `cite-*` labels;
-- the plugin can inject structured metadata into
-  `vfile.data.astro.frontmatter`;
-- Astro exposes that injected object through
-  `render(entry).remarkPluginFrontmatter`;
-- the same path works for `.md` and `.mdx` content because MDX extends the
-  project Markdown config;
-- canonical references can be replaced with controlled marker links;
-- canonical definitions can be removed before Astro/GFM emits the default
-  combined footnotes section;
-- rich definition content can be preserved as structured serializable data
-  containing text, emphasis, links, inline code, and block node types;
-- ordinary noncanonical footnote labels can remain untouched until full
-  validation is enabled.
-
-The proof payload is intentionally named `articleReferencesProof` so it cannot
-be mistaken for the final public data model. Its current shape is:
-
-```ts
-interface ArticleReferencesProofPayload {
-  entries: readonly {
-    blocks: readonly {
-      children: readonly ArticleReferencesProofInline[];
-      kind: "code" | "heading" | "list" | "paragraph" | "unknown";
-      nodeType: string;
-      text: string;
-    }[];
-    definitionNodeTypes: readonly string[];
-    displayLabel?: string;
-    id: string;
-    kind: "citation" | "note";
-    label: string;
-    markerIds: readonly string[];
-  }[];
-  markers: readonly {
-    displayText: string;
-    entryId: string;
-    id: string;
-    kind: "citation" | "note";
-    label: string;
-  }[];
-  source: "remark-plugin-frontmatter";
-  version: 1;
-}
-```
-
-Important implication: `remarkPluginFrontmatter` can carry JSON-serializable
-rich data, not Astro components or already-rendered component instances. The
-final implementation should therefore normalize definitions into a typed
-serializable reference model that article-reference components can render
-deterministically. The documented AST-injection fallback is not needed based on
-this proof unless a later requirement needs Markdown features that the
-serializable model cannot represent cleanly.
-
-## Article Route Integration
-
-The article route owns the Markdown render call and passes reference metadata
-through without parsing source text:
-
-```astro
----
-const { Content, headings, remarkPluginFrontmatter } = await render(article);
-const articleReferences = articleReferencesFromFrontmatter(
-  remarkPluginFrontmatter,
-);
----
-
-<ArticleLayout article={article} articleReferences={articleReferences}>
-  <Content />
-</ArticleLayout>
-```
-
-`ArticleLayout` owns final placement. It renders `ArticleReferences` inside the
-article end stack after `ArticleEndcap` and before `ArticleTags`. If no
-canonical references exist, the layout receives `undefined` or an empty model
-and renders no reference apparatus.
-
-Invalid canonical reference fixtures are tested at the plugin boundary. Strict
-validation for legacy, noncanonical footnote labels remains disabled in
-`astro.config.ts` until the article corpus is normalized or explicit exceptions
-are recorded.
-
-## Article Footer Placement
-
-The article footer order should stay intentional:
-
-1. article prose;
-2. support CTA;
-3. more in category / related discovery;
-4. article notes and bibliography;
-5. tags as the final surface.
-
-If the plugin injects sections directly, it must not violate that ordering. That
-is one reason component-rendered bibliography data is preferred.
-
-## Validation Requirements
-
-Blocking errors:
-
-- footnote label does not start with `note-` or `cite-`;
-- label contains characters outside the canonical slug rules;
-- body reference has no matching definition;
-- definition has no matching body reference;
-- duplicate definition label;
-- repeated `note-*` reference;
-- malformed display label marker at the first inline position;
-- the same label is somehow classified differently;
-- generated HTML IDs collide within the article;
-- plugin cannot distinguish a note from a citation.
-
-Review-only warnings, if useful later:
-
-- citation definition looks like a bare URL with no title/context;
-- citation definition contains a dead URL, if a link checker is added;
-- unusually long note or citation text;
-- legacy explicit references section still exists in an article that also uses
-  canonical `cite-*` labels;
-- possible malformed legacy bibliography item such as an orphan caret marker.
-
-Use `file.fail(...)` for blocking errors and `file.message(...)` for warnings.
-Messages should be author-readable: say what is wrong, show the label, and say
-how to fix it.
-
-Example message:
-
-```text
-Invalid article reference label "[^source-1]". Use "[^note-...]" for
-explanatory notes or "[^cite-...]" for bibliography citations.
-```
-
-## AST Transformation Requirements
-
-The plugin should:
-
-- visit every `footnoteReference` node;
-- collect every `footnoteDefinition` node;
-- extract and remove an optional leading `[@...]` display label marker from
-  `note-*` and `cite-*` definitions;
-- classify identifiers by prefix;
-- preserve first-reference order for numbering;
-- keep multiple references to the same citation connected to one citation entry;
-- generate deterministic IDs for references, definitions, and backrefs;
-- remove or replace consumed `footnoteDefinition` nodes so default GFM footnote
-  rendering does not produce a competing combined footnotes block;
-- replace `footnoteReference` nodes with accessible link/sup markup or a
-  renderable marker representation chosen in implementation;
-- preserve rich definition content such as emphasis, links, code, and inline
-  punctuation;
-- avoid rewriting surrounding paragraph text.
-
-ID conventions should be deterministic and scoped:
-
-```text
-note-term-scope
-note-ref-term-scope
-cite-diagram-games
-cite-ref-diagram-games
-```
-
-For repeated citation references, append stable numeric suffixes to backref IDs.
-Repeated note references fail validation.
-
-## Accessibility Requirements
-
-Rendered reference markers should:
-
-- be keyboard-focusable links;
-- have meaningful accessible text;
-- point to the rendered note or bibliography entry;
-- provide return links from entries back to the source reference where feasible;
-- not rely on hover-only behavior;
-- work without client-side JavaScript.
-
-Rendered notes and bibliography sections should:
-
-- have real headings;
-- use ordered lists when numbering communicates order;
-- preserve readable prose and link semantics;
-- not create duplicate landmarks;
-- remain compatible with Tailwind Typography.
-
-## Bibliography Page Implications
-
-The global `/bibliography/` page is a later milestone. This plugin must make
-that page possible by creating dependable data:
-
-- normalized citation labels;
-- citation content;
-- source article ID/title/URL/category/date;
-- duplicate-source handling hooks;
-- article back-link data.
-
-The plugin does not deduplicate sources globally, but it must not make global
-deduplication impossible. Avoid baking display numbering into the canonical data
-model.
-
-## Migration Strategy
-
-Migration should be separate from plugin implementation.
-
-Recommended order:
-
-1. Implement and test the plugin with isolated fixtures.
-2. Run the plugin against known canonical fixture articles.
-3. Add an audit script or test fixture for the current article corpus.
-4. Normalize one article format at a time with careful manual review.
-5. Enable blocking validation for published articles only after the corpus has
-   been normalized or approved exceptions exist.
-
-Article-content edits require explicit instruction and manual verification.
-Do not opportunistically rewrite article prose while building the plugin.
-
-Known corpus cases to model in fixtures:
-
-- one article using only `note-*` explanatory footnotes;
-- one article using only `cite-*` bibliography citations;
-- one article using both notes and citations;
-- repeated citation reference;
-- repeated note reference failure;
-- note definition with display label;
-- citation definition with display label;
-- note and citation definitions with display labels and rich Markdown content;
-- `[@...]` text later in the definition body that should remain ordinary
-  definition content;
-- rich citation content with links/emphasis;
-- invalid legacy label;
-- missing definition;
-- unreferenced definition;
-- duplicate definition.
-
-## Tests
+Inline explanatory-note markers and bibliography-citation markers must be
+visually distinguishable. Explanatory notes render as naked clickable
+superscript numbers, for example `1`, with no brackets. Bibliographic
+citations render as bracketed numeric citation markers by default, for example
+`[1]`.
+
+The data model still preserves generated citation labels such as
+`Baudrillard 1981` for future explicit style overrides, but the default body
+marker remains numeric so author-written prose citations do not duplicate
+themselves.
+
+Article-local rendering:
+
+- explanatory notes render in `ArticleFootnotes`;
+- citations render in `ArticleBibliography`;
+- notes appear before bibliography when both exist;
+- references render after article endcap discovery and before final tags;
+- raw BibTeX is not visible in the article body.
+
+Global bibliography rendering:
+
+- consumes normalized citation data from every article;
+- groups exact or explicitly canonicalized source identities;
+- links each source to every article that cited it;
+- never infers sources from inline links.
+
+## Diagnostics
+
+Diagnostics should be author-readable and point at the repair:
+
+- invalid reference label: use `note-*` or `cite-*`;
+- missing note definition;
+- empty note definition;
+- repeated note reference;
+- missing BibTeX entry for `[^cite-*]`;
+- duplicate BibTeX key;
+- malformed BibTeX;
+- forbidden visible `bibtex` fence in published articles if enforcement is
+  enabled;
+- duplicate generated HTML IDs.
+
+Strict release validation should be enabled only after the corpus is normalized
+or explicit exceptions are documented.
+
+## Corpus Migration
+
+Article-content migration requires explicit user approval.
+
+Migration rules:
+
+- Preserve author wording and article intent.
+- Convert true sources to `[^cite-*]` markers plus `tpm-bibtex` entries.
+- Convert broad bibliography/source-list entries to bibliography-only
+  `tpm-bibtex` entries when no precise inline citation point exists.
+- Convert explanatory notes to `[^note-*]` definitions.
+- Leave ordinary inline links alone.
+- Leave ambiguous links alone until reviewed.
+- Do not invent bibliographic metadata that cannot be recovered with
+  confidence.
+- Prefer one article or one legacy pattern per reviewable change.
+
+## Testing Requirements
 
 Unit tests:
 
-- label classification;
-- slug validation;
-- duplicate detection;
-- missing reference/definition detection;
-- first-reference ordering;
-- repeated citation handling;
-- repeated note failure;
-- deterministic ID generation;
-- display-label extraction from `note-*` and `cite-*` definitions;
-- rich definition preservation.
+- BibTeX parser accepts citation-manager-shaped entries;
+- parser preserves unknown fields and raw text;
+- parser rejects malformed entries with precise diagnostics;
+- normalization catches missing and duplicate citation keys;
+- normalization keeps uncited BibTeX entries as bibliography-only sources;
+- notes and citations are independently normalized;
+- generated citation definitions have stable fallback text.
 
-Plugin integration tests:
+Remark/plugin tests:
 
-- process Markdown with `remark`, `remark-gfm`, and the plugin;
-- prove `[@...]` markers are extracted only from valid `note-*` and `cite-*`
-  definitions;
-- assert transformed output or transformed AST;
-- assert `file.fail` behavior for blocking invalid input;
-- assert `file.message` behavior if warnings are implemented.
+- `tpm-bibtex` blocks are removed from rendered Markdown;
+- citation markers link to generated bibliography entries;
+- explanatory notes still render from Markdown definitions;
+- visible `bibtex` fences are rejected when strict validation is enabled;
+- MDX articles get the same behavior.
 
-Astro integration tests:
+Integration tests:
 
-- ensure `.md` and `.mdx` content both run through the plugin;
-- ensure article pages do not render Astro's default combined GFM footnote
-  section in addition to the custom note/bibliography sections;
-- ensure article end ordering remains support, discovery, references, tags;
-- ensure build fails on invalid published article references.
-
-E2E/accessibility tests:
-
-- reference markers are links;
-- keyboard focus reaches reference markers and backrefs;
-- note/bibliography headings are sensible;
-- no duplicate IDs;
-- no horizontal overflow caused by long citation text or URLs;
-- light and dark modes preserve readable reference links and focus rings.
-
-## Implementation Checklist
-
-- Add direct dependencies if needed, rather than relying on transitive
-  dependencies:
-  - `unist-util-visit`;
-  - `@types/mdast` if TypeScript needs explicit mdast node types;
-  - `remark` and `remark-gfm` as dev dependencies if plugin tests process
-    Markdown outside Astro.
-- Add `src/remark-plugins/articleReferences.ts`.
-- Add pure helpers under `src/lib/article-references/` where useful.
-- Add tests for display-label normalization before wiring the plugin into
-  production article rendering.
-- Add the plugin to `astro.config.ts` under `markdown.remarkPlugins`.
-- Verify MDX inherits the Markdown config.
-- Confirm the default GFM footnote renderer is suppressed or replaced.
-- Update article submission docs with the canonical `note-*` and `cite-*`
-  syntax after implementation is stable.
-- Update `CHECKLIST.md` and bibliography design docs if implementation exposes
-  new requirements.
-
-## Resolved Decisions
-
-No core behavior should remain open before implementation. Current decisions:
-
-- Metadata path: use `render(entry).remarkPluginFrontmatter` if the proof of
-  concept confirms rich citation content can be rendered safely from that data.
-  Otherwise inject generated sections from the plugin as the documented
-  fallback.
-- Repeated references: repeated `cite-*` references are allowed; repeated
-  `note-*` references fail.
-- Unreferenced definitions: fail for notes and citations. Further reading should
-  be a separate future content type, not an uncited citation.
-- Article-local rendering: render notes and bibliography through article
-  components when metadata works; use ordered lists because ordering communicates
-  citation/note order.
-- Validation timing: do not enable release-blocking validation against the full
-  published corpus until the article migration plan has normalized existing
-  content or recorded explicit exceptions. The finished plugin itself should be
-  strict.
-- Global deduplication: do not fuzzy-deduplicate bibliography entries. If global
-  source deduplication is needed, add explicit canonical source IDs instead of
-  guessing from prose.
-
-## Reference Docs
-
-- [unified guide: create a remark plugin](https://unifiedjs.com/learn/guide/create-a-remark-plugin/)
-- [vfile messages and file data](https://unifiedjs.com/explore/package/vfile/)
-- [mdast footnote nodes](https://github.com/syntax-tree/mdast)
-- [Astro Markdown plugins](https://docs.astro.build/en/guides/markdown-content/#markdown-plugins)
-- [Astro content rendering and headings](https://docs.astro.build/en/guides/content-collections/#rendering-body-content)
+- article-local references render after endcap and before tags;
+- no raw BibTeX appears on article pages;
+- global bibliography aggregation receives structured citation data;
+- long citation fields wrap without horizontal overflow.

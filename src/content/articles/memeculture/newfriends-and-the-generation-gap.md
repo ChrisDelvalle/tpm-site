@@ -24,7 +24,7 @@ legacyPermalink: 2016/05/12/newfriends-and-the-generation-gap/
 
 I was walking home from a friend's place yesterday when I saw a few children chasing each other and play fighting. As I walked past, I heard one tell the other, "get wrecked!" I wondered whether they learned it from video games they play (my guess was either LoL or DotA, but it could be one of those FPSs) or from older kids (or perhaps, most befittingly, even older kids online!) they know such as their older siblings.
 
-Dawkins's theory of memes itself began as an inquiry into the way culture is transmitted between organisms. Later theorists in the field of cultural evolution such as Cavalli-Sforza and Feldman suggest we divide them into three forms: horizontal (i.e. between individuals within the same generation), oblique (from an older generation to a younger with less direct links than parent to offspring) and vertical (i.e. from parent to offspring). It's the whale diagram from the meme lecture.
+Dawkins's theory of memes itself began as an inquiry into the way culture is transmitted between organisms.[^cite-dawkins-r-1976-the-selfish-gene] Later theorists in the field of cultural evolution such as Cavalli-Sforza and Feldman suggest we divide them into three forms: horizontal (i.e. between individuals within the same generation), oblique (from an older generation to a younger with less direct links than parent to offspring) and vertical (i.e. from parent to offspring).[^cite-cavalli-sforza-feldman-1981-cultural-transmission] It's the whale diagram from the meme lecture.
 
 The 'generational gap' never fails to be brought up in discussions about the Internet. In discussions about generational gaps, the use of language never fails to be brought up. In terms of Internet communities, I think that not only is there a gap between 'IRL' demographics, there is also what can be sensibly called a generation gap in regard to different 'generations' of users. That is to say, 'oldbies' and 'newbies'.
 
@@ -47,3 +47,21 @@ The information conveyed itself changes in the new context, just as genes change
 This challenge of ambiguity became increasingly significant as the normie-autist habitats overlapped further and further. Facebook's ironic meme community played the central role in accelerating the process of selection for memes which could withstand the extreme volatility of the dualistic habitat. As an integral aspect of the autist subculture, ironic memes must maintain their ritualistic function of signaling membership to survive. Normification is the dilution of meaning through the introduction of ambiguity. Once the normies “steal” the memes, their power to convey unique meaning whither. It's not just the surface level meaning of “this meme is for oldfags” that is damaged, but the ability for the meme to convey the deeper and implicit sentiments associated with the subculture as a whole, such as “say no to normie consumerism!” or “the Internet is srs bsns!”
 
 And you're goddamn right the Internet is serious business.
+
+```tpm-bibtex
+@book{dawkins-r-1976-the-selfish-gene,
+  citation = {Dawkins, R. (1976). The Selfish Gene. Oxford University Press.},
+  author = {Dawkins, Richard},
+  title = {The Selfish Gene},
+  year = {1976},
+  publisher = {Oxford University Press}
+}
+
+@book{cavalli-sforza-feldman-1981-cultural-transmission,
+  citation = {Cavalli-Sforza, L. L., & Feldman, M. W. (1981). Cultural Transmission and Evolution: A Quantitative Approach. Princeton University Press.},
+  author = {Cavalli-Sforza, Luigi Luca and Feldman, Marcus W.},
+  title = {Cultural Transmission and Evolution: A Quantitative Approach},
+  year = {1981},
+  publisher = {Princeton University Press}
+}
+```

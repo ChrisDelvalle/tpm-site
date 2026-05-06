@@ -23,6 +23,7 @@ import {
   authorSummariesForArticle,
   getAuthorEntries,
 } from "../lib/authors";
+import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
 import { getArticles, getCategory } from "../lib/content";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import BaseLayout from "./BaseLayout.astro";
@@ -46,6 +47,10 @@ const {
   tableOfContentsHeadings = [],
 } = Astro.props;
 const articleView = articleViewModel(article);
+const canonicalUrl = new URL(
+  articleView.canonicalPath,
+  Astro.site ?? Astro.url.origin,
+).toString();
 const showTableOfContents = hasUsefulTableOfContents(tableOfContentsHeadings);
 const authorEntries = await getAuthorEntries();
 const articleAuthors = authorSummariesForArticle(article, authorEntries);
@@ -73,6 +78,14 @@ const moreInCategory =
           authorEntries,
         ),
       );
+const citation = articleCitationMenuViewModel({
+  articleId: article.id,
+  authors: articleAuthors,
+  canonicalUrl,
+  legacyAuthor: articleView.author,
+  publishedAt: articleView.date,
+  title: articleView.title,
+});
 ---
 
 <BaseLayout
@@ -109,6 +122,7 @@ const moreInCategory =
         category={category && categoryHref
           ? { href: categoryHref, title: category.title }
           : undefined}
+        citation={citation}
         date={articleView.date}
         description={articleView.description}
         formattedDate={articleView.formattedDate}

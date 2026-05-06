@@ -13,7 +13,7 @@ draft: true
 legacyPermalink: /2022/04/20/joshua-citarella-astroturfing/
 ---
 
-Joshua Citarella getting ratiod on his own [insta post](https://www.instagram.com/p/CcdbowvuHx_) for the "How to Plant a Meme" project, in which he memed on Instagram for a year and a half to get other memers "interested in conventional forms of political organization or possibly even engage in electoral politics." Peculiarly, he attempted this by making memes about Mark Fisher, who had this to say about electoralism: "[Don't vote, don't encourage them](http://k-punk.abstractdynamics.org/archives/005462.html)".
+Joshua Citarella getting ratiod on his own [insta post](https://www.instagram.com/p/CcdbowvuHx_) for the "How to Plant a Meme" project, in which he memed on Instagram for a year and a half to get other memers "interested in conventional forms of political organization or possibly even engage in electoral politics."[^cite-citarella-j-2022-how-to-plant-a-meme] Peculiarly, he attempted this by making memes about Mark Fisher, who had this to say about electoralism: "[Don't vote, don't encourage them](http://k-punk.abstractdynamics.org/archives/005462.html)".[^cite-fisher-m-2005-dont-vote]
 
 On the one hand, this practice is nothing new, except for the fact that it's come almost entirely from the right (most notoriously, the stormweenie takeover of 4chan to the point of turning the by and large left and right libertarian space into an authright shithole). Private memer networks plotting to force a meme has become par for the course in post-2016 meme culture. There are countless groups and chats that facilitate this sort of thing (no, I won't name or show them). It shouldn't be that shocking or controversial in that respect, at least.
 
@@ -24,3 +24,21 @@ I can't see any way to describe this other than as astroturfing. The usual criti
 The Internet is already contaminated with astroturfing (some estimates suggest around a third of all online product reviews as being fake). Wikipedia is edited and maintained by only a tiny number of people, and thus represent the viewpoint of a tiny minority, public and mainstream as it may seem. In the abstract, even your local environment and the few hundred people you interact with on a regular basis present a false impression of what the general public is like, and that's like "being astroturfed" by random chance (of course, the difference is that it's not a concerted campaign to deceive you). It's ubiquitous, and we are terrible at dealing with it.
 
 A more cynical interpretation might be that ironic memes are inherently astroturfed in their aesthetic, because they always imply an already existing community of users within their [language-diagram-game](/2017-09-10-memes-are-not-jokes-they-are-diagram-games). An awareness about this quirk in the aesthetics of memes is, without a doubt, an important part of memetic literacy.
+
+```tpm-bibtex
+@online{citarella-j-2022-how-to-plant-a-meme,
+  citation = {Citarella, J. (2022). How to Plant a Meme. Instagram post. Available at: https://www.instagram.com/p/CcdbowvuHx_},
+  author = {Citarella, Joshua},
+  title = {How to Plant a Meme},
+  year = {2022},
+  url = {https://www.instagram.com/p/CcdbowvuHx_}
+}
+
+@online{fisher-m-2005-dont-vote,
+  citation = {Fisher, M. (2005). Don't vote, don't encourage them. k-punk. Available at: http://k-punk.abstractdynamics.org/archives/005462.html},
+  author = {Fisher, Mark},
+  title = {Don't Vote, Don't Encourage Them},
+  year = {2005},
+  url = {http://k-punk.abstractdynamics.org/archives/005462.html}
+}
+```

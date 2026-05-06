@@ -27,6 +27,15 @@ category discovery.
 - normalized nesting level;
 - original order.
 
+The normalized input includes Astro-rendered Markdown headings plus generated
+article apparatus headings when they exist. `ArticleFootnotes` contributes a
+`Notes` `h2` with `id="article-references-notes-heading"` when notes exist.
+`ArticleBibliography` contributes a `Bibliography` `h2` with
+`id="article-references-bibliography-heading"` when citations exist. These
+generated headings are included intentionally so footnotes and bibliography are
+reachable through the same article-local navigation instead of depending on an
+incidental Markdown-only extraction pass.
+
 Render nothing when there are too few useful headings.
 
 ## Composition Relationships
@@ -120,6 +129,10 @@ Handle:
 
 - no headings;
 - one heading;
+- no references;
+- notes only;
+- citations only;
+- both notes and citations;
 - many headings;
 - duplicate heading text;
 - long heading text;
@@ -139,6 +152,9 @@ prose. Current/focus states must be visible in light and dark mode.
 - Uses normalized heading IDs without generating its own slugs.
 - Preserves article heading order.
 - Does not include article title/H1.
+- Includes generated Notes and Bibliography headings when those sections render.
+- Does not include generated reference headings when their corresponding
+  section is empty.
 - Keeps long headings inside rail width.
 - Hide/show works without JavaScript.
 - Rail never overlaps prose or hides under the sticky header.

@@ -1,0 +1,37 @@
+---
+import type { BibliographyEntry as BibliographyEntryViewModel } from "../../lib/bibliography";
+import ArticleReferenceDefinitionContent from "../articles/ArticleReferenceDefinitionContent.astro";
+import TextLink from "../ui/TextLink.astro";
+import BibliographySourceArticles from "./BibliographySourceArticles.astro";
+
+interface Props {
+  entry: BibliographyEntryViewModel;
+}
+
+const { entry } = Astro.props;
+---
+
+<article id={entry.id} class="target:bg-muted grid min-w-0 scroll-mt-28 gap-4">
+  <div class="grid min-w-0 gap-2">
+    <div
+      class="text-foreground max-w-full min-w-0 text-base leading-relaxed break-words"
+    >
+      <ArticleReferenceDefinitionContent blocks={entry.sourceContent} />
+    </div>
+    {
+      entry.sourceUrl !== undefined && (
+        <p class="max-w-full min-w-0 text-sm break-words">
+          <TextLink
+            href={entry.sourceUrl}
+            variant="subtle"
+            tone="muted"
+            class="break-all"
+          >
+            {entry.sourceUrl}
+          </TextLink>
+        </p>
+      )
+    }
+  </div>
+  <BibliographySourceArticles articles={entry.sourceArticles} />
+</article>

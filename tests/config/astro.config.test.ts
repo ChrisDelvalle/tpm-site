@@ -30,9 +30,11 @@ describe("Astro config", () => {
     );
   });
 
-  test("runs article references through the Markdown pipeline without strict legacy validation", () => {
-    expect(config.markdown?.remarkPlugins).toContain(remarkArticleReferences);
-    expect(config.markdown?.remarkPlugins).not.toContainEqual([
+  test("runs article references through the Markdown pipeline with strict legacy validation", () => {
+    expect(config.markdown?.remarkPlugins).not.toContain(
+      remarkArticleReferences,
+    );
+    expect(config.markdown?.remarkPlugins).toContainEqual([
       remarkArticleReferences,
       { validateLegacyFootnotes: true },
     ]);

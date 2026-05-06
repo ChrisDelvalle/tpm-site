@@ -4,6 +4,7 @@ import type {
   ArticleReferenceDefinitionInput,
   ArticleReferenceInlineContent,
   ArticleReferenceOccurrenceInput,
+  ParsedBibtexEntry,
 } from "../../../../src/lib/article-references/model";
 import {
   classifyArticleReferenceLabel,
@@ -46,20 +47,19 @@ describe("article reference normalization", () => {
         reference("cite-first"),
         reference("cite-second"),
       ],
+      [definition("note-context", "Context note.")],
       [
-        definition("cite-first", "First citation."),
-        definition("note-context", "Context note."),
-        definition(
-          "cite-second",
-          "[@Second 2020] Second citation with _rich_ content.",
-          [
-            {
-              children: [{ kind: "text", text: "rich" }],
-              kind: "emphasis",
-              text: "rich",
-            },
-          ],
-        ),
+        bibtex("first", {
+          author: "First, A.",
+          title: "First citation",
+          year: "2019",
+        }),
+        bibtex("second", {
+          author: "Second, B.",
+          title: "Second citation with rich content",
+          url: "https://example.com/second",
+          year: "2020",
+        }),
       ],
     );
 
@@ -81,10 +81,9 @@ describe("article reference normalization", () => {
     expect(
       result.data.citations[0]?.references.map((marker) => marker.id),
     ).toEqual(["cite-ref-second", "cite-ref-second-2"]);
-    expect(result.data.citations[0]?.references[0]?.displayText).toBe(
-      "Second 2020",
-    );
+    expect(result.data.citations[0]?.references[0]?.displayText).toBe("1");
     expect(result.data.notes[0]?.references[0]?.displayText).toBe("1");
+    expect(result.data.citations[0]?.bibtex.key).toBe("second");
 
     const [firstDefinitionChild] =
       result.data.citations[0]?.definition.children ?? [];
@@ -93,7 +92,10 @@ describe("article reference normalization", () => {
       throw new Error("Expected paragraph definition content.");
     }
 
-    expect(firstDefinitionChild.children[1]?.kind).toBe("emphasis");
+    expect(firstDefinitionChild.text).toContain("Second citation");
+    expect(
+      firstDefinitionChild.children.some((child) => child.kind === "link"),
+    ).toBe(true);
   });
 
   test("fails invalid references before renderable data is returned", () => {
@@ -105,12 +107,15 @@ describe("article reference normalization", () => {
         reference("note-repeat"),
       ],
       [
-        definition("cite-unused", "Unused citation."),
-        definition("cite-unused", "Duplicate citation."),
+        definition("cite-missing", "Obsolete citation definition."),
         definition("note-repeat", "Repeated note."),
         definition("bad_label", "Bad label."),
         definition("cite-empty", ""),
         definition("cite-bad-display-label", "[@] Bad label."),
+      ],
+      [
+        bibtex("unused", { title: "Bibliography-only citation" }),
+        bibtex("unused", { title: "Duplicate citation" }),
       ],
     );
 
@@ -123,14 +128,89 @@ describe("article reference normalization", () => {
     expect(result.diagnostics.map((diagnostic) => diagnostic.code)).toEqual([
       "invalid-label",
       "invalid-label",
-      "duplicate-definition",
-      "missing-definition",
-      "unreferenced-definition",
-      "unreferenced-definition",
-      "unreferenced-definition",
+      "citation-definition",
+      "citation-definition",
+      "citation-definition",
       "repeated-note-reference",
-      "malformed-display-label",
-      "empty-definition",
+      "duplicate-bibtex-key",
+      "missing-bibtex-entry",
+    ]);
+  });
+
+  test("keeps uncited BibTeX entries as bibliography-only sources", () => {
+    const result = normalizeArticleReferences(
+      [reference("cite-used")],
+      [],
+      [
+        bibtex("used", { author: "Writer, A.", title: "Used", year: "2024" }),
+        bibtex("source-list", {
+          author: "Researcher, B.",
+          title: "Source List Entry",
+          year: "2020",
+        }),
+      ],
+    );
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      throw new Error("Expected normalized bibliography-only citation.");
+    }
+
+    expect(result.data.citations.map((citation) => citation.label)).toEqual([
+      "cite-used",
+      "cite-source-list",
+    ]);
+    expect(result.data.citations[0]?.references).toHaveLength(1);
+    expect(result.data.citations[1]?.references).toEqual([]);
+    expect(result.data.citations[1]?.displayLabel).toBe("Researcher 2020");
+  });
+
+  test("uses literal citation fields to preserve source-list wording", () => {
+    const result = normalizeArticleReferences(
+      [],
+      [],
+      [
+        bibtex("source-list", {
+          author: "Researcher, B.",
+          citation:
+            "Researcher, B. (2020). Source List Entry. Journal, 1(2), 3-4.",
+          title: "Source List Entry",
+          year: "2020",
+        }),
+      ],
+    );
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      throw new Error("Expected literal citation field to normalize.");
+    }
+
+    expect(result.data.citations[0]?.definition.children[0]?.text).toBe(
+      "Researcher, B. (2020). Source List Entry. Journal, 1(2), 3-4.",
+    );
+  });
+
+  test("rejects literal citation fields without source text", () => {
+    const result = normalizeArticleReferences(
+      [],
+      [],
+      [bibtex("source-placeholder", { citation: "^" })],
+    );
+
+    expect(result.ok).toBe(false);
+
+    if (result.ok) {
+      throw new Error("Expected malformed literal citation diagnostic.");
+    }
+
+    expect(result.diagnostics).toEqual([
+      {
+        code: "malformed-bibtex",
+        message:
+          'Entry "source-placeholder" has an unusable literal citation field. Replace it with real source text or remove the entry.',
+      },
     ]);
   });
 });
@@ -153,5 +233,18 @@ function definition(
       },
     ],
     label,
+  };
+}
+
+function bibtex(
+  key: string,
+  fields: Readonly<Record<string, string>>,
+): ParsedBibtexEntry {
+  return {
+    entryType: "article",
+    fields,
+    key,
+    normalizedKey: key.toLowerCase(),
+    raw: `@article{${key}}`,
   };
 }

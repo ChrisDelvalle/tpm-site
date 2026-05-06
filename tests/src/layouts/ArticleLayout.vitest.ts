@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import ArticleLayout from "../../../src/layouts/ArticleLayout.astro";
+import { articleTableOfContentsHeadings } from "../../../src/lib/article-toc";
 import { getArticles } from "../../../src/lib/content";
 import {
   createAstroTestContainer,
@@ -75,7 +76,7 @@ describe("ArticleLayout", () => {
       request: new Request(`${testSiteUrl}/articles/${article.id}/`),
       slots: {
         default:
-          '<p>Rendered article body with <a id="note-ref-context" href="#note-context" data-article-reference-marker="true">[1]</a>.</p>',
+          '<p>Rendered article body with <a id="note-ref-context" href="#note-context" data-article-reference-marker="true" data-reference-kind="note">1</a>.</p>',
       },
     });
 
@@ -137,5 +138,106 @@ describe("ArticleLayout", () => {
     expect(view).toContain('data-article-toc-placement="inline"');
     expect(view).toContain("data-toc-inline-heading");
     expect(view).toContain('href="#first-section"');
+  });
+
+  test("renders generated reference section links in the article table of contents", async () => {
+    const [article] = await getArticles();
+
+    if (article === undefined) {
+      throw new Error("Expected at least one article fixture from content.");
+    }
+
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleLayout, {
+      props: {
+        article,
+        articleReferences: articleReferenceFixture,
+        tableOfContentsHeadings: articleTableOfContentsHeadings([], {
+          references: articleReferenceFixture,
+        }),
+      },
+      request: new Request(`${testSiteUrl}/articles/${article.id}/`),
+      slots: {
+        default: "<p>Rendered article body.</p>",
+      },
+    });
+
+    expect(view).toContain('href="#article-references-notes-heading"');
+    expect(view).toContain('href="#article-references-bibliography-heading"');
+    expect(view).toContain('id="article-references-notes-heading"');
+    expect(view).toContain('id="article-references-bibliography-heading"');
+  });
+
+  test("renders note-only and bibliography-only generated table of contents entries when otherwise useful", async () => {
+    const [article] = await getArticles();
+
+    if (article === undefined) {
+      throw new Error("Expected at least one article fixture from content.");
+    }
+
+    const bodyHeading = {
+      depth: 2,
+      slug: "body-section",
+      text: "Body Section",
+    };
+    const noteReferences = {
+      citations: [],
+      notes: articleReferenceFixture.notes,
+    };
+    const citationReferences = {
+      citations: articleReferenceFixture.citations,
+      notes: [],
+    };
+    const container = await createAstroTestContainer();
+    const noteOnlyView = await container.renderToString(ArticleLayout, {
+      props: {
+        article,
+        articleReferences: noteReferences,
+        tableOfContentsHeadings: articleTableOfContentsHeadings([bodyHeading], {
+          references: noteReferences,
+        }),
+      },
+      request: new Request(`${testSiteUrl}/articles/${article.id}/`),
+      slots: {
+        default: '<h2 id="body-section">Body Section</h2>',
+      },
+    });
+    const citationOnlyView = await container.renderToString(ArticleLayout, {
+      props: {
+        article,
+        articleReferences: citationReferences,
+        tableOfContentsHeadings: articleTableOfContentsHeadings([bodyHeading], {
+          references: citationReferences,
+        }),
+      },
+      request: new Request(`${testSiteUrl}/articles/${article.id}/`),
+      slots: {
+        default: '<h2 id="body-section">Body Section</h2>',
+      },
+    });
+    const noReferencesView = await container.renderToString(ArticleLayout, {
+      props: {
+        article,
+        tableOfContentsHeadings: articleTableOfContentsHeadings([bodyHeading], {
+          references: { citations: [], notes: [] },
+        }),
+      },
+      request: new Request(`${testSiteUrl}/articles/${article.id}/`),
+      slots: {
+        default: '<h2 id="body-section">Body Section</h2>',
+      },
+    });
+
+    expect(noteOnlyView).toContain('href="#article-references-notes-heading"');
+    expect(noteOnlyView).not.toContain(
+      'href="#article-references-bibliography-heading"',
+    );
+    expect(citationOnlyView).toContain(
+      'href="#article-references-bibliography-heading"',
+    );
+    expect(citationOnlyView).not.toContain(
+      'href="#article-references-notes-heading"',
+    );
+    expect(noReferencesView).not.toContain("data-article-toc");
   });
 });

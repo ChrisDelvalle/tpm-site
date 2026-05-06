@@ -1,10 +1,19 @@
+import type { ArticleReferenceData } from "./article-references/model";
+
 const minimumTableOfContentsHeadings = 2;
+const articleReferencesHeadingIdPrefix = "article-references";
 
 /** Raw heading metadata returned by Astro's `render(entry)` helper. */
 interface RenderedArticleHeading {
   depth: number;
   slug: string;
   text: string;
+}
+
+/** Optional generated article sections that should participate in the TOC. */
+interface ArticleTableOfContentsOptions {
+  referenceHeadingIdPrefix?: string | undefined;
+  references?: ArticleReferenceData | undefined;
 }
 
 /** Display-ready article heading link for the article table of contents. */
@@ -20,16 +29,20 @@ export interface ArticleTableOfContentsHeading {
 const includedHeadingDepths = new Set([2, 3]);
 
 /**
- * Converts Astro-rendered heading metadata into table-of-contents data.
+ * Converts Astro-rendered and generated article heading metadata into
+ * table-of-contents data.
  *
  * @param headings Heading metadata returned by `render(entry)`.
+ * @param options Optional generated section metadata from article references.
  * @returns Display-ready article-local heading navigation data.
  */
 export function articleTableOfContentsHeadings(
   headings: readonly RenderedArticleHeading[],
+  options: ArticleTableOfContentsOptions = {},
 ): ArticleTableOfContentsHeading[] {
-  const includedHeadings = headings.filter((heading) =>
-    includedHeadingDepths.has(heading.depth),
+  const referenceHeadings = articleReferenceTableOfContentsHeadings(options);
+  const includedHeadings = [...headings, ...referenceHeadings].filter(
+    (heading) => includedHeadingDepths.has(heading.depth),
   );
   const minimumDepth = includedHeadings.reduce(
     (currentMinimum, heading) => Math.min(currentMinimum, heading.depth),
@@ -47,6 +60,36 @@ export function articleTableOfContentsHeadings(
     order: index,
     text: heading.text,
   }));
+}
+
+function articleReferenceTableOfContentsHeadings({
+  referenceHeadingIdPrefix = articleReferencesHeadingIdPrefix,
+  references,
+}: ArticleTableOfContentsOptions): RenderedArticleHeading[] {
+  if (references === undefined) {
+    return [];
+  }
+
+  return [
+    ...(references.notes.length > 0
+      ? [
+          {
+            depth: 2,
+            slug: `${referenceHeadingIdPrefix}-notes-heading`,
+            text: "Notes",
+          },
+        ]
+      : []),
+    ...(references.citations.length > 0
+      ? [
+          {
+            depth: 2,
+            slug: `${referenceHeadingIdPrefix}-bibliography-heading`,
+            text: "Bibliography",
+          },
+        ]
+      : []),
+  ];
 }
 
 /**

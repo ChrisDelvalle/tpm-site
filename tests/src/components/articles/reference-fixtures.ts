@@ -4,6 +4,18 @@ import type { ArticleReferenceData } from "../../../../src/lib/article-reference
 export const articleReferenceFixture = {
   citations: [
     {
+      bibtex: {
+        entryType: "book",
+        fields: {
+          author: "Baudrillard, Jean",
+          title: "Simulacra",
+          url: "https://example.com/source",
+          year: "1981",
+        },
+        key: "baudrillard-1981",
+        normalizedKey: "baudrillard-1981",
+        raw: "@book{baudrillard-1981}",
+      },
       definition: {
         children: [
           {
@@ -37,7 +49,7 @@ export const articleReferenceFixture = {
       references: [
         {
           backlinkId: "cite-backref-baudrillard-1981",
-          displayText: "Baudrillard 1981",
+          displayText: "1",
           entryId: "cite-baudrillard-1981",
           id: "cite-ref-baudrillard-1981",
           kind: "citation",
@@ -46,7 +58,7 @@ export const articleReferenceFixture = {
         },
         {
           backlinkId: "cite-backref-baudrillard-1981-2",
-          displayText: "Baudrillard 1981",
+          displayText: "1",
           entryId: "cite-baudrillard-1981",
           id: "cite-ref-baudrillard-1981-2",
           kind: "citation",
