@@ -2,10 +2,12 @@ import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
 
 import {
+  announcementSchema,
   articleSchema,
   authorSchema,
   categorySchema,
   filenameStem,
+  homeFeatureSchema,
   pageSchema,
 } from "./lib/content-schemas";
 
@@ -16,6 +18,15 @@ const articles = defineCollection({
     generateId: ({ entry }) => filenameStem(entry),
   }),
   schema: articleSchema,
+});
+
+const announcements = defineCollection({
+  loader: glob({
+    base: "./src/content/announcements",
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: announcementSchema,
 });
 
 const categories = defineCollection({
@@ -33,6 +44,15 @@ const authors = defineCollection({
     pattern: "*.md",
   }),
   schema: authorSchema(),
+});
+
+const homeFeatured = defineCollection({
+  loader: glob({
+    base: "./src/content/home-featured",
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: homeFeatureSchema(),
 });
 
 const pages = defineCollection({
@@ -65,8 +85,10 @@ const articleReferenceProofFixtures = defineCollection({
 export const collections = {
   articleReferenceArticleFixtures,
   articleReferenceProofFixtures,
+  announcements,
   articles,
   authors,
   categories,
+  homeFeatured,
   pages,
 };

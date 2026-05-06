@@ -1,8 +1,17 @@
 import type {
+  AnnouncementEntry,
   ArticleEntry,
   AuthorEntry,
   CategorySummary,
 } from "../../src/lib/routes";
+
+/** Options for building announcement-entry test fixtures. */
+export interface AnnouncementEntryFixtureOptions {
+  data?: Partial<AnnouncementEntry["data"]>;
+  date?: Date;
+  filePath?: string;
+  id?: string;
+}
 
 /** Options for building article-entry test fixtures. */
 export interface ArticleEntryFixtureOptions {
@@ -30,6 +39,38 @@ export interface AuthorEntryFixtureOptions {
   socials?: Array<{ href: string; label: string }>;
   type?: AuthorEntry["data"]["type"];
   website?: string;
+}
+
+/**
+ * Builds a minimal Astro content announcement entry for unit tests.
+ *
+ * @param options Announcement entry overrides.
+ * @param options.data Frontmatter overrides.
+ * @param options.date Publication date override.
+ * @param options.filePath Source file path override.
+ * @param options.id Entry ID override.
+ * @returns Test announcement entry.
+ */
+export function announcementEntry({
+  data = {},
+  date = new Date("2022-01-01T00:00:00.000Z"),
+  filePath,
+  id = "sample-announcement",
+}: AnnouncementEntryFixtureOptions = {}): AnnouncementEntry {
+  return {
+    collection: "announcements",
+    data: {
+      author: "The Philosopher's Meme",
+      date,
+      description: "Announcement description",
+      draft: false,
+      tags: [],
+      title: "Sample Announcement",
+      ...data,
+    },
+    filePath: filePath ?? `/repo/src/content/announcements/${id}.md`,
+    id,
+  };
 }
 
 /**

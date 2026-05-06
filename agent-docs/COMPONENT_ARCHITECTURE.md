@@ -320,29 +320,31 @@ src/content/pages/index.md
   frontmatter:
     title
     description
-    heroImage
-    heroAlt
-    announcementImage
-    announcementAlt
-    primaryAction
-    secondaryAction
-  body:
-    homepage prose and editorial copy
+    startHere article IDs
+
+src/content/announcements/*.md
+  article-like announcement content
+
+src/content/home-featured/*.md
+  featured article references and link features
 
 src/pages/index.astro
   load pages/index
-  render(page)
-  load latest article
+  load articles, announcements, categories, authors, and home featured slots
   HomePage
-    HomeHeroBlock
-    PageProse or HomeIntroBlock
-      Content
-    HomeAnnouncementBlock
-    HomeFeaturedArticlesBlock
-    HomeLatestArticleBlock
+    HomeLeadGrid
+      HomeLeadHeroCell
+        HomeHeroBlock
+      HomeLeadFeaturedCell
+        HomeFeaturedCarousel
+          HomeFeaturedSlide
+      HomeLeadStartCell
+        FlatArticleList title="Start Here"
+      HomeLeadAnnouncementsCell
+        FlatArticleList title="Announcements"
     HomeCategoryOverviewBlock
-    HomeArchiveLinksBlock
-    SupportBlock
+    HomeDiscoveryLinksBlock
+    ArticleList title="Recent"
 ```
 
 The home page is a special page, not an article. It should stay route-controlled
@@ -350,7 +352,7 @@ through `src/pages/index.astro` because it needs dynamic latest-article data and
 component-controlled images. The prose and editorial copy should move into the
 pages content collection.
 
-This gives authors a Markdown editing surface without forcing the homepage to
+This gives authors Markdown-backed configuration without forcing the homepage to
 be pure Markdown. The route remains the composer for dynamic and visual blocks.
 
 The homepage should become an editorial front page. It should answer "what
@@ -363,6 +365,15 @@ should I read?" with multiple entry points:
 - announcements;
 - search/archive entry points;
 - support/community callouts.
+
+The current homepage redesign uses a desktop editorial front page with a
+two-column lead grid: a wide primary column for identity and Featured, and a
+thin secondary column for Start Here and Announcements. Mobile preserves source
+order as Hero, Featured, Start Here, Announcements. Categories return to the
+shared single-column browsing measure as a one-row horizontal rail with real
+scroll controls, followed by a thin secondary discovery strip and the Recent
+article feed. Tags are discoverable through article metadata and `/tags/`, but
+they are not enumerated on the homepage.
 
 ### Archive, Category, And Search Pages
 
@@ -505,11 +516,18 @@ Page components are generic content surfaces. Blocks are reusable page sections.
 - `MarkdownPage`: generic page content renderer.
 - `PageHeader`: title/description for non-article pages.
 - `PageProse`: prose wrapper for non-article Markdown.
+- `FlatArticleList`: flat compact article-like rail for homepage/sidebar
+  surfaces.
+- `FlatArticleTeaser`: one compact article-like teaser.
 - `HomeHeroBlock`: homepage identity and primary actions.
+- `HomeFeaturedCarousel`: static-first featured carousel.
+- `HomeFeaturedSlide`: one normalized featured article or link.
+- `HomeDiscoveryLinksBlock`: thin All articles/Authors/Tags strip.
 - `HomeAnnouncementBlock`: announcement image and copy.
 - `HomeLatestArticleBlock`: latest article teaser.
 - `HomeFeaturedArticlesBlock`: editorial start-here or featured reading.
-- `HomeCategoryOverviewBlock`: categories with recent/featured article previews.
+- `HomeCategoryOverviewBlock`: one-row homepage category rail with scroll
+  controls.
 - `HomeArchiveLinksBlock`: entry points into archive/categories.
 - `SupportBlock`: reusable support CTA.
 - `CategoryOverviewBlock`: category grid or index.

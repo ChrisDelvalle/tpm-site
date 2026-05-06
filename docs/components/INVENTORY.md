@@ -52,6 +52,8 @@ component has a matching one-pager in this directory.
 - `src/components/articles/ArticleProse.astro`
 - `src/components/articles/ArticleTableOfContents.astro`
 - `src/components/articles/ArticleTags.astro`
+- `src/components/articles/FlatArticleList.astro`
+- `src/components/articles/FlatArticleTeaser.astro`
 - `src/components/articles/HoverImageCard.astro`
 - `src/components/articles/HoverImageLink.astro`
 - `src/components/articles/HoverImageParagraph.astro`
@@ -84,9 +86,16 @@ component has a matching one-pager in this directory.
 - `src/components/blocks/HomeAnnouncementBlock.astro`
 - `src/components/blocks/HomeArchiveLinksBlock.astro`
 - `src/components/blocks/HomeCategoryOverviewBlock.astro`
+- `src/components/blocks/HomeCurrentPanel.astro`
+- `src/components/blocks/HomeDiscoveryLinksBlock.astro`
+- `src/components/blocks/HomeFeaturedCarousel.astro`
 - `src/components/blocks/HomeFeaturedArticlesBlock.astro`
+- `src/components/blocks/HomeFeaturedSlide.astro`
 - `src/components/blocks/HomeHeroBlock.astro`
 - `src/components/blocks/HomeLatestArticleBlock.astro`
+- `src/components/blocks/HomeMastheadBlock.astro`
+- `src/components/blocks/HomeRecentPostsBlock.astro`
+- `src/components/blocks/HomeStartHerePanel.astro`
 - `src/components/blocks/SearchResultsBlock.astro`
 - `src/components/blocks/SupportBlock.astro`
 - `src/components/blocks/TermOverviewBlock.astro`

@@ -1,0 +1,53 @@
+---
+import TextLink from "../ui/TextLink.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+
+interface Props {
+  items: readonly ArticleListItem[];
+  title?: string;
+}
+
+const { items, title = "Most Recent" } = Astro.props;
+---
+
+<section
+  class="grid min-w-0 content-start gap-4"
+  aria-labelledby="home-recent-heading"
+  data-home-recent-posts
+>
+  <h2
+    id="home-recent-heading"
+    class="text-foreground m-0 text-2xl font-semibold tracking-normal"
+  >
+    {title}
+  </h2>
+  {
+    items.length > 0 ? (
+      <ol class="grid min-w-0 gap-4">
+        {items.map((item) => (
+          <li class="border-border grid min-w-0 gap-1 border-b pb-4 last:border-b-0 last:pb-0">
+            <TextLink
+              href={item.href}
+              variant="subtle"
+              tone="neutral"
+              prefetch="hover"
+            >
+              <span class="line-clamp-2 min-w-0 text-sm leading-6 font-semibold">
+                {item.title}
+              </span>
+            </TextLink>
+            <div class="text-muted-foreground flex min-w-0 flex-wrap gap-x-2 gap-y-1 text-xs">
+              {item.category && <span>{item.category.title}</span>}
+              {item.category && item.date && <span aria-hidden="true">/</span>}
+              {item.date && <time>{item.date}</time>}
+            </div>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="text-muted-foreground m-0 text-sm">
+        Recent articles will appear here.
+      </p>
+    )
+  }
+</section>

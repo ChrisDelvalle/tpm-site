@@ -8,13 +8,17 @@ interface Props {
   darkImage: ImageMetadata;
   imageAlt: string;
   lightImage: ImageMetadata;
-  tagline: string;
+  tagline?: string | undefined;
 }
 
 const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
 ---
 
-<section class="grid gap-6" aria-labelledby="home-hero-heading">
+<section
+  class="grid min-w-0 content-center justify-items-center gap-4 text-center"
+  aria-labelledby="home-hero-heading"
+  data-home-hero-block
+>
   <h1 id="home-hero-heading" class="sr-only">The Philosopher's Meme</h1>
   <ThemedImage
     lightImage={lightImage}
@@ -23,11 +27,17 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
     layout="full-width"
     loading="eager"
     fetchpriority="high"
-    sizes="(min-width: 64rem) 56rem, calc(100vw - 2rem)"
-    class="h-auto w-full"
+    sizes="(min-width: 80rem) 48rem, (min-width: 64rem) 64vw, calc(100vw - 2rem)"
+    class="mx-auto h-auto w-full max-w-3xl object-contain"
   />
-  <p class="text-muted-foreground max-w-2xl text-lg leading-8">{tagline}</p>
-  <div class="flex flex-wrap gap-3">
+  {
+    tagline && (
+      <p class="text-muted-foreground max-w-xl text-base leading-7">
+        {tagline}
+      </p>
+    )
+  }
+  <div class="flex flex-wrap justify-center gap-3">
     <LinkButton href="https://patreon.com/thephilosophersmeme">
       Support Us
     </LinkButton>
@@ -36,7 +46,7 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
       variant="outline"
       tone="neutral"
     >
-      Join TPM Discord
+      Join Discord
     </LinkButton>
   </div>
 </section>

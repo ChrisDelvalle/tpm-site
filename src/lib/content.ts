@@ -1,13 +1,17 @@
 import { getCollection } from "astro:content";
 
 import {
+  type AnnouncementEntry,
   type ArticleEntry,
+  assertUniqueAnnouncementSlugs,
   assertUniqueArticleSlugs,
   type CategoryEntry,
   categorySlug,
   type CategorySummary,
+  isPublishedAnnouncement,
   isPublishedArticle,
   normalizeSlug,
+  sortAnnouncementsNewestFirst,
   sortNewestFirst,
 } from "./routes";
 import {
@@ -25,6 +29,17 @@ export async function getArticles(): Promise<ArticleEntry[]> {
   const entries = await getArticleEntries();
   assertUniqueArticleSlugs(entries);
   return sortNewestFirst(entries.filter(isPublishedArticle));
+}
+
+/**
+ * Loads all published announcements in newest-first order.
+ *
+ * @returns Published announcement entries sorted for public announcement surfaces.
+ */
+export async function getAnnouncements(): Promise<AnnouncementEntry[]> {
+  const entries = await getAnnouncementEntries();
+  assertUniqueAnnouncementSlugs(entries);
+  return sortAnnouncementsNewestFirst(entries.filter(isPublishedAnnouncement));
 }
 
 /**
@@ -108,6 +123,10 @@ function categoryFromMetadata(
 
 async function getArticleEntries(): Promise<ArticleEntry[]> {
   return getCollection("articles");
+}
+
+async function getAnnouncementEntries(): Promise<AnnouncementEntry[]> {
+  return getCollection("announcements");
 }
 
 function labelFromSlug(slug: string): string {

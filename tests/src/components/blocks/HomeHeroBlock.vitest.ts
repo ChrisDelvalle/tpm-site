@@ -25,10 +25,11 @@ describe("HomeHeroBlock", () => {
     expect(view).toContain('fetchpriority="high"');
     expect(view).toContain('fetchpriority="low"');
     expect(view).toContain(
-      'sizes="(min-width: 64rem) 56rem, calc(100vw - 2rem)"',
+      'sizes="(min-width: 80rem) 48rem, (min-width: 64rem) 64vw, calc(100vw - 2rem)"',
     );
+    expect(view).toContain("max-w-3xl");
     expect(view).toContain("The philosophy of memes.");
     expect(view).toContain("Support Us");
-    expect(view).toContain("Join TPM Discord");
+    expect(view).toContain("Join Discord");
   });
 });

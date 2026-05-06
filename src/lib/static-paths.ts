@@ -1,5 +1,19 @@
-import type { ArticleEntry, CategorySummary } from "./routes";
+import type {
+  AnnouncementEntry,
+  ArticleEntry,
+  CategorySummary,
+} from "./routes";
 import type { TagSummary } from "./tags";
+
+/** Astro static path entry for announcement pages. */
+interface AnnouncementStaticPath {
+  params: {
+    slug: string;
+  };
+  props: {
+    announcement: AnnouncementEntry;
+  };
+}
 
 /** Astro static path entry for article pages. */
 interface ArticleStaticPath {
@@ -29,6 +43,21 @@ interface TagStaticPath {
   props: {
     tag: TagSummary;
   };
+}
+
+/**
+ * Builds Astro static paths for published announcements.
+ *
+ * @param announcements Published announcement entries.
+ * @returns Static path params and props.
+ */
+export function announcementStaticPaths(
+  announcements: AnnouncementEntry[],
+): AnnouncementStaticPath[] {
+  return announcements.map((announcement) => ({
+    params: { slug: announcement.id },
+    props: { announcement },
+  }));
 }
 
 /**

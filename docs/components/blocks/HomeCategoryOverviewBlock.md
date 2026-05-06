@@ -6,7 +6,8 @@ Source: `src/components/blocks/HomeCategoryOverviewBlock.astro`
 
 `HomeCategoryOverviewBlock` provides homepage category discovery while staying
 inside the same comfortable content measure as the surrounding homepage
-sections.
+sections. It uses a one-row horizontal rail so categories are available without
+spending a full grid block of vertical space.
 
 ## Public Contract
 
@@ -19,25 +20,40 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/navigation`, `./CategoryOverviewBlock`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+It composes `../ui/IconButton`, `../ui/TextLink`, `lucide-astro` chevrons, and
+the small `../../scripts/horizontal-scroll-rail` controller. Parent blocks
+should pass normalized props and slots rather than asking this component to
+fetch global content directly.
 
 ## Layout And Responsiveness
 
-The block uses the compact category grid variant while inheriting its width from
-`BrowsingBody`. It aligns with homepage featured, archive, and support sections
-because the shared browsing body owns the page measure. It should not introduce
-its own max-width or inherit a denser archive/category-page grid unless the
-homepage layout is explicitly redesigned around that wider content measure.
+The block renders one horizontal row at every viewport width. Items share one
+tile width and height. The shared width should be the smallest content-aware
+width the largest item needs, then stretch evenly when the rail has extra room.
+Items never wrap into a second row, and the rail scrolls horizontally when the
+full list does not fit. The section width still comes from `BrowsingBody`, so it
+aligns with homepage featured, discovery, and recent sections.
 
 ## Layering And Scrolling
 
-The component should avoid creating a stacking context unless it owns an overlay,
-sticky region, or popover. Any `z-index`, sticky offset, fixed size, or scroll
-container is part of this component's public design and needs an invariant test.
+The rail owns a local horizontal scroll container and two absolutely positioned
+control affordances. Those controls may use a small local `z-index` above the
+rail and subtle edge fades, but they must not escape the component or overlap
+neighboring homepage sections.
 
 ## Interaction States
 
-Default, long-content, missing optional content, hover, focus-visible, and dark-mode states should be represented in the catalog when relevant. Empty lists, missing image/description, many tags, one-item lists, and dense lists should have catalog examples or tests where applicable.
+Default, long-content, missing optional content, hover, focus-visible,
+horizontal overflow, and dark-mode states should be represented in the catalog
+when relevant. Empty lists, one-item lists, and dense lists should have catalog
+examples or tests where applicable.
+
+The previous/next buttons are progressive enhancement. They are hidden by
+default so no-JavaScript users never see inert buttons; native horizontal
+scrolling and keyboard focus remain available. When JavaScript runs, each edge
+control appears only when there is more content in that direction. At the left
+edge, the first item is fully visible with no left fade. At the right edge, the
+last item is fully visible with no right fade.
 
 ## Accessibility Semantics
 
@@ -63,8 +79,16 @@ visible, and CTAs distinguishable from neutral actions.
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
-- aligns with the homepage support and archive-link measure.
-- never renders the four-column archive grid on the homepage.
+- aligns with the homepage featured, discovery, and recent measures.
+- keeps every category item on one row and scrolls horizontally when needed.
+- keeps category items equal width and height while letting the shared width
+  stretch evenly to available space.
+- reveals each functional previous/next icon button only when there is more
+  content in that direction.
+- keeps the first and last item clear at the corresponding scroll edge by
+  hiding the inactive edge fade and control.
+- keeps native horizontal scrolling and keyboard navigation usable without
+  JavaScript.
 - renders empty and missing-content states without throwing or leaving broken layout.
 
 ## Follow-Up Notes

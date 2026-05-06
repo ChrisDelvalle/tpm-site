@@ -4,7 +4,8 @@ Source: `src/components/articles/RelatedArticlesBlock.astro`
 
 ## Purpose
 
-`RelatedArticlesBlock` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`RelatedArticlesBlock` serves as an article-domain component for article lists,
+metadata, or post-article discovery.
 
 ## Public Contract
 

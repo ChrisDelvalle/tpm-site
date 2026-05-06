@@ -5,6 +5,7 @@ import path from "node:path";
 import { describe, expect, spyOn, test } from "bun:test";
 
 import {
+  announcementPublicationStats,
   type ArticlePublication,
   articlePublicationStats,
   formatBuildVerificationReport,
@@ -52,6 +53,12 @@ const oxcNormalizedAstroPrefetchRuntimeFixture =
 describe("build verifier helpers", () => {
   test("derives required article and category paths from source content", () => {
     expect(requiredPathsForSource(publication(), ["history"])).toContain(
+      "announcements/index.html",
+    );
+    expect(
+      requiredPathsForSource(publication(), ["history"], ["site-news"]),
+    ).toContain("announcements/site-news/index.html");
+    expect(requiredPathsForSource(publication(), ["history"])).toContain(
       "articles/markdown-post/index.html",
     );
     expect(requiredPathsForSource(publication(), ["history"])).toContain(
@@ -92,10 +99,37 @@ describe("build verifier helpers", () => {
       expect(Array.from(result.publishedTagSegments)).toEqual(["meme history"]);
     }));
 
+  test("sorts source announcement publication stats deterministically", async () =>
+    withTempRoot(async (root) => {
+      await writeText(
+        root,
+        "src/content/announcements/z-news.md",
+        "---\ntitle: Z\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/announcements/a-news.md",
+        "---\ntitle: A\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/announcements/draft-news.md",
+        "---\ntitle: Draft\ndraft: true\n---\n",
+      );
+
+      const result = await announcementPublicationStats(
+        path.join(root, "src/content/announcements"),
+      );
+
+      expect(result.publishedSlugs).toEqual(["a-news", "z-news"]);
+      expect(result.draftSlugs).toEqual(["draft-news"]);
+    }));
+
   test("chooses representative static pages without hardcoded migrated slugs", () => {
     expect(staticReadingPagesForSource(publication(), ["history"])).toEqual([
       "index.html",
       "about/index.html",
+      "announcements/index.html",
       "articles/index.html",
       "articles/all/index.html",
       "tags/index.html",
@@ -103,6 +137,9 @@ describe("build verifier helpers", () => {
       "categories/history/index.html",
       "tags/meme history/index.html",
     ]);
+    expect(
+      staticReadingPagesForSource(publication(), ["history"], ["site-news"]),
+    ).toContain("announcements/site-news/index.html");
   });
 
   test("extracts href and src link targets from built HTML", () => {
@@ -198,6 +235,7 @@ describe("build verifier helpers", () => {
       );
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
@@ -236,6 +274,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/index.html", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
@@ -278,6 +317,7 @@ describe("build verifier helpers", () => {
           await writeText(root, "dist/index.html", "");
           await writeText(root, "dist/404.html", "");
           await writeText(root, "dist/about/index.html", "");
+          await writeText(root, "dist/announcements/index.html", "");
           await writeText(root, "dist/articles/index.html", "");
           await writeText(root, "dist/articles/all/index.html", "");
           await writeText(
@@ -322,6 +362,11 @@ describe("build verifier helpers", () => {
         "src/content/articles/history/draft.md",
         "---\ntitle: Draft\ndraft: true\n---\n",
       );
+      await writeText(
+        root,
+        "src/content/announcements/hidden-announcement.md",
+        "---\ntitle: Draft Announcement\ndraft: true\n---\n",
+      );
 
       await writeText(
         root,
@@ -358,6 +403,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/_astro/index.js.map", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
@@ -369,10 +415,15 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/categories/index.html", "");
       await writeText(root, "dist/tags/index.html", "");
       await writeText(root, "dist/feed.xml", "<feed>draft</feed>");
-      await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
+      await writeText(
+        root,
+        "dist/sitemap-index.xml",
+        "<sitemap>hidden-announcement</sitemap>",
+      );
       await writeText(root, "dist/pagefind/pagefind.js", "");
 
       const result = await verifyBuild({
+        announcementDir: path.join(root, "src/content/announcements"),
         articleDir: path.join(root, "src/content/articles"),
         categoryDir: path.join(root, "src/content/categories"),
         distDir: path.join(root, "dist"),
@@ -382,7 +433,10 @@ describe("build verifier helpers", () => {
         "expected 1 article pages from published source content, found 2",
       ]);
       expect(result.issues.brokenLinks).toEqual(["index.html -> /missing/"]);
-      expect(result.issues.draftLeaks).toEqual(["feed.xml -> draft"]);
+      expect(result.issues.draftLeaks).toEqual([
+        "feed.xml -> draft",
+        "sitemap-index.xml -> hidden-announcement",
+      ]);
       expect(result.issues.missingArticleJsonLd).toEqual([
         "articles/extra/index.html",
         "articles/published/index.html",
@@ -439,6 +493,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/index.html", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles", "not a directory");
       await writeText(root, "dist/categories/index.html", "");
       await writeText(root, "dist/tags/index.html", "");
@@ -468,6 +523,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/index.html", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
@@ -515,6 +571,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/index.html", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
@@ -559,6 +616,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/index.html", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
@@ -601,6 +659,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/index.html", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(
@@ -646,6 +705,7 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/index.html", "");
       await writeText(root, "dist/404.html", "");
       await writeText(root, "dist/about/index.html", "");
+      await writeText(root, "dist/announcements/index.html", "");
       await writeText(root, "dist/articles/index.html", "");
       await writeText(root, "dist/articles/all/index.html", "");
       await writeText(

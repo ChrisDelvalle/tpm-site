@@ -1,13 +1,29 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  announcementStaticPaths,
   articleStaticPaths,
   categoryStaticPaths,
   tagStaticPaths,
 } from "../../../src/lib/static-paths";
-import { articleEntry, categorySummary } from "../../helpers/content";
+import {
+  announcementEntry,
+  articleEntry,
+  categorySummary,
+} from "../../helpers/content";
 
 describe("static path helpers", () => {
+  test("builds announcement static path params from entry IDs", () => {
+    const announcement = announcementEntry({ id: "site-news" });
+
+    expect(announcementStaticPaths([announcement])).toEqual([
+      {
+        params: { slug: "site-news" },
+        props: { announcement },
+      },
+    ]);
+  });
+
   test("builds article static path params from entry IDs", () => {
     const article = articleEntry({ id: "article-title" });
 

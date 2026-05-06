@@ -1,0 +1,24 @@
+---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { announcementListItems } from "../../lib/announcements";
+import { getAnnouncements } from "../../lib/content";
+import { announcementsIndexUrl } from "../../lib/routes";
+
+const announcements = await getAnnouncements();
+---
+
+<BaseLayout
+  title="Announcements | The Philosopher's Meme"
+  description="Updates from The Philosopher's Meme."
+  canonicalPath={announcementsIndexUrl()}
+>
+  <BrowsingBody>
+    <ArchiveListBlock
+      title="Announcements"
+      description="Updates from The Philosopher's Meme."
+      items={announcementListItems(announcements)}
+    />
+  </BrowsingBody>
+</BaseLayout>

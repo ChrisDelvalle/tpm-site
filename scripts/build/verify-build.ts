@@ -10,6 +10,7 @@ const requiredBasePaths = [
   "index.html",
   "404.html",
   "about/index.html",
+  "announcements/index.html",
   "articles/index.html",
   "articles/all/index.html",
   "categories/index.html",
@@ -21,6 +22,7 @@ const requiredBasePaths = [
 const staticReadingBasePages = [
   "index.html",
   "about/index.html",
+  "announcements/index.html",
   "articles/index.html",
   "articles/all/index.html",
   "tags/index.html",
@@ -42,6 +44,12 @@ export interface ArticlePublication {
   publishedTagSegments: Set<string>;
 }
 
+/** Source-content publication state used to verify generated announcements. */
+export interface AnnouncementPublication {
+  draftSlugs: string[];
+  publishedSlugs: string[];
+}
+
 /** Categorized build verification failures. */
 export interface BuildVerificationIssues {
   articleCountIssues: string[];
@@ -60,10 +68,47 @@ export interface BuildVerificationIssues {
 
 /** Inputs needed to verify a completed Astro build. */
 export interface BuildVerificationOptions {
+  announcementDir?: string;
   articleDir: string;
   categoryDir: string;
   distDir: string;
   expectedRedirects?: Record<string, string>;
+}
+
+/**
+ * Reads announcement source files and separates draft and published slugs.
+ *
+ * @param announcementDir Source announcement directory.
+ * @returns Publication stats derived from announcement frontmatter and paths.
+ */
+export async function announcementPublicationStats(
+  announcementDir: string,
+): Promise<AnnouncementPublication> {
+  if (!(await pathExists(announcementDir))) {
+    return { draftSlugs: [], publishedSlugs: [] };
+  }
+
+  const sourceFiles = (await listFiles(announcementDir)).filter((file) =>
+    /\.mdx?$/i.test(file),
+  );
+  const draftSlugs: string[] = [];
+  const publishedSlugs: string[] = [];
+
+  for (const file of sourceFiles) {
+    const { data } = matter(await readFile(file, "utf8"));
+    if (isDraft(data)) {
+      draftSlugs.push(filenameStem(file));
+    } else {
+      publishedSlugs.push(filenameStem(file));
+    }
+  }
+
+  return {
+    draftSlugs: draftSlugs.sort((left, right) => left.localeCompare(right)),
+    publishedSlugs: publishedSlugs.sort((left, right) =>
+      left.localeCompare(right),
+    ),
+  };
 }
 
 /** Build verification output used by reports and tests. */
@@ -242,14 +287,17 @@ export function linkTargets(html: string): string[] {
  *
  * @param articlePublication Published article and draft metadata.
  * @param categorySlugs Category slugs expected in the output.
+ * @param announcementSlugs Announcement slugs expected in the output.
  * @returns Relative `dist` paths that must exist after build.
  */
 export function requiredPathsForSource(
   articlePublication: ArticlePublication,
   categorySlugs: string[],
+  announcementSlugs: readonly string[] = [],
 ): string[] {
   return [
     ...requiredBasePaths,
+    ...announcementSlugs.map((slug) => `announcements/${slug}/index.html`),
     ...articlePublication.publishedArticles.map(
       (article) => `articles/${article.slug}/index.html`,
     ),
@@ -274,6 +322,7 @@ export async function runBuildVerificationCli(
   const quiet = args.includes("--quiet");
   const expectedRedirects = await configuredRedirects(rootDir);
   const result = await verifyBuild({
+    announcementDir: path.resolve(rootDir, "src/content/announcements"),
     articleDir: path.resolve(rootDir, "src/content/articles"),
     categoryDir: path.resolve(rootDir, "src/content/categories"),
     distDir: path.resolve(rootDir, "dist"),
@@ -317,11 +366,13 @@ export async function sourceCategorySlugs(
  *
  * @param articlePublication Published article and draft metadata.
  * @param categorySlugs Category slugs expected in the output.
+ * @param announcementSlugs Announcement slugs expected in the output.
  * @returns Relative `dist` paths to inspect for unexpected client scripts.
  */
 export function staticReadingPagesForSource(
   articlePublication: ArticlePublication,
   categorySlugs: string[],
+  announcementSlugs: readonly string[] = [],
 ): string[] {
   const representativeMarkdownArticle =
     articlePublication.publishedArticles.find((article) => !article.isMdx);
@@ -329,6 +380,9 @@ export function staticReadingPagesForSource(
 
   return [
     ...staticReadingBasePages,
+    announcementSlugs[0] === undefined
+      ? undefined
+      : `announcements/${announcementSlugs[0]}/index.html`,
     representativeMarkdownArticle === undefined
       ? undefined
       : `articles/${representativeMarkdownArticle.slug}/index.html`,
@@ -345,6 +399,7 @@ export function staticReadingPagesForSource(
  * Verifies that generated `dist` output matches source content expectations.
  *
  * @param options Build output, source content, and redirect expectations.
+ * @param options.announcementDir Source announcement directory, when announcement output should be verified.
  * @param options.articleDir Source article directory.
  * @param options.categoryDir Source category metadata directory.
  * @param options.distDir Generated build output directory.
@@ -352,6 +407,7 @@ export function staticReadingPagesForSource(
  * @returns Build verification result with counts and issues.
  */
 export async function verifyBuild({
+  announcementDir,
   articleDir,
   categoryDir,
   distDir,
@@ -359,6 +415,10 @@ export async function verifyBuild({
 }: BuildVerificationOptions): Promise<BuildVerificationResult> {
   const files = await listFiles(distDir);
   const articlePublication = await articlePublicationStats(articleDir);
+  const announcementPublication =
+    announcementDir === undefined
+      ? { draftSlugs: [], publishedSlugs: [] }
+      : await announcementPublicationStats(announcementDir);
   const categorySlugs = await sourceCategorySlugs(
     categoryDir,
     articlePublication,
@@ -366,11 +426,17 @@ export async function verifyBuild({
   const requiredPaths = requiredPathsForSource(
     articlePublication,
     categorySlugs,
+    announcementPublication.publishedSlugs,
   );
   const staticReadingPages = staticReadingPagesForSource(
     articlePublication,
     categorySlugs,
+    announcementPublication.publishedSlugs,
   );
+  const draftSlugs = [
+    ...articlePublication.draftSlugs,
+    ...announcementPublication.draftSlugs,
+  ];
   const htmlAndXml = files.filter((file) => /\.(?:html|xml)$/i.test(file));
   const astroClientScripts = files.filter((file) =>
     /\/_astro\/.+\.js$/i.test(file),
@@ -399,12 +465,7 @@ export async function verifyBuild({
       );
     }
 
-    await inspectDraftLeaks(
-      distDir,
-      file,
-      articlePublication.draftSlugs,
-      issues,
-    );
+    await inspectDraftLeaks(distDir, file, draftSlugs, issues);
   }
 
   const articleStats = await stat(path.join(distDir, "articles"));
@@ -528,6 +589,15 @@ function emptyIssues(): BuildVerificationIssues {
 async function exists(distDir: string, relativePath: string): Promise<boolean> {
   try {
     await access(path.join(distDir, relativePath));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function pathExists(fullPath: string): Promise<boolean> {
+  try {
+    await access(fullPath);
     return true;
   } catch {
     return false;

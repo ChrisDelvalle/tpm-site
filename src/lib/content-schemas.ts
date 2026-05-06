@@ -22,6 +22,19 @@ export function articleSchema(
 }
 
 /**
+ * Creates the announcement frontmatter schema.
+ *
+ * @param context Astro image schema context.
+ * @param context.image Astro local-image schema helper.
+ * @returns Strict announcement frontmatter schema.
+ */
+export function announcementSchema(
+  context: ImageSchemaContext,
+): ReturnType<typeof createArticleSchema> {
+  return createArticleSchema(context);
+}
+
+/**
  * Creates the category metadata schema.
  *
  * @returns Strict category metadata schema.
@@ -37,6 +50,17 @@ export function categorySchema(): ReturnType<typeof createCategorySchema> {
  */
 export function authorSchema(): ReturnType<typeof createAuthorSchema> {
   return createAuthorSchema();
+}
+
+/**
+ * Creates the homepage featured item schema.
+ *
+ * @returns Strict homepage featured frontmatter schema.
+ */
+export function homeFeatureSchema(): ReturnType<
+  typeof createHomeFeatureSchema
+> {
+  return createHomeFeatureSchema();
 }
 
 /**
@@ -120,14 +144,50 @@ function createAuthorSchema() {
     .strict();
 }
 
+function createHomeFeatureSchema() {
+  const sharedFeatureFields = {
+    active: z.boolean().default(true),
+    order: z.number().int().nonnegative(),
+  };
+  const articleFeatureSchema = z
+    .object({
+      ...sharedFeatureFields,
+      kind: z.literal("article"),
+      slug: z.string().min(1),
+    })
+    .strict();
+  const linkFeatureSchema = z
+    .object({
+      ...sharedFeatureFields,
+      kind: z.literal("link"),
+      link: hrefSchema(),
+      linkLabel: z.string().min(1),
+      title: z.string().min(1),
+    })
+    .strict();
+
+  return z.discriminatedUnion("kind", [
+    articleFeatureSchema,
+    linkFeatureSchema,
+  ]);
+}
+
 function createPageSchema() {
   return z
     .object({
       description: z.string().optional(),
       draft: z.boolean().optional(),
+      startHere: z.array(z.string().min(1)).default([]),
       title: z.string(),
     })
     .strict();
+}
+
+function hrefSchema() {
+  return z.union([
+    z.string().url(),
+    z.string().regex(/^\/(?!\/)/u, "Expected an absolute site path."),
+  ]);
 }
 
 function fileName(entry: string): string {

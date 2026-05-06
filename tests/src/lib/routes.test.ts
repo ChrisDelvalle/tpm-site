@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  type AnnouncementEntry,
+  announcementsIndexUrl,
+  announcementUrl,
   type ArticleEntry,
   articlesArchiveUrl,
   articlesIndexUrl,
@@ -17,10 +20,32 @@ import {
   imageUrl,
   pageUrl,
   searchUrl,
+  sortAnnouncementsNewestFirst,
   sortNewestFirst,
   tagsIndexUrl,
   tagUrl,
 } from "../../../src/lib/routes";
+
+function announcement(
+  id: string,
+  date: Date,
+  data: Partial<AnnouncementEntry["data"]> = {},
+): AnnouncementEntry {
+  return {
+    collection: "announcements",
+    data: {
+      author: "The Philosopher's Meme",
+      date,
+      description: "Description",
+      draft: false,
+      tags: [],
+      title: id,
+      ...data,
+    },
+    filePath: `/repo/src/content/announcements/${id}.md`,
+    id,
+  };
+}
 
 function article(
   id: string,
@@ -45,6 +70,8 @@ function article(
 
 describe("route helpers", () => {
   test("builds stable public URLs with expected trailing slash behavior", () => {
+    expect(announcementsIndexUrl()).toBe("/announcements/");
+    expect(announcementUrl("site-news")).toBe("/announcements/site-news/");
     expect(articlesIndexUrl()).toBe("/articles/");
     expect(articlesArchiveUrl()).toBe("/articles/all/");
     expect(articleUrl("article-title")).toBe("/articles/article-title/");
@@ -74,6 +101,18 @@ describe("route helpers", () => {
         article("b", sameDate),
         article("a", sameDate),
         article("new", new Date("2023-01-01T00:00:00Z")),
+      ]).map((entry) => entry.id),
+    ).toEqual(["new", "a", "b"]);
+  });
+
+  test("sorts announcements newest first with stable slug tiebreakers", () => {
+    const sameDate = new Date("2022-01-01T00:00:00Z");
+
+    expect(
+      sortAnnouncementsNewestFirst([
+        announcement("b", sameDate),
+        announcement("a", sameDate),
+        announcement("new", new Date("2023-01-01T00:00:00Z")),
       ]).map((entry) => entry.id),
     ).toEqual(["new", "a", "b"]);
   });

@@ -1,0 +1,42 @@
+---
+import TextLink from "../ui/TextLink.astro";
+
+interface DiscoveryLink {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  links: readonly DiscoveryLink[];
+  title?: string;
+}
+
+const { links, title = "More" } = Astro.props;
+const prefetchAttrsFor = (href: string) =>
+  href.startsWith("/") ? { prefetch: "hover" as const } : {};
+---
+
+<nav
+  class="border-border text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 border-y py-3 text-sm"
+  aria-label="Additional homepage discovery links"
+  data-home-discovery-links
+>
+  <span class="text-foreground font-semibold">{title}</span>
+  <span aria-hidden="true">/</span>
+  <ul class="flex min-w-0 flex-wrap gap-x-3 gap-y-2">
+    {
+      links.map((link) => (
+        <li>
+          <TextLink
+            href={link.href}
+            variant="subtle"
+            tone="muted"
+            {...prefetchAttrsFor(link.href)}
+          >
+            {link.label}
+          </TextLink>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

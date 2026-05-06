@@ -6,11 +6,14 @@ tests/**
 # scripts/testing/verify-test-accountability.ts on every accountability run.
 .test-accountability-ignore
 
-# Approved exception: Article and page bodies are human-authored editorial
-# content validated by content schemas, build checks, Markdown/MDX review
-# checks, and manual editorial review rather than mirrored unit tests.
+# Approved exception: Article, announcement, page, and homepage feature bodies are
+# human-authored editorial content validated by content schemas, build checks,
+# Markdown/MDX review checks, and manual editorial review rather than mirrored
+# unit tests.
 src/content/articles/**
+src/content/announcements/**
 src/content/pages/**
+src/content/home-featured/**
 
 # Approved exception: Category JSON files are content data validated by Astro
 # content schemas, content verification, build checks, and category-page tests.

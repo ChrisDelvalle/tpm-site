@@ -1,24 +1,33 @@
 ---
-import { getEntry, render } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 
-import recentImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
-import announcementImage from "../assets/site/r2021-03-22.png";
 import heroDarkImage from "../assets/site/tpm_home_hero_dark.png";
 import heroLightImage from "../assets/site/tpm_home_hero_light.png";
-import HomeAnnouncementBlock from "../components/blocks/HomeAnnouncementBlock.astro";
-import HomeArchiveLinksBlock from "../components/blocks/HomeArchiveLinksBlock.astro";
 import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
-import HomeFeaturedArticlesBlock from "../components/blocks/HomeFeaturedArticlesBlock.astro";
+import HomeDiscoveryLinksBlock from "../components/blocks/HomeDiscoveryLinksBlock.astro";
+import HomeFeaturedCarousel from "../components/blocks/HomeFeaturedCarousel.astro";
+import HomeFeaturedSlide from "../components/blocks/HomeFeaturedSlide.astro";
 import HomeHeroBlock from "../components/blocks/HomeHeroBlock.astro";
-import HomeLatestArticleBlock from "../components/blocks/HomeLatestArticleBlock.astro";
-import SupportBlock from "../components/blocks/SupportBlock.astro";
+import ArticleList from "../components/articles/ArticleList.astro";
+import FlatArticleList from "../components/articles/FlatArticleList.astro";
 import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { announcementListItems } from "../lib/announcements";
 import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleArchiveItems } from "../lib/archive";
 import { getAuthorEntries } from "../lib/authors";
-import { getArticles, getCategories } from "../lib/content";
+import { getAnnouncements, getArticles, getCategories } from "../lib/content";
+import {
+  activeHomeFeatures,
+  homeArticleSelection,
+  homeFeaturedSelection,
+} from "../lib/home";
 import { sectionNavigationItems } from "../lib/navigation";
+import {
+  articlesArchiveUrl,
+  authorsIndexUrl,
+  tagsIndexUrl,
+} from "../lib/routes";
 
 const home = await getEntry("pages", "index");
 
@@ -26,16 +35,60 @@ if (!home) {
   throw new Error("Missing home page content at src/content/pages/index.md.");
 }
 
-const { Content } = await render(home);
 const articles = await getArticles();
+const announcements = await getAnnouncements();
 const categories = await getCategories();
 const authors = await getAuthorEntries();
-const articleItems = articleListItemsFromArchive(
-  articleArchiveItems(articles, categories, authors),
+const archiveItems = articleArchiveItems(articles, categories, authors);
+const articleItems = articleListItemsFromArchive(archiveItems);
+const announcementItems = announcementListItems(announcements.slice(0, 3));
+const startHereSelection = homeArticleSelection(
+  archiveItems,
+  home.data.startHere,
+  4,
 );
-const [latestArticle] = articleItems;
-const featuredArticles = articleItems.slice(1, 4);
+
+if (startHereSelection.missingIds.length > 0) {
+  throw new Error(
+    `Homepage startHere contains unknown article IDs: ${startHereSelection.missingIds.join(
+      ", ",
+    )}.`,
+  );
+}
+
+const startHereItems = articleListItemsFromArchive(
+  startHereSelection.selectedItems,
+);
+const recentFeedItems = articleItems.slice(0, 8);
 const categoryItems = sectionNavigationItems(categories, "/");
+const homeFeaturedEntries = activeHomeFeatures(
+  await getCollection("homeFeatured"),
+);
+const featuredSelection = homeFeaturedSelection(
+  homeFeaturedEntries,
+  archiveItems,
+);
+
+if (featuredSelection.missingSlugs.length > 0) {
+  throw new Error(
+    `Homepage featured items contain unknown article slugs: ${featuredSelection.missingSlugs.join(
+      ", ",
+    )}.`,
+  );
+}
+
+const renderedFeaturedItems = await Promise.all(
+  featuredSelection.items.map(async (item) => {
+    const { Content } = await render(item.entry);
+
+    return { Content, item };
+  }),
+);
+const discoveryLinks = [
+  { href: articlesArchiveUrl(), label: "All articles" },
+  { href: authorsIndexUrl(), label: "Authors" },
+  { href: tagsIndexUrl(), label: "Tags" },
+] as const;
 
 const title = `${home.data.title} | The Philosopher's Meme`;
 const description =
@@ -44,27 +97,64 @@ const description =
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/">
-  <BrowsingBody>
-    <HomeHeroBlock
-      lightImage={heroLightImage}
-      darkImage={heroDarkImage}
-      imageAlt={home.data.title}
-      tagline={description}
-    />
-    <HomeAnnouncementBlock
-      image={announcementImage}
-      imageAlt="The Philosopher's Meme announcement artwork"
+  <BrowsingBody width="wide">
+    <div
+      class="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)] lg:items-start"
+      data-home-lead-grid
     >
-      <Content />
-    </HomeAnnouncementBlock>
-    <HomeLatestArticleBlock
-      image={recentImage}
-      imageAlt={latestArticle?.title ?? "Most recent article"}
-      item={latestArticle}
-    />
-    <HomeFeaturedArticlesBlock items={featuredArticles} />
+      <div class="min-w-0 lg:col-start-1 lg:row-start-1" data-home-lead-hero>
+        <HomeHeroBlock
+          lightImage={heroLightImage}
+          darkImage={heroDarkImage}
+          imageAlt={home.data.title}
+        />
+      </div>
+      <div
+        class="min-w-0 lg:col-start-1 lg:row-start-2"
+        data-home-lead-featured
+      >
+        <HomeFeaturedCarousel itemCount={renderedFeaturedItems.length}>
+          {
+            renderedFeaturedItems.map(({ Content, item }, index) => (
+              <HomeFeaturedSlide index={index} item={item}>
+                <Content />
+              </HomeFeaturedSlide>
+            ))
+          }
+        </HomeFeaturedCarousel>
+      </div>
+      <div class="min-w-0 lg:col-start-2 lg:row-start-1" data-home-lead-start>
+        <FlatArticleList
+          title="Start Here"
+          items={startHereItems}
+          emptyText="Curated starter articles will appear here."
+        />
+      </div>
+      <div
+        class="min-w-0 lg:col-start-2 lg:row-start-2"
+        data-home-lead-announcements
+      >
+        <FlatArticleList
+          title="Announcements"
+          items={announcementItems}
+          emptyText="Announcements will appear here."
+        />
+      </div>
+    </div>
     <HomeCategoryOverviewBlock items={categoryItems} />
-    <HomeArchiveLinksBlock />
-    <SupportBlock />
+    <HomeDiscoveryLinksBlock links={discoveryLinks} />
+    <section
+      class="grid min-w-0 gap-4"
+      aria-labelledby="home-recent-feed-heading"
+      data-home-recent-feed
+    >
+      <h2
+        id="home-recent-feed-heading"
+        class="text-foreground m-0 text-2xl font-semibold tracking-normal"
+      >
+        Recent
+      </h2>
+      <ArticleList items={recentFeedItems} />
+    </section>
   </BrowsingBody>
 </BaseLayout>

@@ -1,0 +1,38 @@
+---
+import TextLink from "../ui/TextLink.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+
+interface Props {
+  item: ArticleListItem;
+}
+
+const { item } = Astro.props;
+const metaParts = [item.category?.title, item.date, item.author].filter(
+  (part): part is string => part !== undefined && part !== "",
+);
+---
+
+<article class="grid min-w-0 gap-1" data-flat-article-teaser>
+  <h3
+    class="text-foreground m-0 line-clamp-2 min-w-0 text-sm leading-6 font-semibold tracking-normal"
+  >
+    <TextLink href={item.href} variant="subtle" tone="neutral" prefetch="hover">
+      {item.title}
+    </TextLink>
+  </h3>
+  {
+    metaParts.length > 0 && (
+      <p
+        class="text-muted-foreground m-0 flex min-w-0 flex-wrap gap-x-2 gap-y-1 text-xs"
+        data-flat-article-teaser-meta
+      >
+        {metaParts.map((part, index) => (
+          <>
+            {index > 0 && <span aria-hidden="true">/</span>}
+            <span>{part}</span>
+          </>
+        ))}
+      </p>
+    )
+  }
+</article>

@@ -13,6 +13,7 @@ import {
 } from "./helpers/layout";
 
 const archiveRoutes = [
+  "/announcements/",
   "/articles/",
   "/articles/all/",
   "/categories/",
@@ -69,14 +70,14 @@ test.describe("component layout invariants", () => {
 
     const pageFrame = page.locator("[data-page-frame]").first();
     const categoryOverview = page.locator("[data-home-category-overview]");
-    const supportBlock = page.locator("[data-support-block]").last();
+    const recentFeed = page.locator("[data-home-recent-feed]");
 
     await expectHorizontallyContained(categoryOverview, pageFrame, {
       inner: "homepage category overview",
       outer: "homepage page frame",
     });
-    await expectHorizontallyContained(supportBlock, pageFrame, {
-      inner: "homepage support block",
+    await expectHorizontallyContained(recentFeed, pageFrame, {
+      inner: "homepage recent feed",
       outer: "homepage page frame",
     });
 
@@ -84,15 +85,279 @@ test.describe("component layout invariants", () => {
       categoryOverview,
       "homepage category overview",
     );
-    const supportBox = await visibleBoundingBox(
-      supportBlock,
-      "homepage support block",
-    );
+    const recentBox = await visibleBoundingBox(recentFeed, "homepage recent");
     expect(categoryBox.width).toBeGreaterThan(700);
-    expect(supportBox.width).toBeGreaterThan(700);
-    expect(Math.abs(categoryBox.width - supportBox.width)).toBeLessThanOrEqual(
+    expect(recentBox.width).toBeGreaterThan(700);
+    expect(Math.abs(categoryBox.width - recentBox.width)).toBeLessThanOrEqual(
       1,
     );
+  });
+
+  test("homepage flat front page exposes announcements, featured, discovery, and reading paths", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 1000, width: 1440 });
+    await page.goto("/");
+
+    const leadGrid = page.locator("[data-home-lead-grid]");
+    const leadHero = page.locator("[data-home-lead-hero]");
+    const leadFeatured = page.locator("[data-home-lead-featured]");
+    const leadStart = page.locator("[data-home-lead-start]");
+    const leadAnnouncements = page.locator("[data-home-lead-announcements]");
+    const hero = page.locator("[data-home-hero-block]");
+    const featured = page.locator("[data-home-featured-carousel]");
+    const startHere = leadStart.locator("[data-flat-article-list]");
+    const announcements = leadAnnouncements.locator("[data-flat-article-list]");
+    const categories = page.locator("[data-home-category-overview]");
+    const discoveryLinks = page.locator("[data-home-discovery-links]");
+    const recentFeed = page.locator("[data-home-recent-feed]");
+
+    await expect(announcements.getByRole("link").first()).toBeVisible();
+    await expect(hero.getByRole("link", { name: "Support Us" })).toBeVisible();
+    await expect(
+      hero.getByRole("link", { name: "Join Discord" }),
+    ).toBeVisible();
+    await expect(
+      featured
+        .locator("[data-home-featured-slide]")
+        .first()
+        .getByRole("link")
+        .first(),
+    ).toBeVisible();
+    await expect(startHere.getByRole("link").first()).toBeVisible();
+    await expect(
+      discoveryLinks.getByRole("link", { name: "All articles" }),
+    ).toHaveAttribute("href", "/articles/all/");
+    await expect(
+      discoveryLinks.getByRole("link", { name: "Authors" }),
+    ).toHaveAttribute("href", "/authors/");
+    await expect(
+      discoveryLinks.getByRole("link", { name: "Tags" }),
+    ).toHaveAttribute("href", "/tags/");
+    await expect(
+      discoveryLinks.getByRole("link", { name: "GitHub" }),
+    ).toHaveCount(0);
+    await expect(discoveryLinks.getByRole("link", { name: "RSS" })).toHaveCount(
+      0,
+    );
+    await expect(page.getByText("Essays")).toHaveCount(0);
+    await expect(
+      recentFeed.getByRole("link", { name: "Join the TPM Discord" }),
+    ).toHaveCount(0);
+
+    const leadGridBox = await visibleBoundingBox(
+      leadGrid,
+      "homepage lead grid",
+    );
+    const leadHeroBox = await visibleBoundingBox(
+      leadHero,
+      "homepage lead hero cell",
+    );
+    const leadFeaturedBox = await visibleBoundingBox(
+      leadFeatured,
+      "homepage lead featured cell",
+    );
+    const leadStartBox = await visibleBoundingBox(
+      leadStart,
+      "homepage lead start-here cell",
+    );
+    const leadAnnouncementsBox = await visibleBoundingBox(
+      leadAnnouncements,
+      "homepage lead announcements cell",
+    );
+    const announcementBox = await visibleBoundingBox(
+      announcements,
+      "homepage announcements",
+    );
+    const heroBox = await visibleBoundingBox(hero, "homepage hero");
+    const heroImageBox = await visibleBoundingBox(
+      hero.locator("img").first(),
+      "homepage hero image",
+    );
+    const featuredBox = await visibleBoundingBox(featured, "featured carousel");
+    const featuredViewportBox = await visibleBoundingBox(
+      featured.locator("[data-home-featured-viewport]"),
+      "featured carousel viewport",
+    );
+    const startBox = await visibleBoundingBox(startHere, "start here rail");
+    const featuredHeadingBox = await visibleBoundingBox(
+      featured.getByRole("heading", { name: "Featured" }),
+      "featured heading",
+    );
+    const announcementsHeadingBox = await visibleBoundingBox(
+      announcements.getByRole("heading", { name: "Announcements" }),
+      "announcements heading",
+    );
+
+    expect(leadHeroBox.x).toBeLessThan(leadStartBox.x);
+    expect(leadFeaturedBox.x).toBeLessThan(leadAnnouncementsBox.x);
+    expect(leadHeroBox.width).toBeGreaterThan(leadStartBox.width);
+    expect(leadFeaturedBox.width).toBeGreaterThan(leadAnnouncementsBox.width);
+    expect(leadHeroBox.width).toBeGreaterThan(leadGridBox.width * 0.55);
+    expect(leadStartBox.width).toBeGreaterThan(leadGridBox.width * 0.25);
+    expect(Math.abs(leadHeroBox.x - leadFeaturedBox.x)).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(leadStartBox.x - leadAnnouncementsBox.x),
+    ).toBeLessThanOrEqual(1);
+    expect(Math.abs(leadHeroBox.y - leadStartBox.y)).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(leadFeaturedBox.y - leadAnnouncementsBox.y),
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(featuredHeadingBox.y - announcementsHeadingBox.y),
+    ).toBeLessThanOrEqual(1);
+    expect(heroBox.x).toBeLessThan(startBox.x);
+    expect(featuredBox.x).toBeLessThan(announcementBox.x);
+    expect(featuredBox.width).toBeGreaterThan(leadGridBox.width * 0.55);
+    expect(heroImageBox.width).toBeGreaterThan(heroBox.width * 0.75);
+    expect(leadGridBox.y).toBeLessThan(360);
+    expect(featuredViewportBox.height).toBeGreaterThan(
+      featuredBox.height * 0.7,
+    );
+    expect(Math.abs(featuredBox.y - announcementBox.y)).toBeLessThanOrEqual(1);
+
+    const nextFeature = featured.getByRole("button", {
+      name: "Next featured item",
+    });
+    await expect(nextFeature).toBeVisible();
+    await nextFeature.click();
+    const featuredBoxAfterChange = await visibleBoundingBox(
+      featured,
+      "featured carousel after slide change",
+    );
+    const featuredViewportBoxAfterChange = await visibleBoundingBox(
+      featured.locator("[data-home-featured-viewport]"),
+      "featured carousel viewport after slide change",
+    );
+    expect(
+      Math.abs(featuredBoxAfterChange.height - featuredBox.height),
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(
+        featuredViewportBoxAfterChange.height - featuredViewportBox.height,
+      ),
+    ).toBeLessThanOrEqual(1);
+
+    const categoryRail = categories.locator("[data-scroll-rail-viewport]");
+    const previousCategory = categories.getByRole("button", {
+      name: "Scroll categories left",
+    });
+    const nextCategory = categories.getByRole("button", {
+      name: "Scroll categories right",
+    });
+    const readCategoryRailMetrics = async () =>
+      categoryRail.evaluate((rail) => {
+        const itemBoxes = Array.from(rail.querySelectorAll("li"), (item) => {
+          const box = item.getBoundingClientRect();
+
+          return {
+            height: box.height,
+            top: box.top,
+            width: box.width,
+            x: box.x,
+          };
+        });
+
+        return {
+          clientWidth: rail.clientWidth,
+          itemBoxes,
+          scrollLeft: rail.scrollLeft,
+          scrollWidth: rail.scrollWidth,
+        };
+      });
+    const railMetrics = await readCategoryRailMetrics();
+
+    await expect(previousCategory).toBeHidden();
+    await expect(nextCategory).toBeVisible();
+    await expect(nextCategory).toBeEnabled();
+    expect(railMetrics.scrollWidth).toBeGreaterThan(railMetrics.clientWidth);
+    expect(railMetrics.scrollLeft).toBe(0);
+    railMetrics.itemBoxes.slice(1).forEach((box) => {
+      expect(
+        Math.abs(box.top - (railMetrics.itemBoxes[0]?.top ?? 0)),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.width - (railMetrics.itemBoxes[0]?.width ?? 0)),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.height - (railMetrics.itemBoxes[0]?.height ?? 0)),
+      ).toBeLessThanOrEqual(1);
+    });
+    expect(railMetrics.itemBoxes[1]?.x).toBeGreaterThan(
+      railMetrics.itemBoxes[0]?.x ?? 0,
+    );
+    await nextCategory.click();
+    await expect
+      .poll(async () => categoryRail.evaluate((rail) => rail.scrollLeft))
+      .toBeGreaterThan(0);
+    await expect(previousCategory).toBeEnabled();
+    await expect(previousCategory).toBeVisible();
+    await categoryRail.evaluate((rail) => {
+      rail.scrollLeft = rail.scrollWidth;
+      rail.dispatchEvent(new Event("scroll", { bubbles: true }));
+    });
+    await expect(nextCategory).toBeHidden();
+    await expect(previousCategory).toBeVisible();
+
+    await expectVerticallyBefore(categories, discoveryLinks, {
+      after: "homepage discovery links",
+      before: "homepage categories",
+    });
+    await expectVerticallyBefore(discoveryLinks, recentFeed, {
+      after: "homepage recent feed",
+      before: "homepage discovery links",
+    });
+
+    const tagHrefCount = await discoveryLinks
+      .locator("a")
+      .evaluateAll(
+        (links) =>
+          links.filter(
+            (link) => link.getAttribute("href")?.startsWith("/tags/") === true,
+          ).length,
+      );
+    expect(tagHrefCount).toBe(1);
+    await expectNoHorizontalOverflow(page);
+
+    await page.setViewportSize({ height: 1000, width: 390 });
+    await page.goto("/");
+    const mobileRailMetrics = await readCategoryRailMetrics();
+    expect(mobileRailMetrics.scrollWidth).toBeGreaterThan(
+      mobileRailMetrics.clientWidth,
+    );
+    expect(mobileRailMetrics.scrollLeft).toBe(0);
+    mobileRailMetrics.itemBoxes.slice(1).forEach((box) => {
+      expect(
+        Math.abs(box.top - (mobileRailMetrics.itemBoxes[0]?.top ?? 0)),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.width - (mobileRailMetrics.itemBoxes[0]?.width ?? 0)),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.height - (mobileRailMetrics.itemBoxes[0]?.height ?? 0)),
+      ).toBeLessThanOrEqual(1);
+    });
+    await expect(previousCategory).toBeHidden();
+    await expect(nextCategory).toBeVisible();
+    await expect(nextCategory).toBeEnabled();
+
+    await expectVerticallyBefore(hero, featured, {
+      after: "mobile featured",
+      before: "mobile hero",
+    });
+    await expectVerticallyBefore(featured, startHere, {
+      after: "mobile start here",
+      before: "mobile featured",
+    });
+    await expectVerticallyBefore(startHere, announcements, {
+      after: "mobile announcements",
+      before: "mobile start here",
+    });
+    await expectVerticallyBefore(announcements, categories, {
+      after: "mobile categories",
+      before: "mobile announcements",
+    });
+    await expectNoHorizontalOverflow(page);
   });
 
   test("article end surfaces render support, category discovery, then final tags", async ({

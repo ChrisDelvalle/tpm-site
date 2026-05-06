@@ -67,7 +67,7 @@
     "typecheck": "bun --silent run typecheck:astro && bun --silent run typecheck:tools",
     "typecheck:astro": "astro check --minimumFailingSeverity warning --minimumSeverity warning",
     "typecheck:tools": "tsc --project tsconfig.tools.json --pretty false",
-    "validate:html": "html-validate --max-warnings=0 dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/articles/index.html\" \"dist/authors/**/*.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\" \"dist/tags/**/*.html\"",
+    "validate:html": "html-validate --max-warnings=0 dist/index.html dist/404.html \"dist/about/**/*.html\" \"dist/announcements/**/*.html\" \"dist/articles/index.html\" \"dist/authors/**/*.html\" \"dist/categories/**/*.html\" \"dist/search/**/*.html\" \"dist/tags/**/*.html\"",
     "verify": "bun scripts/build/verify-build.ts --quiet",
     "verify:content": "bun scripts/content/verify-content.ts"
   },

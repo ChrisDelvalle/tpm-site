@@ -1,0 +1,100 @@
+---
+import { Image } from "astro:assets";
+
+import LinkButton from "../ui/LinkButton.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { HomeFeaturedItem } from "../../lib/home";
+
+interface Props {
+  index: number;
+  item: HomeFeaturedItem;
+}
+
+const { index, item } = Astro.props;
+const isActive = index === 0;
+const hasBody = Astro.slots.has("default");
+const metaParts = [
+  item.kind === "article" ? item.category?.title : undefined,
+  item.date,
+].filter((part): part is string => part !== undefined && part !== "");
+const linkPrefetch = item.href.startsWith("/") ? "hover" : undefined;
+const linkPrefetchAttrs =
+  linkPrefetch === undefined ? {} : { prefetch: linkPrefetch as "hover" };
+---
+
+<article
+  class="col-start-1 row-start-1 grid h-full min-h-0 min-w-0 gap-4 transition-opacity data-[home-featured-active=false]:pointer-events-none data-[home-featured-active=false]:invisible data-[home-featured-active=false]:opacity-0 md:grid-cols-[minmax(0,1fr)_minmax(9rem,14rem)] md:items-center"
+  data-home-featured-slide
+  data-home-featured-active={isActive ? "true" : "false"}
+  aria-hidden={isActive ? "false" : "true"}
+  hidden={!isActive}
+>
+  <div class="grid min-w-0 gap-3">
+    {
+      metaParts.length > 0 && (
+        <p class="text-muted-foreground m-0 flex min-w-0 flex-wrap gap-x-2 gap-y-1 text-xs font-semibold uppercase">
+          {metaParts.map((part, partIndex) => (
+            <>
+              {partIndex > 0 && <span aria-hidden="true">/</span>}
+              <span>{part}</span>
+            </>
+          ))}
+        </p>
+      )
+    }
+    <h3
+      class="text-foreground m-0 line-clamp-2 min-w-0 text-2xl leading-tight font-semibold tracking-normal"
+    >
+      <TextLink
+        href={item.href}
+        variant="subtle"
+        tone="neutral"
+        {...linkPrefetchAttrs}
+      >
+        {item.title}
+      </TextLink>
+    </h3>
+    {
+      item.description && (
+        <p class="text-muted-foreground m-0 line-clamp-3 text-sm leading-6">
+          {item.description}
+        </p>
+      )
+    }
+    {
+      hasBody && (
+        <div class="text-muted-foreground line-clamp-3 text-sm leading-6">
+          <slot />
+        </div>
+      )
+    }
+    {
+      item.linkLabel && (
+        <div>
+          <LinkButton href={item.href} size="sm" {...linkPrefetchAttrs}>
+            {item.linkLabel}
+          </LinkButton>
+        </div>
+      )
+    }
+  </div>
+  {
+    item.image && (
+      <a
+        href={item.href}
+        aria-label={`Read ${item.title}`}
+        data-astro-prefetch={linkPrefetch}
+        class="bg-muted order-first block aspect-[4/3] min-w-0 overflow-hidden rounded-xs no-underline md:order-last"
+      >
+        <Image
+          src={item.image.src}
+          alt={item.image.alt}
+          width={480}
+          height={360}
+          loading={isActive ? "eager" : "lazy"}
+          class="h-full w-full object-cover"
+        />
+      </a>
+    )
+  }
+</article>

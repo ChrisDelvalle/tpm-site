@@ -4,15 +4,16 @@ Source: `src/components/blocks/HomeHeroBlock.astro`
 
 ## Purpose
 
-`HomeHeroBlock` renders the homepage identity artwork, tagline, and primary
-calls to action.
+`HomeHeroBlock` renders the homepage identity artwork and primary calls to
+action. It sits in the wide first-row cell of the homepage lead grid, not a
+full-height marketing hero.
 
 ## Public Contract
 
 - `lightImage: ImageMetadata`
 - `darkImage: ImageMetadata`
 - `imageAlt: string`
-- `tagline: string`
+- `tagline?: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -20,16 +21,19 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes `../media/ThemedImage` and `../ui/LinkButton`. Parent routes should
-pass normalized props rather than asking this component to fetch global content
-directly.
+It composes `../media/ThemedImage` and `../ui/LinkButton`. It is normally
+paired with Start Here in the first desktop lead row. Featured and
+Announcements occupy the second lead row. Parent routes should pass normalized
+props rather than asking this component to fetch global content directly.
 
 ## Layout And Responsiveness
 
-The block should size itself from content, use the shared page measure unless
-intentionally wider, and remain composable in the homepage flow. The themed
-hero image should fill the block width without creating layout shift between
-light and dark variants.
+The block should fill the wide homepage lead cell while keeping the logo art
+centered and visually dominant. The CTAs sit below the artwork so they do not
+reduce the image's horizontal space. The themed hero image is width-led: it may
+grow to the column's available measure, then stops at a readable maximum width.
+The light and dark variants must share the same dimensions to avoid layout
+shift.
 
 ## Layering And Scrolling
 
@@ -60,11 +64,14 @@ to `ThemedImage`; CTA and prose colors should still come from semantic tokens.
 
 ## Testable Invariants
 
-- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
-- preserves readable text and visible focus/hover states in light and dark themes.
+- renders without horizontal overflow at mobile, tablet, desktop, and wide
+  desktop widths.
+- preserves readable text and visible focus/hover states in light and dark
+  themes.
 - handles long content without clipping or overlapping neighboring components.
-- aligns with the intended page measure or documents why it is wider.
-- renders empty and missing-content states without throwing or leaving broken layout.
+- remains centered and visually dominant inside the homepage wide lead cell.
+- uses most of the hero column before reaching its maximum width.
+- bounds the logo art so it does not consume the full first viewport.
 - shows the light hero image in light mode and the dark hero image in dark mode.
 
 ## Follow-Up Notes

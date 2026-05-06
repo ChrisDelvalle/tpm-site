@@ -61,6 +61,50 @@ await mock.module("astro:content", () => ({
       ];
     }
 
+    if (collection === "announcements") {
+      return [
+        {
+          collection: "announcements",
+          data: {
+            author: "The Philosopher's Meme",
+            date: new Date("2026-05-05T00:00:00Z"),
+            description: "Newest announcement",
+            draft: false,
+            tags: [],
+            title: "Newest Announcement",
+          },
+          filePath: "/repo/src/content/announcements/newest.md",
+          id: "newest",
+        },
+        {
+          collection: "announcements",
+          data: {
+            author: "The Philosopher's Meme",
+            date: new Date("2026-05-04T00:00:00Z"),
+            description: "Draft announcement",
+            draft: true,
+            tags: [],
+            title: "Draft Announcement",
+          },
+          filePath: "/repo/src/content/announcements/draft.md",
+          id: "draft",
+        },
+        {
+          collection: "announcements",
+          data: {
+            author: "The Philosopher's Meme",
+            date: new Date("2026-05-03T00:00:00Z"),
+            description: "Older announcement",
+            draft: false,
+            tags: [],
+            title: "Older Announcement",
+          },
+          filePath: "/repo/src/content/announcements/older.md",
+          id: "older",
+        },
+      ];
+    }
+
     if (collection === "categories") {
       return [
         {
@@ -87,10 +131,19 @@ await mock.module("astro:content", () => ({
   },
 }));
 
-const { getCategories, getCategory, getTag, getTags } =
+const { getAnnouncements, getCategories, getCategory, getTag, getTags } =
   await import("../../../src/lib/content");
 
 describe("content helpers", () => {
+  test("loads published announcements newest first", async () => {
+    const announcements = await getAnnouncements();
+
+    expect(announcements.map((announcement) => announcement.id)).toEqual([
+      "newest",
+      "older",
+    ]);
+  });
+
   test("builds category summaries from metadata and article folders", async () => {
     const categories = await getCategories();
 

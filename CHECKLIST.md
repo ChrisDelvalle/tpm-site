@@ -96,3 +96,180 @@ they are useful context. Explicitly deferred work belongs in
       keeps both repos manageable in one local workspace.
 - [x] Identify implementation phases, high-risk proof points, and follow-up
       milestones before any migration begins.
+
+### Milestone 8: Homepage Editorial Front Page Design
+
+- [x] Design a denser homepage that preserves the TPM logo art while making the
+      first desktop viewport answer "where should I start reading?", "what is
+      current?", and "how can I support or join?".
+- [x] Specify configurable homepage promo slots as author-owned Markdown files
+      rather than hard-coded Astro copy.
+- [x] Specify desktop, tablet, mobile, and short-viewport behavior, including
+      which sections are primary and which sections may collapse or become
+      secondary.
+- [x] Define the component hierarchy, data model, accessibility requirements,
+      performance requirements, and testable layout/content invariants before
+      implementation begins.
+
+### Milestone 9: Homepage Content Model
+
+- [x] Add a typed `homePromos` content collection where one Markdown file owns
+      one promo slot with semantic kind, link, CTA label, order, and active
+      state.
+- [x] Extend home page frontmatter enough to configure curated Start Here
+      article IDs without adding a full CMS-style block array.
+- [x] Add helper logic and tests for resolving curated article IDs, selecting
+      fallback articles, sorting active promos, and rejecting stale promo
+      configuration where practical.
+- [x] Add initial TPM promo content for a featured article, Discord, Patreon,
+      and project/forum announcement without editing article bodies.
+
+### Milestone 10: Homepage Masthead Components
+
+- [x] Add component docs and Astro components for the desktop three-column
+      masthead: Start Here panel, compact hero, and current/community panel.
+- [x] Preserve the existing logo art while bounding its desktop and mobile
+      height so it acts as an identity anchor instead of a full hero section.
+- [x] Ensure the masthead gives visible first-viewport reading and support paths
+      without client JavaScript.
+- [x] Add component/catalog tests for empty, long-content, and normal states.
+
+### Milestone 11: Homepage Promo, Recent, And Discovery Blocks
+
+- [x] Add component docs and Astro components for the promo rail, promo cards,
+      compact most-recent posts, and thin discovery links strip.
+- [x] Keep promo slots real static HTML with no auto-advancing carousel
+      behavior.
+- [x] Place categories before the recent article feed and keep tags out of
+      homepage enumeration while linking to `/tags/` in the discovery strip.
+- [x] Add component/catalog tests for active promos, multiple promos, empty
+      promos, long titles, wrapping discovery links, and no-JavaScript output.
+
+### Milestone 12: Homepage Assembly And Verification
+
+- [x] Recompose `src/pages/index.astro` around the redesigned desktop anatomy
+      and mobile ordering documented in `docs/HOMEPAGE_REDESIGN.md`.
+- [x] Update homepage component docs, catalog inventory, architecture docs, and
+      author-facing notes as needed.
+- [x] Add or update browser/a11y/layout tests for homepage first-viewport
+      links, desktop masthead columns, promo/latest split, category/discovery
+      order, no tag enumeration, and no horizontal overflow.
+- [x] Run focused tests, `bun run check`, relevant e2e/a11y checks, and perf
+      checks before marking complete. Local Lighthouse did not complete because
+      Chrome reported no first paint; build, check, e2e, a11y, HTML validation,
+      markdown review, catalog, lint, and typecheck verification passed.
+
+### Milestone 13: Flat Homepage Redesign Design
+
+- [x] Redesign the homepage as a flat editorial index with the desktop anatomy:
+      Announcements thin rail plus wide hero, Featured carousel plus thin Start
+      Here rail, four-column Categories, thin More Ways To Browse, and
+      chronological Recent articles.
+- [x] Specify writer-facing interfaces for announcements, featured article
+      items, and featured link items without duplicating article metadata.
+- [x] Define reusable flat article teaser/list primitives and carousel behavior
+      before implementation begins.
+- [x] Define accessibility, performance, responsive, and testable invariants
+      for the revised homepage and any new routes.
+
+### Milestone 14: Announcements Collection And Routes
+
+- [x] Add an `announcements` content collection that uses article-like
+      frontmatter while staying separate from normal article helpers.
+- [x] Add typed announcement helpers, route helpers, static paths, `/announcements/`,
+      and `/announcements/[slug]/`.
+- [x] Add initial announcement content and tests proving announcements are
+      newest-first and do not appear in normal article browsing.
+
+### Milestone 15: Featured Content Model And Carousel Data
+
+- [x] Replace the first-pass `homePromos` model with `homeFeatured` Markdown
+      entries using `kind: article` and `kind: link`.
+- [x] Add normalization helpers that inherit article feature metadata from
+      normal articles, validate stale slugs, and render link features from
+      explicit frontmatter and Markdown body.
+- [x] Add tests for sorting, inactive entries, stale article slugs, article
+      feature inheritance, and link feature validation.
+
+### Milestone 16: Flat Homepage Components And Carousel
+
+- [x] Add component docs and reusable flat teaser/list primitives for compact
+      announcement, Start Here, and Recent surfaces.
+- [x] Add `HomeFeaturedCarousel` and supporting browser script with static
+      first-item fallback, controls, reduced-motion behavior, and interaction
+      pause behavior.
+- [x] Update catalog examples and component tests for empty, single-item,
+      multi-item, long-content, and no-JavaScript states.
+
+### Milestone 17: Homepage Assembly Redesign
+
+- [x] Recompose `src/pages/index.astro` into the revised row anatomy from
+      `docs/HOMEPAGE_REDESIGN.md`.
+- [x] Remove GitHub and RSS from homepage discovery, rename headings to concise
+      labels, use four-column desktop Categories, and ensure Recent is
+      chronological normal articles only.
+- [x] Remove or retire first-pass home promo components/content that no longer
+      belong to the homepage design.
+
+### Milestone 18: Homepage Redesign Verification
+
+- [x] Add or update page, e2e, accessibility, build-verifier, catalog, and
+      content tests for the new homepage, announcement routes, featured
+      carousel, and no-announcement-leakage invariants.
+- [x] Run focused tests and the normal quality gate before marking complete.
+      Verified with focused unit/component/page tests, `bun run typecheck`,
+      `bun run lint`, `bun run check`, `bun run build`, `bun run verify`,
+      `bun run validate:html`, `bun run test:e2e`, `bun run test:a11y`, and
+      `bun run coverage`.
+- [x] Record any local performance-check blocker explicitly if Lighthouse cannot
+      run in the local environment. `bun run test:perf` rebuilt successfully,
+      but local LHCI healthcheck failed because Chrome was not installed in the
+      expected Lighthouse environment.
+
+### Milestone 19: Homepage Lead Grid Revision
+
+- [x] Revise the homepage lead area from two independent rows into one
+      two-column lead grid: wide column with Hero then Featured, thin column
+      with Start Here then Announcements.
+- [x] Preserve mobile source order as Hero, Featured, Start Here,
+      Announcements, followed by Categories, More, and Recent.
+- [x] Update homepage design/component docs and browser invariants for desktop
+      column relationships, stable carousel height, and mobile ordering.
+- [x] Run focused homepage tests and normal quality gates before marking
+      complete. Verified with focused Astro/component/script tests,
+      `bun run check`, `bun run build`, `bun run validate:html`,
+      `bun run review:markdown`, `bun run test:e2e`, `bun run test:a11y`,
+      `bun run coverage`, and `bun run test:perf` with Playwright Chromium.
+      Lighthouse passed assertions with a homepage LCP warning at 2559.6308ms
+      against the 2500ms warning threshold.
+
+### Milestone 20: Homepage Lead Row Alignment
+
+- [x] Refactor the homepage lead grid so Hero, Featured, Start Here, and
+      Announcements are direct grid cells on desktop rather than nested
+      independent columns.
+- [x] Preserve mobile source order as Hero, Featured, Start Here, and
+      Announcements while placing Start Here beside Hero and Announcements
+      beside Featured on desktop.
+- [x] Update homepage docs and browser invariants so the Announcements heading
+      aligns with the Featured heading without margin offsets or height hacks.
+- [x] Run focused homepage tests and formatting before marking complete.
+      Verified with focused Astro component/page tests, the focused Playwright
+      homepage invariant, `bun run build`, and `bun run validate:html`.
+
+### Milestone 21: Homepage Category Rail
+
+- [x] Replace the homepage category grid with a one-row horizontal rail that
+      reduces vertical space while preserving the shared browsing measure.
+- [x] Add minimal previous/next icon buttons that actually scroll the rail and
+      reveal only when the rail has horizontal overflow.
+- [x] Preserve native horizontal scrolling, keyboard navigation, focus-visible
+      states, and no-JavaScript readability.
+- [x] Keep category cards equal width and height with content-aware sizing that
+      stretches evenly when the rail has spare horizontal space.
+- [x] Update component docs and tests for rail layout, button behavior, and
+      homepage ordering before marking complete.
+      Verified with focused scroll-rail/component tests, `bun run typecheck`,
+      `bun run lint`, `bun run build`, the focused homepage Playwright
+      invariant, `bun run verify`, `bun run validate:html`, `bun run format`,
+      and `bun run format:markdown`.

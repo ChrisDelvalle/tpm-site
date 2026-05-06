@@ -4,7 +4,8 @@ Source: `src/components/articles/MoreInCategoryBlock.astro`
 
 ## Purpose
 
-`MoreInCategoryBlock` serves as a article-domain component for essays, article lists, metadata, or post-article discovery.
+`MoreInCategoryBlock` serves as an article-domain component for article lists,
+metadata, or post-article discovery.
 
 ## Public Contract
 
