@@ -11,7 +11,7 @@ describe("HomeCategoryOverviewBlock", () => {
       props: { items: navigationItems },
     });
 
-    expect(view).toContain("Categories");
+    expect(view).toContain('aria-label="Categories"');
     expect(view).toContain("Metamemetics");
     expect(view).toMatch(/2\s+articles/);
     expect(view).toContain("data-home-category-overview");
@@ -23,6 +23,9 @@ describe("HomeCategoryOverviewBlock", () => {
     expect(view).toContain("Scroll categories right");
     expect(view).toContain("auto-cols-fr");
     expect(view).toContain("w-max");
+    expect(view).toContain("justify-items-center");
+    expect(view).toContain("text-center");
+    expect(view).not.toContain("home-categories-heading");
     expect(view).not.toContain("max-w-3xl");
     expect(view).not.toContain("xl:grid-cols-4");
     expect(view).not.toContain("w-[min(17rem,78vw)]");

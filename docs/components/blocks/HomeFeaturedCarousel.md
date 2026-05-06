@@ -8,12 +8,18 @@ Source: `src/components/blocks/HomeFeaturedCarousel.astro`
 item at a time while keeping the first item available as static HTML when
 JavaScript is unavailable.
 
+The component exposes an accessible label but does not render a visible
+`Featured` heading on the homepage. The surrounding homepage layout already
+communicates the slot; removing the heading saves vertical space and keeps the
+feature itself primary.
+
 ## Intentions
 
 - Keep Featured calm and editorial, not promotional clutter.
 - Render no controls for zero or one item.
 - Reveal controls only after the browser script is active.
 - Use real buttons for previous, next, and item indicators.
+- Place previous, next, and item indicators in one bottom control row.
 - Keep the carousel region stable so rotation does not shift the page.
 - Fit the homepage wide second-row lead cell without changing height when
   slides change.
@@ -39,6 +45,8 @@ enhances the static markup:
 - Controls are keyboard reachable only when enhancement is active.
 - The viewport height is owned by the carousel's layout contract, not by
   whichever slide is currently active.
-- The heading aligns with the Announcements heading through the parent lead
-  grid row, not through component-specific margin offsets.
+- The component has an accessible name even when no visible heading is
+  rendered.
+- The carousel and Announcements cell align through the parent lead grid row,
+  not through component-specific margin offsets.
 - No React or framework island is required.

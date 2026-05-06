@@ -3,9 +3,12 @@ import SupportLink from "../navigation/SupportLink.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 import {
+  announcementsIndexUrl,
   articlesArchiveUrl,
   articlesIndexUrl,
   authorsIndexUrl,
+  collectionsIndexUrl,
+  collectionUrl,
   feedUrl,
   pageUrl,
   SITE_TITLE,
@@ -39,6 +42,25 @@ const footerCategories = navigationItems.slice(0, 8);
           <li>
             <TextLink href={articlesArchiveUrl()} variant="subtle" tone="muted"
               >All Articles</TextLink
+            >
+          </li>
+          <li>
+            <TextLink href={collectionsIndexUrl()} variant="subtle" tone="muted"
+              >Collections</TextLink
+            >
+          </li>
+          <li>
+            <TextLink
+              href={announcementsIndexUrl()}
+              variant="subtle"
+              tone="muted">Announcements</TextLink
+            >
+          </li>
+          <li>
+            <TextLink
+              href={collectionUrl("featured")}
+              variant="subtle"
+              tone="muted">Featured Articles</TextLink
             >
           </li>
           <li>

@@ -4,7 +4,7 @@
 
 The homepage should be easy for writers to manage and easy for developers to
 extend. The visual layout is already close to the desired front page: Hero,
-Featured, Start Here, Announcements, Categories, More, and Recent. The weak
+Featured, Start Here, Announcements, Categories, Read, and Recent. The weak
 point is the content model. It still spreads homepage curation across page
 frontmatter, homepage-specific feature files, and announcement-specific list
 helpers.
@@ -30,6 +30,9 @@ The goal is author simplicity, not abstraction for its own sake.
 - Collections should be easy to edit by hand and should own manual order.
 - Collection items should be bare publishable slugs by default, with an
   optional note when editorial context is useful.
+- Collections should also be public browsing surfaces: `/collections/` lists
+  available collections and `/collections/[collection]/` renders one ordered
+  collection.
 - Everything is visible everywhere by default; writers only set visibility
   fields to `false` for exceptions.
 - Homepage lists should render any normalized publishable entries without
@@ -114,19 +117,25 @@ Surface meaning:
 
 - `homepage`: automatic homepage surfaces and homepage collections.
 - `directory`: automatic browsing directories such as article archive,
-  categories, tags, authors, and announcement index.
+  categories, tags, authors, announcement index, and collection detail lists.
 - `feed`: RSS/feed output.
 - `search`: Pagefind/search indexing.
 
 Drafts still override all visibility. A draft is unpublished and should not
 appear in public static paths or public lists.
 
+Visibility does not automatically remove a publishable detail route. A published
+announcement or article may still have a direct URL while opting out of every
+automatic surface. This supports off-site sharing and historical records without
+forcing entries into homepage slots, directories, feeds, or search.
+
 The first implementation must enforce homepage visibility for homepage
-collections and automatic homepage announcements. Feed/search/directory
-visibility should be represented in the shared model and applied wherever the
-surface already consumes publishable helpers. If a later surface still uses
-legacy article helpers, that is a documented migration target rather than a new
-frontmatter contract.
+collections and automatic homepage announcements. It must also enforce
+directory visibility on announcement indexes and collection detail lists because
+those surfaces consume the shared publishable model. Feed/search/directory
+visibility should continue to be applied wherever a surface already consumes
+publishable helpers. If a later surface still uses legacy article helpers, that
+is a documented migration target rather than a new frontmatter contract.
 
 ## Collections
 
@@ -164,9 +173,34 @@ Rules:
   collection is resolved.
 - A collection item whose publishable entry has `visibility.homepage: false`
   fails when used on the homepage.
+- A collection detail page omits collection items whose publishable entry has
+  `visibility.directory: false`.
 
 This keeps collection authoring small while allowing a featured item to carry
 one sentence of extra editorial context when needed.
+
+### Collection Pages
+
+Collections are not publishable entries themselves. They are editorial
+directories. The public route contract is:
+
+```text
+/collections/
+/collections/[collection]/
+```
+
+The index lists active, non-draft collections using the same compact term
+overview language as category and tag indexes. The count label should describe
+collection entries rather than always saying "articles" because collections may
+include announcements.
+
+The detail page resolves the collection against the global publishable index,
+preserves manual order, filters out `directory: false` items, and renders the
+remaining entries with the shared archive/list treatment. If a collection
+references an unknown slug or repeats a slug, the build fails. A hidden item is
+not an error on collection detail pages; it is simply not listed there. Homepage
+resolution remains stricter because a hidden homepage item in `featured` or
+`start-here` is likely a configuration mistake.
 
 ## Homepage Data Flow
 
@@ -285,6 +319,7 @@ Unit tests:
 - collection resolver preserves manual order;
 - collection resolver rejects duplicate and missing slugs;
 - homepage collection resolution rejects `homepage: false` items;
+- collection detail pages omit `directory: false` items;
 - publishable list item mapping works for articles and announcements.
 
 Component tests:
@@ -300,6 +335,10 @@ Page/browser tests:
 - homepage renders Featured from the `featured` collection;
 - homepage renders Start Here from the `start-here` collection;
 - announcements remain newest-first and do not appear in Recent;
+- `/collections/` lists active collections;
+- `/collections/start-here/` renders the Start Here collection in manual order;
+- `/collections/featured/` renders the Featured Articles collection in manual
+  order;
 - source order and desktop row alignment from the existing homepage design
   remain intact;
 - no horizontal overflow at mobile, tablet, desktop, and wide desktop widths.

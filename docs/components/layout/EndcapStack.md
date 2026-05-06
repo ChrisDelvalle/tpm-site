@@ -10,6 +10,11 @@ primary reading or browsing task.
 It prevents support, related reading, references, tags, and footer handoff from
 being arranged ad hoc by each route.
 
+The parent body owns separation from the primary content. `EndcapStack` starts
+flush in normal document flow and owns only the rhythm between end surfaces.
+This prevents optional sections such as generated bibliography output from
+creating double gaps when they are present or absent.
+
 ## Public Contract
 
 - default slot
@@ -41,6 +46,9 @@ BrowsingBody
 ```
 
 Child components own their own content; the stack owns order and rhythm.
+Children should not add external margins to create separation from sibling end
+surfaces. Internal padding, borders, and headings are allowed when they belong
+to the child surface itself.
 
 ## Layout And Responsiveness
 
@@ -80,6 +88,8 @@ tags, but all surfaces must stay within one coherent visual system.
 - Keeps support blocks aligned with the parent body measure.
 - Does not create extra contentinfo landmarks.
 - Handles missing optional surfaces without awkward gaps.
+- Handles generated references/bibliography output as an optional stack child
+  without page-level spacing patches.
 - Does not create horizontal overflow with long endcap content.
 
 ## Follow-Up Notes

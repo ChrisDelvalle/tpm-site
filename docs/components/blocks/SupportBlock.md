@@ -4,14 +4,15 @@ Source: `src/components/blocks/SupportBlock.astro`
 
 ## Purpose
 
-`SupportBlock` renders reusable support calls to action without behaving like an intrusive advertisement
+`SupportBlock` renders reusable support calls to action without behaving like
+an intrusive advertisement.
 
 ## Public Contract
 
 - `body?: string`
+- `discordHref?: string`
 - `headingId?: string`
-- `href?: string`
-- `label?: string`
+- `patreonHref?: string`
 - `title?: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
@@ -20,11 +21,16 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../ui/LinkButton`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+It composes local components: `../ui/PatreonButton` and
+`../ui/DiscordButton`. Parent blocks should pass normalized props and slots
+rather than asking this component to fetch global content directly.
 
 ## Layout And Responsiveness
 
-The block should size itself from content, use the shared page measure unless intentionally wider, and remain composable in the homepage, archive, search, and category flows.
+The block should size itself from content, use the shared page measure unless
+intentionally wider, and remain composable in article endcaps and other support
+handoffs. The branded CTA row may wrap at very narrow widths, but the buttons
+must not overlap or create horizontal overflow.
 
 ## Layering And Scrolling
 
@@ -59,7 +65,9 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - aligns with the intended page measure or documents why it is wider.
 - renders empty and missing-content states without throwing or leaving broken layout.
+- renders Patreon and Discord branded CTAs with useful accessible names.
 
 ## Follow-Up Notes
 
-- The homepage instance has historically drifted wider than adjacent homepage content; tests should assert it is contained by the same measure as surrounding sections.
+- The homepage uses the same branded button primitives directly because its hero
+  owns a tighter social CTA row with Patreon, Discord, and YouTube.

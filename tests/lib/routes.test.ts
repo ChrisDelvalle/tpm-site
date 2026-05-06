@@ -13,6 +13,8 @@ import {
   categoriesIndexUrl,
   categorySlug,
   categoryUrl,
+  collectionsIndexUrl,
+  collectionUrl,
   decodeHtmlEntities,
   feedUrl,
   isPublishedArticle,
@@ -64,6 +66,8 @@ describe("route helpers", () => {
     expect(authorUrl("seong-young-her")).toBe("/authors/seong-young-her/");
     expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("memeculture")).toBe("/categories/memeculture/");
+    expect(collectionsIndexUrl()).toBe("/collections/");
+    expect(collectionUrl("featured")).toBe("/collections/featured/");
     expect(pageUrl("About")).toBe("/about/");
     expect(searchUrl()).toBe("/search/");
     expect(feedUrl()).toBe("/feed.xml");

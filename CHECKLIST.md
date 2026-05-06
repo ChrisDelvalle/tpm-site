@@ -358,3 +358,79 @@ they are useful context. Explicitly deferred work belongs in
       `bun run validate:html`, `bun run review:markdown`,
       the focused homepage Playwright invariants, full `bun run test:e2e`, and
       `bun run test:a11y`.
+
+### Milestone 28: Collection Directory And Homepage Refinement Design
+
+- [x] Update the homepage/content-model docs before implementation so
+      collections are not only homepage configuration files, but public
+      directory pages at `/collections/` and `/collections/[collection]/`.
+- [x] Specify how collection pages resolve article-like publishable entries,
+      respect `directory` visibility on list surfaces, and keep direct
+      publishable detail routes available for off-site links.
+- [x] Specify the homepage refinement: no visible Featured/Categories/Recent
+      headings, linked Start Here and Announcements headings, carousel controls
+      grouped with the dots, centered category names, and Collections in the
+      More strip.
+- [x] Specify footer links for Collections, Announcements, and Featured
+      Articles.
+- [x] Critically review the docs for stale assumptions before implementation
+      begins.
+
+### Milestone 29: Collection Directory Routes
+
+- [x] Add route helpers, static path helpers, `/collections/`, and
+      `/collections/[collection]/`.
+- [x] Render collection detail pages from the shared publishable-entry model so
+      ordered collection items can include articles or announcements.
+- [x] Update Pagefind, HTML validation, build verification, route tests, and
+      page tests so collection pages are release artifacts.
+      Verified with focused route/static-path/collection helper tests,
+      collection page render tests, build-verifier tests, and typecheck.
+
+### Milestone 30: Homepage, Footer, And Announcement Content Refinement
+
+- [x] Remove the visible Featured, Categories, and Recent headings while
+      preserving accessible section names.
+- [x] Move Featured carousel previous/next controls into the bottom control row
+      with the dots.
+- [x] Center homepage category names within the category rail.
+- [x] Link Start Here to `/collections/start-here/` and Announcements to
+      `/announcements/`.
+- [x] Replace the homepage More strip with a first-row quick navigation bar
+      labeled `Read / Articles Archive Authors Collections Tags`; include
+      `/articles/`, `/articles/all/`, `/authors/`, `/collections/`, and
+      `/tags/`, keep it one line, and shrink rather than wrap or overflow.
+- [x] Add Collections, Announcements, and Featured Articles to the footer.
+- [x] Move `jeremy-cahill-metamer-dismissed-for-serious-misconduct` from
+      articles to announcements and set every visibility override to `false`.
+      Verified with focused homepage/block/footer/announcement render tests,
+      announcement visibility helper tests, legacy redirect tests, and
+      `bun run test:astro`.
+
+### Milestone 31: Collection/Homepage Refinement Verification
+
+- [x] Run focused route/helper/page/component tests for collections, homepage
+      refinements, footer links, and announcement visibility.
+- [x] Run release-relevant checks for typecheck, lint, build, verify, HTML
+      validation, formatting, and browser invariants before marking complete.
+      Verified with `bun run check`, `bun run build`, `bun run verify`,
+      `bun run validate:html`, focused homepage/route Playwright invariants,
+      `bun run catalog:check`, focused route/page/component tests, and
+      `bun run test:unit`.
+
+### Milestone 32: Article Endcap And TOC Follow-Ups
+
+- [x] Normalize vertical spacing between the end of article prose, the article
+      support block, related-content blocks, references, and tags so article
+      end surfaces have even gaps.
+- [x] Replace the article support block's generic `Support Us` button with the
+      same Patreon and Discord brand buttons used on the homepage.
+- [x] When the margin table of contents is hidden, render an article-top
+      contents section so readers still have heading navigation.
+- [x] Remove the `Article Contents` label from the margin TOC; the visible
+      control should read `Hide`, and the collapsed control should read
+      `Show Contents`.
+      Verified with `bun run build`, focused ArticleLayout/SupportBlock/TOC
+      component tests, focused article-end/TOC Playwright invariants,
+      `bun run format:code`, `bun run format:markdown`, `bun run lint`,
+      `bun run verify`, `bun run validate:html`, and `bun run catalog:check`.

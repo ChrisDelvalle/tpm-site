@@ -11,6 +11,7 @@ describe("UI catalog examples", () => {
     expect(paths).toContain("src/components/ui/DiscordButton.astro");
     expect(paths).toContain("src/components/ui/LinkButton.astro");
     expect(paths).toContain("src/components/ui/PatreonButton.astro");
+    expect(paths).toContain("src/components/ui/YouTubeButton.astro");
     expect(paths).toContain("src/components/media/ResponsiveIframe.astro");
     expect(paths).toContain("src/components/media/ThemedImage.astro");
     expect(new Set(paths).size).toBe(paths.length);

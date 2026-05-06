@@ -14,6 +14,8 @@ interface Props {
   emptyLabel?: string;
   headingLevel?: 1 | 2;
   headingId?: string;
+  itemNoun?: string;
+  itemNounPlural?: string;
   items: readonly TermOverviewItem[];
   title: string;
 }
@@ -24,6 +26,8 @@ const {
   emptyLabel = "No terms are available yet.",
   headingLevel = 1,
   headingId = "term-overview-heading",
+  itemNoun = "article",
+  itemNounPlural = `${itemNoun}s`,
   items,
   title,
 } = Astro.props;
@@ -75,7 +79,7 @@ const columnClasses = {
               <p class="text-muted-foreground text-sm">{item.description}</p>
             )}
             <p class="text-muted-foreground text-xs">
-              {item.count} {item.count === 1 ? "article" : "articles"}
+              {item.count} {item.count === 1 ? itemNoun : itemNounPlural}
             </p>
           </li>
         ))}

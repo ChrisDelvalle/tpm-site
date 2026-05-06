@@ -19,6 +19,8 @@ compatibility category pages.
 - default slot for browsing sections
 - optional named slot `header`
 - optional named slot `intro`
+- `padding?: "normal" | "snug"` for pages whose first compact navigation
+  element should sit directly under site chrome
 - `width?: "standard" | "wide"` only if the design proves both are needed
 
 Default to one standard browsing measure. Do not add route-specific width

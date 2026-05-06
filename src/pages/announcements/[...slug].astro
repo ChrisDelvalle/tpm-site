@@ -30,10 +30,11 @@ const { announcement } = Astro.props;
 const { Content } = await render(announcement);
 const title = announcement.data.title;
 const description = announcement.data.description;
+const searchable = announcement.data.visibility.search;
 ---
 
 <BaseLayout
-  title={`${title} | The Philosopher's Meme`}
+  title={title}
   description={description}
   canonicalPath={announcementUrl(announcement.id)}
   image={announcement.data.image?.src}
@@ -41,7 +42,11 @@ const description = announcement.data.description;
   type="article"
 >
   <ReadingBody>
-    <article class="grid w-full min-w-0 gap-8" data-pagefind-body>
+    <article
+      class="grid w-full min-w-0 gap-8"
+      data-pagefind-body={searchable ? true : undefined}
+      data-pagefind-ignore={searchable ? undefined : true}
+    >
       <ArticleHeader
         author={announcement.data.author}
         date={announcement.data.date}

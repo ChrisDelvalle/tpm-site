@@ -15,7 +15,7 @@ const spacingClasses = {
 <div
   {...attrs}
   data-endcap-stack
-  class:list={["mt-12 grid min-w-0", spacingClasses[spacing], className]}
+  class:list={["grid min-w-0", spacingClasses[spacing], className]}
 >
   {Astro.slots.has("support") && <slot name="support" />}
   {Astro.slots.has("discovery") && <slot name="discovery" />}

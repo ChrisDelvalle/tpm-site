@@ -11,24 +11,15 @@ interface Props {
 }
 
 const { items, title = "Categories" } = Astro.props;
-const headingId = "home-categories-heading";
 const railId = "home-categories-rail";
 ---
 
 <section
   class="grid min-w-0 gap-4"
-  aria-labelledby={headingId}
+  aria-label={title}
   data-home-category-overview
   data-scroll-rail
 >
-  <header class="flex min-w-0 items-center justify-between gap-3">
-    <h2
-      id={headingId}
-      class="text-foreground m-0 text-2xl font-semibold tracking-normal"
-    >
-      {title}
-    </h2>
-  </header>
   {
     items.length > 0 ? (
       <div class="relative min-w-0">
@@ -57,11 +48,11 @@ const railId = "home-categories-rail";
         >
           <ul class="grid w-max min-w-full auto-cols-fr grid-flow-col gap-3">
             {items.map((item) => (
-              <li class="border-border bg-card grid min-h-28 min-w-0 snap-start content-start gap-1 rounded-sm border p-4">
+              <li class="border-border bg-card grid min-h-28 min-w-0 snap-start justify-items-center gap-1 rounded-sm border p-4 text-center">
                 <TextLink
                   href={item.href}
                   tone="neutral"
-                  class="line-clamp-2 font-semibold"
+                  class="line-clamp-2 text-center font-semibold"
                   prefetch="hover"
                 >
                   {item.title}

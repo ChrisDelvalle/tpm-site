@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  announcementDirectoryListItems,
   announcementListItem,
   announcementListItems,
 } from "../../../src/lib/announcements";
@@ -45,6 +46,35 @@ describe("announcement list helpers", () => {
     expect(announcementListItems([announcement])[0]?.image).toEqual({
       alt: "Forum Build Priority",
       src: { format: "png", height: 300, src: "/forum.png", width: 600 },
+    });
+  });
+
+  test("filters directory-hidden announcements for public announcement lists", () => {
+    const visible = announcementEntry({
+      data: {
+        title: "Visible Update",
+      },
+      id: "visible-update",
+    });
+    const hidden = announcementEntry({
+      data: {
+        title: "Off-Site Update",
+        visibility: {
+          directory: false,
+          feed: false,
+          homepage: false,
+          search: false,
+        },
+      },
+      id: "off-site-update",
+    });
+
+    const items = announcementDirectoryListItems([visible, hidden]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0]).toMatchObject({
+      href: "/announcements/visible-update/",
+      title: "Visible Update",
     });
   });
 });

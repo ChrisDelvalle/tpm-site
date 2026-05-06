@@ -2,6 +2,7 @@ import type {
   AnnouncementEntry,
   ArticleEntry,
   CategorySummary,
+  EditorialCollectionEntry,
 } from "./routes";
 import type { TagSummary } from "./tags";
 
@@ -32,6 +33,16 @@ interface CategoryStaticPath {
   };
   props: {
     category: CategorySummary;
+  };
+}
+
+/** Astro static path entry for editorial collection pages. */
+interface CollectionStaticPath {
+  params: {
+    collection: string;
+  };
+  props: {
+    collection: EditorialCollectionEntry;
   };
 }
 
@@ -87,6 +98,21 @@ export function categoryStaticPaths(
   return categories.map((category) => ({
     params: { category: category.slug },
     props: { category },
+  }));
+}
+
+/**
+ * Builds Astro static paths for active editor-owned collections.
+ *
+ * @param collections Active editorial collection entries.
+ * @returns Static path params and props.
+ */
+export function collectionStaticPaths(
+  collections: EditorialCollectionEntry[],
+): CollectionStaticPath[] {
+  return collections.map((collection) => ({
+    params: { collection: collection.id },
+    props: { collection },
   }));
 }
 

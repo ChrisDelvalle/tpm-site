@@ -28,7 +28,7 @@ const safeRel = target === "_blank" && rel === undefined ? "noreferrer" : rel;
   rel={safeRel}
   aria-label={ariaLabel}
   class:list={[
-    "focus-visible:outline-ring inline-flex h-9 w-32 shrink-0 items-center justify-center rounded-xl border border-transparent bg-[#F96854] px-2 py-1.5 no-underline transition-colors hover:bg-[#E05240] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+    "focus-visible:outline-ring inline-flex h-9 w-32 min-w-0 shrink items-center justify-center rounded-xl border border-transparent bg-[#F96854] px-2 py-1.5 no-underline transition-colors hover:bg-[#E05240] focus-visible:outline-2 focus-visible:outline-offset-2",
     className,
   ]}
 >

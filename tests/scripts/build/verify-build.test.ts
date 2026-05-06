@@ -30,6 +30,19 @@ describe("build verifier", () => {
           publishedTagSegments: new Set(["meme history"]),
         },
         ["history"],
+        [],
+        ["featured"],
+      ),
+    ).toContain("collections/featured/index.html");
+    expect(
+      requiredPathsForSource(
+        {
+          draftSlugs: [],
+          publishedArticles: [{ isMdx: false, slug: "post" }],
+          publishedCategorySlugs: new Set(["history"]),
+          publishedTagSegments: new Set(["meme history"]),
+        },
+        ["history"],
       ),
     ).toContain("articles/post/index.html");
   });

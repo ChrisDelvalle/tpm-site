@@ -1,21 +1,22 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-import LinkButton from "../ui/LinkButton.astro";
+import DiscordButton from "../ui/DiscordButton.astro";
+import PatreonButton from "../ui/PatreonButton.astro";
 
 interface Props extends HTMLAttributes<"section"> {
   body?: string;
+  discordHref?: string;
   headingId?: string;
-  href?: string;
-  label?: string;
+  patreonHref?: string;
   title?: string;
 }
 
 const {
   body = "Help keep independent research and writing going.",
+  discordHref = "https://discord.gg/8MVFRMa",
   headingId = "support-block-heading",
-  href = "https://patreon.com/thephilosophersmeme",
-  label = "Support Us",
+  patreonHref = "https://patreon.com/thephilosophersmeme",
   title = "Support The Philosopher's Meme",
   class: className,
   ...attrs
@@ -40,7 +41,11 @@ const {
     </h2>
     <p class="text-muted-foreground min-w-0 text-sm break-words">{body}</p>
   </div>
-  <div>
-    <LinkButton href={href}>{label}</LinkButton>
+  <div class="flex min-w-0 flex-wrap items-center gap-3">
+    <PatreonButton
+      href={patreonHref}
+      aria-label="Support The Philosopher's Meme on Patreon"
+    />
+    <DiscordButton href={discordHref} aria-label="Join the TPM Discord" />
   </div>
 </section>

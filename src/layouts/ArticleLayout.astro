@@ -114,6 +114,15 @@ const moreInCategory =
         formattedDate={articleView.formattedDate}
         title={articleView.title}
       />
+      {
+        showTableOfContents && (
+          <ArticleTableOfContents
+            headings={tableOfContentsHeadings}
+            initiallyOpen={false}
+            placement="inline"
+          />
+        )
+      }
       <ArticleProse
         data-article-prose
         enableImageInspector={enableImageInspector}

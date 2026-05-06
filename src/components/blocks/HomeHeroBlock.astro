@@ -4,6 +4,7 @@ import type { ImageMetadata } from "astro";
 import ThemedImage from "../media/ThemedImage.astro";
 import DiscordButton from "../ui/DiscordButton.astro";
 import PatreonButton from "../ui/PatreonButton.astro";
+import YouTubeButton from "../ui/YouTubeButton.astro";
 
 interface Props {
   darkImage: ImageMetadata;
@@ -38,8 +39,12 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
       </p>
     )
   }
-  <div class="flex flex-wrap justify-center gap-3">
+  <div
+    class="flex w-full max-w-[26rem] min-w-0 flex-nowrap justify-center gap-3"
+    data-home-hero-cta-row
+  >
     <PatreonButton href="https://patreon.com/thephilosophersmeme" />
     <DiscordButton href="https://discord.gg/8MVFRMa" />
+    <YouTubeButton href="https://www.youtube.com/@ThePhilosophersMeme" />
   </div>
 </section>

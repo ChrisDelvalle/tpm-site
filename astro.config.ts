@@ -116,7 +116,7 @@ export default defineConfig({
     "/2021/05/16/gamergate-as-metagaming/":
       "/articles/gamergate-as-metagaming/",
     "/2021/06/14/jeremy-cahill-metamer-dismissed-for-serious-misconduct/":
-      "/articles/jeremy-cahill-metamer-dismissed-for-serious-misconduct/",
+      "/announcements/jeremy-cahill-metamer-dismissed-for-serious-misconduct/",
     "/2021/07/21/we-can-have-retrieval-inference-synthesis/":
       "/articles/we-can-have-retrieval-inference-synthesis/",
     "/2021/11/30/what-is-a-meme/": "/articles/what-is-a-meme/",

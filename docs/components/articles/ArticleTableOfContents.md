@@ -4,9 +4,10 @@ Source: `src/components/articles/ArticleTableOfContents.astro`
 
 ## Purpose
 
-`ArticleTableOfContents` renders article-local heading navigation in the margin
-rail. It helps readers stay oriented inside long articles after global category
-navigation moves into site navigation.
+`ArticleTableOfContents` renders article-local heading navigation in either the
+reading margin rail or a compact in-flow article-top fallback. It helps readers
+stay oriented inside long articles after global category navigation moves into
+site navigation.
 
 It must not parse Markdown source, fetch article content, or render global
 category discovery.
@@ -16,6 +17,7 @@ category discovery.
 - `headings: readonly ArticleHeading[]`
 - `label?: string`
 - `initiallyOpen?: boolean`
+- `placement?: "rail" | "inline"`
 
 `ArticleHeading` should be normalized outside this component and include:
 
@@ -36,6 +38,9 @@ ReadingBody
       ArticleTableOfContents
         TableOfContentsToggle
         TableOfContentsItem
+  article content
+    ArticleTableOfContents placement="inline"
+    ArticleProse
 ```
 
 `ArticleLayout` or the article route passes normalized headings. The TOC owns
@@ -44,9 +49,12 @@ rail geometry and sticky behavior.
 
 ## Layout And Responsiveness
 
-Mobile/tablet base: no persistent side rail. The TOC should be absent or
-rendered as a compact in-flow disclosure only if a later design chooses that.
-Hiding the rail must not cause the reading column to drift off center.
+Mobile/tablet base: no persistent side rail. Render the inline placement near
+the top of the article body as a compact disclosure. It should start collapsed
+by default so it teaches readers that contents exist without forcing a long
+navigation list before the article. Keep the inline placement unframed; do not
+add horizontal rules above or below the `Show Contents` control. Hiding the
+rail must not cause the reading column to drift off center.
 
 Desktop: render in the left margin rail only when at least two useful headings
 exist and there is enough room for a symmetric reading grid. The rail starts
@@ -64,7 +72,7 @@ keeps heading targets below the sticky header.
 
 ## Interaction States
 
-Use native `details`/`summary` for hide/show where possible:
+Use native `details`/`summary` for hide/show:
 
 - open;
 - collapsed;
@@ -78,12 +86,16 @@ state and must not be required for hash links or disclosure behavior to work.
 
 ## Accessibility Semantics
 
-Render a labeled navigation region such as `aria-label="Article contents"`.
+Render a labeled navigation region such as
+`aria-label="Article table of contents"`.
 Use normal anchor links. Do not use app-menu roles.
 
-The summary/toggle text must be visible and keyboard reachable. If active
-section highlighting is available, use `data-current="true"` for styling and
-`aria-current="location"` for the active in-page anchor.
+The summary/toggle text must be visible and keyboard reachable. The visible
+state text is intentionally terse: `Hide` when open and `Show Contents` when
+collapsed. Do not render a redundant visible `Article Contents` label above the
+rail list. If active section highlighting is available, use
+`data-current="true"` for styling and `aria-current="location"` for the active
+in-page anchor.
 
 ## Content Edge Cases
 
@@ -113,6 +125,8 @@ prose. Current/focus states must be visible in light and dark mode.
 - Keeps long headings inside rail width.
 - Hide/show works without JavaScript.
 - Rail never overlaps prose or hides under the sticky header.
+- Inline placement is visible whenever the rail is hidden by responsive
+  constraints.
 - Reading content remains centered with the TOC visible, hidden by responsive
   constraints, or collapsed with the native disclosure.
 - Links navigate to visible heading targets.

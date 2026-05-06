@@ -580,7 +580,8 @@ Page components are generic content surfaces. Blocks are reusable page sections.
 - `HomeHeroBlock`: homepage identity and primary actions.
 - `HomeFeaturedCarousel`: static-first featured carousel.
 - `HomeFeaturedSlide`: one normalized featured publishable entry.
-- `HomeDiscoveryLinksBlock`: thin All articles/Authors/Tags strip.
+- `HomeDiscoveryLinksBlock`: thin Read / Articles / Archive / Authors /
+  Collections / Tags strip.
 - `HomeAnnouncementBlock`: announcement image and copy.
 - `HomeLatestArticleBlock`: latest article teaser.
 - `HomeFeaturedArticlesBlock`: editorial start-here or featured reading.

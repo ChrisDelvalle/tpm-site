@@ -16,6 +16,10 @@ describe("announcements index page", () => {
     expect(view).toContain("Announcements");
     expect(view).toContain("Join the TPM Discord");
     expect(view).toContain("/announcements/discord-community/");
+    expect(view).not.toContain("Jeremy Cahill");
+    expect(view).not.toContain(
+      "/announcements/jeremy-cahill-metamer-dismissed-for-serious-misconduct/",
+    );
     expect(view).not.toContain("Browse Categories");
     expect(view).not.toContain("/articles/discord-community/");
   });

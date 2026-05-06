@@ -1,0 +1,31 @@
+---
+import TermOverviewBlock from "../../components/blocks/TermOverviewBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getEditorialCollections } from "../../lib/content";
+import { collectionsIndexUrl, collectionUrl } from "../../lib/routes";
+
+const collectionItems = (await getEditorialCollections()).map((collection) => ({
+  count: collection.data.items.length,
+  description: collection.data.description,
+  href: collectionUrl(collection.id),
+  title: collection.data.title,
+}));
+---
+
+<BaseLayout
+  title="Collections | The Philosopher's Meme"
+  description="Curated article and announcement collections from The Philosopher's Meme."
+  canonicalPath={collectionsIndexUrl()}
+>
+  <BrowsingBody>
+    <TermOverviewBlock
+      title="Collections"
+      description="Curated paths through TPM articles and announcements."
+      items={collectionItems}
+      itemNoun="entry"
+      itemNounPlural="entries"
+      emptyLabel="No collections are available yet."
+    />
+  </BrowsingBody>
+</BaseLayout>

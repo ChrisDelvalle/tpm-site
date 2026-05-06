@@ -10,6 +10,7 @@ import {
 
 const keyRoutes = [
   "/",
+  "/announcements/",
   "/articles/",
   "/articles/all/",
   "/articles/gamergate-as-metagaming/",
@@ -17,6 +18,8 @@ const keyRoutes = [
   "/authors/seong-young-her/",
   "/categories/",
   "/categories/history/",
+  "/collections/",
+  "/collections/start-here/",
   "/tags/",
   "/tags/memeculture/",
   "/about/",

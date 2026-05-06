@@ -19,9 +19,9 @@ describe("HomeFeaturedCarousel", () => {
       },
     });
 
-    expect(view).toContain("Featured");
+    expect(view).toContain('aria-label="Featured Articles"');
     expect(view).toContain("Feature");
-    expect(view).toContain("lg:grid-rows-[auto_minmax(0,1fr)_auto]");
+    expect(view).toContain("lg:grid-rows-[minmax(0,1fr)_auto]");
     expect(view).toContain("min-h-80");
     expect(view).not.toContain("data-home-featured-next");
   });
@@ -38,6 +38,12 @@ describe("HomeFeaturedCarousel", () => {
     });
 
     expect(view).toContain("data-home-featured-next");
+    expect(view.indexOf("data-home-featured-previous")).toBeLessThan(
+      view.indexOf("data-home-featured-indicators"),
+    );
+    expect(view.indexOf("data-home-featured-indicators")).toBeLessThan(
+      view.indexOf("data-home-featured-next"),
+    );
     expect(view).toContain("data-home-featured-indicator");
     expect(view).toContain("home-featured-carousel");
   });

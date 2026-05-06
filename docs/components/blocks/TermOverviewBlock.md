@@ -5,8 +5,8 @@ Source: `src/components/blocks/TermOverviewBlock.astro`
 ## Purpose
 
 `TermOverviewBlock` renders a reusable browsing overview for article-grouping
-terms such as categories and tags. It owns the shared visual pattern, not the
-domain-specific data lookup.
+terms such as categories, tags, and editorial collection indexes. It owns the
+shared visual pattern, not the domain-specific data lookup.
 
 ## Public Contract
 
@@ -15,6 +15,8 @@ domain-specific data lookup.
 - `headingLevel?: 1 | 2`
 - `headingId?: string`
 - `items: readonly TermOverviewItem[]`
+- `itemNoun?: string`
+- `itemNounPlural?: string`
 - `title?: string`
 
 `TermOverviewItem`:
@@ -27,8 +29,9 @@ domain-specific data lookup.
 ## Composition Relationships
 
 `CategoryOverviewBlock` adapts category navigation data into this component.
-The tags index route adapts tag summaries into this component. Parents fetch and
-normalize data; `TermOverviewBlock` only renders the provided terms.
+The tags and collections index routes adapt their summaries into this
+component. Parents fetch and normalize data; `TermOverviewBlock` only renders
+the provided terms.
 
 ## Layout And Responsiveness
 
@@ -71,7 +74,7 @@ cell boundaries.
 
 - renders a single heading at the requested level;
 - renders each term as a link with the correct `href`;
-- pluralizes article counts correctly;
+- pluralizes the configured item noun correctly;
 - renders an empty state when no items exist;
 - handles long labels without horizontal overflow;
 - preserves focus-visible link styling.

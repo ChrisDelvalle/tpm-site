@@ -61,4 +61,5 @@ visible, and CTAs distinguishable from neutral actions.
 - No component-specific brittle decision is known yet; add one here when implementation review finds a questionable or fragile choice.
 - Footer category links are a required fallback discovery surface. If desktop
   dropdowns or mobile disclosure fail, readers should still be able to browse
-  categories, articles, RSS, bibliography, authors, and support from the footer.
+  categories, articles, collections, announcements, featured articles, RSS,
+  bibliography, authors, and support from the footer.

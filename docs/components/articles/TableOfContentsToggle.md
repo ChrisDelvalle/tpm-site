@@ -30,7 +30,7 @@ ArticleTableOfContents
 ```
 
 `ArticleTableOfContents` owns the disclosure wrapper. This component owns the
-visible label/icon styling and accessible text.
+visible state text and accessible name.
 
 ## Layout And Responsiveness
 
@@ -57,8 +57,9 @@ Avoid animated height transitions unless they are clearly useful and respect
 
 ## Accessibility Semantics
 
-Use native disclosure semantics through `summary` whenever possible. Visible
-text should say what is being toggled, such as "Article contents".
+Use native disclosure semantics through `summary`. The accessible name should
+identify the region as article contents, but visible text should only show the
+current action/state: `Hide` when open and `Show Contents` when collapsed.
 
 ## Content Edge Cases
 
@@ -74,7 +75,8 @@ light and dark mode.
 
 - Toggle is keyboard reachable.
 - Toggle changes disclosure state without JavaScript.
-- Accessible name identifies article contents.
+- Accessible name identifies article contents without rendering a redundant
+  visible label.
 - Focus-visible state is clear.
 - Open/closed state does not change primary content measure.
 

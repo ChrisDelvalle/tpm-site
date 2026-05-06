@@ -16,6 +16,8 @@ describe("PatreonButton", () => {
     expect(view).toContain('aria-label="Support Us"');
     expect(view).toContain("bg-[#F96854]");
     expect(view).toContain("h-9 w-32");
+    expect(view).toContain("min-w-0");
+    expect(view).toContain("shrink");
     expect(view).toContain("rounded-xl");
     expect(view).toContain("h-4");
     expect(view).toContain("w-auto");

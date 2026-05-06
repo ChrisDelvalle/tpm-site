@@ -11,26 +11,29 @@ interface Props {
   title?: string;
 }
 
-const { links, title = "More" } = Astro.props;
+const { links, title = "Read" } = Astro.props;
 const prefetchAttrsFor = (href: string) =>
   href.startsWith("/") ? { prefetch: "hover" as const } : {};
 ---
 
 <nav
-  class="border-border text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 border-y py-3 text-sm"
-  aria-label="Additional homepage discovery links"
+  class="text-muted-foreground flex w-fit max-w-full min-w-0 flex-nowrap items-center gap-x-2 overflow-hidden py-0 text-xs sm:gap-x-3 sm:text-sm"
+  aria-label="Homepage reading navigation"
   data-home-discovery-links
 >
-  <span class="text-foreground font-semibold">{title}</span>
+  <span class="text-foreground shrink-0 font-semibold whitespace-nowrap">
+    {title}
+  </span>
   <span aria-hidden="true">/</span>
-  <ul class="flex min-w-0 flex-wrap gap-x-3 gap-y-2">
+  <ul class="flex min-w-0 flex-nowrap gap-x-2 overflow-hidden sm:gap-x-3">
     {
       links.map((link) => (
-        <li>
+        <li class="min-w-0 shrink">
           <TextLink
             href={link.href}
             variant="subtle"
             tone="muted"
+            class="block truncate whitespace-nowrap"
             {...prefetchAttrsFor(link.href)}
           >
             {link.label}

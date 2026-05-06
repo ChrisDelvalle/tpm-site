@@ -31,6 +31,7 @@ ReadingBody
     left: ArticleTableOfContents
     content:
       ArticleHeader
+      ArticleTableOfContents placement="inline"
       ArticleProse
       EndcapStack
         ArticleEndcap
@@ -39,7 +40,10 @@ ReadingBody
 ```
 
 `ArticleLayout` owns article surface ordering. `ReadingBody` owns page-body
-measure. `MarginSidebarLayout` owns TOC rail geometry.
+measure. `MarginSidebarLayout` owns TOC rail geometry. When the rail is hidden
+by responsive constraints, the inline TOC placement appears near the top of the
+article body so heading navigation is still available without changing the
+reading column geometry.
 
 ## Layout And Responsiveness
 
@@ -86,6 +90,8 @@ should not impose decorative frames.
 - Article heading/H1 order is valid.
 - End order is prose, support/discovery, references, tags.
 - TOC receives normalized headings, not raw Markdown.
+- TOC has a rail placement on desktop and an inline fallback when the rail is
+  hidden.
 - No blank hero gap appears when no hero exists.
 - No horizontal overflow at supported viewport sizes.
 

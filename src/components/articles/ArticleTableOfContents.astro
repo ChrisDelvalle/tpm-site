@@ -10,22 +10,36 @@ interface Props {
   headings: readonly ArticleTableOfContentsHeading[];
   initiallyOpen?: boolean;
   label?: string;
+  placement?: "inline" | "rail";
 }
 
 const {
   headings,
   initiallyOpen = true,
-  label = "Article contents",
+  label = "Article table of contents",
+  placement = "rail",
 } = Astro.props;
 const shouldRender = hasUsefulTableOfContents(headings);
+const placementClasses = {
+  inline: "py-1 xl:hidden",
+  rail: "min-w-0",
+} as const;
 ---
 
 {
   shouldRender && (
-    <nav aria-label={label} data-article-toc>
+    <nav
+      aria-label={label}
+      data-article-toc
+      data-article-toc-placement={placement}
+      class:list={[placementClasses[placement]]}
+    >
       <details class="group grid gap-2" open={initiallyOpen}>
         <TableOfContentsToggle label={label} />
-        <ol class="border-border grid gap-0.5 border-s ps-3 group-open:block">
+        <ol
+          class="border-border grid gap-0.5 border-s ps-3"
+          data-article-toc-list
+        >
           {headings.map((heading) => (
             <li>
               <TableOfContentsItem heading={heading} />

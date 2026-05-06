@@ -88,6 +88,11 @@ export const uiCatalogExamples = [
     title: "TextLink",
   },
   {
+    componentPath: "src/components/ui/YouTubeButton.astro",
+    description: "YouTube-branded channel link using the official white asset.",
+    title: "YouTubeButton",
+  },
+  {
     componentPath: "src/components/media/EmbedFrame.astro",
     description: "Stable external embed frame with fallback source link.",
     title: "EmbedFrame",

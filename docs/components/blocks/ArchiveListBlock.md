@@ -4,7 +4,9 @@ Source: `src/components/blocks/ArchiveListBlock.astro`
 
 ## Purpose
 
-`ArchiveListBlock` serves as a page-level block that represents a reusable editorial section.
+`ArchiveListBlock` serves as a page-level block for full-width publishable-entry
+directories such as all articles, category pages, tag pages, announcements, and
+collection detail pages.
 
 ## Public Contract
 
@@ -20,11 +22,15 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes local components: `../../lib/article-list`, `../articles/ArticleList`. Parent blocks should pass normalized props and slots rather than asking this component to fetch global content directly.
+It composes local components: `../../lib/article-list`,
+`../articles/ArticleList`. Parent blocks should pass normalized props and slots
+rather than asking this component to fetch global content directly.
 
 ## Layout And Responsiveness
 
-The block should size itself from content, use the shared page measure unless intentionally wider, and remain composable in the homepage, archive, search, and category flows.
+The block should size itself from content, use the shared page measure unless
+intentionally wider, and remain composable in archive, announcement, collection,
+search, category, tag, and author flows.
 
 ## Layering And Scrolling
 

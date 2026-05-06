@@ -12,6 +12,9 @@ export type AuthorEntry = CollectionEntry<"authors">;
 /** Astro content collection entry for category metadata. */
 export type CategoryEntry = CollectionEntry<"categories">;
 
+/** Astro content collection entry for editor-owned collections. */
+export type EditorialCollectionEntry = CollectionEntry<"collections">;
+
 /** Display-ready category data with its sorted articles. */
 export interface CategorySummary {
   articles: ArticleEntry[];
@@ -205,6 +208,25 @@ export function categoriesIndexUrl(): string {
  */
 export function categoryUrl(slug: string): string {
   return withTrailingSlash(`${categoriesIndexUrl()}${slug}`);
+}
+
+/**
+ * Builds the public editorial collections index URL.
+ *
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function collectionsIndexUrl(): string {
+  return withTrailingSlash("/collections");
+}
+
+/**
+ * Builds the canonical site URL path for an editorial collection.
+ *
+ * @param slug Stable collection content entry ID.
+ * @returns Absolute-path URL with the configured trailing slash.
+ */
+export function collectionUrl(slug: string): string {
+  return withTrailingSlash(`${collectionsIndexUrl()}${slug}`);
 }
 
 /**

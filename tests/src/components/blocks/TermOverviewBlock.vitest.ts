@@ -51,4 +51,20 @@ describe("TermOverviewBlock", () => {
     expect(view).toContain("No tags yet.");
     expect(view).toContain("data-term-overview-empty");
   });
+
+  test("supports non-article count nouns for collection indexes", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(TermOverviewBlock, {
+      props: {
+        itemNoun: "entry",
+        itemNounPlural: "entries",
+        items: [
+          { count: 2, href: "/collections/featured/", title: "Featured" },
+        ],
+        title: "Collections",
+      },
+    });
+
+    expect(view).toMatch(/2\s+entries/);
+  });
 });

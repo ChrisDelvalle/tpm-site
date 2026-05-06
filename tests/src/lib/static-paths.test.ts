@@ -4,12 +4,14 @@ import {
   announcementStaticPaths,
   articleStaticPaths,
   categoryStaticPaths,
+  collectionStaticPaths,
   tagStaticPaths,
 } from "../../../src/lib/static-paths";
 import {
   announcementEntry,
   articleEntry,
   categorySummary,
+  editorialCollectionEntry,
 } from "../../helpers/content";
 
 describe("static path helpers", () => {
@@ -42,6 +44,17 @@ describe("static path helpers", () => {
       {
         params: { category: "history" },
         props: { category },
+      },
+    ]);
+  });
+
+  test("builds collection static path params from entry IDs", () => {
+    const collection = editorialCollectionEntry({ id: "start-here" });
+
+    expect(collectionStaticPaths([collection])).toEqual([
+      {
+        params: { collection: "start-here" },
+        props: { collection },
       },
     ]);
   });

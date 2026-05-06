@@ -18,6 +18,8 @@ const archiveRoutes = [
   "/articles/all/",
   "/categories/",
   "/categories/metamemetics/",
+  "/collections/",
+  "/collections/start-here/",
   "/tags/",
   "/tags/memeculture/",
   "/search/",
@@ -105,6 +107,7 @@ test.describe("component layout invariants", () => {
     const leadStart = page.locator("[data-home-lead-start]");
     const leadAnnouncements = page.locator("[data-home-lead-announcements]");
     const hero = page.locator("[data-home-hero-block]");
+    const heroCtaRow = hero.locator("[data-home-hero-cta-row]");
     const featured = page.locator("[data-home-featured-carousel]");
     const startHere = leadStart.locator("[data-flat-article-list]");
     const announcements = leadAnnouncements.locator("[data-flat-article-list]");
@@ -113,10 +116,40 @@ test.describe("component layout invariants", () => {
     const recentFeed = page.locator("[data-home-recent-feed]");
 
     await expect(announcements.getByRole("link").first()).toBeVisible();
-    await expect(hero.getByRole("link", { name: "Support Us" })).toBeVisible();
-    await expect(
-      hero.getByRole("link", { name: "Join Discord" }),
-    ).toBeVisible();
+    const supportCta = hero.getByRole("link", { name: "Support Us" });
+    const discordCta = hero.getByRole("link", { name: "Join Discord" });
+    const youtubeCta = hero.getByRole("link", { name: "Visit YouTube" });
+
+    await expect(supportCta).toBeVisible();
+    await expect(discordCta).toBeVisible();
+    await expect(youtubeCta).toBeVisible();
+    await expect(youtubeCta).toHaveAttribute(
+      "href",
+      "https://www.youtube.com/@ThePhilosophersMeme",
+    );
+    const ctaBoxes = await Promise.all([
+      visibleBoundingBox(supportCta, "homepage Patreon CTA"),
+      visibleBoundingBox(discordCta, "homepage Discord CTA"),
+      visibleBoundingBox(youtubeCta, "homepage YouTube CTA"),
+    ]);
+    const logoBoxes = await Promise.all([
+      visibleBoundingBox(supportCta.locator("img"), "homepage Patreon logo"),
+      visibleBoundingBox(discordCta.locator("img"), "homepage Discord logo"),
+      visibleBoundingBox(youtubeCta.locator("img"), "homepage YouTube logo"),
+    ]);
+    const referenceCtaBox = ctaBoxes[0];
+    ctaBoxes.slice(1).forEach((box) => {
+      expect(Math.abs(box.width - referenceCtaBox.width)).toBeLessThanOrEqual(
+        1,
+      );
+      expect(Math.abs(box.height - referenceCtaBox.height)).toBeLessThanOrEqual(
+        1,
+      );
+    });
+    logoBoxes.forEach((box) => {
+      expect(box.width).toBeGreaterThan(referenceCtaBox.width * 0.6);
+      expect(box.height).toBeGreaterThan(referenceCtaBox.height * 0.4);
+    });
     await expect(
       featured
         .locator("[data-home-featured-slide]")
@@ -126,11 +159,17 @@ test.describe("component layout invariants", () => {
     ).toBeVisible();
     await expect(startHere.getByRole("link").first()).toBeVisible();
     await expect(
-      discoveryLinks.getByRole("link", { name: "All articles" }),
+      discoveryLinks.getByRole("link", { exact: true, name: "Articles" }),
+    ).toHaveAttribute("href", "/articles/");
+    await expect(
+      discoveryLinks.getByRole("link", { exact: true, name: "Archive" }),
     ).toHaveAttribute("href", "/articles/all/");
     await expect(
       discoveryLinks.getByRole("link", { name: "Authors" }),
     ).toHaveAttribute("href", "/authors/");
+    await expect(
+      discoveryLinks.getByRole("link", { name: "Collections" }),
+    ).toHaveAttribute("href", "/collections/");
     await expect(
       discoveryLinks.getByRole("link", { name: "Tags" }),
     ).toHaveAttribute("href", "/tags/");
@@ -148,6 +187,14 @@ test.describe("component layout invariants", () => {
     const leadGridBox = await visibleBoundingBox(
       leadGrid,
       "homepage lead grid",
+    );
+    const discoveryBox = await visibleBoundingBox(
+      discoveryLinks,
+      "homepage read links",
+    );
+    const headerBox = await visibleBoundingBox(
+      page.locator("[data-site-header]"),
+      "site header",
     );
     const leadHeroBox = await visibleBoundingBox(
       leadHero,
@@ -180,15 +227,21 @@ test.describe("component layout invariants", () => {
       "featured carousel viewport",
     );
     const startBox = await visibleBoundingBox(startHere, "start here rail");
-    const featuredHeadingBox = await visibleBoundingBox(
-      featured.getByRole("heading", { name: "Featured" }),
-      "featured heading",
-    );
     const announcementsHeadingBox = await visibleBoundingBox(
       announcements.getByRole("heading", { name: "Announcements" }),
       "announcements heading",
     );
 
+    await expect(
+      featured.getByRole("heading", { name: "Featured" }),
+    ).toHaveCount(0);
+    expect(discoveryBox.width).toBeLessThan(leadGridBox.width * 0.55);
+    expect(
+      discoveryBox.y - (headerBox.y + headerBox.height),
+    ).toBeLessThanOrEqual(24);
+    expect(
+      leadGridBox.y - (discoveryBox.y + discoveryBox.height),
+    ).toBeLessThanOrEqual(16);
     expect(leadHeroBox.x).toBeLessThan(leadStartBox.x);
     expect(leadFeaturedBox.x).toBeLessThan(leadAnnouncementsBox.x);
     expect(leadHeroBox.width).toBeGreaterThan(leadStartBox.width);
@@ -203,9 +256,9 @@ test.describe("component layout invariants", () => {
     expect(
       Math.abs(leadFeaturedBox.y - leadAnnouncementsBox.y),
     ).toBeLessThanOrEqual(1);
-    expect(
-      Math.abs(featuredHeadingBox.y - announcementsHeadingBox.y),
-    ).toBeLessThanOrEqual(1);
+    expect(announcementsHeadingBox.y).toBeGreaterThanOrEqual(
+      leadAnnouncementsBox.y,
+    );
     expect(heroBox.x).toBeLessThan(startBox.x);
     expect(featuredBox.x).toBeLessThan(announcementBox.x);
     expect(featuredBox.width).toBeGreaterThan(leadGridBox.width * 0.55);
@@ -220,6 +273,11 @@ test.describe("component layout invariants", () => {
       name: "Next featured item",
     });
     await expect(nextFeature).toBeVisible();
+    const featuredControlsBox = await visibleBoundingBox(
+      featured.locator("[data-home-featured-controls]"),
+      "featured carousel controls",
+    );
+    expect(featuredControlsBox.y).toBeGreaterThan(featuredViewportBox.y);
     await nextFeature.click();
     const featuredBoxAfterChange = await visibleBoundingBox(
       featured,
@@ -299,13 +357,13 @@ test.describe("component layout invariants", () => {
     await expect(nextCategory).toBeHidden();
     await expect(previousCategory).toBeVisible();
 
-    await expectVerticallyBefore(categories, discoveryLinks, {
-      after: "homepage discovery links",
-      before: "homepage categories",
+    await expectVerticallyBefore(discoveryLinks, leadGrid, {
+      after: "homepage lead grid",
+      before: "homepage read links",
     });
-    await expectVerticallyBefore(discoveryLinks, recentFeed, {
+    await expectVerticallyBefore(categories, recentFeed, {
       after: "homepage recent feed",
-      before: "homepage discovery links",
+      before: "homepage categories",
     });
 
     const tagHrefCount = await discoveryLinks
@@ -321,6 +379,29 @@ test.describe("component layout invariants", () => {
 
     await page.setViewportSize({ height: 1000, width: 390 });
     await page.goto("/");
+    const mobileCtaRowMetrics = await heroCtaRow.evaluate((row) => ({
+      clientWidth: row.clientWidth,
+      scrollWidth: row.scrollWidth,
+    }));
+    const mobileCtaBoxes = await Promise.all([
+      visibleBoundingBox(supportCta, "mobile homepage Patreon CTA"),
+      visibleBoundingBox(discordCta, "mobile homepage Discord CTA"),
+      visibleBoundingBox(youtubeCta, "mobile homepage YouTube CTA"),
+    ]);
+    const mobileCtaReferenceBox = mobileCtaBoxes[0];
+
+    expect(mobileCtaRowMetrics.scrollWidth).toBeLessThanOrEqual(
+      mobileCtaRowMetrics.clientWidth + 1,
+    );
+    mobileCtaBoxes.slice(1).forEach((box) => {
+      expect(Math.abs(box.y - mobileCtaReferenceBox.y)).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.height - mobileCtaReferenceBox.height),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.width - mobileCtaReferenceBox.width),
+      ).toBeLessThanOrEqual(1);
+    });
     const mobileRailMetrics = await readCategoryRailMetrics();
     expect(mobileRailMetrics.scrollWidth).toBeGreaterThan(
       mobileRailMetrics.clientWidth,
@@ -344,6 +425,10 @@ test.describe("component layout invariants", () => {
     await expectVerticallyBefore(hero, featured, {
       after: "mobile featured",
       before: "mobile hero",
+    });
+    await expectVerticallyBefore(discoveryLinks, hero, {
+      after: "mobile hero",
+      before: "mobile read links",
     });
     await expectVerticallyBefore(featured, startHere, {
       after: "mobile start here",
@@ -369,9 +454,11 @@ test.describe("component layout invariants", () => {
     );
 
     const prose = page.locator("[data-article-prose]");
+    const stack = page.locator("[data-endcap-stack]");
     const endcap = page.locator(
       'article aside[aria-label="Article support and discovery"]',
     );
+    const supportBlock = endcap.locator("[data-support-block]");
     const support = endcap.getByRole("heading", {
       name: "Support The Philosopher's Meme",
     });
@@ -385,6 +472,14 @@ test.describe("component layout invariants", () => {
       "href",
       /^\/tags\//u,
     );
+    await expect(
+      supportBlock.getByRole("link", {
+        name: "Support The Philosopher's Meme on Patreon",
+      }),
+    ).toBeVisible();
+    await expect(
+      supportBlock.getByRole("link", { name: "Join the TPM Discord" }),
+    ).toBeVisible();
     await expectVerticallyBefore(prose, support, {
       after: "support block",
       before: "article prose",
@@ -397,6 +492,25 @@ test.describe("component layout invariants", () => {
       after: "article tags",
       before: "article endcap",
     });
+    await expectHorizontallyContained(stack, prose, {
+      inner: "article end stack",
+      outer: "article prose",
+    });
+
+    const proseBox = await visibleBoundingBox(prose, "article prose");
+    const supportBox = await visibleBoundingBox(
+      supportBlock,
+      "article support block",
+    );
+    const endcapBox = await visibleBoundingBox(endcap, "article endcap");
+    const tagsBox = await visibleBoundingBox(tags, "article tags");
+    const proseToSupportGap = supportBox.y - (proseBox.y + proseBox.height);
+    const endcapToTagsGap = tagsBox.y - (endcapBox.y + endcapBox.height);
+
+    expect(proseToSupportGap).toBeGreaterThanOrEqual(24);
+    expect(proseToSupportGap).toBeLessThanOrEqual(64);
+    expect(endcapToTagsGap).toBeGreaterThanOrEqual(32);
+    expect(endcapToTagsGap).toBeLessThanOrEqual(64);
   });
 
   test("article body starts close to the header when no hero image is rendered", async ({
@@ -436,11 +550,13 @@ test.describe("component layout invariants", () => {
         page.locator("[data-site-header]"),
         "site header",
       );
-      const toc = page.locator("[data-article-toc]");
+      const toc = page.locator("[data-article-toc-placement='rail']");
+      const inlineToc = page.locator("[data-article-toc-placement='inline']");
       const prose = page.locator("[data-article-prose]");
       const contentColumn = page.locator("[data-margin-sidebar-content]");
       const tocBox = await visibleBoundingBox(toc, "article table of contents");
 
+      await expect(inlineToc).toBeHidden();
       expect(tocBox.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height);
       await expectNoOverlap(toc, prose, {
         first: "article table of contents",
@@ -465,10 +581,11 @@ test.describe("component layout invariants", () => {
     await page.setViewportSize({ height: 900, width: 2560 });
     await page.goto("/articles/facebook-groups/");
 
-    const details = page.locator("[data-article-toc] details");
-    const summary = page.locator("[data-article-toc] summary");
+    const toc = page.locator("[data-article-toc-placement='rail']");
+    const details = toc.locator("details");
+    const summary = toc.locator("summary");
     const firstLink = page
-      .locator("[data-article-toc]")
+      .locator("[data-article-toc-placement='rail']")
       .getByRole("link", { name: "Facebook as a platform" });
     const contentColumn = page.locator("[data-margin-sidebar-content]");
     const openContentBox = await visibleBoundingBox(
@@ -477,9 +594,14 @@ test.describe("component layout invariants", () => {
     );
 
     await summary.focus();
+    await expect(summary.getByText("Hide")).toBeVisible();
+    await expect(summary.getByText("Show Contents")).toBeHidden();
+    await expect(summary.getByText("Article Contents")).toHaveCount(0);
     await expectFocusVisible(page);
     await page.keyboard.press("Enter");
     await expect(details).not.toHaveAttribute("open", "");
+    await expect(summary.getByText("Show Contents")).toBeVisible();
+    await expect(summary.getByText("Hide")).toBeHidden();
 
     const closedContentBox = await visibleBoundingBox(
       contentColumn,
@@ -528,8 +650,16 @@ test.describe("component layout invariants", () => {
       await page.goto("/articles/facebook-groups/");
 
       const contentColumn = page.locator("[data-margin-sidebar-content]");
+      const railToc = page.locator("[data-article-toc-placement='rail']");
+      const inlineToc = page.locator("[data-article-toc-placement='inline']");
 
-      await expect(page.locator("[data-article-toc]")).toBeHidden();
+      await expect(railToc).toBeHidden();
+      await expect(inlineToc).toBeVisible();
+      await expect(inlineToc.getByText("Show Contents")).toBeVisible();
+      await inlineToc.locator("summary").click();
+      await expect(
+        inlineToc.getByRole("link", { name: "Facebook as a platform" }),
+      ).toBeVisible();
       await expectCenteredInViewport(
         page,
         contentColumn,

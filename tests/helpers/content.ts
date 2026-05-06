@@ -4,6 +4,7 @@ import type {
   ArticleEntry,
   AuthorEntry,
   CategorySummary,
+  EditorialCollectionEntry,
 } from "../../src/lib/routes";
 
 /** Options for building announcement-entry test fixtures. */
@@ -29,6 +30,12 @@ export interface CategorySummaryFixtureOptions {
   order?: number;
   slug?: string;
   title?: string;
+}
+
+/** Options for building editorial-collection test fixtures. */
+export interface EditorialCollectionEntryFixtureOptions {
+  data?: Partial<EditorialCollectionEntry["data"]>;
+  id?: string;
 }
 
 /** Options for building author-entry test fixtures. */
@@ -132,6 +139,33 @@ export function categorySummary({
     order,
     slug,
     title,
+  };
+}
+
+/**
+ * Builds a minimal Astro content editorial collection entry for unit tests.
+ *
+ * @param options Editorial collection entry overrides.
+ * @param options.data Frontmatter overrides.
+ * @param options.id Entry ID override.
+ * @returns Test editorial collection entry.
+ */
+export function editorialCollectionEntry({
+  data = {},
+  id = "sample-collection",
+}: EditorialCollectionEntryFixtureOptions = {}): EditorialCollectionEntry {
+  return {
+    body: "",
+    collection: "collections",
+    data: {
+      description: "Collection description",
+      draft: false,
+      items: [],
+      title: "Sample Collection",
+      ...data,
+    },
+    filePath: `/repo/src/content/collections/${id}.md`,
+    id,
   };
 }
 

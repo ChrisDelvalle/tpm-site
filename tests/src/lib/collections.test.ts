@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   activeEditorialCollections,
+  collectionDirectoryListItems,
   collectionItemReferences,
   editorialCollectionById,
   type EditorialCollectionEntry,
@@ -114,6 +115,38 @@ describe("editorial collections", () => {
     ).toThrow(
       'Collection "featured" references "hidden", but that entry is hidden from homepage.',
     );
+  });
+
+  test("maps directory-visible collection entries into compact list items", () => {
+    const items = collectionDirectoryListItems(
+      collectionEntry("start-here", {
+        items: [
+          { note: "Use this note in the directory.", slug: "visible" },
+          "hidden",
+        ],
+      }),
+      new Map([
+        [
+          "hidden",
+          publishable("hidden", "article", {
+            ...defaultPublishableVisibility,
+            directory: false,
+          }),
+        ],
+        ["visible", publishable("visible")],
+      ]),
+    );
+
+    expect(items).toEqual([
+      {
+        author: "Author",
+        date: "May 5, 2026",
+        description: "Use this note in the directory.",
+        href: "/articles/visible/",
+        kind: "article",
+        title: "visible",
+      },
+    ]);
   });
 });
 

@@ -5,12 +5,18 @@ import { pathToFileURL } from "node:url";
 import { describe, expect, test } from "bun:test";
 import matter from "gray-matter";
 
-const articleDir = path.resolve("src/content/articles");
-const articlePattern = /\.mdx?$/i;
-
-function articleUrl(file: string) {
-  return withTrailingSlash(`/articles/${filenameStem(file)}`);
-}
+const publishableSources = [
+  {
+    dir: path.resolve("src/content/announcements"),
+    url: (file: string) =>
+      withTrailingSlash(`/announcements/${filenameStem(file)}`),
+  },
+  {
+    dir: path.resolve("src/content/articles"),
+    url: (file: string) => withTrailingSlash(`/articles/${filenameStem(file)}`),
+  },
+] as const;
+const publishablePattern = /\.mdx?$/i;
 
 async function configRedirects() {
   // eslint-disable-next-line no-unsanitized/method -- Fixed local config path, not user-controlled input.
@@ -41,34 +47,37 @@ async function configRedirects() {
   );
 }
 
-async function expectedRedirectsFromArticleFrontmatter() {
-  const files = await listFiles(articleDir, articlePattern);
+async function expectedRedirectsFromPublishableFrontmatter() {
   const redirects = new Map<string, string>();
   const seen = new Map<string, string>();
 
-  for (const file of files) {
-    const data = frontmatterData(await readFile(file, "utf8"));
+  for (const source of publishableSources) {
+    const files = await listFiles(source.dir, publishablePattern);
 
-    const legacyPermalink = data["legacyPermalink"];
-    if (legacyPermalink === undefined) {
-      continue;
+    for (const file of files) {
+      const data = frontmatterData(await readFile(file, "utf8"));
+
+      const legacyPermalink = data["legacyPermalink"];
+      if (legacyPermalink === undefined) {
+        continue;
+      }
+
+      if (typeof legacyPermalink !== "string") {
+        throw new TypeError(`${file}: legacyPermalink must be a string.`);
+      }
+
+      const redirectSource = normalizeLegacyPermalink(legacyPermalink);
+      const previous = seen.get(redirectSource);
+
+      if (previous !== undefined) {
+        throw new Error(
+          `${file}: duplicate legacyPermalink ${redirectSource}; already used by ${previous}.`,
+        );
+      }
+
+      seen.set(redirectSource, file);
+      redirects.set(redirectSource, source.url(file));
     }
-
-    if (typeof legacyPermalink !== "string") {
-      throw new TypeError(`${file}: legacyPermalink must be a string.`);
-    }
-
-    const source = normalizeLegacyPermalink(legacyPermalink);
-    const previous = seen.get(source);
-
-    if (previous !== undefined) {
-      throw new Error(
-        `${file}: duplicate legacyPermalink ${source}; already used by ${previous}.`,
-      );
-    }
-
-    seen.set(source, file);
-    redirects.set(source, articleUrl(file));
   }
 
   return Object.fromEntries(
@@ -126,9 +135,9 @@ function withTrailingSlash(value: string) {
 }
 
 describe("legacy redirects", () => {
-  test("Astro redirects match article legacy permalink frontmatter", async () => {
+  test("Astro redirects match publishable legacy permalink frontmatter", async () => {
     expect(await configRedirects()).toEqual(
-      await expectedRedirectsFromArticleFrontmatter(),
+      await expectedRedirectsFromPublishableFrontmatter(),
     );
   });
 });

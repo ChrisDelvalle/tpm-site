@@ -5,17 +5,23 @@ import Container from "../ui/Container.astro";
 import SectionStack from "./SectionStack.astro";
 
 interface Props extends HTMLAttributes<"div"> {
+  padding?: "normal" | "snug";
   spacing?: "compact" | "normal" | "relaxed";
   width?: "standard" | "wide";
 }
 
 const {
+  padding = "normal",
   spacing = "normal",
   width = "standard",
   class: className,
   ...attrs
 } = Astro.props;
 const widthSize = width === "wide" ? "lg" : "md";
+const paddingClasses = {
+  normal: "py-8 lg:py-12",
+  snug: "pt-2 pb-8 lg:pt-3 lg:pb-12",
+} as const;
 ---
 
 <Container
@@ -24,7 +30,7 @@ const widthSize = width === "wide" ? "lg" : "md";
   data-browsing-body
   data-page-frame
   size={widthSize}
-  class:list={["py-8 lg:py-12", className]}
+  class:list={[paddingClasses[padding], className]}
 >
   <SectionStack spacing={spacing}>
     <slot />

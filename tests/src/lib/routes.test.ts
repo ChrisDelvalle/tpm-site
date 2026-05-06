@@ -15,6 +15,8 @@ import {
   categoriesIndexUrl,
   categorySlug,
   categoryUrl,
+  collectionsIndexUrl,
+  collectionUrl,
   entryTitle,
   feedUrl,
   formatDate,
@@ -82,6 +84,8 @@ describe("route helpers", () => {
     expect(authorUrl("seong-young-her")).toBe("/authors/seong-young-her/");
     expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("history")).toBe("/categories/history/");
+    expect(collectionsIndexUrl()).toBe("/collections/");
+    expect(collectionUrl("start-here")).toBe("/collections/start-here/");
     expect(pageUrl("About")).toBe("/about/");
     expect(searchUrl()).toBe("/search/");
     expect(tagsIndexUrl()).toBe("/tags/");

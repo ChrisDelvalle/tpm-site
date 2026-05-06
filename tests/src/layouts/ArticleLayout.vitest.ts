@@ -132,7 +132,8 @@ describe("ArticleLayout", () => {
     });
 
     expect(view).toContain('data-content-rail="left"');
-    expect(view).toContain("data-article-toc");
+    expect(view).toContain('data-article-toc-placement="rail"');
+    expect(view).toContain('data-article-toc-placement="inline"');
     expect(view).toContain('href="#first-section"');
   });
 });

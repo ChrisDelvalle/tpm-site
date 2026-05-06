@@ -2,6 +2,8 @@ import type { PublishableListItem } from "./article-list";
 import {
   publishableFromAnnouncement,
   publishableListItem,
+  publishableListItems,
+  visiblePublishables,
 } from "./publishable";
 import type { AnnouncementEntry } from "./routes";
 
@@ -27,4 +29,21 @@ export function announcementListItems(
   announcements: readonly AnnouncementEntry[],
 ): PublishableListItem[] {
   return announcements.map(announcementListItem);
+}
+
+/**
+ * Converts directory-visible announcements into shared article-list props.
+ *
+ * @param announcements Announcement content entries.
+ * @returns Component-ready list items visible on public directory surfaces.
+ */
+export function announcementDirectoryListItems(
+  announcements: readonly AnnouncementEntry[],
+): PublishableListItem[] {
+  return publishableListItems(
+    visiblePublishables(
+      announcements.map(publishableFromAnnouncement),
+      "directory",
+    ),
+  );
 }

@@ -23,8 +23,12 @@ import {
 import { homePageViewModel } from "../lib/home";
 import { sectionNavigationItems } from "../lib/navigation";
 import {
+  announcementsIndexUrl,
+  articlesIndexUrl,
   articlesArchiveUrl,
   authorsIndexUrl,
+  collectionsIndexUrl,
+  collectionUrl,
   tagsIndexUrl,
 } from "../lib/routes";
 
@@ -49,8 +53,10 @@ const { announcementItems, featuredItems, recentFeedItems, startHereItems } =
   homeView;
 const categoryItems = sectionNavigationItems(categories, "/");
 const discoveryLinks = [
-  { href: articlesArchiveUrl(), label: "All articles" },
+  { href: articlesIndexUrl(), label: "Articles" },
+  { href: articlesArchiveUrl(), label: "Archive" },
   { href: authorsIndexUrl(), label: "Authors" },
+  { href: collectionsIndexUrl(), label: "Collections" },
   { href: tagsIndexUrl(), label: "Tags" },
 ] as const;
 
@@ -61,61 +67,59 @@ const description =
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/">
-  <BrowsingBody width="wide">
-    <div
-      class="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)] lg:items-start"
-      data-home-lead-grid
-    >
-      <div class="min-w-0 lg:col-start-1 lg:row-start-1" data-home-lead-hero>
-        <HomeHeroBlock
-          lightImage={heroLightImage}
-          darkImage={heroDarkImage}
-          imageAlt={home.data.title}
-        />
-      </div>
+  <BrowsingBody width="wide" padding="snug">
+    <div class="grid min-w-0 gap-1" data-home-read-lead-group>
+      <HomeDiscoveryLinksBlock links={discoveryLinks} />
       <div
-        class="min-w-0 lg:col-start-1 lg:row-start-2"
-        data-home-lead-featured
+        class="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)] lg:items-start"
+        data-home-lead-grid
       >
-        <HomeFeaturedCarousel itemCount={featuredItems.length}>
-          {
-            featuredItems.map((item, index) => (
-              <HomeFeaturedSlide index={index} item={item} />
-            ))
-          }
-        </HomeFeaturedCarousel>
-      </div>
-      <div class="min-w-0 lg:col-start-2 lg:row-start-1" data-home-lead-start>
-        <FlatArticleList
-          title="Start Here"
-          items={startHereItems}
-          emptyText="Curated starter articles will appear here."
-        />
-      </div>
-      <div
-        class="min-w-0 lg:col-start-2 lg:row-start-2"
-        data-home-lead-announcements
-      >
-        <FlatArticleList
-          title="Announcements"
-          items={announcementItems}
-          emptyText="Announcements will appear here."
-        />
+        <div class="min-w-0 lg:col-start-1 lg:row-start-1" data-home-lead-hero>
+          <HomeHeroBlock
+            lightImage={heroLightImage}
+            darkImage={heroDarkImage}
+            imageAlt={home.data.title}
+          />
+        </div>
+        <div
+          class="min-w-0 lg:col-start-1 lg:row-start-2"
+          data-home-lead-featured
+        >
+          <HomeFeaturedCarousel itemCount={featuredItems.length}>
+            {
+              featuredItems.map((item, index) => (
+                <HomeFeaturedSlide index={index} item={item} />
+              ))
+            }
+          </HomeFeaturedCarousel>
+        </div>
+        <div class="min-w-0 lg:col-start-2 lg:row-start-1" data-home-lead-start>
+          <FlatArticleList
+            title="Start Here"
+            titleHref={collectionUrl("start-here")}
+            items={startHereItems}
+            emptyText="Curated starter articles will appear here."
+          />
+        </div>
+        <div
+          class="min-w-0 lg:col-start-2 lg:row-start-2"
+          data-home-lead-announcements
+        >
+          <FlatArticleList
+            title="Announcements"
+            titleHref={announcementsIndexUrl()}
+            items={announcementItems}
+            emptyText="Announcements will appear here."
+          />
+        </div>
       </div>
     </div>
     <HomeCategoryOverviewBlock items={categoryItems} />
-    <HomeDiscoveryLinksBlock links={discoveryLinks} />
     <section
       class="grid min-w-0 gap-4"
-      aria-labelledby="home-recent-feed-heading"
+      aria-label="Recent"
       data-home-recent-feed
     >
-      <h2
-        id="home-recent-feed-heading"
-        class="text-foreground m-0 text-2xl font-semibold tracking-normal"
-      >
-        Recent
-      </h2>
       <ArticleList items={recentFeedItems} />
     </section>
   </BrowsingBody>

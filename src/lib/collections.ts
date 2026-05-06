@@ -1,13 +1,14 @@
-import type { CollectionEntry } from "astro:content";
-
 import {
   type PublishableEntry,
+  type PublishableListItem,
+  publishableListItem,
   type PublishableVisibilitySurface,
   publishableVisibleOn,
 } from "./publishable";
+import type { EditorialCollectionEntry } from "./routes";
 
 /** Astro content entry for one editor-owned publishable collection. */
-export type EditorialCollectionEntry = CollectionEntry<"collections">;
+export type { EditorialCollectionEntry };
 
 /** Normalized collection item reference. */
 interface CollectionItemReference {
@@ -102,6 +103,25 @@ export function resolvePublishableCollection(
     ),
     title: entry.data.title,
   };
+}
+
+/**
+ * Converts a collection into directory-visible compact list items.
+ *
+ * @param entry Editorial collection entry.
+ * @param publishables Publishable lookup by global slug.
+ * @returns Directory-visible items in manual collection order.
+ */
+export function collectionDirectoryListItems(
+  entry: EditorialCollectionEntry,
+  publishables: ReadonlyMap<string, PublishableEntry>,
+): PublishableListItem[] {
+  return resolvePublishableCollection(entry, publishables)
+    .items.filter((item) => publishableVisibleOn(item.entry, "directory"))
+    .map(({ entry: publishable, note }) => ({
+      ...publishableListItem(publishable),
+      description: note ?? publishable.description,
+    }));
 }
 
 function assertUniqueCollectionSlugs(

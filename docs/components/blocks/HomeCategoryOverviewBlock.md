@@ -34,6 +34,10 @@ Items never wrap into a second row, and the rail scrolls horizontally when the
 full list does not fit. The section width still comes from `BrowsingBody`, so it
 aligns with homepage featured, discovery, and recent sections.
 
+The homepage instance does not render a visible `Categories` heading. The block
+keeps an accessible section label and uses centered category names so the rail
+reads as a compact navigation strip rather than a stack of cards.
+
 ## Layering And Scrolling
 
 The rail owns a local horizontal scroll container and two absolutely positioned
@@ -58,9 +62,9 @@ last item is fully visible with no right fade.
 ## Accessibility Semantics
 
 Use semantic HTML first, preserve heading order when headings are rendered, and
-keep focus-visible states intact for any interactive descendants. This wrapper
-sets the reusable category overview heading to `h2` so the homepage keeps a
-single `h1`.
+keep focus-visible states intact for any interactive descendants. The homepage
+usage labels the section without a visible heading so the page keeps one `h1`
+and avoids spending first-screen space on redundant section copy.
 
 ## Content Edge Cases
 
@@ -83,6 +87,7 @@ visible, and CTAs distinguishable from neutral actions.
 - keeps every category item on one row and scrolls horizontally when needed.
 - keeps category items equal width and height while letting the shared width
   stretch evenly to available space.
+- centers category labels inside their rail items.
 - reveals each functional previous/next icon button only when there is more
   content in that direction.
 - keeps the first and last item clear at the corresponding scroll edge by

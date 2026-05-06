@@ -27,11 +27,13 @@ describe("FlatArticleList", () => {
           },
         ],
         title: "Start Here",
+        titleHref: "/collections/start-here/",
       },
       request: new Request(`${testSiteUrl}/`),
     });
 
     expect(view).toContain("data-flat-article-list");
+    expect(view).toContain('href="/collections/start-here/"');
     expect(view).toContain("First Article");
     expect(view).toContain("Culture");
     expect(view).toContain("May 5, 2026");

@@ -22,10 +22,34 @@ describe("announcement page", () => {
     });
 
     expect(view).toContain(announcement.data.title);
+    expect(view).toContain(`<title>${announcement.data.title}</title>`);
+    expect(view).not.toContain(
+      `<title>${announcement.data.title} | The Philosopher's Meme</title>`,
+    );
     expect(view).toContain("data-article-prose");
     expect(view).toContain("data-pagefind-body");
     expect(view).toContain(`/announcements/${announcement.id}/`);
     expect(view).not.toContain("Article tags");
     expect(view).not.toContain("More in");
+  });
+
+  test("keeps search-hidden announcements out of Pagefind body indexing", async () => {
+    const announcement = (await getAnnouncements()).find(
+      (entry) =>
+        entry.id === "jeremy-cahill-metamer-dismissed-for-serious-misconduct",
+    );
+
+    if (announcement === undefined) {
+      throw new Error("Expected hidden Jeremy Cahill announcement fixture.");
+    }
+
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(AnnouncementPage, {
+      props: { announcement },
+      request: new Request(`${testSiteUrl}/announcements/${announcement.id}/`),
+    });
+
+    expect(view).toContain("data-pagefind-ignore");
+    expect(view).not.toContain("data-pagefind-body");
   });
 });

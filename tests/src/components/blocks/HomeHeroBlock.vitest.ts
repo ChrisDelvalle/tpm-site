@@ -31,5 +31,7 @@ describe("HomeHeroBlock", () => {
     expect(view).toContain("The philosophy of memes.");
     expect(view).toContain("Support Us");
     expect(view).toContain("Join Discord");
+    expect(view).toContain("Visit YouTube");
+    expect(view).toContain("https://www.youtube.com/@ThePhilosophersMeme");
   });
 });

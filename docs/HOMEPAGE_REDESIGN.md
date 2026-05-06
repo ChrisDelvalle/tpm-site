@@ -33,6 +33,9 @@ Desktop homepage:
 
 ```text
 Lead grid
+  Row 0
+    Read / Articles Archive Authors Collections Tags
+
   Row 1
     Wide cell: Hero / Support / Discord
     Thin cell: Start Here
@@ -41,10 +44,7 @@ Lead grid
     Wide cell: Featured carousel
     Thin cell: Announcements
 
-Then single-column flow
 Categories, one-row horizontal rail
-
-More Ways To Browse: All Articles, Authors, Tags
 
 Recent, chronological normal articles
 ```
@@ -52,12 +52,12 @@ Recent, chronological normal articles
 Mobile homepage:
 
 ```text
+Read / Articles Archive Authors Collections Tags
 Hero / Support / Discord
 Featured
 Start Here
 Announcements
 Categories
-More Ways To Browse
 Recent
 ```
 
@@ -69,11 +69,11 @@ the same priority order and avoid horizontal overflow.
 - Use "articles", never "essays".
 - Prefer concise headings:
   - `Announcements`
-  - `Featured`
   - `Start Here`
-  - `Categories`
-  - `More`
-  - `Recent`
+  - `Read`
+- The homepage should not render visible headings for Featured, Categories, or
+  Recent when the surrounding structure already makes the surface clear. Keep
+  accessible labels for screen readers and tests.
 - Do not enumerate tags on the homepage.
 - Do not include GitHub on the homepage.
 - Keep obvious explanations out of visible copy.
@@ -127,6 +127,10 @@ Announcements have their own routes:
 /announcements/[slug]/
 ```
 
+The homepage `Announcements` heading links to `/announcements/`. Announcement
+entries whose `visibility.directory` is `false` keep direct routes but do not
+appear in the announcement index or collection detail lists.
+
 Announcements are separate from the normal article library:
 
 - not in `/articles/`;
@@ -134,7 +138,8 @@ Announcements are separate from the normal article library:
 - not in normal Recent;
 - not in related articles;
 - not in the top category navigation;
-- only in the homepage Announcements slot and announcement routes.
+- only in the homepage Announcements slot, announcement routes, and explicit
+  collections that name them.
 
 This separation is intentional. It makes accidental intermingling difficult and
 keeps announcements available as full reading pages when needed.
@@ -152,6 +157,31 @@ an optional `note` for feature-specific editorial context. The page inherits
 title, description, href, author, date, category, kind, and image from the
 referenced article or announcement.
 
+Featured also has a public directory route at `/collections/featured/`. The
+footer labels that link as `Featured Articles` because that is clearer to
+readers than the internal collection ID. The homepage carousel itself has an
+accessible label but no visible `Featured` heading; previous/next controls live
+in the same bottom control row as the position dots.
+
+### Start Here
+
+Start Here is the `start-here` collection and has a public directory route at
+`/collections/start-here/`. The homepage `Start Here` heading links to that
+route.
+
+### Collections
+
+Collections have their own browsing routes:
+
+```text
+/collections/
+/collections/[collection]/
+```
+
+The collection index belongs in footer navigation and the homepage Read strip.
+Collection detail pages use the shared publishable-entry list model and preserve
+manual collection order.
+
 ## Component Hierarchy
 
 ```text
@@ -162,16 +192,16 @@ src/pages/index.astro
     HomeLeadGrid
       HomeLeadHeroCell
       HomeHeroBlock
-      HomeLeadFeaturedCell
+    HomeLeadFeaturedCell
       HomeFeaturedCarousel
         HomeFeaturedSlide
-      HomeLeadStartCell
-        FlatArticleList title="Start Here" (publishable entries)
-      HomeLeadAnnouncementsCell
-        FlatArticleList title="Announcements" (publishable entries)
+    HomeLeadStartCell
+      FlatArticleList title="Start Here" titleHref="/collections/start-here/" (publishable entries)
+    HomeLeadAnnouncementsCell
+      FlatArticleList title="Announcements" titleHref="/announcements/" (publishable entries)
     HomeCategoryOverviewBlock
     HomeDiscoveryLinksBlock
-    ArticleList title="Recent"
+    ArticleList inside aria-label="Recent"
 ```
 
 Reusable primitives:
@@ -209,6 +239,8 @@ JavaScript enhancement for multiple items:
 
 - show one item at a time;
 - provide previous, next, and position controls as real buttons;
+- place previous, next, and position controls in one bottom row so the carousel
+  does not need a visible heading/action row;
 - auto-rotate on a calm interval only when motion is allowed;
 - pause on hover, focus, touch/pointer interaction, and manual control use;
 - respect `prefers-reduced-motion` by disabling auto-rotation;
@@ -233,17 +265,22 @@ widget.
   artwork's horizontal measure.
 - The hero artwork should use most of the wide desktop track before hitting its
   maximum width.
-- The Announcements heading should vertically align with the Featured heading
-  on desktop because both are row-2 grid cells. Do not achieve this with margin
-  offsets, fixed heights on Start Here, or JavaScript measurement.
+- The older requirement that Announcements and Featured headings align is
+  replaced by a simpler invariant: the Announcements cell and the Featured
+  carousel begin on the same row, and the carousel has no visible heading row.
+  Do not use margin offsets, fixed heights on Start Here, or JavaScript
+  measurement to force alignment.
 - The Featured carousel should keep a stable viewport height so slide changes
   do not resize the lead grid.
 - Announcement, Featured, Start Here, and Recent surfaces use flat article
   treatments with separators rather than cards.
-- Categories render as one horizontal rail, never wrap into a second row, and
-  expose working previous/next icon buttons when the list overflows.
-- More Ways To Browse is a thin row containing only All Articles, Authors, and
-  Tags.
+- Categories render as one horizontal rail, never wrap into a second row,
+  center category names inside each item, and expose working previous/next icon
+  buttons when the list overflows.
+- Read is a compact, left-aligned, intrinsic-width first-row quick navigation
+  bar containing Articles, Archive, Authors, Collections, and Tags. It has no
+  horizontal border bars, almost no vertical padding, sits directly under the
+  site header, and nearly touches the lead row below it.
 - Recent is chronological newest-first normal articles only.
 - The homepage must not duplicate announcement entries inside Recent.
 - The homepage must not have horizontal overflow at mobile, tablet, desktop, or
@@ -252,8 +289,12 @@ widget.
 ## Accessibility Requirements
 
 - The page has one `h1`.
-- Each major row has a concise section heading.
-- Announcement, Start Here, Featured, Categories, More, and Recent landmarks are
+- Each major row has a concise visible heading or an accessible section label.
+- Announcement and Start Here headings are visible links to their directory
+  pages.
+- Featured, Categories, and Recent use accessible section labels even when they
+  do not render visible headings.
+- Announcement, Start Here, Featured, Categories, Read, and Recent landmarks are
   reachable in logical DOM order.
 - Carousel controls are keyboard reachable and named.
 - Inactive carousel items are not keyboard reachable and are hidden from screen
@@ -286,12 +327,15 @@ widget.
   secondary track.
 - Hero and Start Here share the first desktop row; Featured and Announcements
   share the second desktop row.
-- The Featured and Announcements headings align vertically on desktop.
+- The Featured carousel and Announcements list begin in the same desktop row
+  without a visible Featured heading.
 - The primary lead track takes roughly two thirds of the lead grid, and the hero
   artwork fills most of that track before reaching its maximum width.
-- Mobile order is Hero, Featured, Start Here, Announcements, Categories, More,
+- Mobile order is Read, Hero, Featured, Start Here, Announcements, Categories,
   Recent without responsive order hacks.
 - The Featured carousel height does not change when the active feature changes.
+- The Featured carousel previous/next buttons share the bottom control row with
+  item dots.
 - The first viewport contains at least one announcement link when announcements
   exist, one support link, one Discord link, one featured link, and one Start
   Here link.
@@ -302,10 +346,15 @@ widget.
 - Reduced-motion disables auto-rotation.
 - Categories render one horizontal row with working scroll controls when the
   rail overflows.
-- More Ways To Browse contains All Articles, Authors, and Tags, and excludes
-  GitHub and RSS.
+- Category names are centered.
+- Read contains Articles, Archive, Authors, Collections, and Tags; it stays one
+  line by shrinking/truncating before wrapping, remains left-aligned rather than
+  spreading across the page, and excludes GitHub and RSS.
 - Recent is newest-first normal articles only and excludes announcements.
 - `/announcements/` lists announcements newest-first.
+- `/collections/` lists active collections.
+- `/collections/start-here/` and `/collections/featured/` render ordered
+  collection directories.
 - Announcement detail pages use article-like semantics without appearing in
   normal article routes.
 - The homepage uses "articles" language and does not include "essays".

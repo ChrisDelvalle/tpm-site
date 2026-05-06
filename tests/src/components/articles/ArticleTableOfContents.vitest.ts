@@ -23,18 +23,31 @@ const headings = [
 ] as const;
 
 describe("ArticleTableOfContents", () => {
-  test("renders a labeled details navigation for useful heading lists", async () => {
+  test("renders a labeled rail details navigation for useful heading lists", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(ArticleTableOfContents, {
       props: { headings },
     });
 
-    expect(view).toContain('aria-label="Article contents"');
+    expect(view).toContain('aria-label="Article table of contents"');
     expect(view).toContain("data-article-toc");
+    expect(view).toContain('data-article-toc-placement="rail"');
     expect(view).toContain("<details");
     expect(view).toContain("open");
     expect(view).toContain('href="#first-heading"');
     expect(view).toContain('href="#nested-heading"');
+  });
+
+  test("renders an inline placement for narrow reading bodies", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleTableOfContents, {
+      props: { headings, initiallyOpen: false, placement: "inline" },
+    });
+
+    expect(view).toContain('data-article-toc-placement="inline"');
+    expect(view).toContain("xl:hidden");
+    expect(view).toContain("Show Contents");
+    expect(view).not.toContain("<details open");
   });
 
   test("renders collapsed markup when initially closed", async () => {
