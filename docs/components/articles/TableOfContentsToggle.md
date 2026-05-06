@@ -15,6 +15,7 @@ basic collapsed/open behavior.
 - `label?: string`
 - `openLabel?: string`
 - `closedLabel?: string`
+- `placement?: "rail" | "inline"`
 
 The preferred implementation is a native `summary` inside a parent `details`.
 If the final implementation needs a separate button, update this one-pager
@@ -37,6 +38,15 @@ visible state text and accessible name.
 The toggle should be compact and touch-friendly. It must not shift the reading
 column when opened or closed.
 
+Rail placement uses compact navigation text: `Hide` when open and
+`Show Contents` when closed.
+
+Inline placement has two visual states. When open, the summary row should read
+as a small article section header with `Contents` as the dominant label and a
+quiet `Hide` affordance. When closed, the summary should collapse to only the
+one-line `Show Contents` affordance with minimal vertical padding and no
+section-like spacing.
+
 ## Layering And Scrolling
 
 No layering. It participates in the sticky rail controlled by `ContentRail`.
@@ -58,8 +68,9 @@ Avoid animated height transitions unless they are clearly useful and respect
 ## Accessibility Semantics
 
 Use native disclosure semantics through `summary`. The accessible name should
-identify the region as article contents, but visible text should only show the
-current action/state: `Hide` when open and `Show Contents` when collapsed.
+identify the region as article contents. Rail visible text should only show the
+current action/state. Inline open visible text may show `Contents` plus `Hide`
+because the inline placement is part of article structure.
 
 ## Content Edge Cases
 
@@ -76,7 +87,8 @@ light and dark mode.
 - Toggle is keyboard reachable.
 - Toggle changes disclosure state without JavaScript.
 - Accessible name identifies article contents without rendering a redundant
-  visible label.
+  visible rail label.
+- Inline closed state renders only the compact `Show Contents` affordance.
 - Focus-visible state is clear.
 - Open/closed state does not change primary content measure.
 

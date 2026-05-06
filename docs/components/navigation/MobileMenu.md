@@ -36,7 +36,8 @@ position. Its panel is viewport-constrained rather than trigger-aligned, so it
 cannot fall off-screen when the trigger is near the left or right edge.
 Position the panel from `--site-header-height` instead of a fixed top value so
 header row changes cannot cover the menu. The mobile shell uses the
-`mobile-shell-panel` anchored-positioning preset and may render as native
+`mobile-shell-panel` anchored-positioning preset and spans the full viewport
+width below the sticky header. It may render as native
 `details`/`summary` so disclosure remains semantic without a hydrated island.
 
 The search form and theme toggle sit together at the top of the panel as the
@@ -84,6 +85,7 @@ visible, and CTAs distinguishable from neutral actions.
 - supports keyboard disclosure and focus order.
 - keeps the panel inside the viewport regardless of whether the trigger appears
   left, center, or right.
+- spans the full viewport width at constrained/mobile sizes.
 - snaps the panel top edge to the sticky header bottom.
 - keeps search and theme controls in the top utility area.
 - includes categories, `Articles`, `About`, search, and theme.

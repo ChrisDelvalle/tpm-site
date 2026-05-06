@@ -434,3 +434,53 @@ they are useful context. Explicitly deferred work belongs in
       component tests, focused article-end/TOC Playwright invariants,
       `bun run format:code`, `bun run format:markdown`, `bun run lint`,
       `bun run verify`, `bun run validate:html`, and `bun run catalog:check`.
+
+### Milestone 33: Full-Width Mobile Menu Shell
+
+- [x] Make the mobile sandwich menu panel span the full viewport width below
+      the sticky header rather than keeping side gutters.
+- [x] Keep the panel viewport-safe, internally scrollable, and backed by the
+      shared anchored-positioning preset so future mobile shell panels inherit
+      the same invariant.
+- [x] Update component/positioning docs and focused tests for the full-width
+      mobile menu contract.
+      Verified with focused anchored-positioning unit tests, focused
+      `MobileMenu` component tests, focused mobile menu Playwright invariants,
+      `bun run format:code`, `bun run format:markdown`, `bun run lint`,
+      `bun run build`, `bun run verify`, `bun run validate:html`, and
+      `bun run catalog:check`.
+
+### Milestone 34: Prose-Native Inline Article Contents
+
+- [x] Update the article TOC component designs so the inline placement is an
+      article-native contents section, not a rail moved into the article body.
+- [x] Make the inline TOC start open by default and visually distinguish
+      primary sections from subsections with more than indentation.
+- [x] Make the collapsed inline TOC extremely compact so hiding contents removes
+      the visual weight of the section instead of leaving a large gap.
+- [x] Keep rail behavior unchanged: visible `Hide` when open, `Show Contents`
+      when collapsed, no redundant `Article Contents` heading.
+- [x] Add or update focused component and browser invariants for inline default
+      open state, compact collapsed spacing, hierarchy styling, and centered
+      reading layout.
+      Verified with focused ArticleTableOfContents/TableOfContentsItem/
+      TableOfContentsToggle/ArticleLayout component tests, `bun run typecheck`,
+      `bun run build`, fresh-build focused TOC Playwright invariants,
+      `bun run verify`, `bun run validate:html`, `bun run lint`,
+      `bun run format:code`, `bun run format:markdown`, and
+      `bun run catalog:check`.
+
+### Milestone 35: Inline Contents Section Numbering
+
+- [x] Number in-article contents entries as a hierarchy, such as `1`, `1.1`,
+      `1.2`, and `2`, so it reads like an article outline.
+- [x] Keep subsections visibly subordinate while showing their parent section
+      relationship through the outline number.
+- [x] Keep the margin rail unnumbered and visually unchanged.
+- [x] Update focused component and browser tests for inline-only numbering.
+      Verified with focused ArticleTableOfContents/TableOfContentsItem/
+      TableOfContentsToggle/ArticleLayout component tests, `bun run typecheck`,
+      `bun run build`, fresh-build focused TOC Playwright invariants,
+      `bun run verify`, `bun run validate:html`, `bun run lint`,
+      `bun run format:code`, `bun run format:markdown`, and
+      `bun run catalog:check`.

@@ -35,7 +35,11 @@ describe("anchored positioning", () => {
       expect(anchoredPresetConfig(preset).placement).toBe(
         expectedPlacement(preset),
       );
-      expect(anchoredPresetConfig(preset).safeGutter).toBeGreaterThan(0);
+      if (preset === "mobile-shell-panel") {
+        expect(anchoredPresetConfig(preset).safeGutter).toBe(0);
+      } else {
+        expect(anchoredPresetConfig(preset).safeGutter).toBeGreaterThan(0);
+      }
     }
   });
 
@@ -90,13 +94,14 @@ describe("anchored positioning", () => {
         floatingSize: { height: 700, width: 100 },
         inlineAnchorRect: rect({ height: 40, width: 40, x: 0, y: 24 }),
         placement: "viewport-fill",
+        safeGutter: anchoredPresetConfig("mobile-shell-panel").safeGutter,
       }),
     );
 
-    expect(result.x).toBe(16);
+    expect(result.x).toBe(0);
     expect(result.y).toBe(96);
-    expect(result.maxWidth).toBe(768);
-    expect(result.maxHeight).toBe(488);
+    expect(result.maxWidth).toBe(800);
+    expect(result.maxHeight).toBe(504);
     expect(result.placement).toBe("viewport-fill");
   });
 

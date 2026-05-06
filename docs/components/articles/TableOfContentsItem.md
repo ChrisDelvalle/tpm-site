@@ -14,8 +14,11 @@ should render.
 
 - `heading: ArticleHeading`
 - `current?: boolean`
+- `placement?: "rail" | "inline"`
+- `sectionLabel?: string`
 
 `heading` includes stable ID, text, depth, normalized nesting level, and order.
+`sectionLabel` is only for inline outline numbering.
 
 ## Composition Relationships
 
@@ -31,6 +34,16 @@ link's indentation, wrapping, current state, and focus behavior.
 
 Items stack vertically. Indentation should be based on normalized heading level,
 not raw heading depth. Long heading text wraps instead of overflowing.
+
+Rail items are compact navigation links. Inline items are article contents
+links: level 1 entries must read as primary section links, and level 2+ entries
+must read as subordinate subsection links through a combination of indentation,
+type weight, color, numbering, and rhythm. Indentation alone is not enough for
+the inline placement.
+
+Inline entries should display hierarchical outline labels before the link text:
+`1`, `1.1`, `1.2`, `2`, etc. Rail entries should never show these section
+labels.
 
 ## Layering And Scrolling
 
@@ -68,6 +81,8 @@ light and dark mode.
 - Does not generate or mutate slugs.
 - Wraps long text inside the rail.
 - Applies stable indentation from normalized level.
+- Visually distinguishes inline primary sections from inline subsections.
+- Shows hierarchical section labels only for inline entries.
 - Keeps focus-visible state readable.
 
 ## Follow-Up Notes

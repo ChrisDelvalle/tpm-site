@@ -32,10 +32,10 @@ describe("anchored positioning browser script", () => {
     installAnchoredPositioning(runtimeFor(window));
     dispatchWindowEvent(root, window, "toggle");
 
-    expect(panel.style.getPropertyValue("--anchor-x")).toBe("16px");
+    expect(panel.style.getPropertyValue("--anchor-x")).toBe("0px");
     expect(panel.style.getPropertyValue("--anchor-y")).toBe("96px");
-    expect(panel.style.getPropertyValue("--anchor-max-width")).toBe("358px");
-    expect(panel.style.getPropertyValue("--anchor-max-height")).toBe("732px");
+    expect(panel.style.getPropertyValue("--anchor-max-width")).toBe("390px");
+    expect(panel.style.getPropertyValue("--anchor-max-height")).toBe("748px");
     expect(panel.dataset["anchorPlacement"]).toBe("viewport-fill");
     expect(panel.dataset["anchorState"]).toContain("sized-block");
   });

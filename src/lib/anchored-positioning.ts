@@ -118,7 +118,7 @@ const presetConfigs = {
     fallback: ["size-then-shift"],
     offset: 0,
     placement: "viewport-fill",
-    safeGutter: defaultSafeGutter,
+    safeGutter: 0,
   },
 } as const satisfies Record<AnchoredPreset, AnchoredPresetConfig>;
 

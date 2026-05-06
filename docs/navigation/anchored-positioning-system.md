@@ -373,7 +373,9 @@ Examples:
 - `CategoryDropdown` chooses `header-dropdown`.
 - `SearchReveal` chooses `header-search-start` or `header-search-end` based on
   which header utility cluster contains it.
-- `MobileMenu` chooses `mobile-shell-panel`.
+- `MobileMenu` chooses `mobile-shell-panel`, which intentionally uses zero
+  horizontal safe gutter so the mobile shell spans the viewport below the
+  sticky header.
 - article hover-image components choose `inline-hover-preview`.
 
 Component docs should list the preset they use and the visible relationships

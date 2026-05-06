@@ -114,21 +114,22 @@ const moreInCategory =
         formattedDate={articleView.formattedDate}
         title={articleView.title}
       />
-      {
-        showTableOfContents && (
-          <ArticleTableOfContents
-            headings={tableOfContentsHeadings}
-            initiallyOpen={false}
-            placement="inline"
-          />
-        )
-      }
-      <ArticleProse
-        data-article-prose
-        enableImageInspector={enableImageInspector}
-      >
-        <slot />
-      </ArticleProse>
+      <div class="grid min-w-0 gap-1" data-article-body-flow>
+        {
+          showTableOfContents && (
+            <ArticleTableOfContents
+              headings={tableOfContentsHeadings}
+              placement="inline"
+            />
+          )
+        }
+        <ArticleProse
+          data-article-prose
+          enableImageInspector={enableImageInspector}
+        >
+          <slot />
+        </ArticleProse>
+      </div>
       <EndcapStack spacing="relaxed">
         {
           articleAuthorProfiles.map((profile) => (

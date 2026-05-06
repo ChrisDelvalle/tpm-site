@@ -5,7 +5,7 @@ Source: `src/components/articles/ArticleTableOfContents.astro`
 ## Purpose
 
 `ArticleTableOfContents` renders article-local heading navigation in either the
-reading margin rail or a compact in-flow article-top fallback. It helps readers
+reading margin rail or an in-flow article contents section. It helps readers
 stay oriented inside long articles after global category navigation moves into
 site navigation.
 
@@ -50,11 +50,21 @@ rail geometry and sticky behavior.
 ## Layout And Responsiveness
 
 Mobile/tablet base: no persistent side rail. Render the inline placement near
-the top of the article body as a compact disclosure. It should start collapsed
-by default so it teaches readers that contents exist without forcing a long
-navigation list before the article. Keep the inline placement unframed; do not
-add horizontal rules above or below the `Show Contents` control. Hiding the
+the top of the article body as an article-native contents section. It should
+start open by default because the section is useful orientation, not secondary
+chrome. When open, it should feel like article structure: a concise `Contents`
+heading, hierarchical section links, visibly subordinate subsections, and
+enough rhythm to separate it from the article body. Inline numbering should use
+article-outline labels such as `1`, `1.1`, `1.2`, and `2`, so readers can scan
+major sections and subsections as one outline. When collapsed, it should be
+intentionally tiny: only a one-line `Show Contents` summary with minimal
+vertical padding and no leftover section spacing, border, or rule. Hiding the
 rail must not cause the reading column to drift off center.
+
+The inline placement must not inherit the rail's visual language. Do not render
+the rail side border, rail indentation, sidebar-density styling, or persistent
+rail chrome in the article flow. Numbering belongs only to the inline article
+contents section, not the rail.
 
 Desktop: render in the left margin rail only when at least two useful headings
 exist and there is enough room for a symmetric reading grid. The rail starts
@@ -80,6 +90,11 @@ Use native `details`/`summary` for hide/show:
 - long-heading wrapping;
 - current section as progressive enhancement.
 
+The rail summary should stay terse: `Hide` when open and `Show Contents` when
+collapsed. The inline summary should expose the open section as `Contents` with
+a compact `Hide` affordance; when closed, it should show only
+`Show Contents`.
+
 Do not require JavaScript for basic navigation or hide/show behavior.
 `src/scripts/article-table-of-contents.ts` only enhances visible active-section
 state and must not be required for hash links or disclosure behavior to work.
@@ -90,10 +105,12 @@ Render a labeled navigation region such as
 `aria-label="Article table of contents"`.
 Use normal anchor links. Do not use app-menu roles.
 
-The summary/toggle text must be visible and keyboard reachable. The visible
+The summary/toggle text must be visible and keyboard reachable. Rail visible
 state text is intentionally terse: `Hide` when open and `Show Contents` when
-collapsed. Do not render a redundant visible `Article Contents` label above the
-rail list. If active section highlighting is available, use
+collapsed. Inline open state may show a `Contents` label because it is the
+article's contents section, not a persistent rail. Do not render a redundant
+visible `Article Contents` label above the rail list. If active section
+highlighting is available, use
 `data-current="true"` for styling and `aria-current="location"` for the active
 in-page anchor.
 
@@ -127,6 +144,11 @@ prose. Current/focus states must be visible in light and dark mode.
 - Rail never overlaps prose or hides under the sticky header.
 - Inline placement is visible whenever the rail is hidden by responsive
   constraints.
+- Inline placement starts open by default.
+- Inline open state visually distinguishes primary sections from subsections.
+- Inline section links use hierarchical outline numbering; rail items are not
+  numbered.
+- Inline collapsed state is compact and does not leave a large article-body gap.
 - Reading content remains centered with the TOC visible, hidden by responsive
   constraints, or collapsed with the native disclosure.
 - Links navigate to visible heading targets.

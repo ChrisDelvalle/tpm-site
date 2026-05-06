@@ -303,8 +303,8 @@ test("mobile navigation panel stays viewport-constrained from the left trigger",
   );
   const box = await visibleBoundingBox(panel, "mobile navigation panel");
 
-  expect(box.x).toBeGreaterThanOrEqual(0);
-  expect(box.x + box.width).toBeLessThanOrEqual(320);
+  expect(box.x).toBe(0);
+  expect(box.width).toBe(320);
   expect(box.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height);
   expect(box.y + box.height).toBeLessThanOrEqual(520);
   await expect(panel.getByRole("searchbox")).toBeVisible();

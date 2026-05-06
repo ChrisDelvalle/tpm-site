@@ -655,11 +655,40 @@ test.describe("component layout invariants", () => {
 
       await expect(railToc).toBeHidden();
       await expect(inlineToc).toBeVisible();
-      await expect(inlineToc.getByText("Show Contents")).toBeVisible();
-      await inlineToc.locator("summary").click();
+      await expect(
+        inlineToc.locator("[data-toc-inline-heading]"),
+      ).toBeVisible();
+      await expect(inlineToc.locator("[data-toc-inline-action]")).toBeVisible();
+      await expect(
+        inlineToc.locator("[data-toc-section-label='1']"),
+      ).toBeVisible();
+      await expect(
+        inlineToc
+          .getByRole("link", { name: "Facebook as a platform" })
+          .locator("[data-toc-section-label-text]"),
+      ).toBeVisible();
       await expect(
         inlineToc.getByRole("link", { name: "Facebook as a platform" }),
       ).toBeVisible();
+      await inlineToc.locator("summary").click();
+      await expect(
+        inlineToc.locator("[data-toc-inline-closed-label]"),
+      ).toBeVisible();
+      await expect(
+        inlineToc.getByRole("link", { name: "Facebook as a platform" }),
+      ).toBeHidden();
+
+      const summaryBox = await visibleBoundingBox(
+        inlineToc.locator("summary"),
+        "collapsed inline table of contents summary",
+      );
+      const firstProseElementBox = await visibleBoundingBox(
+        page.locator("[data-article-prose] > :first-child").first(),
+        "first prose element after collapsed contents",
+      );
+      expect(
+        firstProseElementBox.y - (summaryBox.y + summaryBox.height),
+      ).toBeLessThanOrEqual(16);
       await expectCenteredInViewport(
         page,
         contentColumn,

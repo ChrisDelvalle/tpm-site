@@ -216,9 +216,13 @@ test.describe("anchored header surfaces", () => {
     await page.getByLabel("Open navigation menu").click();
 
     const panel = page.locator("[data-mobile-menu-panel]");
+    const panelBox = await visibleBoundingBox(panel, "mobile menu panel");
+
     await expect(panel).toBeVisible();
     await expectPanelBelowHeader(page, panel);
     await expectViewportContained(page, panel, "mobile menu panel");
+    expect(panelBox.x).toBe(0);
+    expect(panelBox.width).toBe(320);
     await expect(panel.getByRole("searchbox")).toBeVisible();
     await expect(panel.locator(".theme-toggle")).toBeVisible();
     await expect(panel.getByRole("link", { name: "RSS" })).toHaveCount(0);

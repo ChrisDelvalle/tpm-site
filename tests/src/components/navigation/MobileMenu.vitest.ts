@@ -26,6 +26,9 @@ describe("MobileMenu", () => {
     expect(view).toContain("data-floating-panel");
     expect(view).toContain("data-mobile-menu-panel");
     expect(view).not.toContain("fixed inset-x-4");
+    expect(view).toContain("w-[var(--anchor-max-width,100vw)]");
+    expect(view).toContain("left: var(--anchor-x, 0px)");
+    expect(view).toContain("rounded-none");
     expect(view).toContain("--site-header-height");
     expect(view).toContain("grid-cols-[minmax(0,1fr)_auto]");
     expect(view).toContain("overflow-y-auto");

@@ -41,13 +41,43 @@ describe("ArticleTableOfContents", () => {
   test("renders an inline placement for narrow reading bodies", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(ArticleTableOfContents, {
-      props: { headings, initiallyOpen: false, placement: "inline" },
+      props: { headings, placement: "inline" },
     });
 
     expect(view).toContain('data-article-toc-placement="inline"');
     expect(view).toContain("xl:hidden");
+    expect(view).toMatch(/<details[^>]* open/u);
+    expect(view).toContain("data-toc-inline-heading");
+    expect(view).toContain("Contents");
+    expect(view).toContain("Hide");
+    expect(view).toContain('data-toc-link-placement="inline"');
+    expect(view).toContain('data-toc-section-label="1"');
+    expect(view).toContain('data-toc-section-label="1.1"');
+    expect(view).not.toContain("border-s");
+  });
+
+  test("keeps rail placement unnumbered", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleTableOfContents, {
+      props: { headings, placement: "rail" },
+    });
+
+    expect(view).toContain('data-article-toc-placement="rail"');
+    expect(view).not.toContain("data-toc-section-label");
+    expect(view).toContain("border-s");
+  });
+
+  test("renders compact inline collapsed markup when explicitly closed", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleTableOfContents, {
+      props: { headings, initiallyOpen: false, placement: "inline" },
+    });
+
+    expect(view).toContain('data-article-toc-placement="inline"');
+    expect(view).toContain("data-toc-inline-closed-label");
     expect(view).toContain("Show Contents");
     expect(view).not.toContain("<details open");
+    expect(view).not.toContain("border-s");
   });
 
   test("renders collapsed markup when initially closed", async () => {

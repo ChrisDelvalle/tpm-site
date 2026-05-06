@@ -39,7 +39,8 @@ const {
     <X class="hidden size-5 group-open:block" aria-hidden="true" />
   </AnchoredTrigger>
   <AnchoredPanel
-    class="border-border bg-background z-50 grid w-[var(--anchor-max-width,calc(100vw-2rem))] gap-5 overflow-y-auto overscroll-contain rounded-sm border p-4 shadow-lg"
+    class="border-border bg-background z-50 grid w-[var(--anchor-max-width,100vw)] gap-5 overflow-y-auto overscroll-contain rounded-none border-y p-4 shadow-lg"
+    style="left: var(--anchor-x, 0px); max-width: var(--anchor-max-width, 100vw);"
     data-mobile-menu-panel
   >
     <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">

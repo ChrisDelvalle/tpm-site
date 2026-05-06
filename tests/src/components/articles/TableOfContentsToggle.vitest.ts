@@ -16,4 +16,17 @@ describe("TableOfContentsToggle", () => {
     expect(view).toContain("Hide");
     expect(view).toContain("Show Contents");
   });
+
+  test("renders an inline contents heading only for the article-flow placement", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(TableOfContentsToggle, {
+      props: { label: "Essay contents", placement: "inline" },
+    });
+
+    expect(view).toContain('aria-label="Essay contents"');
+    expect(view).toContain("data-toc-inline-heading");
+    expect(view).toContain("Contents");
+    expect(view).toContain("data-toc-inline-closed-label");
+    expect(view).toContain("data-toc-inline-action");
+  });
 });
