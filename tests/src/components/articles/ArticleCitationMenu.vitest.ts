@@ -33,7 +33,8 @@ describe("ArticleCitationMenu", () => {
       },
     });
 
-    expect(view).toContain("Cite this article");
+    expect(view).toContain('aria-label="Cite this article"');
+    expect(view).toContain(">Cite</span>");
     expect(view).toContain("lucide-quote");
     expect(view).toContain("lucide-copy");
     expect(view).toContain("data-article-citation-menu");

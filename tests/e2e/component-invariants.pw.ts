@@ -564,10 +564,12 @@ test.describe("component layout invariants", () => {
       const header = page.locator("article > header").first();
       const title = header.getByRole("heading", { level: 1 });
       const metaRow = header.locator("[data-article-meta-row]");
+      const headerActions = header.locator("[data-article-header-actions]");
       const citationMenu = header.locator("[data-article-citation-menu]");
       const citationTrigger = citationMenu.getByRole("button", {
         name: "Cite this article",
       });
+      const pdfLink = headerActions.locator("[data-article-pdf-link]");
       const citationPanel = page.locator("[data-article-citation-panel]");
       const citationText = citationPanel.locator(
         "[data-article-citation-text]",
@@ -580,33 +582,38 @@ test.describe("component layout invariants", () => {
       );
 
       await expect(citationTrigger).toBeVisible();
+      await expect(pdfLink).toBeVisible();
       await expectVerticallyBefore(title, metaRow, {
         after: "article metadata row",
         before: "article title",
       });
-      await expectHorizontallyContained(citationMenu, header, {
-        inner: "article citation menu",
+      await expectHorizontallyContained(headerActions, header, {
+        inner: "article header actions",
         outer: "article header",
       });
-      await expectHorizontallyContained(citationMenu, metaRow, {
-        inner: "article citation menu",
+      await expectHorizontallyContained(headerActions, metaRow, {
+        inner: "article header actions",
         outer: "article metadata row",
+      });
+      await expectHorizontallyContained(citationMenu, headerActions, {
+        inner: "article citation menu",
+        outer: "article header actions",
       });
 
       const metaRowBox = await visibleBoundingBox(
         metaRow,
         "article metadata row",
       );
-      const citationMenuBox = await visibleBoundingBox(
-        citationMenu,
-        "article citation menu",
+      const headerActionsBox = await visibleBoundingBox(
+        headerActions,
+        "article header actions",
       );
       const headerHeightBefore = (
         await visibleBoundingBox(header, "article header")
       ).height;
 
       expectApproximatelyEqual(
-        citationMenuBox.x + citationMenuBox.width,
+        headerActionsBox.x + headerActionsBox.width,
         metaRowBox.x + metaRowBox.width,
         2,
       );

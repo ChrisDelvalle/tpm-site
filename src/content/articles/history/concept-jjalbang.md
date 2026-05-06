@@ -25,7 +25,7 @@ _Gaejoogi (개죽이, Bamboo Doggy), an iconic Korean jjal from 2001._
 
 When the users began using the site for general socialisation, moderators aggressively pruned off-topic posts in order to maintain quality. Since this was a camera and photography forum, the mods usually detected off-topic posts by whether they included a photo. Users began including random images on their shitposts in order to prevent them from being detected by moderators. Eventually these images became a genre.
 
-![ASCII art version of Gaejoogi made in Japan](https://cdn.discordapp.com/attachments/562443537673748480/663831483777286212/f68fdabc885ab2b83f749e23f773f9f939b9f9b1c015ee6b23f8c89c18735eeb.png)
+![ASCII art version of Gaejoogi made in Japan](../../../assets/articles/concept-jjalbang/ascii-jjalbang.png)
 
 _An ASCII art version of Gaejoogi made in Japan._
 

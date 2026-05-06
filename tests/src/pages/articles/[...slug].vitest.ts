@@ -2,6 +2,7 @@ import { getCollection } from "astro:content";
 import { describe, expect, test } from "vitest";
 
 import { getArticles } from "../../../../src/lib/content";
+import { articleSlug } from "../../../../src/lib/routes";
 import ArticlePage from "../../../../src/pages/articles/[...slug].astro";
 import {
   createAstroTestContainer,
@@ -25,6 +26,11 @@ describe("article page", () => {
     expect(view).toContain(article.data.title);
     expect(view).toContain("Article tags");
     expect(view).toContain("Support The Philosopher&#39;s Meme");
+    expect(view).toContain("Save PDF");
+    expect(view).toContain('name="citation_pdf_url"');
+    expect(view).toContain(
+      `href="/articles/${articleSlug(article)}/${articleSlug(article)}.pdf"`,
+    );
   });
 
   test("uses Astro rendered headings for the article table of contents", async () => {

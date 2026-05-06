@@ -1,8 +1,11 @@
 ---
+import { Download } from "lucide-astro";
+
 import ArticleCitationMenu from "./ArticleCitationMenu.astro";
 import ArticleMeta from "./ArticleMeta.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { AuthorSummary } from "../../lib/authors";
+import type { ArticlePdfViewModel } from "../../lib/article-pdf";
 import type { ArticleCitationMenuViewModel } from "../../lib/citations/article-citation";
 
 interface ArticleCategory {
@@ -18,6 +21,7 @@ interface Props {
   date?: Date | undefined;
   description?: string | undefined;
   formattedDate?: string | undefined;
+  pdf?: ArticlePdfViewModel | undefined;
   title: string;
 }
 
@@ -29,8 +33,10 @@ const {
   date,
   description,
   formattedDate,
+  pdf,
   title,
 } = Astro.props;
+const hasHeaderActions = citation !== undefined || pdf !== undefined;
 ---
 
 <header class="grid min-w-0 gap-4">
@@ -42,6 +48,7 @@ const {
         tone="primary"
         prefetch="hover"
         class="text-sm font-semibold uppercase"
+        data-pdf-exclude
       >
         {category.title}
       </TextLink>
@@ -62,13 +69,58 @@ const {
       date={date}
       formattedDate={formattedDate}
     />
-    {citation && <ArticleCitationMenu citation={citation} />}
+    {
+      hasHeaderActions && (
+        <div
+          class="flex flex-wrap items-center gap-2 print:hidden"
+          data-article-header-actions
+          data-pdf-exclude
+        >
+          {citation && <ArticleCitationMenu citation={citation} />}
+          {pdf && (
+            <TextLink
+              href={pdf.pdfHref}
+              variant="nav"
+              tone="muted"
+              class="inline-flex items-center gap-1 text-sm font-medium"
+              aria-label="Save PDF"
+              data-article-pdf-link
+              download
+            >
+              <Download class="size-3.5" aria-hidden="true" />
+              <span aria-hidden="true">PDF</span>
+            </TextLink>
+          )}
+        </div>
+      )
+    }
   </div>
   {
     description && (
       <p class="text-muted-foreground max-w-3xl min-w-0 text-lg break-words">
         {description}
       </p>
+    )
+  }
+  {
+    pdf && (
+      <>
+        <p
+          class="hidden text-sm leading-6 print:block"
+          data-article-pdf-canonical
+        >
+          Published {formattedDate ?? pdf.publicationDateForScholar}. Available
+          at <a href={pdf.articleUrl}>{pdf.articleUrl}</a>.
+        </p>
+        <p
+          class="hidden text-sm leading-6 print:block"
+          data-article-pdf-disclaimer
+        >
+          This PDF is a static export of the canonical web article. Interactive
+          media and embeds may be represented as source links; visit the
+          canonical article for the full web version.
+        </p>
+      </>
     )
   }
 </header>

@@ -14,6 +14,7 @@ describe("Astro config", () => {
     expect(config.trailingSlash).toBe("always");
     expect(config.compressHTML).toBe(true);
     expect(config.image).toMatchObject({
+      breakpoints: [384, 640, 750, 828, 1080, 1280, 1668, 2048, 2560],
       layout: "constrained",
       responsiveStyles: false,
     });
@@ -41,7 +42,10 @@ describe("Astro config", () => {
   });
 
   test("runs editorial article image handling before Astro optimizes Markdown images", () => {
-    expect(config.markdown?.remarkPlugins).toContain(remarkArticleImageMarkers);
+    expect(config.markdown?.remarkPlugins).toContainEqual([
+      remarkArticleImageMarkers,
+      { policyCacheKey: articleImagePolicyCacheKey },
+    ]);
     expect(config.markdown?.rehypePlugins).toContainEqual([
       rehypeArticleImages,
       { policyCacheKey: articleImagePolicyCacheKey },

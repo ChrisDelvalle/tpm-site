@@ -35,13 +35,25 @@ describe("content schemas", () => {
       image: imageSchema,
     });
 
+    const parsed = schema.safeParse({
+      author: "Author",
+      date: "2022-04-06",
+      description: "Description",
+      image: { format: "jpg", height: 640, src: "/article.jpg", width: 960 },
+      tags: ["meme history", "c++"],
+      title: "Article Title",
+    });
+
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect("pdf" in parsed.data && parsed.data.pdf).toBe(true);
+    }
     expect(
       schema.safeParse({
         author: "Author",
         date: "2022-04-06",
         description: "Description",
-        image: { format: "jpg", height: 640, src: "/article.jpg", width: 960 },
-        tags: ["meme history", "c++"],
+        pdf: false,
         title: "Article Title",
       }).success,
     ).toBe(true);
@@ -119,6 +131,16 @@ describe("content schemas", () => {
         title: "Announcement Title",
       }).success,
     ).toBe(true);
+    expect(
+      schema.safeParse({
+        author: "The Philosopher's Meme",
+        date: "2026-05-05",
+        description: "Announcement description",
+        pdf: false,
+        tags: [],
+        title: "Announcement Title",
+      }).success,
+    ).toBe(false);
     expect(
       schema.safeParse({
         author: "The Philosopher's Meme",

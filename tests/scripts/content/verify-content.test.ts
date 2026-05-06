@@ -188,4 +188,57 @@ describe("content verifier", () => {
         "src/content/articles/history/example.md:7: local article image must be separated into its own paragraph; add blank lines around the image so article image tooling can render it as an inspectable figure",
       );
     }));
+
+  test("requires article MDX component imports to declare PDF compatibility", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/compatible.mdx",
+        [
+          "---",
+          "title: Compatible",
+          "author: Author",
+          "---",
+          "",
+          'import HoverImageLink from "../../../components/articles/HoverImageLink.astro";',
+          'import articleImage from "../../../assets/articles/example/image.png";',
+          "",
+          '<HoverImageLink image={articleImage} label="preview" />',
+        ].join("\n"),
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/unsupported.mdx",
+        [
+          "---",
+          "title: Unsupported",
+          "author: Author",
+          "---",
+          "",
+          'import InteractiveWidget from "../../../components/articles/InteractiveWidget.astro";',
+          "",
+          "<InteractiveWidget />",
+        ].join("\n"),
+      );
+
+      const result = await verifyContent({
+        articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
+        categoryDir: path.join(root, "src/content/categories"),
+        rootDir: root,
+      });
+
+      expect(result.issues).toContain(
+        'src/content/articles/history/unsupported.mdx: article MDX import "../../../components/articles/InteractiveWidget.astro" needs an explicit PDF fallback in src/lib/article-pdf-compatibility.ts',
+      );
+      expect(
+        result.issues.some((issue) => issue.includes("compatible.mdx")),
+      ).toBe(false);
+    }));
 });

@@ -13,6 +13,7 @@ const expectedScriptEntrypoints = [
   ["assets:shared", "scripts/assets/find-shared-assets.ts"],
   ["assets:unused", "scripts/assets/find-unused-images.ts"],
   ["build:optimize", "scripts/build/optimize-build-output.ts"],
+  ["build:pdf", "scripts/build/generate-article-pdfs.ts"],
   ["catalog:check", "scripts/quality/verify-component-catalog.ts"],
   ["coverage:verify", "scripts/testing/verify-test-coverage.ts"],
   [

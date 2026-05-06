@@ -238,7 +238,7 @@ Browser/accessibility tests:
 ## Open Decisions
 
 - Which prose citation styles should be available on the global bibliography
-  page, if any, versus only in the article-local "Cite this article" feature.
+  page, if any, versus only in the article-local citation feature.
 - Whether to add CSL JSON export after the internal model stabilizes.
 - Whether filters are necessary for the first release or should wait until the
   source list is large enough to justify them.

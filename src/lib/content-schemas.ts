@@ -25,7 +25,7 @@ interface ImageSchemaContext {
 export function articleSchema(
   context: ImageSchemaContext,
 ): ReturnType<typeof createArticleSchema> {
-  return createArticleSchema(context);
+  return createArticleSchema(context, { includePdf: true });
 }
 
 /**
@@ -38,7 +38,7 @@ export function articleSchema(
 export function announcementSchema(
   context: ImageSchemaContext,
 ): ReturnType<typeof createArticleSchema> {
-  return createArticleSchema(context);
+  return createArticleSchema(context, { includePdf: false });
 }
 
 /**
@@ -100,21 +100,33 @@ export function pageSchema(): ReturnType<typeof createPageSchema> {
   return createPageSchema();
 }
 
-function createArticleSchema({ image }: ImageSchemaContext) {
+function createArticleSchema(
+  { image }: ImageSchemaContext,
+  { includePdf }: { includePdf: boolean },
+) {
+  const publishableSchemaFields = {
+    author: z.string().min(1),
+    date: z.coerce.date(),
+    description: z.string().min(1),
+    draft: z.boolean().default(false),
+    image: image().optional(),
+    imageAlt: z.string().optional(),
+    legacyBanner: z.string().optional(),
+    legacyPermalink: z.string().optional(),
+    tags: tagListSchema(),
+    title: z.string().min(1),
+    visibility: publishableVisibilitySchema(),
+  };
+
   return z
-    .object({
-      author: z.string().min(1),
-      date: z.coerce.date(),
-      description: z.string().min(1),
-      draft: z.boolean().default(false),
-      image: image().optional(),
-      imageAlt: z.string().optional(),
-      legacyBanner: z.string().optional(),
-      legacyPermalink: z.string().optional(),
-      tags: tagListSchema(),
-      title: z.string().min(1),
-      visibility: publishableVisibilitySchema(),
-    })
+    .object(
+      includePdf
+        ? {
+            ...publishableSchemaFields,
+            pdf: z.boolean().default(true),
+          }
+        : publishableSchemaFields,
+    )
     .strict();
 }
 

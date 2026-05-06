@@ -3,7 +3,13 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import matter from "gray-matter";
+import { PDFDocument } from "pdf-lib";
 
+import {
+  articlePdfHref,
+  articlePdfOutputPath,
+  scholarPublicationDate,
+} from "../../src/lib/article-pdf";
 import { normalizeTag } from "../../src/lib/tags";
 
 const requiredBasePaths = [
@@ -41,6 +47,8 @@ const articleCitationMenuScriptPattern =
 const astroPrefetchPageScriptPattern = /^\/_astro\/page\.[\w-]+\.js$/u;
 const astroPrefetchChunkImportPattern =
   /from\s*["'`]\.\/(_astro_prefetch\.[\w-]+\.js)["'`]/u;
+const pdfHeader = "%PDF-";
+const maxArticlePdfBytes = 5 * 1024 * 1024;
 
 /** Source-content publication state used to verify generated output. */
 export interface ArticlePublication {
@@ -65,6 +73,7 @@ export interface CollectionPublication {
 /** Categorized build verification failures. */
 export interface BuildVerificationIssues {
   articleCountIssues: string[];
+  articlePdfIssues: string[];
   brokenLinks: string[];
   catalogLeaks: string[];
   draftLeaks: string[];
@@ -169,8 +178,12 @@ export interface BuildVerificationResult {
 
 /** Publication metadata for one non-draft article source file. */
 export interface PublishedArticle {
+  authors: string[];
   isMdx: boolean;
+  pdfEnabled: boolean;
+  publicationDate?: Date | undefined;
   slug: string;
+  title: string;
 }
 
 /**
@@ -197,8 +210,12 @@ export async function articlePublicationStats(
     } else {
       const slug = filenameStem(file);
       publishedArticles.push({
+        authors: authorNames(data["author"]),
         isMdx: /\.mdx$/i.test(file),
+        pdfEnabled: articlePdfEnabledFromFrontmatter(data),
+        publicationDate: dateValue(data["date"]),
         slug,
+        title: stringValue(data["title"]) ?? slug,
       });
 
       const categorySlug = categorySlugFromArticlePath(articleDir, file);
@@ -237,6 +254,11 @@ export function formatBuildVerificationReport(
 
   const lines = ["Build verification failed."];
 
+  if (result.issues.articlePdfIssues.length > 0) {
+    lines.push(
+      `Article PDF issues: ${JSON.stringify(result.issues.articlePdfIssues.slice(0, 50))}`,
+    );
+  }
   if (result.issues.missingRequired.length > 0) {
     lines.push(`Missing: ${JSON.stringify(result.issues.missingRequired)}`);
   }
@@ -352,6 +374,9 @@ export function requiredPathsForSource(
     ...articlePublication.publishedArticles.map(
       (article) => `articles/${article.slug}/index.html`,
     ),
+    ...articlePublication.publishedArticles
+      .filter((article) => article.pdfEnabled)
+      .map((article) => articlePdfOutputPath(article.slug)),
     ...categorySlugs.map((slug) => `categories/${slug}/index.html`),
     ...collectionSlugs.map((slug) => `collections/${slug}/index.html`),
     ...Array.from(articlePublication.publishedTagSegments)
@@ -509,6 +534,12 @@ export async function verifyBuild({
     /\/_astro\/.+\.js$/i.test(file),
   );
   const issues = emptyIssues();
+  const publishedArticleByHtmlPath = new Map(
+    articlePublication.publishedArticles.map((article) => [
+      `articles/${article.slug}/index.html`,
+      article,
+    ]),
+  );
   issues.sourceMaps.push(
     ...files
       .map((file) => toPosix(path.relative(distDir, file)))
@@ -526,6 +557,7 @@ export async function verifyBuild({
       await inspectHtmlFile(
         distDir,
         file,
+        publishedArticleByHtmlPath,
         staticReadingPages,
         expectedRedirects,
         issues,
@@ -534,6 +566,12 @@ export async function verifyBuild({
 
     await inspectDraftLeaks(distDir, file, draftSlugs, issues);
   }
+
+  await inspectArticlePdfs(
+    distDir,
+    articlePublication.publishedArticles,
+    issues,
+  );
 
   const articleStats = await stat(path.join(distDir, "articles"));
   if (!articleStats.isDirectory()) {
@@ -638,6 +676,7 @@ async function configuredRedirects(
 
 function emptyIssues(): BuildVerificationIssues {
   return {
+    articlePdfIssues: [],
     articleCountIssues: [],
     brokenLinks: [],
     catalogLeaks: [],
@@ -689,6 +728,7 @@ function firstSortedTagSegment(
 
 function hasIssues(issues: BuildVerificationIssues): boolean {
   return (
+    issues.articlePdfIssues.length > 0 ||
     issues.articleCountIssues.length > 0 ||
     issues.brokenLinks.length > 0 ||
     issues.catalogLeaks.length > 0 ||
@@ -730,6 +770,35 @@ function tagsFromFrontmatter(data: Record<string, unknown>) {
     .filter((tag) => tag !== "" && !tag.includes("/"));
 }
 
+function authorNames(value: unknown): string[] {
+  if (typeof value !== "string") {
+    return [];
+  }
+
+  return value
+    .split(/\s*&\s*/u)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
+}
+
+function dateValue(value: unknown): Date | undefined {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime()) ? undefined : date;
+  }
+
+  return undefined;
+}
+
+function stringValue(value: unknown): string | undefined {
+  return typeof value === "string" ? value : undefined;
+}
+
 async function inspectDraftLeaks(
   distDir: string,
   file: string,
@@ -753,9 +822,79 @@ async function inspectDraftLeaks(
   }
 }
 
+function metaContentValues(html: string, metaName: string): string[] {
+  const values: string[] = [];
+  const metaPattern = /<meta\b[^>]*>/giu;
+  let match: null | RegExpExecArray;
+
+  while ((match = metaPattern.exec(html)) !== null) {
+    const tag = match[0];
+    if (htmlAttributeValue(tag, "name") === metaName) {
+      const content = htmlAttributeValue(tag, "content");
+      if (content !== undefined) {
+        values.push(decodeHtmlAttributeValue(content));
+      }
+    }
+  }
+
+  return values;
+}
+
+function htmlAttributeValue(
+  tag: string,
+  attributeName: string,
+): string | undefined {
+  const attributePattern = /\s([a-z:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/giu;
+  let match: null | RegExpExecArray;
+
+  while ((match = attributePattern.exec(tag)) !== null) {
+    if (match[1]?.toLowerCase() !== attributeName) {
+      continue;
+    }
+
+    return match[2] ?? match[3];
+  }
+
+  return undefined;
+}
+
+function decodeHtmlAttributeValue(value: string): string {
+  return value
+    .replaceAll("&amp;", "&")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&#39;", "'")
+    .replaceAll("&apos;", "'")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">");
+}
+
+function scholarPdfMetaMatches(value: string, pdfHref: string): boolean {
+  let withoutProtocol: string | undefined;
+  if (value.startsWith("https://")) {
+    withoutProtocol = value.slice("https://".length);
+  } else if (value.startsWith("http://")) {
+    withoutProtocol = value.slice("http://".length);
+  }
+
+  if (withoutProtocol === undefined) {
+    return false;
+  }
+
+  const pathStart = withoutProtocol.indexOf("/");
+  if (pathStart === -1) {
+    return false;
+  }
+
+  const pathAndQuery = withoutProtocol.slice(pathStart);
+  const pathname = pathAndQuery.split("?")[0]?.split("#")[0] ?? "";
+
+  return pathname === pdfHref;
+}
+
 async function inspectHtmlFile(
   distDir: string,
   file: string,
+  publishedArticleByHtmlPath: ReadonlyMap<string, PublishedArticle>,
   staticReadingPages: string[],
   expectedRedirects: Record<string, string>,
   issues: BuildVerificationIssues,
@@ -797,6 +936,11 @@ async function inspectHtmlFile(
     issues.missingArticleJsonLd.push(relativeHtmlPath);
   }
 
+  const article = publishedArticleByHtmlPath.get(relativeHtmlPath);
+  if (article !== undefined) {
+    inspectArticlePdfHtml(text, relativeHtmlPath, article, issues);
+  }
+
   await inspectStaticReadingPageHtml(
     text,
     relativeHtmlPath,
@@ -809,6 +953,156 @@ async function inspectHtmlFile(
     if (!isExternal(target) && !(await internalTargetExists(distDir, target))) {
       issues.brokenLinks.push(`${relativeHtmlPath} -> ${target}`);
     }
+  }
+}
+
+function inspectArticlePdfHtml(
+  html: string,
+  relativeHtmlPath: string,
+  article: PublishedArticle,
+  issues: BuildVerificationIssues,
+): void {
+  const pdfHref = articlePdfHref(article.slug);
+  const pdfMetaValues = metaContentValues(html, "citation_pdf_url");
+  const titleMetaValues = metaContentValues(html, "citation_title");
+  const authorMetaValues = metaContentValues(html, "citation_author").map(
+    decodeHtmlAttributeValue,
+  );
+  const publicationDateValues = metaContentValues(
+    html,
+    "citation_publication_date",
+  );
+
+  if (!article.pdfEnabled) {
+    if (linkTargets(html).includes(pdfHref)) {
+      issues.articlePdfIssues.push(
+        `${relativeHtmlPath}: PDF disabled but Save PDF link is present for ${pdfHref}`,
+      );
+    }
+
+    if (pdfMetaValues.length > 0) {
+      issues.articlePdfIssues.push(
+        `${relativeHtmlPath}: PDF disabled but citation_pdf_url metadata is present`,
+      );
+    }
+  } else if (!linkTargets(html).includes(pdfHref)) {
+    issues.articlePdfIssues.push(
+      `${relativeHtmlPath}: missing Save PDF link to ${pdfHref}`,
+    );
+  }
+
+  if (!article.pdfEnabled) {
+    // Base Scholar metadata is still verified below for PDF-disabled articles.
+  } else if (pdfMetaValues.length === 0) {
+    issues.articlePdfIssues.push(
+      `${relativeHtmlPath}: missing citation_pdf_url metadata`,
+    );
+  } else if (
+    !pdfMetaValues.some((value) => scholarPdfMetaMatches(value, pdfHref))
+  ) {
+    issues.articlePdfIssues.push(
+      `${relativeHtmlPath}: citation_pdf_url does not point to ${pdfHref}`,
+    );
+  }
+
+  if (titleMetaValues.length === 0 || titleMetaValues[0]?.trim() === "") {
+    issues.articlePdfIssues.push(
+      `${relativeHtmlPath}: missing citation_title metadata`,
+    );
+  }
+
+  for (const author of article.authors) {
+    if (!authorMetaValues.includes(author)) {
+      issues.articlePdfIssues.push(
+        `${relativeHtmlPath}: missing citation_author metadata for ${author}`,
+      );
+    }
+  }
+
+  if (
+    article.publicationDate !== undefined &&
+    !publicationDateValues.includes(
+      scholarPublicationDate(article.publicationDate),
+    )
+  ) {
+    issues.articlePdfIssues.push(
+      `${relativeHtmlPath}: missing citation_publication_date metadata`,
+    );
+  }
+}
+
+async function inspectArticlePdfs(
+  distDir: string,
+  articles: readonly PublishedArticle[],
+  issues: BuildVerificationIssues,
+): Promise<void> {
+  for (const article of articles) {
+    const relativePdfPath = articlePdfOutputPath(article.slug);
+    const pdfExists = await exists(distDir, relativePdfPath);
+
+    if (!article.pdfEnabled) {
+      if (pdfExists) {
+        issues.articlePdfIssues.push(
+          `${relativePdfPath}: PDF disabled but generated PDF exists`,
+        );
+      }
+      continue;
+    }
+
+    if (!pdfExists) {
+      continue;
+    }
+
+    const data = await readFile(path.join(distDir, relativePdfPath));
+    const header = new TextDecoder().decode(data.subarray(0, pdfHeader.length));
+
+    if (header !== pdfHeader) {
+      issues.articlePdfIssues.push(
+        `${relativePdfPath}: generated file is not a PDF`,
+      );
+      continue;
+    }
+
+    if (data.byteLength > maxArticlePdfBytes) {
+      issues.articlePdfIssues.push(
+        `${relativePdfPath}: generated PDF is ${data.byteLength} bytes, above the ${maxArticlePdfBytes} byte limit`,
+      );
+    }
+
+    await inspectArticlePdfDocumentMetadata(
+      relativePdfPath,
+      data,
+      article,
+      issues,
+    );
+  }
+}
+
+async function inspectArticlePdfDocumentMetadata(
+  relativePdfPath: string,
+  data: Uint8Array,
+  article: PublishedArticle,
+  issues: BuildVerificationIssues,
+): Promise<void> {
+  try {
+    const pdf = await PDFDocument.load(data);
+    const expectedAuthor = article.authors.join(", ");
+
+    if (pdf.getTitle() !== article.title) {
+      issues.articlePdfIssues.push(
+        `${relativePdfPath}: missing PDF title metadata`,
+      );
+    }
+
+    if (expectedAuthor !== "" && pdf.getAuthor() !== expectedAuthor) {
+      issues.articlePdfIssues.push(
+        `${relativePdfPath}: missing PDF author metadata`,
+      );
+    }
+  } catch (error) {
+    issues.articlePdfIssues.push(
+      `${relativePdfPath}: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 
@@ -1016,6 +1310,12 @@ function isDatedHtmlPage(relativeHtmlPath: string): boolean {
 
 function isDraft(data: Record<string, unknown>): boolean {
   return data["draft"] === true;
+}
+
+function articlePdfEnabledFromFrontmatter(
+  data: Record<string, unknown>,
+): boolean {
+  return data["pdf"] !== false;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

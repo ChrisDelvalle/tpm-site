@@ -66,8 +66,12 @@ describe("rehypeArticleImages", () => {
     );
 
     expect(html).toContain('data-article-image-policy="bounded"');
+    expect(html).toContain('data-article-image-remote="true"');
     expect(html).toContain('data-article-image-inspectable="true"');
     expect(html).toContain("data-article-image-inspect-trigger");
+    expect(html).toContain("data-pdf-exclude");
+    expect(html).toContain("data-article-image-fallback");
+    expect(html).toContain('href="https://example.com/image.png"');
     expect(html).toContain(
       'sizes="(min-width: 48rem) 48rem, calc(100vw - 2rem)"',
     );
@@ -108,10 +112,11 @@ describe("rehypeArticleImages", () => {
 
     rehypeArticleImages()(tree, { data: {} });
 
-    const [figure] = tree.children;
-    const figureProperties = figure?.properties as
-      | Record<string, unknown>
-      | undefined;
+    const [figure] = tree.children as Array<{
+      properties?: Record<string, unknown>;
+      tagName?: string;
+    }>;
+    const figureProperties = figure?.properties;
 
     expect(figure?.tagName).toBe("figure");
     expect(figureProperties?.["data-article-image-policy"]).toBe("bounded");
@@ -149,10 +154,11 @@ describe("rehypeArticleImages", () => {
 
     rehypeArticleImages()(tree, {});
 
-    const [figure] = tree.children;
-    const figureProperties = figure?.properties as
-      | Record<string, unknown>
-      | undefined;
+    const [figure] = tree.children as Array<{
+      properties?: Record<string, unknown>;
+      tagName?: string;
+    }>;
+    const figureProperties = figure?.properties;
 
     expect(figureProperties?.["data-article-image-policy"]).toBe("bounded");
     expect(image.properties["sizes"]).toBe(
@@ -179,6 +185,120 @@ Introductory paragraph.
     expect(imageTags[0]).toContain('fetchpriority="high"');
     expect(imageTags[1]).toContain('loading="lazy"');
     expect(imageTags[1]).not.toContain("fetchpriority");
+  });
+
+  test("wraps article iframes with a print-only PDF fallback link", () => {
+    const iframe = {
+      children: [],
+      properties: {
+        src: "https://www.youtube.com/embed/example",
+        title: "Video title",
+      },
+      tagName: "iframe",
+      type: "element" as const,
+    };
+    const tree = {
+      children: [iframe],
+      type: "root" as const,
+    };
+
+    rehypeArticleImages()(tree, { data: {} });
+
+    const [figure] = tree.children as Array<{
+      properties?: Record<string, unknown>;
+      tagName?: string;
+    }>;
+    const figureProperties = figure?.properties;
+    const iframeProperties = iframe.properties as Record<string, unknown>;
+
+    expect(figure?.tagName).toBe("figure");
+    expect(figureProperties?.["data-article-embed"]).toBe("true");
+    expect(iframeProperties["data-pdf-exclude"]).toBe("true");
+    expect(JSON.stringify(figure)).toContain("data-article-embed-fallback");
+    expect(JSON.stringify(figure)).toContain(
+      "https://www.youtube.com/embed/example",
+    );
+    expect(JSON.stringify(figure)).toContain("Video title");
+  });
+
+  test("wraps raw article iframe HTML with the same PDF fallback", () => {
+    const tree: {
+      children: Array<{
+        properties?: Record<string, unknown>;
+        tagName?: string;
+        type: string;
+        value?: string;
+      }>;
+      type: "root";
+    } = {
+      children: [
+        {
+          type: "raw" as const,
+          value:
+            '<iframe src="https://www.youtube.com/embed/raw" title="Raw video" allowfullscreen></iframe>',
+        },
+      ],
+      type: "root" as const,
+    };
+
+    rehypeArticleImages()(tree, { data: {} });
+
+    const [figure] = tree.children;
+    const figureProperties = figure?.properties;
+
+    expect(figure?.tagName).toBe("figure");
+    expect(figureProperties?.["data-article-embed"]).toBe("true");
+    expect(JSON.stringify(figure)).toContain("data-article-embed-fallback");
+    expect(JSON.stringify(figure)).toContain(
+      "https://www.youtube.com/embed/raw",
+    );
+    expect(JSON.stringify(figure)).toContain("Raw video");
+  });
+
+  test("rewrites Markdown raw iframe HTML before Astro preserves it", () => {
+    const tree = {
+      children: [
+        {
+          type: "html" as const,
+          value:
+            '<iframe src="https://www.youtube.com/embed/markdown" title="Markdown video"></iframe>',
+        },
+      ],
+      type: "root" as const,
+    };
+
+    remarkArticleImageMarkers()(tree);
+
+    const [html] = tree.children;
+    expect(html?.type).toBe("html");
+    expect(html?.value).toContain("data-article-embed");
+    expect(html?.value).toContain("data-article-embed-fallback");
+    expect(html?.value).toContain("https://www.youtube.com/embed/markdown");
+    expect(html?.value).toContain("Markdown video");
+  });
+
+  test("rewrites multiline Markdown raw iframe HTML before Astro preserves it", () => {
+    const tree = remark().parse(`<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/multiline"
+  title="Multiline video"
+  loading="lazy"
+  allowfullscreen
+></iframe>`);
+
+    remarkArticleImageMarkers()(tree);
+
+    const [html] = tree.children;
+    if (html?.type !== "html") {
+      throw new Error("Expected multiline iframe to remain raw HTML");
+    }
+
+    expect(html.value).toContain("data-article-embed");
+    expect(html.value).toContain("data-article-embed-fallback");
+    expect(html.value).toContain("data-pdf-exclude");
+    expect(html.value).toContain("https://www.youtube.com/embed/multiline");
+    expect(html.value).toContain("Multiline video");
   });
 });
 

@@ -28,6 +28,17 @@ describe("ArticleHeader", () => {
         date: new Date("2022-04-06T23:58:10.000Z"),
         description: "Article description.",
         formattedDate: "April 6, 2022",
+        pdf: {
+          articleUrl: "https://thephilosophersmeme.com/articles/article-title/",
+          authors: ["Seong-Young Her"],
+          citationPdfUrl:
+            "https://thephilosophersmeme.com/articles/article-title/article-title.pdf",
+          pdfHref: "/articles/article-title/article-title.pdf",
+          pdfOutputPath: "articles/article-title/article-title.pdf",
+          publicationDate: new Date("2022-04-06T23:58:10.000Z"),
+          publicationDateForScholar: "2022/04/06",
+          title: "Article Title",
+        },
         title: "Article Title",
       },
     });
@@ -37,9 +48,53 @@ describe("ArticleHeader", () => {
     expect(view).toContain("/categories/history/");
     expect(view).toContain('data-astro-prefetch="hover"');
     expect(view).toContain("data-article-meta-row");
-    expect(view).toContain("Cite this article");
+    expect(view).toContain('aria-label="Cite this article"');
+    expect(view).toContain(">Cite</span>");
     expect(view).toContain('data-anchor-preset="article-citation-menu"');
+    expect(view).toContain('aria-label="Save PDF"');
+    expect(view).toContain(">PDF</span>");
+    expect(view).toContain('data-article-pdf-link="true"');
+    expect(view).toContain('href="/articles/article-title/article-title.pdf"');
+    expect(view).toContain("download");
+    expect(view).toContain("print:hidden");
+    expect(view).toContain("data-pdf-exclude");
+    expect(view).toContain("data-article-pdf-canonical");
+    expect(view).toContain("data-article-pdf-disclaimer");
+    expect(view).toContain(
+      "https://thephilosophersmeme.com/articles/article-title/",
+    );
+    expect(view).toContain("static export of the canonical web article");
     expect(view).toContain("Article description.");
     expect(view).not.toContain("Article tags");
+  });
+
+  test("omits the PDF action and print canonical line when PDF data is unavailable", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleHeader, {
+      props: {
+        author: "Seong-Young Her",
+        citation: {
+          articleId: "article-title",
+          canonicalUrl: "https://example.com/articles/article-title/",
+          formats: [
+            {
+              id: "bibtex",
+              label: "BibTeX",
+              text: "@online{article-title}",
+            },
+          ],
+          title: "Article Title",
+        },
+        date: new Date("2022-04-06T23:58:10.000Z"),
+        formattedDate: "April 6, 2022",
+        title: "Article Title",
+      },
+    });
+
+    expect(view).toContain('aria-label="Cite this article"');
+    expect(view).not.toContain('aria-label="Save PDF"');
+    expect(view).not.toContain("data-article-pdf-link");
+    expect(view).not.toContain("data-article-pdf-canonical");
+    expect(view).not.toContain("data-article-pdf-disclaimer");
   });
 });

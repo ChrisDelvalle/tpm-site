@@ -1,5 +1,4 @@
 ---
-import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
 import ArticleProse from "../components/articles/ArticleProse.astro";
@@ -10,6 +9,8 @@ import AuthorBioBlock from "../components/authors/AuthorBioBlock.astro";
 import ContentRail from "../components/layout/ContentRail.astro";
 import EndcapStack from "../components/layout/EndcapStack.astro";
 import ReadingBody from "../components/layout/ReadingBody.astro";
+import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
+import ArticleScholarMeta from "../components/seo/ArticleScholarMeta.astro";
 import type { ArticleReferenceData } from "../lib/article-references/model";
 import {
   hasUsefulTableOfContents,
@@ -23,6 +24,7 @@ import {
   authorSummariesForArticle,
   getAuthorEntries,
 } from "../lib/authors";
+import { articleScholarMetaViewModel } from "../lib/article-pdf";
 import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
 import { getArticles, getCategory } from "../lib/content";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
@@ -86,6 +88,12 @@ const citation = articleCitationMenuViewModel({
   publishedAt: articleView.date,
   title: articleView.title,
 });
+const scholarMeta = articleScholarMetaViewModel({
+  article,
+  authors: articleAuthors,
+  site: Astro.site,
+});
+const pdf = scholarMeta.pdf;
 ---
 
 <BaseLayout
@@ -102,6 +110,7 @@ const citation = articleCitationMenuViewModel({
     authors={articleAuthors}
     category={category}
   />
+  <ArticleScholarMeta slot="head" metadata={scholarMeta} />
   <ReadingBody>
     {
       showTableOfContents && (
@@ -115,7 +124,7 @@ const citation = articleCitationMenuViewModel({
         </ContentRail>
       )
     }
-    <article class="grid w-full min-w-0 gap-8" data-pagefind-body>
+    <article class="grid w-full min-w-0 gap-6" data-pagefind-body>
       <ArticleHeader
         author={articleView.author}
         authors={articleAuthors}
@@ -126,6 +135,7 @@ const citation = articleCitationMenuViewModel({
         date={articleView.date}
         description={articleView.description}
         formattedDate={articleView.formattedDate}
+        pdf={pdf}
         title={articleView.title}
       />
       <div class="grid min-w-0 gap-1" data-article-body-flow>
@@ -147,20 +157,25 @@ const citation = articleCitationMenuViewModel({
       <EndcapStack spacing="relaxed">
         {
           articleAuthorProfiles.map((profile) => (
-            <AuthorBioBlock profile={profile} context="article" />
+            <div data-pdf-exclude>
+              <AuthorBioBlock profile={profile} context="article" />
+            </div>
           ))
         }
-        <ArticleEndcap
-          categoryHref={categoryHref}
-          categoryTitle={category?.title}
-          moreInCategory={moreInCategory}
-        />
+        <div data-pdf-exclude>
+          <ArticleEndcap
+            categoryHref={categoryHref}
+            categoryTitle={category?.title}
+            moreInCategory={moreInCategory}
+          />
+        </div>
         <ArticleReferences references={articleReferences} />
         {
           article.data.tags.length > 0 && (
             <div
               class="border-border border-t pt-6"
               data-article-tags-placement
+              data-pdf-exclude
             >
               <ArticleTags tags={article.data.tags} />
             </div>

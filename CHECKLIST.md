@@ -731,3 +731,163 @@ they are useful context. Explicitly deferred work belongs in
       tests, local preview inspection of `/bibliography/` and citation-heavy
       article routes, `bun --silent run test:e2e`, and
       `bun --silent run check:release`.
+
+### Milestone 48: Scholar-Compatible Article PDF Export Design
+
+- [x] Design a static Scholar-compatible PDF export system for every published
+      article, including Highwire/Google Scholar metadata, `citation_pdf_url`,
+      generated same-directory PDFs, and a compact article-header `Save PDF`
+      action.
+- [x] Specify the PDF rendering policy: plain academic styling, inline
+      contents, article body, generated notes and bibliography, no site chrome,
+      no CTAs, no related lists, no interactive UI, and lightweight generated
+      files.
+- [x] Inventory article-system components and article-content MDX components
+      that must be rendered, transformed, or stripped for PDF output.
+- [x] Define a maintainable PDF compatibility model so future MDX article
+      components must declare a static fallback policy before publication.
+- [x] Define build, verification, file-size, metadata, route, component, and
+      browser tests before implementation begins.
+      Completed in `docs/ARTICLE_PDF_EXPORT.md`; implementation is unblocked
+      with explicit source-derived verification, MDX compatibility, and PDF
+      file-size requirements.
+
+### Milestone 49: Article Scholar Metadata And Save PDF Action
+
+- [x] Add typed article PDF helper data for same-directory PDF paths, absolute
+      `citation_pdf_url`, Scholar publication dates, and article-header action
+      props.
+- [x] Emit Scholar/Highwire tags on article pages: `citation_title`,
+      `citation_author`, `citation_publication_date`, and
+      `citation_pdf_url`.
+- [x] Add a secondary `Save PDF` article-header link with a Lucide save/download
+      icon that points to the generated static PDF and stays hidden from print
+      output.
+- [x] Add focused helper, component, and article page tests for metadata,
+      multi-author/fallback author behavior, and the header action.
+      Verified with `bun test tests/src/lib/article-pdf.test.ts`,
+      focused `bun --silent run test:astro`, and
+      `bun --silent run typecheck`.
+
+### Milestone 50: Article PDF Rendering And Compatibility Policy
+
+- [x] Add print/PDF CSS that produces plain academic article output and strips
+      site chrome, CTAs, related/endcap UI, citation UI, image inspector UI,
+      hover panels, and other browser-only surfaces.
+- [x] Preserve printable article content: title, authors, date, canonical URL,
+      description, inline contents, prose, figures, notes, and bibliography.
+- [x] Add iframe/embed print fallbacks so media-heavy articles keep a plain
+      URL/title reference instead of an empty PDF frame.
+- [x] Add a PDF compatibility registry or verifier for article-content MDX
+      imports so future components must declare PDF behavior.
+- [x] Add focused tests for print CSS markers, iframe fallback output, current
+      MDX component inventory, and unsupported MDX component failures.
+      Verified with focused Bun tests, focused `bun --silent run test:astro`,
+      and `bun --silent run typecheck`.
+
+### Milestone 51: Static PDF Generation Build Step
+
+- [x] Add `scripts/build/generate-article-pdfs.ts` to serve built `dist/`, open
+      each published article with Playwright print media, and write
+      `dist/articles/<slug>/<slug>.pdf`.
+- [x] Set generated PDF document metadata where the toolchain supports it,
+      including title, author, subject/description, keywords, creator, producer,
+      and stable date fields without letting metadata diverge from article
+      frontmatter.
+- [x] Enforce generated PDF existence, PDF header validity, and a hard size
+      budget below the Google Scholar 5 MB limit.
+- [x] Add `build:pdf` and integrate the production build path as
+      `build:raw -> build:pdf -> build:optimize`.
+- [x] Update package script docs and script-entrypoint tests.
+- [x] Add script unit tests for CLI usage, successful generation, missing input,
+      invalid article pages, oversized PDFs, and quiet output.
+      Verified with focused generator tests, `bun --silent run typecheck`,
+      `bun --silent run build:raw`, and `bun --silent run build:pdf`; generated
+      59 article PDFs and kept the largest below 5 MB.
+
+### Milestone 52: PDF Build Verification And Browser Invariants
+
+- [x] Extend build verification so every published article has a matching PDF,
+      PDF link, and Scholar metadata derived from source content.
+- [x] Add focused verifier tests for missing PDFs, missing/mismatched
+      `citation_pdf_url`, missing required Scholar tags, broken PDF links, and
+      oversized PDFs.
+- [x] Verify representative generated PDFs expose expected title/author
+      document metadata and searchable first-page text.
+- [x] Add Playwright checks for representative article PDF links, print media
+      stripping of site-only UI, inline TOC presence, generated references, MDX
+      hover-link fallback behavior, and iframe fallback visibility.
+- [x] Run release-relevant checks after implementation and record any explicit
+      blocker before release handoff.
+      Verified with `bun --silent run check`, `bun --silent run build`,
+      `bun --silent run verify`, `bun --silent run validate:html`,
+      `bun --silent run test:e2e`, `bun --silent run coverage`,
+      `bun --silent run test:catalog`, `bun --silent run test:a11y`,
+      `bun --silent run test:perf`, `bun --silent run test:accountability:release`,
+      `bun --silent run audit`, and `bun --silent run secrets`. Lighthouse still
+      reports a non-blocking homepage LCP warning in local runs, but the perf
+      gate exits successfully.
+
+### Milestone 53: PDF Robustness And Escape Hatch Design
+
+- [x] Update the PDF export design so generated PDFs are the default for
+      articles, but authors have a frontmatter escape hatch that disables the
+      generated PDF, PDF action, and `citation_pdf_url` without removing base
+      Scholar metadata.
+- [x] Specify deterministic PDF image loading so lazy article images are
+      explicitly loaded and decoded before Chromium prints the page.
+- [x] Specify PDF image-efficiency checks that verify article images come from
+      Astro's optimized build output and keep generated files under the
+      established size budgets.
+- [x] Specify a PDF-visible static-export disclaimer for interactive media,
+      embeds, and other browser-only features.
+- [x] Critically review the design for author burden, Google Scholar metadata
+      behavior, build-verifier edge cases, image-heavy articles, and future MDX
+      components before implementation begins.
+      Verified with `bun --silent run lint:markdown` and
+      `bun --silent run format:markdown`.
+
+### Milestone 54: PDF Eligibility Frontmatter
+
+- [x] Add the article frontmatter `pdf` boolean with default `true`, while
+      keeping current articles enabled and avoiding announcement schema drift.
+- [x] Thread PDF eligibility through article PDF helpers, article layout,
+      Scholar metadata, and the article header so disabled articles omit only
+      the generated PDF surfaces.
+- [x] Update the PDF generator and build verifier so only PDF-eligible
+      published articles require and generate same-directory PDFs, while stale
+      PDFs or stale `citation_pdf_url` tags are rejected for disabled articles.
+- [x] Add focused schema, helper, component, generator, and verifier tests for
+      default-enabled and explicitly disabled PDF behavior.
+      Verified with focused content-schema/article-PDF/generator/verifier Bun
+      tests, focused Astro component/layout/page tests, `bun --silent run
+      typecheck`, `bun --silent run format:code`, `bun --silent run
+      lint:markdown`, and `bun --silent run format:markdown`.
+
+### Milestone 55: Reliable PDF Image Loading And Disclaimer
+
+- [x] Update the PDF generator to force all article images in the built article
+      page to eager-load, scroll into view, and decode before printing.
+- [x] Fail PDF generation when a printable article image cannot load, rather
+      than silently dropping it from the generated PDF.
+- [x] Add a print/PDF-only static-export disclaimer to article PDFs without
+      showing it in the web article.
+- [x] Add focused tests for the image-loading contract and disclaimer rendering.
+      Verified with focused PDF generator/style Bun tests, focused
+      ArticleHeader/ArticleLayout Astro tests, `bun --silent run format:code`,
+      and `bun --silent run typecheck`.
+
+### Milestone 56: PDF Efficiency Reporting And Final Verification
+
+- [x] Add PDF image-efficiency reporting so generation records total article
+      images and optimized Astro image sources used by generated PDFs.
+- [x] Add or update tests for unoptimized image-source regressions and release
+      reporting.
+- [x] Run focused PDF tests plus release-relevant build, verify, HTML
+      validation, typecheck, and browser PDF invariants before marking complete.
+      Verified with focused PDF generator/config/rehype/style Bun tests,
+      `bun --silent run typecheck`, `bun --silent run build:raw`,
+      `bun --silent run build:pdf`, `bun --silent run verify`,
+      `bun --silent run validate:html`, and `bun --silent run check:release`.
+      Generated PDFs are currently under the 5 MB release cap; the largest
+      local output observed was `the-interpretation-of-memes.pdf` at 3.6 MB.

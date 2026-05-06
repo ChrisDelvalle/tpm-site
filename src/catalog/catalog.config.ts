@@ -74,6 +74,11 @@ export const componentCatalogIgnoreList = [
     reason: "Non-visual SEO component covered by SEO and page render tests.",
   },
   {
+    path: "src/components/seo/ArticleScholarMeta.astro",
+    reason:
+      "Non-visual Scholar metadata component covered by PDF SEO and article render tests.",
+  },
+  {
     path: "src/components/seo/SiteHead.astro",
     reason: "Non-visual SEO component covered by SEO and page render tests.",
   },

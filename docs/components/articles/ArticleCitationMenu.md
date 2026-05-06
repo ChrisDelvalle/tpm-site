@@ -5,10 +5,10 @@ Source: `src/components/articles/ArticleCitationMenu.astro`
 ## Purpose
 
 `ArticleCitationMenu` lets readers generate citations for the current TPM
-article. It is a quiet article-header utility labeled `Cite this article` with
-the Lucide `Quote` icon. The trigger lives in the article metadata row; the
-formats live in an anchored popover so the feature does not reserve reading
-space.
+article. It is a quiet article-header utility with the visible label `Cite`,
+the accessible name `Cite this article`, and the Lucide `Quote` icon. The
+trigger lives in the article metadata row; the formats live in an anchored
+popover so the feature does not reserve reading space.
 
 It must generate citations from structured article metadata, not from rendered
 DOM text.
@@ -169,8 +169,8 @@ selected citation text. Only one copy button should exist in the menu.
 
 ## Accessibility Semantics
 
-Use a semantic button for the trigger. The trigger's accessible name should be
-`Cite this article`.
+Use a semantic button for the trigger. The visible label should be `Cite`, and
+the trigger's accessible name should be `Cite this article`.
 
 Each generated citation format needs:
 
@@ -209,8 +209,8 @@ dark mode, visible borders, and visible focus rings.
 
 ## Testable Invariants
 
-- The trigger renders `Cite this article` with the Lucide `Quote` icon in the
-  article metadata row.
+- The trigger renders visible `Cite` text with the Lucide `Quote` icon in the
+  article metadata row and exposes `Cite this article` as its accessible name.
 - Generated citations include title, author, date, canonical URL, and site name
   where each format requires them.
 - The closed popover is hidden and reserves no article-body space.

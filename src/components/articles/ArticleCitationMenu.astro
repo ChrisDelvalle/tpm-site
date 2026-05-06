@@ -35,11 +35,12 @@ const citationTextClass =
     as="button"
     type="button"
     popovertarget={popoverId}
+    aria-label="Cite this article"
     data-article-citation-trigger
     class="text-muted-foreground hover:text-foreground focus-visible:outline-ring inline-flex items-center gap-1 rounded-xs text-sm leading-5 font-medium tracking-normal transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
   >
     <Quote class="size-3.5" aria-hidden="true" />
-    <span>Cite this article</span>
+    <span aria-hidden="true">Cite</span>
   </AnchoredTrigger>
   <AnchoredPanel
     id={popoverId}

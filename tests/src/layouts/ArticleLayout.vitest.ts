@@ -3,10 +3,12 @@ import { describe, expect, test } from "vitest";
 import ArticleLayout from "../../../src/layouts/ArticleLayout.astro";
 import { articleTableOfContentsHeadings } from "../../../src/lib/article-toc";
 import { getArticles } from "../../../src/lib/content";
+import { articleSlug } from "../../../src/lib/routes";
 import {
   createAstroTestContainer,
   testSiteUrl,
 } from "../../helpers/astro-container";
+import { articleEntry } from "../../helpers/content";
 import { articleReferenceFixture } from "../components/articles/reference-fixtures";
 
 describe("ArticleLayout", () => {
@@ -29,6 +31,43 @@ describe("ArticleLayout", () => {
     expect(view).toContain(article.data.title);
     expect(view).toContain("Rendered article body.");
     expect(view).toContain("application/ld+json");
+    expect(view).toContain('name="citation_title"');
+    expect(view).toContain('name="citation_author"');
+    expect(view).toContain('name="citation_publication_date"');
+    expect(view).toContain('name="citation_pdf_url"');
+    expect(view).toContain(
+      `content="${testSiteUrl}/articles/${articleSlug(article)}/${articleSlug(article)}.pdf"`,
+    );
+    expect(view).toContain("Save PDF");
+    expect(view).toContain(
+      `href="/articles/${articleSlug(article)}/${articleSlug(article)}.pdf"`,
+    );
+  });
+
+  test("keeps base Scholar metadata and omits PDF surfaces when disabled", async () => {
+    const article = articleEntry({
+      data: {
+        author: "PDF Disabled Author",
+        pdf: false,
+        title: "Web Only Article",
+      },
+      id: "web-only-article",
+    });
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleLayout, {
+      props: { article },
+      request: new Request(`${testSiteUrl}/articles/web-only-article/`),
+      slots: {
+        default: "<p>Rendered article body.</p>",
+      },
+    });
+
+    expect(view).toContain('name="citation_title"');
+    expect(view).toContain('name="citation_author"');
+    expect(view).toContain('name="citation_publication_date"');
+    expect(view).not.toContain('name="citation_pdf_url"');
+    expect(view).not.toContain('aria-label="Save PDF"');
+    expect(view).not.toContain("web-only-article.pdf");
   });
 
   test("renders tags as the final article surface after the endcap", async () => {

@@ -9,7 +9,8 @@ prose, endcap, references, tags, and article-local navigation data without
 owning low-level layout geometry.
 
 It must preserve article body wording and must not parse article Markdown
-source directly.
+source directly. It also owns article-level machine-readable metadata that
+requires page context, including Google Scholar/Highwire PDF tags.
 
 ## Public Contract
 
@@ -18,6 +19,8 @@ source directly.
 - normalized related/more-in-category data
 - optional normalized article headings
 - optional normalized article reference data
+- derived Scholar metadata and optional article PDF metadata for the `PDF`
+  action
 
 Exact prop names may change during implementation, but the layout should
 receive normalized view-model data rather than creating it inside visual
@@ -44,6 +47,13 @@ measure. `MarginSidebarLayout` owns TOC rail geometry. When the rail is hidden
 by responsive constraints, the inline TOC placement appears near the top of the
 article body so heading navigation is still available without changing the
 reading column geometry.
+
+`ArticleLayout` derives the article Scholar metadata once and passes it to:
+
+- `ArticleScholarMeta`, which emits `citation_title`, `citation_author`,
+  `citation_publication_date`, and, for PDF-eligible articles,
+  `citation_pdf_url`.
+- `ArticleHeader`, which renders the visible `PDF` action.
 
 ## Layout And Responsiveness
 
@@ -94,6 +104,9 @@ should not impose decorative frames.
   render.
 - TOC has a rail placement on desktop and an inline fallback when the rail is
   hidden.
+- Every article page emits base Scholar metadata. PDF-eligible articles also
+  emit a same-directory PDF URL and visible article-header PDF link; PDF-disabled
+  articles omit both without losing title, author, or publication-date metadata.
 - No blank hero gap appears when no hero exists.
 - No horizontal overflow at supported viewport sizes.
 

@@ -13,6 +13,7 @@ import { remarkArticleReferences } from "./src/remark-plugins/articleReferences"
 export default defineConfig({
   compressHTML: true,
   image: {
+    breakpoints: [384, 640, 750, 828, 1080, 1280, 1668, 2048, 2560],
     layout: "constrained",
     responsiveStyles: false,
   },
@@ -22,7 +23,10 @@ export default defineConfig({
       [rehypeArticleImages, { policyCacheKey: articleImagePolicyCacheKey }],
     ],
     remarkPlugins: [
-      remarkArticleImageMarkers,
+      [
+        remarkArticleImageMarkers,
+        { policyCacheKey: articleImagePolicyCacheKey },
+      ],
       [remarkArticleReferences, { validateLegacyFootnotes: true }],
     ],
   },

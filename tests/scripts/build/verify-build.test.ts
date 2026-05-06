@@ -13,7 +13,15 @@ describe("build verifier", () => {
       requiredPathsForSource(
         {
           draftSlugs: [],
-          publishedArticles: [{ isMdx: false, slug: "post" }],
+          publishedArticles: [
+            {
+              authors: [],
+              isMdx: false,
+              pdfEnabled: true,
+              slug: "post",
+              title: "Post",
+            },
+          ],
           publishedCategorySlugs: new Set(["history"]),
           publishedTagSegments: new Set(["meme history"]),
         },
@@ -25,7 +33,15 @@ describe("build verifier", () => {
       requiredPathsForSource(
         {
           draftSlugs: [],
-          publishedArticles: [{ isMdx: false, slug: "post" }],
+          publishedArticles: [
+            {
+              authors: [],
+              isMdx: false,
+              pdfEnabled: true,
+              slug: "post",
+              title: "Post",
+            },
+          ],
           publishedCategorySlugs: new Set(["history"]),
           publishedTagSegments: new Set(["meme history"]),
         },
@@ -38,13 +54,59 @@ describe("build verifier", () => {
       requiredPathsForSource(
         {
           draftSlugs: [],
-          publishedArticles: [{ isMdx: false, slug: "post" }],
+          publishedArticles: [
+            {
+              authors: [],
+              isMdx: false,
+              pdfEnabled: true,
+              slug: "post",
+              title: "Post",
+            },
+          ],
           publishedCategorySlugs: new Set(["history"]),
           publishedTagSegments: new Set(["meme history"]),
         },
         ["history"],
       ),
     ).toContain("articles/post/index.html");
+    expect(
+      requiredPathsForSource(
+        {
+          draftSlugs: [],
+          publishedArticles: [
+            {
+              authors: [],
+              isMdx: false,
+              pdfEnabled: true,
+              slug: "post",
+              title: "Post",
+            },
+          ],
+          publishedCategorySlugs: new Set(["history"]),
+          publishedTagSegments: new Set(["meme history"]),
+        },
+        ["history"],
+      ),
+    ).toContain("articles/post/post.pdf");
+    expect(
+      requiredPathsForSource(
+        {
+          draftSlugs: [],
+          publishedArticles: [
+            {
+              authors: [],
+              isMdx: false,
+              pdfEnabled: false,
+              slug: "web-only",
+              title: "Web Only",
+            },
+          ],
+          publishedCategorySlugs: new Set(["history"]),
+          publishedTagSegments: new Set([]),
+        },
+        ["history"],
+      ),
+    ).not.toContain("articles/web-only/web-only.pdf");
   });
 
   test("extracts local link targets and ignores external URLs", () => {
@@ -58,6 +120,7 @@ describe("build verifier", () => {
         articlePageCount: 1,
         astroClientScriptCount: 0,
         issues: {
+          articlePdfIssues: [],
           articleCountIssues: [],
           brokenLinks: [],
           catalogLeaks: [],
