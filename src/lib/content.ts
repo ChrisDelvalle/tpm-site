@@ -1,6 +1,10 @@
 import { getCollection } from "astro:content";
 
 import {
+  activeEditorialCollections,
+  type EditorialCollectionEntry,
+} from "./collections";
+import {
   type AnnouncementEntry,
   type ArticleEntry,
   assertUniqueAnnouncementSlugs,
@@ -91,6 +95,17 @@ export async function getCategory(
  */
 export async function getTags(): Promise<TagSummary[]> {
   return tagSummariesFromArticles(await getArticles());
+}
+
+/**
+ * Loads active editor-owned collections.
+ *
+ * @returns Non-draft editorial collections sorted by ID.
+ */
+export async function getEditorialCollections(): Promise<
+  EditorialCollectionEntry[]
+> {
+  return activeEditorialCollections(await getCollection("collections"));
 }
 
 /**

@@ -55,13 +55,11 @@ describe("HomeFeaturedSlide", () => {
           description: "Inherited article description.",
           href: "/articles/what-is-a-meme/",
           kind: "article",
+          note: "Optional editorial copy.",
           title: "What Is a Meme?",
         }),
       },
       request: new Request(`${testSiteUrl}/`),
-      slots: {
-        default: "Optional editorial copy.",
-      },
     });
 
     expect(view).toContain("What Is a Meme?");
@@ -72,15 +70,14 @@ describe("HomeFeaturedSlide", () => {
     expect(view).not.toContain("Join Discord");
   });
 
-  test("renders link feature action labels", async () => {
+  test("renders announcement feature links", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(HomeFeaturedSlide, {
       props: {
         index: 0,
         item: featuredItem({
-          href: "https://discord.gg/8MVFRMa",
-          kind: "link",
-          linkLabel: "Join Discord",
+          href: "/announcements/join-discord/",
+          kind: "announcement",
           title: "Join the TPM Discord",
         }),
       },
@@ -88,8 +85,7 @@ describe("HomeFeaturedSlide", () => {
     });
 
     expect(view).toContain("Join the TPM Discord");
-    expect(view).toContain("Join Discord");
-    expect(view).toContain("https://discord.gg/8MVFRMa");
+    expect(view).toContain("/announcements/join-discord/");
   });
 });
 
@@ -97,23 +93,10 @@ function featuredItem(
   overrides: Partial<HomeFeaturedItem> = {},
 ): HomeFeaturedItem {
   return {
-    entry: {
-      body: "",
-      collection: "homeFeatured",
-      data: {
-        active: true,
-        kind: "link",
-        link: "https://example.com",
-        linkLabel: "Read",
-        order: 10,
-        title: "Feature",
-      },
-      id: "feature",
-    },
-    href: "https://example.com",
+    href: "/articles/feature/",
     id: "feature",
-    kind: "link",
-    linkLabel: "Read",
+    kind: "article",
+    slug: "feature",
     title: "Feature",
     ...overrides,
   };

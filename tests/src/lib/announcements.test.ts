@@ -19,7 +19,7 @@ describe("announcement list helpers", () => {
       id: "discord-community",
     });
 
-    expect(announcementListItem(announcement)).toEqual({
+    expect(announcementListItem(announcement)).toMatchObject({
       author: "The Philosopher's Meme",
       date: "May 5, 2026",
       description: "Talk with TPM readers.",
@@ -28,6 +28,7 @@ describe("announcement list helpers", () => {
         alt: "Discord preview",
         src: { format: "png", height: 300, src: "/discord.png", width: 600 },
       },
+      kind: "announcement",
       title: "Join Discord",
     });
   });

@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 
-import LinkButton from "../ui/LinkButton.astro";
+import fallbackFeatureImage from "../../assets/shared/tpm-site-symbol.svg";
 import TextLink from "../ui/TextLink.astro";
 import type { HomeFeaturedItem } from "../../lib/home";
 
@@ -13,13 +13,17 @@ interface Props {
 const { index, item } = Astro.props;
 const isActive = index === 0;
 const hasBody = Astro.slots.has("default");
-const metaParts = [
-  item.kind === "article" ? item.category?.title : undefined,
-  item.date,
-].filter((part): part is string => part !== undefined && part !== "");
+const metaParts = [item.category?.title, item.date].filter(
+  (part): part is string => part !== undefined && part !== "",
+);
 const linkPrefetch = item.href.startsWith("/") ? "hover" : undefined;
 const linkPrefetchAttrs =
   linkPrefetch === undefined ? {} : { prefetch: linkPrefetch as "hover" };
+const image = item.image ?? {
+  alt: "The Philosopher's Meme",
+  src: fallbackFeatureImage,
+};
+const usesFallbackImage = item.image === undefined;
 ---
 
 <article
@@ -62,33 +66,34 @@ const linkPrefetchAttrs =
       )
     }
     {
+      item.note && (
+        <p class="text-muted-foreground m-0 line-clamp-3 text-sm leading-6">
+          {item.note}
+        </p>
+      )
+    }
+    {
       hasBody && (
         <div class="text-muted-foreground line-clamp-3 text-sm leading-6">
           <slot />
         </div>
       )
     }
-    {
-      item.linkLabel && (
-        <div>
-          <LinkButton href={item.href} size="sm" {...linkPrefetchAttrs}>
-            {item.linkLabel}
-          </LinkButton>
-        </div>
-      )
-    }
   </div>
   {
-    item.image && (
+    (
       <a
         href={item.href}
         aria-label={`Read ${item.title}`}
         data-astro-prefetch={linkPrefetch}
-        class="bg-muted order-first block aspect-[4/3] min-w-0 overflow-hidden rounded-xs no-underline md:order-last"
+        class:list={[
+          "order-first block aspect-[4/3] min-w-0 overflow-hidden rounded-xs no-underline md:order-last",
+          !usesFallbackImage && "bg-muted",
+        ]}
       >
         <Image
-          src={item.image.src}
-          alt={item.image.alt}
+          src={image.src}
+          alt={image.alt}
           width={480}
           height={360}
           loading={isActive ? "eager" : "lazy"}

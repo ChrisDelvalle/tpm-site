@@ -6,8 +6,8 @@ import {
   articleSchema,
   authorSchema,
   categorySchema,
+  editorialCollectionSchema,
   filenameStem,
-  homeFeatureSchema,
   pageSchema,
 } from "./lib/content-schemas";
 
@@ -46,13 +46,13 @@ const authors = defineCollection({
   schema: authorSchema(),
 });
 
-const homeFeatured = defineCollection({
+const editorialCollections = defineCollection({
   loader: glob({
-    base: "./src/content/home-featured",
+    base: "./src/content/collections",
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
-  schema: homeFeatureSchema(),
+  schema: editorialCollectionSchema(),
 });
 
 const pages = defineCollection({
@@ -89,6 +89,6 @@ export const collections = {
   articles,
   authors,
   categories,
-  homeFeatured,
+  collections: editorialCollections,
   pages,
 };

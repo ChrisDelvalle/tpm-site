@@ -1,5 +1,9 @@
-import type { ArticleListItem } from "./article-list";
-import { type AnnouncementEntry, announcementUrl, formatDate } from "./routes";
+import type { PublishableListItem } from "./article-list";
+import {
+  publishableFromAnnouncement,
+  publishableListItem,
+} from "./publishable";
+import type { AnnouncementEntry } from "./routes";
 
 /**
  * Converts an announcement entry into the shared article-list display shape.
@@ -9,21 +13,8 @@ import { type AnnouncementEntry, announcementUrl, formatDate } from "./routes";
  */
 export function announcementListItem(
   announcement: AnnouncementEntry,
-): ArticleListItem {
-  return {
-    author: announcement.data.author,
-    date: formatDate(announcement.data.date),
-    description: announcement.data.description,
-    href: announcementUrl(announcement.id),
-    image:
-      announcement.data.image === undefined
-        ? undefined
-        : {
-            alt: announcement.data.imageAlt ?? announcement.data.title,
-            src: announcement.data.image,
-          },
-    title: announcement.data.title,
-  };
+): PublishableListItem {
+  return publishableListItem(publishableFromAnnouncement(announcement));
 }
 
 /**
@@ -34,6 +25,6 @@ export function announcementListItem(
  */
 export function announcementListItems(
   announcements: readonly AnnouncementEntry[],
-): ArticleListItem[] {
+): PublishableListItem[] {
   return announcements.map(announcementListItem);
 }

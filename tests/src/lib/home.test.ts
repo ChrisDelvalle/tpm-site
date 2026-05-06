@@ -1,97 +1,122 @@
 import { describe, expect, test } from "bun:test";
 
 import type { ArticleArchiveItem } from "../../../src/lib/archive";
-import {
-  activeHomeFeatures,
-  homeArticleSelection,
-  type HomeFeaturedEntry,
-  homeFeaturedSelection,
-} from "../../../src/lib/home";
-import { articleEntry } from "../../helpers/content";
+import type { EditorialCollectionEntry } from "../../../src/lib/collections";
+import { homePageViewModel } from "../../../src/lib/home";
+import { defaultPublishableVisibility } from "../../../src/lib/publishable";
+import { announcementEntry, articleEntry } from "../../helpers/content";
 
-describe("homepage helpers", () => {
-  test("selects curated start-here articles with deterministic fallbacks", () => {
-    const items = [
-      archiveItem("latest"),
-      archiveItem("what-is-a-meme"),
-      archiveItem("the-memetic-bottleneck"),
-      archiveItem("fallback"),
-    ];
+describe("homepage view model", () => {
+  test("resolves Featured and Start Here from publishable collections", () => {
+    const viewModel = homePageViewModel({
+      announcements: [
+        announcementEntry({
+          id: "forum-priority",
+        }),
+      ],
+      archiveItems: [
+        archiveItem("latest"),
+        archiveItem("what-is-a-meme"),
+        archiveItem("homesteading-the-memeosphere"),
+      ],
+      collections: [
+        collectionEntry("featured", {
+          items: [
+            {
+              note: "Feature note.",
+              slug: "homesteading-the-memeosphere",
+            },
+            "forum-priority",
+          ],
+        }),
+        collectionEntry("start-here", {
+          items: ["what-is-a-meme", "homesteading-the-memeosphere"],
+        }),
+      ],
+    });
 
-    const selection = homeArticleSelection(
-      items,
-      ["what-is-a-meme", "missing", "what-is-a-meme"],
-      3,
-    );
-
-    expect(selection.missingIds).toEqual(["missing"]);
-    expect(selection.selectedItems.map((item) => item.article.id)).toEqual([
+    expect(viewModel.featuredItems.map((item) => item.slug)).toEqual([
+      "homesteading-the-memeosphere",
+      "forum-priority",
+    ]);
+    expect(viewModel.featuredItems[0]?.note).toBe("Feature note.");
+    expect(viewModel.featuredItems.map((item) => item.kind)).toEqual([
+      "article",
+      "announcement",
+    ]);
+    expect(viewModel.startHereItems.map((item) => item.title)).toEqual([
       "what-is-a-meme",
-      "latest",
-      "the-memetic-bottleneck",
+      "homesteading-the-memeosphere",
     ]);
   });
 
-  test("filters inactive featured entries and sorts active entries by order and id", () => {
-    const features = [
-      linkFeature("discord", 20, true),
-      linkFeature("hidden", 1, false),
-      articleFeature("article-b", "beta", 10, true),
-      articleFeature("article-a", "alpha", 10, true),
-    ];
-
-    expect(activeHomeFeatures(features).map((item) => item.id)).toEqual([
-      "article-a",
-      "article-b",
-      "discord",
-    ]);
-  });
-
-  test("normalizes article and link featured entries into one render model", () => {
-    const selection = homeFeaturedSelection(
-      [
-        articleFeature("feature-article", "what-is-a-meme", 10, true),
-        linkFeature("feature-link", 20, true),
+  test("uses newest visible announcements and normal articles for automatic homepage lists", () => {
+    const viewModel = homePageViewModel({
+      announcementLimit: 2,
+      announcements: [
+        announcementEntry({
+          date: new Date("2026-05-05T00:00:00Z"),
+          id: "new",
+        }),
+        announcementEntry({
+          data: {
+            visibility: {
+              ...defaultPublishableVisibility,
+              homepage: false,
+            },
+          },
+          date: new Date("2026-05-04T00:00:00Z"),
+          id: "hidden-announcement",
+        }),
+        announcementEntry({
+          date: new Date("2026-05-03T00:00:00Z"),
+          id: "old",
+        }),
       ],
-      [archiveItem("what-is-a-meme")],
-    );
+      archiveItems: [
+        archiveItem("latest"),
+        archiveItem("hidden", {
+          visibility: {
+            ...defaultPublishableVisibility,
+            homepage: false,
+          },
+        }),
+        archiveItem("older"),
+      ],
+      collections: [
+        collectionEntry("featured", { items: ["latest"] }),
+        collectionEntry("start-here", { items: ["older"] }),
+      ],
+      recentLimit: 2,
+    });
 
-    expect(selection.missingSlugs).toEqual([]);
-    expect(selection.items).toMatchObject([
-      {
-        description: "what-is-a-meme description",
-        href: "/articles/what-is-a-meme/",
-        id: "feature-article",
-        kind: "article",
-        title: "what-is-a-meme",
-      },
-      {
-        href: "https://discord.gg/8MVFRMa",
-        id: "feature-link",
-        kind: "link",
-        linkLabel: "Join Discord",
-        title: "Join Discord",
-      },
+    expect(viewModel.announcementItems.map((item) => item.href)).toEqual([
+      "/announcements/new/",
+      "/announcements/old/",
+    ]);
+    expect(viewModel.recentFeedItems.map((item) => item.href)).toEqual([
+      "/articles/latest/",
+      "/articles/older/",
     ]);
   });
 
-  test("reports stale featured article slugs without returning invalid items", () => {
-    const selection = homeFeaturedSelection(
-      [
-        articleFeature("missing", "missing-article", 10, true),
-        articleFeature("duplicate-missing", "missing-article", 20, true),
-      ],
-      [archiveItem("available")],
-    );
-
-    expect(selection.missingSlugs).toEqual(["missing-article"]);
-    expect(selection.items).toEqual([]);
+  test("fails clearly when required homepage collections are missing", () => {
+    expect(() =>
+      homePageViewModel({
+        announcements: [],
+        archiveItems: [],
+        collections: [],
+      }),
+    ).toThrow('Missing required homepage collection "featured".');
   });
 });
 
-function archiveItem(id: string): ArticleArchiveItem {
+function archiveItem(
+  id: string,
+  data: Partial<ReturnType<typeof articleEntry>["data"]> = {},
+): ArticleArchiveItem {
   return {
-    article: articleEntry({ id }),
+    article: articleEntry({ data, id }),
     author: "Author",
     authors: [],
     date: "January 1, 2024",
@@ -101,41 +126,19 @@ function archiveItem(id: string): ArticleArchiveItem {
   };
 }
 
-function articleFeature(
+function collectionEntry(
   id: string,
-  slug: string,
-  order: number,
-  active: boolean,
-): HomeFeaturedEntry {
+  data: Partial<EditorialCollectionEntry["data"]> = {},
+): EditorialCollectionEntry {
   return {
-    id,
     body: "",
-    collection: "homeFeatured",
+    collection: "collections",
     data: {
-      active,
-      kind: "article",
-      order,
-      slug,
+      draft: false,
+      items: [],
+      title: id,
+      ...data,
     },
-  } satisfies HomeFeaturedEntry;
-}
-
-function linkFeature(
-  id: string,
-  order: number,
-  active: boolean,
-): HomeFeaturedEntry {
-  return {
     id,
-    body: "",
-    collection: "homeFeatured",
-    data: {
-      active,
-      kind: "link",
-      link: "https://discord.gg/8MVFRMa",
-      linkLabel: "Join Discord",
-      order,
-      title: "Join Discord",
-    },
-  } satisfies HomeFeaturedEntry;
+  };
 }

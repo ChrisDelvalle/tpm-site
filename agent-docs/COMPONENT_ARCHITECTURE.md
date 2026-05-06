@@ -320,17 +320,17 @@ src/content/pages/index.md
   frontmatter:
     title
     description
-    startHere article IDs
 
 src/content/announcements/*.md
   article-like announcement content
 
-src/content/home-featured/*.md
-  featured article references and link features
+src/content/collections/*.md
+  ordered editor-owned lists of publishable article/announcement slugs
 
 src/pages/index.astro
   load pages/index
-  load articles, announcements, categories, authors, and home featured slots
+  load articles, announcements, categories, authors, and collections
+  normalize through the homepage view model
   HomePage
     HomeLeadGrid
       HomeLeadHeroCell
@@ -352,8 +352,9 @@ through `src/pages/index.astro` because it needs dynamic latest-article data and
 component-controlled images. The prose and editorial copy should move into the
 pages content collection.
 
-This gives authors Markdown-backed configuration without forcing the homepage to
-be pure Markdown. The route remains the composer for dynamic and visual blocks.
+This gives authors Markdown-backed page copy and collection configuration
+without forcing the homepage to be pure Markdown. The route remains the composer
+for dynamic and visual blocks.
 
 The homepage should become an editorial front page. It should answer "what
 should I read?" with multiple entry points:

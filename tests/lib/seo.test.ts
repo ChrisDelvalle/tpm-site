@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { defaultPublishableVisibility } from "../../src/lib/publishable";
 import type { ArticleEntry, CategorySummary } from "../../src/lib/routes";
 import { articleBlogPostingJsonLd, safeJsonLd } from "../../src/lib/seo";
 
@@ -13,6 +14,7 @@ function article(): ArticleEntry {
       draft: false,
       tags: ["philosophy", "quotes"],
       title: "Example Article",
+      visibility: defaultPublishableVisibility,
     },
     id: "example-article",
   };

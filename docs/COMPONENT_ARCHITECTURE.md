@@ -361,17 +361,17 @@ src/content/pages/index.md
   frontmatter:
     title
     description
-    startHere article IDs
 
 src/content/announcements/*.md
   article-like announcement content
 
-src/content/home-featured/*.md
-  featured article references and link features
+src/content/collections/*.md
+  ordered editor-owned lists of publishable article/announcement slugs
 
 src/pages/index.astro
   load pages/index
-  load articles, announcements, categories, authors, and home featured slots
+  load articles, announcements, categories, authors, and collections
+  normalize through the homepage view model
   HomePage
     HomeLeadGrid
       HomeLeadHeroCell
@@ -393,8 +393,9 @@ through `src/pages/index.astro` because it needs dynamic latest-article data and
 component-controlled images. The prose and editorial copy should move into the
 pages content collection.
 
-This gives authors Markdown-backed configuration without forcing the homepage to
-be pure Markdown. The route remains the composer for dynamic and visual blocks.
+This gives authors Markdown-backed page copy and collection configuration
+without forcing the homepage to be pure Markdown. The route remains the composer
+for dynamic and visual blocks.
 
 The homepage should become an editorial front page. It should answer "what
 should I read?" with multiple entry points:
@@ -415,6 +416,11 @@ shared single-column browsing measure as a one-row horizontal rail with real
 scroll controls, followed by a thin secondary discovery strip and the Recent
 article feed. Tags are discoverable through article metadata and `/tags/`, but
 they are not enumerated on the homepage.
+
+Homepage curation uses the publishable-entry and collection model documented in
+`docs/HOMEPAGE_CONTENT_MODEL.md`. Articles and announcements share one
+author-facing publishable schema; folder location derives internal kind.
+Collections own ordered curation such as `featured` and `start-here`.
 
 ### Archive, Category, And Search Pages
 
@@ -568,12 +574,12 @@ Page components are generic content surfaces. Blocks are reusable page sections.
 - `MarkdownPage`: generic page content renderer.
 - `PageHeader`: title/description for non-article pages.
 - `PageProse`: prose wrapper for non-article Markdown.
-- `FlatArticleList`: flat compact article-like rail for homepage/sidebar
+- `FlatArticleList`: flat compact publishable-entry rail for homepage/sidebar
   surfaces.
-- `FlatArticleTeaser`: one compact article-like teaser.
+- `FlatArticleTeaser`: one compact publishable-entry teaser.
 - `HomeHeroBlock`: homepage identity and primary actions.
 - `HomeFeaturedCarousel`: static-first featured carousel.
-- `HomeFeaturedSlide`: one normalized featured article or link.
+- `HomeFeaturedSlide`: one normalized featured publishable entry.
 - `HomeDiscoveryLinksBlock`: thin All articles/Authors/Tags strip.
 - `HomeAnnouncementBlock`: announcement image and copy.
 - `HomeLatestArticleBlock`: latest article teaser.

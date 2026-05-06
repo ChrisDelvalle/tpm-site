@@ -1,148 +1,132 @@
-import type { CollectionEntry } from "astro:content";
-
 import type { ArticleArchiveItem } from "./archive";
+import {
+  editorialCollectionById,
+  type EditorialCollectionEntry,
+  resolvePublishableCollection,
+} from "./collections";
+import {
+  type PublishableEntry,
+  publishableFromAnnouncement,
+  publishableFromArticleArchive,
+  publishableIndex,
+  type PublishableKind,
+  type PublishableListItem,
+  publishableListItems,
+  visiblePublishables,
+} from "./publishable";
+import type { AnnouncementEntry } from "./routes";
 
-/** Astro content entry for one homepage featured item. */
-export type HomeFeaturedEntry = CollectionEntry<"homeFeatured">;
-
-/** Homepage discovery panel generated from curated and fallback articles. */
-interface HomeArticleSelection {
-  missingIds: string[];
-  selectedItems: ArticleArchiveItem[];
-}
+const FEATURED_COLLECTION_ID = "featured";
+const START_HERE_COLLECTION_ID = "start-here";
 
 /** Display-ready homepage featured item. */
-export interface HomeFeaturedItem {
-  category?: undefined | { href: string; title: string };
-  date?: string | undefined;
-  description?: string | undefined;
-  entry: HomeFeaturedEntry;
-  href: string;
+export interface HomeFeaturedItem extends PublishableListItem {
   id: string;
-  image?: ArticleArchiveItem["image"] | undefined;
-  kind: "article" | "link";
-  linkLabel?: string | undefined;
-  title: string;
+  kind: PublishableKind;
+  note?: string | undefined;
+  slug: string;
 }
 
-/** Normalized homepage featured item result. */
-interface HomeFeaturedSelection {
-  items: HomeFeaturedItem[];
-  missingSlugs: string[];
+/** Inputs required to build the homepage view model. */
+interface HomePageViewModelInput {
+  announcementLimit?: number;
+  announcements: readonly AnnouncementEntry[];
+  archiveItems: readonly ArticleArchiveItem[];
+  collections: readonly EditorialCollectionEntry[];
+  recentLimit?: number;
+}
+
+/** Display-ready homepage view model consumed by the Astro route. */
+interface HomePageViewModel {
+  announcementItems: PublishableListItem[];
+  featuredItems: HomeFeaturedItem[];
+  recentFeedItems: PublishableListItem[];
+  startHereItems: PublishableListItem[];
 }
 
 /**
- * Selects curated start-here articles with deterministic fallbacks.
+ * Builds the homepage view model from publishable entries and collections.
  *
- * @param items Article archive items sorted in homepage display order.
- * @param curatedIds Article content IDs from homepage frontmatter.
- * @param limit Maximum number of selected articles.
- * @returns Curated articles followed by fallback articles and missing IDs.
+ * @param input Homepage content inputs.
+ * @param input.announcementLimit Maximum newest announcements shown on home.
+ * @param input.announcements Published announcements.
+ * @param input.archiveItems Display-ready normal article archive items.
+ * @param input.collections Active editor-owned collections.
+ * @param input.recentLimit Maximum newest normal articles shown on home.
+ * @returns Display-ready homepage lists and feature items.
  */
-export function homeArticleSelection(
-  items: readonly ArticleArchiveItem[],
-  curatedIds: readonly string[],
-  limit: number,
-): HomeArticleSelection {
-  const itemById = new Map(items.map((item) => [item.article.id, item]));
-  const missingIds = curatedIds.filter((id) => !itemById.has(id));
-  const curatedItems = uniqueStrings(curatedIds)
-    .map((id) => itemById.get(id))
-    .filter((item): item is ArticleArchiveItem => item !== undefined);
-  const curatedItemIds = new Set(curatedItems.map((item) => item.article.id));
-  const fallbackItems = items.filter(
-    (item) => !curatedItemIds.has(item.article.id),
+export function homePageViewModel({
+  announcementLimit = 3,
+  announcements,
+  archiveItems,
+  collections,
+  recentLimit = 8,
+}: HomePageViewModelInput): HomePageViewModel {
+  const articlePublishables = archiveItems.map(publishableFromArticleArchive);
+  const announcementPublishables = announcements.map(
+    publishableFromAnnouncement,
+  );
+  const publishables = [...articlePublishables, ...announcementPublishables];
+  const index = publishableIndex(publishables);
+  const featuredCollection = requiredCollection(
+    collections,
+    FEATURED_COLLECTION_ID,
+  );
+  const startHereCollection = requiredCollection(
+    collections,
+    START_HERE_COLLECTION_ID,
+  );
+  const featuredItems = resolvePublishableCollection(
+    featuredCollection,
+    index,
+    { requiredVisibility: "homepage" },
+  ).items.map(featuredItemFromResolvedItem);
+  const startHereItems = publishableListItems(
+    resolvePublishableCollection(startHereCollection, index, {
+      requiredVisibility: "homepage",
+    }).items.map((item) => item.entry),
+  );
+  const announcementItems = publishableListItems(
+    visiblePublishables(announcementPublishables, "homepage").slice(
+      0,
+      announcementLimit,
+    ),
+  );
+  const recentFeedItems = publishableListItems(
+    visiblePublishables(articlePublishables, "homepage").slice(0, recentLimit),
   );
 
   return {
-    missingIds,
-    selectedItems: [...curatedItems, ...fallbackItems].slice(0, limit),
+    announcementItems,
+    featuredItems,
+    recentFeedItems,
+    startHereItems,
   };
 }
 
-/**
- * Sorts and filters homepage featured entries.
- *
- * @param features Homepage featured content entries.
- * @returns Active featured entries sorted for homepage display.
- */
-export function activeHomeFeatures(
-  features: readonly HomeFeaturedEntry[],
-): HomeFeaturedEntry[] {
-  return features
-    .filter((feature) => feature.data.active)
-    .toSorted((a, b) => {
-      const orderSort = a.data.order - b.data.order;
-      if (orderSort !== 0) {
-        return orderSort;
-      }
-
-      return a.id.localeCompare(b.id);
-    });
-}
-
-/**
- * Normalizes homepage featured entries into one renderable item model.
- *
- * @param features Active featured content entries.
- * @param articles Display-ready normal article archive items.
- * @returns Normalized featured items and stale article slugs.
- */
-export function homeFeaturedSelection(
-  features: readonly HomeFeaturedEntry[],
-  articles: readonly ArticleArchiveItem[],
-): HomeFeaturedSelection {
-  const articleById = new Map(articles.map((item) => [item.article.id, item]));
-  const missingSlugs = features
-    .flatMap((feature) =>
-      feature.data.kind === "article" ? [feature.data.slug] : [],
-    )
-    .filter((slug) => !articleById.has(slug));
-
+function featuredItemFromResolvedItem({
+  entry,
+  note,
+}: {
+  entry: PublishableEntry;
+  note?: string | undefined;
+}): HomeFeaturedItem {
   return {
-    items: features.flatMap<HomeFeaturedItem>((feature) => {
-      if (feature.data.kind === "link") {
-        return [
-          {
-            entry: feature,
-            href: feature.data.link,
-            id: feature.id,
-            kind: "link",
-            linkLabel: feature.data.linkLabel,
-            title: feature.data.title,
-          } satisfies HomeFeaturedItem,
-        ];
-      }
-
-      const article = articleById.get(feature.data.slug);
-      if (article === undefined) {
-        return [];
-      }
-
-      return [
-        {
-          category:
-            article.category === undefined
-              ? undefined
-              : {
-                  href: article.category.url,
-                  title: article.category.title,
-                },
-          date: article.date,
-          description: article.description,
-          entry: feature,
-          href: article.url,
-          id: feature.id,
-          image: article.image,
-          kind: "article",
-          title: article.title,
-        } satisfies HomeFeaturedItem,
-      ];
-    }),
-    missingSlugs: uniqueStrings(missingSlugs),
+    ...entry,
+    id: entry.slug,
+    note,
   };
 }
 
-function uniqueStrings(values: readonly string[]): string[] {
-  return Array.from(new Set(values));
+function requiredCollection(
+  collections: readonly EditorialCollectionEntry[],
+  id: string,
+): EditorialCollectionEntry {
+  const collection = editorialCollectionById(collections, id);
+
+  if (collection === undefined) {
+    throw new Error(`Missing required homepage collection "${id}".`);
+  }
+
+  return collection;
 }

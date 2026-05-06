@@ -1,3 +1,4 @@
+import { defaultPublishableVisibility } from "../../src/lib/publishable";
 import type {
   AnnouncementEntry,
   ArticleEntry,
@@ -66,6 +67,7 @@ export function announcementEntry({
       draft: false,
       tags: [],
       title: "Sample Announcement",
+      visibility: defaultPublishableVisibility,
       ...data,
     },
     filePath: filePath ?? `/repo/src/content/announcements/${id}.md`,
@@ -98,6 +100,7 @@ export function articleEntry({
       draft: false,
       tags: [],
       title: "Sample Article",
+      visibility: defaultPublishableVisibility,
       ...data,
     },
     filePath: filePath ?? `/repo/src/content/articles/history/${id}.md`,

@@ -8,12 +8,12 @@ interface HomeCatalogExample {
 export const homeCatalogExamples = [
   {
     componentPath: "src/components/articles/FlatArticleList.astro",
-    description: "Flat compact article-like list for homepage rails.",
+    description: "Flat compact publishable-entry list for homepage rails.",
     title: "FlatArticleList",
   },
   {
     componentPath: "src/components/articles/FlatArticleTeaser.astro",
-    description: "One flat compact article-like teaser.",
+    description: "One flat compact publishable-entry teaser.",
     title: "FlatArticleTeaser",
   },
   {
@@ -53,7 +53,7 @@ export const homeCatalogExamples = [
   },
   {
     componentPath: "src/components/blocks/HomeFeaturedSlide.astro",
-    description: "One normalized homepage featured carousel item.",
+    description: "One normalized featured publishable-entry carousel item.",
     title: "HomeFeaturedSlide",
   },
   {

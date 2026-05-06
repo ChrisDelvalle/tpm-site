@@ -84,26 +84,22 @@ the same priority order and avoid horizontal overflow.
 
 ## Content Model
 
-The homepage is assembled by `src/pages/index.astro` because it needs article,
-announcement, category, and featured-item data. Writer-owned configuration lives
-in content files.
+The homepage is assembled from the publishable-entry and collection model
+defined in [Homepage Content Model](./HOMEPAGE_CONTENT_MODEL.md). Articles and
+announcements are publishable entries with the same author-facing schema.
+Collections are editor-owned ordered lists of publishable entries.
 
 ### Homepage Page Frontmatter
 
-`src/content/pages/index.md` owns stable homepage configuration that belongs to
-the page itself:
+`src/content/pages/index.md` owns stable page metadata only:
 
 ```yaml
 title: The Philosopher's Meme
 description: The philosophy of memes, cyberculture, and the Internet.
-startHere:
-  - what-is-a-meme
-  - memes-are-not-jokes-they-are-diagram-games
 ```
 
-`startHere` is a curated list of normal article IDs. Missing IDs fail the build.
-The Start Here component may fill with deterministic fallbacks when fewer than
-the display limit are configured.
+Curated homepage lists live in `src/content/collections/` so writers manage all
+ordered lists through one interface.
 
 ### Announcements
 
@@ -145,64 +141,34 @@ keeps announcements available as full reading pages when needed.
 
 ### Featured Items
 
-Featured items live in:
+Featured items are the `featured` collection:
 
 ```text
-src/content/home-featured/*.md
+src/content/collections/featured.md
 ```
 
-The collection uses a small discriminated interface.
-
-Article feature:
-
-```yaml
-kind: article
-slug: what-is-a-meme
-order: 10
-active: true
-```
-
-The Markdown body is optional editorial copy explaining why the article is
-featured. The page inherits title, description, href, author, date, category,
-and image from the referenced normal article.
-
-Link feature:
-
-```yaml
-kind: link
-title: The TPM Reader
-link: https://example.com
-linkLabel: Get the Book
-order: 20
-active: true
-```
-
-The Markdown body is optional supporting copy. `link` may be an external URL or
-an absolute site path. Link features cover books, events, Patreon drives,
-Discord, internal pages, and any other non-article feature without adding
-bespoke feature kinds.
-
-The homepage normalizes both feature kinds into one render model before the
-carousel receives props.
+The collection references publishable slugs in manual order. Items may include
+an optional `note` for feature-specific editorial context. The page inherits
+title, description, href, author, date, category, kind, and image from the
+referenced article or announcement.
 
 ## Component Hierarchy
 
 ```text
 src/pages/index.astro
-  loads home page, articles, announcements, categories, and featured entries
-  validates curated IDs and referenced feature slugs
-  normalizes data into display models
+  loads home page, articles, announcements, categories, authors, and collections
+  calls homePageViewModel()
   composes:
     HomeLeadGrid
       HomeLeadHeroCell
       HomeHeroBlock
       HomeLeadFeaturedCell
       HomeFeaturedCarousel
-        HomeFeaturedItem
+        HomeFeaturedSlide
       HomeLeadStartCell
-        FlatArticleList title="Start Here"
+        FlatArticleList title="Start Here" (publishable entries)
       HomeLeadAnnouncementsCell
-        FlatArticleList title="Announcements"
+        FlatArticleList title="Announcements" (publishable entries)
     HomeCategoryOverviewBlock
     HomeDiscoveryLinksBlock
     ArticleList title="Recent"
@@ -212,7 +178,7 @@ Reusable primitives:
 
 ```text
 FlatArticleTeaser
-  one compact article or announcement link with optional meta
+  one compact publishable entry link with optional meta
 
 FlatArticleList
   section heading plus FlatArticleTeaser items
@@ -263,8 +229,8 @@ widget.
   Announcements. Desktop placement may move Start Here beside Hero and
   Announcements beside Featured, but it must not require DOM-order hacks.
 - The hero is wide, centered, and visually calm. It contains logo art plus
-  `Support Us` and `Join Discord`; the CTAs should not reduce the artwork's
-  horizontal measure.
+  Patreon- and Discord-branded logo CTAs; the CTAs should not reduce the
+  artwork's horizontal measure.
 - The hero artwork should use most of the wide desktop track before hitting its
   maximum width.
 - The Announcements heading should vertically align with the Featured heading
@@ -347,10 +313,9 @@ widget.
 
 ## Critical Review
 
-The redesigned model intentionally replaces `homePromos`. Featured items need a
-clearer interface than the first promo model: `kind: article` should be thin
-and inherit article metadata, while `kind: link` should cover every non-article
-feature without adding marketing-specific types.
+The redesigned model intentionally replaces both `homePromos` and
+`home-featured`. Featured should be a normal collection of publishable entries
+instead of a second homepage-only content type.
 
 Announcements are separate from articles even though they share article-like
 frontmatter. A hidden category would be easier initially, but it would make

@@ -7,7 +7,7 @@ import {
 } from "../../../helpers/astro-container";
 
 describe("FlatArticleList", () => {
-  test("renders compact article links with metadata in caller order", async () => {
+  test("renders compact publishable links with metadata in caller order", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(FlatArticleList, {
       props: {
@@ -17,11 +17,13 @@ describe("FlatArticleList", () => {
             category: { href: "/categories/culture/", title: "Culture" },
             date: "May 5, 2026",
             href: "/articles/first/",
+            kind: "article",
             title: "First Article",
           },
           {
-            href: "/articles/second/",
-            title: "Second Article",
+            href: "/announcements/second/",
+            kind: "announcement",
+            title: "Second Announcement",
           },
         ],
         title: "Start Here",
@@ -35,7 +37,7 @@ describe("FlatArticleList", () => {
     expect(view).toContain("May 5, 2026");
     expect(view).toContain("Author");
     expect(view.indexOf("First Article")).toBeLessThan(
-      view.indexOf("Second Article"),
+      view.indexOf("Second Announcement"),
     );
   });
 

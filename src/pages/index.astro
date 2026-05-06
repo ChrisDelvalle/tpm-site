@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry, render } from "astro:content";
+import { getEntry } from "astro:content";
 
 import heroDarkImage from "../assets/site/tpm_home_hero_dark.png";
 import heroLightImage from "../assets/site/tpm_home_hero_light.png";
@@ -12,16 +12,15 @@ import ArticleList from "../components/articles/ArticleList.astro";
 import FlatArticleList from "../components/articles/FlatArticleList.astro";
 import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { announcementListItems } from "../lib/announcements";
-import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleArchiveItems } from "../lib/archive";
 import { getAuthorEntries } from "../lib/authors";
-import { getAnnouncements, getArticles, getCategories } from "../lib/content";
 import {
-  activeHomeFeatures,
-  homeArticleSelection,
-  homeFeaturedSelection,
-} from "../lib/home";
+  getAnnouncements,
+  getArticles,
+  getCategories,
+  getEditorialCollections,
+} from "../lib/content";
+import { homePageViewModel } from "../lib/home";
 import { sectionNavigationItems } from "../lib/navigation";
 import {
   articlesArchiveUrl,
@@ -39,51 +38,16 @@ const articles = await getArticles();
 const announcements = await getAnnouncements();
 const categories = await getCategories();
 const authors = await getAuthorEntries();
+const collections = await getEditorialCollections();
 const archiveItems = articleArchiveItems(articles, categories, authors);
-const articleItems = articleListItemsFromArchive(archiveItems);
-const announcementItems = announcementListItems(announcements.slice(0, 3));
-const startHereSelection = homeArticleSelection(
+const homeView = homePageViewModel({
+  announcements,
   archiveItems,
-  home.data.startHere,
-  4,
-);
-
-if (startHereSelection.missingIds.length > 0) {
-  throw new Error(
-    `Homepage startHere contains unknown article IDs: ${startHereSelection.missingIds.join(
-      ", ",
-    )}.`,
-  );
-}
-
-const startHereItems = articleListItemsFromArchive(
-  startHereSelection.selectedItems,
-);
-const recentFeedItems = articleItems.slice(0, 8);
+  collections,
+});
+const { announcementItems, featuredItems, recentFeedItems, startHereItems } =
+  homeView;
 const categoryItems = sectionNavigationItems(categories, "/");
-const homeFeaturedEntries = activeHomeFeatures(
-  await getCollection("homeFeatured"),
-);
-const featuredSelection = homeFeaturedSelection(
-  homeFeaturedEntries,
-  archiveItems,
-);
-
-if (featuredSelection.missingSlugs.length > 0) {
-  throw new Error(
-    `Homepage featured items contain unknown article slugs: ${featuredSelection.missingSlugs.join(
-      ", ",
-    )}.`,
-  );
-}
-
-const renderedFeaturedItems = await Promise.all(
-  featuredSelection.items.map(async (item) => {
-    const { Content } = await render(item.entry);
-
-    return { Content, item };
-  }),
-);
 const discoveryLinks = [
   { href: articlesArchiveUrl(), label: "All articles" },
   { href: authorsIndexUrl(), label: "Authors" },
@@ -113,12 +77,10 @@ const description =
         class="min-w-0 lg:col-start-1 lg:row-start-2"
         data-home-lead-featured
       >
-        <HomeFeaturedCarousel itemCount={renderedFeaturedItems.length}>
+        <HomeFeaturedCarousel itemCount={featuredItems.length}>
           {
-            renderedFeaturedItems.map(({ Content, item }, index) => (
-              <HomeFeaturedSlide index={index} item={item}>
-                <Content />
-              </HomeFeaturedSlide>
+            featuredItems.map((item, index) => (
+              <HomeFeaturedSlide index={index} item={item} />
             ))
           }
         </HomeFeaturedCarousel>

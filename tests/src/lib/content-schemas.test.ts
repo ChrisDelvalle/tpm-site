@@ -6,9 +6,10 @@ import {
   articleSchema,
   authorSchema,
   categorySchema,
+  editorialCollectionSchema,
   filenameStem,
-  homeFeatureSchema,
   pageSchema,
+  publishableVisibilitySchema,
 } from "../../../src/lib/content-schemas";
 
 describe("content schemas", () => {
@@ -130,6 +131,41 @@ describe("content schemas", () => {
     ).toBe(false);
   });
 
+  test("defaults publishable visibility to every public surface", () => {
+    expect(publishableVisibilitySchema().parse(undefined)).toEqual({
+      directory: true,
+      feed: true,
+      homepage: true,
+      search: true,
+    });
+    expect(
+      publishableVisibilitySchema().parse({
+        homepage: false,
+      }),
+    ).toEqual({
+      directory: true,
+      feed: true,
+      homepage: false,
+      search: true,
+    });
+    expect(
+      articleSchema({ image: imageSchema }).parse({
+        author: "Author",
+        date: "2022-04-06",
+        description: "Description",
+        title: "Article Title",
+        visibility: {
+          homepage: false,
+        },
+      }).visibility,
+    ).toEqual({
+      directory: true,
+      feed: true,
+      homepage: false,
+      search: true,
+    });
+  });
+
   test("validates category and standalone page frontmatter", () => {
     expect(
       categorySchema().safeParse({
@@ -159,37 +195,38 @@ describe("content schemas", () => {
     ).toBe(true);
   });
 
-  test("validates homepage featured frontmatter", () => {
+  test("validates editorial collection frontmatter", () => {
     expect(
-      homeFeatureSchema().safeParse({
-        kind: "article",
-        order: 10,
-        slug: "what-is-a-meme",
+      editorialCollectionSchema().safeParse({
+        items: [
+          "what-is-a-meme",
+          {
+            note: "Start here.",
+            slug: "homesteading-the-memeosphere",
+          },
+        ],
+        title: "Start Here",
       }).success,
     ).toBe(true);
     expect(
-      homeFeatureSchema().safeParse({
-        kind: "link",
-        link: "https://discord.gg/8MVFRMa",
-        linkLabel: "Join Discord",
-        order: 20,
-        title: "Join Discord",
-      }).success,
-    ).toBe(true);
+      editorialCollectionSchema().parse({
+        title: "Featured",
+      }),
+    ).toEqual({
+      draft: false,
+      items: [],
+      title: "Featured",
+    });
     expect(
-      homeFeatureSchema().safeParse({
-        kind: "link",
-        link: "relative/path",
-        linkLabel: "Bad",
-        order: 20,
-        title: "Bad Link",
+      editorialCollectionSchema().safeParse({
+        items: [{ note: "", slug: "what-is-a-meme" }],
+        title: "Bad Note",
       }).success,
     ).toBe(false);
     expect(
-      homeFeatureSchema().safeParse({
-        kind: "article",
-        link: "/articles/",
-        order: 20,
+      editorialCollectionSchema().safeParse({
+        item: ["what-is-a-meme"],
+        title: "Unknown field",
       }).success,
     ).toBe(false);
   });

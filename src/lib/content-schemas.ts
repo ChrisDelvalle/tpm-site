@@ -3,6 +3,13 @@ import { z } from "astro/zod";
 
 import { tagDiagnostics } from "./tags";
 
+const publishableVisibilityDefaults = {
+  directory: true,
+  feed: true,
+  homepage: true,
+  search: true,
+} as const;
+
 /** Local image schema factory supplied by Astro content collections. */
 interface ImageSchemaContext {
   image: () => z.ZodType<ImageMetadata>;
@@ -53,14 +60,14 @@ export function authorSchema(): ReturnType<typeof createAuthorSchema> {
 }
 
 /**
- * Creates the homepage featured item schema.
+ * Creates the editor-owned publishable collection schema.
  *
- * @returns Strict homepage featured frontmatter schema.
+ * @returns Strict editorial collection frontmatter schema.
  */
-export function homeFeatureSchema(): ReturnType<
-  typeof createHomeFeatureSchema
+export function editorialCollectionSchema(): ReturnType<
+  typeof createEditorialCollectionSchema
 > {
-  return createHomeFeatureSchema();
+  return createEditorialCollectionSchema();
 }
 
 /**
@@ -71,6 +78,17 @@ export function homeFeatureSchema(): ReturnType<
  */
 export function filenameStem(entry: string): string {
   return fileName(entry).replace(/\.(?:md|mdx)$/i, "");
+}
+
+/**
+ * Creates the shared publishable visibility schema.
+ *
+ * @returns Visibility schema with true defaults for every public surface.
+ */
+export function publishableVisibilitySchema(): ReturnType<
+  typeof createPublishableVisibilitySchema
+> {
+  return createPublishableVisibilitySchema();
 }
 
 /**
@@ -95,6 +113,7 @@ function createArticleSchema({ image }: ImageSchemaContext) {
       legacyPermalink: z.string().optional(),
       tags: tagListSchema(),
       title: z.string().min(1),
+      visibility: publishableVisibilitySchema(),
     })
     .strict();
 }
@@ -144,32 +163,37 @@ function createAuthorSchema() {
     .strict();
 }
 
-function createHomeFeatureSchema() {
-  const sharedFeatureFields = {
-    active: z.boolean().default(true),
-    order: z.number().int().nonnegative(),
-  };
-  const articleFeatureSchema = z
+function createPublishableVisibilitySchema() {
+  return z
     .object({
-      ...sharedFeatureFields,
-      kind: z.literal("article"),
-      slug: z.string().min(1),
+      directory: z.boolean().default(publishableVisibilityDefaults.directory),
+      feed: z.boolean().default(publishableVisibilityDefaults.feed),
+      homepage: z.boolean().default(publishableVisibilityDefaults.homepage),
+      search: z.boolean().default(publishableVisibilityDefaults.search),
     })
-    .strict();
-  const linkFeatureSchema = z
+    .strict()
+    .default(publishableVisibilityDefaults);
+}
+
+function createEditorialCollectionSchema() {
+  const collectionItemSchema = z.union([
+    z.string().min(1),
+    z
+      .object({
+        note: z.string().min(1).optional(),
+        slug: z.string().min(1),
+      })
+      .strict(),
+  ]);
+
+  return z
     .object({
-      ...sharedFeatureFields,
-      kind: z.literal("link"),
-      link: hrefSchema(),
-      linkLabel: z.string().min(1),
+      description: z.string().optional(),
+      draft: z.boolean().default(false),
+      items: z.array(collectionItemSchema).default([]),
       title: z.string().min(1),
     })
     .strict();
-
-  return z.discriminatedUnion("kind", [
-    articleFeatureSchema,
-    linkFeatureSchema,
-  ]);
 }
 
 function createPageSchema() {
@@ -181,13 +205,6 @@ function createPageSchema() {
       title: z.string(),
     })
     .strict();
-}
-
-function hrefSchema() {
-  return z.union([
-    z.string().url(),
-    z.string().regex(/^\/(?!\/)/u, "Expected an absolute site path."),
-  ]);
 }
 
 function fileName(entry: string): string {

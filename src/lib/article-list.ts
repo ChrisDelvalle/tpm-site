@@ -1,30 +1,9 @@
-import type { ImageMetadata } from "astro";
-
 import type { ArticleArchiveItem } from "./archive";
-import type { AuthorSummary } from "./authors";
+import type { PublishableListItem } from "./publishable";
 
-/** Image metadata consumed by article list rows. */
-interface ArticleListImage {
-  alt: string;
-  src: ImageMetadata;
-}
-
-/** Display-ready item consumed by article cards and article lists. */
-export interface ArticleListItem {
-  author?: string | undefined;
-  authors?: readonly AuthorSummary[] | undefined;
-  category?:
-    | undefined
-    | {
-        href: string;
-        title: string;
-      };
-  date?: string | undefined;
-  description?: string | undefined;
-  href: string;
-  image?: ArticleListImage | undefined;
-  title: string;
-}
+/** Compatibility name for the generic publishable-entry list item. */
+export type ArticleListItem = PublishableListItem;
+export type { PublishableListItem };
 
 /**
  * Converts an archive item into the shared article-list item shape.

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { defaultPublishableVisibility } from "../../src/lib/publishable";
 import {
   type ArticleEntry,
   articlesArchiveUrl,
@@ -32,6 +33,7 @@ function entry(
     draft: false,
     tags: [],
     title: "Title",
+    visibility: defaultPublishableVisibility,
     ...data,
   } satisfies ArticleEntry["data"];
 

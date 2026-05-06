@@ -48,6 +48,11 @@ export const uiCatalogExamples = [
     title: "Container",
   },
   {
+    componentPath: "src/components/ui/DiscordButton.astro",
+    description: "Discord-branded link button using the official white asset.",
+    title: "DiscordButton",
+  },
+  {
     componentPath: "src/components/ui/IconButton.astro",
     description: "Icon-only native button with required accessible label.",
     title: "IconButton",
@@ -61,6 +66,11 @@ export const uiCatalogExamples = [
     componentPath: "src/components/ui/LinkButton.astro",
     description: "Link-shaped call to action for navigation and support.",
     title: "LinkButton",
+  },
+  {
+    componentPath: "src/components/ui/PatreonButton.astro",
+    description: "Patreon-branded support link using a white lockup asset.",
+    title: "PatreonButton",
   },
   {
     componentPath: "src/components/ui/Section.astro",

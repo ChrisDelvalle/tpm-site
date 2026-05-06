@@ -273,3 +273,88 @@ they are useful context. Explicitly deferred work belongs in
       `bun run lint`, `bun run build`, the focused homepage Playwright
       invariant, `bun run verify`, `bun run validate:html`, `bun run format`,
       and `bun run format:markdown`.
+
+### Milestone 22: Publishable Homepage Content Model Design
+
+- [x] Design the publishable-entry, collection, visibility, and homepage
+      view-model system that keeps article and announcement authoring aligned
+      while making homepage lists source-agnostic.
+- [x] Define collection authoring for `featured` and `start-here`, including
+      manual order, optional item notes, duplicate/missing-slug failures, and
+      folder-derived publishable kind.
+- [x] Define reusable list/component boundaries so Announcements, Start Here,
+      future collection pages, and compact discovery lists consume the same
+      normalized publishable list item shape.
+- [x] Define visibility defaults and override semantics for homepage,
+      directory, feed, and search surfaces before implementation begins.
+- [x] Critically review the design for overgeneralization, stale homepage
+      assumptions, author ergonomics, and testable invariants before marking
+      complete.
+      Completed in `docs/HOMEPAGE_CONTENT_MODEL.md`; older homepage design and
+      architecture docs now point to the publishable-entry/collections model.
+
+### Milestone 23: Publishable Schema And Model
+
+- [x] Add shared publishable visibility schema defaults to article and
+      announcement frontmatter without adding author-facing kind fields.
+- [x] Add internal publishable types/helpers that derive kind from collection
+      location, build a global slug index, and fail duplicate publishable slugs
+      across articles and announcements.
+- [x] Add focused tests for visibility defaults, visibility overrides,
+      kind derivation, duplicate slug failures, and source-agnostic list-item
+      conversion.
+      Verified with focused schema/model/route/SEO tests and
+      `bun run typecheck`.
+
+### Milestone 24: Collections Content Model
+
+- [x] Replace homepage-specific `home-featured` content with a general
+      `collections` content collection.
+- [x] Add `featured` and `start-here` collection files using ordered
+      publishable slug references and optional item notes.
+- [x] Add typed collection helpers that resolve collection items from the
+      global publishable index, preserve manual order, reject duplicates, and
+      report missing slugs clearly.
+- [x] Add schema/helper tests and update content-collection config tests.
+      Verified with focused collection/schema/content-config tests and
+      `bun run typecheck`.
+
+### Milestone 25: Homepage View Model Migration
+
+- [x] Move homepage data orchestration into a typed homepage view model so
+      `src/pages/index.astro` composes blocks instead of resolving content
+      rules inline.
+- [x] Drive Featured from the `featured` collection, Start Here from the
+      `start-here` collection, Announcements from newest visible announcements,
+      and Recent from newest visible normal articles.
+- [x] Keep homepage visuals, ordering, carousel behavior, and concise labels
+      unchanged unless required by the new data model.
+- [x] Add tests proving homepage collections resolve correctly and
+      announcements still do not leak into Recent or normal article browsing.
+      Verified with focused homepage model tests, Astro page/component render
+      tests, and `bun run typecheck`.
+
+### Milestone 26: Source-Agnostic Compact List Cleanup
+
+- [x] Generalize compact list item types and component docs so flat homepage
+      lists are publishable-entry lists, not article-only lists.
+- [x] Keep compatibility wrappers or aliases where needed to avoid unrelated
+      component churn, but ensure new homepage code depends on the generic
+      model.
+- [x] Update catalog/docs/tests for compact list empty, article, announcement,
+      collection, metadata, and long-title states.
+      Verified with focused compact list component tests, announcement/list
+      helper tests, homepage render tests, and `bun run typecheck`.
+
+### Milestone 27: Publishable Homepage Model Verification
+
+- [x] Run focused schema/helper/homepage/component tests after each
+      implementation milestone.
+- [x] Run release-relevant checks for build output, typecheck, lint, HTML
+      validation, formatting, and browser homepage invariants before marking
+      the model complete.
+      Verified with focused model/component/page tests during milestones 23-26,
+      `bun run check`, `bun run build`, `bun run verify`,
+      `bun run validate:html`, `bun run review:markdown`,
+      the focused homepage Playwright invariants, full `bun run test:e2e`, and
+      `bun run test:a11y`.

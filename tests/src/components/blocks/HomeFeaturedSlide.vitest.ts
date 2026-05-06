@@ -8,7 +8,7 @@ import {
 } from "../../../helpers/astro-container";
 
 describe("HomeFeaturedSlide", () => {
-  test("renders inherited article feature metadata and editorial body copy", async () => {
+  test("renders inherited article feature metadata and collection note", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(HomeFeaturedSlide, {
       props: {
@@ -19,13 +19,11 @@ describe("HomeFeaturedSlide", () => {
           description: "Inherited article description.",
           href: "/articles/what-is-a-meme/",
           kind: "article",
+          note: "Optional editorial copy.",
           title: "What Is a Meme?",
         }),
       },
       request: new Request(`${testSiteUrl}/`),
-      slots: {
-        default: "Optional editorial copy.",
-      },
     });
 
     expect(view).toContain("What Is a Meme?");
@@ -35,15 +33,14 @@ describe("HomeFeaturedSlide", () => {
     expect(view).toContain('data-home-featured-active="true"');
   });
 
-  test("renders link feature action labels without article metadata", async () => {
+  test("renders announcement features without article category metadata", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(HomeFeaturedSlide, {
       props: {
         index: 1,
         item: featuredItem({
-          href: "https://discord.gg/8MVFRMa",
-          kind: "link",
-          linkLabel: "Join Discord",
+          href: "/announcements/join-discord/",
+          kind: "announcement",
           title: "Join the TPM Discord",
         }),
       },
@@ -51,8 +48,7 @@ describe("HomeFeaturedSlide", () => {
     });
 
     expect(view).toContain("Join the TPM Discord");
-    expect(view).toContain("Join Discord");
-    expect(view).toContain("https://discord.gg/8MVFRMa");
+    expect(view).toContain("/announcements/join-discord/");
     expect(view).toContain("hidden");
     expect(view).not.toContain("Culture");
   });
@@ -62,23 +58,10 @@ function featuredItem(
   overrides: Partial<HomeFeaturedItem> = {},
 ): HomeFeaturedItem {
   return {
-    entry: {
-      body: "",
-      collection: "homeFeatured",
-      data: {
-        active: true,
-        kind: "link",
-        link: "https://example.com",
-        linkLabel: "Read",
-        order: 10,
-        title: "Feature",
-      },
-      id: "feature",
-    },
-    href: "https://example.com",
+    href: "/articles/feature/",
     id: "feature",
-    kind: "link",
-    linkLabel: "Read",
+    kind: "article",
+    slug: "feature",
     title: "Feature",
     ...overrides,
   };

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { defaultPublishableVisibility } from "../../../src/lib/publishable";
 import type { ArticleEntry } from "../../../src/lib/routes";
 import { absoluteUrl, articleBlogPostingJsonLd } from "../../../src/lib/seo";
 
@@ -13,6 +14,7 @@ function article(data: Partial<ArticleEntry["data"]> = {}): ArticleEntry {
       draft: false,
       tags: [],
       title: "Title",
+      visibility: defaultPublishableVisibility,
       ...data,
     },
     id: "title",

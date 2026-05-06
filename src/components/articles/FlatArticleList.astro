@@ -1,11 +1,11 @@
 ---
 import FlatArticleTeaser from "./FlatArticleTeaser.astro";
-import type { ArticleListItem } from "../../lib/article-list";
+import type { PublishableListItem } from "../../lib/article-list";
 
 interface Props {
   emptyText?: string;
   headingLevel?: 2 | 3;
-  items: readonly ArticleListItem[];
+  items: readonly PublishableListItem[];
   title: string;
 }
 

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { defaultPublishableVisibility } from "../../../src/lib/publishable";
 import {
   type AnnouncementEntry,
   announcementsIndexUrl,
@@ -40,6 +41,7 @@ function announcement(
       draft: false,
       tags: [],
       title: id,
+      visibility: defaultPublishableVisibility,
       ...data,
     },
     filePath: `/repo/src/content/announcements/${id}.md`,
@@ -61,6 +63,7 @@ function article(
       draft: false,
       tags: [],
       title: id,
+      visibility: defaultPublishableVisibility,
       ...data,
     },
     filePath: `/repo/src/content/articles/history/${id}.md`,
