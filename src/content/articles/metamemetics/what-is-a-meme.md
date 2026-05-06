@@ -236,7 +236,7 @@ _This article was reproduced with the kind permission of University of Bristol._
 @misc{know-your-meme-2020-money-printer-go-brrr-online,
   citation = {Know Your Meme. 2020. Money Printer Go Brrr [online] Available at: <https://knowyourmeme.com/memes/money-printer-go-brrr> [Accessed 4 January 2021].},
   author = {Know Your Meme},
-  title = {Money Printer Go Brrr [online] Available at: <https://knowyourmeme.com/memes/money-printer-go-brrr> [Accessed 4 January 2021].},
+  title = {Money Printer Go Brrr},
   year = {2020},
   url = {https://knowyourmeme.com/memes/money-printer-go-brrr},
 }
@@ -252,7 +252,7 @@ _This article was reproduced with the kind permission of University of Bristol._
 @misc{know-your-meme-2015-expectation-vs,
   citation = {Know Your Meme. 2015. Expectation vs. Reality [online] Available at: <https://knowyourmeme.com/memes/expectation-vs-reality> [Accessed 4 January 2021].},
   author = {Know Your Meme},
-  title = {Expectation vs},
+  title = {Expectation vs. Reality},
   year = {2015},
   url = {https://knowyourmeme.com/memes/expectation-vs-reality},
 }
@@ -268,25 +268,25 @@ _This article was reproduced with the kind permission of University of Bristol._
 @misc{the-philosopher-s-2016-online-youtube,
   citation = {The Philosopher's Meme, 2016. [online] YouTube. Available at: <https://www.youtube.com/channel/UCT1K7lBP4fkxdlHaJAqjpaw> [Accessed 7 January 2021].},
   author = {The Philosopher's Meme},
-  title = {online] YouTube},
+  title = {The Philosopher's Meme YouTube Channel},
   year = {2016},
   url = {https://www.youtube.com/channel/UCT1K7lBP4fkxdlHaJAqjpaw},
 }
 
 @misc{unknown-user-2017-meta-i-created-an-analysis,
-  citation = {Unknown user, 2017. [META] I created an analysis of postmodernism in memes [online]. Available at: <https://www.reddit.com/r/surrealmemes/comments/61szun/meta_i_created_an_ analysis_of_postmodernism_in/> [Accessed 4 January 2021].},
+  citation = {Unknown user, 2017. [META] I created an analysis of postmodernism in memes [online]. Available at: <https://www.reddit.com/r/surrealmemes/comments/61szun/meta_i_created_an_analysis_of_postmodernism_in/> [Accessed 4 January 2021].},
   author = {Unknown user},
-  title = {META] I created an analysis of postmodernism in memes [online]},
+  title = {[META] I created an analysis of postmodernism in memes},
   year = {2017},
-  url = {https://www.reddit.com/r/surrealmemes/comments/61szun/meta_i_created_an_},
+  url = {https://www.reddit.com/r/surrealmemes/comments/61szun/meta_i_created_an_analysis_of_postmodernism_in/},
 }
 
 @misc{the-straight-dope-2000-what-s-the-origin-of,
-  citation = {The Straight Dope. 2000. What’s The Origin Of "Kilroy Was Here"?. [online] Available at: <https://www.straightdope.com/21342952/what-s-the-origin-of-kilroy- was-here> [Accessed 4 January 2021].},
+  citation = {The Straight Dope. 2000. What’s The Origin Of "Kilroy Was Here"?. [online] Available at: <https://www.straightdope.com/21342952/what-s-the-origin-of-kilroy-was-here> [Accessed 4 January 2021].},
   author = {The Straight Dope},
   title = {What’s The Origin Of "Kilroy Was Here"?},
   year = {2000},
-  url = {https://www.straightdope.com/21342952/what-s-the-origin-of-kilroy-},
+  url = {https://www.straightdope.com/21342952/what-s-the-origin-of-kilroy-was-here},
 }
 
 @misc{kuipers-giselinde-media-2002-450-470,

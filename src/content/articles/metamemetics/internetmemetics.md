@@ -450,9 +450,9 @@ Evolution occurs on multiple dimensions. We do not expect to explain it all thro
 }
 
 @misc{google-trends-2016a-compare-memes-jesus-https-www,
-  citation = {Google Trends (2016a). Compare: memes, jesus https://www.google.com/trends/explore?q=memes,jesus},
+  citation = {Google Trends (2016a). Compare: memes, jesus. Available at: https://www.google.com/trends/explore?q=memes,jesus},
   author = {Google Trends},
-  title = {Compare: memes, jesus https://www.google.com/trends/explore?q=memes,jesus},
+  title = {Compare: memes, jesus},
   year = {2016},
   url = {https://www.google.com/trends/explore?q=memes,jesus},
 }
@@ -570,11 +570,11 @@ Evolution occurs on multiple dimensions. We do not expect to explain it all thro
 }
 
 @misc{milner-r-2013b-media-lingua-franca-fixity-novelty,
-  citation = {Milner, R. (2013b). ‘Media Lingua Franca: Fixity, Novelty, and Vernacular Creativity in Internet Memes’, Selected Papers of Internet Research 3. http://spir.aoir.org/index.php/spir/ article/view/806.},
+  citation = {Milner, R. (2013b). ‘Media Lingua Franca: Fixity, Novelty, and Vernacular Creativity in Internet Memes’, Selected Papers of Internet Research 3. http://spir.aoir.org/index.php/spir/article/view/806.},
   author = {Milner, R.},
   title = {Media Lingua Franca: Fixity, Novelty, and Vernacular Creativity in Internet Memes’, Selected Papers of Internet Research 3},
   year = {2013},
-  url = {http://spir.aoir.org/index.php/spir/},
+  url = {http://spir.aoir.org/index.php/spir/article/view/806},
 }
 
 @misc{milner-r-2015-memes-are-dead-long-live,
