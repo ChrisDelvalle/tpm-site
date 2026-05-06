@@ -50,6 +50,7 @@ Most articles need only:
 
 - one Markdown file in `src/content/articles/<category>/`;
 - optional images in `src/assets/articles/<article-slug>/`;
+- optional notes or bibliography citations when the article needs them;
 - a pull request for review.
 
 Use `.md` for normal articles. Use `.mdx` only when a maintainer tells you the
@@ -309,7 +310,137 @@ Avoid:
 # Introduction
 ```
 
-## 9. Add Images
+## 9. Add Notes And Sources
+
+Most article prose can use ordinary Markdown links. Use the special note and
+citation syntax only when you want the site to create article footnotes,
+article bibliography entries, or global bibliography entries.
+
+There are three common cases:
+
+1. **Ordinary link**: use this for context, examples, archives, or a place you
+   simply want readers to visit.
+2. **Explanatory note**: use this for a side comment that would interrupt the
+   paragraph.
+3. **Bibliography citation**: use this when a source supports a claim and
+   should appear in the article bibliography and the site-wide bibliography.
+
+### Ordinary Links
+
+Use a normal Markdown link when the link is part of the prose.
+
+```md
+For background, see the [Know Your Meme entry](https://knowyourmeme.com/).
+```
+
+Ordinary links do not appear in the bibliography. That is intentional. A link is
+not automatically a source citation.
+
+### Explanatory Notes
+
+Use a note when you want to add extra context without making the paragraph
+heavier.
+
+```md
+This meme circulated mostly in small Facebook groups.[^note-small-groups]
+
+[^note-small-groups]:
+    The exact group boundaries were fuzzy because many users
+    shared screenshots across several related groups.
+```
+
+The note label can be any short lowercase name after `note-`. Use words and
+hyphens, not spaces.
+
+Good:
+
+```md
+[^note-small-groups]
+```
+
+Avoid:
+
+```md
+[^1]
+[^Small Groups]
+```
+
+Each explanatory note should be used once. If you need to point to the same
+source several times, use a bibliography citation instead.
+
+### Bibliography Citations
+
+Use a bibliography citation when a source supports a claim.
+
+The citation has two parts:
+
+1. a short citation marker in the paragraph;
+2. a hidden BibTeX entry later in the article file.
+
+Example:
+
+````md
+Internet memes often depend on shared participatory practice.[^cite-shifman-2015]
+
+```tpm-bibtex
+@book{shifman-2015,
+  author = {Shifman, Limor},
+  title = {Memes in Digital Culture},
+  publisher = {MIT Press},
+  year = {2015},
+  url = {https://mitpress.mit.edu/9780262525435/memes-in-digital-culture/}
+}
+```
+````
+
+In the article, the citation marker will render as a bracketed number, such as
+`[1]`. The `tpm-bibtex` block will not be shown to readers. The site uses it to
+make the article bibliography and the global bibliography page.
+
+The marker and BibTeX key must match:
+
+```md
+[^cite-shifman-2015]
+```
+
+matches:
+
+```bibtex
+@book{shifman-2015,
+```
+
+Notice that the marker includes `cite-`, but the BibTeX key does not.
+
+Rules:
+
+- citation labels use lowercase words, numbers, and hyphens;
+- do not add a normal footnote definition like `[^cite-shifman-2015]: ...`;
+- put the source details inside a `tpm-bibtex` code block;
+- do not use a plain `bibtex` code block unless you intentionally want visible
+  code in the article;
+- do not add placeholder citations such as `citation = {^}` or `title = {TBD}`;
+- it is okay to cite the same source more than once with the same marker.
+
+If you use Zotero, Google Scholar, or another citation manager, copying BibTeX
+is usually the easiest starting point. It is fine if you are not sure whether
+the BibTeX is perfect. Include the best source data you have, and a maintainer
+can help clean it up.
+
+If a page number matters, write it in the sentence for now:
+
+```md
+Shifman describes this as participatory culture (p. 42).[^cite-shifman-2015]
+```
+
+There is not yet a special page-number syntax. Keeping page numbers in the prose
+is the safest current approach.
+
+If you have a long source list or appendix that is not tied to one exact
+sentence, ask a maintainer before converting it. The site can support
+bibliography-only source entries, but preserving the author's intent matters
+more than forcing every source into a new format.
+
+## 10. Add Images
 
 Put article images in a folder that matches the article slug:
 
@@ -344,7 +475,7 @@ Do not put article images in `public/`, root-level folders, `uploads/`, or
 Alt text should describe the image for a reader who cannot see it. Keep it
 plain and specific.
 
-## 10. Check The Site Locally
+## 11. Check The Site Locally
 
 If you can use the terminal, install dependencies once:
 
@@ -392,7 +523,7 @@ bun run preview:fresh
 
 Then open the local preview URL shown in the terminal.
 
-## 11. Common Problems
+## 12. Common Problems
 
 If the check says the filename is not URL-safe, rename the article so it uses
 only lowercase letters, numbers, and hyphens.
@@ -409,7 +540,20 @@ If the check says an image is outside `src/assets/`, move it into
 If Markdown review complains about multiple `H1` headings, change body headings
 from `#` to `##`, `##` to `###`, and so on.
 
-## 12. Save Your Changes As A Commit
+If the check says an article reference label is invalid, use `note-*` for
+explanatory notes or `cite-*` for bibliography citations. Plain numbered
+footnotes such as `[^1]` are not allowed in published articles.
+
+If the check says a citation is missing a BibTeX entry, add a matching entry to
+a `tpm-bibtex` block. For `[^cite-shifman-2015]`, the matching BibTeX entry
+starts with `@book{shifman-2015, ...}` or another BibTeX type using the same
+key.
+
+If the check says BibTeX is malformed, check for missing braces, missing commas,
+or placeholder fields. A bibliography entry needs real source text, not a
+placeholder.
+
+## 13. Save Your Changes As A Commit
 
 A commit is a saved snapshot of your article changes.
 
@@ -434,7 +578,7 @@ git add src/content/articles src/assets
 git commit -m "Add my new article"
 ```
 
-## 13. Push Your Branch To GitHub
+## 14. Push Your Branch To GitHub
 
 Pushing uploads your branch to GitHub so maintainers can review it.
 
@@ -448,7 +592,7 @@ Click **Push origin**.
 git push -u origin article/my-new-article
 ```
 
-## 14. Open A Pull Request
+## 15. Open A Pull Request
 
 A pull request is how you ask maintainers to review and publish your article.
 
@@ -477,7 +621,7 @@ If GitHub Desktop does not show the button:
 5. Check that the compare branch is your article branch.
 6. Click **Create pull request**.
 
-## 15. Wait For Checks And Review
+## 16. Wait For Checks And Review
 
 After you open a pull request, GitHub runs automatic checks.
 
@@ -495,7 +639,7 @@ If a check fails:
 If you do not understand the failure, leave a comment on the pull request and
 ask a maintainer for help.
 
-## 16. Respond To Review Comments
+## 17. Respond To Review Comments
 
 Maintainers may leave comments or request changes.
 
@@ -508,7 +652,7 @@ If they ask for changes:
 
 Do not open a second pull request for the same article unless a maintainer asks.
 
-## 17. Pull Request Checklist
+## 18. Pull Request Checklist
 
 Before asking for review:
 
@@ -521,6 +665,10 @@ Before asking for review:
 - Images live under `src/assets/`.
 - Meaningful images have alt text.
 - Body headings start at `##`, not `#`.
+- Explanatory notes use `note-*`, not plain numbered footnotes.
+- Bibliography citations use `cite-*` markers and matching `tpm-bibtex` entries.
+- Ordinary links are intentionally left out of the bibliography unless you also
+  cite them.
 - `bun run check`, `bun run build`, and `bun run verify` pass if you can run
   local checks.
 
