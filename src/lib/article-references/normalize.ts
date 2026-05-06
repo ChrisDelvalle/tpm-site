@@ -569,7 +569,7 @@ function definitionFromBibtex(entry: ParsedBibtexEntry): {
   const literalCitation = field(entry, "citation");
 
   if (literalCitation !== undefined) {
-    return paragraphDefinition([{ kind: "text", text: literalCitation }]);
+    return paragraphDefinition(literalCitationContent(literalCitation));
   }
 
   const children: ArticleReferenceInlineContent[] = [];
@@ -686,6 +686,75 @@ function appendLink(
     text,
     url,
   });
+}
+
+function literalCitationContent(
+  citation: string,
+): ArticleReferenceInlineContent[] {
+  const children: ArticleReferenceInlineContent[] = [];
+  const urlPattern = /<(https?:\/\/[^>]+)>|https?:\/\/[^\s<]+/giu;
+  let cursor = 0;
+
+  for (const match of citation.matchAll(urlPattern)) {
+    const raw = match[0];
+    const index = match.index;
+
+    appendText(children, citation.slice(cursor, index));
+
+    if (match.at(1) !== undefined) {
+      const bracketedUrl = match.at(1) ?? "";
+      const url = normalizeBracketedUrl(bracketedUrl);
+
+      appendText(children, "<");
+      appendLiteralCitationUrl(children, url, bracketedUrl);
+      appendText(children, ">");
+      cursor = index + raw.length;
+      continue;
+    }
+
+    const { trailing, url } = trimTrailingUrlPunctuation(raw);
+
+    appendLiteralCitationUrl(children, url, raw);
+    appendText(children, trailing);
+    cursor = index + raw.length;
+  }
+
+  appendText(children, citation.slice(cursor));
+
+  return children.length === 0 ? [{ kind: "text", text: citation }] : children;
+}
+
+function appendLiteralCitationUrl(
+  children: ArticleReferenceInlineContent[],
+  url: string,
+  fallbackText: string,
+): void {
+  if (!isHttpUrl(url)) {
+    appendText(children, fallbackText);
+    return;
+  }
+
+  appendLink(children, url, url);
+}
+
+function normalizeBracketedUrl(url: string): string {
+  return url.replace(/\s+/gu, "");
+}
+
+function trimTrailingUrlPunctuation(url: string): {
+  trailing: string;
+  url: string;
+} {
+  const trimmedUrl = url.replace(/[),.;:!?]+$/gu, "");
+
+  return {
+    trailing: url.slice(trimmedUrl.length),
+    url: trimmedUrl,
+  };
+}
+
+function isHttpUrl(value: string): boolean {
+  return /^https?:\/\/[^\s<>]+$/iu.test(value);
 }
 
 function paragraphDefinition(

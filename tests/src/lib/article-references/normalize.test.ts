@@ -192,6 +192,51 @@ describe("article reference normalization", () => {
     );
   });
 
+  test("links URL text inside literal citation fields", () => {
+    const result = normalizeArticleReferences(
+      [],
+      [],
+      [
+        bibtex("source-list", {
+          citation:
+            "Researcher, B. (2020). Available at: <https://example.com/source path> and https://example.com/plain.",
+        }),
+      ],
+    );
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      throw new Error("Expected literal citation URLs to normalize.");
+    }
+
+    const [definition] = result.data.citations[0]?.definition.children ?? [];
+
+    if (definition?.kind !== "paragraph") {
+      throw new Error("Expected paragraph definition content.");
+    }
+
+    const links = definition.children.filter((child) => child.kind === "link");
+
+    expect(links).toEqual([
+      {
+        children: [{ kind: "text", text: "https://example.com/sourcepath" }],
+        kind: "link",
+        text: "https://example.com/sourcepath",
+        url: "https://example.com/sourcepath",
+      },
+      {
+        children: [{ kind: "text", text: "https://example.com/plain" }],
+        kind: "link",
+        text: "https://example.com/plain",
+        url: "https://example.com/plain",
+      },
+    ]);
+    expect(definition.text).toBe(
+      "Researcher, B. (2020). Available at: <https://example.com/sourcepath> and https://example.com/plain.",
+    );
+  });
+
   test("rejects literal citation fields without source text", () => {
     const result = normalizeArticleReferences(
       [],
