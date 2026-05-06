@@ -289,8 +289,11 @@ function transformNode(
 }
 
 function markerLinkNode(marker: ArticleReferenceMarker): MutableMdastNode {
+  const markerText =
+    marker.kind === "note" ? marker.displayText : `[${marker.displayText}]`;
+
   return {
-    children: [{ type: "text", value: `[${marker.displayText}]` }],
+    children: [{ type: "text", value: markerText }],
     data: {
       hProperties: {
         "aria-label": `${marker.kind === "citation" ? "Citation" : "Note"} ${marker.displayText}`,

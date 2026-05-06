@@ -13,6 +13,7 @@ describe("BibliographyList", () => {
 
     expect(view).toContain("<ol");
     expect(view).toContain("<li");
+    expect(view).toContain('class="min-w-0 py-4"');
     expect(view).toContain("Simulacra and Simulation");
   });
 });

@@ -116,7 +116,7 @@ describe("article reference corpus audit", () => {
       await writeText(
         root,
         "src/content/articles/culture/example.md",
-        "---\ntitle: Example\n---\n\n## Sources\n",
+        "---\ntitle: Example\n---\n\n## Source List\n",
       );
 
       const result = await auditArticleReferences({
@@ -130,5 +130,36 @@ describe("article reference corpus audit", () => {
       expect(report).toContain("| `src/content/articles/culture/example.md` |");
       expect(report).toContain("reference-section headings: 1");
       expect(report).toContain("- articleCount: 1");
+    }));
+
+  test("treats common bibliography-like heading variants as manual review", async () =>
+    withTempRoot(async (root) => {
+      await writeText(
+        root,
+        "src/content/articles/culture/source-list.md",
+        [
+          "---",
+          "title: Source List",
+          "---",
+          "",
+          "## Reference",
+          "## Source",
+          "## Source List",
+          "## Further Reading",
+          "## Works Consulted",
+          "## Citations",
+          "",
+        ].join("\n"),
+      );
+
+      const result = await auditArticleReferences({
+        articleDir: path.join(root, "src/content/articles"),
+        rootDir: root,
+      });
+
+      expect(result.manualReviewCount).toBe(1);
+      expect(result.articles[0]?.manualReviewPatterns).toEqual([
+        "reference-section headings: 6",
+      ]);
     }));
 });

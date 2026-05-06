@@ -19,8 +19,24 @@ interface ArticleCitationInput {
 
 /** Generated citation text for one supported format. */
 interface GeneratedArticleCitation {
-  id: "bibtex" | "mla";
-  label: "BibTeX" | "MLA";
+  id:
+    | "apa"
+    | "bibtex"
+    | "chicago-author-date"
+    | "chicago-notes"
+    | "harvard"
+    | "ieee"
+    | "mla"
+    | "ris";
+  label:
+    | "APA"
+    | "BibTeX"
+    | "Chicago Author-Date"
+    | "Chicago Notes"
+    | "Harvard"
+    | "IEEE"
+    | "MLA"
+    | "RIS";
   text: string;
 }
 
@@ -62,6 +78,20 @@ const mlaMonths = [
   "Nov.",
   "Dec.",
 ] as const;
+const longMonths = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
 
 /**
  * Builds the view model used by the article citation menu.
@@ -91,16 +121,60 @@ function generatedArticleCitations(
 ): GeneratedArticleCitation[] {
   return [
     {
-      id: "bibtex",
-      label: "BibTeX",
-      text: articleBibtexCitation(input),
+      id: "apa",
+      label: "APA",
+      text: articleApaCitation(input),
     },
     {
       id: "mla",
       label: "MLA",
       text: articleMlaCitation(input),
     },
+    {
+      id: "chicago-notes",
+      label: "Chicago Notes",
+      text: articleChicagoNotesCitation(input),
+    },
+    {
+      id: "chicago-author-date",
+      label: "Chicago Author-Date",
+      text: articleChicagoAuthorDateCitation(input),
+    },
+    {
+      id: "harvard",
+      label: "Harvard",
+      text: articleHarvardCitation(input),
+    },
+    {
+      id: "ieee",
+      label: "IEEE",
+      text: articleIeeeCitation(input),
+    },
+    {
+      id: "bibtex",
+      label: "BibTeX",
+      text: articleBibtexCitation(input),
+    },
+    {
+      id: "ris",
+      label: "RIS",
+      text: articleRisCitation(input),
+    },
   ];
+}
+
+/**
+ * Generates an APA-style web-page citation for a TPM article.
+ *
+ * @param input Article metadata needed for generated citations.
+ * @returns APA-style citation text.
+ */
+export function articleApaCitation(input: ArticleCitationInput): string {
+  const siteTitle = input.siteTitle ?? SITE_TITLE;
+  const author = apaAuthor(input);
+  const authorPrefix = author === undefined ? "" : `${author} `;
+
+  return `${authorPrefix}(${apaDate(input.publishedAt)}). ${sentenceTitle(input.title)} ${siteTitle}. ${input.canonicalUrl}`;
 }
 
 /**
@@ -141,6 +215,93 @@ export function articleMlaCitation(input: ArticleCitationInput): string {
   return `${authorPrefix}"${title}" ${siteTitle}, ${mlaDate(input.publishedAt)}, ${input.canonicalUrl}.`;
 }
 
+/**
+ * Generates a Chicago notes-and-bibliography style citation for a TPM article.
+ *
+ * @param input Article metadata needed for generated citations.
+ * @returns Chicago notes-and-bibliography style citation text.
+ */
+export function articleChicagoNotesCitation(
+  input: ArticleCitationInput,
+): string {
+  const siteTitle = input.siteTitle ?? SITE_TITLE;
+  const author = chicagoAuthor(input);
+  const authorPrefix = author === undefined ? "" : `${author}. `;
+  const title = sentenceTitle(input.title);
+
+  return `${authorPrefix}"${title}" ${siteTitle}. ${longDate(input.publishedAt)}. ${input.canonicalUrl}.`;
+}
+
+/**
+ * Generates a Chicago author-date style citation for a TPM article.
+ *
+ * @param input Article metadata needed for generated citations.
+ * @returns Chicago author-date style citation text.
+ */
+export function articleChicagoAuthorDateCitation(
+  input: ArticleCitationInput,
+): string {
+  const siteTitle = input.siteTitle ?? SITE_TITLE;
+  const author = chicagoAuthor(input);
+  const year = input.publishedAt.getUTCFullYear();
+  const authorPrefix = author === undefined ? "" : `${author}. `;
+  const title = sentenceTitle(input.title);
+
+  return `${authorPrefix}${year}. "${title}" ${siteTitle}. ${longDate(input.publishedAt)}. ${input.canonicalUrl}.`;
+}
+
+/**
+ * Generates a Harvard-style web-page citation for a TPM article.
+ *
+ * @param input Article metadata needed for generated citations.
+ * @returns Harvard-style citation text.
+ */
+export function articleHarvardCitation(input: ArticleCitationInput): string {
+  const siteTitle = input.siteTitle ?? SITE_TITLE;
+  const author = apaAuthor(input);
+  const year = input.publishedAt.getUTCFullYear();
+  const authorPrefix = author === undefined ? "" : `${author} `;
+
+  return `${authorPrefix}(${year}) '${input.title}', ${siteTitle}, ${dayMonthYear(input.publishedAt)}. Available at: ${input.canonicalUrl}.`;
+}
+
+/**
+ * Generates an IEEE-style web-page citation for a TPM article.
+ *
+ * @param input Article metadata needed for generated citations.
+ * @returns IEEE-style citation text.
+ */
+export function articleIeeeCitation(input: ArticleCitationInput): string {
+  const siteTitle = input.siteTitle ?? SITE_TITLE;
+  const author = ieeeAuthor(input);
+  const authorPrefix = author === undefined ? "" : `${author}, `;
+
+  return `${authorPrefix}"${input.title}," ${siteTitle}, ${ieeeDate(input.publishedAt)}. [Online]. Available: ${input.canonicalUrl}`;
+}
+
+/**
+ * Generates an RIS citation-manager export for a TPM article.
+ *
+ * @param input Article metadata needed for generated citations.
+ * @returns RIS citation text.
+ */
+export function articleRisCitation(input: ArticleCitationInput): string {
+  const siteTitle = input.siteTitle ?? SITE_TITLE;
+  const authorLines = citationPeople(input).map(
+    (author) => `AU  - ${risAuthorName(author)}`,
+  );
+
+  return [
+    "TY  - ELEC",
+    `TI  - ${input.title}`,
+    ...authorLines,
+    `T2  - ${siteTitle}`,
+    `DA  - ${isoDate(input.publishedAt)}`,
+    `UR  - ${input.canonicalUrl}`,
+    "ER  -",
+  ].join("\n");
+}
+
 function field(name: string, value: string | undefined): string | undefined {
   return value === undefined
     ? undefined
@@ -171,6 +332,62 @@ function mlaAuthor(input: ArticleCitationInput): string | undefined {
   }
 
   return authors.map(mlaAuthorName).join(", and ");
+}
+
+function apaAuthor(input: ArticleCitationInput): string | undefined {
+  const authors = citationPeople(input);
+
+  if (authors.length === 0) {
+    return undefined;
+  }
+
+  if (authors.length === 1) {
+    return authors.map(apaAuthorName).join("");
+  }
+
+  const authorNames = authors.map(apaAuthorName);
+  const lastAuthor = authorNames.at(-1);
+  const otherAuthors = authorNames.slice(0, -1);
+
+  return lastAuthor === undefined
+    ? authorNames.join(", ")
+    : `${otherAuthors.join(", ")}, & ${lastAuthor}`;
+}
+
+function chicagoAuthor(input: ArticleCitationInput): string | undefined {
+  const authors = citationPeople(input);
+
+  if (authors.length === 0) {
+    return undefined;
+  }
+
+  if (authors.length > 2) {
+    const [firstAuthor] = authors;
+
+    return firstAuthor === undefined
+      ? undefined
+      : `${mlaAuthorName(firstAuthor)}, et al`;
+  }
+
+  return authors.map(mlaAuthorName).join(", and ");
+}
+
+function ieeeAuthor(input: ArticleCitationInput): string | undefined {
+  const authors = citationPeople(input);
+
+  if (authors.length === 0) {
+    return undefined;
+  }
+
+  if (authors.length > 3) {
+    const [firstAuthor] = authors;
+
+    return firstAuthor === undefined
+      ? undefined
+      : `${ieeeAuthorName(firstAuthor)} et al.`;
+  }
+
+  return authors.map(ieeeAuthorName).join(", ");
 }
 
 function citationPeople(input: ArticleCitationInput): CitationPerson[] {
@@ -207,6 +424,52 @@ function mlaAuthorName(author: CitationPerson): string {
     : `${last}, ${rest}`;
 }
 
+function apaAuthorName(author: CitationPerson): string {
+  if (author.type !== "person") {
+    return author.displayName;
+  }
+
+  const parts = author.displayName.split(/\s+/u);
+  const last = parts.at(-1);
+  const rest = parts.slice(0, -1).join(" ");
+
+  return last === undefined || rest.length === 0
+    ? author.displayName
+    : `${last}, ${initials(rest)}`;
+}
+
+function ieeeAuthorName(author: CitationPerson): string {
+  if (author.type !== "person") {
+    return author.displayName;
+  }
+
+  const parts = author.displayName.split(/\s+/u);
+  const last = parts.at(-1);
+  const rest = parts.slice(0, -1).join(" ");
+
+  return last === undefined || rest.length === 0
+    ? author.displayName
+    : `${initials(rest)} ${last}`;
+}
+
+function risAuthorName(author: CitationPerson): string {
+  return author.type === "person" ? mlaAuthorName(author) : author.displayName;
+}
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/u)
+    .filter((part) => part.length > 0)
+    .map((part) =>
+      part
+        .split("-")
+        .filter((piece) => piece.length > 0)
+        .map((piece) => `${piece[0]?.toUpperCase() ?? ""}.`)
+        .join("-"),
+    )
+    .join(" ");
+}
+
 function bibtexKey(articleId: string): string {
   const slug = articleId
     .trim()
@@ -236,4 +499,28 @@ function mlaDate(date: Date): string {
   const month = mlaMonths[date.getUTCMonth()] ?? "";
 
   return `${date.getUTCDate()} ${month} ${date.getUTCFullYear()}`;
+}
+
+function apaDate(date: Date): string {
+  const month = longMonths[date.getUTCMonth()] ?? "";
+
+  return `${date.getUTCFullYear()}, ${month} ${date.getUTCDate()}`;
+}
+
+function longDate(date: Date): string {
+  const month = longMonths[date.getUTCMonth()] ?? "";
+
+  return `${month} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+}
+
+function dayMonthYear(date: Date): string {
+  const month = longMonths[date.getUTCMonth()] ?? "";
+
+  return `${date.getUTCDate()} ${month} ${date.getUTCFullYear()}`;
+}
+
+function ieeeDate(date: Date): string {
+  const month = mlaMonths[date.getUTCMonth()] ?? "";
+
+  return `${month} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 }

@@ -9,10 +9,10 @@ interface Props {
 const { entries } = Astro.props;
 ---
 
-<ol class="border-border divide-border grid divide-y border-y">
+<ol class="border-border divide-border grid min-w-0 divide-y border-y">
   {
     entries.map((entry) => (
-      <li>
+      <li class="min-w-0 py-4">
         <BibliographyEntry entry={entry} />
       </li>
     ))

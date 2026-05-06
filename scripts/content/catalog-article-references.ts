@@ -48,6 +48,7 @@ export interface ArticleReferenceCatalogLine {
 
 /** Aggregate catalog counts. */
 export interface ArticleReferenceCatalogTotals {
+  canonicalReferencesCount: number;
   cleanCount: number;
   manualRequiredCount: number;
   mechanicalSafeCount: number;
@@ -56,6 +57,7 @@ export interface ArticleReferenceCatalogTotals {
 
 /** Review status for an article's reference migration state. */
 export type ArticleReferenceCatalogStatus =
+  | "canonical-references"
   | "clean"
   | "manual-required"
   | "mechanical-safe"
@@ -172,7 +174,7 @@ export function formatArticleReferenceCatalog(
     "",
     `Generated from repository content on ${catalog.generatedDate}.`,
     "",
-    "This catalog tracks every article before manual reference normalization.",
+    "This catalog tracks every article's current reference-normalization status.",
     "It is intentionally conservative: ordinary prose links stay ordinary prose",
     "unless an article is explicitly edited to cite them.",
     "",
@@ -187,6 +189,8 @@ export function formatArticleReferenceCatalog(
     "## Status Legend",
     "",
     "- `clean`: no reference-like content detected by the catalog.",
+    "- `canonical-references`: canonical `note-*` or `cite-*` reference data",
+    "  was detected and no manual-review patterns remain.",
     "- `prose-links-only`: only ordinary Markdown links, raw URLs, or archive",
     "  links were detected; these are not bibliography entries by default.",
     "- `mechanical-safe`: the article has simple HTML links that can be converted",
@@ -205,6 +209,7 @@ export function formatArticleReferenceCatalog(
     "## Summary",
     "",
     `- Clean articles: ${catalog.totals.cleanCount}`,
+    `- Canonical-reference articles: ${catalog.totals.canonicalReferencesCount}`,
     `- Prose-links-only articles: ${catalog.totals.proseLinksOnlyCount}`,
     `- Mechanical-safe articles: ${catalog.totals.mechanicalSafeCount}`,
     `- Manual-required articles: ${catalog.totals.manualRequiredCount}`,
@@ -258,12 +263,16 @@ function articleReferenceCatalogStatus(
     return "mechanical-safe";
   }
 
-  if (article.patterns.length === 0) {
-    return "clean";
-  }
-
   if (article.manualReviewPatterns.length > 0) {
     return "manual-required";
+  }
+
+  if (hasCanonicalReferenceData(article)) {
+    return "canonical-references";
+  }
+
+  if (article.patterns.length === 0) {
+    return "clean";
   }
 
   return "prose-links-only";
@@ -273,6 +282,9 @@ function catalogTotals(
   articles: readonly ArticleReferenceCatalogArticle[],
 ): ArticleReferenceCatalogTotals {
   return {
+    canonicalReferencesCount: articles.filter(
+      (article) => article.status === "canonical-references",
+    ).length,
     cleanCount: articles.filter((article) => article.status === "clean").length,
     manualRequiredCount: articles.filter(
       (article) => article.status === "manual-required",
@@ -284,6 +296,17 @@ function catalogTotals(
       (article) => article.status === "prose-links-only",
     ).length,
   };
+}
+
+function hasCanonicalReferenceData(
+  article: ArticleReferenceAuditArticle,
+): boolean {
+  return (
+    article.counts.canonicalCitationMarkerCount > 0 ||
+    article.counts.canonicalNoteDefinitionCount > 0 ||
+    article.counts.canonicalNoteMarkerCount > 0 ||
+    article.counts.hiddenBibtexBlockCount > 0
+  );
 }
 
 function emptyDetails(): ArticleReferenceCatalogDetails {
@@ -406,7 +429,7 @@ function isMediaCreditLine(line: string): boolean {
 }
 
 function isReferenceHeadingLine(line: string): boolean {
-  return /^#{1,6}\s+(?:references|bibliography|works cited|sources)\s*$/iu.test(
+  return /^#{1,6}\s+(?:bibliograph(?:y|ies)|citations?|further reading|references?|sources?|source list|works cited|works consulted)\s*$/iu.test(
     line.trim(),
   );
 }

@@ -26,6 +26,10 @@ Claim with context.[^note-context]
     expect(result.references.citations).toHaveLength(0);
     expect(result.references.notes[0]?.label).toBe("note-context");
     expect(result.html).toContain("data-article-reference-marker");
+    expect(result.html).toContain('data-reference-kind="note"');
+    expect(result.html).toContain('aria-label="Note 1"');
+    expect(result.html).toContain(">1</a>");
+    expect(result.html).not.toContain("[1]</a>");
     expect(result.html).not.toContain('data-footnotes="true"');
   });
 
@@ -51,7 +55,7 @@ First claim.[^cite-baudrillard-1981] Later claim.[^cite-baudrillard-1981]
     expect(citation?.references).toHaveLength(2);
     expect(
       citation?.references.map((reference) => reference.displayText),
-    ).toEqual(["Baudrillard 1981", "Baudrillard 1981"]);
+    ).toEqual(["1", "1"]);
     expect(citation?.definition.children).toHaveLength(1);
     const firstDefinitionBlock = citation?.definition.children[0];
 
@@ -66,7 +70,8 @@ First claim.[^cite-baudrillard-1981] Later claim.[^cite-baudrillard-1981]
     expect(
       firstDefinitionBlock.children.some((child) => child.kind === "link"),
     ).toBe(true);
-    expect(result.html).toContain("Baudrillard 1981");
+    expect(result.html).toContain(">[1]</a>");
+    expect(result.html).toContain('data-reference-kind="citation"');
     expect(result.html).not.toContain("tpm-bibtex");
     expect(result.html).not.toContain("@book");
   });
@@ -159,18 +164,31 @@ Claim.[^note-duplicate]
     ).toThrow("Duplicate article reference definition");
   });
 
-  test("fails missing, unused, duplicate, and malformed BibTeX entries", () => {
+  test("keeps BibTeX entries without inline markers as bibliography-only citations", () => {
+    const result = processMarkdown(`
+\`\`\`tpm-bibtex
+@article{source-list,
+  author = {Researcher, B.},
+  title = {Source List Entry},
+  year = {2020}
+}
+\`\`\`
+`);
+
+    expect(result.references.citations).toHaveLength(1);
+    expect(result.references.citations[0]?.label).toBe("cite-source-list");
+    expect(result.references.citations[0]?.references).toEqual([]);
+    expect(result.references.citations[0]?.displayLabel).toBe(
+      "Researcher 2020",
+    );
+    expect(result.html).not.toContain("tpm-bibtex");
+    expect(result.html).not.toContain("@article");
+  });
+
+  test("fails missing, duplicate, and malformed BibTeX entries", () => {
     expect(() => processMarkdown("Claim.[^cite-missing]")).toThrow(
       "has no matching BibTeX entry",
     );
-
-    expect(() =>
-      processMarkdown(`
-\`\`\`tpm-bibtex
-@article{unused, title = {Unused}}
-\`\`\`
-`),
-    ).toThrow("is never cited");
 
     expect(() =>
       processMarkdown(`

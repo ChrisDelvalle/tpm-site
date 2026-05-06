@@ -108,8 +108,7 @@ export type ArticleReferenceDiagnostic =
   | MissingBibtexEntryDiagnostic
   | MissingDefinitionDiagnostic
   | RepeatedNoteReferenceDiagnostic
-  | UnreferencedDefinitionDiagnostic
-  | UnusedBibtexEntryDiagnostic;
+  | UnreferencedDefinitionDiagnostic;
 
 interface ArticleReferenceEntryBase {
   definition: ArticleReferenceDefinitionContent;
@@ -208,11 +207,6 @@ interface MissingBibtexEntryDiagnostic {
   code: "missing-bibtex-entry";
   key: string;
   label: ArticleReferenceLabel;
-}
-
-interface UnusedBibtexEntryDiagnostic {
-  code: "unused-bibtex-entry";
-  key: string;
 }
 
 interface MalformedBibtexDiagnostic {

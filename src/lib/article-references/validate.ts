@@ -46,7 +46,5 @@ export function articleReferenceDiagnosticMessage(
       return `Article note "[^${diagnostic.label}]" is referenced more than once. Notes may only be referenced once; use a cite-* label for repeatable citations.`;
     case "unreferenced-definition":
       return `Article reference definition "[^${diagnostic.label}]" is never used. Reference it in the article body or remove the definition.`;
-    case "unused-bibtex-entry":
-      return `BibTeX entry "${diagnostic.key}" is never cited. Add a matching "[^cite-${diagnostic.key}]" marker or remove the BibTeX entry.`;
   }
 }

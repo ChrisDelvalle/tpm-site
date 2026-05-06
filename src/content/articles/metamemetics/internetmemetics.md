@@ -14,17 +14,17 @@ legacyPermalink: 2016/11/15/internetmemetics/
 
 ### 1.1. The Revival of an Unpopular Hypothesis
 
-Cultural evolution has been a subject of increasing interest over the past few centuries. That culture evolves is trivially true if all we mean by this is that culture changes over time. However, the questions of how culture evolves, and just how Darwinian cultural evolution really is (Sperber, 1985), remain open. Memetics is a hypothesis which attempts to answer these questions. Memetics posits that culture evolves through cumulative selection acting on discrete units of cultural information called ‘memes’. Since its introduction 40 years ago as a hypothetical, cultural analogue to genes in The Selfish Gene (Dawkins, 1976), the concept of memes has progressively fallen out of vogue. There were two reasons for this: 1. Dawkins’ argument that evolutionary processes are best explained through a reductionist focus on particulate units that natural selection directly acts upon fell out of vogue; 2. Memeticists failed to identify and agree upon empirically observable subjects of analysis.
+Cultural evolution has been a subject of increasing interest over the past few centuries. That culture evolves is trivially true if all we mean by this is that culture changes over time. However, the questions of how culture evolves, and just how Darwinian cultural evolution really is (Sperber, 1985)[^cite-sperber-d-1985-anthropology-and-psychology], remain open. Memetics is a hypothesis which attempts to answer these questions. Memetics posits that culture evolves through cumulative selection acting on discrete units of cultural information called ‘memes’. Since its introduction 40 years ago as a hypothetical, cultural analogue to genes in The Selfish Gene (Dawkins, 1976)[^cite-dawkins-r-1976-the-selfish-gene-oxford-oxford], the concept of memes has progressively fallen out of vogue. There were two reasons for this: 1. Dawkins’ argument that evolutionary processes are best explained through a reductionist focus on particulate units that natural selection directly acts upon fell out of vogue; 2. Memeticists failed to identify and agree upon empirically observable subjects of analysis.
 
-Today, reductionism is largely rejected by biological and evolutionary theorists, in favour of holism and pluralism. However, with the advent of the internet, there has been a resurgence of interest in memetics, perhaps in part due to the vernacular appropriation of the term “meme” to refer to popular humorous images online. The term “Internet meme”, often colloquially reduced to just “meme”, is used by Internet users to refer to “jokes, rumors, videos, or websites” shared through the Internet between users and sometimes creatively modified along the way (Shifman, 2013a. pg. 362). Some media scholars, referred to throughout as memeologists, have taken it upon themselves to adopt memetics in the study of Internet memes (Shifman, 2015; Milner, 2015). However, their use of memetics is largely as an inspiration or a metaphor, as memeologists do not commit to a Darwinian view of Internet memes and their evolution.
+Today, reductionism is largely rejected by biological and evolutionary theorists, in favour of holism and pluralism. However, with the advent of the internet, there has been a resurgence of interest in memetics, perhaps in part due to the vernacular appropriation of the term “meme” to refer to popular humorous images online. The term “Internet meme”, often colloquially reduced to just “meme”, is used by Internet users to refer to “jokes, rumors, videos, or websites” shared through the Internet between users and sometimes creatively modified along the way (Shifman, 2013a. pg. 362)[^cite-shifman-l-2013a-memes-in-a-digital-world]. Some media scholars, referred to throughout as memeologists, have taken it upon themselves to adopt memetics in the study of Internet memes (Shifman, 2015; Milner, 2015)[^cite-shifman-l-2015-memeology-festival-05][^cite-milner-r-2015-memes-are-dead-long-live]. However, their use of memetics is largely as an inspiration or a metaphor, as memeologists do not commit to a Darwinian view of Internet memes and their evolution.
 
-Dawkins finds the appropriation of the term 'meme' for the express description of Internet memes consistent with his theory, albeit overly focused on a single subset of his concept (Dawkins, 1993; Dawkins, Foreword in Blackmore, 1999; Solon, 2013). The first recorded instance of an emoticon, which is commonly cited as the first Internet meme (Börzsei, 2013. pp. 5-6; Davison, 2012. pg. 124) occurred only six years after (Fahlman, 1982) the publication of The Selfish Gene (1976). However, the contemporary concept of Internet memes as fads and popular cultural artefacts on the Internet did not become prominent in folk memeology (i.e. amateur research of Internet memes by Internet users) until later. As a subject of academic research, the Internet meme is even more novel (as of writing, about 3000 total results appear on Google Scholar for “Internet meme”). The Internet meme is such a novel concept that disciplinary boundaries in Internet meme studies are still being clarified. Researchers are still attempting to define 'Internet meme' and operationalize the concept. Given such circumstances, it should be unsurprising that there exists very little empirical data regarding either Internet memes themselves (Segev et al., 2015. pg. 422) or their massive sociocultural impact.
+Dawkins finds the appropriation of the term 'meme' for the express description of Internet memes consistent with his theory, albeit overly focused on a single subset of his concept (Dawkins, 1993; Dawkins, Foreword in Blackmore, 1999; Solon, 2013)[^cite-dawkins-r-1993-viruses-of-the-mind][^cite-blackmore-s-1999-the-meme-machine-oxford-oxford][^cite-solon-o-2013-richard-dawkins-on-the-internet]. The first recorded instance of an emoticon, which is commonly cited as the first Internet meme (Börzsei, 2013. pp. 5-6; Davison, 2012. pg. 124)[^cite-borzsei-l-2013-makes-a-meme-instead-a][^cite-davison-p-2012-the-language-of-internet-memes] occurred only six years after (Fahlman, 1982)[^cite-fahlman-s-1982-original-bboard-thread-in-which] the publication of The Selfish Gene (1976). However, the contemporary concept of Internet memes as fads and popular cultural artefacts on the Internet did not become prominent in folk memeology (i.e. amateur research of Internet memes by Internet users) until later. As a subject of academic research, the Internet meme is even more novel (as of writing, about 3000 total results appear on Google Scholar for “Internet meme”). The Internet meme is such a novel concept that disciplinary boundaries in Internet meme studies are still being clarified. Researchers are still attempting to define 'Internet meme' and operationalize the concept. Given such circumstances, it should be unsurprising that there exists very little empirical data regarding either Internet memes themselves (Segev et al., 2015. pg. 422)[^cite-segev-e-nissenbaum-2015-families-and-networks-of-internet] or their massive sociocultural impact.
 
 ### 1.2. The Socio-political Relevance of Internet Memes
 
-As of writing, Internet memes are more popular than Jesus as a search term (Google Trends, 2016a). In fact, the fifth most common search query which includes “Jesus” is actually “Jesus memes”.
+As of writing, Internet memes are more popular than Jesus as a search term (Google Trends, 2016a)[^cite-google-trends-2016a-compare-memes-jesus-https-www]. In fact, the fifth most common search query which includes “Jesus” is actually “Jesus memes”.
 
-The influence of Internet memes in politics has been anticipated and noted before (e.g. Huntington, 2013), and the 4chan and Anonymous phenomenon of the mid-2000's (see: Phillips, 2012b) is a paradigm example of memes breaking into IRL (In Real Life, cf. On the Internet) politics and the mainstream. However, the years 2015 to 2016 mark a new explosion for Internet memes, especially the political. Prior, political memes were considered a scarce minority genre by Internet meme scholars (Shifman, 2012) despite their ubiquity in the underground and the intrinsically political nature of the Internet and its subcultures (see: Milner, 2013a for an example of subcultural logic of the Internet).
+The influence of Internet memes in politics has been anticipated and noted before (e.g. Huntington, 2013)[^cite-huntington-h-e-2013-big-bird-binders-full-of], and the 4chan and Anonymous phenomenon of the mid-2000's (see: Phillips, 2012b)[^cite-phillips-w-2012b-the-house-that-fox-built] is a paradigm example of memes breaking into IRL (In Real Life, cf. On the Internet) politics and the mainstream. However, the years 2015 to 2016 mark a new explosion for Internet memes, especially the political. Prior, political memes were considered a scarce minority genre by Internet meme scholars (Shifman, 2012)[^cite-shifman-l-2012-an-anatomy-of-a-youtube] despite their ubiquity in the underground and the intrinsically political nature of the Internet and its subcultures (see: Milner, 2013a for an example of subcultural logic of the Internet)[^cite-milner-r-2013a-hacking-the-social-internet-memes].
 
 Internet memes facilitate massive scale online discourse on topics ranging from the personal, such as taste in music, to the socio-political;; Internet memes they are frequently cited as significant players in world politics. They have been cited as a driving factor behind the recent rise of the 'alt-right' (an Internet-based far right movement) as well as the election of Donald Trump in the 2016 US election (e.g. Phillips & Milner, 2016; Williams, 2016; Domonoske, 2016; Friedman, 2016; Hillary for America, 2016; see appendix 1 for more). Besides academic work, there has also been much 'folk research' (i.e. amateur scientific investigation, particularly that conducted by Internet users in collaboration) has been focused on the phenomenon as well (Solon, 2016a; Ferreol, 2016; Encyclopaedia Dramatica, 2014; Know Your Meme, 2008).
 
@@ -34,13 +34,13 @@ Internet memes are particularly interesting in the following four ways, and a go
 
 Of the above four, scientific relevance is the most important. I argue that memeology fails to meet two of these four criteria due to its active opposition to Darwinian explanations of culture. Firstly, memeology is limited in analytic power due to being confined to a single level of analysis, namely individual users as “actors [with] agency” and their interaction as mediated by Internet memes. This analytic confinement to one level of memetic evolution has resulted in continuous failure by memeologists in their attempt to categorize Internet memes by identifying their essence which naturally group them together as belonging to the same genre. Secondly, the cause of this problem for memeology is their rejection of key, Darwinian elements in memetics. The failure to draw more than superficially from other disciplines is another mark against memeology, as it fails to make proper use of one of the most promising interdisciplinary field of study.
 
-On the other hand, memeologists have successfully established a basis for the study of Internet memes as important sociocultural phenomena without downplaying their aesthetic value for users. The definition of 'meme' offered by memeologists is in enough agreement with folk memeology that it can both inform and be informed by folk researchers without difficulty. An Internet meme for the memeologist is a group of similar contents, whether they be videos, phrases or images, just not ideas or formulas (Shifman, 2013a. pg. 367). The claim is effectively that with Internet memes, “what you see is what you get”. I suggest that the progressively more blurry characterization of Internet memes by memeologists is the result of their attempt at recreating concepts from memetics abandoned at the outset of memeology, and that these examples suggest a reinstatement of memetic theory in meme scholarship is in order.
+On the other hand, memeologists have successfully established a basis for the study of Internet memes as important sociocultural phenomena without downplaying their aesthetic value for users. The definition of 'meme' offered by memeologists is in enough agreement with folk memeology that it can both inform and be informed by folk researchers without difficulty. An Internet meme for the memeologist is a group of similar contents, whether they be videos, phrases or images, just not ideas or formulas (Shifman, 2013a. pg. 367)[^cite-shifman-l-2013a-memes-in-a-digital-world]. The claim is effectively that with Internet memes, “what you see is what you get”. I suggest that the progressively more blurry characterization of Internet memes by memeologists is the result of their attempt at recreating concepts from memetics abandoned at the outset of memeology, and that these examples suggest a reinstatement of memetic theory in meme scholarship is in order.
 
 ## Chapter 2. Defining the Meme Concept
 
 ### 2.1. Defining 'Meme'
 
-I briefly explained the memeticist position in chapter 1. In this chapter, I will explain why Dawkinsian memetics is not “a match made in heaven” with Internet memes (Shifman, 2013b. pg. 13) or even that it is clear Dawkinsian memes are the same thing as Internet memes. It is memetics supplemented by other disciplines which may be described as perhaps adequate, and only tentatively so, given the competing evolutionary theories that may potentially suit the analysis of Internet memes better than memetics. My primary aim therefore is to clarify the contents of memetics so that recent developments in memeology can be compared against them for signs of memeology reinventing the inferior wheel.
+I briefly explained the memeticist position in chapter 1. In this chapter, I will explain why Dawkinsian memetics is not “a match made in heaven” with Internet memes (Shifman, 2013b. pg. 13)[^cite-shifman-l-2013b-memes-in-digital-culture] or even that it is clear Dawkinsian memes are the same thing as Internet memes. It is memetics supplemented by other disciplines which may be described as perhaps adequate, and only tentatively so, given the competing evolutionary theories that may potentially suit the analysis of Internet memes better than memetics. My primary aim therefore is to clarify the contents of memetics so that recent developments in memeology can be compared against them for signs of memeology reinventing the inferior wheel.
 
 Consider the following definitions: a 'memetic artefact' is a media unit such as a singe image file or video file. It is equivalent to DNA as in the hereditary material itself. It is shared through being copied and replicated from one computer to another over the Internet. An 'Internet meme' then at least refers to all memetic artefacts which share the same digital information, just as a 'gene' refers to every copy of the gene. Variants of these definitions have been a cause of conflict between memetics and memeology, as well as within each disciplines.
 
@@ -48,23 +48,23 @@ Consider the following definitions: a 'memetic artefact' is a media unit such as
 
 In The Selfish Gene, Dawkins presents his replicator-centric view of evolution. He argues that there are entities which produce copies of themselves called 'replicators', and that they also produce and reside within entities which interact with the external environment, called 'vehicles'. According to Dawkins, replicators such as genes vary in their fitness (i.e. they are passed down in greater numbers and persist over a longer period of time), mostly according to how suitable the vehicles they have produced are for survival. Changes in these vehicles are not passed onto the next generation, and only changes in their replicators are passed on. Therefore vehicles are not directly subject to Darwinian selection, and are not considered a unit of selection for Dawkins. This means that despite organisms experience the ills and benefits of evolution as the vehicles to these units, their experience is incidental unless it affects the fitness of the units of selection.
 
-In the final chapter of The Selfish Gene (1976. pg. 193), Dawkins argues that not just genes but any entities will evolve so long as they meet three requirements: 1. fecundity, the ability to replicate and spread; 2. fidelity, the ability to remain stable through successive replication; and 3. longevity, the ability to form a lineage which persists over time. This idea, that Darwinian evolution is not confined by substrate (such as biological or cellular), is called universal Darwinism. Memetics is the suggestion that universal Darwinism is at work in cultural evolution. Hence, working backwards, the universal Darwinist infers that there must be some entities being selected if there is Darwinian selection going on driving the evolutionary process. The Dawkinsian memeticist hypothesizes that these units must be discrete units of culture, but there is no reason to assume this from the Darwinian position alone.
+In the final chapter of The Selfish Gene (1976. pg. 193)[^cite-dawkins-r-1976-the-selfish-gene-oxford-oxford], Dawkins argues that not just genes but any entities will evolve so long as they meet three requirements: 1. fecundity, the ability to replicate and spread; 2. fidelity, the ability to remain stable through successive replication; and 3. longevity, the ability to form a lineage which persists over time. This idea, that Darwinian evolution is not confined by substrate (such as biological or cellular), is called universal Darwinism. Memetics is the suggestion that universal Darwinism is at work in cultural evolution. Hence, working backwards, the universal Darwinist infers that there must be some entities being selected if there is Darwinian selection going on driving the evolutionary process. The Dawkinsian memeticist hypothesizes that these units must be discrete units of culture, but there is no reason to assume this from the Darwinian position alone.
 
 This is one reason that the unit of meme is so vaguely defined. Just as genes do not have a single unitary size, there is no reason for a meme to have a set size in order to qualify as a unit. Rather than define the single meme unit, Dawkins offers another hypothesis by analogy with genetics, called memeplexes. Memeplexes are several memes which have co-adapted and tend to spread together, because the cooperation improves their individual, respective fitness compared to going at it alone (2004. pg. 126).
 
-Dawkins' characterization of memes has remained ambiguous despite numerous clarifications since The Selfish Gene. Memes vary in size and sometimes the line between a single meme and a memeplex is blurred, but where memes exist physically is a harder question to answer or undercut. The most common reading of Dawkinsian memetics is an internalist one, which assumes that memes exist only within the brain as ideas (Blackmore, 1999. pg. 64). The counter-position to internalism is externalism, which posits that memes exist outside of the brain either as cultural artefacts or traits of cultural artefacts. Dawkins defines a meme as “a unit of cultural inheritance... naturally selected by virtue of its 'phenotypic' (i.e. vehicular) consequences on its own survival and replication” (1982a. pg. 190).
+Dawkins' characterization of memes has remained ambiguous despite numerous clarifications since The Selfish Gene. Memes vary in size and sometimes the line between a single meme and a memeplex is blurred, but where memes exist physically is a harder question to answer or undercut. The most common reading of Dawkinsian memetics is an internalist one, which assumes that memes exist only within the brain as ideas (Blackmore, 1999. pg. 64)[^cite-blackmore-s-1999-the-meme-machine-oxford-oxford]. The counter-position to internalism is externalism, which posits that memes exist outside of the brain either as cultural artefacts or traits of cultural artefacts. Dawkins defines a meme as “a unit of cultural inheritance... naturally selected by virtue of its 'phenotypic' (i.e. vehicular) consequences on its own survival and replication” (1982a. pg. 190)[^cite-dawkins-r-1982a-the-extended-phenotype-oxford-oxford].
 
 For Dawkins, a meme is “a unit of information residing in a brain” with “a definite structure, realized in whatever physical medium the brain uses for storing information”. Furthermore, he states that “the phenotypic effects of a meme may be in the form of words, music, visual images, styles of clothes, facial or hand gestures” and so on (ibid., pg. 109). An extreme example of externalism comes from Benzon. He characterizes memes as the observable properties of cultural artefacts, realized as cognitive states such as thoughts and ideas when perceived by individuals:
 
 > What I in fact propose is that we think of these mental objects and processes as being analogous to the biologist's phenotype just as the physical objects and processes are analogous to the genotype. Properly understood, these mental objects and processes are embodied in brain states...Thus we have the whole of physical culture interacting with the inner cultural environment to produce the various mental objects and activities which are the substance of culture... Note, however, that Dawkins places memes in the brain and traits in the external world, which is just the opposite of what I am doing.
 
-—Benzon, 1996. pg. 3
+—Benzon, 1996. pg. 3[^cite-benzon-w-1996-culture-as-an-evolutionary-arena]
 
 However, the same process can be expressed without the genic metaphors. Consider for instance: humans can learn a language, and this often involves developing a disposition to interpret certain stimuli as having certain meanings. Thus a human brain can learn to interpret the stimuli of a sign for instance with an indeterminate range of meanings depending on the language. There is no reason to suppose that external stimuli of this sort are analogous to genetic information, given that whether individuals choose to replicate a given stimulant is entirely contingent on the ‘language’, or the neural state of the individuals. Thus despite the usefulness of the various analogies and metaphors as a learning tool in understanding Darwinian theories, memes must be better defined in order to be made scientifically useful:
 
 > if, following Dennett and others, we are to believe that the same evolutionary algorithm governs meme and gene selection, memes have to be something with a defined existence in the world; they cannot remain an arbitrary unit of analysis, created merely to talk conveniently about the world, but with no clear ontology.
 
-—Bloch, 2001. pg. 193
+—Bloch, 2001. pg. 193[^cite-bloch-m-2001-a-well-disposed-social-anthropologist]
 
 So far, I have shown that memetics may well be a useful theory to apply in the analysis of Internet memes, but not that memetics is necessarily or even especially appropriate for the analysis of Internet memes. The ontological clarity of memes depends on two things: 1. theoretical clarity; and 2. empirical specificity. The general tendency in memetics and memeology can be described as follows: memetics has traditionally been rigid about theoretical changes, holding out for potentially appropriate real life examples; memeology suggests that meme theory should be radically changed to fit the subject matter, namely Internet memes. I suggest that the memeologist position proves hasty and that Darwinism is crucial to the correct understanding of Internet memes. However, memetics is hardly the only Darwinian theory of evolution we could apply to Internet memes. In the next sections, I examine whether memetics is worth the consideration.
 
@@ -72,23 +72,23 @@ So far, I have shown that memetics may well be a useful theory to apply in the a
 
 One of the central missions for memeology has been the revival and sterilization of memetics. The position can be summarized as: 1. the disavowal of Darwinized, replicator-centric or otherwise biologized accounts of culture, in favour of an anti-reductionist emphasis of human agency; and 2. the salvaging of memetics through adopting some of its core (but not essential) ideas such as the emphasis on 'units of culture' or the diffusion of these particulate culture-units.
 
-Despite the cultural evolutionist lineage that can be traced as far back as the nineteenth century (Mitchell, 2012. p. 114), memetics is best explained from its terminological beginning in 1976. Consider a summary by Humphrey of memetics as first presented in The Selfish Gene:
+Despite the cultural evolutionist lineage that can be traced as far back as the nineteenth century (Mitchell, 2012. p. 114)[^cite-mitchell-p-2012-contagious-metaphor-bloomsbury-academic], memetics is best explained from its terminological beginning in 1976. Consider a summary by Humphrey of memetics as first presented in The Selfish Gene:
 
 > As my colleague N. K. Humphrey neatly summed up an earlier draft of this chapter: '...memes should be regarded as living structures, not just metaphorically but technically. When you plant a fertile meme in my mind you literally parasitize my brain, turning it into a vehicle for the meme's propagation in just the way that a virus may parasitize the genetic mechanism of a host cell. And this isn't just a way of talking --- the meme for, say, “belief in life after death” is actually realized physically, millions of times over, as a structure in the nervous systems of individual men the world over.'
 
-—Dawkins, 1989. p. 192
+—Dawkins, 1989. p. 192[^cite-dawkins-r-1989-the-selfish-gene-oxford-oxford]
 
-The history of memetics since The Selfish Gene has been largely characterized by attempts to untangle the contradicting possibilities presented in this summary of memetics. This attempt at an explicitly evolutionary explanation of culture traces back at least over a century ago with the functionalist psychologists. “The environment of thought can only be thoughts; only processes of thought can influence and be influenced by them” (Baldwin, 1898. pp. 12-13). Sperber echoes this notion and claims that “Cultural phenomena are ecological patterns of psychological phenomena” (1985. pg. 76).
+The history of memetics since The Selfish Gene has been largely characterized by attempts to untangle the contradicting possibilities presented in this summary of memetics. This attempt at an explicitly evolutionary explanation of culture traces back at least over a century ago with the functionalist psychologists. “The environment of thought can only be thoughts; only processes of thought can influence and be influenced by them” (Baldwin, 1898. pp. 12-13)[^cite-baldwin-j-1898-on-selective-thinking]. Sperber echoes this notion and claims that “Cultural phenomena are ecological patterns of psychological phenomena” (1985. pg. 76)[^cite-sperber-d-1985-anthropology-and-psychology].
 
-The notion of the human mind as the parasitized host, whose design and function is to act as a Meme Machine (as Blackmore put it, 1999), has been one of the most common source of criticism for memetics from its wholesale detractors. Memetic determinism, the notion that human beings have no agency and are instead controlled by memes (Aunger, 2002. pg. 328), has been readily cited by social scientists as reason to reject Dawkinsian memetics in the technical (e.g. Shifman, 2013a. pg. 364; Conte, 2001. pg. 87). The notion has been variously accepted or rejected by memeticists. However, as Dennett points out, conscious and 'artificial selection' (i.e. selection not accidental but resultant of human preference) of memes is not incompatible with the Dawkinsian explanation from the meme's eye view which posits memes are the units of selection (1998).
+The notion of the human mind as the parasitized host, whose design and function is to act as a Meme Machine (as Blackmore put it, 1999), has been one of the most common source of criticism for memetics from its wholesale detractors. Memetic determinism, the notion that human beings have no agency and are instead controlled by memes (Aunger, 2002. pg. 328)[^cite-aunger-r-2002-the-electric-meme-a-new], has been readily cited by social scientists as reason to reject Dawkinsian memetics in the technical (e.g. Shifman, 2013a. pg. 364; Conte, 2001. pg. 87)[^cite-shifman-l-2013a-memes-in-a-digital-world][^cite-conte-r-2001-memes-through-social-minds-in]. The notion has been variously accepted or rejected by memeticists. However, as Dennett points out, conscious and 'artificial selection' (i.e. selection not accidental but resultant of human preference) of memes is not incompatible with the Dawkinsian explanation from the meme's eye view which posits memes are the units of selection (1998)[^cite-dennett-d-1998-memes-myths-misunderstandings-and-misgivings].
 
-The notion of parasitic ideas is not exclusive to memetics. Sperber and others argue that replicators are not necessary for natural selection, and furthermore that cultural evolution (Claidere et al., 2014)
+The notion of parasitic ideas is not exclusive to memetics. Sperber and others argue that replicators are not necessary for natural selection, and furthermore that cultural evolution (Claidere et al., 2014)[^cite-claidere-n-scott-2014-how-darwinian-is-cultural-evolution]
 
-Memetics is one attempt at a Darwinian and reductionist explanation of culture. The concept of a meme was originally presented as a metaphor to explain the concept of 'replicators' but subsequently spawned a school of thought about cultural evolution (Burman, 2012. pp. 79-91). Dawkins defines a replicator as “any entity in the universe of which copies are made” (1982a. pg. 300). Furthermore, he defines a meme as any idea capable of replicating itself from one person to another (Dawkins, 1993). This concept of the Dawkinsian meme was reified by Blackmore with Dawkins' approval Blackmore, 1999. Foreword.
+Memetics is one attempt at a Darwinian and reductionist explanation of culture. The concept of a meme was originally presented as a metaphor to explain the concept of 'replicators' but subsequently spawned a school of thought about cultural evolution (Burman, 2012. pp. 79-91)[^cite-burman-j-t-2012-the-misunderstanding-of-memes-biography]. Dawkins defines a replicator as “any entity in the universe of which copies are made” (1982a. pg. 300)[^cite-dawkins-r-1982a-the-extended-phenotype-oxford-oxford]. Furthermore, he defines a meme as any idea capable of replicating itself from one person to another (Dawkins, 1993)[^cite-dawkins-r-1993-viruses-of-the-mind]. This concept of the Dawkinsian meme was reified by Blackmore with Dawkins' approval Blackmore, 1999. Foreword[^cite-blackmore-s-1999-the-meme-machine-oxford-oxford].
 
 > The most important point to remember is that, as in Dawkins’s original formulation, memes are passed on by imitation. I have described them as ‘instructions for carrying out behaviour, stored in brains (or other objects) and passed on by imitation’... imitation includes any kind of copying ideas and behaviours from one person to another... a meme is whatever it is that is passed on by imitation.
 
-—Blackmore, 1999. pg. 43
+—Blackmore, 1999. pg. 43[^cite-blackmore-s-1999-the-meme-machine-oxford-oxford]
 
 Therefore a Dawkinsian meme can be defined as a special kind of replicator which requires an agent doing the imitating, namely a person or other developed animals.
 
@@ -96,19 +96,19 @@ Therefore a Dawkinsian meme can be defined as a special kind of replicator which
 
 Of the countless critics of memetics, Bruce Edmonds stands out for being a memeticist-turned-critic of memetics. In 2002, he challenged memeticists to present “a conclusive case-study; a theory for when memetic models are appropriate; and a simulation of the emergence of a memetic process.” In 2005, he published a study where he uses ISI and Google Scholar to estimate the mention of memetics between 1987 and 2004. Edmonds searches for “memetic” using Google Scholar but excludes “memetic algorithm”, because they are “not about memes in any meaningful way”. He concludes that the results show a decline of memetics in general and that it proves it to be “a short-lived fad whose effect has been to obscure more than it has been to enlighten ”. However, Tim Tyler (2008) shows that Edmonds merely made a mistake by not accounting for the delay in Google's indexing recent articles.
 
-Edmonds's assertion that memetics is dead as a topic of scientific interest is at least false according to the method of his choice. The interest as indicated by the sheer number of mentions by name is growing for not just Internet memes but memetics also. Memetics has been regaining vitality through collaboration with developments in other disciplines such as complexity science (Brewer, 2016) as well as outright adoption by researchers in various fields outside of cultural evolution, namely memeology as discussed in this article (Uhlíř & Stella, 2012. pg. 129). Whether memetics is the ideal explanation for Internet memes is an open question.
+Edmonds's assertion that memetics is dead as a topic of scientific interest is at least false according to the method of his choice. The interest as indicated by the sheer number of mentions by name is growing for not just Internet memes but memetics also. Memetics has been regaining vitality through collaboration with developments in other disciplines such as complexity science (Brewer, 2016)[^cite-brewer-j-2016-a-forty-year-update-on] as well as outright adoption by researchers in various fields outside of cultural evolution, namely memeology as discussed in this article (Uhlíř & Stella, 2012. pg. 129)[^cite-uhlir-v-stella-2012-who-needs-memetics-possible-developments]. Whether memetics is the ideal explanation for Internet memes is an open question.
 
 ### 2.6. Memetics and the Units of Selection Problem
 
-A lasting challenge for evolutionary theorists since Darwin has been the Units of Selection Problem. Darwin's insight was that a population of organisms will adapt to a given environment according to the fit between their traits and the demands of their habitat. But what is being selected, exactly—is it the traits, the organisms, groups of organisms, the entire populations or something else entirely? This is referred to as the Units of Selection Problem (Lloyd, 2012).
+A lasting challenge for evolutionary theorists since Darwin has been the Units of Selection Problem. Darwin's insight was that a population of organisms will adapt to a given environment according to the fit between their traits and the demands of their habitat. But what is being selected, exactly—is it the traits, the organisms, groups of organisms, the entire populations or something else entirely? This is referred to as the Units of Selection Problem (Lloyd, 2012)[^cite-lloyd-e-2012-units-and-levels-of-selection].
 
 > We must begin by throwing out the gene as the sole basis of our ideas on evolution. I am an enthusiastic Darwinian, but I think Darwinism is too big a theory to be confined to the narrow context of the gene. The gene will enter my thesis as an analogy, nothing more.
 
-—Dawkins, 2006. pg. 191
+—Dawkins, 2006. pg. 191[^cite-dawkins-r-2006-the-selfish-gene-30th-anniversary]
 
-The fundamental tenet of gene centrism is the distinction between replicators and their vehicular counterparts. Dawkins defines a replicator as something that makes copies of itself (2006, p. 15) and its vehicle as “any relatively discrete entity... which houses replicators, and which can be regarded as a machine programmed to preserve and propagate the replicators that ride inside it” (1982, p. 295). David Hull further specifies a replicator as “an entity that passes on its structure directly in replication” and introduces a replacement concept for the vehicle called an interactor, which he defines as “an entity that directly interacts … in such a way that replication is differential” (Hull 1980, p. 318).
+The fundamental tenet of gene centrism is the distinction between replicators and their vehicular counterparts. Dawkins defines a replicator as something that makes copies of itself (2006, p. 15)[^cite-dawkins-r-2006-the-selfish-gene-30th-anniversary] and its vehicle as “any relatively discrete entity... which houses replicators, and which can be regarded as a machine programmed to preserve and propagate the replicators that ride inside it” (1982, p. 295)[^cite-dawkins-r-1982a-the-extended-phenotype-oxford-oxford]. David Hull further specifies a replicator as “an entity that passes on its structure directly in replication” and introduces a replacement concept for the vehicle called an interactor, which he defines as “an entity that directly interacts … in such a way that replication is differential” (Hull 1980, p. 318)[^cite-hull-d-1980-individuality-and-selection-annual-review].
 
-Lloyd (2012) identifies the four distinct questions which make up the contemporary debate about units of selection: 1. the interactors question (“what units are being actively selected in a process of natural selection?”); 2. the replicators question (“which organic entities actually meet the definition of replicator?”); 3. the beneficiaries question (“who benefits ultimately in the long term, from the evolution by selection process?”); and 4. the manifestors of adaptations question (“When a population evolves by natural selection, what, if anything, is the entity that does the adapting?” (Sober, 1984, p. 204. As quoted in Lloyd, 2012).
+Lloyd (2012) identifies the four distinct questions which make up the contemporary debate about units of selection: 1. the interactors question (“what units are being actively selected in a process of natural selection?”); 2. the replicators question (“which organic entities actually meet the definition of replicator?”); 3. the beneficiaries question (“who benefits ultimately in the long term, from the evolution by selection process?”); and 4. the manifestors of adaptations question (“When a population evolves by natural selection, what, if anything, is the entity that does the adapting?” (Sober, 1984, p. 204. As quoted in Lloyd, 2012)[^cite-sober-e-1984-the-nature-of-selection][^cite-lloyd-e-2012-units-and-levels-of-selection].
 
 Aunger's major contribution to memetics is his extremely clear rejection of the theory that memes are substrate-neutral replicators, able to traverse between brains, tunes, recordings, electronic signals, sound waves, eardrum vibrations and so on and remain replicators. Aunger posits that Dawkinsian memes are “essentially memories” which exist as neural states. They are therefore substrate-specific and unable to move between various media such as brains and Internet memes (2002. pp. 234-236). Thus, Aunger argues, there is no reason to posit that they are “both replicators and interactors bundled into one” as in the case of prions (proteins which denature other proteins to transform them into prions).
 
@@ -116,7 +116,7 @@ Instead, Aunger offers that signals which cause brains to locally reproduce meme
 
 In contrast to memeology, contemporary memetics preserves some essential insights of Dawkinsian memetics such as the belief that culture is an evolving system of inheritance highly analogous to biological evolution. Memetics posits that replicators or units of culture undergoing natural selection is at the heart of cultural evolution.
 
-Not all cultural evolutionists believe this. For instance, Sperber argues that the correct model of cultural evolution is Mayr's 'population thinking' applied to culture through an infectious disease metaphor, called the epidemiology of representations (Sperber, 1985; Claidere et al., 2014). In this context, this means that Sperber considers cultural information to spread through a population of human minds, in the same way a human disease spreads through its ecology made up of people, vectors and so on. Sperber emphasizes the distinction between the epidemiologist of representations and the memeticist as that of a different focus on the levels of selection.
+Not all cultural evolutionists believe this. For instance, Sperber argues that the correct model of cultural evolution is Mayr's 'population thinking' applied to culture through an infectious disease metaphor, called the epidemiology of representations (Sperber, 1985; Claidere et al., 2014)[^cite-sperber-d-1985-anthropology-and-psychology][^cite-claidere-n-scott-2014-how-darwinian-is-cultural-evolution]. In this context, this means that Sperber considers cultural information to spread through a population of human minds, in the same way a human disease spreads through its ecology made up of people, vectors and so on. Sperber emphasizes the distinction between the epidemiologist of representations and the memeticist as that of a different focus on the levels of selection.
 
 ### 2.7. Replicators and Interactors
 
@@ -124,30 +124,30 @@ The reason for the introduction of these novel biological classes for Hull is th
 
 > When biologists address the issue of the levels at which selection can occur, they take the traditional organizational hierarchy as fundamental and the level at which selection operates as variable. As a result, selection wanders from one level to the next from time to time and from group to group, sometimes acting on genes, sometimes organisms, sometimes colonies, etc. As long as the traditional hierarchy is taken as basic and the levels at which selection can occur as variable, no simple, nomothetic generalizations are likely to materialize. Rather, the evolutionary process must be taken as basic and the levels defined in terms of it. Two entities that perform the same function in the evolutionary process must be classed as the same sort of entity even if one happens to be an organism and the other a colony or a population.
 
-—Hull, 1980, p. 316
+—Hull, 1980, p. 316[^cite-hull-d-1980-individuality-and-selection-annual-review]
 
-After this radical shift of perspective suggested by Hull, its application to abiological systems is a trivial extrapolation in comparison. One such extrapolation of evolutionary theory is memetics. “we must begin by throwing out the gene as the sole basis of our ideas on evolution. I am an enthusiastic Darwinian, but I think Darwinism is too big a theory to be confined to the narrow context of the gene. The gene will enter my thesis as an analogy, nothing more.” (Dawkins, 1976. pg. 193).
+After this radical shift of perspective suggested by Hull, its application to abiological systems is a trivial extrapolation in comparison. One such extrapolation of evolutionary theory is memetics. “we must begin by throwing out the gene as the sole basis of our ideas on evolution. I am an enthusiastic Darwinian, but I think Darwinism is too big a theory to be confined to the narrow context of the gene. The gene will enter my thesis as an analogy, nothing more.” (Dawkins, 1976. pg. 193)[^cite-dawkins-r-1976-the-selfish-gene-oxford-oxford].
 
 ## 3. Memeology
 
 ### 3.1. The Memeologist Definition of 'Meme'
 
-Shifman suggests that we should modify the definition of 'a meme' to be: “diffused units... incorporating several memetic dimensions... groups of content items that were created with awareness of each other and share common characteristics” (2013a. pg. 367). She subsequently connects this new definition to Dawkins' claim that memes are units of imitation, and introduces the concept of memetic dimensions. Shifman's view can be summarized as follows: 1. a cultural artefact which becomes (2013a. pg. 374) a meme has traits called its memetic dimensions (2013b. pg. 39), which tend to be imitated with or without modification (ibid. pg. 40; pg. 58) 2. a meme is a cluster of cultural artefacts (2013a. pg. 367) which share in these memetic dimensions (2013b. pp. 53-54).
+Shifman suggests that we should modify the definition of 'a meme' to be: “diffused units... incorporating several memetic dimensions... groups of content items that were created with awareness of each other and share common characteristics” (2013a. pg. 367)[^cite-shifman-l-2013a-memes-in-a-digital-world]. She subsequently connects this new definition to Dawkins' claim that memes are units of imitation, and introduces the concept of memetic dimensions. Shifman's view can be summarized as follows: 1. a cultural artefact which becomes (2013a. pg. 374)[^cite-shifman-l-2013a-memes-in-a-digital-world] a meme has traits called its memetic dimensions (2013b. pg. 39)[^cite-shifman-l-2013b-memes-in-digital-culture], which tend to be imitated with or without modification (ibid. pg. 40; pg. 58)[^cite-shifman-l-2013b-memes-in-digital-culture] 2. a meme is a cluster of cultural artefacts (2013a. pg. 367)[^cite-shifman-l-2013a-memes-in-a-digital-world] which share in these memetic dimensions (2013b. pp. 53-54)[^cite-shifman-l-2013b-memes-in-digital-culture].
 
 The memeologist position thus differs from memetics in three very important ways:
-Firstly, culture is not seen as undergoing Darwinian evolution. No evolutionary, Darwinized or otherwise biologized explanations of culture is considered necessary and in fact actively exorcised from memetics before its adoption. Instead “human agency” is emphasized in opposition to 'memetic determinism'. Memeologists do not treat memes as “isolated, discreet units, but as the building blocks of complex cultures, intertwining and interacting with each other.” (Shifman, 2012. pg. 3). Secondly, memeologists draw a distinction between 'viral content' and 'meme content' (Shifman, 2015). Thirdly, memeology is species essentialist about memes, meaning that there are necessary traits or “quiddities” by which memetic artefacts are grouped together into families.
+Firstly, culture is not seen as undergoing Darwinian evolution. No evolutionary, Darwinized or otherwise biologized explanations of culture is considered necessary and in fact actively exorcised from memetics before its adoption. Instead “human agency” is emphasized in opposition to 'memetic determinism'. Memeologists do not treat memes as “isolated, discreet units, but as the building blocks of complex cultures, intertwining and interacting with each other.” (Shifman, 2012. pg. 3)[^cite-shifman-l-2012-an-anatomy-of-a-youtube]. Secondly, memeologists draw a distinction between 'viral content' and 'meme content' (Shifman, 2015)[^cite-shifman-l-2015-memeology-festival-05]. Thirdly, memeology is species essentialist about memes, meaning that there are necessary traits or “quiddities” by which memetic artefacts are grouped together into families.
 
-Furthermore, stability of essence (in Dawkinsian terms, fidelity or the rate at which mutation occurs between successive copies) is seen as an inherent trait of the memes, rather than the statistic consequence of environmental pressures exerted on the memes (Segev et al., 2015. pp. 418-419). Memeologists focus on Internet memes as families (ibid., pg. 418) of cultural artefacts (Shifman & Thelwall, 2009; Miltner, 2011; Miltner, 2014) and the cultural practices mediated by these artefacts (Phillips, 2012a; Shifman, 2015; Milner, 2015) through which their morphologies are defined functionally (Shifman, 2015) by quiddities, or essentially shared traits (Segev et al., 2015).
+Furthermore, stability of essence (in Dawkinsian terms, fidelity or the rate at which mutation occurs between successive copies) is seen as an inherent trait of the memes, rather than the statistic consequence of environmental pressures exerted on the memes (Segev et al., 2015. pp. 418-419)[^cite-segev-e-nissenbaum-2015-families-and-networks-of-internet]. Memeologists focus on Internet memes as families (ibid., pg. 418)[^cite-segev-e-nissenbaum-2015-families-and-networks-of-internet] of cultural artefacts (Shifman & Thelwall, 2009; Miltner, 2011; Miltner, 2014)[^cite-shifman-l-thelwall-2009-assessing-global-diffusion-with-web][^cite-miltner-k-2011-srsly-phenomenal][^cite-miltner-k-2014-there-s-no-place-for] and the cultural practices mediated by these artefacts (Phillips, 2012a; Shifman, 2015; Milner, 2015)[^cite-phillips-w-2012a-in-defense-of-memes-article][^cite-shifman-l-2015-memeology-festival-05][^cite-milner-r-2015-memes-are-dead-long-live] through which their morphologies are defined functionally (Shifman, 2015)[^cite-shifman-l-2015-memeology-festival-05] by quiddities, or essentially shared traits (Segev et al., 2015)[^cite-segev-e-nissenbaum-2015-families-and-networks-of-internet].
 
 ### 3.2. Memeology in Practice
 
 In practice, memeology is divided into two schools: memeological archaeology and memeological anthropology. The most important and essential distinction between the two is that memeological anthropology inherits some fundamental principles from memetics (viz. analysis of culture as diffusion of particulate units) while memeological archaeology only coincides by its focus on a common subject matter (viz. whatever is trending as a fad on the Internet). Memeological archaeology is the study of Internet memes as objects of interest in and of themselves, little different in kind from the study of any other cultural artefacts. Memeological anthropology prioritizes the sociological and cultural aspects of how the Internet memes are used (produced, consumed and spread).
 
-The Internet not only provides a uniquely suitable substrate for memes (Aunger, 2002. pp. 125-128) but also allows for researchers to trace their evolutionary trajectory with relative accuracy and ease (Shifman & Thelwal, 2009). Memeologists, namely Shifman (2015) and Milner (2015), contrast memeology or 'meme studies' against 'viral studies'. Shifman defines 'viral content' as “a single content unit that spreads well” and 'meme content' as “a group of digital units sharing common characteristics”. The way a cultural artefact spreads is important in memeology, as it determines whether it counts as a viral, a meme or neither. Virality is characterized by a spike of popularity caused by content being shared between people over a short period of time. Memetic success for memeologists like Shifman is the achievement of virality achieved by memetic dimensions; “propagation of—and engagement with—Internet memes,” (2013a, pg. 369-370; 2013b. pg. 65). Most quantitative research in memeology therefore focuses on metrics such as Google Trends rankings.
+The Internet not only provides a uniquely suitable substrate for memes (Aunger, 2002. pp. 125-128)[^cite-aunger-r-2002-the-electric-meme-a-new] but also allows for researchers to trace their evolutionary trajectory with relative accuracy and ease (Shifman & Thelwal, 2009)[^cite-shifman-l-thelwall-2009-assessing-global-diffusion-with-web]. Memeologists, namely Shifman (2015) and Milner (2015), contrast memeology or 'meme studies' against 'viral studies'. Shifman defines 'viral content' as “a single content unit that spreads well” and 'meme content' as “a group of digital units sharing common characteristics”. The way a cultural artefact spreads is important in memeology, as it determines whether it counts as a viral, a meme or neither. Virality is characterized by a spike of popularity caused by content being shared between people over a short period of time. Memetic success for memeologists like Shifman is the achievement of virality achieved by memetic dimensions; “propagation of—and engagement with—Internet memes,” (2013a, pg. 369-370; 2013b. pg. 65)[^cite-shifman-l-2013a-memes-in-a-digital-world][^cite-shifman-l-2013b-memes-in-digital-culture]. Most quantitative research in memeology therefore focuses on metrics such as Google Trends rankings.
 
 ### 3.3. Memeology Is Essentialist
 
-Not only does Shifman reject the internalist notion that memes reside in the brain, she also rejects the need for their biological characterization. “In the digital age, [people] can spread content as is by forwarding, linking, or copying... it is not necessary to think of biology when analyzing memes. The ideas of replication, adaptation, and ‘‘fitness’’ to a certain environment can be analyzed from a purely social/cultural perspective.” (Shifman, 2013. pp. 365-366. Emphasis in original).
+Not only does Shifman reject the internalist notion that memes reside in the brain, she also rejects the need for their biological characterization. “In the digital age, [people] can spread content as is by forwarding, linking, or copying... it is not necessary to think of biology when analyzing memes. The ideas of replication, adaptation, and ‘‘fitness’’ to a certain environment can be analyzed from a purely social/cultural perspective.” (Shifman, 2013. pp. 365-366. Emphasis in original)[^cite-shifman-l-2013a-memes-in-a-digital-world].
 
 Building on top of Shifman's argument that we define Internet memes as groups of similar memetic artefacts, Segev et al. (2015) argue that Internet memes should be grouped together into 'families' by their 'quiddity' or the essential trait which all members of the family share. According to Segev et al., a meme refers to a group of related media units (e.g. an image file, a video) which were produced through the imitation of an 'original meme' or derivatives produced through its imitation. Thus a meme family is a cluster of memetic artefacts formed around the original, which share one or more of these quiddities with the original: "object, action, specific character, generic character (e.g. 'child' or 'cat'), and phrase".
 
@@ -155,13 +155,13 @@ Consider the memeologists' rejection of Darwinism against the backdrop of the pr
 
 ### 3.4. The Dawkinsian Turn in Memeology
 
-Although some memeologists have defined Internet memes as cultural artefacts with 'virtual physicality', existing both digitally on the Web and cognitively in the brain (Wiggins & Bowers, pg. 1891), the definition has given way to one purely centred around the artefacts themselves as culture subsumed the cognitive aspect. The dominant view in memeology now is to view “meme culture” as a plurality of user behaviour and participation (Segev, 2012. pg. 430; Shifman, 2013a. pp. 364-365; Milner, 2015). Memeology is frequently defined against the perceived dangers of 'memetic determinism': “memes are not passive and do not follow the model of biological infection [but] exist in synecdochical relationship to the culture in which they inhere” (Phillips, 2012a).
+Although some memeologists have defined Internet memes as cultural artefacts with 'virtual physicality', existing both digitally on the Web and cognitively in the brain (Wiggins & Bowers, pg. 1891)[^cite-wiggins-b-bowers-2014-memes-as-genre-a-structural], the definition has given way to one purely centred around the artefacts themselves as culture subsumed the cognitive aspect. The dominant view in memeology now is to view “meme culture” as a plurality of user behaviour and participation (Segev et al., 2015, p. 430; Shifman, 2013a. pp. 364-365; Milner, 2015)[^cite-segev-e-nissenbaum-2015-families-and-networks-of-internet][^cite-shifman-l-2013a-memes-in-a-digital-world][^cite-milner-r-2015-memes-are-dead-long-live]. Memeology is frequently defined against the perceived dangers of 'memetic determinism': “memes are not passive and do not follow the model of biological infection [but] exist in synecdochical relationship to the culture in which they inhere” (Phillips, 2012a)[^cite-phillips-w-2012a-in-defense-of-memes-article].
 
 However, with the growing focus on user behavior, the memeologist definition of 'meme' has broadened to the point where it has returned to its Dawkinsian roots. I suggest that this is evidence of the inherent issues within memeology due to the essentialist, morphological typology favoured by memeologists. Furthermore, I argue that this flaw is not fatal and can be amended through restoring Darwinian and multi-level thinking to memeology in the form of memetics. In the next two chapters, I will present an alternative theory and an accompanying typological system for Internet memes consistent with the view that memetic evolution is a multi-dimensional and multi-level process. I argue that the units of selection in memes are lineages rather than 'families' bound together by quiddities or individual memetic artefacts spreading virally. I draw heavily from folk research to do this, not only out of respect for participatory observation in anthropology but because the majority of research and practice in fringe Internet memes come from the underground (i.e. subcultures that demand higher subcultural, memetic literacy of their users than those in the mainstream).
 
 ### 3.5. Memetic Dimensions as Memetics
 
-The memeologists' emphasis on human agency is justified. A prominent concept in folk memetics is the 'forced meme'. A forced meme is a meme which was intentionally popularized, rather than through the organic accident of many individual users participating in the parody and spread of memetic artefacts. A classic example from Dawkins is an ad jingle; the Internet subculture has “Milhouse Is Not A Meme”, a debate over whether if a picture of The Simpsons character would be considered a meme if it were posted enough times on the imageboard 4chan (Know Your Meme, 2015; Urban Dictionary, 2009). The consensus that arose among the users was that “Milhouse is not a meme, but 'Milhouse is not a meme' is a meme”.
+The memeologists' emphasis on human agency is justified. A prominent concept in folk memetics is the 'forced meme'. A forced meme is a meme which was intentionally popularized, rather than through the organic accident of many individual users participating in the parody and spread of memetic artefacts. A classic example from Dawkins is an ad jingle; the Internet subculture has “Milhouse Is Not A Meme”, a debate over whether if a picture of The Simpsons character would be considered a meme if it were posted enough times on the imageboard 4chan (Know Your Meme, 2015; Urban Dictionary, 2009)[^cite-know-your-meme-2015-milhouse-is-not-a-meme][^cite-urban-dictionary-2009-forced-meme]. The consensus that arose among the users was that “Milhouse is not a meme, but 'Milhouse is not a meme' is a meme”.
 
 The dominant approach in contemporary memeology is the Shifmanian dimensions theory: memes are diffuse units of culture (i.e. memetic artefacts, most commonly image files) that share aspects of content, form and stance. 'Content' is what is expressed in an instance of a meme, namely ideas and ideologies. 'Form' is how it is expressed, namely visual representation of the memetic artefact (e.g. an image). 'Stance' is the attitude expressed by the creator of the memetic artefact such as whether it was done 'ironically'. In this view, a meme is always an encoded message with specific meaning. Furthermore, the focus is on the information embedded in the meme about all three of the dimensions (content, form and stance).
 
@@ -181,155 +181,563 @@ This approach is more in line with the way memes evolve and propagate. This is a
 
 ## 4. Conclusion
 
-The fatal flaw in contemporary memeology is that it has sacrificed its evolutionary and Darwinian components in favour of a typological approach to meme studies. This need not be the case if memeologists can accept that while agents are important, memeology as a study of populations as mere sums of their constituent individuals cannot account for all population-level effects by claiming that “cultural information passes along from person to person, yet gradually scales into a shared social phenomenon” (Shifman, 2013a. pp. 365-366). Populations are different entities to the individuals within (see: Sober, 1980) and therefore there are no grounds for the memeologist to simply assume that the fact that 1. populations are made up of individuals; 2. individual-level effects accumulate as population-level effects; and 3. the population in question is “decentralized, nonhierarchical, and user-based” (Shifman, 2013a. pg. 365).
+The fatal flaw in contemporary memeology is that it has sacrificed its evolutionary and Darwinian components in favour of a typological approach to meme studies. This need not be the case if memeologists can accept that while agents are important, memeology as a study of populations as mere sums of their constituent individuals cannot account for all population-level effects by claiming that “cultural information passes along from person to person, yet gradually scales into a shared social phenomenon” (Shifman, 2013a. pp. 365-366)[^cite-shifman-l-2013a-memes-in-a-digital-world]. Populations are different entities to the individuals within (see: Sober, 1980)[^cite-sober-e-1980-evolution-population-thinking-and-essentialism] and therefore there are no grounds for the memeologist to simply assume that the fact that 1. populations are made up of individuals; 2. individual-level effects accumulate as population-level effects; and 3. the population in question is “decentralized, nonhierarchical, and user-based” (Shifman, 2013a. pg. 365)[^cite-shifman-l-2013a-memes-in-a-digital-world].
 
 Memetic dimensions are descriptions of the morphological traits of individual memetic artefacts which: 1. are reproduced through user mimicry or digital copying in other memetic artefacts; and 2. cause the various levels of mutation in their reproduction. In other words, they are both 'memetic information' and phenotype-analogues that are directly exposed to the selective pressures of user interaction. The focus on memetic dimensions to the neglect of matters such as population-level selection is to limit memeology to one or two dimensions of cultural evolution.
 
 Evolution occurs on multiple dimensions. We do not expect to explain it all through a single dimension such as genetics or epigenetics. The same standard should apply to memetics: memetic evolution occurs on multiple dimensions. This is in fact the effect of Shifman's greatest contribution to memetics. By dividing memes from virals, she is in fact positing that we take a population centred approach to memetics rather than focus arbitrarily on individual media units. Unfortunately, she has yet to take the step in the direction of considering populations as a separate level from the individuals, and therefore remains trapped by an outdated model of population mechanics.
 
-## Bibliography
-
-Alvarez, A. (2004). Memetics: An evolutionary theory of cultural transmission. Sorites, 15, 24–28.
-
-Atran, S. (2001). The trouble with memes : Inference versus imitation in cultural creation. Human Nature (Hawthorne, N.Y.), 12(4), 351–381. https://doi.org/10.1007/s12110-001-1003-0
-
-Aunger, R. (ed.) (2001). Darwinizing Culture: The Status of Memetics as a Science. Oxford University Press.
-
-Aunger, R. (2002). The Electric Meme: A New Theory of How We Think. New York, Free Press.
-
-Baldwin, J., (1898). On Selective Thinking. Psychological Review, 5.1 (January 1898): 1-24.
-
-Baron, A. (2012). The History of Know Your Meme. Know Your Meme. blog article. Archived 2016-06-23. Available at: http://archive.is/FBowo
-
-Benzon, W. (1996). Culture as an evolutionary arena. Journal of Social and Evolutionary Systems, 19, 321–62.
-
-Benzon, W. (2013). Cultural Evolution: Some Terminology. Blog article. Available at: http://www.replicatedtypo.com/cultural-evolution-some-terminology/6439.html
-
-Blackmore, S. (1999). The Meme Machine, Oxford: Oxford University Press.
-
-Bloch M. (2001). A well-disposed social anthropologist’s problems with memes. In: Darwinizing Culture: The Status of Memetics as a Science. Oxford University Press.
-
-Börzsei, L. (2013). Makes a Meme Instead: A Concise History of Internet Memes, New Media Studies Magazine, Issue 7.
-
-Boyd, R., Richerson, P. (2001). Memes: Universal acid or a better mousetrap? In Darwinizing Culture: The Status of Memetics as a Science. Oxford University Press.
-
-Brewer, J. (2016). A Forty Year Update On Meme Theory. Blog article, The Evolution Institute. Available at: https://evolution-institute.org/blog/a-forty-year-update-on-meme-theory/
-
-Burman, J. T. (2012). The misunderstanding of memes: Biography of an unscientific object, 1976-1999, Perspectives on Science.
-
-Claidere, N., Scott-Phillips, T. C., Sperber, D. (2014). How Darwinian is cultural evolution? Philosophical Transactions of the Royal Society. 369: 20130368. DOI:10.1098/rstb.2013.0368.
-
-Conte, R. (2001). 'Memes through (social) minds', in: Aunger, R. (eds.) Darwinizing Culture: The Status of Memetics as a Science. pp.83-119. Oxford University Press. DOI: 10.1093/acprof:oso/9780192632449.001.0001
-
-Cullen B. (1998). "Parasite Ecology and the Evolution of Religion", in: Heylighen F., Bollen J. & Riegler A. (eds.) (1999). The Evolution of Complexity. Kluwer Academic, Dordrecht
-
-Cullen, B. (1993). ‘The Darwinian Resurgence and the Cultural Virus Critique’, Cambridge Archaeological Journal, 3(2), pp. 179–202. doi: 10.1017/S0959774300000834.
-
-Davison, P. (2012). The Language of Internet Memes. The Social Media Reader. Ed. Michael Mandiberg. 120-134. Web. Available at: http://www.veryinteractive.net/library/the-language-of-internet-memes
-
-Dennett, D. (1998). Memes: Myths, Misunderstandings and Misgivings. Paper presented at the Chapel Hill Colloquium, North Carolina. Available at: https://ase.tufts.edu/cogstud/dennett/papers/MEMEMYTH.FIN.htm
-
-Dawkins , R. (1993). Viruses of the Mind. In B. Dahlbom. (ed.) Dennett and His Critics. Cambridge: Blackwell.
-
-Dawkins, R. (1976). The Selfish Gene, Oxford: Oxford University Press.
-
-Dawkins, R. (1982a). The Extended Phenotype, Oxford: Oxford University Press.
-
-Dawkins, R. (1982b). Replicators and vehicles. Current problems in sociobiology, 45: 45-64.
-
-Dawkins, R. (1983). Universal Darwinism. In: Evolution from molecules to man, ed. D. S. Bendall. Cambridge University Press.
-
-Dawkins, R. (1986). The Blind Watchmaker, Oxford: Oxford University Press.
-
-Dawkins, R. (1989). The Selfish Gene, Oxford: Oxford University Press.
-
-Dawkins, R. (2003). A Devil's Chaplain: Reflections on Hope, Lies, Science and Love. Mariner Books. Boston, New York.
-
-Dawkins, R. (2006). The Selfish Gene (30th Anniversary Edition), Oxford: Oxford University Press.
-
-Dennett, D. (1995). Darwin's Dangerous Idea, Sciences 35.3 (May 1995): 34.
-
-Dirlam, D. K. (2005). Using memetics to grow memetics. Journal of Memetics–Evolutionary Models of Information Transmission, 9(1).
-
-Edmonds, B., (2002). Three Challenges for the Survival of Memetics. Journal of Memetics - Evolutionary Models of Information Transmission, 6
-
-Edmonds, B., (2005). The revealed poverty of the gene-meme analogy - why memetics per se has failed to produce substantive results. Journal of Memetics - Evolutionary Models of Information Transmission, 9
-
-Encyclopaedia Dramatica (2014). Encyclopaedia Dramatica: About. Encyclopaedia Dramatica. Wiki article. Archived 2016-06-23. Available at: http://archive.is/AE24b
-
-Encyclopaedia Dramatica (2015). Forced Meme. Encyclopaedia Dramatica. Wiki article. Available at: https://encyclopediadramatica.se/Forced_Meme Archived 2016-12-19. Archive available at: http://archive.is/FchZo
-
-Fahlman, S. (1982). Original Bboard Thread in which :-) was proposed, Web. http://www.cs.cmu.edu/~sef/Orig-Smiley.htm
-
-Google Trends (2016a). Compare: memes, jesus https://www.google.com/trends/explore?q=memes,jesus
-
-Gatherer, D. (1998). Why the Thought Contagion Metaphor is Retarding the Progress of Memetics. Journal of Memetics - Evolutionary Models of Information Transmission;1998, Vol. 2 Issue 2, p32
-
-Gray, R. D., Greenhill, S. J., Ross, R. M. (2007) The Pleasures and Perils of Darwinizing Culture (with Phylogenies). Biological Theory, 2(4), pp. 360-375.
-
-Heylighen F. (1998). "What makes a meme successful? Selection criteria for cultural evolution", in: Proc. 16th Int. Congress on Cybernetics (Association Internat. de Cybernetique, Namur), p. 423-418. Available at: http://pespmc1.vub.ac.be/Papers/MemeticsNamur.html
-
-Hull, D. (1980). Individuality and Selection, Annual Review of Ecology and Systematics, Vol. 11, pp. 311-332.
-
-Huntington, H. E. (2013). Big Bird, Binders Full of Women & Bayonets and Horses: The Diffusion of Internet Memes in Mainstream Media Coverage of the 2012 U.S. Presidential Campaign. Presented at the National Popular Culture/American Culture Conference, March 27-30 Washington, D.C.
-
-Knobel, M., Lankshear, L. (2005). Memes and affinities: Cultural replication and literacy education.
-
-Know Your Meme, (2008). About. Available at: http://knowyourmeme.com/about
-
-Know Your Meme (2015). “Milhouse Is Not A Meme”. Know Your Meme. Available at: http://knowyourmeme.com/memes/milhouse-is-not-a-meme
-
-Lamm, E. (2012). Inheritance Systems, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/inheritance-systems/
-
-Lewens, T. (2013). Cultural Evolution, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/evolution-cultural/
-
-Lloyd, E. (2012). Units and Levels of Selection, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/selection-units
-
-Marcus, O. R., Singer, M. (2016). Loving Ebola-chan: Internet memes in an epidemic. Media, Culture & Society. pp. 1-6. DOI: 10.1177/0163443716646174
-
-Marshall, G. (1998). The Internet and memetics. School of Computing Science, Middlesex University. Retrieved August, 22, 2013. Available at: http://pespmc1.vub.ac.be/conf/memepap/marshall.html
-
-Milner, R. (2012). The World Made Meme. MIT Press.
-
-Milner, R. (2013a). “Hacking the Social: Internet Memes, Identity Antagonism, and the Logic of Lulz.” The Fibreculture Journal 22 (Trolls and The Negative Space of the Internet).
-
-Milner, R. (2013b). ‘Media Lingua Franca: Fixity, Novelty, and Vernacular Creativity in Internet Memes’, Selected Papers of Internet Research 3. http://spir.aoir.org/index.php/spir/ article/view/806.
-
-Milner, R. (2015). Memes are Dead; Long Live Memetics. Blog article. Culture Digitally. Available at: http://culturedigitally.org/2015/10/01-memes-are-dead-long-live-memetics-by-ryan-m-milner/
-
-Miltner, K. (2014). “‘There’s No Place for Lulz on LOLCats’: The Role of Genre, Gender, and Group Identity in the Interpretation and Enjoyment of an Internet Meme.” First Monday 19 (8).
-
-Mitchell, P. (2012). Contagious Metaphor, Bloomsbury Academic.
-
-O'Brien, M. J., Lyman, R. L., Mesoudi, A., VanPool, T. L. (2010) Cultural traits as units of analysis. Philosophical Transactions of the Royal Society B. Volume 365, Issue 1559. DOI: 10.1098/rstb.2010.0012
-
-Phillips, W. (2012a). In Defense of Memes, article. Spreadable Media. Archived 2016-11-21. Available at: http://archive.is/AKTc3
-
-Phillips, W. (2012b). The house that fox built: Anonymous, spectacle and cycles of amplification. Television and New Media, 14(6), 494–509.
-
-Segev, E., Nissenbaum, A., Stolero, N., Shifman, L (2015). Families and Networks of Internet Memes: The Relationship Between Cohesiveness, Uniqueness, and Quiddity Concreteness. Journal of Computer-Mediated Communication. pp. 417-433. Doi:10.1111/jcc4.12120
-
-Shifman, L. (2012). An anatomy of a YouTube meme. New Media & Society, 14(2), 187–203. doi:10.1177/1461444811412160
-
-Shifman, L. (2013a). Memes in a digital world: Reconciling with a conceptual troublemaker. Journal of Computer-Mediated Communication, 18(3), 362–377.
-
-Shifman, L. (2013b). Memes in Digital Culture. MIT Press.
-
-Shifman, L. (2015). Memeology Festival 05. Memes as Ritual, Virals as Transmission? In Praise of Blurry Boundaries. Blog article, Culture Digitally. Available at: http://culturedigitally.org/2015/11/memeology-festival-05-memes-as-ritual-virals-as-transmission-in-praise-of-blurry-boundaries/
-
-Shifman, L., Thelwall, M. (2009). Assessing Global Diffusion with Web Memetics: The Spread and Evolution of a Popular Joke. Journal of the Association for Information Science and Technology. Volume 60, Issue 12. pp. 2567-2576. DOI:10.1002/asi.21185
-
-Solon, O. (2013). Richard Dawkins on the internet's hijacking of the word 'meme', Wired Magazine. Available at: http://www.wired.co.uk/article/richard-dawkins-memes
-
-Sterelny, K. (1999). Dawkins' Bulldog. Philosophy and Phenomenological Research, Vol. 59, No. 1, pp. 255-262. International Phenomenological Society. Available at: http://www.jstor.org/stable/2653476
-
-Uhlíř, V. Stella, M. (2012). Who needs memetics? Possible developments of the meme concept and beyond. Anthropologie (Brno) 50, 1: 127-142
-
-Urban Dictionary (2009). forced meme. Available at: http://www.urbandictionary.com/define.php?term=forced%20meme
-
-Wiggins, B., Bowers, G. (2014). Memes as genre: A structural analysis of the memescape. New Media.
-
-Wilkins, J. S., Hull, D. (2014). Replication and Reproduction, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/replication/
+```tpm-bibtex
+@misc{alvarez-a-2004-memetics-an-evolutionary-theory-of,
+  citation = {Alvarez, A. (2004). Memetics: An evolutionary theory of cultural transmission. Sorites, 15, 24–28.},
+  author = {Alvarez, A.},
+  title = {Memetics: An evolutionary theory of cultural transmission},
+  year = {2004},
+}
+
+@misc{atran-s-2001-the-trouble-with-memes-inference,
+  citation = {Atran, S. (2001). The trouble with memes : Inference versus imitation in cultural creation. Human Nature (Hawthorne, N.Y.), 12(4), 351–381. https://doi.org/10.1007/s12110-001-1003-0},
+  author = {Atran, S.},
+  title = {The trouble with memes : Inference versus imitation in cultural creation},
+  year = {2001},
+  url = {https://doi.org/10.1007/s12110-001-1003-0},
+}
+
+@misc{aunger-r-2001-darwinizing-culture-the-status-of,
+  citation = {Aunger, R. (ed.) (2001). Darwinizing Culture: The Status of Memetics as a Science. Oxford University Press.},
+  author = {Aunger, R.},
+  title = {Darwinizing Culture: The Status of Memetics as a Science},
+  year = {2001},
+}
+
+@misc{aunger-r-2002-the-electric-meme-a-new,
+  citation = {Aunger, R. (2002). The Electric Meme: A New Theory of How We Think. New York, Free Press.},
+  author = {Aunger, R.},
+  title = {The Electric Meme: A New Theory of How We Think},
+  year = {2002},
+}
+
+@misc{baldwin-j-1898-on-selective-thinking,
+  citation = {Baldwin, J., (1898). On Selective Thinking. Psychological Review, 5.1 (January 1898): 1-24.},
+  author = {Baldwin, J.,},
+  title = {On Selective Thinking},
+  year = {1898},
+}
+
+@misc{baron-a-2012-the-history-of-know-your,
+  citation = {Baron, A. (2012). The History of Know Your Meme. Know Your Meme. blog article. Archived 2016-06-23. Available at: http://archive.is/FBowo},
+  author = {Baron, A.},
+  title = {The History of Know Your Meme},
+  year = {2012},
+  url = {http://archive.is/FBowo},
+}
+
+@misc{benzon-w-1996-culture-as-an-evolutionary-arena,
+  citation = {Benzon, W. (1996). Culture as an evolutionary arena. Journal of Social and Evolutionary Systems, 19, 321–62.},
+  author = {Benzon, W.},
+  title = {Culture as an evolutionary arena},
+  year = {1996},
+}
+
+@misc{benzon-w-2013-cultural-evolution-some-terminology,
+  citation = {Benzon, W. (2013). Cultural Evolution: Some Terminology. Blog article. Available at: http://www.replicatedtypo.com/cultural-evolution-some-terminology/6439.html},
+  author = {Benzon, W.},
+  title = {Cultural Evolution: Some Terminology},
+  year = {2013},
+  url = {http://www.replicatedtypo.com/cultural-evolution-some-terminology/6439.html},
+}
+
+@misc{blackmore-s-1999-the-meme-machine-oxford-oxford,
+  citation = {Blackmore, S. (1999). The Meme Machine, Oxford: Oxford University Press.},
+  author = {Blackmore, S.},
+  title = {The Meme Machine, Oxford: Oxford University Press.},
+  year = {1999},
+}
+
+@misc{bloch-m-2001-a-well-disposed-social-anthropologist,
+  citation = {Bloch M. (2001). A well-disposed social anthropologist’s problems with memes. In: Darwinizing Culture: The Status of Memetics as a Science. Oxford University Press.},
+  author = {Bloch M.},
+  title = {A well-disposed social anthropologist’s problems with memes},
+  year = {2001},
+}
+
+@misc{borzsei-l-2013-makes-a-meme-instead-a,
+  citation = {Börzsei, L. (2013). Makes a Meme Instead: A Concise History of Internet Memes, New Media Studies Magazine, Issue 7.},
+  author = {Börzsei, L.},
+  title = {Makes a Meme Instead: A Concise History of Internet Memes, New Media Studies Magazine, Issue 7.},
+  year = {2013},
+}
+
+@misc{boyd-r-richerson-2001-memes-universal-acid-or-a,
+  citation = {Boyd, R., Richerson, P. (2001). Memes: Universal acid or a better mousetrap? In Darwinizing Culture: The Status of Memetics as a Science. Oxford University Press.},
+  author = {Boyd, R., Richerson, P.},
+  title = {Memes: Universal acid or a better mousetrap? In Darwinizing Culture: The Status of Memetics as a Science},
+  year = {2001},
+}
+
+@misc{brewer-j-2016-a-forty-year-update-on,
+  citation = {Brewer, J. (2016). A Forty Year Update On Meme Theory. Blog article, The Evolution Institute. Available at: https://evolution-institute.org/blog/a-forty-year-update-on-meme-theory/},
+  author = {Brewer, J.},
+  title = {A Forty Year Update On Meme Theory},
+  year = {2016},
+  url = {https://evolution-institute.org/blog/a-forty-year-update-on-meme-theory/},
+}
+
+@misc{burman-j-t-2012-the-misunderstanding-of-memes-biography,
+  citation = {Burman, J. T. (2012). The misunderstanding of memes: Biography of an unscientific object, 1976-1999, Perspectives on Science.},
+  author = {Burman, J. T.},
+  title = {The misunderstanding of memes: Biography of an unscientific object, 1976-1999, Perspectives on Science.},
+  year = {2012},
+}
+
+@misc{claidere-n-scott-2014-how-darwinian-is-cultural-evolution,
+  citation = {Claidere, N., Scott-Phillips, T. C., Sperber, D. (2014). How Darwinian is cultural evolution? Philosophical Transactions of the Royal Society. 369: 20130368. DOI:10.1098/rstb.2013.0368.},
+  author = {Claidere, N., Scott-Phillips, T. C., Sperber, D.},
+  title = {How Darwinian is cultural evolution? Philosophical Transactions of the Royal Society},
+  year = {2014},
+}
+
+@misc{conte-r-2001-memes-through-social-minds-in,
+  citation = {Conte, R. (2001). 'Memes through (social) minds', in: Aunger, R. (eds.) Darwinizing Culture: The Status of Memetics as a Science. pp.83-119. Oxford University Press. DOI: 10.1093/acprof:oso/9780192632449.001.0001},
+  author = {Conte, R.},
+  title = {Memes through (social) minds', in: Aunger, R},
+  year = {2001},
+}
+
+@misc{cullen-b-1998-parasite-ecology-and-the-evolution,
+  citation = {Cullen B. (1998). "Parasite Ecology and the Evolution of Religion", in: Heylighen F., Bollen J. & Riegler A. (eds.) (1999). The Evolution of Complexity. Kluwer Academic, Dordrecht},
+  author = {Cullen B.},
+  title = {Parasite Ecology and the Evolution of Religion", in: Heylighen F., Bollen J},
+  year = {1998},
+}
+
+@misc{cullen-b-1993-the-darwinian-resurgence-and-the,
+  citation = {Cullen, B. (1993). ‘The Darwinian Resurgence and the Cultural Virus Critique’, Cambridge Archaeological Journal, 3(2), pp. 179–202. doi: 10.1017/S0959774300000834.},
+  author = {Cullen, B.},
+  title = {The Darwinian Resurgence and the Cultural Virus Critique’, Cambridge Archaeological Journal, 3(2), pp},
+  year = {1993},
+}
+
+@misc{davison-p-2012-the-language-of-internet-memes,
+  citation = {Davison, P. (2012). The Language of Internet Memes. The Social Media Reader. Ed. Michael Mandiberg. 120-134. Web. Available at: http://www.veryinteractive.net/library/the-language-of-internet-memes},
+  author = {Davison, P.},
+  title = {The Language of Internet Memes},
+  year = {2012},
+  url = {http://www.veryinteractive.net/library/the-language-of-internet-memes},
+}
+
+@misc{dennett-d-1998-memes-myths-misunderstandings-and-misgivings,
+  citation = {Dennett, D. (1998). Memes: Myths, Misunderstandings and Misgivings. Paper presented at the Chapel Hill Colloquium, North Carolina. Available at: https://ase.tufts.edu/cogstud/dennett/papers/MEMEMYTH.FIN.htm},
+  author = {Dennett, D.},
+  title = {Memes: Myths, Misunderstandings and Misgivings},
+  year = {1998},
+  url = {https://ase.tufts.edu/cogstud/dennett/papers/MEMEMYTH.FIN.htm},
+}
+
+@misc{dawkins-r-1993-viruses-of-the-mind,
+  citation = {Dawkins , R. (1993). Viruses of the Mind. In B. Dahlbom. (ed.) Dennett and His Critics. Cambridge: Blackwell.},
+  author = {Dawkins , R.},
+  title = {Viruses of the Mind},
+  year = {1993},
+}
+
+@misc{dawkins-r-1976-the-selfish-gene-oxford-oxford,
+  citation = {Dawkins, R. (1976). The Selfish Gene, Oxford: Oxford University Press.},
+  author = {Dawkins, R.},
+  title = {The Selfish Gene, Oxford: Oxford University Press.},
+  year = {1976},
+}
+
+@misc{dawkins-r-1982a-the-extended-phenotype-oxford-oxford,
+  citation = {Dawkins, R. (1982a). The Extended Phenotype, Oxford: Oxford University Press.},
+  author = {Dawkins, R.},
+  title = {The Extended Phenotype, Oxford: Oxford University Press.},
+  year = {1982},
+}
+
+@misc{dawkins-r-1982b-replicators-and-vehicles,
+  citation = {Dawkins, R. (1982b). Replicators and vehicles. Current problems in sociobiology, 45: 45-64.},
+  author = {Dawkins, R.},
+  title = {Replicators and vehicles},
+  year = {1982},
+}
+
+@misc{dawkins-r-1983-universal-darwinism,
+  citation = {Dawkins, R. (1983). Universal Darwinism. In: Evolution from molecules to man, ed. D. S. Bendall. Cambridge University Press.},
+  author = {Dawkins, R.},
+  title = {Universal Darwinism},
+  year = {1983},
+}
+
+@misc{dawkins-r-1986-the-blind-watchmaker-oxford-oxford,
+  citation = {Dawkins, R. (1986). The Blind Watchmaker, Oxford: Oxford University Press.},
+  author = {Dawkins, R.},
+  title = {The Blind Watchmaker, Oxford: Oxford University Press.},
+  year = {1986},
+}
+
+@misc{dawkins-r-1989-the-selfish-gene-oxford-oxford,
+  citation = {Dawkins, R. (1989). The Selfish Gene, Oxford: Oxford University Press.},
+  author = {Dawkins, R.},
+  title = {The Selfish Gene, Oxford: Oxford University Press.},
+  year = {1989},
+}
+
+@misc{dawkins-r-2003-a-devil-s-chaplain-reflections,
+  citation = {Dawkins, R. (2003). A Devil's Chaplain: Reflections on Hope, Lies, Science and Love. Mariner Books. Boston, New York.},
+  author = {Dawkins, R.},
+  title = {A Devil's Chaplain: Reflections on Hope, Lies, Science and Love},
+  year = {2003},
+}
+
+@misc{dawkins-r-2006-the-selfish-gene-30th-anniversary,
+  citation = {Dawkins, R. (2006). The Selfish Gene (30th Anniversary Edition), Oxford: Oxford University Press.},
+  author = {Dawkins, R.},
+  title = {The Selfish Gene (30th Anniversary Edition), Oxford: Oxford University Press.},
+  year = {2006},
+}
+
+@misc{dennett-d-1995-darwin-s-dangerous-idea-sciences,
+  citation = {Dennett, D. (1995). Darwin's Dangerous Idea, Sciences 35.3 (May 1995): 34.},
+  author = {Dennett, D.},
+  title = {Darwin's Dangerous Idea, Sciences 35.3 (May 1995): 34.},
+  year = {1995},
+}
+
+@misc{dirlam-d-k-2005-using-memetics-to-grow-memetics,
+  citation = {Dirlam, D. K. (2005). Using memetics to grow memetics. Journal of Memetics–Evolutionary Models of Information Transmission, 9(1).},
+  author = {Dirlam, D. K.},
+  title = {Using memetics to grow memetics},
+  year = {2005},
+}
+
+@misc{edmonds-b-2002-three-challenges-for-the-survival,
+  citation = {Edmonds, B., (2002). Three Challenges for the Survival of Memetics. Journal of Memetics - Evolutionary Models of Information Transmission, 6},
+  author = {Edmonds, B.,},
+  title = {Three Challenges for the Survival of Memetics},
+  year = {2002},
+}
+
+@misc{edmonds-b-2005-the-revealed-poverty-of-the,
+  citation = {Edmonds, B., (2005). The revealed poverty of the gene-meme analogy - why memetics per se has failed to produce substantive results. Journal of Memetics - Evolutionary Models of Information Transmission, 9},
+  author = {Edmonds, B.,},
+  title = {The revealed poverty of the gene-meme analogy - why memetics per se has failed to produce substantive results},
+  year = {2005},
+}
+
+@misc{encyclopaedia-dramatica-2014-encyclopaedia-dramatica-about,
+  citation = {Encyclopaedia Dramatica (2014). Encyclopaedia Dramatica: About. Encyclopaedia Dramatica. Wiki article. Archived 2016-06-23. Available at: http://archive.is/AE24b},
+  author = {Encyclopaedia Dramatica},
+  title = {Encyclopaedia Dramatica: About},
+  year = {2014},
+  url = {http://archive.is/AE24b},
+}
+
+@misc{encyclopaedia-dramatica-2015-forced-meme,
+  citation = {Encyclopaedia Dramatica (2015). Forced Meme. Encyclopaedia Dramatica. Wiki article. Available at: https://encyclopediadramatica.se/Forced_Meme Archived 2016-12-19. Archive available at: http://archive.is/FchZo},
+  author = {Encyclopaedia Dramatica},
+  title = {Forced Meme},
+  year = {2015},
+  url = {https://encyclopediadramatica.se/Forced_Meme},
+}
+
+@misc{fahlman-s-1982-original-bboard-thread-in-which,
+  citation = {Fahlman, S. (1982). Original Bboard Thread in which :-) was proposed, Web. http://www.cs.cmu.edu/~sef/Orig-Smiley.htm},
+  author = {Fahlman, S.},
+  title = {Original Bboard Thread in which :-) was proposed, Web},
+  year = {1982},
+  url = {http://www.cs.cmu.edu/~sef/Orig-Smiley.htm},
+}
+
+@misc{google-trends-2016a-compare-memes-jesus-https-www,
+  citation = {Google Trends (2016a). Compare: memes, jesus https://www.google.com/trends/explore?q=memes,jesus},
+  author = {Google Trends},
+  title = {Compare: memes, jesus https://www.google.com/trends/explore?q=memes,jesus},
+  year = {2016},
+  url = {https://www.google.com/trends/explore?q=memes,jesus},
+}
+
+@misc{gatherer-d-1998-why-the-thought-contagion-metaphor,
+  citation = {Gatherer, D. (1998). Why the Thought Contagion Metaphor is Retarding the Progress of Memetics. Journal of Memetics - Evolutionary Models of Information Transmission;1998, Vol. 2 Issue 2, p32},
+  author = {Gatherer, D.},
+  title = {Why the Thought Contagion Metaphor is Retarding the Progress of Memetics},
+  year = {1998},
+}
+
+@misc{gray-r-d-2007-the-pleasures-and-perils-of,
+  citation = {Gray, R. D., Greenhill, S. J., Ross, R. M. (2007) The Pleasures and Perils of Darwinizing Culture (with Phylogenies). Biological Theory, 2(4), pp. 360-375.},
+  author = {Gray, R. D., Greenhill, S. J., Ross, R. M.},
+  title = {The Pleasures and Perils of Darwinizing Culture (with Phylogenies)},
+  year = {2007},
+}
+
+@misc{heylighen-f-1998-what-makes-a-meme-successful,
+  citation = {Heylighen F. (1998). "What makes a meme successful? Selection criteria for cultural evolution", in: Proc. 16th Int. Congress on Cybernetics (Association Internat. de Cybernetique, Namur), p. 423-418. Available at: http://pespmc1.vub.ac.be/Papers/MemeticsNamur.html},
+  author = {Heylighen F.},
+  title = {What makes a meme successful? Selection criteria for cultural evolution", in: Proc},
+  year = {1998},
+  url = {http://pespmc1.vub.ac.be/Papers/MemeticsNamur.html},
+}
+
+@misc{hull-d-1980-individuality-and-selection-annual-review,
+  citation = {Hull, D. (1980). Individuality and Selection, Annual Review of Ecology and Systematics, Vol. 11, pp. 311-332.},
+  author = {Hull, D.},
+  title = {Individuality and Selection, Annual Review of Ecology and Systematics, Vol},
+  year = {1980},
+}
+
+@misc{huntington-h-e-2013-big-bird-binders-full-of,
+  citation = {Huntington, H. E. (2013). Big Bird, Binders Full of Women & Bayonets and Horses: The Diffusion of Internet Memes in Mainstream Media Coverage of the 2012 U.S. Presidential Campaign. Presented at the National Popular Culture/American Culture Conference, March 27-30 Washington, D.C.},
+  author = {Huntington, H. E.},
+  title = {Big Bird, Binders Full of Women & Bayonets and Horses: The Diffusion of Internet Memes in Mainstream Media Coverage of the 2012 U.S},
+  year = {2013},
+}
+
+@misc{knobel-m-lankshear-2005-memes-and-affinities-cultural-replication,
+  citation = {Knobel, M., Lankshear, L. (2005). Memes and affinities: Cultural replication and literacy education.},
+  author = {Knobel, M., Lankshear, L.},
+  title = {Memes and affinities: Cultural replication and literacy education.},
+  year = {2005},
+}
+
+@misc{know-your-meme-2008-about,
+  citation = {Know Your Meme, (2008). About. Available at: http://knowyourmeme.com/about},
+  author = {Know Your Meme,},
+  title = {About},
+  year = {2008},
+  url = {http://knowyourmeme.com/about},
+}
+
+@misc{know-your-meme-2015-milhouse-is-not-a-meme,
+  citation = {Know Your Meme (2015). “Milhouse Is Not A Meme”. Know Your Meme. Available at: http://knowyourmeme.com/memes/milhouse-is-not-a-meme},
+  author = {Know Your Meme},
+  title = {Milhouse Is Not A Meme”},
+  year = {2015},
+  url = {http://knowyourmeme.com/memes/milhouse-is-not-a-meme},
+}
+
+@misc{lamm-e-2012-inheritance-systems-stanford-encyclopedia-of,
+  citation = {Lamm, E. (2012). Inheritance Systems, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/inheritance-systems/},
+  author = {Lamm, E.},
+  title = {Inheritance Systems, Stanford Encyclopedia of Philosophy},
+  year = {2012},
+  url = {http://plato.stanford.edu/entries/inheritance-systems/},
+}
+
+@misc{lewens-t-2013-cultural-evolution-stanford-encyclopedia-of,
+  citation = {Lewens, T. (2013). Cultural Evolution, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/evolution-cultural/},
+  author = {Lewens, T.},
+  title = {Cultural Evolution, Stanford Encyclopedia of Philosophy},
+  year = {2013},
+  url = {http://plato.stanford.edu/entries/evolution-cultural/},
+}
+
+@misc{lloyd-e-2012-units-and-levels-of-selection,
+  citation = {Lloyd, E. (2012). Units and Levels of Selection, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/selection-units},
+  author = {Lloyd, E.},
+  title = {Units and Levels of Selection, Stanford Encyclopedia of Philosophy},
+  year = {2012},
+  url = {http://plato.stanford.edu/entries/selection-units},
+}
+
+@misc{marcus-o-r-2016-loving-ebola-chan-internet-memes,
+  citation = {Marcus, O. R., Singer, M. (2016). Loving Ebola-chan: Internet memes in an epidemic. Media, Culture & Society. pp. 1-6. DOI: 10.1177/0163443716646174},
+  author = {Marcus, O. R., Singer, M.},
+  title = {Loving Ebola-chan: Internet memes in an epidemic},
+  year = {2016},
+}
+
+@misc{marshall-g-1998-the-internet-and-memetics,
+  citation = {Marshall, G. (1998). The Internet and memetics. School of Computing Science, Middlesex University. Retrieved August, 22, 2013. Available at: http://pespmc1.vub.ac.be/conf/memepap/marshall.html},
+  author = {Marshall, G.},
+  title = {The Internet and memetics},
+  year = {1998},
+  url = {http://pespmc1.vub.ac.be/conf/memepap/marshall.html},
+}
+
+@misc{milner-r-2012-the-world-made-meme,
+  citation = {Milner, R. (2012). The World Made Meme. MIT Press.},
+  author = {Milner, R.},
+  title = {The World Made Meme},
+  year = {2012},
+}
+
+@misc{milner-r-2013a-hacking-the-social-internet-memes,
+  citation = {Milner, R. (2013a). “Hacking the Social: Internet Memes, Identity Antagonism, and the Logic of Lulz.” The Fibreculture Journal 22 (Trolls and The Negative Space of the Internet).},
+  author = {Milner, R.},
+  title = {Hacking the Social: Internet Memes, Identity Antagonism, and the Logic of Lulz.” The Fibreculture Journal 22 (Trolls and The Negative Space of the Internet).},
+  year = {2013},
+}
+
+@misc{milner-r-2013b-media-lingua-franca-fixity-novelty,
+  citation = {Milner, R. (2013b). ‘Media Lingua Franca: Fixity, Novelty, and Vernacular Creativity in Internet Memes’, Selected Papers of Internet Research 3. http://spir.aoir.org/index.php/spir/ article/view/806.},
+  author = {Milner, R.},
+  title = {Media Lingua Franca: Fixity, Novelty, and Vernacular Creativity in Internet Memes’, Selected Papers of Internet Research 3},
+  year = {2013},
+  url = {http://spir.aoir.org/index.php/spir/},
+}
+
+@misc{milner-r-2015-memes-are-dead-long-live,
+  citation = {Milner, R. (2015). Memes are Dead; Long Live Memetics. Blog article. Culture Digitally. Available at: http://culturedigitally.org/2015/10/01-memes-are-dead-long-live-memetics-by-ryan-m-milner/},
+  author = {Milner, R.},
+  title = {Memes are Dead; Long Live Memetics},
+  year = {2015},
+  url = {http://culturedigitally.org/2015/10/01-memes-are-dead-long-live-memetics-by-ryan-m-milner/},
+}
+
+@misc{miltner-k-2014-there-s-no-place-for,
+  citation = {Miltner, K. (2014). “‘There’s No Place for Lulz on LOLCats’: The Role of Genre, Gender, and Group Identity in the Interpretation and Enjoyment of an Internet Meme.” First Monday 19 (8).},
+  author = {Miltner, K.},
+  title = {There’s No Place for Lulz on LOLCats’: The Role of Genre, Gender, and Group Identity in the Interpretation and Enjoyment of an Internet Meme.” First Monday 19 (8).},
+  year = {2014},
+}
+
+@misc{miltner-k-2011-srsly-phenomenal,
+  citation = {Miltner, K. (2011). Srsly Phenomenal: An Investigation into the Appeal of LOLcats. Unpublished master's dissertation, London School of Economics.},
+  author = {Miltner, K.},
+  title = {Srsly Phenomenal: An Investigation into the Appeal of LOLcats},
+  year = {2011},
+}
+
+@misc{mitchell-p-2012-contagious-metaphor-bloomsbury-academic,
+  citation = {Mitchell, P. (2012). Contagious Metaphor, Bloomsbury Academic.},
+  author = {Mitchell, P.},
+  title = {Contagious Metaphor, Bloomsbury Academic.},
+  year = {2012},
+}
+
+@misc{o-brien-m-2010-cultural-traits-as-units-of,
+  citation = {O'Brien, M. J., Lyman, R. L., Mesoudi, A., VanPool, T. L. (2010) Cultural traits as units of analysis. Philosophical Transactions of the Royal Society B. Volume 365, Issue 1559. DOI: 10.1098/rstb.2010.0012},
+  author = {O'Brien, M. J., Lyman, R. L., Mesoudi, A., VanPool, T. L.},
+  title = {Cultural traits as units of analysis},
+  year = {2010},
+}
+
+@misc{phillips-w-2012a-in-defense-of-memes-article,
+  citation = {Phillips, W. (2012a). In Defense of Memes, article. Spreadable Media. Archived 2016-11-21. Available at: http://archive.is/AKTc3},
+  author = {Phillips, W.},
+  title = {In Defense of Memes, article},
+  year = {2012},
+  url = {http://archive.is/AKTc3},
+}
+
+@misc{phillips-w-2012b-the-house-that-fox-built,
+  citation = {Phillips, W. (2012b). The house that fox built: Anonymous, spectacle and cycles of amplification. Television and New Media, 14(6), 494–509.},
+  author = {Phillips, W.},
+  title = {The house that fox built: Anonymous, spectacle and cycles of amplification},
+  year = {2012},
+}
+
+@misc{segev-e-nissenbaum-2015-families-and-networks-of-internet,
+  citation = {Segev, E., Nissenbaum, A., Stolero, N., Shifman, L (2015). Families and Networks of Internet Memes: The Relationship Between Cohesiveness, Uniqueness, and Quiddity Concreteness. Journal of Computer-Mediated Communication. pp. 417-433. Doi:10.1111/jcc4.12120},
+  author = {Segev, E., Nissenbaum, A., Stolero, N., Shifman, L},
+  title = {Families and Networks of Internet Memes: The Relationship Between Cohesiveness, Uniqueness, and Quiddity Concreteness},
+  year = {2015},
+}
+
+@misc{shifman-l-2012-an-anatomy-of-a-youtube,
+  citation = {Shifman, L. (2012). An anatomy of a YouTube meme. New Media & Society, 14(2), 187–203. doi:10.1177/1461444811412160},
+  author = {Shifman, L.},
+  title = {An anatomy of a YouTube meme},
+  year = {2012},
+}
+
+@misc{shifman-l-2013a-memes-in-a-digital-world,
+  citation = {Shifman, L. (2013a). Memes in a digital world: Reconciling with a conceptual troublemaker. Journal of Computer-Mediated Communication, 18(3), 362–377.},
+  author = {Shifman, L.},
+  title = {Memes in a digital world: Reconciling with a conceptual troublemaker},
+  year = {2013},
+}
+
+@misc{shifman-l-2013b-memes-in-digital-culture,
+  citation = {Shifman, L. (2013b). Memes in Digital Culture. MIT Press.},
+  author = {Shifman, L.},
+  title = {Memes in Digital Culture},
+  year = {2013},
+}
+
+@misc{shifman-l-2015-memeology-festival-05,
+  citation = {Shifman, L. (2015). Memeology Festival 05. Memes as Ritual, Virals as Transmission? In Praise of Blurry Boundaries. Blog article, Culture Digitally. Available at: http://culturedigitally.org/2015/11/memeology-festival-05-memes-as-ritual-virals-as-transmission-in-praise-of-blurry-boundaries/},
+  author = {Shifman, L.},
+  title = {Memeology Festival 05},
+  year = {2015},
+  url = {http://culturedigitally.org/2015/11/memeology-festival-05-memes-as-ritual-virals-as-transmission-in-praise-of-blurry-boundaries/},
+}
+
+@misc{shifman-l-thelwall-2009-assessing-global-diffusion-with-web,
+  citation = {Shifman, L., Thelwall, M. (2009). Assessing Global Diffusion with Web Memetics: The Spread and Evolution of a Popular Joke. Journal of the Association for Information Science and Technology. Volume 60, Issue 12. pp. 2567-2576. DOI:10.1002/asi.21185},
+  author = {Shifman, L., Thelwall, M.},
+  title = {Assessing Global Diffusion with Web Memetics: The Spread and Evolution of a Popular Joke},
+  year = {2009},
+}
+
+@misc{solon-o-2013-richard-dawkins-on-the-internet,
+  citation = {Solon, O. (2013). Richard Dawkins on the internet's hijacking of the word 'meme', Wired Magazine. Available at: http://www.wired.co.uk/article/richard-dawkins-memes},
+  author = {Solon, O.},
+  title = {Richard Dawkins on the internet's hijacking of the word 'meme', Wired Magazine},
+  year = {2013},
+  url = {http://www.wired.co.uk/article/richard-dawkins-memes},
+}
+
+@misc{sterelny-k-1999-dawkins-bulldog,
+  citation = {Sterelny, K. (1999). Dawkins' Bulldog. Philosophy and Phenomenological Research, Vol. 59, No. 1, pp. 255-262. International Phenomenological Society. Available at: http://www.jstor.org/stable/2653476},
+  author = {Sterelny, K.},
+  title = {Dawkins' Bulldog},
+  year = {1999},
+  url = {http://www.jstor.org/stable/2653476},
+}
+
+@misc{uhlir-v-stella-2012-who-needs-memetics-possible-developments,
+  citation = {Uhlíř, V. Stella, M. (2012). Who needs memetics? Possible developments of the meme concept and beyond. Anthropologie (Brno) 50, 1: 127-142},
+  author = {Uhlíř, V. Stella, M.},
+  title = {Who needs memetics? Possible developments of the meme concept and beyond},
+  year = {2012},
+}
+
+@misc{urban-dictionary-2009-forced-meme,
+  citation = {Urban Dictionary (2009). forced meme. Available at: http://www.urbandictionary.com/define.php?term=forced%20meme},
+  author = {Urban Dictionary},
+  title = {forced meme},
+  year = {2009},
+  url = {http://www.urbandictionary.com/define.php?term=forced%20meme},
+}
+
+@misc{wiggins-b-bowers-2014-memes-as-genre-a-structural,
+  citation = {Wiggins, B., Bowers, G. (2014). Memes as genre: A structural analysis of the memescape. New Media.},
+  author = {Wiggins, B., Bowers, G.},
+  title = {Memes as genre: A structural analysis of the memescape},
+  year = {2014},
+}
+
+@misc{wilkins-j-s-2014-replication-and-reproduction-stanford-encyclopedia,
+  citation = {Wilkins, J. S., Hull, D. (2014). Replication and Reproduction, Stanford Encyclopedia of Philosophy. Available at: http://plato.stanford.edu/entries/replication/},
+  author = {Wilkins, J. S., Hull, D.},
+  title = {Replication and Reproduction, Stanford Encyclopedia of Philosophy},
+  year = {2014},
+  url = {http://plato.stanford.edu/entries/replication/},
+}
+
+@misc{sperber-d-1985-anthropology-and-psychology,
+  citation = {Sperber, D. (1985). Anthropology and psychology: Towards an epidemiology of representations. Man, 20(1), 73-89.},
+  author = {Sperber, D.},
+  title = {Anthropology and psychology: Towards an epidemiology of representations},
+  year = {1985},
+}
+
+@misc{sober-e-1980-evolution-population-thinking-and-essentialism,
+  citation = {Sober, E. (1980). Evolution, population thinking, and essentialism. Philosophy of Science, 47(3), 350-383.},
+  author = {Sober, E.},
+  title = {Evolution, population thinking, and essentialism},
+  year = {1980},
+}
+
+@misc{sober-e-1984-the-nature-of-selection,
+  citation = {Sober, E. (1984). The Nature of Selection: Evolutionary Theory in Philosophical Focus. University of Chicago Press.},
+  author = {Sober, E.},
+  title = {The Nature of Selection: Evolutionary Theory in Philosophical Focus},
+  year = {1984},
+}
+```
 
 ## Appendix 1. Notable articles about Pepe the Frog and US politics
 

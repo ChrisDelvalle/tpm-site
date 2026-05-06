@@ -10,7 +10,7 @@ describe("article reference model", () => {
     const label: ArticleReferenceLabel = "cite-baudrillard-1981";
     const marker: ArticleReferenceMarker = {
       backlinkId: "cite-backref-baudrillard-1981",
-      displayText: "Baudrillard 1981",
+      displayText: "1",
       entryId: "cite-baudrillard-1981",
       id: "cite-ref-baudrillard-1981",
       kind: "citation",

@@ -75,7 +75,7 @@ describe("ArticleLayout", () => {
       request: new Request(`${testSiteUrl}/articles/${article.id}/`),
       slots: {
         default:
-          '<p>Rendered article body with <a id="note-ref-context" href="#note-context" data-article-reference-marker="true">[1]</a>.</p>',
+          '<p>Rendered article body with <a id="note-ref-context" href="#note-context" data-article-reference-marker="true" data-reference-kind="note">1</a>.</p>',
       },
     });
 

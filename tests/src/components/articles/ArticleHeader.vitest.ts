@@ -36,7 +36,9 @@ describe("ArticleHeader", () => {
     expect(view).toContain("Article Title");
     expect(view).toContain("/categories/history/");
     expect(view).toContain('data-astro-prefetch="hover"');
+    expect(view).toContain("data-article-meta-row");
     expect(view).toContain("Cite this article");
+    expect(view).toContain('data-anchor-preset="article-citation-menu"');
     expect(view).toContain("Article description.");
     expect(view).not.toContain("Article tags");
   });

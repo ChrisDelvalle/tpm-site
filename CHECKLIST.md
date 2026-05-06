@@ -124,17 +124,17 @@ tests, and git history.
       manual-review work is current.
 - [x] Add a written decision report for article-reference migration decisions,
       and keep it paired with future catalog updates.
-- [ ] Normalize one article-reference format at a time into canonical
+- [x] Normalize one article-reference format at a time into canonical
       `note-*` footnotes and `cite-*` markers with `tpm-bibtex` source entries
       according to the approved article-content plan.
-- [ ] Preserve author wording and article intent; only change reference syntax
+- [x] Preserve author wording and article intent; only change reference syntax
       and section structure needed for the canonical parser.
-- [ ] Keep ambiguous inline prose links out of bibliography data unless the
+- [x] Keep ambiguous inline prose links out of bibliography data unless the
       article is explicitly edited to use a canonical `cite-*` marker plus
       BibTeX source entry.
-- [ ] Add explicit exceptions only when an article cannot reasonably be
-      normalized yet, and document why the exception is temporary or permanent.
-- [ ] Enable release-blocking validation for published articles only after the
+- [x] Confirm no explicit exceptions are needed; add explicit documented
+      exceptions only when an article cannot reasonably be normalized.
+- [x] Enable release-blocking validation for published articles only after the
       normalized corpus and exceptions pass.
 - [x] Update author-facing article submission documentation with the canonical
       `note-*`, `cite-*`, and `tpm-bibtex` syntax.
@@ -171,3 +171,84 @@ tests, and git history.
       overflow.
 - [x] Update `CHECKLIST.md` with any remaining bibliography follow-up
       discovered during implementation.
+
+## Milestone 41: Minimal Cite This Article Redesign
+
+- [x] Update the `ArticleCitationMenu` and `ArticleHeader` component designs so
+      the citation utility is a metadata-row trigger with an anchored popover,
+      not an in-flow panel.
+- [x] Keep the citation UI minimal: reserve only trigger space in the article
+      header, use compact four-column citation-style controls, and update one
+      citation text box in place instead of rendering per-format dropdown text
+      boxes.
+- [x] Add common citation outputs for TPM articles beyond BibTeX and MLA,
+      including APA, Chicago, Harvard, IEEE, and a citation-manager export.
+- [x] Implement the redesigned component using existing anchored-positioning
+      primitives rather than bespoke positioning.
+- [x] Update tests for placement, popover behavior, generated formats, copy
+      behavior, stable citation text-box width, and no-overflow invariants.
+- [x] Run focused tests and the normal quality gate before marking complete.
+
+## Milestone 42: Correct Article Reference Semantics And Migration
+
+- [x] Make explanatory footnote markers visually distinct from bibliography
+      citations: notes render as naked clickable superscript numbers, while
+      citations retain citation-specific label/bracket styling.
+- [x] Update article-reference docs and tests so the footnote/citation visual
+      distinction is explicit and difficult to regress.
+- [x] Reopen the corpus audit to detect visible source-list/reference content,
+      including headings such as `Source List` that are still bibliography-like
+      even if they are not named `References` or `Bibliography`.
+- [x] Regenerate the per-article migration catalog so every article is
+      represented and any remaining citation/source/reference material is
+      visible for review.
+- [x] Manually review every article flagged by the updated audit, including
+      articles already edited in the previous pass.
+- [x] Migrate every feasible citation/source/reference entry to canonical
+      `cite-*` markers plus hidden `tpm-bibtex` entries; do not satisfy this
+      milestone by renaming bibliography sections.
+- [x] Record explicit decisions for anything left as visible prose, including
+      why it is not currently feasible or correct to convert to TPM BibTeX.
+- [x] Run focused reference tests, content verification, build, audit, catalog,
+      and the normal quality gate before marking complete.
+
+## Milestone 43: Manual Article Reference Audit
+
+- [x] Manually inspect every article file, independent of the automated audit,
+      for citation/source/reference sections, manual inline citations, and
+      footnotes being used as citations.
+- [x] Record a per-article decision for every inspected article in a durable
+      manual audit report.
+- [x] Convert any missed clear inline citations or source/reference structures
+      to canonical `cite-*`, `note-*`, and hidden `tpm-bibtex` syntax.
+- [x] Record uncertain cases explicitly for user review instead of silently
+      normalizing them.
+- [x] Run reference checks, content verification, build, formatting, and focused
+      tests before marking complete.
+
+## Milestone 44: Numeric Citation Default And Appendix Preservation
+
+- [x] Make inline bibliography citation markers render numerically by default
+      while preserving generated source labels in structured data for future
+      explicit style overrides.
+- [x] Restore author-owned appendix content that was incorrectly treated as
+      disposable bibliography data.
+- [x] Remove invalid structured bibliography entries that encode visible
+      article headings or appendix structure as source metadata.
+- [x] Review changed article files for additional author-intent risks and
+      report any non-obvious cases.
+- [x] Update article-reference docs and decision records to encode the numeric
+      default and appendix-preservation rule.
+- [x] Run focused article-reference tests, content/reference checks, markdown
+      formatting, and build verification before marking complete.
+
+## Milestone 45: Bibliography Malformed Entry Cleanup
+
+- [x] Inspect the rendered global bibliography for malformed source entries.
+- [x] Remove or correct malformed structured source data without inventing
+      missing article metadata.
+- [x] Add validation/tests so placeholder literal citation fields cannot render
+      as global bibliography entries.
+- [x] Update migration/audit docs with the preservation decision.
+- [x] Run focused reference, bibliography, content, formatting, and build
+      checks before marking complete.

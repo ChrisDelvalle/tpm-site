@@ -411,9 +411,11 @@ function textFromAst(node: AuditAstNode): string {
 }
 
 function isReferenceHeading(value: string): boolean {
-  return /^(?:references|bibliography|works cited|sources)$/iu.test(
-    value.trim(),
-  );
+  return referenceHeadingPattern().test(value.trim());
+}
+
+function referenceHeadingPattern(): RegExp {
+  return /^(?:bibliograph(?:y|ies)|citations?|further reading|references?|sources?|source list|works cited|works consulted)$/iu;
 }
 
 function isCanonicalReferenceLabel(label: string): boolean {

@@ -47,8 +47,9 @@ or article media spacing belongs to an explicit media component.
 
 `ArticleCitationMenu` should sit near metadata as a secondary utility. It may
 wrap under the metadata row on narrow screens, but it must not push the title,
-description, or byline into overlap. The header should remain readable when the
-citation utility is absent.
+description, or byline into overlap. The trigger is aligned to the inline end of
+the article width, while the popover itself must not reserve article space. The
+header should remain readable when the citation utility is absent.
 
 ## Layering And Scrolling
 
@@ -82,8 +83,11 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, and category links semantically associated.
-- keeps the `Cite this article` utility subordinate to article metadata when
-  present and absent without layout shift when omitted.
+- keeps the `Cite this article` trigger subordinate to article metadata, locked
+  to the inline end of the article width, and absent without layout shift when
+  omitted.
+- opens the citation popover without increasing article header height or
+  changing the title, metadata, or description positions.
 - does not create an awkward header-to-body gap when no hero image is rendered.
 - links known authors through `AuthorByline` and preserves legacy byline text
   when structured author data is not available.

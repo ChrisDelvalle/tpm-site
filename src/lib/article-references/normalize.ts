@@ -156,6 +156,7 @@ export function normalizeArticleReferences(
   const duplicateBibtexKeys = duplicateValues(
     bibtexEntries.map((entry) => entry.normalizedKey),
   ).map((key) => ({ code: "duplicate-bibtex-key", key }) as const);
+  const malformedBibtexEntries = malformedBibtexEntryDiagnostics(bibtexEntries);
   const bibtexMap = new Map(
     bibtexEntries.map((entry) => [entry.normalizedKey, entry] as const),
   );
@@ -169,11 +170,6 @@ export function normalizeArticleReferences(
           label: `cite-${key}`,
         }) as const,
     );
-  const unusedBibtexEntries = Array.from(
-    new Set(bibtexEntries.map((entry) => entry.normalizedKey)),
-  )
-    .filter((key) => !referencedCitationKeys.has(key))
-    .map((key) => ({ code: "unused-bibtex-entry", key }) as const);
   const preflightDiagnostics = [
     ...invalidDiagnostics,
     ...citationDefinitions,
@@ -184,8 +180,8 @@ export function normalizeArticleReferences(
     ...malformedDisplayLabels,
     ...emptyDefinitions,
     ...duplicateBibtexKeys,
+    ...malformedBibtexEntries,
     ...missingBibtexEntries,
-    ...unusedBibtexEntries,
   ];
 
   if (hasArticleReferenceDiagnostics(preflightDiagnostics)) {
@@ -212,14 +208,20 @@ export function normalizeArticleReferences(
     "citation",
   );
   const orderedNoteLabels = orderedLabelsForKind(validReferences, "note");
-  const citations = orderedCitationLabels.map((label, index) =>
-    citationFromLabel(
+  const referencedCitations = orderedCitationLabels.map((label, index) =>
+    citationFromReferencedLabel(
       label,
       index + 1,
       referencesByLabel.get(label) ?? [],
       bibtexMap,
     ),
   );
+  const bibliographyOnlyCitations = bibtexEntries
+    .filter((entry) => !referencedCitationKeys.has(entry.normalizedKey))
+    .map((entry, index) =>
+      citationFromBibtexEntry(entry, referencedCitations.length + index + 1),
+    );
+  const citations = [...referencedCitations, ...bibliographyOnlyCitations];
   const notes = orderedNoteLabels.map((label, index) =>
     noteFromLabel(
       label,
@@ -255,7 +257,7 @@ export function normalizeArticleReferences(
   };
 }
 
-function citationFromLabel(
+function citationFromReferencedLabel(
   label: ArticleReferenceLabel,
   order: number,
   references: readonly LabelOccurrence[],
@@ -277,6 +279,26 @@ function citationFromLabel(
     label,
     order,
     references: markers,
+  };
+}
+
+function citationFromBibtexEntry(
+  bibtex: ParsedBibtexEntry,
+  order: number,
+): ArticleCitation {
+  const label: ArticleReferenceLabel = `cite-${bibtex.normalizedKey}`;
+  const definition = definitionFromBibtex(bibtex);
+  const displayLabel = citationDisplayLabel(bibtex);
+
+  return {
+    bibtex,
+    definition,
+    ...(displayLabel === undefined ? {} : { displayLabel }),
+    id: articleReferenceEntryId(label),
+    kind: "citation",
+    label,
+    order,
+    references: [],
   };
 }
 
@@ -430,6 +452,28 @@ function repeatedNoteDiagnostics(
   ).map((label) => ({ code: "repeated-note-reference", label }));
 }
 
+function malformedBibtexEntryDiagnostics(
+  entries: readonly ParsedBibtexEntry[],
+): ArticleReferenceDiagnostic[] {
+  return entries.flatMap((entry) => {
+    const literalCitation = field(entry, "citation");
+
+    return literalCitation !== undefined &&
+      !hasBibliographyDisplayText(literalCitation)
+      ? [
+          {
+            code: "malformed-bibtex",
+            message: `Entry "${entry.key}" has an unusable literal citation field. Replace it with real source text or remove the entry.`,
+          } as const,
+        ]
+      : [];
+  });
+}
+
+function hasBibliographyDisplayText(value: string): boolean {
+  return /[\p{L}\p{N}]/u.test(value);
+}
+
 function hasDefinitionContent(
   children: readonly ArticleReferenceBlockContent[],
 ): boolean {
@@ -522,6 +566,12 @@ function citationKeyFromLabel(label: ArticleReferenceLabel): string {
 function definitionFromBibtex(entry: ParsedBibtexEntry): {
   children: readonly ArticleReferenceBlockContent[];
 } {
+  const literalCitation = field(entry, "citation");
+
+  if (literalCitation !== undefined) {
+    return paragraphDefinition([{ kind: "text", text: literalCitation }]);
+  }
+
   const children: ArticleReferenceInlineContent[] = [];
   const contributor = field(entry, "author") ?? field(entry, "editor");
   const title = field(entry, "title");
@@ -564,15 +614,7 @@ function definitionFromBibtex(entry: ParsedBibtexEntry): {
     appendText(children, entry.key);
   }
 
-  return {
-    children: [
-      {
-        children,
-        kind: "paragraph",
-        text: children.map((child) => child.text).join(""),
-      },
-    ],
-  };
+  return paragraphDefinition(children);
 }
 
 function citationDisplayLabel(
@@ -644,4 +686,20 @@ function appendLink(
     text,
     url,
   });
+}
+
+function paragraphDefinition(
+  children: readonly ArticleReferenceInlineContent[],
+): {
+  children: readonly ArticleReferenceBlockContent[];
+} {
+  return {
+    children: [
+      {
+        children,
+        kind: "paragraph",
+        text: children.map((child) => child.text).join(""),
+      },
+    ],
+  };
 }

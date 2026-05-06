@@ -4,10 +4,10 @@
 
 This document defines the reusable positioning primitive for UI surfaces that
 must stay visually related to another element. Current consumers are desktop
-category dropdowns, header search reveal, constrained mobile navigation, and
-article hover-image previews. Future consumers may include tooltips, contextual
-help, citation previews, share panels, command palettes, and editorial
-annotations.
+category dropdowns, header search reveal, constrained mobile navigation,
+article hover-image previews, and the article citation menu. Future consumers
+may include tooltips, contextual help, share panels, command palettes, and
+editorial annotations.
 
 The design goal is not to patch one navigation bug. The goal is to make a whole
 class of placement bugs hard to represent:
@@ -69,6 +69,10 @@ layout, and internal component layout remain simple CSS/Tailwind.
   migrate because article hover-image previews are inline trigger-attached
   floating previews. Native Astro markup plus the `inline-hover-preview` preset
   removes unnecessary hydration while preserving robust positioning.
+- `src/components/articles/ArticleCitationMenu.astro`: must use anchored
+  positioning because it is a trigger-attached utility surface. The citation
+  trigger lives in the article metadata row, but the menu must not reserve
+  article-flow space or detach from the trigger when opened.
 
 ### Components That Should Stay Out Of Scope
 
@@ -90,10 +94,10 @@ layout, and internal component layout remain simple CSS/Tailwind.
 
 ### Future Candidates
 
-Use the anchored system for future citation previews, share panels, tooltips,
-annotations, contextual help, or floating filters only when they are genuinely
-trigger-attached floating surfaces. Do not migrate a component simply because
-it uses `position: sticky`, `position: absolute` for internal decoration, or a
+Use the anchored system for future share panels, tooltips, annotations,
+contextual help, or floating filters only when they are genuinely
+trigger-attached floating surfaces. Do not migrate a component simply because it
+uses `position: sticky`, `position: absolute` for internal decoration, or a
 responsive layout constraint.
 
 ## Source Notes

@@ -26,13 +26,15 @@ Each `ArticleCitation` should include:
 - stable entry ID;
 - stable label;
 - numeric order;
-- one or more source reference markers;
+- zero or more source reference markers;
 - parsed BibTeX entry data;
 - display-ready citation text generated from BibTeX fields;
 - fallback text for incomplete but renderable sources.
 
 Repeated `cite-*` references are valid, so citations may have multiple source
-markers/backlinks.
+markers/backlinks. Bibliography-only sources are also valid when an article's
+historical source list is structured as `tpm-bibtex` without a precise inline
+claim marker; those entries render without backlinks.
 
 ## Composition Relationships
 
@@ -74,6 +76,10 @@ If a citation has `displayLabel`, inline citation markers may render with that
 label. The bibliography entry itself should render generated citation display
 content from parsed source data. It must not expose raw BibTeX unless a future
 explicit export/debug surface is designed.
+
+Inline citation markers must stay visually distinct from explanatory footnote
+markers. Citations use citation-specific marker styling, currently bracketed
+generated labels when possible, while notes use naked superscript numbers.
 
 ## Accessibility Semantics
 
@@ -118,6 +124,8 @@ dark mode.
 - Renders a visible `Bibliography` heading by default.
 - Renders an ordered list with entry order matching first citation order.
 - Uses stable entry IDs that match inline marker hrefs.
+- Inline citation markers are citation-styled and do not reuse the naked
+  superscript footnote presentation.
 - Supports multiple backlinks for repeated citations.
 - Renders generated bibliography display content from parsed BibTeX data.
 - Does not render raw `tpm-bibtex` source data.

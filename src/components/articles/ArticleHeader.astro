@@ -52,19 +52,18 @@ const {
   >
     {title}
   </h1>
-  <ArticleMeta
-    author={author}
-    authors={authors}
-    date={date}
-    formattedDate={formattedDate}
-  />
-  {
-    citation && (
-      <div class="max-w-2xl min-w-0">
-        <ArticleCitationMenu citation={citation} />
-      </div>
-    )
-  }
+  <div
+    class="flex w-full max-w-4xl min-w-0 flex-wrap items-start justify-between gap-x-4 gap-y-1"
+    data-article-meta-row
+  >
+    <ArticleMeta
+      author={author}
+      authors={authors}
+      date={date}
+      formattedDate={formattedDate}
+    />
+    {citation && <ArticleCitationMenu citation={citation} />}
+  </div>
   {
     description && (
       <p class="text-muted-foreground max-w-3xl min-w-0 text-lg break-words">

@@ -59,11 +59,11 @@ If the information is new to the viewer, introducing it as the set-up would slow
 
 Most of these images are unambiguous instances of a two-panel comic. Two or three of them are likely to be classified as memes rather than comics. I think that comics are the closest established medium to Internet memes, and examples of comic panels being used as memes fit comfortably with this hypothesis.
 
-Comic artist [Will Eisner](http://www.willeisner.com/) defines comics as a subgroup of sequential art: images ordered in a particular way to convey a narrative. Images in a sequence express the flow of time because they necessarily facilitate the synchronous flow of time for the reader. Time flows while the reader moves from one panel to the next. While panels can't straightforwardly be considered units of narratological time without problems, they are useful to think of as some segment of time.
+Comic artist [Will Eisner](http://www.willeisner.com/) defines comics as a subgroup of sequential art: images ordered in a particular way to convey a narrative.[^cite-eisner-w-comics-and-sequential-art] Images in a sequence express the flow of time because they necessarily facilitate the synchronous flow of time for the reader. Time flows while the reader moves from one panel to the next. While panels can't straightforwardly be considered units of narratological time without problems, they are useful to think of as some segment of time.
 
 For example, consider recursive comics which force some panels to function as both chronologically before and after another panel. A recursive narrative might even allow for a single-panel comic to function the same way, instructing the viewer to read the sole panel multiple times. Comic panels are much more reliably understood as segmenting units of comprehension than as strictly segmenting time and events. The reader must understand a panel in the context of the preceding panel.
 
-[Scott McCloud](http://scottmccloud.com/)'s [Infinite Canvas](http://www.scottmccloud.com/4-inventions/canvas/index.html) takes the idea of the panel as one segment among many in a sequence of images to its extreme. McCloud suggests a model of comics without pagination, in which panels can extend indefinitely on a single canvas. Pages are a lot like panels to McCloud: they entail the segmentation of narratological time, through the segmentation of the canvas itself. Space between two images expresses the narratological flow of time by enforcing the flow of actual reading time. Experimental comics based on this idea can branch out in every possible direction, upwards and downwards, left and right, and even into the background and the foreground using the Z-axis of the digital canvas.
+[Scott McCloud](http://scottmccloud.com/)'s [Infinite Canvas](http://www.scottmccloud.com/4-inventions/canvas/index.html) takes the idea of the panel as one segment among many in a sequence of images to its extreme.[^cite-mccloud-s-infinite-canvas] McCloud suggests a model of comics without pagination, in which panels can extend indefinitely on a single canvas. Pages are a lot like panels to McCloud: they entail the segmentation of narratological time, through the segmentation of the canvas itself. Space between two images expresses the narratological flow of time by enforcing the flow of actual reading time. Experimental comics based on this idea can branch out in every possible direction, upwards and downwards, left and right, and even into the background and the foreground using the Z-axis of the digital canvas.
 
 Memes are just like comics when understood this way. Most commonly, they are presented as a single image in a single post. They are viewed on their own discrete (web)page, and the pretense of preceding pages and _panels_ that contextualise the actual image currently being read is essential to the understanding of any given meme. Most interestingly, this is the case even when no previous _panels_ exist for a particular image. For example, many postironic memes use the general style of ironic memes in order to present a stand-alone message, and often do not even reference other memes or memetic imagery in order to do so. This means that they are merely designed to _look_ as though there were previous panels leading up to them, which would allow for a fuller understanding of their meaning. This kind of _implied memelore_ frequently inspires people to retroactively write in the meme's backstory.
 
@@ -75,11 +75,11 @@ Since comics are made up of images coupled with readily identified grammatical c
 
 Through parody, the comic panels in the example were turned into a meme template. But the original comic would not have been considered a template until enough edits were produced that people began recognising it as a meme. The comic panels initially spread unaltered, because there was no sense among the audience that the expected mode of interaction with the comic panels was to modify them.
 
-They became memetic through the development of variants, most of which would have been edits of edits of the original comic. [Limor Shifman](https://limorshifman.huji.ac.il/) attempts to explain this process of viral-meme transition by distinguishing _memes_ from _virals_. [She defines memes](http://culturedigitally.org/2015/11/memeology-festival-05-memes-as-ritual-virals-as-transmission-in-praise-of-blurry-boundaries/) as spreadable content with family resemblance, and virals as one content unit that spreads well. Virals happen because people share one version among the many possible versions of an image a lot. Memes happen because people share lots of different versions.
+They became memetic through the development of variants, most of which would have been edits of edits of the original comic. [Limor Shifman](https://limorshifman.huji.ac.il/) attempts to explain this process of viral-meme transition by distinguishing _memes_ from _virals_. [She defines memes](http://culturedigitally.org/2015/11/memeology-festival-05-memes-as-ritual-virals-as-transmission-in-praise-of-blurry-boundaries/) as spreadable content with family resemblance, and virals as one content unit that spreads well.[^cite-shifman-l-2015-memeology-festival-05] Virals happen because people share one version among the many possible versions of an image a lot. Memes happen because people share lots of different versions.
 
 The templating process of comics turning viral and then memetic shows that this epidemiological model based on patterns of spread is misleading, whether it's from the meme's-eye-view or the agent's-eye-view. Namely, it doesn't explain the fact that virals and memes are frequently indistinguishable, overlapping, and behaviourally identical. By Shifman's definition, memes are either just a higher-level group of contents made of virals, or virals are memes in waiting that haven't been diversely parodied enough to warrant the label.
 
-As [Dan Sperber points out](http://www.dan.sperber.fr/wp-content/uploads/2000_an-objection-to-the-memetic-approach-to-culture.pdf) through an example involving a series of star shapes copied in a chain of visual Chinese whispers, most people would not be able to place memetic content in chronological order without great difficulty.
+As [Dan Sperber points out](http://www.dan.sperber.fr/wp-content/uploads/2000_an-objection-to-the-memetic-approach-to-culture.pdf) through an example involving a series of star shapes copied in a chain of visual Chinese whispers, most people would not be able to place memetic content in chronological order without great difficulty.[^cite-sperber-d-2000-an-objection-to-the-memetic-approach]
 
 Even those already familiar with the entire chronology of a meme could not help but read additional meaning into the original, such as a sense of irony about what was to come. The subsequent panels of the long chain of sequential art have recontextualised the previous panels and given them new meaning.
 
@@ -87,7 +87,7 @@ Since memetic images change meaning and function throughout time, they can't be 
 
 ## IV. Non-Linear Sequential Art and the Memetic Bottleneck
 
-Memes as characterised above are a form of what I call _non-linear sequential art_. Other examples of non-linear sequential art include any replayable games with non-linear narratives. This characterization as _non-linear_ holds despite what skeptics may say. [Amy Claussen](https://www.amyeclaussen.com/), for instance, challenges the existence of non-linear narrative in her GDC talk called ["Unpopular Opinion: All Narrative is Linear"](https://www.youtube.com/watch?v=GWmEu7Yqrb0).
+Memes as characterised above are a form of what I call _non-linear sequential art_. Other examples of non-linear sequential art include any replayable games with non-linear narratives. This characterization as _non-linear_ holds despite what skeptics may say. [Amy Claussen](https://www.amyeclaussen.com/), for instance, challenges the existence of non-linear narrative in her GDC talk called ["Unpopular Opinion: All Narrative is Linear"](https://www.youtube.com/watch?v=GWmEu7Yqrb0).[^cite-claussen-a-unpopular-opinion-all-narrative-is-linear]
 
 <iframe
   width="560"
@@ -112,3 +112,42 @@ This is analogous to the choice between various interpretive contexts for a give
 This dynamic is one reason why it makes sense to refer to both the single instance and the totality of a family of contents as "a meme". This is kind of like referring to both a printed set of letters on a page, as well as every spoken or written instance of that linguistic entity, as "a word".
 
 Like a panel in a highly networked version of the Infinite Canvas, every meme is both a potential bottleneck and a possible choice. Since the sense that every meme has a preceding meme is essential to the appreciation of memes, the memetic bottleneck works in the inverse direction of the narrative bottleneck, generating potential pasts. To choose a meme to post is to choose which game to play with the audience. More significantly, it is to choose which save file to load up: it's scenario editing of history, conditioned on current mood.
+
+```tpm-bibtex
+@misc{eisner-w-comics-and-sequential-art,
+  citation = {Eisner, W. Comics and Sequential Art. Author site available at: http://www.willeisner.com/},
+  author = {Eisner, W.},
+  title = {Comics and Sequential Art},
+  url = {http://www.willeisner.com/},
+}
+
+@misc{mccloud-s-infinite-canvas,
+  citation = {McCloud, S. The Infinite Canvas. Available at: http://www.scottmccloud.com/4-inventions/canvas/index.html},
+  author = {McCloud, S.},
+  title = {The Infinite Canvas},
+  url = {http://www.scottmccloud.com/4-inventions/canvas/index.html},
+}
+
+@misc{shifman-l-2015-memeology-festival-05,
+  citation = {Shifman, L. (2015). Memeology Festival 05. Memes as Ritual, Virals as Transmission? In Praise of Blurry Boundaries. Culture Digitally. Available at: http://culturedigitally.org/2015/11/memeology-festival-05-memes-as-ritual-virals-as-transmission-in-praise-of-blurry-boundaries/},
+  author = {Shifman, L.},
+  title = {Memeology Festival 05. Memes as Ritual, Virals as Transmission? In Praise of Blurry Boundaries},
+  year = {2015},
+  url = {http://culturedigitally.org/2015/11/memeology-festival-05-memes-as-ritual-virals-as-transmission-in-praise-of-blurry-boundaries/},
+}
+
+@misc{sperber-d-2000-an-objection-to-the-memetic-approach,
+  citation = {Sperber, D. (2000). An objection to the memetic approach to culture. Available at: http://www.dan.sperber.fr/wp-content/uploads/2000_an-objection-to-the-memetic-approach-to-culture.pdf},
+  author = {Sperber, D.},
+  title = {An objection to the memetic approach to culture},
+  year = {2000},
+  url = {http://www.dan.sperber.fr/wp-content/uploads/2000_an-objection-to-the-memetic-approach-to-culture.pdf},
+}
+
+@misc{claussen-a-unpopular-opinion-all-narrative-is-linear,
+  citation = {Claussen, A. Unpopular Opinion: All Narrative is Linear. GDC talk. Available at: https://www.youtube.com/watch?v=GWmEu7Yqrb0},
+  author = {Claussen, A.},
+  title = {Unpopular Opinion: All Narrative is Linear},
+  url = {https://www.youtube.com/watch?v=GWmEu7Yqrb0},
+}
+```

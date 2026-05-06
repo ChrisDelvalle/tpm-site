@@ -2,8 +2,9 @@
 
 ## Purpose
 
-The corpus audit inventories citation-like article content before any article
-rewrites happen. It is a review tool, not an automatic migration tool.
+The corpus audit inventories citation-like article content before and after
+article-reference rewrites. It is a review tool, not an automatic migration
+tool.
 
 The audit must make these things clear:
 
@@ -29,8 +30,9 @@ The audit script should scan every Markdown and MDX article under
 - hidden BibTeX data blocks: fenced code with `tpm-bibtex`;
 - obsolete citation definitions: `[^cite-*]: ...`;
 - noncanonical footnote definitions and markers;
-- explicit reference-section headings such as `References`, `Bibliography`,
-  `Works Cited`, or `Sources`;
+- explicit reference-section headings such as `Reference`, `References`,
+  `Bibliography`, `Works Cited`, `Works Consulted`, `Sources`, `Source`, or
+  `Source List`;
 - visible BibTeX fences using ordinary `bibtex`;
 - raw HTML links;
 - Markdown links, with archive links counted separately;
@@ -76,9 +78,8 @@ Default CLI output should be Markdown:
 - a compact all-article inventory when useful.
 
 JSON output should be available for future tooling and CI experiments. The
-audit should not fail by default; release blocking belongs to a later strict
-validation step after the corpus is normalized or exceptions are explicitly
-approved.
+audit should not fail by default. Release blocking is handled by the strict
+Markdown reference plugin now that the published corpus is normalized.
 
 ## Testing
 
@@ -101,5 +102,5 @@ The script should be covered through pure helper tests and a CLI smoke test.
 - Do not infer citations from ordinary links.
 - Do not fetch external pages for metadata.
 - Do not deduplicate sources globally.
-- Do not enable release-blocking citation validation until the corpus audit is
-  reviewed and the content-normalization plan is approved.
+- Do not use audit output as a substitute for the strict Markdown validation
+  that enforces canonical labels during build.

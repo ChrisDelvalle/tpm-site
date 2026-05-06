@@ -11,13 +11,13 @@ const { articles } = Astro.props;
 
 {
   articles.length > 0 && (
-    <section class="grid gap-2" aria-label="Articles citing this source">
+    <div class="grid min-w-0 gap-2" data-bibliography-source-articles>
       <h3 class="text-muted-foreground text-sm font-semibold">
         Cited by {articles.length === 1 ? "article" : "articles"}
       </h3>
-      <ul class="grid gap-1 text-sm">
+      <ul class="grid min-w-0 gap-1 text-sm">
         {articles.map((article) => (
-          <li class="text-muted-foreground flex flex-wrap gap-x-2 gap-y-1">
+          <li class="text-muted-foreground flex min-w-0 flex-wrap gap-x-2 gap-y-1">
             <TextLink href={article.href} prefetch="hover">
               {article.title}
             </TextLink>
@@ -25,6 +25,6 @@ const { articles } = Astro.props;
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   )
 }

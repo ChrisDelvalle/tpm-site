@@ -139,7 +139,6 @@ interface ArticleCitationReference {
 Invalid states should not be representable after normalization:
 
 - a citation with no matching BibTeX entry;
-- an unused BibTeX entry;
 - duplicate BibTeX keys;
 - duplicate note definitions;
 - repeated note markers, unless later explicitly designed;
@@ -164,6 +163,13 @@ Required baseline fields:
 - books: `author` or `editor`, plus `year` when available;
 - articles/in-collection entries: `author`, `title`, `year` when available;
 - web-like entries: `title`, plus `url` when the source is online.
+
+TPM also supports a conservative `citation` field for corpus migrations. When
+present, `citation` is the literal source-list wording to render in article and
+global bibliography views. Parsed fields such as `author`, `title`, `year`,
+`url`, and `doi` may still accompany it for sorting, deduplication, and future
+format exports, but the visible bibliography entry preserves the literal
+author-approved source text.
 
 Missing optional fields should not block rendering. Missing fields that make a
 source unusable should produce diagnostics in strict mode and clear fallback
@@ -215,8 +221,16 @@ later change style without editing article content.
 
 ## Rendering Contract
 
-Inline citation markers may render numerically or with a generated label
-depending on the chosen article style. The data model must support both.
+Inline explanatory-note markers and bibliography-citation markers must be
+visually distinguishable. Explanatory notes render as naked clickable
+superscript numbers, for example `1`, with no brackets. Bibliographic
+citations render as bracketed numeric citation markers by default, for example
+`[1]`.
+
+The data model still preserves generated citation labels such as
+`Baudrillard 1981` for future explicit style overrides, but the default body
+marker remains numeric so author-written prose citations do not duplicate
+themselves.
 
 Article-local rendering:
 
@@ -242,7 +256,6 @@ Diagnostics should be author-readable and point at the repair:
 - empty note definition;
 - repeated note reference;
 - missing BibTeX entry for `[^cite-*]`;
-- unused BibTeX entry;
 - duplicate BibTeX key;
 - malformed BibTeX;
 - forbidden visible `bibtex` fence in published articles if enforcement is
@@ -260,6 +273,8 @@ Migration rules:
 
 - Preserve author wording and article intent.
 - Convert true sources to `[^cite-*]` markers plus `tpm-bibtex` entries.
+- Convert broad bibliography/source-list entries to bibliography-only
+  `tpm-bibtex` entries when no precise inline citation point exists.
 - Convert explanatory notes to `[^note-*]` definitions.
 - Leave ordinary inline links alone.
 - Leave ambiguous links alone until reviewed.
@@ -274,7 +289,8 @@ Unit tests:
 - BibTeX parser accepts citation-manager-shaped entries;
 - parser preserves unknown fields and raw text;
 - parser rejects malformed entries with precise diagnostics;
-- normalization catches missing, unused, and duplicate citation keys;
+- normalization catches missing and duplicate citation keys;
+- normalization keeps uncited BibTeX entries as bibliography-only sources;
 - notes and citations are independently normalized;
 - generated citation definitions have stable fallback text.
 

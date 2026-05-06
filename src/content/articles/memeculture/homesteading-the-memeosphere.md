@@ -16,7 +16,7 @@ tags:
 legacyPermalink: 2022/04/04/homesteading-the-memeosphere/
 ---
 
-Eric S. Raymond, in ["Homesteading the Noosphere"](https://firstmonday.org/ojs/index.php/fm/article/download/1474/1389) (1998):
+Eric S. Raymond, in ["Homesteading the Noosphere"](https://firstmonday.org/ojs/index.php/fm/article/download/1474/1389) (1998)[^cite-raymond-e-s-1998-homesteading-the-noosphere]:
 
 > Nothing prevents half a dozen different people from taking any given open-source product (such as, say the Free Software Foundations's gcc C compiler), duplicating the sources, running off with them in different evolutionary directions, but all claiming to be the product.
 >
@@ -30,7 +30,7 @@ Eric S. Raymond, in ["Homesteading the Noosphere"](https://firstmonday.org/ojs/i
 
 The reason that memepages were such a revolutionary force was, in part, because they could accumulate reputation and following for _individual_ shitposters. But reputation per se still plays a role even in anonymous environments. On 4chan, the _platform_ (or subfora such as /b/) accumulated the reputation instead of the individual users. Not only that, but as anyone who has used an imageboard quickly comes to realise, you can often tell (intuitively, based on things like tone and content) if you're interacting with the same poster.
 
-Going further back than imageboard culture, the "hacker ownership" of memes can be seen at work, such as in memes like ["Godwin's Law"](http://www.wired.com/1994/10/godwin-if-2/) (1990) and its corollaries such as "Miller's Paradox" or "Gordon's Restatement of Newman's Corollary to Godwin's Law". This mode of thinking about memes as something individuals can invent (and put their name on) was superseded alongside enthusiasm for memetic engineering, replaced by hostility against forced memes; it has since been revived with the maturation of ironic memes and memepages.
+Going further back than imageboard culture, the "hacker ownership" of memes can be seen at work, such as in memes like ["Godwin's Law"](http://www.wired.com/1994/10/godwin-if-2/) (1990)[^cite-godwin-m-1994-meme-counter-meme] and its corollaries such as "Miller's Paradox" or "Gordon's Restatement of Newman's Corollary to Godwin's Law". This mode of thinking about memes as something individuals can invent (and put their name on) was superseded alongside enthusiasm for memetic engineering, replaced by hostility against forced memes; it has since been revived with the maturation of ironic memes and memepages.
 
 It's intriguing to me that, just as with the ["Promiscuous Theory, Puritan Practice"](https://firstmonday.org/ojs/index.php/fm/article/download/1474/1389#d3) that ESR talks about, memers adopted and utilised contradictory theory and practice in response to different platforms. Namely, the notion that memes are organic, genic, or viral, paired with the notion that memes can be engineered; the notion that memes are cultural products made by individuals or communities, paired with notion that memes emerge naturally and cannot be forced (or at least a taboo against such behaviour).
 
@@ -52,6 +52,31 @@ I think that many memes have great value and significance, historically and cult
 
 Conceptualising memes _monoculturally_ and excluding the ingroup-first, [_emic_](https://www.anthroencyclopedia.com/entry/emic-and-etic) perspectives that respect the importance of cultural context (such as by focusing solely on memers and their audiences, or solely on memetic artefacts such as posts or images), will pave the way to a thorough commercialisation of memes and memecultures. Memeculturalists will then have no choice but to adopt the definition of meme culture provided by people who never had a stake in the culture itself.
 
-[Hilary Putnam](https://www.youtube.com/watch?v=oLJfEVu3kbY) said: "The problem with just giving up on philosophy is: bad philosophy is omnipresent. \[...\] if professional philosophers gave up talking about philosophy, your novelists wouldn't; your physicists wouldn't; your biologists wouldn't; your self-promoted god-knows-what wouldn't. We'd be deluged in nonsense. We _will_ be deluged in nonsense, but at least there has to be some, still small, voices, like the boy saying the emperor has no clothes, saying that's nonsense."
+[Hilary Putnam](https://www.youtube.com/watch?v=oLJfEVu3kbY) said[^cite-putnam-h-bad-philosophy-is-omnipresent]: "The problem with just giving up on philosophy is: bad philosophy is omnipresent. \[...\] if professional philosophers gave up talking about philosophy, your novelists wouldn't; your physicists wouldn't; your biologists wouldn't; your self-promoted god-knows-what wouldn't. We'd be deluged in nonsense. We _will_ be deluged in nonsense, but at least there has to be some, still small, voices, like the boy saying the emperor has no clothes, saying that's nonsense."
 
 We are already deluged in nonsense about memes, and I treasure the (still small) voices that speak up for the memes.
+
+```tpm-bibtex
+@misc{raymond-e-s-1998-homesteading-the-noosphere,
+  citation = {Raymond, E.S. (1998). Homesteading the Noosphere. First Monday. Available at: https://firstmonday.org/ojs/index.php/fm/article/download/1474/1389},
+  author = {Raymond, E.S.},
+  title = {Homesteading the Noosphere},
+  year = {1998},
+  url = {https://firstmonday.org/ojs/index.php/fm/article/download/1474/1389},
+}
+
+@misc{putnam-h-bad-philosophy-is-omnipresent,
+  citation = {Putnam, H. Bad philosophy is omnipresent. Video. Available at: https://www.youtube.com/watch?v=oLJfEVu3kbY},
+  author = {Putnam, H.},
+  title = {Bad philosophy is omnipresent},
+  url = {https://www.youtube.com/watch?v=oLJfEVu3kbY},
+}
+
+@online{godwin-m-1994-meme-counter-meme,
+  citation = {Godwin, M. (1994). Meme, Counter-meme. Wired. Available at: http://www.wired.com/1994/10/godwin-if-2/},
+  author = {Godwin, Mike},
+  title = {Meme, Counter-meme},
+  year = {1994},
+  url = {http://www.wired.com/1994/10/godwin-if-2/},
+}
+```

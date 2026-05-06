@@ -81,9 +81,7 @@ describe("article reference normalization", () => {
     expect(
       result.data.citations[0]?.references.map((marker) => marker.id),
     ).toEqual(["cite-ref-second", "cite-ref-second-2"]);
-    expect(result.data.citations[0]?.references[0]?.displayText).toBe(
-      "Second 2020",
-    );
+    expect(result.data.citations[0]?.references[0]?.displayText).toBe("1");
     expect(result.data.notes[0]?.references[0]?.displayText).toBe("1");
     expect(result.data.citations[0]?.bibtex.key).toBe("second");
 
@@ -116,7 +114,7 @@ describe("article reference normalization", () => {
         definition("cite-bad-display-label", "[@] Bad label."),
       ],
       [
-        bibtex("unused", { title: "Unused citation" }),
+        bibtex("unused", { title: "Bibliography-only citation" }),
         bibtex("unused", { title: "Duplicate citation" }),
       ],
     );
@@ -136,7 +134,83 @@ describe("article reference normalization", () => {
       "repeated-note-reference",
       "duplicate-bibtex-key",
       "missing-bibtex-entry",
-      "unused-bibtex-entry",
+    ]);
+  });
+
+  test("keeps uncited BibTeX entries as bibliography-only sources", () => {
+    const result = normalizeArticleReferences(
+      [reference("cite-used")],
+      [],
+      [
+        bibtex("used", { author: "Writer, A.", title: "Used", year: "2024" }),
+        bibtex("source-list", {
+          author: "Researcher, B.",
+          title: "Source List Entry",
+          year: "2020",
+        }),
+      ],
+    );
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      throw new Error("Expected normalized bibliography-only citation.");
+    }
+
+    expect(result.data.citations.map((citation) => citation.label)).toEqual([
+      "cite-used",
+      "cite-source-list",
+    ]);
+    expect(result.data.citations[0]?.references).toHaveLength(1);
+    expect(result.data.citations[1]?.references).toEqual([]);
+    expect(result.data.citations[1]?.displayLabel).toBe("Researcher 2020");
+  });
+
+  test("uses literal citation fields to preserve source-list wording", () => {
+    const result = normalizeArticleReferences(
+      [],
+      [],
+      [
+        bibtex("source-list", {
+          author: "Researcher, B.",
+          citation:
+            "Researcher, B. (2020). Source List Entry. Journal, 1(2), 3-4.",
+          title: "Source List Entry",
+          year: "2020",
+        }),
+      ],
+    );
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      throw new Error("Expected literal citation field to normalize.");
+    }
+
+    expect(result.data.citations[0]?.definition.children[0]?.text).toBe(
+      "Researcher, B. (2020). Source List Entry. Journal, 1(2), 3-4.",
+    );
+  });
+
+  test("rejects literal citation fields without source text", () => {
+    const result = normalizeArticleReferences(
+      [],
+      [],
+      [bibtex("source-placeholder", { citation: "^" })],
+    );
+
+    expect(result.ok).toBe(false);
+
+    if (result.ok) {
+      throw new Error("Expected malformed literal citation diagnostic.");
+    }
+
+    expect(result.diagnostics).toEqual([
+      {
+        code: "malformed-bibtex",
+        message:
+          'Entry "source-placeholder" has an unusable literal citation field. Replace it with real source text or remove the entry.',
+      },
     ]);
   });
 });

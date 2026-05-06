@@ -98,6 +98,14 @@ point to them. Inline markers rendered by the plugin must link to entries inside
 these sections, and backlink components must return readers to the exact source
 reference where feasible.
 
+Inline note and citation markers must not share the same visual treatment.
+Explanatory notes are naked clickable superscript numbers. Bibliographic
+citations are citation-styled bracketed numbers by default. Generated
+author-year labels remain structured data for future explicit style overrides,
+but the body default is numeric to avoid duplicating author-written prose
+citations. This distinction is part of the reading contract, not an incidental
+style choice.
+
 ## Content Edge Cases
 
 Handle:
@@ -133,6 +141,8 @@ that compete with the support block.
 - Does not create horizontal overflow with long labels, titles, or URLs.
 - Preserves normalized note content and generated citation display content from
   the normalized model.
+- Keeps note markers naked and superscripted while keeping citation markers
+  visually distinct.
 - Keeps every entry target ID unique.
 - Keeps every backlink target associated with the originating inline marker.
 - Maintains visible focus states in light and dark mode.

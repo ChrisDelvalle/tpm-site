@@ -27,10 +27,10 @@ describe("article reference ID helpers", () => {
     );
   });
 
-  test("uses citation display labels only when provided", () => {
+  test("uses numeric marker display text by default", () => {
     expect(
       articleReferenceMarkerDisplayText("citation", 2, "Baudrillard 1981"),
-    ).toBe("Baudrillard 1981");
+    ).toBe("2");
     expect(articleReferenceMarkerDisplayText("citation", 2, undefined)).toBe(
       "2",
     );

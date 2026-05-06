@@ -4,6 +4,10 @@ Use ordinary Markdown for article prose. Only use the reference syntax below
 when a note or bibliography entry should be part of the site's structured
 article-reference system.
 
+Published articles use strict reference validation. Arbitrary Markdown
+footnotes such as `[^1]` or `[^source]` fail the build; use `note-*` for
+explanatory notes and `cite-*` plus `tpm-bibtex` for bibliography sources.
+
 ## Explanatory Notes
 
 Use `note-*` footnotes for explanatory asides.
@@ -44,6 +48,8 @@ Rules:
 - the BibTeX key is `<key>` without the `cite-` prefix;
 - citation keys use lowercase ASCII words separated by hyphens;
 - citations may be referenced more than once;
+- inline citation markers render as bracketed numbers by default, such as
+  `[1]`, even when source metadata can generate an author-year label;
 - do not add `[^cite-*]:` footnote definitions;
 - `tpm-bibtex` blocks are hidden source data and should never appear to
   readers.

@@ -17,6 +17,8 @@ describe("BibliographySourceArticles", () => {
     );
     expect(view).toContain("April 6, 2022");
     expect(view).toContain('data-astro-prefetch="hover"');
+    expect(view).toContain("data-bibliography-source-articles");
+    expect(view).not.toContain('aria-label="Articles citing this source"');
   });
 
   test("renders nothing without source articles", async () => {

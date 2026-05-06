@@ -46,19 +46,17 @@ Rules:
 
 ## Corpus Survey
 
-The current corpus has several citation-like patterns:
+The published corpus has been normalized so legacy numeric footnotes and
+claim-tied reference sections no longer remain as build-valid source syntax.
+Current article-reference data comes from explicit `cite-*` markers, `note-*`
+definitions, and hidden `tpm-bibtex` blocks.
 
-- explicit `Reference`, `References`, or `Bibliography` sections;
-- Markdown footnotes used as source references;
-- Markdown footnotes used as explanatory notes;
-- bracket-style numbered citations;
-- raw HTML or MDX links;
-- ordinary inline links.
-
-These patterns are not reliable structured bibliography data. Migration should
-convert only true sources into explicit `cite-*` markers plus BibTeX entries.
-Explanatory prose becomes `note-*` footnotes. Ambiguous links stay as prose
-links until manually reviewed.
+The corpus still contains ordinary inline links, archive links, and raw URLs.
+These patterns are not reliable structured bibliography data. They stay article
+prose unless an article is explicitly edited to cite a source with a `cite-*`
+marker plus BibTeX entry. Historical source-list sections have been migrated
+only when doing so preserves author intent. Author-owned appendices remain
+visible prose until a separate visible-source-appendix model is designed.
 
 ## Global Bibliography Model
 
@@ -186,14 +184,14 @@ Before corpus normalization:
 After normalization:
 
 - missing citation BibTeX entries fail;
-- unused BibTeX entries fail;
+- uncited BibTeX entries render as bibliography-only sources;
 - duplicate BibTeX keys fail;
 - malformed BibTeX fails;
 - note definitions must be valid and referenced;
 - raw visible `bibtex` fences can be rejected if they would confuse authoring.
 
 Diagnostics must tell authors whether to add a BibTeX entry, rename a marker,
-remove an unused source, convert a prose note, or leave an ordinary link alone.
+convert a prose note, or leave an ordinary link alone.
 
 ## SEO And Search
 

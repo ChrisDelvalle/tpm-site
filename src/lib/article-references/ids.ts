@@ -53,6 +53,10 @@ export function articleReferenceBacklinkId(
 /**
  * Builds the default marker display text for an inline reference.
  *
+ * Citation source labels remain available in normalized reference data, but
+ * inline citation markers default to numeric display so author-written prose
+ * citations such as "Knobe (2015)" do not duplicate themselves in the body.
+ *
  * @param kind Reference kind.
  * @param entryOrder One-based entry order within that reference kind.
  * @param displayLabel Optional author-provided display label.
@@ -63,9 +67,10 @@ export function articleReferenceMarkerDisplayText(
   entryOrder: number,
   displayLabel: string | undefined,
 ): string {
-  return kind === "citation" && displayLabel !== undefined
-    ? displayLabel
-    : String(entryOrder);
+  void kind;
+  void displayLabel;
+
+  return String(entryOrder);
 }
 
 function labelPrefix(label: ArticleReferenceLabel): "cite" | "note" {

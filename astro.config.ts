@@ -21,7 +21,10 @@ export default defineConfig({
     rehypePlugins: [
       [rehypeArticleImages, { policyCacheKey: articleImagePolicyCacheKey }],
     ],
-    remarkPlugins: [remarkArticleImageMarkers, remarkArticleReferences],
+    remarkPlugins: [
+      remarkArticleImageMarkers,
+      [remarkArticleReferences, { validateLegacyFootnotes: true }],
+    ],
   },
   prefetch: {
     defaultStrategy: "hover",

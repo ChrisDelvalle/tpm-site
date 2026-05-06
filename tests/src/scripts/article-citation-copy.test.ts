@@ -96,6 +96,158 @@ describe("article citation copy browser script", () => {
       document.querySelector("button")?.dataset["articleCitationCopyState"],
     ).toBe("error");
   });
+
+  test("copies citation text from the collapsed popover code block", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const copiedText: string[] = [];
+    const document = window.document;
+
+    document.body.innerHTML = `
+      <div data-article-citation-menu>
+        <details data-article-citation-format="apa" open>
+          <button
+            data-article-citation-copy-button
+            data-article-citation-copy-target="citation-apa"
+          >Copy</button>
+          <code
+            id="citation-apa"
+            data-article-citation-copy-text="&quot;Author. (2022). Article title.\\nSecond line.&quot;"
+            data-article-citation-text
+          >
+            Author. (2022). Article title.
+            <span>Second line.</span>
+          </code>
+          <p data-article-citation-copy-status></p>
+        </details>
+      </div>
+    `;
+
+    installArticleCitationCopy({
+      document: browserDocument(document),
+      navigator: browserNavigator({
+        clipboard: {
+          writeText: async (value: string) => {
+            await Promise.resolve();
+            copiedText.push(value);
+          },
+        },
+      }),
+    });
+
+    document
+      .querySelector("button")
+      ?.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+    await settledPromises();
+
+    expect(copiedText).toEqual([
+      "Author. (2022). Article title.\nSecond line.",
+    ]);
+    expect(
+      document.querySelector("[data-article-citation-copy-status]")
+        ?.textContent,
+    ).toBe("Copied.");
+  });
+
+  test("switches citation styles in one selected citation text block", async () => {
+    const window = new Window();
+    Reflect.set(window, "SyntaxError", SyntaxError);
+    const copiedText: string[] = [];
+    const document = window.document;
+    const bibtex = "@online{source,\n  title = {Source}\n}";
+
+    document.body.innerHTML = `
+      <div data-article-citation-menu>
+        <button
+          type="button"
+          aria-pressed="true"
+          data-article-citation-format-label="APA"
+          data-article-citation-format-text="&quot;Author. (2022). Article title.&quot;"
+          data-article-citation-style-button
+        >APA</button>
+        <button
+          type="button"
+          aria-pressed="false"
+          data-article-citation-format-label="BibTeX"
+          data-article-citation-format-text=""
+          data-article-citation-style-button
+        >BibTeX</button>
+        <code
+          id="citation-selected"
+          data-article-citation-copy-text="&quot;Author. (2022). Article title.&quot;"
+          data-article-citation-text
+        >
+          <span class="block">Author. (2022). Article title.</span>
+        </code>
+        <button
+          aria-label="Copy APA citation"
+          data-article-citation-copy-button
+          data-article-citation-copy-target="citation-selected"
+        >Copy</button>
+        <p data-article-citation-copy-status>Copied.</p>
+      </div>
+    `;
+
+    installArticleCitationCopy({
+      document: browserDocument(document),
+      navigator: browserNavigator({
+        clipboard: {
+          writeText: async (value: string) => {
+            await Promise.resolve();
+            copiedText.push(value);
+          },
+        },
+      }),
+    });
+
+    const dom = browserDocument(document);
+    const styleButtons = Array.from(
+      dom.querySelectorAll<HTMLButtonElement>(
+        "[data-article-citation-style-button]",
+      ),
+    );
+    const citationText = dom.querySelector<HTMLElement>(
+      "[data-article-citation-text]",
+    );
+    const copyButton = dom.querySelector<HTMLButtonElement>(
+      "[data-article-citation-copy-button]",
+    );
+    const bibtexStyleButton = styleButtons.at(1);
+
+    if (
+      bibtexStyleButton === undefined ||
+      citationText === null ||
+      copyButton === null
+    ) {
+      throw new Error("Citation menu test fixture is missing expected nodes.");
+    }
+
+    bibtexStyleButton.dataset["articleCitationFormatText"] =
+      JSON.stringify(bibtex);
+    bibtexStyleButton.dispatchEvent(
+      browserEvent(new window.MouseEvent("click", { bubbles: true })),
+    );
+
+    expect(
+      styleButtons.map((button) => button.getAttribute("aria-pressed")),
+    ).toEqual(["false", "true"]);
+    expect(citationText.dataset["articleCitationCopyText"]).toBe(
+      JSON.stringify(bibtex),
+    );
+    expect(citationText.textContent).toContain("@online{source,");
+    expect(copyButton.getAttribute("aria-label")).toBe("Copy BibTeX citation");
+    expect(
+      document.querySelector("[data-article-citation-copy-status]")
+        ?.textContent,
+    ).toBe("");
+
+    copyButton.dispatchEvent(
+      browserEvent(new window.MouseEvent("click", { bubbles: true })),
+    );
+    await settledPromises();
+
+    expect(copiedText).toEqual([bibtex]);
+  });
 });
 
 function browserDocument(document: unknown): Document {
@@ -106,6 +258,11 @@ function browserDocument(document: unknown): Document {
 function browserNavigator(navigator: unknown): Navigator {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Tests provide the clipboard subset required by the script.
   return navigator as Navigator;
+}
+
+function browserEvent(event: unknown): Event {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Happy DOM events implement the browser event shape used by dispatchEvent.
+  return event as Event;
 }
 
 async function settledPromises(): Promise<void> {

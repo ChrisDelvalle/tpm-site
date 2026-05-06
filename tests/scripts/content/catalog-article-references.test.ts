@@ -54,6 +54,22 @@ describe("article reference migration catalog", () => {
           "",
         ].join("\n"),
       );
+      await writeText(
+        root,
+        "src/content/articles/culture/with-references.md",
+        [
+          "---",
+          "title: With References",
+          "---",
+          "",
+          "Claim.[^cite-source]",
+          "",
+          "```tpm-bibtex",
+          "@book{source, title = {Source}}",
+          "```",
+          "",
+        ].join("\n"),
+      );
 
       const catalog = await articleReferenceCatalog({
         articleDir: path.join(root, "src/content/articles"),
@@ -62,14 +78,18 @@ describe("article reference migration catalog", () => {
       });
       const statuses = catalog.articles.map((article) => article.status);
 
-      expect(catalog.articles).toHaveLength(3);
+      expect(catalog.articles).toHaveLength(4);
       expect(statuses).toEqual([
         "clean",
         "mechanical-safe",
         "prose-links-only",
+        "canonical-references",
       ]);
       expect(formatArticleReferenceCatalog(catalog)).toContain(
         "| `src/content/articles/culture/html.md` | `mechanical-safe` |",
+      );
+      expect(formatArticleReferenceCatalog(catalog)).toContain(
+        "- Canonical-reference articles: 1",
       );
       expect(formatArticleReferenceCatalog(catalog)).toContain(
         "ARTICLE_REFERENCE_MIGRATION_DECISIONS.md",
@@ -81,7 +101,7 @@ describe("article reference migration catalog", () => {
       [
         "Claim.[^old]",
         "",
-        "## References",
+        "## Source List",
         "",
         "[^old]: Source.",
         '<a name="Top"></a>',
@@ -94,7 +114,7 @@ describe("article reference migration catalog", () => {
       { line: 1, text: "Claim.[^old]" },
     ]);
     expect(details.referenceHeadings).toEqual([
-      { line: 3, text: "## References" },
+      { line: 3, text: "## Source List" },
     ]);
     expect(details.footnoteDefinitions).toEqual([
       { line: 5, text: "[^old]: Source." },
@@ -105,6 +125,26 @@ describe("article reference migration catalog", () => {
     ]);
     expect(details.mediaCreditLines).toEqual([
       { line: 8, text: "Image source: archive" },
+    ]);
+  });
+
+  test("captures bibliography-like heading variants that require human review", () => {
+    const details = articleReferenceCatalogDetails(
+      [
+        "## Reference",
+        "## Source",
+        "## Further Reading",
+        "## Works Consulted",
+        "## Citations",
+      ].join("\n"),
+    );
+
+    expect(details.referenceHeadings).toEqual([
+      { line: 1, text: "## Reference" },
+      { line: 2, text: "## Source" },
+      { line: 3, text: "## Further Reading" },
+      { line: 4, text: "## Works Consulted" },
+      { line: 5, text: "## Citations" },
     ]);
   });
 

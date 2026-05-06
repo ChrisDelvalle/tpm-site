@@ -29,9 +29,9 @@ The quote is variously cited in both peer-reviewed books and articles as well as
 >
 > It is worth noting that Wittgenstein once said that **a serious and good philosophical work could be written that would consist entirely of _jokes_** (without begin \[sic\] facetious). Another time he said that a philosophical treatise might contain nothing but questions (without answers). In his own writing he made wide use of both.
 
-<p style="text-align: right">Norman Malcolm, <i>Ludwig Wittgenstein: A Memoir</i> (1958 [bold emphasis my own.])</p>
+_Norman Malcolm, Ludwig Wittgenstein: A Memoir (1958 [bold emphasis my own.])_[^cite-malcolm-n-1958-ludwig-wittgenstein-a-memoir]
 
-The most popular phrasing, from Henry Dribble, is a (very slight) paraphrasing of Norman Malcolm's. It first appeared in 2004, in "A View from the Asylum", one of several satirical short stories written from the perspective of "Henry Dribble", a patient in an insane asylum. It was published in a collection of similar writings under the same pseudonym of Henry Dribble, titled _Philosophical Investigations from The Sanctity of the Press_. The author, Jess Rosenblatt, was an "armchair philosopher" from Mercer Island, working as a manufacturing sales manager at CMF Industries at the time. In an interview about the book, [Rosenblatt said](https://www.mi-reporter.com/life/armchair-philosopher-pens-two-books/) that "academics won't promote \[Wittgenstein\] or teach his theories because they see him as destructive of all previous philosophy. You'll find more hackers who like him, I'm a philosophical hacker because I'm not in academics anymore."
+The most popular phrasing, from Henry Dribble, is a (very slight) paraphrasing of Norman Malcolm's. It first appeared in 2004, in "A View from the Asylum", one of several satirical short stories written from the perspective of "Henry Dribble", a patient in an insane asylum. It was published in a collection of similar writings under the same pseudonym of Henry Dribble, titled _Philosophical Investigations from The Sanctity of the Press_.[^cite-dribble-h-2004-philosophical-investigations] The author, Jess Rosenblatt, was an "armchair philosopher" from Mercer Island, working as a manufacturing sales manager at CMF Industries at the time. In an interview about the book, [Rosenblatt said](https://www.mi-reporter.com/life/armchair-philosopher-pens-two-books/) that "academics won't promote \[Wittgenstein\] or teach his theories because they see him as destructive of all previous philosophy. You'll find more hackers who like him, I'm a philosophical hacker because I'm not in academics anymore."[^cite-hanson-c-2004-armchair-philosopher-pens-two-books]
 
 As of right now, a Google search of the exact phrasing from Malcolm's 1958 memoir brings up a mere 78 results; the exact phrasing from Rosenblatt's book brings up over 7730 results. It's the top result for "Wittgenstein quote". So, most people are quoting the fictional character Henry Dribble, who is paraphrasing Norman Malcolm, who is paraphrasing Wittgenstein, who may have been joking (but was not being facetious). It would seem that Rosenblatt did indeed contribute somewhat to popularising Wittgenstein with his catchier phrasing.
 
@@ -63,3 +63,27 @@ Traditional theories of meaning and reference would tell us that, indeed, given 
 The early Wittgenstein probably would have supported the notion too. Insofar as the word "Wittgenstein" in both versions refers to the same object (himself), it has the same meaning in both cases. The later Wittgenstein might have disagreed: Wittgenstein the Philosopher of Language was a serious-minded thinker attempting to make sense of logic, meaning, and mathematics; Wittgenstein the Mad Dog is a mystical character who wants to _wake us up_ with fortune cookie wisdom that feels simultaneously anti-establishment (philosophy and stuffy academia are a _joke_) and empowering (having a good sense of humour is much the same as being a good philosopher). The context and use of the quote and the word are not the same, and therefore the meaning of "Wittgenstein" as well as the quote itself differs depending on whether it is used to make a point about (say) philosophical logic.
 
 Contemporary trends in Wittgenstein scholarship seem to be blurring the line between these two Wittgensteins in their own way, interpreting him as having been more sympathetic to metaphysics than was previously thought. That's just as well. For most of us, the line between historical individuals and their folkloric counterparts is _always_ blurred. This is necessarily the case with historical figures from another time, and frequently so even with those whom we are close. It can even happen with our memory of past events, or with our self-identity. The quintessential difference between the early and later Wittgenstein is his shift from viewing meaning as _representation_ to viewing meaning as _use_. How we live changes over time, and so does the meaning of our lives. The Wittgenstein I knew before discovering the genealogy of his most popular quote was not the same Wittgenstein as I know now; I can no longer use the quote to refer to the Wittgenstein that I knew before.
+
+```tpm-bibtex
+@misc{malcolm-n-1958-ludwig-wittgenstein-a-memoir,
+  citation = {Malcolm, N. (1958). Ludwig Wittgenstein: A Memoir.},
+  author = {Malcolm, N.},
+  title = {Ludwig Wittgenstein: A Memoir},
+  year = {1958},
+}
+
+@misc{dribble-h-2004-philosophical-investigations,
+  citation = {Dribble, H. (2004). Philosophical Investigations from The Sanctity of the Press.},
+  author = {Dribble, H.},
+  title = {Philosophical Investigations from The Sanctity of the Press},
+  year = {2004},
+}
+
+@misc{hanson-c-2004-armchair-philosopher-pens-two-books,
+  citation = {Hanson, C. (2004). Armchair philosopher pens two books. Mercer Island Reporter. Available at: https://www.mi-reporter.com/life/armchair-philosopher-pens-two-books/},
+  author = {Hanson, C.},
+  title = {Armchair philosopher pens two books},
+  year = {2004},
+  url = {https://www.mi-reporter.com/life/armchair-philosopher-pens-two-books/},
+}
+```

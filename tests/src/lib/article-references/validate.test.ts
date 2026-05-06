@@ -68,10 +68,6 @@ describe("article reference diagnostics", () => {
         label: "note-context",
       }),
       articleReferenceDiagnosticMessage({
-        code: "unused-bibtex-entry",
-        key: "baudrillard-1981",
-      }),
-      articleReferenceDiagnosticMessage({
         code: "unreferenced-definition",
         label: "note-context",
       }),
@@ -89,7 +85,6 @@ describe("article reference diagnostics", () => {
       'Article citation "[^cite-baudrillard-1981]" has no matching BibTeX entry. Add "@...{baudrillard-1981, ...}" inside a hidden "tpm-bibtex" fenced block.',
       'Article reference "[^note-context]" is used but has no matching definition. Add a "[^note-context]:" definition.',
       'Article note "[^note-context]" is referenced more than once. Notes may only be referenced once; use a cite-* label for repeatable citations.',
-      'BibTeX entry "baudrillard-1981" is never cited. Add a matching "[^cite-baudrillard-1981]" marker or remove the BibTeX entry.',
       'Article reference definition "[^note-context]" is never used. Reference it in the article body or remove the definition.',
     ]);
   });

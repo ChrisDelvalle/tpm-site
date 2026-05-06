@@ -19,5 +19,7 @@ describe("bibliography route", () => {
     expect(view).toContain(
       'href="https://thephilosophersmeme.com/bibliography/"',
     );
+    expect(view).not.toContain("source-source");
+    expect(view).not.toContain(">^<");
   });
 });

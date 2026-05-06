@@ -30,7 +30,9 @@ links to `BibliographySourceArticles`.
 ## Layout And Responsiveness
 
 Source content appears first, source article usage appears after it as secondary
-metadata. Long URLs and source titles wrap.
+metadata. Long URLs and source titles wrap. Outer vertical spacing belongs to
+`BibliographyList`, so a standalone entry does not encode first/last list-item
+spacing.
 
 ## Layering And Scrolling
 
@@ -62,7 +64,7 @@ as promotional cards.
 ## Testable Invariants
 
 - Renders generated citation display content without exposing raw BibTeX.
-- Renders one source article section when source articles exist.
+- Renders one source article backlink group when source articles exist.
 - Long URLs wrap.
 - Entry ID is stable and unique.
 - Focus states are visible for all links.

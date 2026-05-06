@@ -1,15 +1,21 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  articleApaCitation,
   articleBibtexCitation,
+  articleChicagoAuthorDateCitation,
+  articleChicagoNotesCitation,
   articleCitationMenuViewModel,
+  articleHarvardCitation,
+  articleIeeeCitation,
   articleMlaCitation,
+  articleRisCitation,
 } from "../../../../src/lib/citations/article-citation";
 
 const publishedAt = new Date("2022-04-06T23:58:10.000Z");
 
 describe("article citation helpers", () => {
-  test("generates deterministic BibTeX and MLA citations from structured author data", () => {
+  test("generates deterministic popular citation formats from structured author data", () => {
     const input = {
       articleId: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now",
       authors: [
@@ -32,8 +38,34 @@ describe("article citation helpers", () => {
       "  author = {Seong-Young Her},",
     );
     expect(articleBibtexCitation(input)).toContain("  date = {2022-04-06},");
+    expect(articleApaCitation(input)).toBe(
+      "Her, S.-Y. (2022, April 6). Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now. The Philosopher's Meme. https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+    );
     expect(articleMlaCitation(input)).toBe(
       "Her, Seong-Young. \"Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now.\" The Philosopher's Meme, 6 Apr. 2022, https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/.",
+    );
+    expect(articleChicagoNotesCitation(input)).toBe(
+      "Her, Seong-Young. \"Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now.\" The Philosopher's Meme. April 6, 2022. https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/.",
+    );
+    expect(articleChicagoAuthorDateCitation(input)).toBe(
+      "Her, Seong-Young. 2022. \"Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now.\" The Philosopher's Meme. April 6, 2022. https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/.",
+    );
+    expect(articleHarvardCitation(input)).toBe(
+      "Her, S.-Y. (2022) 'Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now', The Philosopher's Meme, 6 April 2022. Available at: https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/.",
+    );
+    expect(articleIeeeCitation(input)).toBe(
+      "S.-Y. Her, \"Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now,\" The Philosopher's Meme, Apr. 6, 2022. [Online]. Available: https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+    );
+    expect(articleRisCitation(input)).toBe(
+      [
+        "TY  - ELEC",
+        "TI  - Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+        "AU  - Her, Seong-Young",
+        "T2  - The Philosopher's Meme",
+        "DA  - 2022-04-06",
+        "UR  - https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+        "ER  -",
+      ].join("\n"),
     );
   });
 
@@ -92,6 +124,15 @@ describe("article citation helpers", () => {
         publishedAt,
         title: "Anonymous Article",
       }).formats.map((format) => format.id),
-    ).toEqual(["bibtex", "mla"]);
+    ).toEqual([
+      "apa",
+      "mla",
+      "chicago-notes",
+      "chicago-author-date",
+      "harvard",
+      "ieee",
+      "bibtex",
+      "ris",
+    ]);
   });
 });

@@ -49,7 +49,7 @@ export const articleReferenceFixture = {
       references: [
         {
           backlinkId: "cite-backref-baudrillard-1981",
-          displayText: "Baudrillard 1981",
+          displayText: "1",
           entryId: "cite-baudrillard-1981",
           id: "cite-ref-baudrillard-1981",
           kind: "citation",
@@ -58,7 +58,7 @@ export const articleReferenceFixture = {
         },
         {
           backlinkId: "cite-backref-baudrillard-1981-2",
-          displayText: "Baudrillard 1981",
+          displayText: "1",
           entryId: "cite-baudrillard-1981",
           id: "cite-ref-baudrillard-1981-2",
           kind: "citation",
