@@ -58,7 +58,7 @@
       },
       {
         "href": "/articles/all/",
-        "label": "All Articles"
+        "label": "Archive"
       },
       {
         "href": "/collections/",
@@ -82,7 +82,7 @@
       },
       {
         "href": "/bibliography/",
-        "label": "Bibliography"
+        "label": "Site Bibliography"
       },
       {
         "href": "/about/",

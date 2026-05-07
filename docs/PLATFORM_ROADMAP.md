@@ -101,7 +101,8 @@ tutorials.
 The first example lives at `examples/docs-site/` and is intentionally modest:
 it exercises config, articles, announcements, authors, categories, collections,
 pages, assets, search, feeds, and PDFs without becoming a second publication to
-maintain. `bun run test:docs-site` validates and builds it with
+maintain. `bun run docs-site:dev` serves it locally, and
+`bun run test:docs-site` validates and builds it with
 `SITE_INSTANCE_ROOT=examples/docs-site`.
 
 ### 3. Multi-Site Command Cleanup
