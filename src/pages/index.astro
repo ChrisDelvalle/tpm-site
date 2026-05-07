@@ -29,8 +29,10 @@ import {
   authorsIndexUrl,
   collectionsIndexUrl,
   collectionUrl,
+  SITE_DESCRIPTION,
   tagsIndexUrl,
 } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
 
 const home = await getEntry("pages", "index");
 
@@ -60,10 +62,8 @@ const discoveryLinks = [
   { href: tagsIndexUrl(), label: "Tags" },
 ] as const;
 
-const title = `${home.data.title} | The Philosopher's Meme`;
-const description =
-  home.data.description ??
-  "The philosophy of memes, cyberculture, and the Internet.";
+const title = titleWithSite(home.data.title);
+const description = home.data.description ?? SITE_DESCRIPTION;
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/">

@@ -12,6 +12,7 @@ import {
   excerpt,
   SITE_DESCRIPTION,
   SITE_TITLE,
+  SITE_URL,
 } from "../lib/routes";
 import { absoluteUrl } from "../lib/seo";
 import { socialPreviewImageViewModel } from "../lib/social-images";
@@ -27,7 +28,7 @@ type FeedContext = Pick<APIContext, "site">;
 export async function GET(context: FeedContext): Promise<Response> {
   const articles = await getArticles();
   const authors = await getAuthorEntries();
-  const site = context.site?.toString() ?? "https://thephilosophersmeme.com";
+  const site = context.site?.toString() ?? SITE_URL;
 
   return rss({
     title: SITE_TITLE,

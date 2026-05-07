@@ -9,6 +9,7 @@ import SearchReveal from "../navigation/SearchReveal.astro";
 import SupportLink from "../navigation/SupportLink.astro";
 import ThemeToggle from "../navigation/ThemeToggle.astro";
 import type { PrimaryNavItem, SectionNavItem } from "../../lib/navigation";
+import { siteConfig } from "../../lib/site-config";
 
 interface Props {
   categoryItems: readonly SectionNavItem[];
@@ -17,6 +18,10 @@ interface Props {
 }
 
 const { categoryItems, currentPath, primaryItems } = Astro.props;
+const headerSupportCompactProps =
+  siteConfig.support.patreon.compactLabel === undefined
+    ? {}
+    : { compactLabel: siteConfig.support.patreon.compactLabel };
 ---
 
 <header
@@ -51,7 +56,7 @@ const { categoryItems, currentPath, primaryItems } = Astro.props;
           <PrimaryNav currentPath={currentPath} items={primaryItems} gap="md" />
         </div>
         <SupportLink
-          compactLabel="Patreon"
+          {...headerSupportCompactProps}
           class="max-sm:min-h-8 max-sm:px-1 max-sm:py-1.5 max-sm:text-xs md:max-lg:min-h-9 md:max-lg:px-3 md:max-lg:py-2"
         />
       </ActionCluster>

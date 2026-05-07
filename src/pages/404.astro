@@ -4,10 +4,11 @@ import PageHeader from "../components/pages/PageHeader.astro";
 import TextLink from "../components/ui/TextLink.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { articlesIndexUrl } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
 ---
 
 <BaseLayout
-  title="Page Not Found | The Philosopher's Meme"
+  title={titleWithSite("Page Not Found")}
   description="The requested page could not be found."
   canonicalPath="/404/"
 >

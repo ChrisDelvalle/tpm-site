@@ -32,6 +32,7 @@ import { articleCitationMenuViewModel } from "../lib/citations/article-citation"
 import { getArticles, getCategory } from "../lib/content";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import { articleShareMenuViewModel } from "../lib/share-targets";
+import { titleWithSite } from "../lib/site-config";
 import { socialPreviewImageViewModel } from "../lib/social-images";
 import BaseLayout from "./BaseLayout.astro";
 
@@ -114,7 +115,7 @@ const pdf = scholarMeta.pdf;
 ---
 
 <BaseLayout
-  title={`${articleView.title} | The Philosopher's Meme`}
+  title={titleWithSite(articleView.title)}
   description={articleView.description}
   canonicalPath={articleView.canonicalPath}
   image={socialPreviewImage}

@@ -3,7 +3,12 @@ import TermOverviewBlock from "../../components/blocks/TermOverviewBlock.astro";
 import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getEditorialCollections } from "../../lib/content";
-import { collectionsIndexUrl, collectionUrl } from "../../lib/routes";
+import {
+  collectionsIndexUrl,
+  collectionUrl,
+  SITE_TITLE,
+} from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
 
 const collectionItems = (await getEditorialCollections()).map((collection) => ({
   count: collection.data.items.length,
@@ -14,8 +19,8 @@ const collectionItems = (await getEditorialCollections()).map((collection) => ({
 ---
 
 <BaseLayout
-  title="Collections | The Philosopher's Meme"
-  description="Curated article and announcement collections from The Philosopher's Meme."
+  title={titleWithSite("Collections")}
+  description={`Curated article and announcement collections from ${SITE_TITLE}.`}
   canonicalPath={collectionsIndexUrl()}
 >
   <BrowsingBody>

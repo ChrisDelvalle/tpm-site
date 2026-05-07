@@ -20,6 +20,7 @@ import {
   publishableIndex,
 } from "../../lib/publishable";
 import { collectionUrl } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
 import { collectionStaticPaths } from "../../lib/static-paths";
 
 /**
@@ -56,7 +57,7 @@ const description =
 ---
 
 <BaseLayout
-  title={`${title} | Collections | The Philosopher's Meme`}
+  title={titleWithSite(`${title} | Collections`)}
   description={description}
   canonicalPath={collectionUrl(collection.id)}
 >

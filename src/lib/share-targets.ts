@@ -1,11 +1,12 @@
 import { SITE_TITLE } from "./routes";
+import { siteConfig } from "./site-config";
 import type { SocialPreviewImage } from "./social-images";
 
 const threadsMaxPostLength = 500;
 const articleShareTargetConfig = {
   attribution: {
-    threadsMention: "@the_philosophers_meme",
-    xViaHandle: "philo_meme",
+    threadsMention: siteConfig.share.threadsMention,
+    xViaHandle: siteConfig.share.xViaHandle,
   },
   endpoints: {
     bluesky: "https://bsky.app/intent/compose",
@@ -221,7 +222,10 @@ function shareText(title: string, articleUrl: string): string {
 }
 
 function threadsShareText(title: string, articleUrl: string): string {
-  const suffix = `\n\n${articleUrl}\n\n${articleShareTargetConfig.attribution.threadsMention}`;
+  const suffix =
+    articleShareTargetConfig.attribution.threadsMention === undefined
+      ? `\n\n${articleUrl}`
+      : `\n\n${articleUrl}\n\n${articleShareTargetConfig.attribution.threadsMention}`;
   const titleLimit = threadsMaxPostLength - suffix.length;
   const safeTitle =
     title.length <= titleLimit ? title : `${title.slice(0, titleLimit - 3)}...`;

@@ -4,6 +4,7 @@ import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getTags } from "../../lib/content";
 import { tagsIndexUrl } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
 
 const tagItems = (await getTags()).map((tag) => ({
   count: tag.articles.length,
@@ -13,7 +14,7 @@ const tagItems = (await getTags()).map((tag) => ({
 ---
 
 <BaseLayout
-  title="Tags | The Philosopher's Meme"
+  title={titleWithSite("Tags")}
   description="Browse articles by tag."
   canonicalPath={tagsIndexUrl()}
 >

@@ -5,6 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCategories } from "../../lib/content";
 import { sectionNavigationItems } from "../../lib/navigation";
 import { categoriesIndexUrl } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
 
 const categoryItems = sectionNavigationItems(
   await getCategories(),
@@ -13,7 +14,7 @@ const categoryItems = sectionNavigationItems(
 ---
 
 <BaseLayout
-  title="Categories | The Philosopher's Meme"
+  title={titleWithSite("Categories")}
   description="Browse articles by category."
   canonicalPath={categoriesIndexUrl()}
 >

@@ -4,6 +4,7 @@ import type { ImageMetadata } from "astro";
 import ThemedImage from "../media/ThemedImage.astro";
 import DiscordButton from "../ui/DiscordButton.astro";
 import PatreonButton from "../ui/PatreonButton.astro";
+import { siteConfig } from "../../lib/site-config";
 
 interface Props {
   darkImage: ImageMetadata;
@@ -20,7 +21,7 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
   aria-labelledby="home-hero-heading"
   data-home-hero-block
 >
-  <h1 id="home-hero-heading" class="sr-only">The Philosopher's Meme</h1>
+  <h1 id="home-hero-heading" class="sr-only">{siteConfig.identity.title}</h1>
   <ThemedImage
     lightImage={lightImage}
     darkImage={darkImage}
@@ -42,7 +43,13 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
     class="flex w-full max-w-[17rem] min-w-0 flex-nowrap justify-center gap-3"
     data-home-hero-cta-row
   >
-    <PatreonButton href="https://patreon.com/thephilosophersmeme" />
-    <DiscordButton href="https://discord.gg/8MVFRMa" />
+    <PatreonButton
+      href={siteConfig.support.patreon.href}
+      aria-label={siteConfig.support.patreon.label}
+    />
+    <DiscordButton
+      href={siteConfig.support.discord.href}
+      aria-label={siteConfig.support.discord.label}
+    />
   </div>
 </section>

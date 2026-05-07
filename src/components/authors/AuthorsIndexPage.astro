@@ -2,6 +2,7 @@
 import Card from "../ui/Card.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { AuthorProfile } from "../../lib/authors";
+import { SITE_TITLE } from "../../lib/routes";
 
 interface Props {
   profiles: readonly AuthorProfile[];
@@ -16,7 +17,7 @@ const { profiles } = Astro.props;
       Authors
     </h1>
     <p class="text-muted-foreground max-w-3xl text-lg">
-      Browse contributors and collectives in The Philosopher's Meme archive.
+      Browse contributors and collectives in {SITE_TITLE} archive.
     </p>
   </header>
   {

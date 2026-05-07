@@ -572,3 +572,10 @@ moving production content.
 The safest next step is Phase 1: introduce validated config while files stay in
 place. That creates immediate flexibility and makes later repo splitting much
 less invasive.
+
+## Next Design Pass
+
+`docs/PLATFORM_SITE_BOUNDARY.md` is the implementation-ready follow-up for the
+in-repo refactor. It updates this audit around the newer publishable-entry,
+homepage, collection, PDF, social-preview, and share-menu systems, and defines
+the first root-level `site/` config surface before content and asset roots move.

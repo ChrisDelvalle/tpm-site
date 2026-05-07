@@ -22,9 +22,8 @@ describe("announcement page", () => {
     });
 
     expect(view).toContain(announcement.data.title);
-    expect(view).toContain(`<title>${announcement.data.title}</title>`);
-    expect(view).not.toContain(
-      `<title>${announcement.data.title} | The Philosopher's Meme</title>`,
+    expect(view).toContain(
+      `<title>${htmlText(announcement.data.title)}</title>`,
     );
     expect(view).toContain("data-article-prose");
     expect(view).toContain("data-pagefind-body");
@@ -53,3 +52,12 @@ describe("announcement page", () => {
     expect(view).not.toContain("data-pagefind-body");
   });
 });
+
+function htmlText(value: string): string {
+  return value
+    .replace(/&/gu, "&amp;")
+    .replace(/</gu, "&lt;")
+    .replace(/>/gu, "&gt;")
+    .replace(/"/gu, "&quot;")
+    .replace(/'/gu, "&#39;");
+}

@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import fallbackFeatureImage from "../../assets/shared/tpm-site-symbol.svg";
 import TextLink from "../ui/TextLink.astro";
 import type { HomeFeaturedItem } from "../../lib/home";
+import { SITE_TITLE } from "../../lib/routes";
 
 interface Props {
   index: number;
@@ -20,7 +21,7 @@ const linkPrefetch = item.href.startsWith("/") ? "hover" : undefined;
 const linkPrefetchAttrs =
   linkPrefetch === undefined ? {} : { prefetch: linkPrefetch as "hover" };
 const image = item.image ?? {
-  alt: "The Philosopher's Meme",
+  alt: SITE_TITLE,
   src: fallbackFeatureImage,
 };
 const usesFallbackImage = item.image === undefined;

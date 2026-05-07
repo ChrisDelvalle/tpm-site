@@ -1,13 +1,12 @@
 import {
-  articlesIndexUrl,
   articleSlug,
   articleUrl,
   type CategorySummary,
   categoryUrl,
   entryTitle,
   excerpt,
-  pageUrl,
 } from "./routes";
+import { siteConfig } from "./site-config";
 
 /** Article data rendered inside navigation and discovery surfaces. */
 export interface ArticleSummary {
@@ -41,10 +40,10 @@ export interface PrimaryNavItem {
  * @returns Primary navigation links that are not category discovery or utility actions.
  */
 export function primaryNavigationItems(): PrimaryNavItem[] {
-  return [
-    { href: articlesIndexUrl(), label: "Articles" },
-    { href: pageUrl("about"), label: "About" },
-  ];
+  return siteConfig.navigation.primary.map((item) => ({
+    href: item.href,
+    label: item.label,
+  }));
 }
 
 /**

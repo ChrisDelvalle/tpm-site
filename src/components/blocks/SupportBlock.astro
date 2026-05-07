@@ -3,6 +3,7 @@ import type { HTMLAttributes } from "astro/types";
 
 import DiscordButton from "../ui/DiscordButton.astro";
 import PatreonButton from "../ui/PatreonButton.astro";
+import { siteConfig } from "../../lib/site-config";
 
 interface Props extends HTMLAttributes<"section"> {
   body?: string;
@@ -13,11 +14,11 @@ interface Props extends HTMLAttributes<"section"> {
 }
 
 const {
-  body = "Help keep independent research and writing going.",
-  discordHref = "https://discord.gg/8MVFRMa",
+  body = siteConfig.support.block.body,
+  discordHref = siteConfig.support.discord.href,
   headingId = "support-block-heading",
-  patreonHref = "https://patreon.com/thephilosophersmeme",
-  title = "Support The Philosopher's Meme",
+  patreonHref = siteConfig.support.patreon.href,
+  title = siteConfig.support.block.title,
   class: className,
   ...attrs
 } = Astro.props;
@@ -44,8 +45,11 @@ const {
   <div class="flex min-w-0 flex-wrap items-center gap-3">
     <PatreonButton
       href={patreonHref}
-      aria-label="Support The Philosopher's Meme on Patreon"
+      aria-label={siteConfig.support.patreon.ariaLabel}
     />
-    <DiscordButton href={discordHref} aria-label="Join the TPM Discord" />
+    <DiscordButton
+      href={discordHref}
+      aria-label={siteConfig.support.discord.ariaLabel}
+    />
   </div>
 </section>

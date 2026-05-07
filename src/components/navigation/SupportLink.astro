@@ -1,6 +1,7 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import LinkButton from "../ui/LinkButton.astro";
+import { siteConfig } from "../../lib/site-config";
 
 interface Props extends Omit<HTMLAttributes<"a">, "href"> {
   class?: string;
@@ -12,8 +13,8 @@ interface Props extends Omit<HTMLAttributes<"a">, "href"> {
 const {
   class: className,
   compactLabel,
-  href = "https://patreon.com/thephilosophersmeme",
-  label = "Support Us",
+  href = siteConfig.support.patreon.href,
+  label = siteConfig.support.patreon.label,
   ...attrs
 } = Astro.props;
 ---

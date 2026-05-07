@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 import { articleImagePolicyCacheKey } from "./src/lib/article-image-policy";
+import { siteConfig } from "./src/lib/site-config";
 import {
   rehypeArticleImages,
   remarkArticleImageMarkers,
@@ -136,7 +137,7 @@ export default defineConfig({
     "/2022/04/20/joshua-citarella-astroturfing/":
       "/articles/joshua-citarella-astroturfing/",
   },
-  site: "https://thephilosophersmeme.com",
+  site: siteConfig.identity.url,
   trailingSlash: "always",
   vite: {
     plugins: [tailwindcss()],

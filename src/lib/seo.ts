@@ -8,9 +8,9 @@ import {
   entryTitle,
   excerpt,
   SITE_TITLE,
+  SITE_URL,
 } from "./routes";
-
-const DEFAULT_SITE_URL = "https://thephilosophersmeme.com";
+import { siteConfig } from "./site-config";
 
 /** Optional normalized metadata for article JSON-LD output. */
 interface ArticleBlogPostingJsonLdOptions {
@@ -32,7 +32,7 @@ export function absoluteUrl(
     return pathOrUrl;
   }
 
-  const base = site?.toString() ?? DEFAULT_SITE_URL;
+  const base = site?.toString() ?? SITE_URL;
   const normalizedBase = base.replace(/\/+$/, "");
   const normalizedPath = pathOrUrl.startsWith("/")
     ? pathOrUrl
@@ -81,7 +81,7 @@ export function articleBlogPostingJsonLd(
     mainEntityOfPage: canonicalUrl,
     publisher: {
       "@type": "Organization",
-      name: SITE_TITLE,
+      name: siteConfig.identity.publisherName ?? SITE_TITLE,
     },
     url: canonicalUrl,
   };

@@ -3,14 +3,15 @@ import AuthorsIndexPage from "../../components/authors/AuthorsIndexPage.astro";
 import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getAuthorProfiles } from "../../lib/authors";
-import { authorsIndexUrl } from "../../lib/routes";
+import { authorsIndexUrl, SITE_TITLE } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
 
 const profiles = await getAuthorProfiles();
 ---
 
 <BaseLayout
-  title="Authors | The Philosopher's Meme"
-  description="Browse contributors and collectives in The Philosopher's Meme archive."
+  title={titleWithSite("Authors")}
+  description={`Browse contributors and collectives in ${SITE_TITLE} archive.`}
   canonicalPath={authorsIndexUrl()}
 >
   <BrowsingBody>

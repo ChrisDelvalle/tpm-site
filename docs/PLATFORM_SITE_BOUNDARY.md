@@ -1,0 +1,279 @@
+# Platform And Site Boundary
+
+## Purpose
+
+This document is the next implementation pass after
+`docs/PLATFORMIZATION_AUDIT.md`. The earlier audit established that TPM should
+become two products that happen to live in one repo for now:
+
+```text
+platform/
+  reusable blogging engine for site owners, authors, and developers
+
+site/
+  the file-based control surface for one publication instance
+```
+
+The current work should not move production content yet. The immediate goal is
+to create a real boundary by moving site-owner decisions into a validated
+root-level `site/` surface while the existing Astro source layout remains stable.
+
+## Philosophical Boundary
+
+The site and the platform have different users.
+
+The TPM site serves readers, editors, and authors. It should be easy to navigate,
+easy to edit, and hard to break. Its files should read like publication settings
+and editorial content, not like framework internals.
+
+The TPM Platform serves site owners, authors, and developers who need a robust
+blogging engine. It should absorb technical complexity: routing, validation,
+SEO, PDFs, feeds, search, images, citations, sharing, accessibility,
+performance, and testing.
+
+The platform succeeds when ordinary site owners do not need to understand Astro
+routes, Tailwind class composition, Markdown plugin internals, PDF generation,
+or social metadata to manage a site.
+
+## Target Repo Shape
+
+The long-term shape is:
+
+```text
+platform/
+  src/
+  tests/
+  docs/
+
+site/
+  config/
+  content/
+  assets/
+  public/
+  docs/
+```
+
+The near-term shape keeps the current Astro project intact and introduces only
+the first part of the site surface:
+
+```text
+site/
+  README.md
+  config/
+    site.json
+
+src/
+  components/
+  layouts/
+  lib/
+  pages/
+  content/
+  assets/
+```
+
+This is intentionally incremental. Content and asset roots are the riskiest
+parts because Astro content collections, Markdown image handling, MDX imports,
+generated PDFs, Pagefind, RSS, and build verification all depend on current
+paths. Moving content belongs after the config boundary is stable.
+
+## Import Rule
+
+The durable import rule is:
+
+```text
+platform code must not import from site code
+platform code may read validated site data through one adapter
+site files must not import platform internals
+```
+
+During the in-repo transition, the adapter is `src/lib/site-config.ts`. It is the
+only platform module allowed to read `site/config/site.json` directly. Components
+and pages should import normalized config or helpers from the adapter, never read
+site files themselves.
+
+## Site Directory UX
+
+The `site/` directory is the future admin UI in file form. A non-technical site
+owner should be able to answer:
+
+- where do I change the site name and description?
+- where do I change support, Discord, or social links?
+- where do I change header and footer navigation?
+- where do I change homepage curation?
+- where do I put content and images?
+- what validation error tells me which file to fix?
+
+Rules for the site surface:
+
+- Prefer JSON, YAML, Markdown, or frontmatter-shaped data over TypeScript.
+- Keep field names editorial and product-facing, not framework-facing.
+- Defaults should make simple blogs work with minimal config.
+- Validation errors should name the site file and field path.
+- Fields should be serializable so a future GUI can read and write them.
+- Avoid arbitrary functions, imports, and executable config.
+- Keep advanced escape hatches explicit and documented.
+
+## First Config Surface
+
+`site/config/site.json` owns the site-level choices that are currently scattered
+through reusable code:
+
+```ts
+interface SiteConfig {
+  identity: {
+    title: string;
+    shortTitle?: string;
+    description: string;
+    url: string;
+    language: string;
+    timezone?: string;
+    publisherName?: string;
+  };
+  routes: {
+    home: string;
+    articles: string;
+    allArticles: string;
+    announcements: string;
+    authors: string;
+    bibliography: string;
+    categories: string;
+    collections: string;
+    feed: string;
+    search: string;
+    tags: string;
+  };
+  navigation: {
+    primary: SiteNavigationLink[];
+    footer: SiteNavigationLink[];
+  };
+  support: {
+    patreon: SiteExternalLink & {
+      compactLabel?: string;
+    };
+    discord: SiteExternalLink;
+    block: {
+      title: string;
+      body: string;
+    };
+  };
+  share: {
+    xViaHandle?: string;
+    threadsMention?: string;
+  };
+}
+```
+
+The first implementation keeps route segments fixed in behavior even though the
+paths are centralized. Arbitrary route renaming is still deferred until the
+content-root and tooling migration proves stable.
+
+## What Moves First
+
+Move these values behind config first:
+
+- site title, description, language, URL, and publisher name;
+- Astro `site`;
+- primary navigation links;
+- footer navigation links;
+- support link destination and labels;
+- article support block title/body/CTA destinations;
+- homepage hero CTA destinations;
+- share attribution for X and Threads;
+- article title suffixes and RSS title.
+
+Do not move these yet:
+
+- `src/content/`;
+- `src/assets/`;
+- `public/`;
+- legacy redirects;
+- package script route globs;
+- Pagefind globs;
+- HTML validation globs;
+- build verifier path assumptions;
+- theme tokens.
+
+Those are separate proof milestones because they touch build output, content
+loading, image processing, and release tooling.
+
+## Component Contract
+
+Reusable components should not know they are rendering TPM. They may render TPM
+because the current site config passes TPM values.
+
+Good platform-facing component shape:
+
+```text
+Component receives explicit props
+or
+Route/layout passes normalized config-derived props
+```
+
+Acceptable transition shape:
+
+```text
+Component imports siteConfig for a default prop value
+```
+
+Preferred final shape:
+
+```text
+Layout or page composes platform components with normalized site config
+```
+
+The transition shape is allowed for small leaf components such as `BrandLink`
+and `SupportLink` so behavior can move to config without broad page churn. New
+platform components should prefer explicit props.
+
+## Testing Requirements
+
+This boundary needs tests at three levels:
+
+- Config tests: parse current TPM config, reject malformed URL/path/link fields,
+  and preserve defaults.
+- Helper/component tests: navigation, support, share attribution, SEO, and
+  article title suffixes render from config-backed values.
+- Release smoke: build/typecheck should prove the adapter works in Astro,
+  tests, scripts that import Astro config, and static rendering.
+
+The first pass should not require broad screenshot updates because rendered TPM
+HTML should remain intentionally unchanged.
+
+## Critical Review
+
+The main risk is exposing too much low-level machinery to site owners. The site
+directory should not become a dumping ground for every platform switch. Config
+belongs in `site/` only when a site owner can plausibly understand and edit it.
+
+The second risk is overgeneralizing routes and homepage layout before the core
+boundary exists. The first pass centralizes fixed route paths but does not sell
+route renaming as supported behavior.
+
+The third risk is importing site config everywhere. That solves literals but
+creates hidden global coupling. The adapter is acceptable as a first step, but
+future milestones should move toward route/layout composition and explicit
+props for reusable blocks.
+
+The fourth risk is content-root churn. Moving content early would force
+Markdown image rewrites, MDX import decisions, PDF path changes, and verifier
+updates all at once. That is the wrong sequence. Content should move only after
+config, path resolver, and external fixture proofs pass.
+
+## Implementation Milestones
+
+The active implementation scope is:
+
+1. Add `site/config/site.json` and a typed adapter.
+2. Replace low-risk hard-coded identity/navigation/support/share values with
+   config-backed values.
+3. Verify that rendered TPM behavior remains stable.
+
+Later milestones should handle:
+
+1. site instance path resolver;
+2. root-level `site/content` proof with a fixture instance;
+3. content and asset migration;
+4. theme-token split;
+5. script/tooling path generalization;
+6. platform fixture tests separate from TPM instance tests;
+7. admin UI schema export and site doctor commands.

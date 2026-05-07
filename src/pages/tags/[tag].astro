@@ -6,6 +6,7 @@ import { articleListItemsFromArchive } from "../../lib/article-list";
 import { articleArchiveItems } from "../../lib/archive";
 import { getAuthorEntries } from "../../lib/authors";
 import { getCategories, getTags } from "../../lib/content";
+import { titleWithSite } from "../../lib/site-config";
 import { tagStaticPaths } from "../../lib/static-paths";
 
 /**
@@ -27,7 +28,7 @@ const description = `Articles tagged ${tag.label}.`;
 ---
 
 <BaseLayout
-  title={`${tag.label} | Tags | The Philosopher's Meme`}
+  title={titleWithSite(`${tag.label} | Tags`)}
   description={description}
   canonicalPath={tag.href}
 >

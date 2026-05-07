@@ -69,3 +69,7 @@ package.json
 # corresponding script tests and intentionally maintained as data files.
 scripts/*-ignore.json
 scripts/coverage-exceptions.json
+
+# Approved exception: Site-owner config JSON is exercised by the typed site
+# config adapter tests, Astro config import tests, and release build checks.
+site/config/site.json
