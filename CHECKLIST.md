@@ -15,34 +15,6 @@ they are useful context. Explicitly deferred work belongs in
 - Do not edit `site/content/articles/` unless the current task explicitly asks
   for article-content changes.
 
-### Milestone 62: Article Share Menu UI And Script
-
-- [x] Add `ArticleShareMenu` using shared anchored popover primitives and a
-      compact secondary trigger beside `Cite` and `PDF`.
-- [x] Add a tiny local copy-link enhancement with `aria-live` status and manual
-      fallback copy text, without native share or third-party SDKs.
-- [x] Thread the share model through `ArticleLayout` and `ArticleHeader`,
-      keeping article header actions printable/PDF-excluded and responsive.
-- [x] Add component and browser-script tests for render structure, copy success,
-      copy failure, idempotent installation, and ignored unrelated clicks.
-      Verified with focused share-target/script/anchored/catalog Bun tests,
-      focused ArticleShareMenu/ArticleHeader/ArticleLayout Astro tests, and
-      `bun --silent run typecheck`.
-
-### Milestone 63: Share Menu Verification And Documentation
-
-- [x] Update component architecture/docs and package/test documentation where
-      needed so the share menu contract is discoverable.
-- [x] Add or update e2e coverage for article header actions, share popover
-      viewport containment, expected share-link hosts, and absence of third-party
-      scripts.
-- [x] Run focused tests plus release-relevant checks before marking complete.
-      Verified with focused share-target/script/anchored/catalog Bun tests,
-      focused ArticleShareActionRow/ArticleShareMenu/ArticleHeader/ArticleLayout
-      Astro tests, `bun --silent run check`, `bun --silent run test:e2e`,
-      `bun --silent run test:a11y`, `bun --silent run verify`, and
-      `bun --silent run validate:html`.
-
 ### Milestone 64: Platform And Site Boundary Design Refresh
 
 - [x] Refresh the platformization audit around the newer publishable-entry,
