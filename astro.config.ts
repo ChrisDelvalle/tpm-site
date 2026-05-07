@@ -10,6 +10,7 @@ import {
   remarkArticleImageMarkers,
 } from "./src/rehype-plugins/articleImages";
 import { remarkArticleReferences } from "./src/remark-plugins/articleReferences";
+import { projectRelativePath, siteInstance } from "./src/lib/site-instance";
 
 export default defineConfig({
   compressHTML: true,
@@ -31,6 +32,7 @@ export default defineConfig({
       [remarkArticleReferences, { validateLegacyFootnotes: true }],
     ],
   },
+  publicDir: projectRelativePath(siteInstance.public),
   prefetch: {
     defaultStrategy: "hover",
     prefetchAll: false,
@@ -141,5 +143,15 @@ export default defineConfig({
   trailingSlash: "always",
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        "@site/assets": siteInstance.assets.root,
+      },
+    },
+    server: {
+      fs: {
+        allow: [siteInstance.root],
+      },
+    },
   },
 });

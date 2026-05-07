@@ -96,3 +96,60 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run verify`, `bun --silent run validate:html`,
       `bun --silent run test:accountability:release`,
       `bun --silent run test:a11y`, and `bun --silent run test:e2e`.
+
+### Milestone 68: Full Site Instance Migration Design
+
+- [x] Define the final in-repo `site/` shape for config, content, assets,
+      public files, and unused assets.
+- [x] Specify the site-instance path resolver contract, including default
+      in-repo paths and future `SITE_INSTANCE_ROOT` support.
+- [x] Specify migration invariants for route stability, Markdown image paths,
+      MDX import escape hatches, Astro asset processing, scripts, and tests.
+- [x] Critically review blockers before file moves begin.
+      Verified in `docs/SITE_INSTANCE_MIGRATION.md` with the follow-up link in
+      `docs/PLATFORM_SITE_BOUNDARY.md`.
+
+### Milestone 69: Site Instance Path Resolver
+
+- [x] Add a typed resolver for site-instance paths and update site config to
+      consume it.
+- [x] Add focused resolver tests for default in-repo paths and external
+      instance roots.
+- [x] Verify the resolver before moving production content or assets.
+      Verified with
+      `bun test tests/src/lib/site-instance.test.ts tests/src/lib/site-config.test.ts`.
+
+### Milestone 70: In-Repo Site Content And Asset Move
+
+- [ ] Move `src/content` to `site/content` with `git mv`.
+- [ ] Move `src/assets` to `site/assets` with `git mv`.
+- [ ] Move `public` to `site/public` with `git mv`.
+- [ ] Move `unused-assets` to `site/unused-assets` with `git mv`.
+- [ ] Update Astro content collections, Astro/Vite config, and site asset
+      aliases to consume resolver-backed paths.
+- [ ] Update platform imports, MDX imports, docs, and tests needed by the move
+      without changing public routes.
+- [ ] Verify build/content/image behavior before marking complete.
+
+### Milestone 71: Site-Aware Tooling
+
+- [ ] Convert content, asset, PDF, build verification, Pagefind, HTML
+      validation, and accountability path assumptions to the resolver-backed
+      `site/` layout.
+- [ ] Keep package scripts stable where practical while moving path knowledge
+      into scripts or shared config.
+- [ ] Verify the full local release toolchain after script migration.
+
+### Milestone 72: External Site Instance Proof
+
+- [ ] Add a small fixture site instance outside the platform source roots.
+- [ ] Prove core config/content/path code can operate against
+      `SITE_INSTANCE_ROOT`.
+- [ ] Document limitations that remain for external production instances,
+      especially MDX imports and theme delivery.
+
+### Milestone 73: Full Migration Verification
+
+- [ ] Run release-relevant checks after the full site migration.
+- [ ] Confirm public routes and generated output expectations remain stable.
+- [ ] Update docs and checklist with final verification notes.

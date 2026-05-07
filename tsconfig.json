@@ -20,10 +20,11 @@
     "strict": true,
     "useUnknownInCatchVariables": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@site/*": ["./site/*"]
     },
     "verbatimModuleSyntax": true
   },
-  "include": [".astro/types.d.ts", "astro.config.ts", "src/**/*"],
+  "include": [".astro/types.d.ts", "astro.config.ts", "site/content/**/*", "src/**/*"],
   "exclude": ["dist", "node_modules"]
 }

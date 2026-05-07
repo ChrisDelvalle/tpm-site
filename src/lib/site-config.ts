@@ -2,7 +2,9 @@ import { readFileSync } from "node:fs";
 
 import { z } from "astro/zod";
 
-const SITE_CONFIG_PATH = "site/config/site.json";
+import { projectRelativePath, siteInstance } from "./site-instance";
+
+const SITE_CONFIG_PATH = projectRelativePath(siteInstance.config.site);
 
 const absoluteUrlSchema = z.string().url();
 const sitePathSchema = z.string().min(1).refine(isSitePath, {
@@ -122,7 +124,8 @@ export function titleWithSite(title: string): string {
 }
 
 function readSiteConfigJson(): unknown {
-  return JSON.parse(readFileSync("site/config/site.json", "utf8"));
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Build-time site config is resolved through the site-instance path adapter.
+  return JSON.parse(readFileSync(siteInstance.config.site, "utf8"));
 }
 
 function formatIssues(issues: readonly z.ZodIssue[]): string {

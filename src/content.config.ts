@@ -10,10 +10,11 @@ import {
   filenameStem,
   pageSchema,
 } from "./lib/content-schemas";
+import { projectRelativePath, siteInstance } from "./lib/site-instance";
 
 const articles = defineCollection({
   loader: glob({
-    base: "./src/content/articles",
+    base: projectRelativePath(siteInstance.content.articles),
     pattern: "**/*.{md,mdx}",
     generateId: ({ entry }) => filenameStem(entry),
   }),
@@ -22,7 +23,7 @@ const articles = defineCollection({
 
 const announcements = defineCollection({
   loader: glob({
-    base: "./src/content/announcements",
+    base: projectRelativePath(siteInstance.content.announcements),
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
@@ -31,7 +32,7 @@ const announcements = defineCollection({
 
 const categories = defineCollection({
   loader: glob({
-    base: "./src/content/categories",
+    base: projectRelativePath(siteInstance.content.categories),
     pattern: "*.json",
   }),
   schema: categorySchema(),
@@ -39,7 +40,7 @@ const categories = defineCollection({
 
 const authors = defineCollection({
   loader: glob({
-    base: "./src/content/authors",
+    base: projectRelativePath(siteInstance.content.authors),
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "*.md",
   }),
@@ -48,7 +49,7 @@ const authors = defineCollection({
 
 const editorialCollections = defineCollection({
   loader: glob({
-    base: "./src/content/collections",
+    base: projectRelativePath(siteInstance.content.collections),
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
@@ -57,7 +58,7 @@ const editorialCollections = defineCollection({
 
 const pages = defineCollection({
   loader: glob({
-    base: "./src/content/pages",
+    base: projectRelativePath(siteInstance.content.pages),
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document is the next implementation pass after
+This document was the first implementation pass after
 `docs/PLATFORMIZATION_AUDIT.md`. The earlier audit established that TPM should
 become two products that happen to live in one repo for now:
 
@@ -14,9 +14,10 @@ site/
   the file-based control surface for one publication instance
 ```
 
-The current work should not move production content yet. The immediate goal is
-to create a real boundary by moving site-owner decisions into a validated
-root-level `site/` surface while the existing Astro source layout remains stable.
+The first pass created a real boundary by moving site-owner decisions into a
+validated root-level `site/` surface while the existing Astro source layout
+remained stable. The follow-up full content and asset migration is specified in
+`docs/SITE_INSTANCE_MIGRATION.md`.
 
 ## Philosophical Boundary
 
