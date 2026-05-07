@@ -112,8 +112,9 @@ ArticleLayout
 ```
 
 `ArticleLayout` owns canonical URL and social image data. `ArticleHeader` owns
-placement in the metadata row. `ArticleShareMenu` owns the trigger, anchored
-popover, email link, social target buttons, copy button, and status text.
+placement in the category/action row above the article title. `ArticleShareMenu`
+owns the trigger, anchored popover, email link, social target buttons, copy
+button, and status text.
 
 The menu should use the shared anchored positioning primitives. If article
 header action popovers need a shared preset, create a semantically named article
@@ -189,8 +190,8 @@ Component tests:
   expected platform actions from a view model;
 - social share targets are buttons, not direct anchors to social domains;
 - it does not contain third-party scripts or SDK markup;
-- `ArticleHeader` includes `Share` beside `Cite` and `PDF` when a share model is
-  provided.
+- `ArticleHeader` includes `Share` beside `Cite` and `PDF` in the
+  category/action row when a share model is provided.
 
 Browser/script tests:
 

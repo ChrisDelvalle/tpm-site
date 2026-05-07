@@ -50,12 +50,13 @@ subordinate to the article title/body, and allow long titles and author names to
 wrap without layout collision. It should not reserve space for hero media; hero
 or article media spacing belongs to an explicit media component.
 
-`ArticleCitationMenu`, `ArticleShareMenu`, and the `PDF` action should sit near
-metadata as secondary muted utilities. They may wrap under the metadata row on
-narrow screens, but they must not push the title, description, or byline into
-overlap. The trigger row is aligned to the inline end of the article width,
-while popovers and generated PDF output must not reserve article space. The
-header should remain readable when any utility is absent.
+`ArticleCitationMenu`, `ArticleShareMenu`, and the `PDF` action should sit in
+the category/action row above the article title as secondary muted utilities.
+They may wrap within that row on narrow screens, but they must not push the
+title, description, or byline into overlap. The action cluster is aligned to the
+inline end of the article width, while popovers and generated PDF output must
+not reserve article space. The header should remain readable when any utility is
+absent.
 
 ## Layering And Scrolling
 
@@ -89,14 +90,15 @@ visible, and CTAs distinguishable from neutral actions.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
 - keeps article title, metadata, and category links semantically associated.
-- keeps the visible `Cite` trigger subordinate to article metadata, locked to
-  the inline end of the article width, accessible as `Cite this article`, and
-  absent without layout shift when omitted.
-- keeps the visible `Share` trigger subordinate to article metadata, accessible
-  as `Share this article`, and absent without layout shift when omitted.
-- keeps the visible `PDF` action subordinate to article metadata, accessible as
-  `Save PDF`, pointed at the generated same-directory PDF, and excluded from
-  print/PDF output when PDF metadata is available.
+- keeps the visible `Cite` trigger subordinate in the category/action row,
+  locked to the inline end of the article width, accessible as
+  `Cite this article`, and absent without layout shift when omitted.
+- keeps the visible `Share` trigger subordinate in the category/action row,
+  accessible as `Share this article`, and absent without layout shift when
+  omitted.
+- keeps the visible `PDF` action subordinate in the category/action row,
+  accessible as `Save PDF`, pointed at the generated same-directory PDF, and
+  excluded from print/PDF output when PDF metadata is available.
 - opens the citation popover without increasing article header height or
   changing the title, metadata, or description positions.
 - does not create an awkward header-to-body gap when no hero image is rendered.

@@ -42,21 +42,57 @@ const {
 } = Astro.props;
 const hasHeaderActions =
   citation !== undefined || share !== undefined || pdf !== undefined;
+const hasKickerRow = category !== undefined || hasHeaderActions;
 ---
 
 <header class="grid min-w-0 gap-4">
   {
-    category && (
-      <TextLink
-        href={category.href}
-        variant="subtle"
-        tone="primary"
-        prefetch="hover"
-        class="text-sm font-semibold uppercase"
-        data-pdf-exclude
+    hasKickerRow && (
+      <div
+        class:list={[
+          "flex w-full max-w-4xl min-w-0 flex-wrap items-center gap-x-4 gap-y-2",
+          category === undefined ? "justify-end" : "justify-between",
+        ]}
+        data-article-kicker-row
       >
-        {category.title}
-      </TextLink>
+        {category && (
+          <TextLink
+            href={category.href}
+            variant="subtle"
+            tone="primary"
+            prefetch="hover"
+            class="text-sm font-semibold uppercase"
+            data-article-category-link
+            data-pdf-exclude
+          >
+            {category.title}
+          </TextLink>
+        )}
+        {hasHeaderActions && (
+          <div
+            class="ml-auto flex flex-wrap items-center gap-2 print:hidden"
+            data-article-header-actions
+            data-pdf-exclude
+          >
+            {citation && <ArticleCitationMenu citation={citation} />}
+            {share && <ArticleShareMenu share={share} />}
+            {pdf && (
+              <TextLink
+                href={pdf.pdfHref}
+                variant="nav"
+                tone="muted"
+                class="inline-flex items-center gap-1 text-sm font-medium"
+                aria-label="Save PDF"
+                data-article-pdf-link
+                download
+              >
+                <Download class="size-3.5" aria-hidden="true" />
+                <span aria-hidden="true">PDF</span>
+              </TextLink>
+            )}
+          </div>
+        )}
+      </div>
     )
   }
   <h1
@@ -65,7 +101,7 @@ const hasHeaderActions =
     {title}
   </h1>
   <div
-    class="flex w-full max-w-4xl min-w-0 flex-wrap items-start justify-between gap-x-4 gap-y-1"
+    class="flex w-full max-w-4xl min-w-0 flex-wrap items-start gap-x-4 gap-y-1"
     data-article-meta-row
   >
     <ArticleMeta
@@ -74,32 +110,6 @@ const hasHeaderActions =
       date={date}
       formattedDate={formattedDate}
     />
-    {
-      hasHeaderActions && (
-        <div
-          class="flex flex-wrap items-center gap-2 print:hidden"
-          data-article-header-actions
-          data-pdf-exclude
-        >
-          {citation && <ArticleCitationMenu citation={citation} />}
-          {share && <ArticleShareMenu share={share} />}
-          {pdf && (
-            <TextLink
-              href={pdf.pdfHref}
-              variant="nav"
-              tone="muted"
-              class="inline-flex items-center gap-1 text-sm font-medium"
-              aria-label="Save PDF"
-              data-article-pdf-link
-              download
-            >
-              <Download class="size-3.5" aria-hidden="true" />
-              <span aria-hidden="true">PDF</span>
-            </TextLink>
-          )}
-        </div>
-      )
-    }
   </div>
   {
     description && (

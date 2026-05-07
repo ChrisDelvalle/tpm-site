@@ -7,7 +7,7 @@ Source: `src/components/articles/ArticleCitationMenu.astro`
 `ArticleCitationMenu` lets readers generate citations for the current TPM
 article. It is a quiet article-header utility with the visible label `Cite`,
 the accessible name `Cite this article`, and the Lucide `Quote` icon. The
-trigger lives in the article metadata row; the formats live in an anchored
+trigger lives in the article category/action row; the formats live in an anchored
 popover so the feature does not reserve reading space.
 
 It must generate citations from structured article metadata, not from rendered
@@ -95,17 +95,17 @@ ArticleLayout
       copy button
 ```
 
-`ArticleHeader` owns placement in the metadata row. `ArticleCitationMenu` owns
-the anchored popover, style selector, selected citation text, and copy control.
+`ArticleHeader` owns placement in the category/action row. `ArticleCitationMenu`
+owns the anchored popover, style selector, selected citation text, and copy control.
 A small browser script may own style switching and clipboard enhancement, but
 the selected citation text must remain visible and selectable if copy fails.
 
 ## Layout And Responsiveness
 
-The trigger should sit at the inline end of the article metadata row, aligned to
-the article header width. It should use the same small visual scale as the
-author/date metadata and should wrap below metadata on narrow screens if needed
-rather than forcing the metadata row to overflow.
+The trigger should sit at the inline end of the article category/action row,
+aligned to the article header width. It should use a small secondary visual
+scale and should wrap within that row on narrow screens if needed rather than
+forcing the header to overflow.
 
 The revealed panel is an anchored popover. Opening it must not increase article
 header height or push body text down. The panel should stay close to the
@@ -210,7 +210,8 @@ dark mode, visible borders, and visible focus rings.
 ## Testable Invariants
 
 - The trigger renders visible `Cite` text with the Lucide `Quote` icon in the
-  article metadata row and exposes `Cite this article` as its accessible name.
+  article category/action row and exposes `Cite this article` as its accessible
+  name.
 - Generated citations include title, author, date, canonical URL, and site name
   where each format requires them.
 - The closed popover is hidden and reserves no article-body space.

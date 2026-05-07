@@ -45,8 +45,9 @@ ArticleLayout
 ```
 
 `ArticleLayout` owns canonical URL and generated social preview image data.
-`ArticleHeader` owns placement beside `Cite` and `PDF`. `ArticleShareMenu` owns
-popover markup, action rendering, and the copy-status region.
+`ArticleHeader` owns placement beside `Cite` and `PDF` in the category/action
+row above the article title. `ArticleShareMenu` owns popover markup, action
+rendering, and the copy-status region.
 
 ## Layout And Responsiveness
 

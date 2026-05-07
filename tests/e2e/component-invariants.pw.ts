@@ -563,6 +563,8 @@ test.describe("component layout invariants", () => {
 
       const header = page.locator("article > header").first();
       const title = header.getByRole("heading", { level: 1 });
+      const kickerRow = header.locator("[data-article-kicker-row]");
+      const categoryLink = kickerRow.locator("[data-article-category-link]");
       const metaRow = header.locator("[data-article-meta-row]");
       const headerActions = header.locator("[data-article-header-actions]");
       const citationMenu = header.locator("[data-article-citation-menu]");
@@ -589,6 +591,11 @@ test.describe("component layout invariants", () => {
       await expect(citationTrigger).toBeVisible();
       await expect(shareTrigger).toBeVisible();
       await expect(pdfLink).toBeVisible();
+      await expect(categoryLink).toBeVisible();
+      await expectVerticallyBefore(kickerRow, title, {
+        after: "article title",
+        before: "article category/action row",
+      });
       await expectVerticallyBefore(title, metaRow, {
         after: "article metadata row",
         before: "article title",
@@ -597,9 +604,9 @@ test.describe("component layout invariants", () => {
         inner: "article header actions",
         outer: "article header",
       });
-      await expectHorizontallyContained(headerActions, metaRow, {
+      await expectHorizontallyContained(headerActions, kickerRow, {
         inner: "article header actions",
-        outer: "article metadata row",
+        outer: "article category/action row",
       });
       await expectHorizontallyContained(citationMenu, headerActions, {
         inner: "article citation menu",
@@ -610,9 +617,9 @@ test.describe("component layout invariants", () => {
         outer: "article header actions",
       });
 
-      const metaRowBox = await visibleBoundingBox(
-        metaRow,
-        "article metadata row",
+      const kickerRowBox = await visibleBoundingBox(
+        kickerRow,
+        "article category/action row",
       );
       const headerActionsBox = await visibleBoundingBox(
         headerActions,
@@ -624,7 +631,7 @@ test.describe("component layout invariants", () => {
 
       expectApproximatelyEqual(
         headerActionsBox.x + headerActionsBox.width,
-        metaRowBox.x + metaRowBox.width,
+        kickerRowBox.x + kickerRowBox.width,
         2,
       );
       await expect(citationPanel).toBeHidden();
