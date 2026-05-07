@@ -31,6 +31,7 @@ import { articleScholarMetaViewModel } from "../lib/article-pdf";
 import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
 import { getArticles, getCategory } from "../lib/content";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
+import { articleShareMenuViewModel } from "../lib/share-targets";
 import { socialPreviewImageViewModel } from "../lib/social-images";
 import BaseLayout from "./BaseLayout.astro";
 
@@ -98,6 +99,12 @@ const citation = articleCitationMenuViewModel({
   publishedAt: articleView.date,
   title: articleView.title,
 });
+const share = articleShareMenuViewModel({
+  articleUrl: canonicalUrl,
+  description: articleView.description,
+  image: socialPreviewImage,
+  title: articleView.title,
+});
 const scholarMeta = articleScholarMetaViewModel({
   article,
   authors: articleAuthors,
@@ -146,6 +153,7 @@ const pdf = scholarMeta.pdf;
         description={articleView.description}
         formattedDate={articleView.formattedDate}
         pdf={pdf}
+        share={share}
         title={articleView.title}
       />
       <div class="grid min-w-0 gap-1" data-article-body-flow>

@@ -47,6 +47,11 @@ export const catalogExampleComponentPaths = [
 
 export const componentCatalogIgnoreList = [
   {
+    path: "src/components/articles/ArticleShareActionRow.astro",
+    reason:
+      "Internal article-share row renderer covered by ArticleShareMenu examples and component tests.",
+  },
+  {
     path: "src/components/articles/ArticleImageInspectorScript.astro",
     reason:
       "Non-visual script boundary covered by ArticleImage, ArticleProse, browser-script, and e2e tests.",

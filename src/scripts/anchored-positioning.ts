@@ -179,6 +179,7 @@ function presetFor(root: HTMLElement): AnchoredPreset | null {
   const preset = root.dataset["anchorPreset"];
 
   if (
+    preset === "article-action-menu" ||
     preset === "article-citation-menu" ||
     preset === "header-dropdown" ||
     preset === "header-search-start" ||

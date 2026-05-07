@@ -9,6 +9,7 @@ describe("article catalog examples", () => {
     );
 
     expect(paths).toContain("src/components/articles/ArticleHeader.astro");
+    expect(paths).toContain("src/components/articles/ArticleShareMenu.astro");
     expect(paths).toContain("src/components/articles/ArticleList.astro");
     expect(paths).toContain("src/components/articles/ArticleEndcap.astro");
     expect(paths).toContain(

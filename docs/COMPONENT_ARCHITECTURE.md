@@ -161,6 +161,8 @@ src/components/
   articles/
     ArticleLayout.astro
     ArticleHeader.astro
+    ArticleCitationMenu.astro
+    ArticleShareMenu.astro
     ArticleMeta.astro
     ArticleProse.astro
     ArticleCard.astro
@@ -539,7 +541,11 @@ implementation depend on complex menu behavior.
 Article components own article display and metadata presentation.
 
 - `ArticleLayout`: page shell for an article entry.
-- `ArticleHeader`: title, category, description, hero, and meta composition.
+- `ArticleHeader`: title, category, description, meta composition, and quiet
+  article utilities such as `Cite`, `Share`, and `PDF`.
+- `ArticleShareMenu`: article-header share utility built from the centralized
+  `src/lib/share-targets.ts` endpoint model; it must not hard-code platform
+  URLs or load third-party share SDKs.
 - `ArticleMeta`: author/date/category/tag metadata row.
 - `ArticleProse`: Tailwind Typography wrapper for rendered Markdown/MDX.
 - `ArticleCard`: flat editorial article row for archive/search/latest-post

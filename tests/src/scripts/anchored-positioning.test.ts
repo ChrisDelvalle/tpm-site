@@ -111,6 +111,41 @@ describe("anchored positioning browser script", () => {
     expect(panel.dataset["anchorPlacement"]).toBe("bottom-end");
   });
 
+  test("positions article action menus with the same trigger-relative contract as article citations", () => {
+    const window = browserWindow();
+    const document = window.document;
+
+    document.body.innerHTML = `
+      <div data-anchor-root data-anchor-preset="article-action-menu">
+        <button data-anchor-trigger>Share</button>
+        <div data-anchor-panel popover>Panel</div>
+      </div>
+    `;
+
+    const trigger = requiredElement(window, "[data-anchor-trigger]");
+    const panel = requiredElement(window, "[data-anchor-panel]");
+
+    Reflect.set(window, "innerHeight", 700);
+    Reflect.set(window, "innerWidth", 768);
+    setRect(trigger, { height: 24, width: 64, x: 600, y: 320 });
+    setRect(panel, { height: 360, width: 288, x: 0, y: 0 });
+    Reflect.set(
+      panel,
+      "matches",
+      (selector: string) => selector === ":popover-open",
+    );
+    installImmediateAnimationFrame(window);
+
+    installAnchoredPositioning(runtimeFor(window));
+    dispatchWindowEvent(trigger, window, "click");
+
+    expect(panel.style.getPropertyValue("--anchor-x")).toBe("376px");
+    expect(panel.style.getPropertyValue("--anchor-y")).toBe("348px");
+    expect(panel.style.getPropertyValue("--anchor-max-width")).toBe("736px");
+    expect(panel.style.getPropertyValue("--anchor-max-height")).toBe("336px");
+    expect(panel.dataset["anchorPlacement"]).toBe("bottom-end");
+  });
+
   test("ignores unrelated events and invalid root contracts", () => {
     const window = browserWindow();
     const document = window.document;

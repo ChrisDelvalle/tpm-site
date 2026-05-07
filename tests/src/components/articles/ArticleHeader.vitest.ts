@@ -39,6 +39,20 @@ describe("ArticleHeader", () => {
           publicationDateForScholar: "2022/04/06",
           title: "Article Title",
         },
+        share: {
+          actions: [
+            {
+              copyText:
+                "https://thephilosophersmeme.com/articles/article-title/",
+              id: "copy-link",
+              kind: "copy",
+              label: "Copy link",
+            },
+          ],
+          articleUrl: "https://thephilosophersmeme.com/articles/article-title/",
+          copyText: "https://thephilosophersmeme.com/articles/article-title/",
+          title: "Article Title",
+        },
         title: "Article Title",
       },
     });
@@ -51,6 +65,9 @@ describe("ArticleHeader", () => {
     expect(view).toContain('aria-label="Cite this article"');
     expect(view).toContain(">Cite</span>");
     expect(view).toContain('data-anchor-preset="article-citation-menu"');
+    expect(view).toContain('aria-label="Share this article"');
+    expect(view).toContain(">Share</span>");
+    expect(view).toContain('data-anchor-preset="article-action-menu"');
     expect(view).toContain('aria-label="Save PDF"');
     expect(view).toContain(">PDF</span>");
     expect(view).toContain('data-article-pdf-link="true"');
@@ -92,6 +109,7 @@ describe("ArticleHeader", () => {
     });
 
     expect(view).toContain('aria-label="Cite this article"');
+    expect(view).not.toContain('aria-label="Share this article"');
     expect(view).not.toContain('aria-label="Save PDF"');
     expect(view).not.toContain("data-article-pdf-link");
     expect(view).not.toContain("data-article-pdf-canonical");

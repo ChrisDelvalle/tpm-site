@@ -39,6 +39,10 @@ describe("ArticleLayout", () => {
       `content="${testSiteUrl}/articles/${articleSlug(article)}/${articleSlug(article)}.pdf"`,
     );
     expect(view).toContain("Save PDF");
+    expect(view).toContain('aria-label="Share this article"');
+    expect(view).toContain("data-article-share-menu");
+    expect(view).toContain("https://twitter.com/intent/tweet");
+    expect(view).toContain("via=philo_meme");
     expect(view).toContain(
       `href="/articles/${articleSlug(article)}/${articleSlug(article)}.pdf"`,
     );

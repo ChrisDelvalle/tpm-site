@@ -11,7 +11,8 @@ owning low-level layout geometry.
 It must preserve article body wording and must not parse article Markdown
 source directly. It also owns article-level machine-readable metadata that
 requires page context, including Google Scholar/Highwire PDF tags and generated
-social preview image metadata.
+social preview image metadata. The same canonical URL and social preview data
+also drive the article share menu.
 
 ## Public Contract
 
@@ -23,6 +24,8 @@ social preview image metadata.
 - derived Scholar metadata and optional article PDF metadata for the `PDF`
   action
 - generated social preview image metadata for Open Graph, Twitter, and JSON-LD
+- normalized article share menu data for copy, email, and public social share
+  targets
 
 Exact prop names may change during implementation, but the layout should
 receive normalized view-model data rather than creating it inside visual
@@ -55,12 +58,12 @@ reading column geometry.
 - `ArticleScholarMeta`, which emits `citation_title`, `citation_author`,
   `citation_publication_date`, and, for PDF-eligible articles,
   `citation_pdf_url`.
-- `ArticleHeader`, which renders the visible `PDF` action.
+- `ArticleHeader`, which renders the visible `Share` and `PDF` actions.
 
 It also derives the article social preview image once through the shared social
-preview image pipeline and passes that generated asset to `BaseLayout` and
-`ArticleJsonLd`. It must not pass raw `ImageMetadata.src` into crawler-facing
-metadata.
+preview image pipeline and passes that generated asset to `BaseLayout`,
+`ArticleJsonLd`, and the share target helper. It must not pass raw
+`ImageMetadata.src` into crawler-facing metadata or Pinterest share media.
 
 ## Layout And Responsiveness
 

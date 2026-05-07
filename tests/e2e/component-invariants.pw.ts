@@ -566,11 +566,16 @@ test.describe("component layout invariants", () => {
       const metaRow = header.locator("[data-article-meta-row]");
       const headerActions = header.locator("[data-article-header-actions]");
       const citationMenu = header.locator("[data-article-citation-menu]");
+      const shareMenu = header.locator("[data-article-share-menu]");
       const citationTrigger = citationMenu.getByRole("button", {
         name: "Cite this article",
       });
+      const shareTrigger = shareMenu.getByRole("button", {
+        name: "Share this article",
+      });
       const pdfLink = headerActions.locator("[data-article-pdf-link]");
       const citationPanel = page.locator("[data-article-citation-panel]");
+      const sharePanel = page.locator("[data-article-share-panel]");
       const citationText = citationPanel.locator(
         "[data-article-citation-text]",
       );
@@ -582,6 +587,7 @@ test.describe("component layout invariants", () => {
       );
 
       await expect(citationTrigger).toBeVisible();
+      await expect(shareTrigger).toBeVisible();
       await expect(pdfLink).toBeVisible();
       await expectVerticallyBefore(title, metaRow, {
         after: "article metadata row",
@@ -597,6 +603,10 @@ test.describe("component layout invariants", () => {
       });
       await expectHorizontallyContained(citationMenu, headerActions, {
         inner: "article citation menu",
+        outer: "article header actions",
+      });
+      await expectHorizontallyContained(shareMenu, headerActions, {
+        inner: "article share menu",
         outer: "article header actions",
       });
 
@@ -619,6 +629,83 @@ test.describe("component layout invariants", () => {
       );
       await expect(citationPanel).toBeHidden();
       await expect(citationText).toBeHidden();
+      await expect(sharePanel).toBeHidden();
+
+      await shareTrigger.click();
+      await expect(sharePanel).toBeVisible();
+      const shareTriggerBox = await visibleBoundingBox(
+        shareTrigger,
+        "article share trigger",
+      );
+      const sharePanelBox = await visibleBoundingBox(
+        sharePanel,
+        "article share panel",
+      );
+      expectApproximatelyEqual(
+        sharePanelBox.y,
+        shareTriggerBox.y + shareTriggerBox.height + 4,
+        2,
+      );
+      await expect(
+        sharePanel.locator("[data-article-share-copy-button]"),
+      ).toHaveCount(1);
+      await expect(
+        sharePanel.locator("[data-article-share-action]"),
+      ).toHaveCount(9);
+      await expect(
+        sharePanel.locator('[data-article-share-action="x"]'),
+      ).toBeVisible();
+      await sharePanel.evaluate((element) => {
+        element.scrollTop = element.scrollHeight;
+      });
+      await expect(
+        sharePanel.locator('[data-article-share-action="pinterest"]'),
+      ).toBeVisible();
+      await expect(
+        sharePanel.locator('[data-article-share-action="x"]'),
+      ).toHaveAttribute(
+        "data-article-share-open-url",
+        /twitter\.com\/intent\/tweet.*via=philo_meme/u,
+      );
+      await expect(
+        sharePanel.locator('[data-article-share-action="threads"]'),
+      ).toHaveAttribute(
+        "data-article-share-open-url",
+        /threads\.com\/intent\/post/u,
+      );
+      await expect(
+        sharePanel.locator('[data-article-share-action="reddit"]'),
+      ).toHaveAttribute("data-article-share-open-url", /reddit\.com\/submit/u);
+      await expect(
+        sharePanel.locator('[data-article-share-action="hacker-news"]'),
+      ).toHaveAttribute(
+        "data-article-share-open-url",
+        /news\.ycombinator\.com\/submitlink/u,
+      );
+      await expect(
+        sharePanel.locator('[data-article-share-action="pinterest"]'),
+      ).toHaveAttribute(
+        "data-article-share-open-url",
+        /pinterest\.com\/pin\/create\/button/u,
+      );
+      await expect(
+        sharePanel.locator(
+          'a[href*="twitter.com"], a[href*="facebook.com/sharer"], a[href*="reddit.com/submit"], a[href*="pinterest.com/pin"]',
+        ),
+      ).toHaveCount(0);
+      await expectViewportContained(page, sharePanel, "article share panel");
+      expectApproximatelyEqual(
+        (await visibleBoundingBox(header, "article header after share")).height,
+        headerHeightBefore,
+        2,
+      );
+      await expect(
+        page.locator(
+          'script[src*="platform.twitter.com"], script[src*="connect.facebook.net"], script[src*="assets.pinterest.com"]',
+        ),
+      ).toHaveCount(0);
+      await page.keyboard.press("Escape");
+      await expect(sharePanel).toBeHidden();
 
       await citationTrigger.click();
       await expect(citationPanel).toBeVisible();

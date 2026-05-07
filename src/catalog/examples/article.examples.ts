@@ -25,6 +25,11 @@ export const articleCatalogExamples = [
     title: "ArticleCitationMenu",
   },
   {
+    componentPath: "src/components/articles/ArticleShareMenu.astro",
+    description: "Article-header utility for copy and social share targets.",
+    title: "ArticleShareMenu",
+  },
+  {
     componentPath: "src/components/articles/ArticleEndcap.astro",
     description: "Article footer discovery and support composition.",
     title: "ArticleEndcap",

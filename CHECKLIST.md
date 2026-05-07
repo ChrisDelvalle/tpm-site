@@ -936,3 +936,58 @@ lint:markdown`, and `bun --silent run format:markdown`.
       `bun --silent run validate:html`; the raw
       `dist/_astro/meme-jokes-puns-chart.aqlxeiBk.png` artifact is no longer
       emitted by the optimized build.
+
+### Milestone 60: Article Share Menu Design
+
+- [x] Design a lightweight article share menu for copy link, email, Bluesky, X,
+      Threads, Facebook, LinkedIn, Reddit, Hacker News, and Pinterest.
+- [x] Specify that external endpoint contracts live in one pure helper module
+      so platform changes do not spread through Astro components.
+- [x] Specify that no native share, embed, share-image generator, Discord,
+      Instagram, TikTok, YouTube, or third-party share SDK belongs in the first
+      implementation.
+- [x] Define attribution rules for X and Threads, social-preview image reuse for
+      Pinterest, accessibility requirements, responsive behavior, and tests
+      before implementation begins.
+      Completed in `docs/ARTICLE_SHARE_MENU.md`; implementation is unblocked
+      with explicit endpoint-isolation and no-third-party-script constraints.
+
+### Milestone 61: Share Target Helper And Endpoint Tests
+
+- [x] Add a typed share-target helper that builds a normalized article share
+      view model from title, canonical URL, description, and generated social
+      preview image metadata.
+- [x] Keep all external endpoint definitions in one maintainable data structure
+      with deterministic ordering and no component-level URL construction.
+- [x] Add focused tests for encoding, ordering, X attribution, Threads
+      attribution, Pinterest media handling, email body construction, and
+      unsupported-target exclusion.
+      Verified with `bun test tests/src/lib/share-targets.test.ts`.
+
+### Milestone 62: Article Share Menu UI And Script
+
+- [x] Add `ArticleShareMenu` using shared anchored popover primitives and a
+      compact secondary trigger beside `Cite` and `PDF`.
+- [x] Add a tiny local copy-link enhancement with `aria-live` status and manual
+      fallback copy text, without native share or third-party SDKs.
+- [x] Thread the share model through `ArticleLayout` and `ArticleHeader`,
+      keeping article header actions printable/PDF-excluded and responsive.
+- [x] Add component and browser-script tests for render structure, copy success,
+      copy failure, idempotent installation, and ignored unrelated clicks.
+      Verified with focused share-target/script/anchored/catalog Bun tests,
+      focused ArticleShareMenu/ArticleHeader/ArticleLayout Astro tests, and
+      `bun --silent run typecheck`.
+
+### Milestone 63: Share Menu Verification And Documentation
+
+- [x] Update component architecture/docs and package/test documentation where
+      needed so the share menu contract is discoverable.
+- [x] Add or update e2e coverage for article header actions, share popover
+      viewport containment, expected share-link hosts, and absence of third-party
+      scripts.
+- [x] Run focused tests plus release-relevant checks before marking complete.
+      Verified with focused share-target/script/anchored/catalog Bun tests,
+      focused ArticleShareActionRow/ArticleShareMenu/ArticleHeader/ArticleLayout
+      Astro tests, `bun --silent run check`, `bun --silent run test:e2e`,
+      `bun --silent run test:a11y`, `bun --silent run verify`, and
+      `bun --silent run validate:html`.

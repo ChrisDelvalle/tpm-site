@@ -20,6 +20,7 @@ import ArticleCitationMenu from "../components/articles/ArticleCitationMenu.astr
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
 import ArticleFootnotes from "../components/articles/ArticleFootnotes.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
+import ArticleShareMenu from "../components/articles/ArticleShareMenu.astro";
 import HoverImageCard from "../components/articles/HoverImageCard.astro";
 import ArticleImage from "../components/articles/ArticleImage.astro";
 import ArticleList from "../components/articles/ArticleList.astro";
@@ -117,6 +118,35 @@ const catalogArticleCitation = {
       text: `Her, Seong-Young. "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now." The Philosopher's Meme, 6 Apr. 2022, https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/.`,
     },
   ],
+  title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+} as const;
+
+const catalogArticleShare = {
+  actions: [
+    {
+      copyText:
+        "https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+      id: "copy-link",
+      kind: "copy",
+      label: "Copy link",
+    },
+    {
+      href: "mailto:?subject=Wittgenstein%27s%20Most%20Beloved%20Quote%20Was%20Real%2C%20But%20It%27s%20Fake%20Now",
+      id: "email",
+      kind: "email",
+      label: "Email",
+    },
+    {
+      href: "https://twitter.com/intent/tweet?text=Wittgenstein%27s+Most+Beloved+Quote+Was+Real%2C+But+It%27s+Fake+Now&url=https%3A%2F%2Fthephilosophersmeme.com%2Farticles%2Fwittgensteins-most-beloved-quote-was-real-but-its-fake-now%2F&via=philo_meme",
+      id: "x",
+      kind: "external",
+      label: "X",
+    },
+  ],
+  articleUrl:
+    "https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+  copyText:
+    "https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
   title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
 } as const;
 
@@ -741,6 +771,7 @@ if (primaryCatalogAuthor === undefined) {
           date={new Date("2022-04-06T23:58:10.000Z")}
           description="A serious and good philosophical work could be written consisting entirely of fake philosophy quotes."
           formattedDate="April 6, 2022"
+          share={catalogArticleShare}
           title="Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now"
         />
       </CatalogExample>
@@ -751,6 +782,14 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/articles/ArticleCitationMenu.astro"
       >
         <ArticleCitationMenu citation={catalogArticleCitation} />
+      </CatalogExample>
+
+      <CatalogExample
+        title="ArticleShareMenu"
+        description="Article share utility with copy, email, and social targets."
+        componentPath="src/components/articles/ArticleShareMenu.astro"
+      >
+        <ArticleShareMenu share={catalogArticleShare} />
       </CatalogExample>
 
       <CatalogExample
