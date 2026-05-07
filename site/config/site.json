@@ -1,4 +1,10 @@
 {
+  "homepage": {
+    "announcementLimit": 3,
+    "featuredCollection": "featured",
+    "recentLimit": 8,
+    "startHereCollection": "start-here"
+  },
   "identity": {
     "description": "The philosophy of memes, cyberculture, and the Internet.",
     "language": "en",

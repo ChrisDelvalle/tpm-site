@@ -67,6 +67,7 @@
     "test:e2e": "bun --silent run build && playwright test tests/e2e",
     "test:flake": "bun scripts/testing/run-randomized-tests.ts",
     "test:perf": "bun --silent run build && lhci autorun",
+    "test:site-instance": "SITE_INSTANCE_ROOT=tests/fixtures/site-instance bun --silent run build:raw && bun scripts/build/generate-article-pdfs.ts --quiet --articles tests/fixtures/site-instance/content/articles && bun --silent run build:optimize",
     "test:unit": "bun test tests/config tests/eslint tests/src tests/types tests/lib tests/scripts tests/components tests/pages --reporter=dots --randomize --concurrent",
     "typecheck": "bun --silent run typecheck:astro && bun --silent run typecheck:tools",
     "typecheck:astro": "astro check --minimumFailingSeverity warning --minimumSeverity warning",

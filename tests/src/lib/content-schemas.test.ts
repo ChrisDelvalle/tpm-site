@@ -209,8 +209,23 @@ describe("content schemas", () => {
       }).success,
     ).toBe(false);
     expect(
-      pageSchema().safeParse({
+      pageSchema({ image: imageSchema }).safeParse({
         description: "About the site",
+        hero: {
+          darkImage: {
+            format: "png",
+            height: 360,
+            src: "/dark.png",
+            width: 960,
+          },
+          imageAlt: "Site logo",
+          lightImage: {
+            format: "png",
+            height: 360,
+            src: "/light.png",
+            width: 960,
+          },
+        },
         startHere: ["what-is-a-meme"],
         title: "About",
       }).success,

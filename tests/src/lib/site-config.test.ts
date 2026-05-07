@@ -14,6 +14,12 @@ const validConfig = {
     title: "Example Blog",
     url: "https://example.com",
   },
+  homepage: {
+    announcementLimit: 2,
+    featuredCollection: "featured",
+    recentLimit: 6,
+    startHereCollection: "start-here",
+  },
   navigation: {
     footer: [{ href: "/feed.xml", label: "RSS" }],
     primary: [{ href: "/articles/", label: "Articles" }],
@@ -59,6 +65,12 @@ describe("site config", () => {
     expect(siteConfig.support.patreon.href).toBe(
       "https://patreon.com/thephilosophersmeme",
     );
+    expect(siteConfig.homepage).toEqual({
+      announcementLimit: 3,
+      featuredCollection: "featured",
+      recentLimit: 8,
+      startHereCollection: "start-here",
+    });
     expect(siteConfig.share.xViaHandle).toBe("philo_meme");
   });
 

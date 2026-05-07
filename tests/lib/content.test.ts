@@ -72,6 +72,10 @@ await mock.module("astro:content", () => ({
 
     return [];
   },
+  getEntry: async () => {
+    await Promise.resolve();
+    return undefined;
+  },
 }));
 
 const { getArticles, getCategories, getCategory } =

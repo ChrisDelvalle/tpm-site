@@ -1,10 +1,9 @@
 import rss from "@astrojs/rss";
-import fallbackSocialPreviewImage from "@site/assets/shared/tpm_home_hero_light.png";
 import type { APIContext } from "astro";
 import { getImage } from "astro:assets";
 
 import { authorDisplayNameForArticle, getAuthorEntries } from "../lib/authors";
-import { getArticles } from "../lib/content";
+import { getArticles, getSiteSocialFallbackImage } from "../lib/content";
 import {
   articleUrl,
   entryDate,
@@ -28,6 +27,7 @@ type FeedContext = Pick<APIContext, "site">;
 export async function GET(context: FeedContext): Promise<Response> {
   const articles = await getArticles();
   const authors = await getAuthorEntries();
+  const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
   const site = context.site?.toString() ?? SITE_URL;
 
   return rss({

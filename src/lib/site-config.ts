@@ -26,8 +26,38 @@ const externalLinkSchema = z
     label: z.string().min(1),
   })
   .strict();
+const defaultHomepageConfig = {
+  announcementLimit: 3,
+  featuredCollection: "featured",
+  recentLimit: 8,
+  startHereCollection: "start-here",
+} as const;
+const homepageConfigSchema = z
+  .object({
+    announcementLimit: z
+      .number()
+      .int()
+      .positive()
+      .default(defaultHomepageConfig.announcementLimit),
+    featuredCollection: z
+      .string()
+      .min(1)
+      .default(defaultHomepageConfig.featuredCollection),
+    recentLimit: z
+      .number()
+      .int()
+      .positive()
+      .default(defaultHomepageConfig.recentLimit),
+    startHereCollection: z
+      .string()
+      .min(1)
+      .default(defaultHomepageConfig.startHereCollection),
+  })
+  .strict()
+  .default(defaultHomepageConfig);
 const siteConfigSchema = z
   .object({
+    homepage: homepageConfigSchema,
     identity: z
       .object({
         description: z.string().min(1),

@@ -16,9 +16,6 @@ import {
 } from "./publishable";
 import type { AnnouncementEntry } from "./routes";
 
-const FEATURED_COLLECTION_ID = "featured";
-const START_HERE_COLLECTION_ID = "start-here";
-
 /** Display-ready homepage featured item. */
 export interface HomeFeaturedItem extends PublishableListItem {
   id: string;
@@ -33,7 +30,9 @@ interface HomePageViewModelInput {
   announcements: readonly AnnouncementEntry[];
   archiveItems: readonly ArticleArchiveItem[];
   collections: readonly EditorialCollectionEntry[];
+  featuredCollectionId?: string;
   recentLimit?: number;
+  startHereCollectionId?: string;
 }
 
 /** Display-ready homepage view model consumed by the Astro route. */
@@ -52,7 +51,9 @@ interface HomePageViewModel {
  * @param input.announcements Published announcements.
  * @param input.archiveItems Display-ready normal article archive items.
  * @param input.collections Active editor-owned collections.
+ * @param input.featuredCollectionId Collection ID used for the featured carousel.
  * @param input.recentLimit Maximum newest normal articles shown on home.
+ * @param input.startHereCollectionId Collection ID used for the start-here list.
  * @returns Display-ready homepage lists and feature items.
  */
 export function homePageViewModel({
@@ -60,7 +61,9 @@ export function homePageViewModel({
   announcements,
   archiveItems,
   collections,
+  featuredCollectionId = "featured",
   recentLimit = 8,
+  startHereCollectionId = "start-here",
 }: HomePageViewModelInput): HomePageViewModel {
   const articlePublishables = archiveItems.map(publishableFromArticleArchive);
   const announcementPublishables = announcements.map(
@@ -70,11 +73,11 @@ export function homePageViewModel({
   const index = publishableIndex(publishables);
   const featuredCollection = requiredCollection(
     collections,
-    FEATURED_COLLECTION_ID,
+    featuredCollectionId,
   );
   const startHereCollection = requiredCollection(
     collections,
-    START_HERE_COLLECTION_ID,
+    startHereCollectionId,
   );
   const featuredItems = resolvePublishableCollection(
     featuredCollection,

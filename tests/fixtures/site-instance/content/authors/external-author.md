@@ -1,8 +1,8 @@
 ---
-name: External Author
 displayName: External Author
 aliases:
   - External Author
+type: person
 ---
 
 # External Author

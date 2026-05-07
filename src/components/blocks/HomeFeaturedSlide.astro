@@ -1,17 +1,16 @@
 ---
 import { Image } from "astro:assets";
 
-import fallbackFeatureImage from "@site/assets/shared/tpm-site-symbol.svg";
 import TextLink from "../ui/TextLink.astro";
 import type { HomeFeaturedItem } from "../../lib/home";
-import { SITE_TITLE } from "../../lib/routes";
 
 interface Props {
+  fallbackLabel?: string | undefined;
   index: number;
   item: HomeFeaturedItem;
 }
 
-const { index, item } = Astro.props;
+const { fallbackLabel = "Blog", index, item } = Astro.props;
 const isActive = index === 0;
 const hasBody = Astro.slots.has("default");
 const metaParts = [item.category?.title, item.date].filter(
@@ -20,11 +19,6 @@ const metaParts = [item.category?.title, item.date].filter(
 const linkPrefetch = item.href.startsWith("/") ? "hover" : undefined;
 const linkPrefetchAttrs =
   linkPrefetch === undefined ? {} : { prefetch: linkPrefetch as "hover" };
-const image = item.image ?? {
-  alt: SITE_TITLE,
-  src: fallbackFeatureImage,
-};
-const usesFallbackImage = item.image === undefined;
 ---
 
 <article
@@ -82,24 +76,31 @@ const usesFallbackImage = item.image === undefined;
     }
   </div>
   {
-    (
+    item.image ? (
       <a
         href={item.href}
         aria-label={`Read ${item.title}`}
         data-astro-prefetch={linkPrefetch}
-        class:list={[
-          "order-first block aspect-[4/3] min-w-0 overflow-hidden rounded-xs no-underline md:order-last",
-          !usesFallbackImage && "bg-muted",
-        ]}
+        class="bg-muted order-first block aspect-[4/3] min-w-0 overflow-hidden rounded-xs no-underline md:order-last"
       >
         <Image
-          src={image.src}
-          alt={image.alt}
+          src={item.image.src}
+          alt={item.image.alt}
           width={480}
           height={360}
           loading={isActive ? "eager" : "lazy"}
           class="h-full w-full object-cover"
         />
+      </a>
+    ) : (
+      <a
+        href={item.href}
+        aria-label={`Read ${item.title}`}
+        data-astro-prefetch={linkPrefetch}
+        class="bg-foreground text-background order-first flex aspect-[4/3] min-w-0 items-center justify-center overflow-hidden rounded-xs p-4 text-center text-4xl leading-none font-bold tracking-normal uppercase no-underline md:order-last"
+        data-home-featured-fallback-image
+      >
+        <span class="line-clamp-2 break-words">{fallbackLabel}</span>
       </a>
     )
   }

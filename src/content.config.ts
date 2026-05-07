@@ -62,7 +62,7 @@ const pages = defineCollection({
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
-  schema: pageSchema(),
+  schema: pageSchema,
 });
 
 const articleReferenceArticleFixtures = defineCollection({
@@ -80,7 +80,7 @@ const articleReferenceProofFixtures = defineCollection({
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
-  schema: pageSchema(),
+  schema: pageSchema,
 });
 
 export const collections = {

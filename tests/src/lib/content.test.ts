@@ -129,10 +129,40 @@ await mock.module("astro:content", () => ({
 
     return [];
   },
+  getEntry: async (collection: string, id: string) => {
+    await Promise.resolve();
+
+    if (collection === "pages" && id === "index") {
+      return {
+        collection: "pages",
+        data: {
+          description: "Home page",
+          hero: {
+            lightImage: {
+              format: "png",
+              height: 630,
+              src: "/home.png",
+              width: 1200,
+            },
+          },
+          title: "Home",
+        },
+        id: "index",
+      };
+    }
+
+    return undefined;
+  },
 }));
 
-const { getAnnouncements, getCategories, getCategory, getTag, getTags } =
-  await import("../../../src/lib/content");
+const {
+  getAnnouncements,
+  getCategories,
+  getCategory,
+  getSiteSocialFallbackImage,
+  getTag,
+  getTags,
+} = await import("../../../src/lib/content");
 
 describe("content helpers", () => {
   test("loads published announcements newest first", async () => {
@@ -142,6 +172,14 @@ describe("content helpers", () => {
       "newest",
       "older",
     ]);
+  });
+
+  test("loads the active homepage hero as the site social fallback", async () => {
+    const fallback = await getSiteSocialFallbackImage();
+
+    expect(fallback).toMatchObject({
+      src: "/home.png",
+    });
   });
 
   test("builds category summaries from metadata and article folders", async () => {

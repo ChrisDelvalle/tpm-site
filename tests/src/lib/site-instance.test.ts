@@ -18,6 +18,9 @@ describe("site instance paths", () => {
     expect(paths.config.site).toBe(
       path.join("/repo/platform", "site", "config", "site.json"),
     );
+    expect(paths.config.redirects).toBe(
+      path.join("/repo/platform", "site", "config", "redirects.json"),
+    );
     expect(paths.content.articles).toBe(
       path.join("/repo/platform", "site", "content", "articles"),
     );

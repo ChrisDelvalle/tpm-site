@@ -277,11 +277,11 @@ The slide should render:
 - publishable description;
 - optional collection item note;
 - publishable image when available;
-- a site-default fallback image when no image exists.
+- a generic framed fallback label when no image exists.
 
-The fallback image should be a shared site asset, not feature-specific logic.
-It preserves the carousel frame and keeps featured entries from collapsing when
-a valid publishable entry has no image.
+The fallback should not import a TPM-named asset from platform code. It should
+preserve the carousel frame with a readable site label, so a valid publishable
+entry without an image remains usable in any site instance.
 
 ## Critical Review
 

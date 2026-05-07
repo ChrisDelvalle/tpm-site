@@ -11,6 +11,7 @@ interface SiteInstancePaths {
     readonly site: string;
   };
   readonly config: {
+    readonly redirects: string;
     readonly site: string;
   };
   readonly content: {
@@ -60,6 +61,7 @@ export function resolveSiteInstancePaths(
       site: path.join(assetsRoot, "site"),
     },
     config: {
+      redirects: path.join(root, "config", "redirects.json"),
       site: path.join(root, "config", "site.json"),
     },
     content: {

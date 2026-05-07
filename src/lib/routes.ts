@@ -20,6 +20,9 @@ export type CategoryEntry = CollectionEntry<"categories">;
 /** Astro content collection entry for editor-owned collections. */
 export type EditorialCollectionEntry = CollectionEntry<"collections">;
 
+/** Astro content collection entry for standalone Markdown pages. */
+export type PageEntry = CollectionEntry<"pages">;
+
 /** Display-ready category data with its sorted articles. */
 export interface CategorySummary {
   articles: ArticleEntry[];

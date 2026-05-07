@@ -170,19 +170,32 @@ The production move is in-repo first. External support is a proof milestone,
 not a separate repo split yet.
 
 The repeatable proof lives at `tests/fixtures/site-instance/`. It includes a
-small non-TPM site config, one article, one author profile, and one category.
-The resolver test parses that config and runs the normal content verifier
-against the fixture paths, proving core config/content/path logic can operate
-outside both `src/` and the live `site/` directory.
+small non-TPM site config, public files, homepage content, one announcement,
+one article, one author profile, one category, and the required homepage
+collections. The resolver test parses that config and runs the normal content
+verifier against the fixture paths, proving core config/content/path logic can
+operate outside both `src/` and the live `site/` directory.
+
+The stronger proof is a full fixture build:
+
+```sh
+bun --silent run test:site-instance
+```
+
+That command sets `SITE_INSTANCE_ROOT=tests/fixtures/site-instance` and runs the
+normal production build path. It exists to catch platform code that still
+imports TPM-named assets, assumes live site content, or depends on the in-repo
+`site/` instance.
 
 Current limitations are explicit:
 
-- The full Astro build still assumes the live in-repo `site/` instance for
-  production release commands.
 - MDX remains an advanced escape hatch. External production instances will need
   the same `@site/assets` alias contract and platform component imports.
 - Site-specific theme and design-token extraction is not yet separated from the
   platform.
+- CI for a true two-repository deployment still needs a checkout recipe that
+  places the platform and site instance beside each other before running the
+  same `SITE_INSTANCE_ROOT` build.
 
 ## Critical Review
 

@@ -21,8 +21,8 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes `../media/ThemedImage`, `../ui/PatreonButton`,
-`../ui/DiscordButton`, and `../ui/YouTubeButton`. It is normally paired with
+It composes `../media/ThemedImage`, `../ui/PatreonButton`, and
+`../ui/DiscordButton`. It is normally paired with
 Start Here in the first desktop lead row. Featured and Announcements occupy the
 second lead row. Parent routes should pass normalized props rather than asking
 this component to fetch global content directly.
@@ -35,9 +35,9 @@ reduce the image's horizontal space. The themed hero image is width-led: it may
 grow to the column's available measure, then stops at a readable maximum width.
 The light and dark variants must share the same dimensions to avoid layout
 shift. Branded external CTAs should prefer the shared fixed button dimensions so
-Patreon, Discord, and YouTube read as a consistent action set. When horizontal
-space is constrained, the CTA row must stay on one line and shrink the buttons
-instead of wrapping a single brand to a second row.
+Patreon and Discord read as a consistent action set. When horizontal space is
+constrained, the CTA row must stay on one line and shrink the buttons instead
+of wrapping a single brand to a second row.
 
 ## Layering And Scrolling
 

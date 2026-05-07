@@ -1,11 +1,4 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
-import {
-  createServer as createHttpServer,
-  type IncomingMessage,
-  type RequestListener,
-  type Server,
-  type ServerResponse,
-} from "node:http";
 import path from "node:path";
 
 import { chromium, type Page } from "@playwright/test";
@@ -84,14 +77,14 @@ export interface ArticlePdfSrcsetCandidate {
   width: number;
 }
 
-interface StaticServer {
-  close: () => Promise<void> | void;
-  origin: string;
+interface GenerateArticlePdfsDependencies {
+  createRenderer?: (distDir: string) => Promise<ArticlePdfRenderer>;
 }
 
-interface GenerateArticlePdfsDependencies {
-  createRenderer?: () => Promise<ArticlePdfRenderer>;
-  createServer?: (distDir: string) => Promise<StaticServer>;
+interface StaticRouteFulfillOptions {
+  body: Buffer | string;
+  contentType: string;
+  status: number;
 }
 
 /**
@@ -143,12 +136,9 @@ export async function generateArticlePdfs(
   dependencies: GenerateArticlePdfsDependencies = {},
 ): Promise<GenerateArticlePdfsResult> {
   const targets = await articlePdfTargets(options);
-  const server = await (dependencies.createServer ?? createStaticDistServer)(
-    options.distDir,
-  );
   const renderer = await (
     dependencies.createRenderer ?? createPlaywrightRenderer
-  )();
+  )(options.distDir);
   const issues: string[] = [];
   let generatedCount = 0;
   let imageCount = 0;
@@ -160,7 +150,7 @@ export async function generateArticlePdfs(
         await mkdir(path.dirname(target.outputPath), { recursive: true });
         const renderStats = await renderer.render(
           target,
-          `${server.origin}${target.articleHref}`,
+          articlePdfLocalUrl(target.articleHref),
         );
         const renderIssues = articlePdfRenderStatsIssues(target, renderStats);
 
@@ -189,7 +179,6 @@ export async function generateArticlePdfs(
     }
   } finally {
     await renderer.close();
-    await server.close();
   }
 
   return {
@@ -409,10 +398,21 @@ function articlePdfDocumentMetadata(
   };
 }
 
-async function createPlaywrightRenderer(): Promise<ArticlePdfRenderer> {
+async function createPlaywrightRenderer(
+  distDir: string,
+): Promise<ArticlePdfRenderer> {
+  const resolvedDist = path.resolve(distDir);
   const browser = await chromium.launch();
   const page = await browser.newPage({
     viewport: { height: 1056, width: 640 },
+  });
+  await page.route("**/*", async (route) => {
+    const response = await staticRouteResponse(
+      resolvedDist,
+      pathnameFromAbsoluteUrl(route.request().url()),
+    );
+
+    await route.fulfill(response);
   });
   await page.emulateMedia({ media: "print" });
 
@@ -441,6 +441,26 @@ async function createPlaywrightRenderer(): Promise<ArticlePdfRenderer> {
       return renderStats;
     },
   };
+}
+
+function articlePdfLocalUrl(pathname: string): string {
+  return `http://article-pdf.local${pathname.startsWith("/") ? pathname : `/${pathname}`}`;
+}
+
+function pathnameFromAbsoluteUrl(url: string): string {
+  const protocolIndex = url.indexOf("://");
+
+  if (protocolIndex === -1) {
+    return url.split("?")[0]?.split("#")[0] ?? "/";
+  }
+
+  const pathnameStart = url.indexOf("/", protocolIndex + 3);
+
+  if (pathnameStart === -1) {
+    return "/";
+  }
+
+  return url.slice(pathnameStart).split("?")[0]?.split("#")[0] ?? "/";
 }
 
 async function prepareArticlePdfImages(
@@ -606,102 +626,33 @@ function isSrcsetWidthCandidate(
   return candidate !== undefined;
 }
 
-async function createStaticDistServer(distDir: string): Promise<StaticServer> {
-  const resolvedDist = path.resolve(distDir);
-  const handler: RequestListener = (request, response) => {
-    handleStaticRequest(resolvedDist, request, response).catch(() => {
-      if (!response.headersSent) {
-        response.writeHead(500, { "content-type": "text/plain" });
-      }
-      response.end("Internal server error");
-    });
-  };
-  const { port, server } = await startStaticHttpServer(handler);
-
-  return {
-    close: async () =>
-      new Promise<void>((resolve, reject) => {
-        server.close((error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      }),
-    origin: `http://127.0.0.1:${port}`,
-  };
-}
-
-async function handleStaticRequest(
+async function staticRouteResponse(
   resolvedDist: string,
-  request: IncomingMessage,
-  response: ServerResponse,
-): Promise<void> {
-  const filePath = staticFilePath(resolvedDist, requestPathname(request.url));
+  pathname: string,
+): Promise<StaticRouteFulfillOptions> {
+  const filePath = staticFilePath(resolvedDist, pathname);
 
   if (filePath === undefined) {
-    response.writeHead(404, { "content-type": "text/plain" });
-    response.end("Not found");
-    return;
+    return {
+      body: "Not found",
+      contentType: "text/plain",
+      status: 404,
+    };
   }
 
   try {
-    response.writeHead(200, { "content-type": contentType(filePath) });
-    response.end(await readFile(filePath));
+    return {
+      body: await readFile(filePath),
+      contentType: contentType(filePath),
+      status: 200,
+    };
   } catch {
-    response.writeHead(404, { "content-type": "text/plain" });
-    response.end("Not found");
+    return {
+      body: "Not found",
+      contentType: "text/plain",
+      status: 404,
+    };
   }
-}
-
-function requestPathname(url: string | undefined): string {
-  const rawPath = url?.split("?")[0]?.split("#")[0] ?? "/";
-  return rawPath === "" ? "/" : rawPath;
-}
-
-async function startStaticHttpServer(
-  handler: RequestListener,
-): Promise<{ port: number; server: Server }> {
-  const preferredPorts = Array.from(
-    { length: 40 },
-    (_, index) => 43100 + index,
-  );
-
-  for (const port of preferredPorts) {
-    const server = createHttpServer(handler);
-
-    try {
-      await listen(server, port);
-      return { port, server };
-    } catch (error) {
-      server.close();
-
-      if (isPortUnavailableError(error)) {
-        continue;
-      }
-
-      throw error;
-    }
-  }
-
-  throw new Error("Could not start local static server on ports 43100-43139.");
-}
-
-async function listen(server: Server, port: number): Promise<void> {
-  return new Promise((resolve, reject) => {
-    server.once("error", reject);
-    server.listen(port, "127.0.0.1", () => {
-      server.off("error", reject);
-      resolve();
-    });
-  });
-}
-
-function isPortUnavailableError(error: unknown): boolean {
-  return (
-    error instanceof Error && "code" in error && error.code === "EADDRINUSE"
-  );
 }
 
 async function listFiles(dir: string): Promise<string[]> {

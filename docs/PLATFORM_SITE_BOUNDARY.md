@@ -76,8 +76,9 @@ src/
 
 The first full migration moved content, assets, root public files, and unused
 assets into the site surface. Remaining platformization work is about making the
-external-instance workflow production-ready, not about moving the live in-repo
-TPM corpus again.
+external-instance workflow production-ready, moving remaining site decisions
+behind validated data, and removing reusable-platform dependencies on TPM asset
+names. It is not about moving the live in-repo TPM corpus again.
 
 ## Import Rule
 
@@ -119,7 +120,8 @@ Rules for the site surface:
 ## First Config Surface
 
 `site/config/site.json` owns the site-level choices that are currently scattered
-through reusable code:
+through reusable code. The implemented surface is intentionally small and
+serializable:
 
 ```ts
 interface SiteConfig {
@@ -163,6 +165,12 @@ interface SiteConfig {
     xViaHandle?: string;
     threadsMention?: string;
   };
+  homepage: {
+    featuredCollection: string;
+    startHereCollection: string;
+    announcementLimit: number;
+    recentLimit: number;
+  };
 }
 ```
 
@@ -170,9 +178,9 @@ The first implementation keeps route segments fixed in behavior even though the
 paths are centralized. Arbitrary route renaming is still deferred until the
 content-root and tooling migration proves stable.
 
-## What Moves First
+## Completed Boundary Work
 
-Move these values behind config first:
+These values now live behind config or the site-instance resolver:
 
 - site title, description, language, URL, and publisher name;
 - Astro `site`;
@@ -182,22 +190,32 @@ Move these values behind config first:
 - article support block title/body/CTA destinations;
 - homepage hero CTA destinations;
 - share attribution for X and Threads;
-- article title suffixes and RSS title.
+- article title suffixes and RSS title;
+- content, assets, public files, and unused assets under `site/`;
+- resolver-backed content, asset, PDF, build verification, Pagefind, HTML
+  validation, and accountability paths.
 
-Do not move these yet:
+## Remaining Split Work
 
-- `site/content/`;
-- `site/assets/`;
-- `public/`;
-- legacy redirects;
-- package script route globs;
-- Pagefind globs;
-- HTML validation globs;
-- build verifier path assumptions;
-- theme tokens.
+The next implementation tranche should finish the parts that still prevent a
+clean production external-instance proof:
 
-Those are separate proof milestones because they touch build output, content
-loading, image processing, and release tooling.
+- move legacy redirects out of `astro.config.ts` into a site-owned config file;
+- move homepage collection IDs, list limits, and hero images out of platform
+  imports and into validated site config/content;
+- remove reusable component imports from TPM-named fallback assets;
+- make built-in brand-button assets platform-owned, because those components
+  are reusable platform UI rather than publication content;
+- expand `tests/fixtures/site-instance/` into a minimal but complete site
+  instance that can run the normal production build path with
+  `SITE_INSTANCE_ROOT`;
+- add a repeatable script for the external fixture build proof;
+- refresh catalog and docs language so generic platform docs are not confused
+  with TPM instance instructions.
+
+Theme-token extraction remains a later platform milestone. It is important, but
+it is not a blocker for proving the external instance build because the current
+platform can still supply default semantic tokens.
 
 ## Component Contract
 
@@ -257,26 +275,31 @@ creates hidden global coupling. The adapter is acceptable as a first step, but
 future milestones should move toward route/layout composition and explicit
 props for reusable blocks.
 
-The fourth risk is content-root churn. Moving content early would force
-Markdown image rewrites, MDX import decisions, PDF path changes, and verifier
-updates all at once. That is the wrong sequence. Content should move only after
-config, path resolver, and external fixture proofs pass.
+The fourth risk is false confidence from helper-only external tests. A resolver
+test that parses a fixture proves path math, but not Astro content loading,
+Markdown image handling, Pagefind, PDF generation, or post-build optimization.
+The next proof must run a real fixture build through the same build script used
+by the live site.
+
+The fifth risk is making homepage composition arbitrary too early. The homepage
+should remain a small typed recipe: configured collection IDs and limits,
+editor-owned collections, and page-owned hero images. A full page builder is
+still intentionally out of scope.
 
 ## Implementation Milestones
 
-The active implementation scope is:
+The active next implementation scope is:
 
-1. Add `site/config/site.json` and a typed adapter.
-2. Replace low-risk hard-coded identity/navigation/support/share values with
-   config-backed values.
-3. Verify that rendered TPM behavior remains stable.
+1. Add site-owned redirect config and load it from Astro config.
+2. Extend the site config/page content model for homepage collection IDs,
+   list limits, and hero image ownership.
+3. Replace TPM-named platform fallback assets with generic rendered fallbacks
+   or platform-owned vendor assets.
+4. Expand the external fixture into a complete minimal site instance and add a
+   reproducible fixture-build script.
+5. Update docs/tests so platform behavior is verified against generic fixtures
+   while TPM values remain in `site/`.
 
-Later milestones should handle:
-
-1. site instance path resolver;
-2. root-level `site/content` proof with a fixture instance;
-3. content and asset migration;
-4. theme-token split;
-5. script/tooling path generalization;
-6. platform fixture tests separate from TPM instance tests;
-7. admin UI schema export and site doctor commands.
+Later milestones should handle theme-token splitting, public/private CI
+checkout orchestration, JSON Schema export, and `site:doctor` style admin UI
+preparation.

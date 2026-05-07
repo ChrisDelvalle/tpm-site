@@ -168,3 +168,69 @@ they are useful context. Explicitly deferred work belongs in
       content and asset checks, Astro/tool type checks, lint, format, deadcode,
       catalog verification, unit tests, production build, build verification,
       HTML validation, e2e tests, catalog e2e tests, audit, and secrets scan.
+
+### Milestone 74: Remaining Platform/Site Split Design
+
+- [x] Refresh platform split docs so they describe the current `site/`
+      migration rather than stale pre-move phases.
+- [x] Define the remaining production boundary work: config-owned redirects,
+      config/content-owned homepage choices, a full external site-instance
+      build proof, generic platform assets, and fixture-backed tests.
+- [x] Critically review the plan for author/admin UX, external-instance
+      ergonomics, Astro asset behavior, maintainability, and overgeneralization
+      before implementation begins.
+      Verified in `docs/PLATFORM_SITE_BOUNDARY.md`,
+      `docs/SITE_INSTANCE_MIGRATION.md`, and
+      `docs/PLATFORMIZATION_AUDIT.md`.
+
+### Milestone 75: Site-Owned Redirect Config
+
+- [x] Move TPM legacy redirect data out of `astro.config.ts` into
+      site-instance config.
+- [x] Add typed redirect validation with path-aware failures and focused tests.
+- [x] Verify Astro config still receives the same redirects for the live site.
+      Verified with
+      `bun test tests/src/lib/site-redirects.test.ts tests/src/lib/site-instance.test.ts tests/config/astro.config.test.ts`.
+
+### Milestone 76: Homepage Config And Content Boundary
+
+- [x] Move homepage collection IDs and list limits into validated site config.
+- [x] Move homepage hero images into page frontmatter instead of platform
+      route imports.
+- [x] Replace TPM-named featured fallback image imports with a generic rendered
+      fallback that works for any configured site.
+- [x] Update focused homepage/content-schema tests and docs.
+      Verified with focused content-schema/site-config/home tests and
+      `bun --silent run test:astro -- HomeFeaturedSlide HomeHeroBlock index`.
+
+### Milestone 77: Generic Platform Brand Assets
+
+- [x] Make built-in Patreon, Discord, and YouTube button assets platform-owned
+      rather than required site-instance files.
+- [x] Keep CTA behavior and visual output stable for the TPM site.
+- [x] Update component tests and docs to reflect reusable platform ownership.
+      Verified with
+      `bun --silent run test:astro -- DiscordButton PatreonButton YouTubeButton SupportBlock HomeFeaturedSlide HomeHeroBlock index`.
+
+### Milestone 78: Full External Site Instance Build Proof
+
+- [x] Expand `tests/fixtures/site-instance/` into a complete minimal site
+      instance with config, redirects, content, assets, and public files.
+- [x] Add a repeatable Bun script that builds with
+      `SITE_INSTANCE_ROOT=tests/fixtures/site-instance`.
+- [x] Verify the external instance through the normal production build path.
+      Verified with `bun --silent run test:site-instance`.
+
+### Milestone 79: Final Platform Split Verification
+
+- [x] Run focused config/home/site-instance/component tests.
+- [x] Run release-relevant checks after the split changes.
+- [x] Update docs/checklist with final verification notes and any explicit
+      remaining deferred work.
+      Verified with focused Bun/Astro tests for redirects, site config, home
+      data, content schemas, feed/content fallbacks, component CTAs, and PDF
+      generation; `bun --silent run assets:locations -- --quiet`;
+      `bun --silent run test:site-instance`; `bun --silent run check`;
+      `bun --silent run build`; `bun --silent run verify`;
+      `bun --silent run validate:html`; `bun --silent run review:markdown`;
+      and the full `bun --silent run check:release`.

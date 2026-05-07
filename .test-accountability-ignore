@@ -31,6 +31,10 @@ site/assets/**
 site/unused-assets/**
 site/public/**
 
+# Approved exception: Platform-owned vendor SVG assets are validated by the
+# Astro component tests that render the branded CTA buttons.
+src/components/ui/assets/**
+
 # Approved exception: Global CSS is exercised by browser, accessibility,
 # responsive, visual, and build checks instead of mirrored unit tests.
 src/styles/**/*.css
@@ -73,3 +77,4 @@ scripts/coverage-exceptions.json
 # Approved exception: Site-owner config JSON is exercised by the typed site
 # config adapter tests, Astro config import tests, and release build checks.
 site/config/site.json
+site/config/redirects.json

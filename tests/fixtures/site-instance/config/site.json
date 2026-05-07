@@ -1,4 +1,10 @@
 {
+  "homepage": {
+    "announcementLimit": 2,
+    "featuredCollection": "featured",
+    "recentLimit": 4,
+    "startHereCollection": "start-here"
+  },
   "identity": {
     "description": "A small fixture site used to prove the platform can resolve an external site instance.",
     "language": "en",

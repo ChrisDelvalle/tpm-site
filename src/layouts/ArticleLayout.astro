@@ -1,7 +1,6 @@
 ---
 import { getImage } from "astro:assets";
 
-import fallbackSocialPreviewImage from "@site/assets/shared/tpm_home_hero_light.png";
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
 import ArticleProse from "../components/articles/ArticleProse.astro";
@@ -29,7 +28,11 @@ import {
 } from "../lib/authors";
 import { articleScholarMetaViewModel } from "../lib/article-pdf";
 import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
-import { getArticles, getCategory } from "../lib/content";
+import {
+  getArticles,
+  getCategory,
+  getSiteSocialFallbackImage,
+} from "../lib/content";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import { articleShareMenuViewModel } from "../lib/share-targets";
 import { titleWithSite } from "../lib/site-config";
@@ -55,6 +58,7 @@ const {
   tableOfContentsHeadings = [],
 } = Astro.props;
 const articleView = articleViewModel(article);
+const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
 const socialPreviewImage = await socialPreviewImageViewModel({
   alt: articleView.imageAlt ?? articleView.title,
   fallback: fallbackSocialPreviewImage,

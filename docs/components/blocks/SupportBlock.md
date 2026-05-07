@@ -70,4 +70,4 @@ visible, and CTAs distinguishable from neutral actions.
 ## Follow-Up Notes
 
 - The homepage uses the same branded button primitives directly because its hero
-  owns a tighter social CTA row with Patreon, Discord, and YouTube.
+  owns a tighter social CTA row.

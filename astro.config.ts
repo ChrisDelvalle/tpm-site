@@ -6,6 +6,7 @@ import { defineConfig } from "astro/config";
 import { articleImagePolicyCacheKey } from "./src/lib/article-image-policy";
 import { siteConfig } from "./src/lib/site-config";
 import { projectRelativePath, siteInstance } from "./src/lib/site-instance";
+import { siteRedirects } from "./src/lib/site-redirects";
 import {
   rehypeArticleImages,
   remarkArticleImageMarkers,
@@ -38,107 +39,7 @@ export default defineConfig({
     prefetchAll: false,
   },
   prerenderConflictBehavior: "error",
-  redirects: {
-    "/2015/06/18/tmnh/": "/articles/tmnh/",
-    "/2015/08/19/misattributed-plato-quote-is-real-now/":
-      "/articles/misattributed-plato-quote-is-real-now/",
-    "/2015/09/14/a-short-note-on-the-death-of-pepe/":
-      "/articles/a-short-note-on-the-death-of-pepe/",
-    "/2015/11/02/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history/":
-      "/articles/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history/",
-    "/2015/11/02/the-quadrant-system-for-the-categorization-of-internet-memes/":
-      "/articles/the-quadrant-system-for-the-categorization-of-internet-memes/",
-    "/2015/11/26/bane-loss-and-phylogeny/":
-      "/articles/bane-loss-and-phylogeny/",
-    "/2015/11/29/a-short-note-on-gondola/":
-      "/articles/a-short-note-on-gondola/",
-    "/2015/11/29/undertale-review/": "/articles/undertale-review/",
-    "/2015/12/01/hotline-miami-and-player-complicity/":
-      "/articles/hotline-miami-and-player-complicity/",
-    "/2015/12/18/the-ironic-normie/": "/articles/the-ironic-normie/",
-    "/2016/01/18/glossary-1-dot-0/": "/articles/glossary-1-dot-0/",
-    "/2016/01/18/the-revised-quadrant-model/":
-      "/articles/the-revised-quadrant-model/",
-    "/2016/01/29/the-post-pepe-manifesto/":
-      "/articles/the-post-pepe-manifesto/",
-    "/2016/03/02/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/":
-      "/articles/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear/",
-    "/2016/03/23/long-boys-never-grow-up/":
-      "/articles/long-boys-never-grow-up/",
-    "/2016/04/14/social-media-freedom/": "/articles/social-media-freedom/",
-    "/2016/04/23/see-the-problem/": "/articles/see-the-problem/",
-    "/2016/05/12/newfriends-and-the-generation-gap/":
-      "/articles/newfriends-and-the-generation-gap/",
-    "/2016/05/13/an-internet-koan/": "/articles/an-internet-koan/",
-    "/2016/10/13/what-we-talk-about-harambe/":
-      "/articles/what-we-talk-about-harambe/",
-    "/2016/10/26/on-vectoralism-and-the-meme-alliance/":
-      "/articles/on-vectoralism-and-the-meme-alliance/",
-    "/2016/10/26/twitch-plays-pokemon/": "/articles/twitch-plays-pokemon/",
-    "/2016/11/02/president-parks-corruption-cult/":
-      "/articles/president-parks-corruption-cult/",
-    "/2016/11/15/internetmemetics/": "/articles/internetmemetics/",
-    "/2017/02/15/early-trash-dove/": "/articles/early-trash-dove/",
-    "/2017/03/10/post-irony-against-meta-irony/":
-      "/articles/post-irony-against-meta-irony/",
-    "/2017/03/27/a-school-of-internet-philosophy/":
-      "/articles/a-school-of-internet-philosophy/",
-    "/2017/03/27/defining-normie-casual-ironist-and-autist-in-internet-subcultures/":
-      "/articles/defining-normie-casual-ironist-and-autist-in-internet-subcultures/",
-    "/2017/03/27/facebook-groups/": "/articles/facebook-groups/",
-    "/2017/06/13/the-structure-of-hyperspatial-politics/":
-      "/articles/the-structure-of-hyperspatial-politics/",
-    "/2017/09/09/the-meta-ironic-era/": "/articles/the-meta-ironic-era/",
-    "/2017/09/10/memes-are-not-jokes-they-are-diagram-games/":
-      "/articles/memes-are-not-jokes-they-are-diagram-games/",
-    "/2017/11/13/when-you-drink-water/": "/articles/when-you-drink-water/",
-    "/2017/11/23/moe-to-memes-otaku-to-autist/":
-      "/articles/moe-to-memes-otaku-to-autist/",
-    "/2017/12/04/kandinsky-and-loss/": "/articles/kandinsky-and-loss/",
-    "/2017/12/04/kym-magibon/": "/articles/kym-magibon/",
-    "/2017/12/15/platform-content-design/":
-      "/articles/platform-content-design/",
-    "/2018/02/05/the-interpretation-of-memes/":
-      "/articles/the-interpretation-of-memes/",
-    "/2018/03/27/memes-jokes-and-visual-puns/":
-      "/articles/memes-jokes-and-visual-puns/",
-    "/2018/09/11/structure-and-content-in-drake-style-templates/":
-      "/articles/structure-and-content-in-drake-style-templates/",
-    "/2018/11/15/the-memeticists-challenge-remains-open/":
-      "/articles/the-memeticists-challenge-remains-open/",
-    "/2019/01/03/the-new-years-memes/": "/articles/the-new-years-memes/",
-    "/2019/04/05/the-memetic-bottleneck/": "/articles/the-memetic-bottleneck/",
-    "/2019/06/30/how-to-digitally-coauthor-articles-in-philosophy-class/":
-      "/articles/how-to-digitally-coauthor-articles-in-philosophy-class/",
-    "/2019/10/12/all-memes-are-from-the-future/":
-      "/articles/all-memes-are-from-the-future/",
-    "/2019/12/23/gondola-shrine/": "/articles/gondola-shrine/",
-    "/2020/01/04/2010-decade-review-part-1/":
-      "/articles/2010-decade-review-part-1/",
-    "/2020/01/07/concept-jjalbang/": "/articles/concept-jjalbang/",
-    "/2020/03/16/a-tale-of-two-healthcare-narratives/":
-      "/articles/a-tale-of-two-healthcare-narratives/",
-    "/2020/07/05/postnaturalism/": "/articles/postnaturalism/",
-    "/2020/10/09/2010-decade-review-part-2/":
-      "/articles/2010-decade-review-part-2/",
-    "/2021/02/02/gme-frenzy-hints-at-the-new-stage-of-memecultures/":
-      "/articles/gme-frenzy-hints-at-the-new-stage-of-memecultures/",
-    "/2021/05/16/gamergate-as-metagaming/":
-      "/articles/gamergate-as-metagaming/",
-    "/2021/06/14/jeremy-cahill-metamer-dismissed-for-serious-misconduct/":
-      "/announcements/jeremy-cahill-metamer-dismissed-for-serious-misconduct/",
-    "/2021/07/21/we-can-have-retrieval-inference-synthesis/":
-      "/articles/we-can-have-retrieval-inference-synthesis/",
-    "/2021/11/30/what-is-a-meme/": "/articles/what-is-a-meme/",
-    "/2021/12/18/on-circlejerk-part-1/": "/articles/on-circlejerk-part-1/",
-    "/2021/12/30/vulliamy-response/": "/articles/vulliamy-response/",
-    "/2022/04/04/homesteading-the-memeosphere/":
-      "/articles/homesteading-the-memeosphere/",
-    "/2022/04/06/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/":
-      "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
-    "/2022/04/20/joshua-citarella-astroturfing/":
-      "/articles/joshua-citarella-astroturfing/",
-  },
+  redirects: siteRedirects,
   site: siteConfig.identity.url,
   trailingSlash: "always",
   vite: {

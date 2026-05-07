@@ -66,6 +66,28 @@ await mock.module("astro:content", () => ({
 
     return [];
   },
+  getEntry: async (collection: string, id: string) => {
+    await Promise.resolve();
+
+    if (collection === "pages" && id === "index") {
+      return {
+        collection: "pages",
+        data: {
+          hero: {
+            lightImage: {
+              format: "png",
+              height: 630,
+              src: "/home.png",
+              width: 1200,
+            },
+          },
+        },
+        id: "index",
+      };
+    }
+
+    return undefined;
+  },
 }));
 
 await mock.module("astro:assets", () => ({

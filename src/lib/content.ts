@@ -1,4 +1,5 @@
-import { getCollection } from "astro:content";
+import type { ImageMetadata } from "astro";
+import { getCollection, getEntry } from "astro:content";
 
 import {
   activeEditorialCollections,
@@ -15,6 +16,7 @@ import {
   isPublishedAnnouncement,
   isPublishedArticle,
   normalizeSlug,
+  type PageEntry,
   sortAnnouncementsNewestFirst,
   sortNewestFirst,
 } from "./routes";
@@ -44,6 +46,33 @@ export async function getAnnouncements(): Promise<AnnouncementEntry[]> {
   const entries = await getAnnouncementEntries();
   assertUniqueAnnouncementSlugs(entries);
   return sortAnnouncementsNewestFirst(entries.filter(isPublishedAnnouncement));
+}
+
+/**
+ * Loads the configured home page content entry.
+ *
+ * @returns The home page entry when present.
+ */
+async function getHomePage(): Promise<PageEntry | undefined> {
+  return getEntry("pages", "index");
+}
+
+/**
+ * Loads the active site instance's default social preview image.
+ *
+ * @returns The homepage hero light image used as the site-level social fallback.
+ */
+export async function getSiteSocialFallbackImage(): Promise<ImageMetadata> {
+  const home = await getHomePage();
+  const fallbackImage = home?.data.hero?.lightImage;
+
+  if (fallbackImage === undefined) {
+    throw new Error(
+      "Missing homepage hero light image for site social previews.",
+    );
+  }
+
+  return fallbackImage;
 }
 
 /**

@@ -1,8 +1,6 @@
 ---
 import { getEntry } from "astro:content";
 
-import heroDarkImage from "@site/assets/site/tpm_home_hero_dark.png";
-import heroLightImage from "@site/assets/shared/tpm_home_hero_light.png";
 import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
 import HomeDiscoveryLinksBlock from "../components/blocks/HomeDiscoveryLinksBlock.astro";
 import HomeFeaturedCarousel from "../components/blocks/HomeFeaturedCarousel.astro";
@@ -32,12 +30,20 @@ import {
   SITE_DESCRIPTION,
   tagsIndexUrl,
 } from "../lib/routes";
-import { titleWithSite } from "../lib/site-config";
+import { siteConfig, titleWithSite } from "../lib/site-config";
 
 const home = await getEntry("pages", "index");
 
 if (!home) {
   throw new Error("Missing home page content at site/content/pages/index.md.");
+}
+
+const hero = home.data.hero;
+
+if (!hero) {
+  throw new Error(
+    "Missing homepage hero config at site/content/pages/index.md frontmatter.",
+  );
 }
 
 const articles = await getArticles();
@@ -47,9 +53,13 @@ const authors = await getAuthorEntries();
 const collections = await getEditorialCollections();
 const archiveItems = articleArchiveItems(articles, categories, authors);
 const homeView = homePageViewModel({
+  announcementLimit: siteConfig.homepage.announcementLimit,
   announcements,
   archiveItems,
   collections,
+  featuredCollectionId: siteConfig.homepage.featuredCollection,
+  recentLimit: siteConfig.homepage.recentLimit,
+  startHereCollectionId: siteConfig.homepage.startHereCollection,
 });
 const { announcementItems, featuredItems, recentFeedItems, startHereItems } =
   homeView;
@@ -76,9 +86,10 @@ const description = home.data.description ?? SITE_DESCRIPTION;
       >
         <div class="min-w-0 lg:col-start-1 lg:row-start-1" data-home-lead-hero>
           <HomeHeroBlock
-            lightImage={heroLightImage}
-            darkImage={heroDarkImage}
-            imageAlt={home.data.title}
+            lightImage={hero.lightImage}
+            darkImage={hero.darkImage ?? hero.lightImage}
+            imageAlt={hero.imageAlt ?? home.data.title}
+            tagline={hero.tagline}
           />
         </div>
         <div
@@ -88,7 +99,13 @@ const description = home.data.description ?? SITE_DESCRIPTION;
           <HomeFeaturedCarousel itemCount={featuredItems.length}>
             {
               featuredItems.map((item, index) => (
-                <HomeFeaturedSlide index={index} item={item} />
+                <HomeFeaturedSlide
+                  fallbackLabel={
+                    siteConfig.identity.shortTitle ?? siteConfig.identity.title
+                  }
+                  index={index}
+                  item={item}
+                />
               ))
             }
           </HomeFeaturedCarousel>
@@ -96,7 +113,7 @@ const description = home.data.description ?? SITE_DESCRIPTION;
         <div class="min-w-0 lg:col-start-2 lg:row-start-1" data-home-lead-start>
           <FlatArticleList
             title="Start Here"
-            titleHref={collectionUrl("start-here")}
+            titleHref={collectionUrl(siteConfig.homepage.startHereCollection)}
             items={startHereItems}
             emptyText="Curated starter articles will appear here."
           />

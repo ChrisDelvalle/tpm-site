@@ -100,6 +100,33 @@ describe("homepage view model", () => {
     ]);
   });
 
+  test("uses configured homepage collection IDs and list limits", () => {
+    const viewModel = homePageViewModel({
+      announcementLimit: 1,
+      announcements: [
+        announcementEntry({ id: "new" }),
+        announcementEntry({ id: "old" }),
+      ],
+      archiveItems: [archiveItem("latest"), archiveItem("older")],
+      collections: [
+        collectionEntry("front-page", { items: ["latest"] }),
+        collectionEntry("starter-pack", { items: ["older"] }),
+      ],
+      featuredCollectionId: "front-page",
+      recentLimit: 1,
+      startHereCollectionId: "starter-pack",
+    });
+
+    expect(viewModel.featuredItems.map((item) => item.slug)).toEqual([
+      "latest",
+    ]);
+    expect(viewModel.startHereItems.map((item) => item.href)).toEqual([
+      "/articles/older/",
+    ]);
+    expect(viewModel.announcementItems).toHaveLength(1);
+    expect(viewModel.recentFeedItems).toHaveLength(1);
+  });
+
   test("fails clearly when required homepage collections are missing", () => {
     expect(() =>
       homePageViewModel({

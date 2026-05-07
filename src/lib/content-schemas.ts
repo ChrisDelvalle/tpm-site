@@ -94,10 +94,14 @@ export function publishableVisibilitySchema(): ReturnType<
 /**
  * Creates the standalone page frontmatter schema.
  *
+ * @param context Astro image schema context.
+ * @param context.image Astro local-image schema helper.
  * @returns Strict page frontmatter schema.
  */
-export function pageSchema(): ReturnType<typeof createPageSchema> {
-  return createPageSchema();
+export function pageSchema(
+  context: ImageSchemaContext,
+): ReturnType<typeof createPageSchema> {
+  return createPageSchema(context);
 }
 
 function createArticleSchema(
@@ -208,11 +212,20 @@ function createEditorialCollectionSchema() {
     .strict();
 }
 
-function createPageSchema() {
+function createPageSchema({ image }: ImageSchemaContext) {
   return z
     .object({
       description: z.string().optional(),
       draft: z.boolean().optional(),
+      hero: z
+        .object({
+          darkImage: image().optional(),
+          imageAlt: z.string().min(1).optional(),
+          lightImage: image(),
+          tagline: z.string().min(1).optional(),
+        })
+        .strict()
+        .optional(),
       startHere: z.array(z.string().min(1)).default([]),
       title: z.string(),
     })
