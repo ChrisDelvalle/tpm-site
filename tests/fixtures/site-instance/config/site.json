@@ -1,4 +1,40 @@
 {
+  "contentDefaults": {
+    "announcements": {
+      "draft": false,
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": false
+      }
+    },
+    "articles": {
+      "draft": false,
+      "pdf": {
+        "enabled": true
+      },
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": true
+      }
+    }
+  },
+  "features": {
+    "announcements": true,
+    "authors": true,
+    "bibliography": true,
+    "categories": true,
+    "collections": true,
+    "feed": true,
+    "pdf": true,
+    "search": true,
+    "support": true,
+    "tags": true,
+    "themeToggle": true
+  },
   "homepage": {
     "announcementLimit": 2,
     "featuredCollection": "featured",

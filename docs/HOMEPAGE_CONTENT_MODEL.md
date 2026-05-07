@@ -33,8 +33,8 @@ The goal is author simplicity, not abstraction for its own sake.
 - Collections should also be public browsing surfaces: `/collections/` lists
   available collections and `/collections/[collection]/` renders one ordered
   collection.
-- Everything is visible everywhere by default; writers only set visibility
-  fields to `false` for exceptions.
+- Visibility follows site-owned content-type defaults; writers only set
+  visibility fields when an entry is exceptional.
 - Homepage lists should render any normalized publishable entries without
   knowing whether they came from latest announcements, a collection, a category,
   a tag, an author page, or a future related-content helper.
@@ -74,7 +74,10 @@ visibility:
   search: true
 ```
 
-The `visibility` object is optional. Missing values default to `true`.
+The `draft` and `visibility` fields are optional. Missing values inherit
+`site/config/site.json` `contentDefaults` for the entry's collection. The
+current TPM defaults preserve the original behavior: articles and announcements
+are visible on every public surface unless frontmatter opts out.
 
 The internal normalized model derives kind from the content collection:
 
@@ -296,11 +299,10 @@ split across `pages/index.md`, `home-featured`, and `collections` would be worse
 than the current state. The migration should remove homepage-specific feature
 content once `featured` and `start-here` collections exist.
 
-The second risk is adding unused visibility fields. The first implementation
-must at least use homepage visibility in homepage selection and collection
-resolution. Other surfaces can keep default-visible behavior until a concrete
-entry opts out, but the helper APIs should make those later applications
-straightforward.
+The second risk is adding unused visibility fields. Homepage, directory, feed,
+and search visibility should be wired through shared helpers as surfaces adopt
+them, with site defaults and frontmatter overrides using the same normalization
+path.
 
 The third risk is over-renaming components. The component contract matters more
 than filenames during this milestone. Keeping compatibility names is acceptable
@@ -311,7 +313,7 @@ if docs, types, and homepage code use the source-agnostic model.
 Unit tests:
 
 - shared publishable schema accepts article and announcement frontmatter;
-- visibility defaults all true;
+- visibility inherits site-owned defaults;
 - visibility overrides preserve unspecified defaults;
 - publishable kind derives from collection source;
 - global publishable index rejects duplicate article/announcement slugs;

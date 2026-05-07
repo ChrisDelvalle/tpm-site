@@ -32,6 +32,38 @@ const defaultHomepageConfig = {
   recentLimit: 8,
   startHereCollection: "start-here",
 } as const;
+const defaultFeatureConfig = {
+  announcements: true,
+  authors: true,
+  bibliography: true,
+  categories: true,
+  collections: true,
+  feed: true,
+  pdf: true,
+  search: true,
+  support: true,
+  tags: true,
+  themeToggle: true,
+} as const;
+const defaultPublishableVisibilityConfig = {
+  directory: true,
+  feed: true,
+  homepage: true,
+  search: true,
+} as const;
+const defaultContentDefaultsConfig = {
+  announcements: {
+    draft: false,
+    visibility: defaultPublishableVisibilityConfig,
+  },
+  articles: {
+    draft: false,
+    pdf: {
+      enabled: true,
+    },
+    visibility: defaultPublishableVisibilityConfig,
+  },
+} as const;
 const homepageConfigSchema = z
   .object({
     announcementLimit: z
@@ -55,8 +87,62 @@ const homepageConfigSchema = z
   })
   .strict()
   .default(defaultHomepageConfig);
+const featureConfigSchema = z
+  .object({
+    announcements: z.boolean().default(defaultFeatureConfig.announcements),
+    authors: z.boolean().default(defaultFeatureConfig.authors),
+    bibliography: z.boolean().default(defaultFeatureConfig.bibliography),
+    categories: z.boolean().default(defaultFeatureConfig.categories),
+    collections: z.boolean().default(defaultFeatureConfig.collections),
+    feed: z.boolean().default(defaultFeatureConfig.feed),
+    pdf: z.boolean().default(defaultFeatureConfig.pdf),
+    search: z.boolean().default(defaultFeatureConfig.search),
+    support: z.boolean().default(defaultFeatureConfig.support),
+    tags: z.boolean().default(defaultFeatureConfig.tags),
+    themeToggle: z.boolean().default(defaultFeatureConfig.themeToggle),
+  })
+  .strict()
+  .default(defaultFeatureConfig);
+const publishableVisibilityConfigSchema = z
+  .object({
+    directory: z
+      .boolean()
+      .default(defaultPublishableVisibilityConfig.directory),
+    feed: z.boolean().default(defaultPublishableVisibilityConfig.feed),
+    homepage: z.boolean().default(defaultPublishableVisibilityConfig.homepage),
+    search: z.boolean().default(defaultPublishableVisibilityConfig.search),
+  })
+  .strict()
+  .default(defaultPublishableVisibilityConfig);
+const baseContentDefaultsConfigSchema = z.object({
+  draft: z.boolean().default(false),
+  visibility: publishableVisibilityConfigSchema,
+});
+const contentDefaultsConfigSchema = z
+  .object({
+    announcements: baseContentDefaultsConfigSchema
+      .strict()
+      .default(defaultContentDefaultsConfig.announcements),
+    articles: baseContentDefaultsConfigSchema
+      .extend({
+        pdf: z
+          .object({
+            enabled: z
+              .boolean()
+              .default(defaultContentDefaultsConfig.articles.pdf.enabled),
+          })
+          .strict()
+          .default(defaultContentDefaultsConfig.articles.pdf),
+      })
+      .strict()
+      .default(defaultContentDefaultsConfig.articles),
+  })
+  .strict()
+  .default(defaultContentDefaultsConfig);
 const siteConfigSchema = z
   .object({
+    contentDefaults: contentDefaultsConfigSchema,
+    features: featureConfigSchema,
     homepage: homepageConfigSchema,
     identity: z
       .object({

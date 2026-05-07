@@ -9,8 +9,8 @@ should read and write the same files.
 
 Current editable areas:
 
-- `config/site.json`: site identity, canonical URL, navigation, support links,
-  and share attribution.
+- `config/site.json`: site identity, canonical URL, feature switches,
+  content-type defaults, navigation, support links, and share attribution.
 - `content/`: Markdown, MDX, and JSON content collections for articles,
   announcements, authors, categories, collections, and pages.
 - `assets/`: project-owned images and SVGs that should go through Astro's asset

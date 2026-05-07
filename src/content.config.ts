@@ -10,6 +10,7 @@ import {
   filenameStem,
   pageSchema,
 } from "./lib/content-schemas";
+import { siteConfig } from "./lib/site-config";
 import { projectRelativePath, siteInstance } from "./lib/site-instance";
 
 const articles = defineCollection({
@@ -18,7 +19,8 @@ const articles = defineCollection({
     pattern: "**/*.{md,mdx}",
     generateId: ({ entry }) => filenameStem(entry),
   }),
-  schema: articleSchema,
+  schema: (context) =>
+    articleSchema(context, siteConfig.contentDefaults.articles),
 });
 
 const announcements = defineCollection({
@@ -27,7 +29,8 @@ const announcements = defineCollection({
     generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
-  schema: announcementSchema,
+  schema: (context) =>
+    announcementSchema(context, siteConfig.contentDefaults.announcements),
 });
 
 const categories = defineCollection({

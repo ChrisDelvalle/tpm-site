@@ -67,10 +67,16 @@ const categoryItems = sectionNavigationItems(categories, "/");
 const discoveryLinks = [
   { href: articlesIndexUrl(), label: "Articles" },
   { href: articlesArchiveUrl(), label: "Archive" },
-  { href: authorsIndexUrl(), label: "Authors" },
-  { href: collectionsIndexUrl(), label: "Collections" },
-  { href: tagsIndexUrl(), label: "Tags" },
-] as const;
+  siteConfig.features.authors
+    ? { href: authorsIndexUrl(), label: "Authors" }
+    : undefined,
+  siteConfig.features.collections
+    ? { href: collectionsIndexUrl(), label: "Collections" }
+    : undefined,
+  siteConfig.features.tags
+    ? { href: tagsIndexUrl(), label: "Tags" }
+    : undefined,
+].filter((link) => link !== undefined);
 
 const title = titleWithSite(home.data.title);
 const description = home.data.description ?? SITE_DESCRIPTION;

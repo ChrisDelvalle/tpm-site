@@ -10,6 +10,7 @@ import {
   articlePdfOutputPath,
   scholarPublicationDate,
 } from "../../src/lib/article-pdf";
+import { siteConfig } from "../../src/lib/site-config";
 import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
 import {
   maxSocialPreviewImageBytes,
@@ -125,7 +126,7 @@ export async function announcementPublicationStats(
 
   for (const file of sourceFiles) {
     const { data } = matter(await readFile(file, "utf8"));
-    if (isDraft(data)) {
+    if (isDraft(data, siteConfig.contentDefaults.announcements.draft)) {
       draftSlugs.push(filenameStem(file));
     } else {
       publishedSlugs.push(filenameStem(file));
@@ -161,7 +162,7 @@ export async function collectionPublicationStats(
 
   for (const file of sourceFiles) {
     const { data } = matter(await readFile(file, "utf8"));
-    if (isDraft(data)) {
+    if (isDraft(data, false)) {
       draftSlugs.push(filenameStem(file));
     } else {
       publishedSlugs.push(filenameStem(file));
@@ -212,7 +213,7 @@ export async function articlePublicationStats(
 
   for (const file of articleSourceFiles) {
     const { data } = matter(await readFile(file, "utf8"));
-    if (isDraft(data)) {
+    if (isDraft(data, siteConfig.contentDefaults.articles.draft)) {
       draftSlugs.push(filenameStem(file));
     } else {
       const slug = filenameStem(file);
@@ -1546,14 +1547,23 @@ function isDatedHtmlPage(relativeHtmlPath: string): boolean {
   return /^\d{4}\/\d{2}\/\d{2}\/[^/]+\/index\.html$/.test(relativeHtmlPath);
 }
 
-function isDraft(data: Record<string, unknown>): boolean {
-  return data["draft"] === true;
+function isDraft(
+  data: Record<string, unknown>,
+  defaultDraft: boolean,
+): boolean {
+  return typeof data["draft"] === "boolean" ? data["draft"] : defaultDraft;
 }
 
 function articlePdfEnabledFromFrontmatter(
   data: Record<string, unknown>,
 ): boolean {
-  return data["pdf"] !== false;
+  if (!siteConfig.features.pdf) {
+    return false;
+  }
+
+  return typeof data["pdf"] === "boolean"
+    ? data["pdf"]
+    : siteConfig.contentDefaults.articles.pdf.enabled;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

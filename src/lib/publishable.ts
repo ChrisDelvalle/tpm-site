@@ -9,6 +9,7 @@ import {
   articleUrl,
   formatDate,
 } from "./routes";
+import { siteConfig } from "./site-config";
 
 /** Runtime kind derived from the source content collection. */
 export type PublishableKind = "announcement" | "article";
@@ -77,13 +78,15 @@ export const defaultPublishableVisibility = {
  * Normalizes partial visibility data into a complete visibility contract.
  *
  * @param visibility Optional visibility overrides from frontmatter.
+ * @param defaults Site-owned fallback visibility values.
  * @returns Visibility values with true defaults.
  */
 export function normalizePublishableVisibility(
   visibility: Partial<PublishableVisibility> | undefined,
+  defaults: PublishableVisibility = defaultPublishableVisibility,
 ): PublishableVisibility {
   return {
-    ...defaultPublishableVisibility,
+    ...defaults,
     ...visibility,
   };
 }
@@ -114,7 +117,10 @@ export function publishableFromArticleArchive(
     kind: "article",
     slug: item.article.id,
     title: item.title,
-    visibility: normalizePublishableVisibility(item.article.data.visibility),
+    visibility: normalizePublishableVisibility(
+      item.article.data.visibility,
+      siteConfig.contentDefaults.articles.visibility,
+    ),
   };
 }
 
@@ -142,7 +148,10 @@ export function publishableFromAnnouncement(
     kind: "announcement",
     slug: announcement.id,
     title: announcement.data.title,
-    visibility: normalizePublishableVisibility(announcement.data.visibility),
+    visibility: normalizePublishableVisibility(
+      announcement.data.visibility,
+      siteConfig.contentDefaults.announcements.visibility,
+    ),
   };
 }
 

@@ -10,7 +10,9 @@ interface Props {
 }
 
 const { navigationItems } = Astro.props;
-const footerCategories = navigationItems.slice(0, 8);
+const footerCategories = siteConfig.features.categories
+  ? navigationItems.slice(0, 8)
+  : [];
 const footerLinks = siteConfig.navigation.footer;
 ---
 
@@ -36,22 +38,28 @@ const footerLinks = siteConfig.navigation.footer;
           }
         </ul>
       </nav>
-      <nav aria-label="Footer category navigation">
-        <ul class="flex flex-wrap gap-x-3 gap-y-2 text-xs">
-          {
-            footerCategories.map((category) => (
-              <li>
-                <TextLink href={category.href} variant="subtle" tone="muted">
-                  {category.title}
-                </TextLink>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
+      {
+        footerCategories.length > 0 && (
+          <nav aria-label="Footer category navigation">
+            <ul class="flex flex-wrap gap-x-3 gap-y-2 text-xs">
+              {footerCategories.map((category) => (
+                <li>
+                  <TextLink href={category.href} variant="subtle" tone="muted">
+                    {category.title}
+                  </TextLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
     </div>
-    <div class="self-start">
-      <SupportLink label="Support Our Research" />
-    </div>
+    {
+      siteConfig.features.support && (
+        <div class="self-start">
+          <SupportLink label="Support Our Research" />
+        </div>
+      )
+    }
   </div>
 </footer>

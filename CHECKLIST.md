@@ -234,3 +234,52 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run build`; `bun --silent run verify`;
       `bun --silent run validate:html`; `bun --silent run review:markdown`;
       and the full `bun --silent run check:release`.
+
+### Milestone 80: Site Defaults And Feature Config Design
+
+- [x] Refresh platform docs around the current completed split and define the
+      next config tranche without stale completed work.
+- [x] Design serializable `features` and `contentDefaults` config surfaces for
+      future GUI use by webmasters and authors.
+- [x] Define the layering contract: platform defaults, site defaults,
+      content-type defaults, and per-entry frontmatter overrides.
+- [x] Review the design for author UX, route/tooling risk, overgeneralization,
+      and compatibility with existing content.
+      Documented in `docs/PLATFORM_SITE_BOUNDARY.md`,
+      `docs/PLATFORMIZATION_AUDIT.md`, `docs/HOMEPAGE_CONTENT_MODEL.md`, and
+      `site/README.md`.
+
+### Milestone 81: Configurable Content Defaults
+
+- [x] Add validated site config defaults for article and announcement draft,
+      visibility, and PDF behavior.
+- [x] Wire content schemas and publishable normalization through those defaults
+      so authors only write frontmatter overrides for exceptions.
+- [x] Update tests and docs for current TPM defaults and non-TPM fixture
+      defaults.
+      Verified with focused site-config, content-schema, publishable, PDF, PDF
+      generator, and build-verifier tests.
+
+### Milestone 82: Feature Flags For Core UI Surfaces
+
+- [x] Add validated feature flags for platform-level surfaces such as support,
+      search, theme toggle, categories, authors, collections, tags, feed,
+      bibliography, and PDF.
+- [x] Use those flags in the high-value UI seams that already compose these
+      surfaces without attempting unsupported route removal.
+- [x] Update component/helper tests for enabled and disabled feature behavior.
+      Verified with focused Astro component tests for header, footer, support
+      links, support block, home hero block, and homepage composition.
+
+### Milestone 83: Config Tranche Verification
+
+- [x] Run focused site-config, content-schema, publishable, PDF, navigation,
+      header/footer/home, and fixture-instance tests.
+- [x] Run release-relevant checks after the config tranche.
+- [x] Update checklist/docs with final verification notes and any explicit
+      remaining platformization work.
+      Verified with focused Bun tests, focused Astro component tests,
+      `bun --silent run typecheck`, `bun --silent run format`,
+      `bun --silent run check`, `bun --silent run test:site-instance`,
+      `bun --silent run build`, `bun --silent run verify`, and
+      `bun --silent run validate:html`.

@@ -165,6 +165,27 @@ interface SiteConfig {
     xViaHandle?: string;
     threadsMention?: string;
   };
+  features: {
+    announcements: boolean;
+    authors: boolean;
+    bibliography: boolean;
+    categories: boolean;
+    collections: boolean;
+    feed: boolean;
+    pdf: boolean;
+    search: boolean;
+    support: boolean;
+    tags: boolean;
+    themeToggle: boolean;
+  };
+  contentDefaults: {
+    articles: PublishableContentDefaults & {
+      pdf: {
+        enabled: boolean;
+      };
+    };
+    announcements: PublishableContentDefaults;
+  };
   homepage: {
     featuredCollection: string;
     startHereCollection: string;
@@ -177,6 +198,19 @@ interface SiteConfig {
 The first implementation keeps route segments fixed in behavior even though the
 paths are centralized. Arbitrary route renaming is still deferred until the
 content-root and tooling migration proves stable.
+
+`contentDefaults` follows a deliberate layering rule:
+
+```text
+platform defaults
+  -> site defaults
+    -> content-type defaults
+      -> individual frontmatter overrides
+```
+
+This is the future GUI-friendly contract. Webmasters edit the normal behavior
+for a publication or content type, while authors only add frontmatter when an
+entry is exceptional.
 
 ## Completed Boundary Work
 
@@ -192,30 +226,37 @@ These values now live behind config or the site-instance resolver:
 - share attribution for X and Threads;
 - article title suffixes and RSS title;
 - content, assets, public files, and unused assets under `site/`;
+- legacy redirects in site-owned config;
+- homepage collection IDs and list limits in site config;
+- homepage hero assets in site page frontmatter;
+- built-in vendor CTA assets owned by reusable platform UI;
+- a complete external fixture site instance build proof;
 - resolver-backed content, asset, PDF, build verification, Pagefind, HTML
   validation, and accountability paths.
 
-## Remaining Split Work
+## Remaining Platform Work
 
-The next implementation tranche should finish the parts that still prevent a
-clean production external-instance proof:
+The controllable-defaults tranche is now implemented:
 
-- move legacy redirects out of `astro.config.ts` into a site-owned config file;
-- move homepage collection IDs, list limits, and hero images out of platform
-  imports and into validated site config/content;
-- remove reusable component imports from TPM-named fallback assets;
-- make built-in brand-button assets platform-owned, because those components
-  are reusable platform UI rather than publication content;
-- expand `tests/fixtures/site-instance/` into a minimal but complete site
-  instance that can run the normal production build path with
-  `SITE_INSTANCE_ROOT`;
-- add a repeatable script for the external fixture build proof;
-- refresh catalog and docs language so generic platform docs are not confused
-  with TPM instance instructions.
+- `features` gives the platform one webmaster-owned source of truth for
+  optional high-level surfaces;
+- `contentDefaults` gives frontmatter fields such as `draft`, `visibility`, and
+  PDF generation site-owned defaults;
+- content schemas, publishable normalization, feed/search exposure, PDF
+  eligibility, and high-value support/navigation UI seams read those settings;
+- the non-TPM fixture site proves a site instance can customize defaults without
+  editing platform modules.
 
-Theme-token extraction remains a later platform milestone. It is important, but
-it is not a blocker for proving the external instance build because the current
-platform can still supply default semantic tokens.
+Remaining platformization work should be deliberate follow-up, not incidental
+cleanup:
+
+- route pruning for disabled features, including sitemap, search, build
+  verification, and configured-link failure modes;
+- theme-token extraction into site-owned config while keeping semantic platform
+  tokens stable;
+- generated JSON Schema for `site/config/site.json` and editor/GUI validation;
+- public/private CI checkout orchestration;
+- `site:doctor` or equivalent admin tooling for authors and webmasters.
 
 ## Component Contract
 
@@ -248,14 +289,17 @@ platform components should prefer explicit props.
 
 ## Testing Requirements
 
-This boundary needs tests at three levels:
+This boundary needs tests at four levels:
 
 - Config tests: parse current TPM config, reject malformed URL/path/link fields,
-  and preserve defaults.
+  and preserve feature/content defaults.
+- Content model tests: prove schema defaults and publishable normalization use
+  the same site-owned defaults while frontmatter overrides still win.
 - Helper/component tests: navigation, support, share attribution, SEO, and
   article title suffixes render from config-backed values.
-- Release smoke: build/typecheck should prove the adapter works in Astro,
-  tests, scripts that import Astro config, and static rendering.
+- Fixture/release smoke: build/typecheck should prove the adapter works in
+  Astro, tests, scripts that import Astro config, external site fixtures, and
+  static rendering.
 
 The first pass should not require broad screenshot updates because rendered TPM
 HTML should remain intentionally unchanged.
@@ -275,11 +319,10 @@ creates hidden global coupling. The adapter is acceptable as a first step, but
 future milestones should move toward route/layout composition and explicit
 props for reusable blocks.
 
-The fourth risk is false confidence from helper-only external tests. A resolver
-test that parses a fixture proves path math, but not Astro content loading,
-Markdown image handling, Pagefind, PDF generation, or post-build optimization.
-The next proof must run a real fixture build through the same build script used
-by the live site.
+The fourth risk is treating feature flags as route support before the rest of
+the platform can honor that contract. This tranche may hide optional UI surfaces
+and suppress generated PDF metadata, but route pruning must wait for sitemap,
+Pagefind, verification, and navigation checks to share one feature model.
 
 The fifth risk is making homepage composition arbitrary too early. The homepage
 should remain a small typed recipe: configured collection IDs and limits,
@@ -288,18 +331,16 @@ still intentionally out of scope.
 
 ## Implementation Milestones
 
-The active next implementation scope is:
+Completed in the config-defaults tranche:
 
-1. Add site-owned redirect config and load it from Astro config.
-2. Extend the site config/page content model for homepage collection IDs,
-   list limits, and hero image ownership.
-3. Replace TPM-named platform fallback assets with generic rendered fallbacks
-   or platform-owned vendor assets.
-4. Expand the external fixture into a complete minimal site instance and add a
-   reproducible fixture-build script.
-5. Update docs/tests so platform behavior is verified against generic fixtures
-   while TPM values remain in `site/`.
+1. Added `features` with conservative true defaults matching current TPM output.
+2. Added `contentDefaults` with current article and announcement behavior as the
+   live site default.
+3. Wired content schemas, publishable normalization, PDF eligibility, feed/search
+   exposure, and the highest-value UI seams through those defaults.
+4. Proved non-TPM fixtures can customize defaults without editing platform code.
+5. Kept remaining feature-gated route pruning as an explicit later milestone.
 
-Later milestones should handle theme-token splitting, public/private CI
-checkout orchestration, JSON Schema export, and `site:doctor` style admin UI
-preparation.
+Later milestones should handle theme-token splitting, public/private CI checkout
+orchestration, JSON Schema export, route pruning, and `site:doctor` style admin
+UI preparation.

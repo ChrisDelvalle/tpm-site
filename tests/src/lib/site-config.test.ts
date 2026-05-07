@@ -71,17 +71,84 @@ describe("site config", () => {
       recentLimit: 8,
       startHereCollection: "start-here",
     });
+    expect(siteConfig.features.pdf).toBe(true);
+    expect(siteConfig.features.support).toBe(true);
+    expect(siteConfig.contentDefaults.articles.pdf.enabled).toBe(true);
+    expect(siteConfig.contentDefaults.announcements.visibility.search).toBe(
+      true,
+    );
     expect(siteConfig.share.xViaHandle).toBe("philo_meme");
   });
 
-  test("parses a non-TPM blog config with default share settings", () => {
+  test("parses a non-TPM blog config with default share, feature, and content settings", () => {
     const parsed: SiteConfig = parseSiteConfig(validConfig);
 
     expect(parsed.identity.title).toBe("Example Blog");
     expect(parsed.share).toEqual({});
+    expect(parsed.features.search).toBe(true);
+    expect(parsed.contentDefaults.articles).toEqual({
+      draft: false,
+      pdf: { enabled: true },
+      visibility: {
+        directory: true,
+        feed: true,
+        homepage: true,
+        search: true,
+      },
+    });
     expect(parsed.navigation.footer).toEqual([
       { href: "/feed.xml", label: "RSS" },
     ]);
+  });
+
+  test("parses webmaster-owned feature and content defaults", () => {
+    const parsed = parseSiteConfig({
+      ...validConfig,
+      contentDefaults: {
+        announcements: {
+          visibility: {
+            search: false,
+          },
+        },
+        articles: {
+          pdf: {
+            enabled: false,
+          },
+          visibility: {
+            feed: false,
+          },
+        },
+      },
+      features: {
+        pdf: false,
+        support: false,
+      },
+    });
+
+    expect(parsed.features).toMatchObject({
+      pdf: false,
+      search: true,
+      support: false,
+    });
+    expect(parsed.contentDefaults.announcements).toEqual({
+      draft: false,
+      visibility: {
+        directory: true,
+        feed: true,
+        homepage: true,
+        search: false,
+      },
+    });
+    expect(parsed.contentDefaults.articles).toEqual({
+      draft: false,
+      pdf: { enabled: false },
+      visibility: {
+        directory: true,
+        feed: false,
+        homepage: true,
+        search: true,
+      },
+    });
   });
 
   test("rejects malformed links with path-aware errors", () => {

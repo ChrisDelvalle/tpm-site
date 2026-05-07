@@ -9,13 +9,14 @@ import {
   articlePdfHref,
   articlePdfOutputPath,
 } from "../../src/lib/article-pdf";
+import { siteConfig } from "../../src/lib/site-config";
 import {
   projectRelativePath,
   resolveSiteInstancePaths,
 } from "../../src/lib/site-instance";
 
 const pdfHeader = "%PDF-";
-const pdfCreator = "The Philosopher's Meme Astro PDF pipeline";
+const pdfCreator = `${siteConfig.identity.title} Astro PDF pipeline`;
 const pdfProducer = "Playwright Chromium + pdf-lib";
 const defaultMaxPdfBytes = 5 * 1024 * 1024;
 const pdfImageTargetWidth = 384;
@@ -810,11 +811,19 @@ function formatGenerateArticlePdfsReport(
 }
 
 function isDraft(data: Record<string, unknown>): boolean {
-  return data["draft"] === true;
+  return typeof data["draft"] === "boolean"
+    ? data["draft"]
+    : siteConfig.contentDefaults.articles.draft;
 }
 
 function articlePdfDisabled(data: Record<string, unknown>): boolean {
-  return data["pdf"] === false;
+  if (!siteConfig.features.pdf) {
+    return true;
+  }
+
+  return typeof data["pdf"] === "boolean"
+    ? !data["pdf"]
+    : !siteConfig.contentDefaults.articles.pdf.enabled;
 }
 
 function stringArray(value: unknown): string[] {

@@ -39,17 +39,21 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
       </p>
     )
   }
-  <div
-    class="flex w-full max-w-[17rem] min-w-0 flex-nowrap justify-center gap-3"
-    data-home-hero-cta-row
-  >
-    <PatreonButton
-      href={siteConfig.support.patreon.href}
-      aria-label={siteConfig.support.patreon.label}
-    />
-    <DiscordButton
-      href={siteConfig.support.discord.href}
-      aria-label={siteConfig.support.discord.label}
-    />
-  </div>
+  {
+    siteConfig.features.support && (
+      <div
+        class="flex w-full max-w-[17rem] min-w-0 flex-nowrap justify-center gap-3"
+        data-home-hero-cta-row
+      >
+        <PatreonButton
+          href={siteConfig.support.patreon.href}
+          aria-label={siteConfig.support.patreon.label}
+        />
+        <DiscordButton
+          href={siteConfig.support.discord.href}
+          aria-label={siteConfig.support.discord.label}
+        />
+      </div>
+    )
+  }
 </section>

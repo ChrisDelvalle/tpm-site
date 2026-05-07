@@ -15,6 +15,7 @@ import {
   formatDate,
   type AnnouncementEntry,
 } from "../../lib/routes";
+import { siteConfig } from "../../lib/site-config";
 import { socialPreviewImageViewModel } from "../../lib/social-images";
 import { announcementStaticPaths } from "../../lib/static-paths";
 
@@ -35,7 +36,8 @@ const { announcement } = Astro.props;
 const { Content } = await render(announcement);
 const title = announcement.data.title;
 const description = announcement.data.description;
-const searchable = announcement.data.visibility.search;
+const searchable =
+  siteConfig.features.search && announcement.data.visibility.search;
 const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
 const socialPreviewImage = await socialPreviewImageViewModel({
   alt: announcement.data.imageAlt ?? title,

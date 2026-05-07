@@ -33,6 +33,22 @@ describe("publishable model", () => {
       homepage: false,
       search: true,
     });
+    expect(
+      normalizePublishableVisibility(
+        { homepage: true },
+        {
+          directory: true,
+          feed: false,
+          homepage: false,
+          search: false,
+        },
+      ),
+    ).toEqual({
+      directory: true,
+      feed: false,
+      homepage: true,
+      search: false,
+    });
   });
 
   test("derives article kind and list data from archive items", () => {
