@@ -115,19 +115,21 @@ describe("article reference corpus audit", () => {
     withTempRoot(async (root) => {
       await writeText(
         root,
-        "src/content/articles/culture/example.md",
+        "site/content/articles/culture/example.md",
         "---\ntitle: Example\n---\n\n## Source List\n",
       );
 
       const result = await auditArticleReferences({
-        articleDir: path.join(root, "src/content/articles"),
+        articleDir: path.join(root, "site/content/articles"),
         rootDir: root,
       });
       const report = formatArticleReferenceAudit(result);
       const exitCode = await runArticleReferenceAuditCli(["--quiet"], root);
 
       expect(exitCode).toBe(0);
-      expect(report).toContain("| `src/content/articles/culture/example.md` |");
+      expect(report).toContain(
+        "| `site/content/articles/culture/example.md` |",
+      );
       expect(report).toContain("reference-section headings: 1");
       expect(report).toContain("- articleCount: 1");
     }));

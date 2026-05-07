@@ -152,7 +152,7 @@ describe("article reference migration catalog", () => {
     withTempRoot(async (root) => {
       await writeText(
         root,
-        "src/content/articles/culture/example.md",
+        "site/content/articles/culture/example.md",
         "---\ntitle: Example\n---\n\nPlain prose.\n",
       );
 

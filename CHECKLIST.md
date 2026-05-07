@@ -12,7 +12,7 @@ they are useful context. Explicitly deferred work belongs in
 - Add or update design docs before implementing new components, substantial
   layout behavior, or non-component technical systems.
 - Verify each milestone before marking it complete.
-- Do not edit `src/content/articles/` unless the current task explicitly asks
+- Do not edit `site/content/articles/` unless the current task explicitly asks
   for article-content changes.
 
 ### Milestone 62: Article Share Menu UI And Script
@@ -121,35 +121,50 @@ they are useful context. Explicitly deferred work belongs in
 
 ### Milestone 70: In-Repo Site Content And Asset Move
 
-- [ ] Move `src/content` to `site/content` with `git mv`.
-- [ ] Move `src/assets` to `site/assets` with `git mv`.
-- [ ] Move `public` to `site/public` with `git mv`.
-- [ ] Move `unused-assets` to `site/unused-assets` with `git mv`.
-- [ ] Update Astro content collections, Astro/Vite config, and site asset
+- [x] Move `src/content` to `site/content` with `git mv`.
+- [x] Move `src/assets` to `site/assets` with `git mv`.
+- [x] Move `public` to `site/public` with `git mv`.
+- [x] Move `unused-assets` to `site/unused-assets` with `git mv`.
+- [x] Update Astro content collections, Astro/Vite config, and site asset
       aliases to consume resolver-backed paths.
-- [ ] Update platform imports, MDX imports, docs, and tests needed by the move
+- [x] Update platform imports, MDX imports, docs, and tests needed by the move
       without changing public routes.
-- [ ] Verify build/content/image behavior before marking complete.
+- [x] Verify build/content/image behavior before marking complete.
+      Verified with focused site-instance/config/route tests, focused asset
+      script tests, `bun --silent run typecheck`,
+      `bun --silent run verify:content -- --quiet`,
+      `bun --silent run assets:locations -- --quiet`,
+      `bun --silent run assets:shared -- --quiet`, and
+      `bun --silent run build`.
 
 ### Milestone 71: Site-Aware Tooling
 
-- [ ] Convert content, asset, PDF, build verification, Pagefind, HTML
+- [x] Convert content, asset, PDF, build verification, Pagefind, HTML
       validation, and accountability path assumptions to the resolver-backed
       `site/` layout.
-- [ ] Keep package scripts stable where practical while moving path knowledge
+- [x] Keep package scripts stable where practical while moving path knowledge
       into scripts or shared config.
-- [ ] Verify the full local release toolchain after script migration.
+- [x] Verify the full local release toolchain after script migration.
+      Verified with focused content/asset/PDF/build script tests,
+      `bun --silent run check`, and the full `bun --silent run check:release`.
 
 ### Milestone 72: External Site Instance Proof
 
-- [ ] Add a small fixture site instance outside the platform source roots.
-- [ ] Prove core config/content/path code can operate against
+- [x] Add a small fixture site instance outside the platform source roots.
+- [x] Prove core config/content/path code can operate against
       `SITE_INSTANCE_ROOT`.
-- [ ] Document limitations that remain for external production instances,
+- [x] Document limitations that remain for external production instances,
       especially MDX imports and theme delivery.
+      Verified with `tests/fixtures/site-instance/`,
+      `tests/src/lib/site-instance.test.ts`, and
+      `docs/SITE_INSTANCE_MIGRATION.md`.
 
 ### Milestone 73: Full Migration Verification
 
-- [ ] Run release-relevant checks after the full site migration.
-- [ ] Confirm public routes and generated output expectations remain stable.
-- [ ] Update docs and checklist with final verification notes.
+- [x] Run release-relevant checks after the full site migration.
+- [x] Confirm public routes and generated output expectations remain stable.
+- [x] Update docs and checklist with final verification notes.
+      Verified with `bun --silent run check:release`, including accountability,
+      content and asset checks, Astro/tool type checks, lint, format, deadcode,
+      catalog verification, unit tests, production build, build verification,
+      HTML validation, e2e tests, catalog e2e tests, audit, and secrets scan.

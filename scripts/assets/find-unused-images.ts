@@ -1,9 +1,12 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
+import {
+  projectRelativePath,
+  resolveSiteInstancePaths,
+} from "../../src/lib/site-instance";
 import { findAssetReferences } from "./find-shared-assets";
 
-const defaultAssetsDir = "src/assets";
 const defaultIgnoreFile = "scripts/unused-image-ignore.json";
 const imageExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|tiff?|webp)$/i;
@@ -35,7 +38,7 @@ interface UnusedImageOptions {
 }
 
 /**
- * Finds images in `src/assets` that are not referenced by source files.
+ * Finds images in the site asset root that source files do not reference.
  *
  * @param options Source, asset, and ignore-list configuration.
  * @param options.assetsDir Relative asset directory to scan.
@@ -46,13 +49,17 @@ interface UnusedImageOptions {
  * @returns Unused-image scan result.
  */
 export async function findUnusedImages({
-  assetsDir = defaultAssetsDir,
+  assetsDir,
   ignoreFile = defaultIgnoreFile,
   ignorePatterns,
   rootDir,
   srcDir,
 }: UnusedImageOptions): Promise<UnusedImageResult> {
-  const resolvedAssetsDir = path.resolve(rootDir, assetsDir);
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
+  const resolvedAssetsDir = path.resolve(
+    rootDir,
+    assetsDir ?? projectRelativePath(sitePaths.assets.root, rootDir),
+  );
   const activeIgnorePatterns =
     ignorePatterns ?? (await loadIgnorePatterns(rootDir, ignoreFile));
 
@@ -104,17 +111,17 @@ export function formatUnusedImageReport(
   ignoreFile = defaultIgnoreFile,
 ): string {
   if (result.unusedImages.length === 0) {
-    return `No unused src images found (${result.scannedImageCount} image files scanned, ${result.referencedImageCount} referenced).`;
+    return `No unused site images found (${result.scannedImageCount} image files scanned, ${result.referencedImageCount} referenced).`;
   }
 
   return [
     `Unused image review warning: found ${result.unusedImages.length} image file${
       result.unusedImages.length === 1 ? "" : "s"
-    } in src/assets that no source file appears to use.`,
+    } in site/assets that no source file appears to use.`,
     "",
     "These files probably will not appear on the site. Please choose one:",
     "- Use the image from an article, page, or component.",
-    "- Move it to unused-assets/ if it is only being kept for possible future use.",
+    "- Move it to site/unused-assets/ if it is only being kept for possible future use.",
     "- Delete it if it is not needed.",
     `- If this check is wrong, add a specific path or narrow glob to ${ignoreFile}.`,
     "",
@@ -317,10 +324,10 @@ function toPosix(file: string) {
 function usage() {
   return `Usage: bun run assets:unused [--json] [--quiet] [--review] [--fail-on-unused] [--ignore-file path]
 
-Find images in src/assets that no source file appears to reference.
+Find images in site/assets that no source file appears to reference.
 
 This is review feedback by default. Move unused-but-preserved files to
-unused-assets/, delete files that are not needed, or add an intentional
+site/unused-assets/, delete files that are not needed, or add an intentional
 exception to ${defaultIgnoreFile}.`;
 }
 

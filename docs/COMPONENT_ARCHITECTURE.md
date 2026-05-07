@@ -359,15 +359,15 @@ need a generic page shell with optional title, description, and body prose.
 Preferred target:
 
 ```text
-src/content/pages/index.md
+site/content/pages/index.md
   frontmatter:
     title
     description
 
-src/content/announcements/*.md
+site/content/announcements/*.md
   article-like announcement content
 
-src/content/collections/*.md
+site/content/collections/*.md
   ordered editor-owned lists of publishable article/announcement slugs
 
 src/pages/index.astro
@@ -608,7 +608,7 @@ The home page should become content-driven without losing dynamic composition.
 Recommended file:
 
 ```text
-src/content/pages/index.md
+site/content/pages/index.md
 ```
 
 Recommended frontmatter shape:
@@ -1180,8 +1180,8 @@ Current gates should cover:
 - build-output guards for accidental catalog output, dated page leaks, broken
   internal links, source maps, unexpected hydration boundaries, draft leaks,
   missing JSON-LD, and unintended client scripts on static reading pages;
-- asset integrity for project-owned images under `src/assets/`, approved
-  `public/` files only, and alt text or documented alt exceptions.
+- asset integrity for project-owned images under `site/assets/`, approved
+  `site/public/` files only, and alt text or documented alt exceptions.
 
 State modeling audit: current public components should avoid boolean clusters
 for mutually exclusive states. If a component can be `empty`, `ready`, `error`,
@@ -1370,7 +1370,7 @@ This sequence minimizes risk and keeps visual changes reviewable.
     into `ArticleLayout` without route-level Markdown parsing.
 14. Add `PageLayout`, `PageHeader`, and `PageProse` for non-article Markdown
     pages.
-15. Move homepage prose/data into `src/content/pages/index.md`.
+15. Move homepage prose/data into `site/content/pages/index.md`.
 16. Replace homepage section markup with home blocks: hero, announcements,
     latest, featured/start-here, category overview, support.
 17. Move remaining component-specific global CSS into Tailwind component
@@ -1434,7 +1434,7 @@ strong even when the sidebar is absent.
 ### Homepage Content Model
 
 Recommendation: keep `src/pages/index.astro` as composer and move prose/data to
-`src/content/pages/index.md`.
+`site/content/pages/index.md`.
 
 Reasoning: this keeps author-facing content editable in Markdown while allowing
 dynamic latest-article data and Astro image components.

@@ -1,11 +1,13 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
+
 const sourceFilePattern = /\.(?:astro|css|mdx?|[cm]?[jt]sx?)$/i;
 const assetExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|mp3|mp4|ogg|otf|pdf|png|svg|tiff?|ttf|wav|webm|webp|woff2?)$/i;
 
-/** One source-file reference to an asset under `src/assets`. */
+/** One source-file reference to an asset under the site asset root. */
 export interface AssetReference {
   assetPath: string;
   file: string;
@@ -17,6 +19,7 @@ export interface AssetReference {
 export interface AssetReferenceOptions {
   assetsDir?: string;
   rootDir: string;
+  sourceDirs?: string[];
   srcDir?: string;
 }
 
@@ -25,6 +28,7 @@ export interface SharedAssetOptions {
   assetsDir?: string;
   rootDir: string;
   sharedAssetsDir?: string;
+  sourceDirs?: string[];
   srcDir?: string;
 }
 
@@ -43,22 +47,37 @@ export interface SharedAssetViolation {
 }
 
 /**
- * Scans source files for references to assets under `src/assets`.
+ * Scans platform and site source files for references to site assets.
  *
  * @param options Source and asset directory configuration.
- * @param options.assetsDir Absolute path to the source asset directory.
+ * @param options.assetsDir Absolute path to the site asset directory.
  * @param options.rootDir Repository root to scan from.
+ * @param options.sourceDirs Absolute source directories to scan.
  * @param options.srcDir Absolute source directory to scan.
  * @returns Resolved asset references found in source files.
  */
 export async function findAssetReferences({
   assetsDir,
   rootDir,
+  sourceDirs,
   srcDir,
 }: AssetReferenceOptions): Promise<AssetReference[]> {
-  const resolvedSrcDir = srcDir ?? path.resolve(rootDir, "src");
-  const resolvedAssetsDir = assetsDir ?? path.resolve(rootDir, "src/assets");
-  const sourceFiles = await listSourceFiles(resolvedSrcDir, resolvedAssetsDir);
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
+  const resolvedAssetsDir = assetsDir ?? sitePaths.assets.root;
+  const resolvedSourceDirs =
+    sourceDirs ??
+    (srcDir === undefined ? defaultSourceDirs(rootDir) : [srcDir]);
+  const sourceFiles = Array.from(
+    new Set(
+      (
+        await Promise.all(
+          resolvedSourceDirs.map(async (dir) =>
+            listSourceFilesIfPresent(dir, resolvedAssetsDir),
+          ),
+        )
+      ).flat(),
+    ),
+  );
   const references: AssetReference[] = [];
 
   for (const file of sourceFiles.sort()) {
@@ -71,12 +90,13 @@ export async function findAssetReferences({
 }
 
 /**
- * Finds shared source assets that should live under `src/assets/shared`.
+ * Finds shared site assets that should live under `site/assets/shared`.
  *
  * @param options Source, asset, and shared-directory configuration.
- * @param options.assetsDir Absolute path to the source asset directory.
+ * @param options.assetsDir Absolute path to the site asset directory.
  * @param options.rootDir Repository root to scan from.
  * @param options.sharedAssetsDir Absolute path to the shared assets directory.
+ * @param options.sourceDirs Absolute source directories to scan.
  * @param options.srcDir Absolute source directory to scan.
  * @returns Shared-asset verification result.
  */
@@ -84,13 +104,17 @@ export async function findSharedAssets({
   assetsDir,
   rootDir,
   sharedAssetsDir,
+  sourceDirs,
   srcDir,
 }: SharedAssetOptions): Promise<SharedAssetResult> {
-  const resolvedSharedAssetsDir =
-    sharedAssetsDir ?? path.resolve(rootDir, "src/assets/shared");
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
+  const resolvedSharedAssetsDir = sharedAssetsDir ?? sitePaths.assets.shared;
   const referenceOptions: AssetReferenceOptions = { rootDir };
   if (assetsDir !== undefined) {
     referenceOptions.assetsDir = assetsDir;
+  }
+  if (sourceDirs !== undefined) {
+    referenceOptions.sourceDirs = sourceDirs;
   }
   if (srcDir !== undefined) {
     referenceOptions.srcDir = srcDir;
@@ -118,15 +142,15 @@ export function formatSharedAssetReport(
   rootDir: string,
 ): string {
   if (result.violations.length === 0) {
-    return `No shared src assets found outside src/assets/shared (${result.referencedAssetCount} referenced assets, ${result.referenceCount} references scanned).`;
+    return `No shared site assets found outside site/assets/shared (${result.referencedAssetCount} referenced assets, ${result.referenceCount} references scanned).`;
   }
 
   const lines = [
-    `Found ${result.violations.length} shared src asset${
+    `Found ${result.violations.length} shared site asset${
       result.violations.length === 1 ? "" : "s"
-    } outside src/assets/shared/:`,
+    } outside site/assets/shared/:`,
     "",
-    "Move shared files into src/assets/shared/, or duplicate intentionally only when the files are no longer meant to stay identical.",
+    "Move shared files into site/assets/shared/, or duplicate intentionally only when the files are no longer meant to stay identical.",
   ];
 
   for (const violation of result.violations) {
@@ -179,7 +203,7 @@ export function normalizeReference(value: string): string | undefined {
 }
 
 /**
- * Resolves a local asset reference to an absolute path under `src/assets`.
+ * Resolves a local asset reference to an absolute path under the site asset root.
  *
  * @param file Source file containing the reference.
  * @param value Raw reference value.
@@ -202,11 +226,17 @@ export function resolveAssetReference(
   let resolved: string;
   const absoluteAssetsPrefix = `/${relative(rootDir, assetsDir)}/`;
   const relativeAssetsPrefix = `${relative(rootDir, assetsDir)}/`;
+  const siteAssetAliasPrefix = "@site/assets/";
 
   if (normalized.startsWith(absoluteAssetsPrefix)) {
     resolved = path.resolve(rootDir, `.${normalized}`);
   } else if (normalized.startsWith(relativeAssetsPrefix)) {
     resolved = path.resolve(rootDir, normalized);
+  } else if (normalized.startsWith(siteAssetAliasPrefix)) {
+    resolved = path.join(
+      assetsDir,
+      normalized.slice(siteAssetAliasPrefix.length),
+    );
   } else if (startsWithRelativeAssetsPath(normalized)) {
     resolved = path.resolve(path.dirname(file), normalized);
   } else {
@@ -234,11 +264,12 @@ export async function runSharedAssetsCli(
   if (args.includes("--help") || args.includes("-h")) {
     console.log(`Usage: bun run assets:shared [--json] [--quiet]
 
-Detect src assets referenced by more than one source file while living outside
-src/assets/shared/.
+Detect site assets referenced by more than one source file while living outside
+site/assets/shared/.
 
-The script scans source files under src/, excluding src/assets/. Multiple
-references from the same source file do not make an asset shared.`);
+The script scans platform source files and site content files, excluding
+site/assets/. Multiple references from the same source file do not make an
+asset shared.`);
     return 0;
   }
 
@@ -311,7 +342,7 @@ function angleReferences(
   const references: AssetReference[] = [];
   const anglePathPattern =
     // eslint-disable-next-line security/detect-unsafe-regex -- This bounded asset-reference matcher scans source files, not untrusted runtime input.
-    /<((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^>\r\n]+)>/g;
+    /<((?:(?:\.\.?\/)+assets|\/?(?:src|site)\/assets|@site\/assets)\/[^>\r\n]+)>/g;
 
   for (const match of text.matchAll(anglePathPattern)) {
     const value = match[1];
@@ -333,6 +364,35 @@ function angleReferences(
   }
 
   return references;
+}
+
+function defaultSourceDirs(rootDir: string): string[] {
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
+
+  return [
+    path.resolve(rootDir, "src"),
+    path.dirname(sitePaths.content.articles),
+  ];
+}
+
+async function listSourceFilesIfPresent(
+  dir: string,
+  assetsDir: string,
+): Promise<string[]> {
+  try {
+    return await listSourceFiles(dir, assetsDir);
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "ENOENT"
+    ) {
+      return [];
+    }
+
+    throw error;
+  }
 }
 
 function findClosingMarkdownTarget(
@@ -454,7 +514,7 @@ function quotedReferences(
   const references: AssetReference[] = [];
   const quotedPathPattern =
     // eslint-disable-next-line security/detect-unsafe-regex -- This bounded asset-reference matcher scans source files, not untrusted runtime input.
-    /(["'`])((?:(?:\.\.?\/)+assets|\/?src\/assets)\/[^"'`\r\n]+)\1/g;
+    /(["'`])((?:(?:\.\.?\/)+assets|\/?(?:src|site)\/assets|@site\/assets)\/[^"'`\r\n]+)\1/g;
 
   for (const match of text.matchAll(quotedPathPattern)) {
     const value = match[2];

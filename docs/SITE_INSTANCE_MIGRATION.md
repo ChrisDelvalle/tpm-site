@@ -169,14 +169,20 @@ project path.
 The production move is in-repo first. External support is a proof milestone,
 not a separate repo split yet.
 
-The proof should use a small fixture instance with config, a page, one article,
-one author, one category, one collection, and one asset. It does not need the
-full TPM corpus.
+The repeatable proof lives at `tests/fixtures/site-instance/`. It includes a
+small non-TPM site config, one article, one author profile, and one category.
+The resolver test parses that config and runs the normal content verifier
+against the fixture paths, proving core config/content/path logic can operate
+outside both `src/` and the live `site/` directory.
 
-The proof is complete when resolver tests and at least one build/content
-verification path demonstrate that `SITE_INSTANCE_ROOT` can point outside the
-platform source tree. Remaining hard cases, especially production MDX imports
-and theme-token delivery, should be documented explicitly rather than hidden.
+Current limitations are explicit:
+
+- The full Astro build still assumes the live in-repo `site/` instance for
+  production release commands.
+- MDX remains an advanced escape hatch. External production instances will need
+  the same `@site/assets` alias contract and platform component imports.
+- Site-specific theme and design-token extraction is not yet separated from the
+  platform.
 
 ## Critical Review
 

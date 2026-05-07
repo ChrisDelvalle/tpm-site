@@ -45,7 +45,7 @@ function entry(
     data: articleData,
     filePath:
       filePath === ""
-        ? `/repo/src/content/articles/history/${id}.md`
+        ? `/repo/site/content/articles/history/${id}.md`
         : filePath,
   };
 }
@@ -107,7 +107,7 @@ describe("route helpers", () => {
     const politics = entry(
       "the-post-pepe-manifesto",
       {},
-      "/repo/src/content/articles/politics/the-post-pepe-manifesto.md",
+      "/repo/site/content/articles/politics/the-post-pepe-manifesto.md",
     );
 
     expect(categorySlug(politics)).toBe("politics");

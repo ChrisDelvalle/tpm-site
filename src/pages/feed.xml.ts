@@ -1,8 +1,8 @@
 import rss from "@astrojs/rss";
+import fallbackSocialPreviewImage from "@site/assets/shared/tpm_home_hero_light.png";
 import type { APIContext } from "astro";
 import { getImage } from "astro:assets";
 
-import fallbackSocialPreviewImage from "../assets/shared/tpm_home_hero_light.png";
 import { authorDisplayNameForArticle, getAuthorEntries } from "../lib/authors";
 import { getArticles } from "../lib/content";
 import {

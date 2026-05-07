@@ -1,6 +1,9 @@
+import path from "node:path";
+
 import type { CollectionEntry } from "astro:content";
 
 import { siteConfig, type SiteRouteKey } from "./site-config";
+import { siteInstance } from "./site-instance";
 
 /** Astro content collection entry for a published or draft article. */
 export type ArticleEntry = CollectionEntry<"articles">;
@@ -193,13 +196,48 @@ export function authorName(entry: ArticleEntry): string {
  * @returns Category folder slug, or an empty string when no category is found.
  */
 export function categorySlug(entry: ArticleEntry): string {
-  const filePath = entry.filePath ?? "";
-  const marker = "/src/content/articles/";
-  const relativePath = filePath.includes(marker)
-    ? (filePath.split(marker)[1] ?? "")
-    : filePath.replace(/^src\/content\/articles\//, "");
+  const relativePath = articleFileRelativePath(entry.filePath ?? "");
 
   return relativePath.includes("/") ? (relativePath.split("/")[0] ?? "") : "";
+}
+
+function articleFileRelativePath(filePath: string): string {
+  if (filePath.length === 0) {
+    return "";
+  }
+
+  const normalizedFilePath = normalizeFilesystemPath(filePath);
+  const articleRoot = normalizeFilesystemPath(siteInstance.content.articles);
+  const rootPrefix = articleRoot.endsWith("/")
+    ? articleRoot
+    : `${articleRoot}/`;
+
+  if (normalizedFilePath.startsWith(rootPrefix)) {
+    return normalizedFilePath.slice(rootPrefix.length);
+  }
+
+  const projectRelativeArticleRoot = normalizeFilesystemPath(
+    path.relative(process.cwd(), siteInstance.content.articles),
+  );
+  const knownRootMarkers = [
+    `/${projectRelativeArticleRoot}/`,
+    `${projectRelativeArticleRoot}/`,
+    "/site/content/articles/",
+    "site/content/articles/",
+    "/src/content/articles/",
+    "src/content/articles/",
+  ];
+  const marker = knownRootMarkers.find((candidate) =>
+    normalizedFilePath.includes(candidate),
+  );
+
+  return marker === undefined
+    ? normalizedFilePath
+    : (normalizedFilePath.split(marker)[1] ?? "");
+}
+
+function normalizeFilesystemPath(filePath: string): string {
+  return filePath.replaceAll(path.sep, "/");
 }
 
 /**

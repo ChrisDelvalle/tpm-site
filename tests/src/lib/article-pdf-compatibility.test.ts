@@ -13,10 +13,12 @@ describe("article MDX PDF compatibility", () => {
     ).toEqual([
       "../../../components/articles/HoverImageLink.astro",
       "../../../components/articles/HoverImageParagraph.astro",
+      "@/components/articles/HoverImageLink.astro",
+      "@/components/articles/HoverImageParagraph.astro",
     ]);
     expect(
       articleMdxPdfCompatibility.map((entry): string => entry.mode),
-    ).toEqual(["static-link", "static-link"]);
+    ).toEqual(["static-link", "static-link", "static-link", "static-link"]);
   });
 
   test("treats article asset imports as compatible and component imports as gated", () => {
@@ -28,6 +30,11 @@ describe("article MDX PDF compatibility", () => {
     expect(
       isArticleMdxPdfCompatibleImport(
         "../../../assets/articles/social-media-freedom/gae1.png",
+      ),
+    ).toBe(true);
+    expect(
+      isArticleMdxPdfCompatibleImport(
+        "@site/assets/articles/social-media-freedom/gae1.png",
       ),
     ).toBe(true);
     expect(

@@ -3,7 +3,11 @@ import { createReadStream } from "node:fs";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
-const defaultScanDirs = ["src/assets", "public", "unused-assets"];
+import {
+  projectRelativePath,
+  resolveSiteInstancePaths,
+} from "../../src/lib/site-instance";
+
 const defaultIgnoreFile = "scripts/duplicate-image-ignore.json";
 const imageExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|tiff?|webp)$/i;
@@ -55,13 +59,14 @@ export async function findDuplicateImages({
   ignoreFile = defaultIgnoreFile,
   ignorePatterns,
   rootDir,
-  scanDirs = defaultScanDirs,
+  scanDirs,
 }: DuplicateImageOptions): Promise<DuplicateImageResult> {
   const activeIgnorePatterns =
     ignorePatterns ?? (await loadIgnorePatterns(rootDir, ignoreFile));
+  const resolvedScanDirs = scanDirs ?? defaultScanDirs(rootDir);
   const existingDirs: string[] = [];
 
-  for (const dir of scanDirs) {
+  for (const dir of resolvedScanDirs) {
     const fullPath = path.resolve(rootDir, dir);
 
     if (await pathExists(fullPath)) {
@@ -116,7 +121,7 @@ export function formatDuplicateImageReport(
     "Review these files before release. If the duplicate is intentional, add the specific file path or a narrow glob to:",
     `- ${ignoreFile}`,
     "",
-    "Prefer removing unused duplicates. Keep intentional shared images in src/assets/shared/ when they are referenced by multiple pages.",
+    "Prefer removing unused duplicates. Keep intentional shared images in site/assets/shared/ when they are referenced by multiple pages.",
   ];
 
   for (const [index, group] of result.duplicateGroups.entries()) {
@@ -211,7 +216,7 @@ export async function runDuplicateImageCli(
   const options = parseCliArgs(args);
 
   if (options.help) {
-    console.log(usage());
+    console.log(usage(rootDir));
     return 0;
   }
 
@@ -241,6 +246,16 @@ function hasDotPathSegment(relativePath: string) {
   return relativePath
     .split("/")
     .some((segment) => segment.startsWith(".") && segment !== ".");
+}
+
+function defaultScanDirs(rootDir: string): string[] {
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
+
+  return [
+    projectRelativePath(sitePaths.assets.root, rootDir),
+    projectRelativePath(sitePaths.public, rootDir),
+    projectRelativePath(sitePaths.unusedAssets, rootDir),
+  ];
 }
 
 async function imageRecord(
@@ -381,13 +396,15 @@ function toPosix(file: string) {
   return file.split(path.sep).join("/");
 }
 
-function usage() {
+function usage(rootDir: string) {
   return `Usage: bun run assets:duplicates [--json] [--quiet] [--review] [--fail-on-duplicates] [--ignore-file path] [dir ...]
 
 Find image files with identical byte content.
 
 Defaults to:
-${defaultScanDirs.map((dir) => `- ${dir}`).join("\n")}
+${defaultScanDirs(rootDir)
+  .map((dir) => `- ${dir}`)
+  .join("\n")}
 
 Intentional duplicates can be ignored with ${defaultIgnoreFile}.
 Use --fail-on-duplicates when duplicate images should fail a gate.`;

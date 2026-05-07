@@ -1,7 +1,7 @@
+import heroLightImage from "@site/assets/shared/tpm_home_hero_light.png";
+import heroDarkImage from "@site/assets/site/tpm_home_hero_dark.png";
 import { describe, expect, test } from "vitest";
 
-import heroLightImage from "../../../../src/assets/shared/tpm_home_hero_light.png";
-import heroDarkImage from "../../../../src/assets/site/tpm_home_hero_dark.png";
 import HomeMastheadBlock from "../../../../src/components/blocks/HomeMastheadBlock.astro";
 import { createAstroTestContainer } from "../../../helpers/astro-container";
 import { articleItems } from "../articles/article-fixture";

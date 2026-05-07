@@ -3,6 +3,7 @@ import path from "node:path";
 
 import matter from "gray-matter";
 
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
 import { normalizeTagList } from "../../src/lib/tags";
 
 /** Options for normalizing article tags in source frontmatter. */
@@ -32,8 +33,9 @@ export async function runNormalizeTagsCli(
 ): Promise<number> {
   const quiet = args.includes("--quiet");
   const write = args.includes("--write");
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
   const result = await normalizeArticleTags({
-    articleDir: path.resolve(rootDir, "src/content/articles"),
+    articleDir: sitePaths.content.articles,
     rootDir,
     write,
   });

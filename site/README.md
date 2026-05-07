@@ -11,8 +11,11 @@ Current editable areas:
 
 - `config/site.json`: site identity, canonical URL, navigation, support links,
   and share attribution.
-
-Content and assets still live under `src/content/` and `src/assets/` during the
-first platformization pass. They will move here only after content loading,
-Markdown images, MDX imports, PDFs, search, RSS, and build verification are
-ready for the new root.
+- `content/`: Markdown, MDX, and JSON content collections for articles,
+  announcements, authors, categories, collections, and pages.
+- `assets/`: project-owned images and SVGs that should go through Astro's asset
+  pipeline.
+- `public/`: files copied directly to the site root, such as `favicon.svg`,
+  `robots.txt`, and `CNAME`.
+- `unused-assets/`: parked historical assets that are intentionally kept out of
+  the generated site.

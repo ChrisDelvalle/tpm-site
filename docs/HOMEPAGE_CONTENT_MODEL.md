@@ -142,7 +142,7 @@ is a documented migration target rather than a new frontmatter contract.
 Collections live in:
 
 ```text
-src/content/collections/*.md
+site/content/collections/*.md
 ```
 
 They are editor-owned curation files, not publishable entries. A collection can

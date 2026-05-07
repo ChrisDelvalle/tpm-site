@@ -10,6 +10,7 @@ import {
   articlePdfOutputPath,
   scholarPublicationDate,
 } from "../../src/lib/article-pdf";
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
 import {
   maxSocialPreviewImageBytes,
   socialPreviewImageMimeType,
@@ -408,12 +409,13 @@ export async function runBuildVerificationCli(
   rootDir = process.cwd(),
 ): Promise<number> {
   const quiet = args.includes("--quiet");
+  const paths = resolveSiteInstancePaths({ cwd: rootDir });
   const expectedRedirects = await configuredRedirects(rootDir);
   const result = await verifyBuild({
-    announcementDir: path.resolve(rootDir, "src/content/announcements"),
-    articleDir: path.resolve(rootDir, "src/content/articles"),
-    categoryDir: path.resolve(rootDir, "src/content/categories"),
-    collectionDir: path.resolve(rootDir, "src/content/collections"),
+    announcementDir: paths.content.announcements,
+    articleDir: paths.content.articles,
+    categoryDir: paths.content.categories,
+    collectionDir: paths.content.collections,
     distDir: path.resolve(rootDir, "dist"),
     expectedRedirects,
   });

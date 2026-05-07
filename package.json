@@ -39,7 +39,7 @@
     "lint": "eslint . --ignore-pattern \"**/*.md\" --ignore-pattern \"**/*.mdx\" --max-warnings=0 --no-cache",
     "lint:fix": "eslint . --ignore-pattern \"**/*.md\" --ignore-pattern \"**/*.mdx\" --fix --max-warnings=0 --no-cache",
     "lint:markdown": "markdownlint-cli2",
-    "lint:mdx": "eslint \"src/content/articles/**/*.mdx\" --max-warnings=0 --no-cache",
+    "lint:mdx": "eslint \"site/content/articles/**/*.mdx\" --max-warnings=0 --no-cache",
     "lint:packages": "sort-package-json --check --quiet package.json",
     "payload:minify-html:experiment": "bun scripts/payload/minify-html-experiment.ts",
     "payload:minify-html:experiments": "bun --silent run build:raw && bun scripts/payload/run-minify-html-experiments.ts",

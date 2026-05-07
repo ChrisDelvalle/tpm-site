@@ -25,6 +25,11 @@
     },
     "verbatimModuleSyntax": true
   },
-  "include": [".astro/types.d.ts", "astro.config.ts", "site/content/**/*", "src/**/*"],
+  "include": [
+    ".astro/types.d.ts",
+    "astro.config.ts",
+    "site/content/**/*",
+    "src/**/*"
+  ],
   "exclude": ["dist", "node_modules"]
 }

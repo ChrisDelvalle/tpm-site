@@ -10,26 +10,26 @@ tests/**
 # bodies are human-authored editorial content validated by content schemas, build
 # checks, Markdown/MDX review checks, and manual editorial review rather than
 # mirrored unit tests.
-src/content/articles/**
-src/content/announcements/**
-src/content/collections/**
-src/content/pages/**
+site/content/articles/**
+site/content/announcements/**
+site/content/collections/**
+site/content/pages/**
 
 # Approved exception: Category JSON files are content data validated by Astro
 # content schemas, content verification, build checks, and category-page tests.
-src/content/categories/**
+site/content/categories/**
 
 # Approved exception: Author Markdown files are content data validated by Astro
 # content schemas, author relationship tests, build checks, and manual profile
 # review rather than mirrored unit tests.
-src/content/authors/**
+site/content/authors/**
 
 # Approved exception: Static image and public assets are validated by
 # asset-location, shared-asset, duplicate-asset, unused-asset, build, and browser
 # review checks rather than mirrored unit tests.
-src/assets/**
-unused-assets/**
-public/**
+site/assets/**
+site/unused-assets/**
+site/public/**
 
 # Approved exception: Global CSS is exercised by browser, accessibility,
 # responsive, visual, and build checks instead of mirrored unit tests.

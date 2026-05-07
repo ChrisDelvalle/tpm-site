@@ -1,8 +1,8 @@
 ---
 import { getEntry } from "astro:content";
 
-import heroDarkImage from "../assets/site/tpm_home_hero_dark.png";
-import heroLightImage from "../assets/shared/tpm_home_hero_light.png";
+import heroDarkImage from "@site/assets/site/tpm_home_hero_dark.png";
+import heroLightImage from "@site/assets/shared/tpm_home_hero_light.png";
 import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
 import HomeDiscoveryLinksBlock from "../components/blocks/HomeDiscoveryLinksBlock.astro";
 import HomeFeaturedCarousel from "../components/blocks/HomeFeaturedCarousel.astro";
@@ -37,7 +37,7 @@ import { titleWithSite } from "../lib/site-config";
 const home = await getEntry("pages", "index");
 
 if (!home) {
-  throw new Error("Missing home page content at src/content/pages/index.md.");
+  throw new Error("Missing home page content at site/content/pages/index.md.");
 }
 
 const articles = await getArticles();

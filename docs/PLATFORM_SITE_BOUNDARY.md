@@ -54,28 +54,30 @@ site/
   docs/
 ```
 
-The near-term shape keeps the current Astro project intact and introduces only
-the first part of the site surface:
+The current in-repo shape keeps the Astro project intact while placing
+site-owned files under `site/`:
 
 ```text
 site/
   README.md
   config/
     site.json
+  content/
+  assets/
+  public/
+  unused-assets/
 
 src/
   components/
   layouts/
   lib/
   pages/
-  content/
-  assets/
 ```
 
-This is intentionally incremental. Content and asset roots are the riskiest
-parts because Astro content collections, Markdown image handling, MDX imports,
-generated PDFs, Pagefind, RSS, and build verification all depend on current
-paths. Moving content belongs after the config boundary is stable.
+The first full migration moved content, assets, root public files, and unused
+assets into the site surface. Remaining platformization work is about making the
+external-instance workflow production-ready, not about moving the live in-repo
+TPM corpus again.
 
 ## Import Rule
 
@@ -184,8 +186,8 @@ Move these values behind config first:
 
 Do not move these yet:
 
-- `src/content/`;
-- `src/assets/`;
+- `site/content/`;
+- `site/assets/`;
 - `public/`;
 - legacy redirects;
 - package script route globs;

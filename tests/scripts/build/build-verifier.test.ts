@@ -743,10 +743,10 @@ describe("build verifier helpers", () => {
 
         try {
           await writeText(root, "astro.config.ts", "export default {};\n");
-          await writeText(root, "src/content/categories/history.json", "{}");
+          await writeText(root, "site/content/categories/history.json", "{}");
           await writeText(
             root,
-            "src/content/articles/history/published.md",
+            "site/content/articles/history/published.md",
             "---\ntitle: Published\n---\n",
           );
 
@@ -912,10 +912,10 @@ describe("build verifier helpers", () => {
 
         try {
           await writeText(root, "astro.config.ts", "export default {};\n");
-          await writeText(root, "src/content/categories/history.json", "{}");
+          await writeText(root, "site/content/categories/history.json", "{}");
           await writeText(
             root,
-            "src/content/articles/history/published.md",
+            "site/content/articles/history/published.md",
             "---\ntitle: Published\n---\n",
           );
           await writeText(root, "dist/index.html", "");

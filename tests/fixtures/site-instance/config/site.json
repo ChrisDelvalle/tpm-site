@@ -1,0 +1,50 @@
+{
+  "identity": {
+    "description": "A small fixture site used to prove the platform can resolve an external site instance.",
+    "language": "en",
+    "title": "Example Platform Site",
+    "url": "https://example.com"
+  },
+  "navigation": {
+    "footer": [
+      {
+        "href": "/articles/",
+        "label": "Articles"
+      }
+    ],
+    "primary": [
+      {
+        "href": "/articles/",
+        "label": "Articles"
+      }
+    ]
+  },
+  "routes": {
+    "allArticles": "/articles/all/",
+    "announcements": "/announcements/",
+    "articles": "/articles/",
+    "authors": "/authors/",
+    "bibliography": "/bibliography/",
+    "categories": "/categories/",
+    "collections": "/collections/",
+    "feed": "/feed.xml",
+    "home": "/",
+    "search": "/search/",
+    "tags": "/tags/"
+  },
+  "support": {
+    "block": {
+      "body": "Support this fixture site.",
+      "title": "Support Example Platform Site"
+    },
+    "discord": {
+      "href": "https://discord.example.com",
+      "label": "Discord"
+    },
+    "patreon": {
+      "compactLabel": "Patreon",
+      "href": "https://patreon.example.com",
+      "label": "Patreon"
+    }
+  }
+}

@@ -80,6 +80,6 @@ visible, and CTAs distinguishable from neutral actions.
 
 ## Follow-Up Notes
 
-- Author handling should become structured after `src/content/authors/` is in
+- Author handling should become structured after `site/content/authors/` is in
   place. Do not keep both `author` and `authors` as permanent public API unless
   a compatibility requirement is explicitly approved.

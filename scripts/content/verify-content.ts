@@ -6,6 +6,7 @@ import type { Image, Nodes, Paragraph, Root } from "mdast";
 import { remark } from "remark";
 
 import { isArticleMdxPdfCompatibleImport } from "../../src/lib/article-pdf-compatibility";
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
 import { tagDiagnostics } from "../../src/lib/tags";
 
 /** Inputs needed to verify source content conventions. */
@@ -35,10 +36,11 @@ export async function runContentVerificationCli(
   rootDir = process.cwd(),
 ): Promise<number> {
   const quiet = args.includes("--quiet");
+  const paths = resolveSiteInstancePaths({ cwd: rootDir });
   const result = await verifyContent({
-    articleDir: path.resolve(rootDir, "src/content/articles"),
-    authorDir: path.resolve(rootDir, "src/content/authors"),
-    categoryDir: path.resolve(rootDir, "src/content/categories"),
+    articleDir: paths.content.articles,
+    authorDir: paths.content.authors,
+    categoryDir: paths.content.categories,
     rootDir,
   });
   const report = formatContentVerificationResult(result);
@@ -95,7 +97,14 @@ export async function verifyContent({
     if (isDraft(data)) {
       draftCount += 1;
     }
-    validateArticleAuthor(rootDir, file, data, authorAliases, issues);
+    validateArticleAuthor(
+      rootDir,
+      file,
+      data,
+      authorDir,
+      authorAliases,
+      issues,
+    );
     validateArticleTags(rootDir, file, data, issues);
     validateArticleImageParagraphs(rootDir, file, text, issues);
     validateArticleMdxPdfImports(rootDir, file, text, issues);
@@ -264,6 +273,7 @@ function validateArticleAuthor(
   rootDir: string,
   file: string,
   data: Record<string, unknown>,
+  authorDir: string,
   authorAliases: Set<string>,
   issues: string[],
 ) {
@@ -282,8 +292,10 @@ function validateArticleAuthor(
     .filter((part) => part.length > 0)
     .forEach((part) => {
       if (!authorAliases.has(normalizeAuthorAlias(part))) {
+        const authorDirectory = toPosix(path.relative(rootDir, authorDir));
+
         issues.push(
-          `${toPosix(path.relative(rootDir, file))}: author "${part}" does not match src/content/authors/ aliases; add an author profile or approved alias`,
+          `${toPosix(path.relative(rootDir, file))}: author "${part}" does not match ${authorDirectory}/ aliases; add an author profile or approved alias`,
         );
       }
     });

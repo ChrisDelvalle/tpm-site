@@ -48,8 +48,8 @@ Running checks locally is recommended, but maintainers can help with failures.
 
 Most articles need only:
 
-- one Markdown file in `src/content/articles/<category>/`;
-- optional images in `src/assets/articles/<article-slug>/`;
+- one Markdown file in `site/content/articles/<category>/`;
+- optional images in `site/assets/articles/<article-slug>/`;
 - optional notes or bibliography citations when the article needs them;
 - a pull request for review.
 
@@ -129,14 +129,14 @@ Use lowercase words and hyphens in branch names.
 
 Current article category folders are:
 
-- `src/content/articles/aesthetics/`
-- `src/content/articles/game-studies/`
-- `src/content/articles/history/`
-- `src/content/articles/irony/`
-- `src/content/articles/memeculture/` (`Culture`)
-- `src/content/articles/metamemetics/`
-- `src/content/articles/philosophy/`
-- `src/content/articles/politics/`
+- `site/content/articles/aesthetics/`
+- `site/content/articles/game-studies/`
+- `site/content/articles/history/`
+- `site/content/articles/irony/`
+- `site/content/articles/memeculture/` (`Culture`)
+- `site/content/articles/metamemetics/`
+- `site/content/articles/philosophy/`
+- `site/content/articles/politics/`
 
 Ask a maintainer before creating a new category.
 
@@ -153,8 +153,8 @@ A category needs two things:
 Example new category:
 
 ```text
-src/content/articles/media-theory/
-src/content/categories/media-theory.json
+site/content/articles/media-theory/
+site/content/categories/media-theory.json
 ```
 
 The folder name becomes the category URL:
@@ -170,10 +170,10 @@ Category folder rules:
 - keep the folder name short and readable.
 
 The metadata file must use the same name as the folder. For
-`src/content/articles/media-theory/`, create:
+`site/content/articles/media-theory/`, create:
 
 ```text
-src/content/categories/media-theory.json
+site/content/categories/media-theory.json
 ```
 
 Start with this JSON:
@@ -202,7 +202,7 @@ should go.
 After adding a category, put the article in the new folder:
 
 ```text
-src/content/articles/media-theory/my-new-article.md
+site/content/articles/media-theory/my-new-article.md
 ```
 
 ## 6. Pick The Article Slug
@@ -212,7 +212,7 @@ The filename becomes the public URL.
 Example:
 
 ```text
-src/content/articles/history/my-new-article.md
+site/content/articles/history/my-new-article.md
 ```
 
 becomes:
@@ -247,7 +247,7 @@ Create a new `.md` file in the category folder.
 Example path:
 
 ```text
-src/content/articles/history/my-new-article.md
+site/content/articles/history/my-new-article.md
 ```
 
 Start with this template:
@@ -273,7 +273,7 @@ Notes:
 - `description` should be brief and useful.
 - `date` should use `YYYY-MM-DD`.
 - `author` should match an existing author display name or alias in
-  `src/content/authors/`.
+  `site/content/authors/`.
 - `tags` are optional, but useful.
 - `image` and `imageAlt` are optional, but recommended when the article has a
   preview image.
@@ -283,7 +283,7 @@ Do not add `slug`, `category`, or `topic` frontmatter. The slug comes from the
 filename. The category comes from the folder.
 
 If this is a new author, ask a maintainer before submitting. The maintainer may
-add a new file in `src/content/authors/<author-slug>.md` with the author's
+add a new file in `site/content/authors/<author-slug>.md` with the author's
 display name, type, and approved aliases. Do not invent biographies, websites,
 or social links for an author.
 
@@ -445,7 +445,7 @@ more than forcing every source into a new format.
 Put article images in a folder that matches the article slug:
 
 ```text
-src/assets/articles/my-new-article/
+site/assets/articles/my-new-article/
   cover.png
   diagram.png
 ```
@@ -466,11 +466,11 @@ imageAlt: "Short description of the cover image."
 If an image is shared by multiple articles, put it in:
 
 ```text
-src/assets/shared/
+site/assets/shared/
 ```
 
-Do not put article images in `public/`, root-level folders, `uploads/`, or
-`assets/`. Images should normally go through `src/assets/`.
+Do not put article images in `site/public/`, root-level folders, `uploads/`, or
+`assets/`. Images should normally go through `site/assets/`.
 
 Alt text should describe the image for a reader who cannot see it. Keep it
 plain and specific.
@@ -534,8 +534,8 @@ filename. Pick a different filename.
 If the check says a category folder or category metadata filename is not
 URL-safe, rename it so it uses only lowercase letters, numbers, and hyphens.
 
-If the check says an image is outside `src/assets/`, move it into
-`src/assets/articles/<article-slug>/` or `src/assets/shared/`.
+If the check says an image is outside `site/assets/`, move it into
+`site/assets/articles/<article-slug>/` or `site/assets/shared/`.
 
 If Markdown review complains about multiple `H1` headings, change body headings
 from `#` to `##`, `##` to `###`, and so on.
@@ -574,7 +574,7 @@ A commit is a saved snapshot of your article changes.
 ### Terminal Option
 
 ```sh
-git add src/content/articles src/assets
+git add site/content/articles site/assets
 git commit -m "Add my new article"
 ```
 
@@ -662,7 +662,7 @@ Before asking for review:
 - The frontmatter has `title`, `description`, `date`, and `author`.
 - The `author` value matches an existing author profile or a maintainer has
   added the new author metadata.
-- Images live under `src/assets/`.
+- Images live under `site/assets/`.
 - Meaningful images have alt text.
 - Body headings start at `##`, not `#`.
 - Explanatory notes use `note-*`, not plain numbered footnotes.

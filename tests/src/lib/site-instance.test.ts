@@ -1,7 +1,10 @@
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { describe, expect, test } from "bun:test";
 
+import { verifyContent } from "../../../scripts/content/verify-content";
+import { parseSiteConfig } from "../../../src/lib/site-config";
 import {
   projectRelativePath,
   resolveSiteInstancePaths,
@@ -49,7 +52,30 @@ describe("site instance paths", () => {
   });
 
   test("formats project-relative paths for author-facing messages", () => {
-    expect(projectRelativePath("/repo/platform/site/content", "/repo/platform"))
-      .toBe("site/content");
+    expect(
+      projectRelativePath("/repo/platform/site/content", "/repo/platform"),
+    ).toBe("site/content");
+  });
+
+  test("verifies a non-TPM fixture site instance outside platform and live site roots", async () => {
+    const paths = resolveSiteInstancePaths({
+      cwd: process.cwd(),
+      siteInstanceRoot: "tests/fixtures/site-instance",
+    });
+    const config = parseSiteConfig(
+      JSON.parse(await readFile(paths.config.site, "utf8")),
+    );
+    const content = await verifyContent({
+      articleDir: paths.content.articles,
+      authorDir: paths.content.authors,
+      categoryDir: paths.content.categories,
+      rootDir: process.cwd(),
+    });
+
+    expect(paths.root).toBe(
+      path.join(process.cwd(), "tests", "fixtures", "site-instance"),
+    );
+    expect(config.identity.title).toBe("Example Platform Site");
+    expect(content.issues).toEqual([]);
   });
 });

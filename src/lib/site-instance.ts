@@ -3,7 +3,7 @@ import path from "node:path";
 const DEFAULT_SITE_INSTANCE_ROOT = "site";
 
 /** Site-instance filesystem paths normalized for platform and tooling code. */
-export interface SiteInstancePaths {
+interface SiteInstancePaths {
   readonly assets: {
     readonly articles: string;
     readonly root: string;
@@ -27,13 +27,15 @@ export interface SiteInstancePaths {
 }
 
 /** Inputs for resolving a site-instance path model. */
-export interface SiteInstancePathOptions {
+interface SiteInstancePathOptions {
   readonly cwd?: string | undefined;
   readonly siteInstanceRoot?: string | undefined;
 }
 
 /** Current site-instance paths for build-time platform code. */
-export const siteInstance = resolveSiteInstancePaths();
+export const siteInstance = resolveSiteInstancePaths({
+  siteInstanceRoot: process.env["SITE_INSTANCE_ROOT"],
+});
 
 /**
  * Resolves all known site-instance roots from a project cwd and optional

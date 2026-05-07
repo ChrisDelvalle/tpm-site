@@ -5,12 +5,12 @@ import { defineConfig } from "astro/config";
 
 import { articleImagePolicyCacheKey } from "./src/lib/article-image-policy";
 import { siteConfig } from "./src/lib/site-config";
+import { projectRelativePath, siteInstance } from "./src/lib/site-instance";
 import {
   rehypeArticleImages,
   remarkArticleImageMarkers,
 } from "./src/rehype-plugins/articleImages";
 import { remarkArticleReferences } from "./src/remark-plugins/articleReferences";
-import { projectRelativePath, siteInstance } from "./src/lib/site-instance";
 
 export default defineConfig({
   compressHTML: true,
@@ -150,7 +150,7 @@ export default defineConfig({
     },
     server: {
       fs: {
-        allow: [siteInstance.root],
+        allow: [process.cwd(), siteInstance.root],
       },
     },
   },

@@ -16,6 +16,10 @@ import {
   articlePdfHref,
   articlePdfOutputPath,
 } from "../../src/lib/article-pdf";
+import {
+  projectRelativePath,
+  resolveSiteInstancePaths,
+} from "../../src/lib/site-instance";
 
 const pdfHeader = "%PDF-";
 const pdfCreator = "The Philosopher's Meme Astro PDF pipeline";
@@ -721,10 +725,13 @@ function parseOptions(
   args: string[],
   rootDir: string,
 ): GenerateArticlePdfsOptions {
+  const paths = resolveSiteInstancePaths({ cwd: rootDir });
+
   return {
     articleDir: path.resolve(
       rootDir,
-      readValueArg(args, "--articles") ?? "src/content/articles",
+      readValueArg(args, "--articles") ??
+        projectRelativePath(paths.content.articles, rootDir),
     ),
     distDir: path.resolve(rootDir, readValueArg(args, "--dir") ?? "dist"),
   };
@@ -882,7 +889,7 @@ Generate same-directory static article PDFs from an already-built Astro dist
 directory.
 
 Default build directory: dist
-Default article source directory: src/content/articles`;
+Default article source directory: site/content/articles`;
 }
 
 if (import.meta.main) {

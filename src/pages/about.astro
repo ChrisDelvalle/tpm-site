@@ -10,7 +10,7 @@ import { titleWithSite } from "../lib/site-config";
 const about = await getEntry("pages", "about");
 
 if (!about) {
-  throw new Error("Missing about page content at src/content/pages/about.md.");
+  throw new Error("Missing about page content at site/content/pages/about.md.");
 }
 
 const { Content } = await render(about);

@@ -13,13 +13,13 @@ describe("unused image finder", () => {
           ignoredPatterns: [],
           referencedImageCount: 0,
           scannedImageCount: 1,
-          unusedImages: ["src/assets/articles/post/unused.png"],
+          unusedImages: ["site/assets/articles/post/unused.png"],
         },
         "scripts/unused-image-ignore.json",
       ),
-    ).toContain("Move it to unused-assets/");
+    ).toContain("Move it to site/unused-assets/");
     expect(
-      globToRegExp("src/assets/**/*.png").test("src/assets/post/image.png"),
+      globToRegExp("site/assets/**/*.png").test("site/assets/post/image.png"),
     ).toBe(true);
   });
 
@@ -31,11 +31,13 @@ describe("unused image finder", () => {
         scannedImageCount: 2,
         unusedImages: [],
       }),
-    ).toBe("No unused src images found (2 image files scanned, 2 referenced).");
-    expect(globToRegExp("src/assets/?.png").test("src/assets/a.png")).toBe(
+    ).toBe(
+      "No unused site images found (2 image files scanned, 2 referenced).",
+    );
+    expect(globToRegExp("site/assets/?.png").test("site/assets/a.png")).toBe(
       true,
     );
-    expect(globToRegExp("src/assets/?.png").test("src/assets/ab.png")).toBe(
+    expect(globToRegExp("site/assets/?.png").test("site/assets/ab.png")).toBe(
       false,
     );
   });

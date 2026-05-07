@@ -91,14 +91,14 @@ Collections are editor-owned ordered lists of publishable entries.
 
 ### Homepage Page Frontmatter
 
-`src/content/pages/index.md` owns stable page metadata only:
+`site/content/pages/index.md` owns stable page metadata only:
 
 ```yaml
 title: The Philosopher's Meme
 description: The philosophy of memes, cyberculture, and the Internet.
 ```
 
-Curated homepage lists live in `src/content/collections/` so writers manage all
+Curated homepage lists live in `site/content/collections/` so writers manage all
 ordered lists through one interface.
 
 ### Announcements
@@ -106,7 +106,7 @@ ordered lists through one interface.
 Announcements are article-like content in a separate collection:
 
 ```text
-src/content/announcements/*.md
+site/content/announcements/*.md
 ```
 
 They use the same author-facing frontmatter shape as normal articles:
@@ -149,7 +149,7 @@ keeps announcements available as full reading pages when needed.
 Featured items are the `featured` collection:
 
 ```text
-src/content/collections/featured.md
+site/content/collections/featured.md
 ```
 
 The collection references publishable slugs in manual order. Items may include
