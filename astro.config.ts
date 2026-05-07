@@ -33,6 +33,7 @@ export default defineConfig({
       [remarkArticleReferences, { validateLegacyFootnotes: true }],
     ],
   },
+  outDir: siteInstance.output.dist,
   publicDir: projectRelativePath(siteInstance.public),
   prefetch: {
     defaultStrategy: "hover",
@@ -47,6 +48,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "@site/assets": siteInstance.assets.root,
+        "@site/theme.css": siteInstance.theme,
       },
     },
     server: {

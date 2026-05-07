@@ -15,6 +15,7 @@ import {
   optimizeBuildOutput,
   productionBuildOutputTransforms,
 } from "../../../scripts/build/build-output-optimizer";
+import { type SiteConfig, siteConfig } from "../../../src/lib/site-config";
 
 function withBuildOutput<T>(run: (outputDir: string) => T): T {
   const rootDir = mkdtempSync(path.join(tmpdir(), "tpm-build-optimizer-test-"));
@@ -64,6 +65,7 @@ describe("generated build output optimizer", () => {
       expect(result.cssFiles).toBe(1);
       expect(result.jsFiles).toBe(1);
       expect(result.rasterFilesRemoved).toBe(1);
+      expect(result.routeEntriesRemoved).toBe(0);
       expect(result.svgFiles).toBe(1);
       expect(result.totalFiles).toBe(4);
       expect(
@@ -126,4 +128,82 @@ describe("generated build output optimizer", () => {
       ).toBe(false);
     });
   });
+
+  test("prunes disabled feature routes, sitemap URLs, and search indexes", () => {
+    withBuildOutput((outputDir) => {
+      mkdirSync(path.join(outputDir, "announcements", "site-news"), {
+        recursive: true,
+      });
+      mkdirSync(path.join(outputDir, "pagefind"), { recursive: true });
+      mkdirSync(path.join(outputDir, "search"), { recursive: true });
+      mkdirSync(path.join(outputDir, "tags", "meme-history"), {
+        recursive: true,
+      });
+      writeFileSync(path.join(outputDir, "announcements", "index.html"), "");
+      writeFileSync(
+        path.join(outputDir, "announcements", "site-news", "index.html"),
+        "",
+      );
+      writeFileSync(path.join(outputDir, "feed.xml"), "<rss />");
+      writeFileSync(path.join(outputDir, "pagefind", "pagefind.js"), "");
+      writeFileSync(path.join(outputDir, "search", "index.html"), "");
+      writeFileSync(path.join(outputDir, "tags", "index.html"), "");
+      writeFileSync(
+        path.join(outputDir, "tags", "meme-history", "index.html"),
+        "",
+      );
+      writeFileSync(
+        path.join(outputDir, "sitemap-0.xml"),
+        [
+          "<urlset>",
+          "<url><loc>https://example.com/announcements/</loc></url>",
+          "<url><loc>https://example.com/announcements/site-news/</loc></url>",
+          "<url><loc>https://example.com/articles/post/</loc></url>",
+          "<url><loc>https://example.com/feed.xml</loc></url>",
+          "<url><loc>https://example.com/search/</loc></url>",
+          "<url><loc>https://example.com/tags/meme-history/</loc></url>",
+          "</urlset>",
+        ].join(""),
+      );
+
+      const result = optimizeBuildOutput({
+        outputDir,
+        site: siteConfigWithFeatures({
+          announcements: false,
+          feed: false,
+          search: false,
+          tags: false,
+        }),
+        transforms: ["disabled-feature-routes"],
+      });
+
+      expect(result.routeEntriesRemoved).toBe(12);
+      expect(existsSync(path.join(outputDir, "announcements"))).toBe(false);
+      expect(existsSync(path.join(outputDir, "feed.xml"))).toBe(false);
+      expect(existsSync(path.join(outputDir, "pagefind"))).toBe(false);
+      expect(existsSync(path.join(outputDir, "search"))).toBe(false);
+      expect(existsSync(path.join(outputDir, "tags"))).toBe(false);
+      const sitemap = readFileSync(
+        path.join(outputDir, "sitemap-0.xml"),
+        "utf8",
+      );
+      expect(sitemap).toContain("/articles/post/");
+      expect(sitemap).not.toContain("/announcements/");
+      expect(sitemap).not.toContain("/feed.xml");
+      expect(sitemap).not.toContain("/search/");
+      expect(sitemap).not.toContain("/tags/");
+    });
+  });
 });
+
+function siteConfigWithFeatures(
+  features: Partial<SiteConfig["features"]>,
+): SiteConfig {
+  return {
+    ...siteConfig,
+    features: {
+      ...siteConfig.features,
+      ...features,
+    },
+  };
+}

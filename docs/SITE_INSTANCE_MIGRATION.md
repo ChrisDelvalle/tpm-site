@@ -191,8 +191,8 @@ Current limitations are explicit:
 
 - MDX remains an advanced escape hatch. External production instances will need
   the same `@site/assets` alias contract and platform component imports.
-- Site-specific theme and design-token extraction is not yet separated from the
-  platform.
+- Site-specific theme tokens now live in site-instance `theme.css`; a future
+  GUI can generate that file from a friendlier structured theme editor.
 - CI for a true two-repository deployment still needs a checkout recipe that
   places the platform and site instance beside each other before running the
   same `SITE_INSTANCE_ROOT` build.

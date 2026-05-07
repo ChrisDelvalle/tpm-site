@@ -2,6 +2,7 @@ import {
   existsSync,
   readdirSync,
   readFileSync,
+  rmSync,
   statSync,
   unlinkSync,
   writeFileSync,
@@ -12,8 +13,15 @@ import { transform as transformCss } from "lightningcss";
 import { type MinifyOptions, minifySync } from "oxc-minify";
 import { optimize as optimizeSvg } from "svgo";
 
+import {
+  optionalFeatureRouteEntries,
+  optionalRouteOwnsPathname,
+} from "../../src/lib/feature-routes";
+import { type SiteConfig, siteConfig } from "../../src/lib/site-config";
+
 /** Supported generated-output transform. */
 export type BuildOutputTransformName =
+  | "disabled-feature-routes"
   | "lightning-css"
   | "oxc-js-aggressive"
   | "oxc-js-conservative"
@@ -22,6 +30,7 @@ export type BuildOutputTransformName =
 
 /** Production-approved generated-output transform stack. */
 export const productionBuildOutputTransforms = [
+  "disabled-feature-routes",
   "lightning-css",
   "svgo",
   "oxc-js-conservative",
@@ -31,6 +40,7 @@ export const productionBuildOutputTransforms = [
 /** Inputs for generated-output optimization. */
 export interface BuildOutputOptimizationOptions {
   outputDir: string;
+  site?: SiteConfig;
   transforms?: readonly BuildOutputTransformName[];
 }
 
@@ -39,6 +49,7 @@ export interface BuildOutputOptimizationResult {
   cssFiles: number;
   jsFiles: number;
   rasterFilesRemoved: number;
+  routeEntriesRemoved: number;
   svgFiles: number;
   totalFiles: number;
   transforms: BuildOutputTransformName[];
@@ -58,11 +69,13 @@ interface OxcMinifyOutput {
  *
  * @param options Optimization options.
  * @param options.outputDir Generated build output directory.
+ * @param options.site Site config that owns feature availability.
  * @param options.transforms Transform stack to apply.
  * @returns Count of optimized generated files.
  */
 export function optimizeBuildOutput({
   outputDir,
+  site = siteConfig,
   transforms = productionBuildOutputTransforms,
 }: BuildOutputOptimizationOptions): BuildOutputOptimizationResult {
   assertDirectory(outputDir);
@@ -71,13 +84,19 @@ export function optimizeBuildOutput({
     cssFiles: 0,
     jsFiles: 0,
     rasterFilesRemoved: 0,
+    routeEntriesRemoved: 0,
     svgFiles: 0,
     totalFiles: 0,
     transforms: Array.from(transforms),
   };
 
   for (const transform of transforms) {
-    if (transform === "lightning-css") {
+    if (transform === "disabled-feature-routes") {
+      result.routeEntriesRemoved += removeDisabledFeatureRouteOutput(
+        outputDir,
+        site,
+      );
+    } else if (transform === "lightning-css") {
       result.cssFiles += optimizeCssFiles(outputDir);
     } else if (transform === "svgo") {
       result.svgFiles += optimizeSvgFiles(outputDir);
@@ -103,6 +122,7 @@ export function optimizeBuildOutput({
       result.cssFiles +
       result.jsFiles +
       result.rasterFilesRemoved +
+      result.routeEntriesRemoved +
       result.svgFiles,
   };
 }
@@ -307,6 +327,106 @@ function removeUnreferencedAstroRasterAssets(outputDir: string): number {
   }
 
   return removed;
+}
+
+function removeDisabledFeatureRouteOutput(
+  outputDir: string,
+  config: SiteConfig,
+): number {
+  const disabledRoutes = optionalFeatureRouteEntries(config).filter(
+    (entry) => !entry.enabled,
+  );
+  let removed = 0;
+
+  for (const route of disabledRoutes) {
+    removed += removeGeneratedOutputEntry(
+      path.join(outputDir, route.outputPath),
+    );
+  }
+
+  if (!config.features.search) {
+    removed += removeGeneratedOutputEntry(path.join(outputDir, "pagefind"));
+  }
+
+  return (
+    removed +
+    removeDisabledFeatureSitemapEntries(
+      outputDir,
+      disabledRoutes.map((route) => route.route),
+    )
+  );
+}
+
+function removeGeneratedOutputEntry(file: string): number {
+  if (!existsSync(file)) {
+    return 0;
+  }
+
+  const entryCount = statSync(file).isDirectory() ? listFiles(file).length : 1;
+  rmSync(file, { force: true, recursive: true });
+
+  return Math.max(entryCount, 1);
+}
+
+function removeDisabledFeatureSitemapEntries(
+  outputDir: string,
+  disabledRoutes: readonly string[],
+): number {
+  if (disabledRoutes.length === 0) {
+    return 0;
+  }
+
+  const sitemapFiles = listFiles(outputDir).filter((file) =>
+    /^sitemap-\d+\.xml$/u.test(toPosix(path.relative(outputDir, file))),
+  );
+  let removed = 0;
+
+  for (const file of sitemapFiles) {
+    const original = readFileSync(file, "utf8");
+    const next = original.replaceAll(
+      /<url\b[^>]*>[\s\S]*?<\/url>/giu,
+      (entry) => {
+        const pathname = sitemapLocPathname(entry);
+        const isDisabledRoute =
+          pathname !== undefined &&
+          disabledRoutes.some((route) =>
+            optionalRouteOwnsPathname(pathname, route),
+          );
+
+        if (!isDisabledRoute) {
+          return entry;
+        }
+
+        removed += 1;
+        return "";
+      },
+    );
+
+    if (next !== original) {
+      writeFileSync(file, next);
+    }
+  }
+
+  return removed;
+}
+
+function sitemapLocPathname(entry: string): string | undefined {
+  const match = /<loc>(?<loc>[^<]+)<\/loc>/iu.exec(entry);
+  const loc = match?.groups?.["loc"];
+
+  if (loc === undefined) {
+    return undefined;
+  }
+
+  const schemeIndex = loc.indexOf("://");
+  if (schemeIndex !== -1) {
+    const pathStart = loc.indexOf("/", schemeIndex + "://".length);
+    const absolutePath = pathStart === -1 ? "/" : loc.slice(pathStart);
+
+    return absolutePath.split("#")[0]?.split("?")[0] ?? "/";
+  }
+
+  return loc.startsWith("/") ? loc : undefined;
 }
 
 function isGeneratedAssetReferenced(

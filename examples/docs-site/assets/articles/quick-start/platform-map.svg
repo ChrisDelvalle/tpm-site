@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Platform and site split</title>
+  <desc id="desc">A diagram showing platform code connected to a site instance.</desc>
+  <rect width="960" height="540" fill="#f7f5ef" />
+  <rect x="74" y="94" width="320" height="352" rx="20" fill="#333126" />
+  <rect x="566" y="94" width="320" height="352" rx="20" fill="#ffffff" stroke="#333126" stroke-width="6" />
+  <path d="M424 270h112" stroke="#b4552f" stroke-width="12" stroke-linecap="round" />
+  <path d="m520 238 36 32-36 32" fill="none" stroke="#b4552f" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  <text x="234" y="176" fill="#ffffff" font-family="Arial, sans-serif" font-size="44" font-weight="700" text-anchor="middle">Platform</text>
+  <text x="234" y="252" fill="#f7f5ef" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">components</text>
+  <text x="234" y="300" fill="#f7f5ef" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">routes</text>
+  <text x="234" y="348" fill="#f7f5ef" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">tooling</text>
+  <text x="726" y="176" fill="#333126" font-family="Arial, sans-serif" font-size="44" font-weight="700" text-anchor="middle">Site</text>
+  <text x="726" y="252" fill="#706d67" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">config</text>
+  <text x="726" y="300" fill="#706d67" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">content</text>
+  <text x="726" y="348" fill="#706d67" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">assets</text>
+</svg>

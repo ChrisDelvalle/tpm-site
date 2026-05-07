@@ -13,6 +13,7 @@ import { siteConfig } from "../../src/lib/site-config";
 import {
   projectRelativePath,
   resolveSiteInstancePaths,
+  siteInstance,
 } from "../../src/lib/site-instance";
 
 const pdfHeader = "%PDF-";
@@ -685,7 +686,11 @@ function parseOptions(
       readValueArg(args, "--articles") ??
         projectRelativePath(paths.content.articles, rootDir),
     ),
-    distDir: path.resolve(rootDir, readValueArg(args, "--dir") ?? "dist"),
+    distDir: path.resolve(
+      rootDir,
+      readValueArg(args, "--dir") ??
+        projectRelativePath(paths.output.dist, rootDir),
+    ),
   };
 }
 
@@ -848,8 +853,8 @@ function usage(): string {
 Generate same-directory static article PDFs from an already-built Astro dist
 directory.
 
-Default build directory: dist
-Default article source directory: site/content/articles`;
+Default build directory: ${projectRelativePath(siteInstance.output.dist)}
+Default article source directory: ${projectRelativePath(siteInstance.content.articles)}`;
 }
 
 if (import.meta.main) {

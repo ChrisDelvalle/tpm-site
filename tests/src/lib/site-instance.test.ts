@@ -28,6 +28,8 @@ describe("site instance paths", () => {
       path.join("/repo/platform", "site", "assets", "shared"),
     );
     expect(paths.public).toBe(path.join("/repo/platform", "site", "public"));
+    expect(paths.theme).toBe(path.join("/repo/platform", "site", "theme.css"));
+    expect(paths.output.dist).toBe(path.join("/repo/platform", "dist"));
   });
 
   test("resolves a sibling external instance root", () => {
@@ -43,6 +45,7 @@ describe("site instance paths", () => {
     expect(paths.unusedAssets).toBe(
       path.join("/repo", "example-site", "unused-assets"),
     );
+    expect(paths.theme).toBe(path.join("/repo", "example-site", "theme.css"));
   });
 
   test("treats blank instance roots as the default in-repo site", () => {
@@ -52,6 +55,50 @@ describe("site instance paths", () => {
     });
 
     expect(paths.root).toBe(path.join("/repo/platform", "site"));
+  });
+
+  test("resolves a custom output directory independently from the site root", () => {
+    const paths = resolveSiteInstancePaths({
+      cwd: "/repo/platform",
+      outputDir: "dist/example-site",
+      siteInstanceRoot: "../example-site",
+    });
+
+    expect(paths.root).toBe(path.join("/repo", "example-site"));
+    expect(paths.output.dist).toBe(
+      path.join("/repo/platform", "dist", "example-site"),
+    );
+  });
+
+  test("uses site and output environment defaults for tooling callers", () => {
+    const previousSiteRoot = process.env["SITE_INSTANCE_ROOT"];
+    const previousOutputDir = process.env["SITE_OUTPUT_DIR"];
+
+    process.env["SITE_INSTANCE_ROOT"] = "examples/docs-site";
+    process.env["SITE_OUTPUT_DIR"] = "dist/examples/docs-site";
+
+    try {
+      const paths = resolveSiteInstancePaths({ cwd: "/repo/platform" });
+
+      expect(paths.root).toBe(
+        path.join("/repo/platform", "examples", "docs-site"),
+      );
+      expect(paths.output.dist).toBe(
+        path.join("/repo/platform", "dist", "examples", "docs-site"),
+      );
+    } finally {
+      if (previousSiteRoot === undefined) {
+        delete process.env["SITE_INSTANCE_ROOT"];
+      } else {
+        process.env["SITE_INSTANCE_ROOT"] = previousSiteRoot;
+      }
+
+      if (previousOutputDir === undefined) {
+        delete process.env["SITE_OUTPUT_DIR"];
+      } else {
+        process.env["SITE_OUTPUT_DIR"] = previousOutputDir;
+      }
+    }
   });
 
   test("formats project-relative paths for author-facing messages", () => {

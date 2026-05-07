@@ -486,9 +486,7 @@ bun install
 Run the normal checks:
 
 ```sh
-bun run check
-bun run build
-bun run verify
+bun run author:check
 ```
 
 Helpful review checks:
@@ -502,11 +500,15 @@ If a check reports a formatting or linting issue, you can try the safe automatic
 fix command:
 
 ```sh
-bun run fix
+bun run author:fix
 ```
 
-Then run the checks again. `bun run fix` is meant for code and config files. If
-Markdown review asks for mechanical Markdown formatting, use this separately:
+Then run `bun run author:check` again. `bun run author:fix` only applies safe
+tag normalization. Maintainers may ask you to run broader checks such as
+`bun run check`, `bun run build`, and `bun run verify` when a change touches
+code, config, or generated-output behavior.
+
+If Markdown review asks for mechanical Markdown formatting, use this separately:
 
 ```sh
 bun run fix:markdown
@@ -552,6 +554,15 @@ key.
 If the check says BibTeX is malformed, check for missing braces, missing commas,
 or placeholder fields. A bibliography entry needs real source text, not a
 placeholder.
+
+If the check says tags need normalization, run:
+
+```sh
+bun run author:fix
+```
+
+This can safely trim whitespace, lowercase tags, and remove duplicate tags.
+Slash-containing tags still need a manual edit.
 
 ## 13. Save Your Changes As A Commit
 

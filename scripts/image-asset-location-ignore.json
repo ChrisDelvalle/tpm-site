@@ -1,6 +1,8 @@
 [
   "site/public/favicon.svg",
   "site/unused-assets/**",
+  "examples/docs-site/assets/**",
+  "examples/docs-site/public/favicon.svg",
   "src/components/ui/assets/**",
   "tests/fixtures/site-instance/assets/**",
   "tests/fixtures/site-instance/public/favicon.svg"

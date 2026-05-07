@@ -18,6 +18,7 @@ import {
   excerpt,
   formatDate,
 } from "./routes";
+import { siteConfig } from "./site-config";
 
 /** Display-ready image metadata for article list previews. */
 interface ArticleArchiveImage {
@@ -72,7 +73,7 @@ export function articleArchiveItems(
       authors:
         authors.length > 0 ? authorSummariesForArticle(article, authors) : [],
       category:
-        category === undefined
+        !siteConfig.features.categories || category === undefined
           ? undefined
           : {
               title: category.title,

@@ -1,6 +1,11 @@
 import path from "node:path";
 
 import {
+  projectRelativePath,
+  resolveSiteInstancePaths,
+  siteInstance,
+} from "../../src/lib/site-instance";
+import {
   optimizeBuildOutput,
   productionBuildOutputTransforms,
 } from "./build-output-optimizer";
@@ -36,7 +41,7 @@ export function runOptimizeBuildOutputCli(
 
     if (!options.quiet) {
       console.log(
-        `Optimized generated output: ${result.cssFiles} CSS, ${result.jsFiles} JS, ${result.svgFiles} SVG files, ${result.rasterFilesRemoved} unreferenced Astro raster assets removed.`,
+        `Optimized generated output: ${result.routeEntriesRemoved} disabled feature route entries removed, ${result.cssFiles} CSS, ${result.jsFiles} JS, ${result.svgFiles} SVG files, ${result.rasterFilesRemoved} unreferenced Astro raster assets removed.`,
       );
     }
 
@@ -52,7 +57,11 @@ function parseOptions(
   cwd: string,
 ): OptimizeBuildOutputCliOptions {
   return {
-    outputDir: path.resolve(cwd, readValueArg(args, "--dir") ?? "dist"),
+    outputDir: path.resolve(
+      cwd,
+      readValueArg(args, "--dir") ??
+        projectRelativePath(resolveSiteInstancePaths({ cwd }).output.dist, cwd),
+    ),
     quiet: args.includes("--quiet"),
   };
 }
@@ -76,11 +85,11 @@ function usage(): string {
   return `Usage: bun run build:optimize [--dir <dir>] [--quiet]
 
 Apply the production generated-output optimization stack to an existing static
-build directory. The production stack is Lightning CSS, SVGO, conservative Oxc
-JavaScript whitespace optimization, and unreferenced generated raster asset
-cleanup.
+build directory. The production stack prunes disabled feature routes, runs
+Lightning CSS, SVGO, conservative Oxc JavaScript whitespace optimization, and
+removes unreferenced generated raster assets.
 
-Default directory: dist`;
+Default directory: ${projectRelativePath(siteInstance.output.dist)}`;
 }
 
 if (import.meta.main) {

@@ -47,10 +47,14 @@ if (!hero) {
 }
 
 const articles = await getArticles();
-const announcements = await getAnnouncements();
-const categories = await getCategories();
+const announcements = siteConfig.features.announcements
+  ? await getAnnouncements()
+  : [];
+const categories = siteConfig.features.categories ? await getCategories() : [];
 const authors = await getAuthorEntries();
-const collections = await getEditorialCollections();
+const collections = siteConfig.features.collections
+  ? await getEditorialCollections()
+  : [];
 const archiveItems = articleArchiveItems(articles, categories, authors);
 const homeView = homePageViewModel({
   announcementLimit: siteConfig.homepage.announcementLimit,
@@ -119,7 +123,9 @@ const description = home.data.description ?? SITE_DESCRIPTION;
         <div class="min-w-0 lg:col-start-2 lg:row-start-1" data-home-lead-start>
           <FlatArticleList
             title="Start Here"
-            titleHref={collectionUrl(siteConfig.homepage.startHereCollection)}
+            titleHref={siteConfig.features.collections
+              ? collectionUrl(siteConfig.homepage.startHereCollection)
+              : undefined}
             items={startHereItems}
             emptyText="Curated starter articles will appear here."
           />
@@ -130,14 +136,20 @@ const description = home.data.description ?? SITE_DESCRIPTION;
         >
           <FlatArticleList
             title="Announcements"
-            titleHref={announcementsIndexUrl()}
+            titleHref={siteConfig.features.announcements
+              ? announcementsIndexUrl()
+              : undefined}
             items={announcementItems}
             emptyText="Announcements will appear here."
           />
         </div>
       </div>
     </div>
-    <HomeCategoryOverviewBlock items={categoryItems} />
+    {
+      siteConfig.features.categories && (
+        <HomeCategoryOverviewBlock items={categoryItems} />
+      )
+    }
     <section
       class="grid min-w-0 gap-4"
       aria-label="Recent"

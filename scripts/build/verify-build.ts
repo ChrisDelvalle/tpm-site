@@ -10,7 +10,8 @@ import {
   articlePdfOutputPath,
   scholarPublicationDate,
 } from "../../src/lib/article-pdf";
-import { siteConfig } from "../../src/lib/site-config";
+import { optionalFeatureRouteEntries } from "../../src/lib/feature-routes";
+import { type SiteConfig, siteConfig } from "../../src/lib/site-config";
 import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
 import {
   maxSocialPreviewImageBytes,
@@ -19,31 +20,6 @@ import {
 } from "../../src/lib/social-images";
 import { normalizeTag } from "../../src/lib/tags";
 
-const requiredBasePaths = [
-  "index.html",
-  "404.html",
-  "about/index.html",
-  "announcements/index.html",
-  "articles/index.html",
-  "articles/all/index.html",
-  "bibliography/index.html",
-  "categories/index.html",
-  "collections/index.html",
-  "tags/index.html",
-  "feed.xml",
-  "sitemap-index.xml",
-  "pagefind/pagefind.js",
-];
-const staticReadingBasePages = [
-  "index.html",
-  "about/index.html",
-  "announcements/index.html",
-  "articles/index.html",
-  "articles/all/index.html",
-  "bibliography/index.html",
-  "collections/index.html",
-  "tags/index.html",
-];
 const allowedStaticClientScriptPatterns = [
   /^\/_astro\/AnchoredRoot\.astro_astro_type_script_index_0_lang\.[\w-]+\.js$/u,
 ] as const;
@@ -373,6 +349,7 @@ export function linkTargets(html: string): string[] {
  * @param categorySlugs Category slugs expected in the output.
  * @param announcementSlugs Announcement slugs expected in the output.
  * @param collectionSlugs Collection slugs expected in the output.
+ * @param config Site config that owns feature availability and routes.
  * @returns Relative `dist` paths that must exist after build.
  */
 export function requiredPathsForSource(
@@ -380,21 +357,38 @@ export function requiredPathsForSource(
   categorySlugs: string[],
   announcementSlugs: readonly string[] = [],
   collectionSlugs: readonly string[] = [],
+  config: SiteConfig = siteConfig,
 ): string[] {
   return [
-    ...requiredBasePaths,
-    ...announcementSlugs.map((slug) => `announcements/${slug}/index.html`),
+    ...requiredBasePathsForConfig(config),
+    ...(config.features.announcements
+      ? announcementSlugs.map((slug) =>
+          routeChildIndexOutputPath(config.routes.announcements, slug),
+        )
+      : []),
     ...articlePublication.publishedArticles.map(
       (article) => `articles/${article.slug}/index.html`,
     ),
     ...articlePublication.publishedArticles
       .filter((article) => article.pdfEnabled)
       .map((article) => articlePdfOutputPath(article.slug)),
-    ...categorySlugs.map((slug) => `categories/${slug}/index.html`),
-    ...collectionSlugs.map((slug) => `collections/${slug}/index.html`),
-    ...Array.from(articlePublication.publishedTagSegments)
-      .sort((left, right) => left.localeCompare(right))
-      .map((segment) => `tags/${segment}/index.html`),
+    ...(config.features.categories
+      ? categorySlugs.map((slug) =>
+          routeChildIndexOutputPath(config.routes.categories, slug),
+        )
+      : []),
+    ...(config.features.collections
+      ? collectionSlugs.map((slug) =>
+          routeChildIndexOutputPath(config.routes.collections, slug),
+        )
+      : []),
+    ...(config.features.tags
+      ? Array.from(articlePublication.publishedTagSegments)
+          .sort((left, right) => left.localeCompare(right))
+          .map((segment) =>
+            routeChildIndexOutputPath(config.routes.tags, segment),
+          )
+      : []),
   ];
 }
 
@@ -417,7 +411,7 @@ export async function runBuildVerificationCli(
     articleDir: paths.content.articles,
     categoryDir: paths.content.categories,
     collectionDir: paths.content.collections,
-    distDir: path.resolve(rootDir, "dist"),
+    distDir: paths.output.dist,
     expectedRedirects,
   });
   const report = formatBuildVerificationReport(result);
@@ -460,6 +454,7 @@ export async function sourceCategorySlugs(
  * @param categorySlugs Category slugs expected in the output.
  * @param announcementSlugs Announcement slugs expected in the output.
  * @param collectionSlugs Collection slugs expected in the output.
+ * @param config Site config that owns feature availability and routes.
  * @returns Relative `dist` paths to inspect for unexpected client scripts.
  */
 export function staticReadingPagesForSource(
@@ -467,29 +462,99 @@ export function staticReadingPagesForSource(
   categorySlugs: string[],
   announcementSlugs: readonly string[] = [],
   collectionSlugs: readonly string[] = [],
+  config: SiteConfig = siteConfig,
 ): string[] {
   const representativeMarkdownArticle =
     articlePublication.publishedArticles.find((article) => !article.isMdx);
   const representativeTagSegment = firstSortedTagSegment(articlePublication);
 
   return [
-    ...staticReadingBasePages,
-    announcementSlugs[0] === undefined
+    ...staticReadingBasePagesForConfig(config),
+    !config.features.announcements || announcementSlugs[0] === undefined
       ? undefined
-      : `announcements/${announcementSlugs[0]}/index.html`,
+      : routeChildIndexOutputPath(
+          config.routes.announcements,
+          announcementSlugs[0],
+        ),
     representativeMarkdownArticle === undefined
       ? undefined
       : `articles/${representativeMarkdownArticle.slug}/index.html`,
-    categorySlugs[0] === undefined
+    !config.features.categories || categorySlugs[0] === undefined
       ? undefined
-      : `categories/${categorySlugs[0]}/index.html`,
-    collectionSlugs[0] === undefined
+      : routeChildIndexOutputPath(config.routes.categories, categorySlugs[0]),
+    !config.features.collections || collectionSlugs[0] === undefined
       ? undefined
-      : `collections/${collectionSlugs[0]}/index.html`,
-    representativeTagSegment === undefined
+      : routeChildIndexOutputPath(
+          config.routes.collections,
+          collectionSlugs[0],
+        ),
+    !config.features.tags || representativeTagSegment === undefined
       ? undefined
-      : `tags/${representativeTagSegment}/index.html`,
+      : routeChildIndexOutputPath(config.routes.tags, representativeTagSegment),
   ].filter((page): page is string => page !== undefined);
+}
+
+function requiredBasePathsForConfig(config: SiteConfig): string[] {
+  return [
+    "index.html",
+    "404.html",
+    "about/index.html",
+    routeIndexOutputPath(config.routes.articles),
+    routeIndexOutputPath(config.routes.allArticles),
+    "sitemap-index.xml",
+    config.features.search ? "pagefind/pagefind.js" : undefined,
+    ...optionalFeatureRouteEntries(config).map((entry) =>
+      entry.enabled ? optionalFeatureBaseOutputPath(entry) : undefined,
+    ),
+  ].filter((item): item is string => item !== undefined);
+}
+
+function staticReadingBasePagesForConfig(config: SiteConfig): string[] {
+  return [
+    "index.html",
+    "about/index.html",
+    routeIndexOutputPath(config.routes.articles),
+    routeIndexOutputPath(config.routes.allArticles),
+    ...optionalFeatureRouteEntries(config)
+      .filter(
+        (entry) =>
+          entry.enabled &&
+          entry.feature !== "feed" &&
+          entry.feature !== "search",
+      )
+      .map(optionalFeatureBaseOutputPath),
+  ];
+}
+
+function optionalFeatureBaseOutputPath(
+  entry: ReturnType<typeof optionalFeatureRouteEntries>[number],
+): string {
+  return entry.outputKind === "directory"
+    ? `${entry.outputPath}/index.html`
+    : entry.outputPath;
+}
+
+function routeChildIndexOutputPath(route: string, child: string): string {
+  const basePath = routeOutputBasePath(route);
+
+  return basePath === ""
+    ? `${child}/index.html`
+    : `${basePath}/${child}/index.html`;
+}
+
+function routeIndexOutputPath(route: string): string {
+  const basePath = routeOutputBasePath(route);
+
+  return basePath === "" ? "index.html" : `${basePath}/index.html`;
+}
+
+function routeOutputBasePath(route: string): string {
+  return (
+    route
+      .split("#")[0]
+      ?.split("?")[0]
+      ?.replace(/^\/+|\/+$/gu, "") ?? ""
+  );
 }
 
 /**
@@ -515,15 +580,14 @@ export async function verifyBuild({
   const files = await listFiles(distDir);
   const articlePublication = await articlePublicationStats(articleDir);
   const announcementPublication =
-    announcementDir === undefined
+    !siteConfig.features.announcements || announcementDir === undefined
       ? { draftSlugs: [], publishedSlugs: [] }
       : await announcementPublicationStats(announcementDir);
-  const categorySlugs = await sourceCategorySlugs(
-    categoryDir,
-    articlePublication,
-  );
+  const categorySlugs = siteConfig.features.categories
+    ? await sourceCategorySlugs(categoryDir, articlePublication)
+    : [];
   const collectionPublication =
-    collectionDir === undefined
+    !siteConfig.features.collections || collectionDir === undefined
       ? { draftSlugs: [], publishedSlugs: [] }
       : await collectionPublicationStats(collectionDir);
   const requiredPaths = requiredPathsForSource(
@@ -531,12 +595,14 @@ export async function verifyBuild({
     categorySlugs,
     announcementPublication.publishedSlugs,
     collectionPublication.publishedSlugs,
+    siteConfig,
   );
   const staticReadingPages = staticReadingPagesForSource(
     articlePublication,
     categorySlugs,
     announcementPublication.publishedSlugs,
     collectionPublication.publishedSlugs,
+    siteConfig,
   );
   const draftSlugs = [
     ...articlePublication.draftSlugs,
@@ -578,7 +644,11 @@ export async function verifyBuild({
       );
     }
 
-    if (toPosix(path.relative(distDir, file)) === "feed.xml") {
+    if (
+      siteConfig.features.feed &&
+      toPosix(path.relative(distDir, file)) ===
+        routeOutputBasePath(siteConfig.routes.feed)
+    ) {
       await inspectFeedSocialImages(distDir, file, issues);
     }
 

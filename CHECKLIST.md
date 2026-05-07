@@ -255,3 +255,108 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run check`, `bun --silent run test:site-instance`,
       `bun --silent run build`, `bun --silent run verify`, and
       `bun --silent run validate:html`.
+
+### Milestone 84: Platform Vision And Roadmap Design
+
+- [x] Capture the end-state platform/site split, current state, and remaining
+      non-GUI roadmap in one durable document.
+- [x] Critically review the roadmap for author UX, webmaster UX, example-site
+      needs, feature modularity, theme extraction, multi-site tooling, testing,
+      and overgeneralization risk.
+- [x] Keep GUI work explicitly deferred while preserving the schema/config
+      contracts it will eventually consume.
+      Documented in `docs/PLATFORM_ROADMAP.md`.
+
+### Milestone 85: Config Contract Hardening
+
+- [x] Export a generated JSON Schema for `site/config/site.json` without adding
+      a second schema source of truth.
+- [x] Add a `site:doctor` command that validates site config relationships in
+      webmaster-readable language.
+- [x] Check feature-disabled navigation, homepage collection references,
+      required site-instance directories, and configured route shape.
+- [x] Add focused tests and docs for the schema and doctor command.
+      Verified with focused site config/schema/doctor/accountability tests,
+      `bun --silent run site:doctor -- --quiet`,
+      `bun --silent run site:schema:check -- --quiet`,
+      `bun --silent run format`, `bun --silent run review:markdown`, and
+      `bun --silent run check`.
+
+### Milestone 86: Example Documentation Site
+
+- [x] Design the example/docs site as a real platform instance, not a tiny
+      fixture or TPM clone.
+- [x] Add example config, content, assets, and docs/tutorial pages that exercise
+      the public platform surface.
+- [x] Add a repeatable check that builds the example site independently.
+- [x] Document how the example site is used for platform regression coverage.
+      Implemented with `examples/docs-site/`, `bun run test:docs-site`,
+      roadmap notes, package-script docs, generated example-site schema, and
+      explicit asset/accountability policy exceptions. Verified with focused
+      package/schema/doctor/accountability tests, both site schema checks,
+      example-site content/schema/doctor checks, the docs-site build check, and
+      the main check suite.
+
+### Milestone 87: Multi-Site Command Cleanup
+
+- [x] Make site-instance build and verification commands avoid shared-output
+      races and read route/feature config consistently.
+- [x] Update Pagefind, HTML validation, build verification, and release-preview
+      commands for explicit site-instance behavior.
+- [x] Verify TPM, fixture, and example-site commands in isolation.
+      Implemented `SITE_OUTPUT_DIR`, site-aware raw build and HTML validation
+      runners, output-aware PDF/optimizer/verifier defaults, and isolated
+      fixture/docs site scripts. Verified with focused site-instance/build-runner
+      tests, docs-site and fixture-site build checks, production build
+      verification, HTML validation, lint, format, and tools typecheck.
+
+### Milestone 88: Feature Modularity And Route Pruning
+
+- [x] Design route pruning rules for disabled features across pages, sitemap,
+      search, RSS, validation, and configured links.
+- [x] Implement route pruning only where the feature model can make invalid
+      states hard to express.
+- [x] Add tests for disabled optional modules and broken configured references.
+      Implemented a shared optional feature route helper, post-build pruning for
+      disabled route output/sitemap entries/search indexes, feature-aware
+      Pagefind/build verification, and optional-surface link guards in article
+      and homepage views. Verified with focused route/build tests,
+      `bun --silent run check`, `bun --silent run test:docs-site`,
+      `bun --silent run test:site-instance`, `bun --silent run build`,
+      `bun --silent run verify`, and `bun --silent run validate:html`.
+
+### Milestone 89: Theme And Branding Extraction
+
+- [x] Design a site-owned theme contract for colors, typography, radius, logos,
+      fallback imagery, prose tone, and brand CTAs.
+- [x] Split TPM-specific theme choices from platform base styles.
+- [x] Verify TPM output remains visually stable while the example site can use a
+      different theme.
+      Implemented required site-instance `theme.css`, platform base/print CSS
+      separation, site theme aliases, and docs in
+      `docs/SITE_THEME_CONTRACT.md`. Verified with focused theme/site-instance
+      tests, site doctor, site schema check, typecheck, lint, format, docs-site
+      check, fixture-site check, and production build.
+
+### Milestone 90: Authoring Workflow Hardening
+
+- [x] Audit author-facing docs and tooling for articles, announcements,
+      collections, tags, citations, images, PDFs, social previews, visibility,
+      and redirects.
+- [x] Add focused validation or repair commands where authors currently have to
+      understand platform internals.
+- [x] Keep the frontmatter model defaults-driven and document exceptions.
+      Implemented `author:check`, `author:fix`, `tags:check`, and
+      `docs/AUTHORING_WORKFLOW.md`, with author docs pointing to the
+      defaults-driven workflow. Verified with package-script lint,
+      author-facing checks, focused package/content tests, and markdown review.
+
+### Milestone 91: Platformization Release Verification
+
+- [x] Run the main platform check suite after all roadmap milestones.
+- [x] Verify the example documentation site and external fixture site.
+- [x] Verify production build output, build invariants, and generated HTML.
+- [x] Review the final worktree for accidental generated-output or unrelated
+      edits before handoff.
+      Verified with the main check suite, docs-site check, fixture-site check,
+      production build, build verifier, and HTML validator.

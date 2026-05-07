@@ -27,6 +27,7 @@ describe("Astro config", () => {
     expect(config.publicDir).toBe("site/public");
     expect(config.vite?.resolve?.alias).toMatchObject({
       "@site/assets": siteInstance.assets.root,
+      "@site/theme.css": siteInstance.theme,
     });
   });
 

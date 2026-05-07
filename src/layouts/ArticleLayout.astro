@@ -84,7 +84,10 @@ const articleAuthorProfiles = articleAuthors
   .map((author) => authorProfileMap.get(author.id))
   .filter((profile) => profile !== undefined);
 const category = await getCategory(articleView.categorySlug);
-const categoryHref = category ? categoryUrl(category.slug) : undefined;
+const categoryHref =
+  siteConfig.features.categories && category
+    ? categoryUrl(category.slug)
+    : undefined;
 const moreInCategory =
   category === undefined
     ? []
@@ -205,7 +208,7 @@ const searchable =
         </div>
         <ArticleReferences references={articleReferences} />
         {
-          article.data.tags.length > 0 && (
+          siteConfig.features.tags && article.data.tags.length > 0 && (
             <div
               class="border-border border-t pt-6"
               data-article-tags-placement

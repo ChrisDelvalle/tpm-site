@@ -74,7 +74,18 @@ package.json
 scripts/*-ignore.json
 scripts/coverage-exceptions.json
 
-# Approved exception: Site-owner config JSON is exercised by the typed site
-# config adapter tests, Astro config import tests, and release build checks.
+# Approved exception: Site-owner config JSON and generated config schema are
+# exercised by the typed site config adapter tests, schema generator tests, Astro
+# config import tests, and release build checks.
 site/config/site.json
 site/config/redirects.json
+site/config/site.schema.json
+
+# Approved exception: Site-owner theme CSS is exercised by theme-contract tests,
+# browser checks, and release build checks rather than mirrored unit tests.
+site/theme.css
+
+# Approved exception: The example documentation site is a second site instance
+# exercised by test:docs-site and kept as author-facing documentation content,
+# config, and assets rather than mirrored source modules.
+examples/docs-site/**

@@ -1,9 +1,10 @@
 import path from "node:path";
 
 const DEFAULT_SITE_INSTANCE_ROOT = "site";
+const DEFAULT_SITE_OUTPUT_DIR = "dist";
 
 /** Site-instance filesystem paths normalized for platform and tooling code. */
-interface SiteInstancePaths {
+export interface SiteInstancePaths {
   readonly assets: {
     readonly articles: string;
     readonly root: string;
@@ -22,19 +23,25 @@ interface SiteInstancePaths {
     readonly collections: string;
     readonly pages: string;
   };
+  readonly output: {
+    readonly dist: string;
+  };
   readonly public: string;
   readonly root: string;
+  readonly theme: string;
   readonly unusedAssets: string;
 }
 
 /** Inputs for resolving a site-instance path model. */
 interface SiteInstancePathOptions {
   readonly cwd?: string | undefined;
+  readonly outputDir?: string | undefined;
   readonly siteInstanceRoot?: string | undefined;
 }
 
 /** Current site-instance paths for build-time platform code. */
 export const siteInstance = resolveSiteInstancePaths({
+  outputDir: process.env["SITE_OUTPUT_DIR"],
   siteInstanceRoot: process.env["SITE_INSTANCE_ROOT"],
 });
 
@@ -49,7 +56,12 @@ export function resolveSiteInstancePaths(
   options: SiteInstancePathOptions = {},
 ): SiteInstancePaths {
   const cwd = options.cwd ?? process.cwd();
-  const root = path.resolve(cwd, normalizedSiteRoot(options.siteInstanceRoot));
+  const root = path.resolve(
+    cwd,
+    normalizedSiteRoot(
+      options.siteInstanceRoot ?? process.env["SITE_INSTANCE_ROOT"],
+    ),
+  );
   const contentRoot = path.join(root, "content");
   const assetsRoot = path.join(root, "assets");
 
@@ -72,8 +84,17 @@ export function resolveSiteInstancePaths(
       collections: path.join(contentRoot, "collections"),
       pages: path.join(contentRoot, "pages"),
     },
+    output: {
+      dist: path.resolve(
+        cwd,
+        normalizedOutputDir(
+          options.outputDir ?? process.env["SITE_OUTPUT_DIR"],
+        ),
+      ),
+    },
     public: path.join(root, "public"),
     root,
+    theme: path.join(root, "theme.css"),
     unusedAssets: path.join(root, "unused-assets"),
   };
 }
@@ -92,6 +113,14 @@ export function projectRelativePath(
   const relativePath = path.relative(cwd, absolutePath);
 
   return relativePath.length === 0 ? "." : relativePath;
+}
+
+function normalizedOutputDir(value: string | undefined): string {
+  const trimmed = value?.trim();
+
+  return trimmed === undefined || trimmed.length === 0
+    ? DEFAULT_SITE_OUTPUT_DIR
+    : trimmed;
 }
 
 function normalizedSiteRoot(value: string | undefined): string {
