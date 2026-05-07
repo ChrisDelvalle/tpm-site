@@ -18,6 +18,7 @@ import {
   staticReadingPagesForSource,
   verifyBuild,
 } from "../../../scripts/build/verify-build";
+import { maxSocialPreviewImageBytes } from "../../../src/lib/social-images";
 
 function publication(): ArticlePublication {
   return {
@@ -96,6 +97,7 @@ async function writeArticlePdf(
 }
 
 async function writeRequiredDistShell(root: string) {
+  await writeText(root, "dist/_astro/social-preview.jpg", "small social jpg");
   await writeText(root, "dist/index.html", "");
   await writeText(root, "dist/404.html", "");
   await writeText(root, "dist/about/index.html", "");
@@ -126,8 +128,16 @@ function articleHtmlFixture(
     title?: string;
   } = {},
 ) {
+  const socialImage =
+    "https://thephilosophersmeme.com/_astro/social-preview.jpg";
+
   return [
-    '{"@type":"BlogPosting"}',
+    `<script type="application/ld+json">{"@type":"BlogPosting","image":"${socialImage}"}</script>`,
+    `<meta property="og:image" content="${socialImage}">`,
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta property="og:image:type" content="image/jpeg">',
+    `<meta name="twitter:image" content="${socialImage}">`,
     `<meta name="citation_title" content="${title}">`,
     ...authors.map(
       (author) => `<meta name="citation_author" content="${author}">`,
@@ -326,6 +336,7 @@ describe("build verifier helpers", () => {
           missingLegacyRedirects: [],
           missingRequired: ["articles/example/index.html"],
           sourceMaps: [],
+          socialImageIssues: [],
           unexpectedHydrationBoundaries: [],
           unexpectedClientScripts: [],
           unexpectedDatedPages: [],
@@ -351,6 +362,7 @@ describe("build verifier helpers", () => {
         missingLegacyRedirects: ["/2022/01/01/post/ -> /articles/post/"],
         missingRequired: ["feed.xml"],
         sourceMaps: ["_astro/index.js.map"],
+        socialImageIssues: ["articles/post/index.html: social image invalid"],
         unexpectedHydrationBoundaries: ["articles/post/index.html"],
         unexpectedClientScripts: ["index.html"],
         unexpectedDatedPages: ["2022/01/01/post/index.html"],
@@ -369,6 +381,7 @@ describe("build verifier helpers", () => {
     expect(report).toContain("Draft content leaked into generated metadata:");
     expect(report).toContain("Missing article JSON-LD:");
     expect(report).toContain("Unexpected source maps:");
+    expect(report).toContain("Social preview image issues:");
     expect(report).toContain("Unexpected hydration boundaries:");
   });
 
@@ -401,6 +414,11 @@ describe("build verifier helpers", () => {
         root,
         "dist/articles/published/index.html",
         articleHtmlFixture("published"),
+      );
+      await writeText(
+        root,
+        "dist/_astro/social-preview.jpg",
+        "small social jpg",
       );
       await writeArticlePdf(root, "published");
       await writeText(root, "dist/categories/index.html", "");
@@ -559,6 +577,119 @@ describe("build verifier helpers", () => {
       );
     }));
 
+  test("reports social preview metadata that points to raw or mismatched images", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\nauthor: Test Author\n---\n",
+      );
+      await writeRequiredDistShell(root);
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        [
+          '<script type="application/ld+json">{"@type":"BlogPosting","image":"https://thephilosophersmeme.com/_astro/jsonld.jpg"}</script>',
+          '<meta property="og:image" content="https://thephilosophersmeme.com/_astro/raw.png">',
+          '<meta property="og:image:width" content="600">',
+          '<meta property="og:image:height" content="315">',
+          '<meta property="og:image:type" content="image/png">',
+          '<meta name="twitter:image" content="https://thephilosophersmeme.com/_astro/twitter.jpg">',
+          '<meta name="citation_title" content="Published">',
+          '<meta name="citation_author" content="Test Author">',
+          '<meta name="citation_pdf_url" content="https://thephilosophersmeme.com/articles/published/published.pdf">',
+          '<a href="/articles/published/published.pdf" data-article-pdf-link>Save PDF</a>',
+        ].join(""),
+      );
+      await writeArticlePdf(root, "published", {
+        authors: ["Test Author"],
+      });
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.socialImageIssues).toEqual([
+        "articles/published/index.html: twitter:image does not match og:image",
+        "articles/published/index.html: BlogPosting JSON-LD image does not match og:image",
+        "articles/published/index.html: og:image:width is not 1200",
+        "articles/published/index.html: og:image:height is not 630",
+        "articles/published/index.html: og:image:type is not image/jpeg",
+        "articles/published/index.html: og:image must point to a generated local JPG asset",
+      ]);
+    }));
+
+  test("reports oversized generated social preview image files", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\nauthor: Test Author\n---\n",
+      );
+      await writeRequiredDistShell(root);
+      await writeFile(
+        path.join(root, "dist/_astro/social-preview.jpg"),
+        Buffer.alloc(maxSocialPreviewImageBytes + 1),
+      );
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        articleHtmlFixture("published", { authors: ["Test Author"] }),
+      );
+      await writeArticlePdf(root, "published", {
+        authors: ["Test Author"],
+      });
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.socialImageIssues).toEqual([
+        `articles/published/index.html: social preview image is ${maxSocialPreviewImageBytes + 1} bytes, above the ${maxSocialPreviewImageBytes} byte budget`,
+      ]);
+    }));
+
+  test("reports raw RSS enclosure images", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/articles/history/published.md",
+        "---\ntitle: Published\nauthor: Test Author\n---\n",
+      );
+      await writeRequiredDistShell(root);
+      await writeText(
+        root,
+        "dist/feed.xml",
+        '<rss><channel><item><enclosure url="https://thephilosophersmeme.com/_astro/raw.png" type="image/png" /></item></channel></rss>',
+      );
+      await writeText(
+        root,
+        "dist/articles/published/index.html",
+        articleHtmlFixture("published", { authors: ["Test Author"] }),
+      );
+      await writeArticlePdf(root, "published", {
+        authors: ["Test Author"],
+      });
+
+      const result = await verifyBuild({
+        articleDir: path.join(root, "src/content/articles"),
+        categoryDir: path.join(root, "src/content/categories"),
+        distDir: path.join(root, "dist"),
+      });
+
+      expect(result.issues.socialImageIssues).toEqual([
+        "feed.xml: enclosure type is not image/jpeg for https://thephilosophersmeme.com/_astro/raw.png",
+        "feed.xml: enclosure image must point to a generated local JPG asset",
+      ]);
+    }));
+
   test("fails normal build verification when private catalog output is present", async () =>
     withTempRoot(async (root) => {
       await writeText(root, "src/content/categories/history.json", "{}");
@@ -588,6 +719,11 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
       await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(
+        root,
+        "dist/_astro/social-preview.jpg",
+        "small social jpg",
+      );
       await writeText(root, "dist/catalog/index.html", "catalog");
 
       const result = await verifyBuild({
@@ -634,6 +770,11 @@ describe("build verifier helpers", () => {
           await writeText(root, "dist/feed.xml", "<feed>published</feed>");
           await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
           await writeText(root, "dist/pagefind/pagefind.js", "");
+          await writeText(
+            root,
+            "dist/_astro/social-preview.jpg",
+            "small social jpg",
+          );
 
           const exitCode = await runBuildVerificationCli(["--quiet"], root);
 
@@ -852,6 +993,11 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/pagefind/pagefind.js", "");
       await writeText(
         root,
+        "dist/_astro/social-preview.jpg",
+        "small social jpg",
+      );
+      await writeText(
+        root,
         "dist/2022/04/20/published/index.html",
         '<!doctype html><title>Redirecting to: /articles/published/</title><meta http-equiv="refresh" content="0;url=/articles/published/"><meta name="robots" content="noindex"><link rel="canonical" href="https://thephilosophersmeme.com/articles/published/"><body><a href="/articles/published/">Redirecting from <code>/2022/04/20/published/</code> to <code>/articles/published/</code></a></body>',
       );
@@ -903,6 +1049,11 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/pagefind/pagefind.js", "");
       await writeText(
         root,
+        "dist/_astro/social-preview.jpg",
+        "small social jpg",
+      );
+      await writeText(
+        root,
         "dist/2022/04/20/draft/index.html",
         '<!doctype html><title>Redirecting to: /articles/draft/</title><meta http-equiv="refresh" content="0;url=/articles/draft/"><meta name="robots" content="noindex"><link rel="canonical" href="https://thephilosophersmeme.com/articles/draft/"><body><a href="/articles/draft/">Redirecting from <code>/2022/04/20/draft/</code> to <code>/articles/draft/</code></a></body>',
       );
@@ -951,6 +1102,11 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/pagefind/pagefind.js", "");
       await writeText(
         root,
+        "dist/_astro/social-preview.jpg",
+        "small social jpg",
+      );
+      await writeText(
+        root,
         "dist/2022/04/20/not-a-redirect/index.html",
         "<html><body>Unexpected page</body></html>",
       );
@@ -995,6 +1151,11 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
       await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(
+        root,
+        "dist/_astro/social-preview.jpg",
+        "small social jpg",
+      );
       await writeText(
         root,
         "dist/2022/04/20/published/index.html",
@@ -1044,6 +1205,11 @@ describe("build verifier helpers", () => {
       await writeText(root, "dist/feed.xml", "<feed>published</feed>");
       await writeText(root, "dist/sitemap-index.xml", "<sitemap />");
       await writeText(root, "dist/pagefind/pagefind.js", "");
+      await writeText(
+        root,
+        "dist/_astro/social-preview.jpg",
+        "small social jpg",
+      );
 
       const result = await verifyBuild({
         articleDir: path.join(root, "src/content/articles"),

@@ -10,6 +10,11 @@ import {
   articlePdfOutputPath,
   scholarPublicationDate,
 } from "../../src/lib/article-pdf";
+import {
+  maxSocialPreviewImageBytes,
+  socialPreviewImageMimeType,
+  socialPreviewImageSpec,
+} from "../../src/lib/social-images";
 import { normalizeTag } from "../../src/lib/tags";
 
 const requiredBasePaths = [
@@ -81,6 +86,7 @@ export interface BuildVerificationIssues {
   missingArticleJsonLd: string[];
   missingLegacyRedirects: string[];
   missingRequired: string[];
+  socialImageIssues: string[];
   sourceMaps: string[];
   unexpectedClientScripts: string[];
   unexpectedDatedPages: string[];
@@ -310,6 +316,11 @@ export function formatBuildVerificationReport(
   if (result.issues.sourceMaps.length > 0) {
     lines.push(
       `Unexpected source maps: ${JSON.stringify(result.issues.sourceMaps.slice(0, 50))}`,
+    );
+  }
+  if (result.issues.socialImageIssues.length > 0) {
+    lines.push(
+      `Social preview image issues: ${JSON.stringify(result.issues.socialImageIssues.slice(0, 50))}`,
     );
   }
   if (result.issues.unexpectedHydrationBoundaries.length > 0) {
@@ -564,6 +575,10 @@ export async function verifyBuild({
       );
     }
 
+    if (toPosix(path.relative(distDir, file)) === "feed.xml") {
+      await inspectFeedSocialImages(distDir, file, issues);
+    }
+
     await inspectDraftLeaks(distDir, file, draftSlugs, issues);
   }
 
@@ -686,6 +701,7 @@ function emptyIssues(): BuildVerificationIssues {
     missingLegacyRedirects: [],
     missingRequired: [],
     sourceMaps: [],
+    socialImageIssues: [],
     unexpectedHydrationBoundaries: [],
     unexpectedClientScripts: [],
     unexpectedDatedPages: [],
@@ -738,6 +754,7 @@ function hasIssues(issues: BuildVerificationIssues): boolean {
     issues.missingLegacyRedirects.length > 0 ||
     issues.missingRequired.length > 0 ||
     issues.sourceMaps.length > 0 ||
+    issues.socialImageIssues.length > 0 ||
     issues.unexpectedHydrationBoundaries.length > 0 ||
     issues.unexpectedClientScripts.length > 0 ||
     issues.unexpectedDatedPages.length > 0
@@ -822,14 +839,78 @@ async function inspectDraftLeaks(
   }
 }
 
+async function inspectFeedSocialImages(
+  distDir: string,
+  file: string,
+  issues: BuildVerificationIssues,
+): Promise<void> {
+  const xml = await readFile(file, "utf8");
+  const relativePath = toPosix(path.relative(distDir, file));
+  const enclosurePattern = /<enclosure\b[^>]*>/giu;
+  let match: null | RegExpExecArray;
+
+  while ((match = enclosurePattern.exec(xml)) !== null) {
+    const tag = match[0];
+    const url = htmlAttributeValue(tag, "url");
+    const type = htmlAttributeValue(tag, "type");
+
+    if (url === undefined) {
+      issues.socialImageIssues.push(`${relativePath}: enclosure missing url`);
+      continue;
+    }
+
+    if (type !== socialPreviewImageMimeType) {
+      issues.socialImageIssues.push(
+        `${relativePath}: enclosure type is not ${socialPreviewImageMimeType} for ${url}`,
+      );
+    }
+
+    const localImagePath = localGeneratedSocialImagePath(url, distDir);
+    if (localImagePath === undefined) {
+      issues.socialImageIssues.push(
+        `${relativePath}: enclosure image must point to a generated local JPG asset`,
+      );
+      continue;
+    }
+
+    try {
+      const imageStats = await stat(localImagePath);
+      if (imageStats.size > maxSocialPreviewImageBytes) {
+        issues.socialImageIssues.push(
+          `${relativePath}: enclosure image is ${imageStats.size} bytes, above the ${maxSocialPreviewImageBytes} byte budget`,
+        );
+      }
+    } catch {
+      issues.socialImageIssues.push(
+        `${relativePath}: enclosure image file is missing for ${url}`,
+      );
+    }
+  }
+}
+
 function metaContentValues(html: string, metaName: string): string[] {
+  return metaContentValuesByAttribute(html, "name", metaName);
+}
+
+function metaPropertyContentValues(
+  html: string,
+  metaProperty: string,
+): string[] {
+  return metaContentValuesByAttribute(html, "property", metaProperty);
+}
+
+function metaContentValuesByAttribute(
+  html: string,
+  attributeName: "name" | "property",
+  attributeValue: string,
+): string[] {
   const values: string[] = [];
   const metaPattern = /<meta\b[^>]*>/giu;
   let match: null | RegExpExecArray;
 
   while ((match = metaPattern.exec(html)) !== null) {
     const tag = match[0];
-    if (htmlAttributeValue(tag, "name") === metaName) {
+    if (htmlAttributeValue(tag, attributeName) === attributeValue) {
       const content = htmlAttributeValue(tag, "content");
       if (content !== undefined) {
         values.push(decodeHtmlAttributeValue(content));
@@ -838,6 +919,67 @@ function metaContentValues(html: string, metaName: string): string[] {
   }
 
   return values;
+}
+
+function articleJsonLdImageValues(html: string): string[] {
+  const values: string[] = [];
+  const scriptPattern = /<script(?<attributes>[^>]*)>([\s\S]*?)<\/script>/giu;
+  let match: null | RegExpExecArray;
+
+  while ((match = scriptPattern.exec(html)) !== null) {
+    const attributes = match.groups?.["attributes"];
+    if (
+      attributes === undefined ||
+      htmlAttributeValue(`<script${attributes}>`, "type") !==
+        "application/ld+json"
+    ) {
+      continue;
+    }
+
+    const text = match[2]?.trim();
+    if (text === undefined || text === "") {
+      continue;
+    }
+
+    try {
+      const parsed = JSON.parse(text) as unknown;
+      if (!isRecord(parsed) || parsed["@type"] !== "BlogPosting") {
+        continue;
+      }
+
+      const image = parsed["image"];
+      if (typeof image === "string") {
+        values.push(image);
+      }
+    } catch {
+      // Invalid JSON-LD is reported by the missing/mismatched image checks.
+    }
+  }
+
+  return values;
+}
+
+function localGeneratedSocialImagePath(
+  value: string,
+  distDir: string,
+): string | undefined {
+  const pathname = absoluteUrlPathname(value);
+  if (pathname === undefined) {
+    return undefined;
+  }
+
+  if (!pathname.startsWith("/_astro/") || !/\.jpe?g$/i.test(pathname)) {
+    return undefined;
+  }
+
+  return path.join(distDir, decodeURIComponent(pathname.slice(1)));
+}
+
+function absoluteUrlPathname(value: string): string | undefined {
+  const match = /^[a-z][a-z\d+.-]*:\/\/[^/?#]+(?<pathname>\/[^?#]*)/iu.exec(
+    value,
+  );
+  return match?.groups?.["pathname"];
 }
 
 function htmlAttributeValue(
@@ -939,6 +1081,12 @@ async function inspectHtmlFile(
   const article = publishedArticleByHtmlPath.get(relativeHtmlPath);
   if (article !== undefined) {
     inspectArticlePdfHtml(text, relativeHtmlPath, article, issues);
+    await inspectArticleSocialImageHtml(
+      text,
+      relativeHtmlPath,
+      distDir,
+      issues,
+    );
   }
 
   await inspectStaticReadingPageHtml(
@@ -1027,6 +1175,94 @@ function inspectArticlePdfHtml(
   ) {
     issues.articlePdfIssues.push(
       `${relativeHtmlPath}: missing citation_publication_date metadata`,
+    );
+  }
+}
+
+async function inspectArticleSocialImageHtml(
+  html: string,
+  relativeHtmlPath: string,
+  distDir: string,
+  issues: BuildVerificationIssues,
+): Promise<void> {
+  const ogImages = metaPropertyContentValues(html, "og:image");
+  const twitterImages = metaContentValues(html, "twitter:image");
+  const jsonLdImages = articleJsonLdImageValues(html);
+  const ogWidths = metaPropertyContentValues(html, "og:image:width");
+  const ogHeights = metaPropertyContentValues(html, "og:image:height");
+  const ogTypes = metaPropertyContentValues(html, "og:image:type");
+
+  if (ogImages.length !== 1) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: expected exactly one og:image, found ${ogImages.length}`,
+    );
+  }
+
+  if (twitterImages.length !== 1) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: expected exactly one twitter:image, found ${twitterImages.length}`,
+    );
+  }
+
+  if (jsonLdImages.length !== 1) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: expected exactly one BlogPosting JSON-LD image, found ${jsonLdImages.length}`,
+    );
+  }
+
+  const ogImage = ogImages[0];
+  if (ogImage === undefined) {
+    return;
+  }
+
+  if (twitterImages[0] !== undefined && twitterImages[0] !== ogImage) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: twitter:image does not match og:image`,
+    );
+  }
+
+  if (jsonLdImages[0] !== undefined && jsonLdImages[0] !== ogImage) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: BlogPosting JSON-LD image does not match og:image`,
+    );
+  }
+
+  if (ogWidths[0] !== socialPreviewImageSpec.width.toString()) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: og:image:width is not ${socialPreviewImageSpec.width}`,
+    );
+  }
+
+  if (ogHeights[0] !== socialPreviewImageSpec.height.toString()) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: og:image:height is not ${socialPreviewImageSpec.height}`,
+    );
+  }
+
+  if (ogTypes[0] !== socialPreviewImageMimeType) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: og:image:type is not ${socialPreviewImageMimeType}`,
+    );
+  }
+
+  const localImagePath = localGeneratedSocialImagePath(ogImage, distDir);
+  if (localImagePath === undefined) {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: og:image must point to a generated local JPG asset`,
+    );
+    return;
+  }
+
+  try {
+    const imageStats = await stat(localImagePath);
+    if (imageStats.size > maxSocialPreviewImageBytes) {
+      issues.socialImageIssues.push(
+        `${relativeHtmlPath}: social preview image is ${imageStats.size} bytes, above the ${maxSocialPreviewImageBytes} byte budget`,
+      );
+    }
+  } catch {
+    issues.socialImageIssues.push(
+      `${relativeHtmlPath}: social preview image file is missing for ${ogImage}`,
     );
   }
 }

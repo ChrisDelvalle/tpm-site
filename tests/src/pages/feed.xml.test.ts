@@ -8,6 +8,8 @@ describe("feed endpoint source", () => {
 
     expect(source).toContain("getArticles");
     expect(source).toContain("getAuthorEntries");
+    expect(source).toContain("socialPreviewImageViewModel");
+    expect(source).toContain("getImage");
     expect(source).toContain("rss({");
     expect(source).toContain("authorDisplayNameForArticle");
     expect(source).toContain("link: articleUrl(article.id)");

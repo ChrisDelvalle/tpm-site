@@ -64,4 +64,18 @@ describe("SEO helpers", () => {
       ],
     });
   });
+
+  test("uses normalized social preview images instead of deriving raw article images", () => {
+    expect(
+      articleBlogPostingJsonLd(
+        article(),
+        undefined,
+        "https://example.com",
+        [],
+        { image: "/_astro/social-preview.hash.jpg" },
+      ),
+    ).toMatchObject({
+      image: "https://example.com/_astro/social-preview.hash.jpg",
+    });
+  });
 });

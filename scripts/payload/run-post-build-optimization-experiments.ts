@@ -125,8 +125,13 @@ const defaultScenarios = [
     name: "safe-stack",
     policy: "candidate",
     rationale:
-      "Composition of standalone CSS, SVG, and conservative Oxc JS optimization.",
-    transforms: ["lightning-css", "svgo", "oxc-js-conservative"],
+      "Composition of standalone CSS, SVG, conservative Oxc JS optimization, and unreferenced Astro raster asset cleanup.",
+    transforms: [
+      "lightning-css",
+      "svgo",
+      "oxc-js-conservative",
+      "unreferenced-astro-raster-assets",
+    ],
   },
   {
     name: "oxc-js-aggressive",
@@ -164,6 +169,8 @@ export function formatPostBuildOptimizationSuiteReport(
     "  part of the Vite/Astro ecosystem.",
     "- `svgo` is a standalone SVG optimizer and Node API; this suite keeps",
     "  `viewBox` preservation explicit.",
+    "- The raster cleanup pass removes only unreferenced generated raster",
+    "  assets under `_astro/`; it does not recompress or rewrite images.",
     "",
     "## Baseline",
     "",
@@ -354,6 +361,7 @@ function buildVerificationHasIssues(issues: BuildVerificationIssues): boolean {
     issues.missingLegacyRedirects,
     issues.missingRequired,
     issues.sourceMaps,
+    issues.socialImageIssues,
     issues.unexpectedClientScripts,
     issues.unexpectedDatedPages,
     issues.unexpectedHydrationBoundaries,

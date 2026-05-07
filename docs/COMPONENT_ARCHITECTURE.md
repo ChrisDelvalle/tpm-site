@@ -610,7 +610,7 @@ Recommended frontmatter shape:
 ```yaml
 title: The Philosopher's Meme
 description: The philosophy of memes, cyberculture, and the Internet.
-heroLightImage: ../../assets/site/tpm_home_hero_light.png
+heroLightImage: ../../assets/shared/tpm_home_hero_light.png
 heroDarkImage: ../../assets/site/tpm_home_hero_dark.png
 heroAlt: The Philosopher's Meme
 announcementImage: ../../assets/site/r2021-03-22.png
@@ -794,6 +794,12 @@ Every page shell should make it easy to provide:
 
 Article and category components should preserve enough metadata to support rich
 snippets and social sharing. SEO should not require page-specific copy/paste.
+
+Social preview images are generated metadata assets, not raw article source
+assets. Article and announcement pages should route preview images through the
+social preview image pipeline documented in `docs/SOCIAL_PREVIEW_IMAGES.md` so
+`og:image`, `twitter:image`, and article JSON-LD stay small, crawler-compatible,
+and consistent without asking authors to manage separate preview files.
 
 ## Lighthouse And Page Quality Contracts
 

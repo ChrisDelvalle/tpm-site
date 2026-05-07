@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
+import heroLightImage from "../../../../src/assets/shared/tpm_home_hero_light.png";
 import heroDarkImage from "../../../../src/assets/site/tpm_home_hero_dark.png";
-import heroLightImage from "../../../../src/assets/site/tpm_home_hero_light.png";
 import HomeHeroBlock from "../../../../src/components/blocks/HomeHeroBlock.astro";
 import { createAstroTestContainer } from "../../../helpers/astro-container";
 

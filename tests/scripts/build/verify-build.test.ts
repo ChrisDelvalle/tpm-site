@@ -130,6 +130,7 @@ describe("build verifier", () => {
           missingLegacyRedirects: [],
           missingRequired: [],
           sourceMaps: [],
+          socialImageIssues: [],
           unexpectedHydrationBoundaries: [],
           unexpectedClientScripts: [],
           unexpectedDatedPages: [],

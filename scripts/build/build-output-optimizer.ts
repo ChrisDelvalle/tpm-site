@@ -3,6 +3,7 @@ import {
   readdirSync,
   readFileSync,
   statSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
@@ -16,13 +17,15 @@ export type BuildOutputTransformName =
   | "lightning-css"
   | "oxc-js-aggressive"
   | "oxc-js-conservative"
-  | "svgo";
+  | "svgo"
+  | "unreferenced-astro-raster-assets";
 
 /** Production-approved generated-output transform stack. */
 export const productionBuildOutputTransforms = [
   "lightning-css",
   "svgo",
   "oxc-js-conservative",
+  "unreferenced-astro-raster-assets",
 ] as const satisfies readonly BuildOutputTransformName[];
 
 /** Inputs for generated-output optimization. */
@@ -35,6 +38,7 @@ export interface BuildOutputOptimizationOptions {
 export interface BuildOutputOptimizationResult {
   cssFiles: number;
   jsFiles: number;
+  rasterFilesRemoved: number;
   svgFiles: number;
   totalFiles: number;
   transforms: BuildOutputTransformName[];
@@ -66,6 +70,7 @@ export function optimizeBuildOutput({
   const result: BuildOutputOptimizationResult = {
     cssFiles: 0,
     jsFiles: 0,
+    rasterFilesRemoved: 0,
     svgFiles: 0,
     totalFiles: 0,
     transforms: Array.from(transforms),
@@ -81,17 +86,24 @@ export function optimizeBuildOutput({
         outputDir,
         conservativeOxcOptions(),
       );
-    } else {
+    } else if (transform === "oxc-js-aggressive") {
       result.jsFiles += optimizeJavaScriptFiles(
         outputDir,
         aggressiveOxcOptions(),
       );
+    } else {
+      result.rasterFilesRemoved +=
+        removeUnreferencedAstroRasterAssets(outputDir);
     }
   }
 
   return {
     ...result,
-    totalFiles: result.cssFiles + result.jsFiles + result.svgFiles,
+    totalFiles:
+      result.cssFiles +
+      result.jsFiles +
+      result.rasterFilesRemoved +
+      result.svgFiles,
   };
 }
 
@@ -240,4 +252,82 @@ function optimizeSvgFiles(outputDir: string): number {
   }
 
   return svgFiles.length;
+}
+
+const rasterAssetExtensions = new Set([
+  ".avif",
+  ".gif",
+  ".jpeg",
+  ".jpg",
+  ".png",
+  ".webp",
+]);
+
+const textReferenceExtensions = new Set([
+  ".css",
+  ".html",
+  ".js",
+  ".json",
+  ".svg",
+  ".txt",
+  ".webmanifest",
+  ".xml",
+]);
+
+function isAstroRasterAsset(outputDir: string, file: string): boolean {
+  const relativePath = toPosix(path.relative(outputDir, file));
+  return (
+    relativePath.startsWith("_astro/") &&
+    rasterAssetExtensions.has(path.extname(file).toLowerCase())
+  );
+}
+
+function isTextReferenceFile(file: string): boolean {
+  return textReferenceExtensions.has(path.extname(file).toLowerCase());
+}
+
+function removeUnreferencedAstroRasterAssets(outputDir: string): number {
+  const files = listFiles(outputDir);
+  const textReferences = files
+    .filter(isTextReferenceFile)
+    .map((file) => readFileSync(file, "utf8"))
+    .join("\n");
+  const rasterAssets = files.filter((file) =>
+    isAstroRasterAsset(outputDir, file),
+  );
+  let removed = 0;
+
+  for (const file of rasterAssets) {
+    if (isGeneratedAssetReferenced(outputDir, file, textReferences)) {
+      continue;
+    }
+
+    unlinkSync(file);
+    removed += 1;
+  }
+
+  return removed;
+}
+
+function isGeneratedAssetReferenced(
+  outputDir: string,
+  file: string,
+  textReferences: string,
+): boolean {
+  const relativePath = toPosix(path.relative(outputDir, file));
+  const fileName = path.basename(file);
+  const references = [
+    fileName,
+    encodeURI(fileName),
+    relativePath,
+    `/${relativePath}`,
+    encodeURI(relativePath),
+    `/${encodeURI(relativePath)}`,
+  ];
+
+  return references.some((reference) => textReferences.includes(reference));
+}
+
+function toPosix(value: string): string {
+  return value.split(path.sep).join(path.posix.sep);
 }

@@ -7,11 +7,15 @@ import {
   entryDate,
   entryTitle,
   excerpt,
-  imageUrl,
   SITE_TITLE,
 } from "./routes";
 
 const DEFAULT_SITE_URL = "https://thephilosophersmeme.com";
+
+/** Optional normalized metadata for article JSON-LD output. */
+interface ArticleBlogPostingJsonLdOptions {
+  image?: string | undefined;
+}
 
 /**
  * Resolves a site-relative or absolute URL against the configured site origin.
@@ -44,6 +48,7 @@ export function absoluteUrl(
  * @param category Category summary for the article, when available.
  * @param site Astro site origin when available.
  * @param authors Optional structured author summaries.
+ * @param options Optional normalized metadata overrides.
  * @returns Schema.org BlogPosting object ready for serialization.
  */
 export function articleBlogPostingJsonLd(
@@ -51,11 +56,11 @@ export function articleBlogPostingJsonLd(
   category: CategorySummary | undefined,
   site: string | undefined | URL,
   authors: readonly AuthorSummary[] = [],
+  options: ArticleBlogPostingJsonLdOptions = {},
 ): Record<string, unknown> {
   const canonicalUrl = absoluteUrl(articleUrl(article.id), site);
-  const articleImage = imageUrl(article);
   const absoluteImage =
-    articleImage === undefined ? undefined : absoluteUrl(articleImage, site);
+    options.image === undefined ? undefined : absoluteUrl(options.image, site);
 
   return {
     "@context": "https://schema.org",

@@ -26,6 +26,10 @@ as normal output.
 - Raster images: Astro's asset pipeline already optimizes generated article
   images. Standalone raster recompression should be treated as a separate image
   quality experiment, not mixed into JS/CSS/SVG minification.
+- Unreferenced generated raster assets: a deterministic post-build reference
+  scan can remove orphaned raster files under `_astro/` after Astro has emitted
+  the asset graph. This is not image recompression; referenced article images,
+  social previews, inspector images, and PDF-linked assets stay intact.
 
 ## Experiment Harness
 
@@ -51,11 +55,11 @@ recognizes the prefetch runtime through behavior tokens rather than exact
 generated-code quote style.
 
 The selected production stack is the `safe-stack` scenario: Lightning CSS,
-SVGO, and conservative Oxc JS whitespace optimization. `bun run build` now runs
-the raw Astro/Pagefind build and then applies that stack to `dist/` through
-`bun run build:optimize`. The raw build remains available as `bun run build:raw`
-so payload experiments can keep comparing optimizer candidates against an
-unoptimized baseline.
+SVGO, conservative Oxc JS whitespace optimization, and unreferenced generated
+Astro raster asset cleanup. `bun run build` now runs the raw Astro/Pagefind
+build and then applies that stack to `dist/` through `bun run build:optimize`.
+The raw build remains available as `bun run build:raw` so payload experiments
+can keep comparing optimizer candidates against an unoptimized baseline.
 
 `bun run preview:release:fresh` builds optimized output, verifies generated
 pages/links/scripts, validates representative HTML, and then starts Astro

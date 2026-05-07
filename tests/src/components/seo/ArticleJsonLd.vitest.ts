@@ -27,12 +27,22 @@ describe("ArticleJsonLd", () => {
           },
         ],
         category: categorySummary({ articles: [article] }),
+        image: {
+          alt: "Social preview image",
+          height: 630,
+          src: "/_astro/social-preview.hash.jpg",
+          type: "image/jpeg",
+          width: 1200,
+        },
       },
     });
 
     expect(view).toContain('type="application/ld+json"');
     expect(view).toContain('"@type":"BlogPosting"');
     expect(view).toContain('"headline":"Article Title"');
+    expect(view).toContain(
+      '"image":"https://thephilosophersmeme.com/_astro/social-preview.hash.jpg"',
+    );
     expect(view).toContain('"url":"https://thephilosophersmeme.com/authors/');
   });
 });

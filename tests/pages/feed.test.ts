@@ -68,6 +68,13 @@ await mock.module("astro:content", () => ({
   },
 }));
 
+await mock.module("astro:assets", () => ({
+  getImage: async () => {
+    await Promise.resolve();
+    return { src: "/_astro/feed-preview.hash.jpg" };
+  },
+}));
+
 const { GET } = await import("../../src/pages/feed.xml");
 
 describe("RSS feed endpoint", () => {

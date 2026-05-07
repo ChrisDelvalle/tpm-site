@@ -77,4 +77,18 @@ describe("SEO helpers", () => {
       ],
     });
   });
+
+  test("uses explicit generated social preview image URLs", () => {
+    expect(
+      articleBlogPostingJsonLd(
+        article(),
+        category(),
+        "https://example.com",
+        [],
+        { image: "/_astro/social-preview.hash.jpg" },
+      ),
+    ).toMatchObject({
+      image: "https://example.com/_astro/social-preview.hash.jpg",
+    });
+  });
 });

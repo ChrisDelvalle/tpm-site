@@ -401,6 +401,7 @@ function buildVerificationHasIssues(issues: BuildVerificationIssues): boolean {
     issues.missingLegacyRedirects,
     issues.missingRequired,
     issues.sourceMaps,
+    issues.socialImageIssues,
     issues.unexpectedClientScripts,
     issues.unexpectedDatedPages,
     issues.unexpectedHydrationBoundaries,

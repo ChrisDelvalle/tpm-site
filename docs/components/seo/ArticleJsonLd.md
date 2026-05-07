@@ -14,6 +14,7 @@ authors that visible article surfaces use.
 - `article: ArticleEntry`
 - `authors?: readonly AuthorSummary[] | undefined`
 - `category?: CategorySummary | undefined`
+- `image?: SocialPreviewImage | undefined`
 
 Public props should remain narrow and semantic. Do not add broad configuration
 objects or boolean clusters when a named variant or a smaller component would
@@ -69,6 +70,8 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - outputs valid escaped JSON or metadata.
 - uses canonical URLs derived from route helpers/site config.
+- uses the same generated social preview image as Open Graph/Twitter metadata
+  instead of deriving a raw source image from article frontmatter.
 - emits structured `Person` or `Organization` author objects only when author
   metadata supports that interpretation.
 - falls back conservatively while legacy `author` strings still exist.

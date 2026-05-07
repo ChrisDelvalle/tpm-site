@@ -36,7 +36,7 @@ export function runOptimizeBuildOutputCli(
 
     if (!options.quiet) {
       console.log(
-        `Optimized generated output: ${result.cssFiles} CSS, ${result.jsFiles} JS, ${result.svgFiles} SVG files.`,
+        `Optimized generated output: ${result.cssFiles} CSS, ${result.jsFiles} JS, ${result.svgFiles} SVG files, ${result.rasterFilesRemoved} unreferenced Astro raster assets removed.`,
       );
     }
 
@@ -76,8 +76,9 @@ function usage(): string {
   return `Usage: bun run build:optimize [--dir <dir>] [--quiet]
 
 Apply the production generated-output optimization stack to an existing static
-build directory. The production stack is Lightning CSS, SVGO, and conservative
-Oxc JavaScript whitespace optimization.
+build directory. The production stack is Lightning CSS, SVGO, conservative Oxc
+JavaScript whitespace optimization, and unreferenced generated raster asset
+cleanup.
 
 Default directory: dist`;
 }

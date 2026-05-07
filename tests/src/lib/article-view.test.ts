@@ -32,7 +32,6 @@ describe("articleViewModel", () => {
       date: new Date("2022-04-06T23:58:10.000Z"),
       description: "Article description",
       formattedDate: "April 6, 2022",
-      image: "/assets/article.jpg",
       imageAlt: "Article image alt",
       title: "Article Title",
     });

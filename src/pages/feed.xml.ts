@@ -1,6 +1,8 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
+import { getImage } from "astro:assets";
 
+import fallbackSocialPreviewImage from "../assets/shared/tpm_home_hero_light.png";
 import { authorDisplayNameForArticle, getAuthorEntries } from "../lib/authors";
 import { getArticles } from "../lib/content";
 import {
@@ -8,11 +10,11 @@ import {
   entryDate,
   entryTitle,
   excerpt,
-  imageUrl,
   SITE_DESCRIPTION,
   SITE_TITLE,
 } from "../lib/routes";
 import { absoluteUrl } from "../lib/seo";
+import { socialPreviewImageViewModel } from "../lib/social-images";
 
 type FeedContext = Pick<APIContext, "site">;
 
@@ -31,23 +33,26 @@ export async function GET(context: FeedContext): Promise<Response> {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     site,
-    items: articles.map((article) => {
-      const image = imageUrl(article);
-      const absoluteImage =
-        image === undefined ? undefined : absoluteUrl(image, site);
+    items: await Promise.all(
+      articles.map(async (article) => {
+        const image = await socialPreviewImageViewModel({
+          alt: article.data.imageAlt ?? entryTitle(article),
+          fallback: fallbackSocialPreviewImage,
+          optimize: getImage,
+          source: article.data.image,
+        });
+        const absoluteImage = absoluteUrl(image.src, site);
 
-      return {
-        title: entryTitle(article),
-        pubDate: entryDate(article),
-        description: excerpt(article),
-        link: articleUrl(article.id),
-        author: authorDisplayNameForArticle(article, authors),
-        customData:
-          absoluteImage === undefined
-            ? undefined
-            : `<enclosure url="${absoluteImage}" type="image/jpeg" />`,
-      };
-    }),
+        return {
+          title: entryTitle(article),
+          pubDate: entryDate(article),
+          description: excerpt(article),
+          link: articleUrl(article.id),
+          author: authorDisplayNameForArticle(article, authors),
+          customData: `<enclosure url="${absoluteImage}" type="${image.type}" />`,
+        };
+      }),
+    ),
     customData: "<language>en-us</language>",
   });
 }

@@ -4,13 +4,13 @@ import "../styles/global.css";
 import SiteShell from "../components/layout/SiteShell.astro";
 import SiteHead from "../components/seo/SiteHead.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../lib/routes";
+import type { SocialPreviewImage } from "../lib/social-images";
 
 interface Props {
   title?: string;
   description?: string;
   canonicalPath?: string;
-  image?: string | undefined;
-  imageAlt?: string | undefined;
+  image?: SocialPreviewImage | undefined;
   type?: "website" | "article";
 }
 
@@ -19,7 +19,6 @@ const {
   description = SITE_DESCRIPTION,
   canonicalPath = Astro.url.pathname,
   image,
-  imageAlt,
   type = "website",
 } = Astro.props;
 ---
@@ -35,7 +34,6 @@ const {
       canonicalPath={canonicalPath}
       description={description}
       image={image}
-      imageAlt={imageAlt}
       title={title}
       type={type}
     />

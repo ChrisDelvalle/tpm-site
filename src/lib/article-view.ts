@@ -7,7 +7,6 @@ import {
   entryTitle,
   excerpt,
   formatDate,
-  imageUrl,
 } from "./routes";
 
 /** Display and metadata fields needed by the article layout. */
@@ -18,7 +17,6 @@ interface ArticleViewModel {
   date: Date;
   description: string;
   formattedDate: string;
-  image?: string | undefined;
   imageAlt?: string | undefined;
   title: string;
 }
@@ -39,7 +37,6 @@ export function articleViewModel(article: ArticleEntry): ArticleViewModel {
     date,
     description: excerpt(article),
     formattedDate: formatDate(date),
-    image: imageUrl(article),
     imageAlt: article.data.imageAlt,
     title: entryTitle(article),
   };

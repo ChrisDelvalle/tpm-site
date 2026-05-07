@@ -10,7 +10,8 @@ owning low-level layout geometry.
 
 It must preserve article body wording and must not parse article Markdown
 source directly. It also owns article-level machine-readable metadata that
-requires page context, including Google Scholar/Highwire PDF tags.
+requires page context, including Google Scholar/Highwire PDF tags and generated
+social preview image metadata.
 
 ## Public Contract
 
@@ -21,6 +22,7 @@ requires page context, including Google Scholar/Highwire PDF tags.
 - optional normalized article reference data
 - derived Scholar metadata and optional article PDF metadata for the `PDF`
   action
+- generated social preview image metadata for Open Graph, Twitter, and JSON-LD
 
 Exact prop names may change during implementation, but the layout should
 receive normalized view-model data rather than creating it inside visual
@@ -54,6 +56,11 @@ reading column geometry.
   `citation_publication_date`, and, for PDF-eligible articles,
   `citation_pdf_url`.
 - `ArticleHeader`, which renders the visible `PDF` action.
+
+It also derives the article social preview image once through the shared social
+preview image pipeline and passes that generated asset to `BaseLayout` and
+`ArticleJsonLd`. It must not pass raw `ImageMetadata.src` into crawler-facing
+metadata.
 
 ## Layout And Responsiveness
 
@@ -107,6 +114,8 @@ should not impose decorative frames.
 - Every article page emits base Scholar metadata. PDF-eligible articles also
   emit a same-directory PDF URL and visible article-header PDF link; PDF-disabled
   articles omit both without losing title, author, or publication-date metadata.
+- Every article page emits generated JPG social preview metadata with matching
+  Open Graph, Twitter, and JSON-LD image URLs.
 - No blank hero gap appears when no hero exists.
 - No horizontal overflow at supported viewport sizes.
 

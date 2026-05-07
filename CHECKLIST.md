@@ -861,8 +861,8 @@ they are useful context. Explicitly deferred work belongs in
       default-enabled and explicitly disabled PDF behavior.
       Verified with focused content-schema/article-PDF/generator/verifier Bun
       tests, focused Astro component/layout/page tests, `bun --silent run
-      typecheck`, `bun --silent run format:code`, `bun --silent run
-      lint:markdown`, and `bun --silent run format:markdown`.
+typecheck`, `bun --silent run format:code`, `bun --silent run
+lint:markdown`, and `bun --silent run format:markdown`.
 
 ### Milestone 55: Reliable PDF Image Loading And Disclaimer
 
@@ -891,3 +891,48 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run validate:html`, and `bun --silent run check:release`.
       Generated PDFs are currently under the 5 MB release cap; the largest
       local output observed was `the-interpretation-of-memes.pdf` at 3.6 MB.
+
+### Milestone 57: Social Preview Image Pipeline Design
+
+- [x] Document the social preview image contract, including crawler-facing
+      dimensions, file format, cropping policy, authoring expectations, and
+      verification invariants.
+- [x] Critically review the design for crawler compatibility, author burden,
+      generated asset size, raw-source asset leaks, article/announcement reuse,
+      and future override needs before implementation begins.
+      Verified by documenting the contract in `docs/SOCIAL_PREVIEW_IMAGES.md`
+      and linking the invariant from the component architecture notes.
+
+### Milestone 58: Generated Social Preview Metadata
+
+- [x] Add a typed social preview image helper that turns article or
+      announcement image metadata into a generated `1200 x 630` JPG preview
+      using Astro's image pipeline.
+- [x] Route article and announcement metadata through that helper, including
+      fallback images when no frontmatter image exists.
+- [x] Update `SiteHead` and article JSON-LD so Open Graph, Twitter, and
+      structured-data image metadata all point at the generated preview image
+      with declared dimensions and MIME type.
+- [x] Route RSS feed enclosure images through the same generated preview image
+      helper so feeds do not accidentally keep raw frontmatter images alive.
+- [x] Add focused unit/component tests for helper options, fallback behavior,
+      head metadata, and JSON-LD image output.
+      Verified with focused social-image, SEO, article-view, feed, and Astro
+      component tests, plus `bun --silent run typecheck`.
+
+### Milestone 59: Social Preview Verification
+
+- [x] Extend build verification to reject raw or oversized social metadata
+      images for article pages and RSS feed enclosures.
+- [x] Add focused verifier tests for missing, mismatched, incorrectly typed,
+      non-JPG, non-generated, and oversized social preview metadata.
+- [x] Extend the production post-build optimizer to remove unreferenced
+      generated raster assets under `_astro/`, so social-preview source images
+      that are no longer linked do not remain in `dist`.
+- [x] Rebuild and verify that the large raw source image regression no longer
+      comes from social metadata.
+      Verified with focused build-verifier and optimizer tests,
+      `bun --silent run build`, `bun --silent run verify`, and
+      `bun --silent run validate:html`; the raw
+      `dist/_astro/meme-jokes-puns-chart.aqlxeiBk.png` artifact is no longer
+      emitted by the optimized build.

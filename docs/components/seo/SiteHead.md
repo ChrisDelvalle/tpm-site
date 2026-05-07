@@ -10,8 +10,7 @@ Source: `src/components/seo/SiteHead.astro`
 
 - `canonicalPath: string`
 - `description: string`
-- `image?: string | undefined`
-- `imageAlt?: string | undefined`
+- `image?: SocialPreviewImage | undefined`
 - `title: string`
 - `type?: "website" | "article"`
 
@@ -60,6 +59,8 @@ visible, and CTAs distinguishable from neutral actions.
 - handles long content without clipping or overlapping neighboring components.
 - outputs valid escaped JSON or metadata.
 - uses canonical URLs derived from route helpers/site config.
+- image metadata, when present, points to a generated social preview image with
+  declared width, height, MIME type, and alt text.
 
 ## Follow-Up Notes
 
