@@ -270,17 +270,18 @@ Recommended CI sequencing:
 
 ## Build And Verification Changes
 
-Add a Cloudflare deploy-prep step after build:
+Use the release build script before manual deploys or release verification:
 
 ```text
-bun run build
-bun run build:cloudflare
+bun run build:release
 bun run verify
 bun run validate:html
 ```
 
-`build:cloudflare` should initially only generate `dist/_redirects`. If future
-headers are added, the same script can write `dist/_headers`.
+`build:release` runs the optimized production build and then runs
+`build:cloudflare`. `build:cloudflare` should initially only generate
+`dist/_redirects`. If future headers are added, the same script can write
+`dist/_headers`.
 
 Focused tests:
 

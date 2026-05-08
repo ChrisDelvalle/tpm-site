@@ -139,12 +139,11 @@ describe("package scripts", () => {
     }
 
     expect(normalCheck.startsWith("bun --silent run check:fast &&")).toBe(true);
-    expect(releaseCheck).toContain("bun --silent run build");
-    expect(releaseCheck).toContain("bun --silent run build:cloudflare");
+    expect(releaseCheck).toContain("bun --silent run build:release");
     expect(releaseCheck).toContain("bun --silent run test:e2e:built");
     expect(releaseCheck).not.toContain("bun --silent run test:e2e &&");
     expect(releaseCheck.indexOf("bun --silent run test:catalog")).toBeLessThan(
-      releaseCheck.indexOf("bun --silent run build"),
+      releaseCheck.indexOf("bun --silent run build:release"),
     );
     expect(
       releaseCheck.indexOf("bun --silent run test:e2e:built"),
@@ -176,13 +175,16 @@ describe("package scripts", () => {
     expect(scripts.get("build:cloudflare")).toBe(
       "bun scripts/build/generate-cloudflare-redirects.ts --quiet",
     );
+    expect(scripts.get("build:release")).toBe(
+      "bun --silent run build && bun --silent run build:cloudflare",
+    );
     expect(scripts.get("deploy:cloudflare")).toBe("wrangler deploy");
     expect(scripts.get("preview:cloudflare")).toBe("wrangler dev");
     expect(scripts.get("preview:cloudflare:fresh")).toContain(
-      "bun --silent run build:cloudflare",
+      "bun --silent run build:release",
     );
     expect(scripts.get("preview:release:fresh")).toContain(
-      "bun --silent run build:cloudflare",
+      "bun --silent run build:release",
     );
   });
 });
