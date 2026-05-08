@@ -141,6 +141,10 @@ Astro must be configured so:
 - Vite allows access to the current site-instance root;
 - Vite resolves `@site/assets` for MDX and platform asset imports;
 - Astro `publicDir` points at `site/public`.
+- Astro image processing allows trusted local SVG sources, because site
+  instances and platform catalog fixtures may use SVGs as normal image metadata.
+  Do not treat this as permission to process untrusted user-uploaded SVGs
+  without a separate sanitization boundary.
 
 The platform should not rely on `src/assets` after the migration.
 
