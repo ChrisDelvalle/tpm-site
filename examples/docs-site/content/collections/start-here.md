@@ -5,6 +5,7 @@ items:
   - quick-start
   - content-model
   - site-config
+  - platform-modules
 ---
 
 Starter documentation for new platform users.

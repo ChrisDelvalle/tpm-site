@@ -462,7 +462,7 @@
   },
   "required": ["identity", "navigation", "routes", "support"],
   "additionalProperties": false,
-  "$id": "https://thephilosophersmeme.com/schemas/site-config.schema.json",
-  "description": "Validated site-owner configuration for the TPM Astro blogging platform.",
-  "title": "TPM Platform Site Config"
+  "$id": "https://example.com/schemas/blog-site-config.schema.json",
+  "description": "Validated site-owner configuration for the reusable Astro blogging platform.",
+  "title": "Blog Platform Site Config"
 }

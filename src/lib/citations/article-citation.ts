@@ -6,7 +6,7 @@ interface ArticleCitationAuthor {
   type: "anonymous" | "collective" | "organization" | "person";
 }
 
-/** Input metadata for generated citations of TPM articles. */
+/** Input metadata for generated article citations. */
 interface ArticleCitationInput {
   articleId: string;
   authors?: readonly ArticleCitationAuthor[] | undefined;
@@ -164,7 +164,7 @@ function generatedArticleCitations(
 }
 
 /**
- * Generates an APA-style web-page citation for a TPM article.
+ * Generates an APA-style web-page citation for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns APA-style citation text.
@@ -178,7 +178,7 @@ export function articleApaCitation(input: ArticleCitationInput): string {
 }
 
 /**
- * Generates a BibTeX-compatible citation for a TPM article.
+ * Generates a BibTeX-compatible citation for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns BibTeX citation text.
@@ -201,7 +201,7 @@ export function articleBibtexCitation(input: ArticleCitationInput): string {
 }
 
 /**
- * Generates a concise MLA-style citation for a TPM article.
+ * Generates a concise MLA-style citation for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns MLA-style citation text.
@@ -216,7 +216,7 @@ export function articleMlaCitation(input: ArticleCitationInput): string {
 }
 
 /**
- * Generates a Chicago notes-and-bibliography style citation for a TPM article.
+ * Generates a Chicago notes-and-bibliography style citation for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns Chicago notes-and-bibliography style citation text.
@@ -233,7 +233,7 @@ export function articleChicagoNotesCitation(
 }
 
 /**
- * Generates a Chicago author-date style citation for a TPM article.
+ * Generates a Chicago author-date style citation for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns Chicago author-date style citation text.
@@ -251,7 +251,7 @@ export function articleChicagoAuthorDateCitation(
 }
 
 /**
- * Generates a Harvard-style web-page citation for a TPM article.
+ * Generates a Harvard-style web-page citation for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns Harvard-style citation text.
@@ -266,7 +266,7 @@ export function articleHarvardCitation(input: ArticleCitationInput): string {
 }
 
 /**
- * Generates an IEEE-style web-page citation for a TPM article.
+ * Generates an IEEE-style web-page citation for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns IEEE-style citation text.
@@ -280,7 +280,7 @@ export function articleIeeeCitation(input: ArticleCitationInput): string {
 }
 
 /**
- * Generates an RIS citation-manager export for a TPM article.
+ * Generates an RIS citation-manager export for an article.
  *
  * @param input Article metadata needed for generated citations.
  * @returns RIS citation text.
@@ -477,7 +477,7 @@ function bibtexKey(articleId: string): string {
     .replace(/[^a-z0-9]+/gu, "-")
     .replace(/^-|-$/gu, "");
 
-  return slug.length === 0 ? "tpm-article" : `tpm-${slug}`;
+  return slug.length === 0 ? "site-article" : `site-${slug}`;
 }
 
 function bibtexValue(value: string): string {

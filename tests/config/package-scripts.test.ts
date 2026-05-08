@@ -31,6 +31,7 @@ const expectedScriptEntrypoints = [
   ],
   ["payload:report", "scripts/payload/report-payload.ts"],
   ["payload:vite:experiments", "scripts/payload/run-vite-build-experiments.ts"],
+  ["platform:check", "scripts/quality/verify-platform-boundaries.ts"],
   ["quality", "scripts/quality/run-quality.ts"],
   ["quality:release", "scripts/quality/run-quality.ts"],
   ["site:doctor", "scripts/site/site-doctor.ts"],

@@ -98,6 +98,11 @@ This keeps a future UI/admin app feasible. A UI can edit JSON-like config and
 content, run validation, and preview the generated site without understanding
 Astro internals.
 
+The active platform module map is now maintained in
+`docs/PLATFORM_MODULES.md`. That document is the source of truth for reusable
+domain ownership, site-instance import boundaries, and the current
+`platform:check` CI invariant.
+
 ## Proposed Config Model
 
 Start with TypeScript schemas in the platform and JSON-like config in the site

@@ -27,10 +27,10 @@ export type SiteConfigJsonSchema = Record<string, unknown>;
 export function siteConfigJsonSchema(): SiteConfigJsonSchema {
   return {
     ...toJSONSchema(siteConfigSchema, { io: "input" }),
-    $id: "https://thephilosophersmeme.com/schemas/site-config.schema.json",
+    $id: "https://example.com/schemas/blog-site-config.schema.json",
     description:
-      "Validated site-owner configuration for the TPM Astro blogging platform.",
-    title: "TPM Platform Site Config",
+      "Validated site-owner configuration for the reusable Astro blogging platform.",
+    title: "Blog Platform Site Config",
   };
 }
 

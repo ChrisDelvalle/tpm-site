@@ -177,6 +177,10 @@ Keep reusable code organized around durable domains.
 - Theme and branding.
 - Site diagnostics.
 
+The current module map and enforceable boundary rules live in
+`docs/PLATFORM_MODULES.md`. New reusable modules should either fit that map or
+expand it deliberately with tests.
+
 ### 8. Future GUI
 
 The GUI is intentionally deferred. It should edit the same contracts that the

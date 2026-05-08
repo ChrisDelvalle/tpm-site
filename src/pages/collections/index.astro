@@ -26,7 +26,7 @@ const collectionItems = (await getEditorialCollections()).map((collection) => ({
   <BrowsingBody>
     <TermOverviewBlock
       title="Collections"
-      description="Curated paths through TPM articles and announcements."
+      description={`Curated paths through ${SITE_TITLE} articles and announcements.`}
       items={collectionItems}
       itemNoun="entry"
       itemNounPlural="entries"

@@ -35,7 +35,7 @@ describe("site config schema generator", () => {
     expect(schema["$schema"]).toBe(
       "https://json-schema.org/draft/2020-12/schema",
     );
-    expect(schema["title"]).toBe("TPM Platform Site Config");
+    expect(schema["title"]).toBe("Blog Platform Site Config");
     expect(schema["required"]).toEqual([
       "identity",
       "navigation",

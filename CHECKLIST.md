@@ -360,3 +360,28 @@ they are useful context. Explicitly deferred work belongs in
       edits before handoff.
       Verified with the main check suite, docs-site check, fixture-site check,
       production build, build verifier, and HTML validator.
+
+### Milestone 92: Platform Module Boundary Design
+
+- [x] Audit reusable platform domains across `src/`, `scripts/`, docs, and
+      tests.
+- [x] Define the stable platform module map, import boundaries, site-instance
+      ownership rules, and CI invariants.
+- [x] Review the design for overfitting to TPM, accidental catalog assumptions,
+      future GUI compatibility, and docs-site usefulness before implementation.
+      Documented in `docs/PLATFORM_MODULES.md`, with roadmap and audit links.
+
+### Milestone 93: Platform Module Boundary Enforcement
+
+- [x] Add a boundary verifier that catches unowned platform modules,
+      site-specific platform literals, and unsupported site-instance imports.
+- [x] Clean obvious generic-copy leaks from reusable platform code.
+- [x] Add package scripts, package docs, tests, and docs-site content so the
+      boundary becomes part of normal CI and platform documentation.
+      Implemented `platform:check`,
+      `scripts/quality/verify-platform-boundaries.ts`,
+      `docs/PLATFORM_MODULES.md`, and a docs-site platform modules page.
+      Verified with focused boundary/package/citation tests, schema checks,
+      markdown review, `bun --silent run check`, and
+      `bun --silent run test:docs-site`, followed by production build, verify,
+      and HTML validation.

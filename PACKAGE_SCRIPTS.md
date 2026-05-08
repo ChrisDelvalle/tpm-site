@@ -9,7 +9,8 @@ Script sources are grouped by responsibility:
 - `scripts/build/`: generated build output verification and optimization.
 - `scripts/content/`: content collection validation helpers.
 - `scripts/payload/`: payload measurement and optimization experiments.
-- `scripts/quality/`: quality orchestration and catalog accountability.
+- `scripts/quality/`: quality orchestration, catalog accountability, and
+  platform boundary checks.
 - `scripts/site/`: site-instance config schema and webmaster diagnostics.
 - `scripts/testing/`: test orchestration, coverage, and accountability checks.
 
@@ -62,6 +63,7 @@ Script sources are grouped by responsibility:
 | `payload:postbuild:experiments`   | Rebuilds raw output, then runs standalone post-build JS/CSS/SVG optimization scenarios against copied build output and reports gate results plus raw/gzip/Brotli deltas.                                                        |
 | `payload:report`                  | Reports raw, gzip, and Brotli sizes for generated `dist/` assets, including focused HTML totals for minification experiments.                                                                                                   |
 | `payload:vite:experiments`        | Builds temporary Astro/Vite configuration scenarios, runs Pagefind, HTML validation, and build verification, then reports raw/gzip/Brotli deltas for optimization decisions.                                                    |
+| `platform:check`                  | Verifies platform module boundaries: every `src/lib` file has a domain owner, core platform files avoid TPM-specific literals, and unsupported site-instance imports fail.                                                      |
 | `preview`                         | Serves the built `dist/` output locally with Astro preview.                                                                                                                                                                     |
 | `preview:fresh`                   | Builds the site, then starts Astro preview. Useful for production-like local testing.                                                                                                                                           |
 | `preview:release:fresh`           | Builds optimized output, verifies generated pages/links/scripts, validates representative HTML, then starts Astro preview for release-like local inspection.                                                                    |
