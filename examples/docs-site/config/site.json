@@ -166,12 +166,7 @@
     "tags": "/tags/"
   },
   "share": {
-    "targets": [
-      "bluesky",
-      "x",
-      "linkedin",
-      "reddit"
-    ],
+    "targets": ["bluesky", "x", "linkedin", "reddit"],
     "threadsMention": "@blog_platform",
     "xViaHandle": "blog_platform"
   },
