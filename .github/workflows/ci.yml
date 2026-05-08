@@ -83,11 +83,19 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium
       - run: bun run build
+      - run: bun run build:cloudflare
       - run: bun run verify
       - run: bun run validate:html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verified-dist
+          path: dist
+          retention-days: 2
 
   browser:
     name: Browser tests
+    needs:
+      - build
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -101,7 +109,11 @@ jobs:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium
-      - run: bun run test:e2e
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-dist
+          path: dist
+      - run: bun run test:e2e:built
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -138,6 +150,8 @@ jobs:
   accessibility:
     name: Accessibility review
     continue-on-error: true
+    needs:
+      - build
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -151,7 +165,11 @@ jobs:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium
-      - run: bun run test:a11y
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-dist
+          path: dist
+      - run: bun run test:a11y:built
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -163,6 +181,8 @@ jobs:
   lighthouse:
     name: Lighthouse review
     continue-on-error: true
+    needs:
+      - build
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -175,8 +195,11 @@ jobs:
         with:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
-      - run: bunx playwright install --with-deps chromium
-      - run: bun run test:perf
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-dist
+          path: dist
+      - run: bun run test:perf:built
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -238,6 +261,33 @@ jobs:
           name: coverage-reports
           path: coverage/
 
+  deploy-cloudflare:
+    name: Deploy to Cloudflare Workers
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - quality
+      - build
+      - browser
+      - catalog
+      - audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-dist
+          path: dist
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: deploy
+          wranglerVersion: "4"
+
   deploy:
     name: Deploy to GitHub Pages
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -258,19 +308,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.12.0
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.12
       - uses: actions/configure-pages@v5
-      - run: bun install --frozen-lockfile
-      - run: bunx playwright install --with-deps chromium
-      - run: bun run build
-      - run: bun run verify
-      - run: bun run validate:html
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-dist
+          path: dist
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -131,6 +131,9 @@ public/**
     expect(accountabilityMirrorTests("vitest.config.ts")).toEqual([
       "tests/config/vitest.config.test.ts",
     ]);
+    expect(accountabilityMirrorTests("wrangler.toml")).toEqual([
+      "tests/config/wrangler.config.test.ts",
+    ]);
   });
 
   test("formats all accountability failure sections", () => {

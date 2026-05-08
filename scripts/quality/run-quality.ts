@@ -86,12 +86,12 @@ const releaseCommands: QualityCommand[] = [
     label: "Markdown review",
   },
   {
-    args: ["--silent", "run", "test:a11y"],
+    args: ["--silent", "run", "test:a11y:built"],
     blocking: false,
     label: "Accessibility review",
   },
   {
-    args: ["--silent", "run", "test:perf"],
+    args: ["--silent", "run", "test:perf:built"],
     blocking: false,
     label: "Lighthouse review",
   },
@@ -183,7 +183,7 @@ export async function runQualityCli(
   // repository quality commands. Unit tests cover `runQualityWorkflow()` with
   // an injected runner instead of recursively running the whole toolchain.
   return runQualityWorkflow({
-    commands: selectedCommands(args),
+    commands: selectQualityCommands(args),
     cwd,
   });
 }
@@ -215,12 +215,67 @@ export async function runQualityWorkflow({
   runner = runCommand,
   write = defaultWrite,
 }: QualityWorkflowOptions): Promise<number> {
-  const results: CommandResult[] = [];
+  const parallelReviewStart = parallelReviewStartIndex(commands);
+  const blockingPrefix =
+    parallelReviewStart === -1
+      ? commands
+      : commands.slice(0, parallelReviewStart);
+  const reviewSuffix =
+    parallelReviewStart === -1 ? [] : commands.slice(parallelReviewStart);
+  const blockingExitCode = await runSequentialBlockingCommands({
+    commands: blockingPrefix,
+    cwd,
+    runner,
+    write,
+  });
 
+  if (blockingExitCode !== 0) {
+    return blockingExitCode;
+  }
+
+  return runParallelReviewCommands({
+    commands: reviewSuffix,
+    cwd,
+    runner,
+    write,
+  });
+}
+
+async function runSequentialBlockingCommands({
+  commands,
+  cwd,
+  runner,
+  write,
+}: Required<QualityWorkflowOptions>): Promise<number> {
   for (const command of commands) {
     const result = await runner(command, cwd);
-    results.push(result);
 
+    if (shouldPrintResult(result)) {
+      write(
+        formatCommandResult(result),
+        result.exitCode === 0 ? "warn" : "error",
+      );
+    }
+
+    if (resultIsBlockingFailure(result)) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+async function runParallelReviewCommands({
+  commands,
+  cwd,
+  runner,
+  write,
+}: Required<QualityWorkflowOptions>): Promise<number> {
+  const reviewResults = await Promise.all(
+    commands.map(async (command) => runner(command, cwd)),
+  );
+
+  for (const result of reviewResults) {
     if (shouldPrintResult(result)) {
       write(
         formatCommandResult(result),
@@ -229,7 +284,7 @@ export async function runQualityWorkflow({
     }
   }
 
-  return results.some(resultIsBlockingFailure) ? 1 : 0;
+  return reviewResults.some(resultIsBlockingFailure) ? 1 : 0;
 }
 
 function commandEnvironment(): NodeJS.ProcessEnv {
@@ -293,17 +348,35 @@ async function runCommand(
   });
 }
 
-function selectedCommands(args: string[]): QualityCommand[] {
-  // Coverage note: command selection is only reached by the real CLI path,
-  // which is intentionally not unit-tested because it launches full checks.
+/**
+ * Selects the quality command list for local or release mode.
+ *
+ * @param args Command-line arguments without the executable prefix.
+ * @returns Quality commands for the requested mode.
+ */
+export function selectQualityCommands(args: string[]): QualityCommand[] {
   return args.includes("--release") ? releaseCommands : localCommands;
+}
+
+function parallelReviewStartIndex(commands: QualityCommand[]): number {
+  const firstReviewIndex = commands.findIndex((command) => !command.blocking);
+
+  if (firstReviewIndex === -1) {
+    return -1;
+  }
+
+  return commands.slice(firstReviewIndex).some((command) => command.blocking)
+    ? -1
+    : firstReviewIndex;
 }
 
 function usage(): string {
   return `Usage: bun run quality [--release]
 
 Run quality checks quietly. Passing commands stay silent. Commands that fail or
-emit warnings print their captured output.
+emit warnings print their captured output. The workflow stops at the first
+blocking failure because later checks often depend on earlier generated output.
+After all blocking checks pass, trailing review-only commands run in parallel.
 
 Default mode runs the local PR-quality path: check, build, verify,
 validate:html, review:assets, review:markdown, and coverage review.

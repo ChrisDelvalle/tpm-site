@@ -17,6 +17,7 @@ export default defineConfig({
   compressHTML: true,
   image: {
     breakpoints: [384, 640, 750, 828, 1080, 1280, 1668, 2048, 2560],
+    dangerouslyProcessSVG: true,
     layout: "constrained",
     responsiveStyles: false,
   },

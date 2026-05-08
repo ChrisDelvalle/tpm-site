@@ -1,6 +1,8 @@
 node_modules
 dist
+dist-catalog
 .astro
+.wrangler
 .DS_Store
 .env.local
 .env.*.local

@@ -27,4 +27,12 @@ describe("ESLint config", () => {
       ),
     ).toBe(true);
   });
+
+  test("ignores generated output directories", () => {
+    const globalIgnorePatterns = config.flatMap((entry) => entry.ignores ?? []);
+
+    for (const ignoredGeneratedPath of ["dist/", "dist-catalog/"]) {
+      expect(globalIgnorePatterns).toContain(ignoredGeneratedPath);
+    }
+  });
 });

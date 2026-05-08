@@ -470,3 +470,96 @@ they are useful context. Explicitly deferred work belongs in
       `bun test tests/scripts/quality/verify-platform-boundaries.test.ts`,
       `bun --silent run platform:check`, `bun --silent run check`, and
       `git diff --check`.
+
+### Milestone 100: CI Build Artifact Reuse
+
+- [x] Add built-output browser, accessibility, and Lighthouse script entrypoints
+      so local convenience commands can keep rebuilding while CI can reuse an
+      existing `dist/`.
+- [x] Refactor GitHub Actions so the build job uploads one verified `dist/`
+      artifact, downstream browser/a11y/perf jobs test that artifact, and
+      deploy publishes that same verified artifact.
+- [x] Update package script documentation and focused tests to encode the new
+      no-rebuild CI contract.
+- [x] Verify correctness with package-script tests, CI workflow tests,
+      workflow/package formatting, the production build, build verification,
+      HTML validation, and at least one built-output browser smoke.
+      Implemented `test:e2e:built`, `test:a11y:built`, and `test:perf:built`;
+      kept the local convenience scripts building first; made GitHub Actions
+      upload `verified-dist` from the verified build job; switched browser,
+      accessibility, Lighthouse, and deploy to consume that artifact; and
+      documented the contract in the CI/tooling audit and package script
+      reference. Verified with package sorting, focused package/CI contract
+      tests, Prettier, Markdownlint, diff whitespace, production build, build
+      verification, HTML validation, built-output e2e smoke, built-output a11y,
+      and built-output Lighthouse.
+
+### Milestone 101: Local Safety Check Ergonomics
+
+- [x] Audit package scripts for remaining duplicate expensive work after CI
+      artifact reuse.
+- [x] Add a fast local safety command for cheap high-signal invariants and make
+      the normal quality gate reuse it.
+- [x] Remove the release-gate duplicate production build before e2e by using
+      the existing built-output browser entrypoint.
+- [x] Make the quiet quality workflow stop after the first blocking failure and
+      use built-output a11y/perf review checks in release mode.
+- [x] Update package script docs, the CI/tooling audit, and focused
+      package-script tests. Verified with package-script tests, package sorting,
+      Prettier, Markdownlint, diff whitespace, and the fast safety command.
+
+### Milestone 102: Isolated Build Variants And Release Parallelism
+
+- [x] Make catalog checks build and preview from an explicit catalog output
+      directory instead of the production `dist/` artifact.
+- [x] Parallelize only release checks with safe output ownership: keep
+      build-producing stages isolated or sequential when shared Astro metadata
+      could race, and run review-only checks concurrently after the verified
+      build exists.
+- [x] Update script docs and focused tests so output ownership and release
+      parallelism stay encoded in the tool contract.
+- [x] Verification plan: run package-script tests, catalog-test runner tests,
+      quality-runner tests, package sorting, the fast safety command, Prettier,
+      Markdownlint, diff whitespace, and a catalog build smoke against the
+      isolated output directory.
+      Implemented `dist-catalog/` catalog output ownership, a dedicated
+      catalog test runner, review-only quality-runner parallelism, and docs for
+      the local/CI efficiency contract. Follow-up verification found that full
+      lint was catching generated `dist-catalog/` output after the fast gate
+      had passed, so `check:fast` now runs cheap config contract tests and the
+      ESLint config test explicitly protects generated output ignores. A second
+      follow-up fixed the catalog e2e invariant to detect the active
+      `SITE_OUTPUT_DIR` instead of hard-coding `dist/`, with a config contract
+      test covering the branch selector. Verified with
+      `bun test tests/config/package-scripts.test.ts tests/scripts/testing/run-catalog-tests.test.ts tests/scripts/quality/run-quality.test.ts`,
+      `bun --silent run lint:packages`, `bun --silent run check:fast`,
+      `bun --silent run format:code`, `bun --silent run lint:markdown`,
+      `git diff --check`, `bun --silent run test:catalog -- --list`,
+      `bun --silent run check`, `bun --silent run build`,
+      `bun --silent run verify`, `bun --silent run validate:html`, and
+      `bun --silent run test:e2e:built`. The catalog branch was rechecked with
+      `bun --silent run test:catalog`; the normal production branch was
+      rechecked with a focused Playwright absent-route grep.
+
+### Milestone 103: Cloudflare Workers Static Hosting Migration
+
+- [x] Add a static-only Cloudflare Workers deployment contract with Wrangler,
+      no Astro SSR adapter, no Worker-first routing, and a custom 404 asset
+      policy.
+- [x] Generate Cloudflare `_redirects` from article and announcement
+      `legacyPermalink` metadata so redirects stay content-derived and do not
+      require hand-maintained deploy-target files.
+- [x] Wire GitHub Actions to deploy the verified `dist/` artifact to
+      Cloudflare Workers using GitHub-provided Cloudflare secrets while keeping
+      the existing GitHub Pages deploy available during the transition.
+- [x] Update package-script docs, migration docs, and focused config/script
+      tests, then verify the new deployment contract before marking complete.
+      Implemented static Workers assets config in `wrangler.toml`, Wrangler
+      package scripts, generated `dist/_redirects` from content
+      `legacyPermalink` metadata, Cloudflare deploy CI that consumes the
+      verified build artifact, and migration documentation that keeps
+      canonical host redirects in Cloudflare Redirect Rules instead of
+      `_redirects`. Verified with `bun --silent run check`,
+      `bun --silent run build`, `bun --silent run build:cloudflare`,
+      `bun --silent run verify`, `bun --silent run validate:html`,
+      `bun --silent run lint:markdown`, and `git diff --check`.
