@@ -5,6 +5,11 @@ import { pathToFileURL } from "node:url";
 import { describe, expect, test } from "bun:test";
 import matter from "gray-matter";
 
+import {
+  collectLegacyRedirectRules,
+  defaultLegacyRedirectSources,
+} from "../../scripts/build/generate-cloudflare-redirects";
+
 const publishableSources = [
   {
     dir: path.resolve("site/content/announcements"),
@@ -139,5 +144,15 @@ describe("legacy redirects", () => {
     expect(await configRedirects()).toEqual(
       await expectedRedirectsFromPublishableFrontmatter(),
     );
+  });
+
+  test("Cloudflare redirects match publishable legacy permalink frontmatter", async () => {
+    expect(
+      Object.fromEntries(
+        (await collectLegacyRedirectRules(defaultLegacyRedirectSources())).map(
+          (rule) => [rule.source, rule.destination],
+        ),
+      ),
+    ).toEqual(await expectedRedirectsFromPublishableFrontmatter());
   });
 });

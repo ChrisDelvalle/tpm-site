@@ -19,12 +19,17 @@ function jobBlock(workflow: string, jobName: string): string {
   return nextJob === -1 ? rest : rest.slice(0, nextJob);
 }
 
+function secretExpression(name: string): string {
+  return ["$", "{{ secrets.", name, " }}"].join("");
+}
+
 describe("CI workflow", () => {
   test("uploads one verified build artifact for downstream checks", async () => {
     const workflow = await readCiWorkflow();
     const build = jobBlock(workflow, "build");
 
     expect(build).toContain("bun run build");
+    expect(build).toContain("bun run build:cloudflare");
     expect(build).toContain("bun run verify");
     expect(build).toContain("bun run validate:html");
     expect(build).toContain("actions/upload-artifact@v4");
@@ -62,6 +67,30 @@ describe("CI workflow", () => {
     expect(deploy).toContain("path: dist");
     expect(deploy).toContain("actions/upload-pages-artifact@v3");
     expect(deploy).toContain("actions/deploy-pages@v4");
+    expect(deploy).not.toContain("bun run build");
+    expect(deploy).not.toContain("bun run verify");
+    expect(deploy).not.toContain("bun run validate:html");
+  });
+
+  test("deploys the verified artifact to Cloudflare Workers on main", async () => {
+    const workflow = await readCiWorkflow();
+    const deploy = jobBlock(workflow, "deploy-cloudflare");
+
+    expect(deploy).toContain("needs:");
+    expect(deploy).toContain("- build");
+    expect(deploy).toContain("actions/download-artifact@v4");
+    expect(deploy).toContain("name: verified-dist");
+    expect(deploy).toContain("path: dist");
+    expect(deploy).toContain("cloudflare/wrangler-action@v3");
+    expect(deploy).toContain(
+      `accountId: ${secretExpression("CLOUDFLARE_ACCOUNT_ID")}`,
+    );
+    expect(deploy).toContain(
+      `apiToken: ${secretExpression("CLOUDFLARE_API_TOKEN")}`,
+    );
+    expect(deploy).toContain("command: deploy");
+    expect(deploy).toContain('wranglerVersion: "4"');
+    expect(deploy).not.toContain("environment:");
     expect(deploy).not.toContain("bun run build");
     expect(deploy).not.toContain("bun run verify");
     expect(deploy).not.toContain("bun run validate:html");

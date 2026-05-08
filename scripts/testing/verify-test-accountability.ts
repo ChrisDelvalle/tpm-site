@@ -328,6 +328,9 @@ function expectedMirrorTests(file: string): string[] {
   if (file === "vitest.config.ts") {
     return ["tests/config/vitest.config.test.ts"];
   }
+  if (file === "wrangler.toml") {
+    return ["tests/config/wrangler.config.test.ts"];
+  }
 
   return [`tests/${pathWithoutExtension}.test.ts`];
 }

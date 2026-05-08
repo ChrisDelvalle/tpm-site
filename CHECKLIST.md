@@ -540,3 +540,26 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run test:e2e:built`. The catalog branch was rechecked with
       `bun --silent run test:catalog`; the normal production branch was
       rechecked with a focused Playwright absent-route grep.
+
+### Milestone 103: Cloudflare Workers Static Hosting Migration
+
+- [x] Add a static-only Cloudflare Workers deployment contract with Wrangler,
+      no Astro SSR adapter, no Worker-first routing, and a custom 404 asset
+      policy.
+- [x] Generate Cloudflare `_redirects` from article and announcement
+      `legacyPermalink` metadata so redirects stay content-derived and do not
+      require hand-maintained deploy-target files.
+- [x] Wire GitHub Actions to deploy the verified `dist/` artifact to
+      Cloudflare Workers using GitHub-provided Cloudflare secrets while keeping
+      the existing GitHub Pages deploy available during the transition.
+- [x] Update package-script docs, migration docs, and focused config/script
+      tests, then verify the new deployment contract before marking complete.
+      Implemented static Workers assets config in `wrangler.toml`, Wrangler
+      package scripts, generated `dist/_redirects` from content
+      `legacyPermalink` metadata, Cloudflare deploy CI that consumes the
+      verified build artifact, and migration documentation that keeps
+      canonical host redirects in Cloudflare Redirect Rules instead of
+      `_redirects`. Verified with `bun --silent run check`,
+      `bun --silent run build`, `bun --silent run build:cloudflare`,
+      `bun --silent run verify`, `bun --silent run validate:html`,
+      `bun --silent run lint:markdown`, and `git diff --check`.

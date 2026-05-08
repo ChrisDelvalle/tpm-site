@@ -12,6 +12,7 @@ const expectedScriptEntrypoints = [
   ["assets:locations", "scripts/assets/verify-image-asset-locations.ts"],
   ["assets:shared", "scripts/assets/find-shared-assets.ts"],
   ["assets:unused", "scripts/assets/find-unused-images.ts"],
+  ["build:cloudflare", "scripts/build/generate-cloudflare-redirects.ts"],
   ["build:optimize", "scripts/build/optimize-build-output.ts"],
   ["build:pdf", "scripts/build/generate-article-pdfs.ts"],
   ["build:raw", "scripts/build/build-raw.ts"],
@@ -139,6 +140,7 @@ describe("package scripts", () => {
 
     expect(normalCheck.startsWith("bun --silent run check:fast &&")).toBe(true);
     expect(releaseCheck).toContain("bun --silent run build");
+    expect(releaseCheck).toContain("bun --silent run build:cloudflare");
     expect(releaseCheck).toContain("bun --silent run test:e2e:built");
     expect(releaseCheck).not.toContain("bun --silent run test:e2e &&");
     expect(releaseCheck.indexOf("bun --silent run test:catalog")).toBeLessThan(
@@ -164,6 +166,23 @@ describe("package scripts", () => {
     );
     expect(scripts.get("test:catalog")).toBe(
       "bun scripts/testing/run-catalog-tests.ts",
+    );
+  });
+
+  test("exposes Cloudflare static-asset deploy commands", async () => {
+    const packageJson = await readPackageJson();
+    const scripts = new Map(Object.entries(packageJson.scripts));
+
+    expect(scripts.get("build:cloudflare")).toBe(
+      "bun scripts/build/generate-cloudflare-redirects.ts --quiet",
+    );
+    expect(scripts.get("deploy:cloudflare")).toBe("wrangler deploy");
+    expect(scripts.get("preview:cloudflare")).toBe("wrangler dev");
+    expect(scripts.get("preview:cloudflare:fresh")).toContain(
+      "bun --silent run build:cloudflare",
+    );
+    expect(scripts.get("preview:release:fresh")).toContain(
+      "bun --silent run build:cloudflare",
     );
   });
 });
