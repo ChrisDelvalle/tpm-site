@@ -1,4 +1,5 @@
 import { existsSync } from "node:fs";
+import path from "node:path";
 
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
@@ -10,7 +11,10 @@ import {
   viewportMatrix,
 } from "./helpers/layout";
 
-const catalogIsBuilt = existsSync("dist/catalog/index.html");
+const activeOutputDir = process.env["SITE_OUTPUT_DIR"] ?? "dist";
+const catalogIsBuilt = existsSync(
+  path.join(activeOutputDir, "catalog", "index.html"),
+);
 
 async function setTheme(page: Page, theme: "dark" | "light"): Promise<void> {
   await page.evaluate((nextTheme) => {

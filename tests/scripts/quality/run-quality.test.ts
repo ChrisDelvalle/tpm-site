@@ -9,6 +9,7 @@ import {
   resultIsBlockingFailure,
   runQualityCli,
   runQualityWorkflow,
+  selectQualityCommands,
   shouldPrintResult,
 } from "../../../scripts/quality/run-quality";
 
@@ -126,6 +127,111 @@ describe("quality runner", () => {
     expect(exitCode).toBe(0);
   });
 
+  test("stops after a blocking failure before dependent work runs", async () => {
+    const calls: string[] = [];
+    const exitCode = await runQualityWorkflow({
+      commands: [command("blocking", true), command("build", true)],
+      cwd: process.cwd(),
+      runner: async (qualityCommand) => {
+        calls.push(qualityCommand.label);
+        await Promise.resolve();
+
+        return {
+          command: qualityCommand,
+          exitCode: 1,
+          output: `${qualityCommand.label} failed.`,
+        };
+      },
+      write: () => undefined,
+    });
+
+    expect(exitCode).toBe(1);
+    expect(calls).toEqual(["blocking"]);
+  });
+
+  test("runs trailing review-only commands concurrently after blocking gates pass", async () => {
+    let releaseSlowReview = (): void => undefined;
+    const slowReviewStarted = deferred();
+    const fastReviewStarted = deferred();
+    const slowReviewCanFinish = new Promise<undefined>((resolve) => {
+      releaseSlowReview = () => {
+        resolve(undefined);
+      };
+    });
+    const workflow = runQualityWorkflow({
+      commands: [
+        command("blocking", true),
+        command("slow-review", false),
+        command("fast-review", false),
+      ],
+      cwd: process.cwd(),
+      runner: async (qualityCommand) => {
+        if (qualityCommand.label === "slow-review") {
+          slowReviewStarted.resolve();
+          await slowReviewCanFinish;
+        }
+
+        if (qualityCommand.label === "fast-review") {
+          fastReviewStarted.resolve();
+        }
+
+        return {
+          command: qualityCommand,
+          exitCode: 0,
+          output: "",
+        };
+      },
+      write: () => undefined,
+    });
+
+    await withTimeout(
+      Promise.all([slowReviewStarted.promise, fastReviewStarted.promise]),
+      100,
+    );
+    releaseSlowReview();
+
+    expect(await workflow).toBe(0);
+  });
+
+  test("keeps mixed blocking/review command lists sequential", async () => {
+    const calls: string[] = [];
+    const exitCode = await runQualityWorkflow({
+      commands: [
+        command("first", true),
+        command("review", false),
+        command("late-blocking", true),
+      ],
+      cwd: process.cwd(),
+      runner: async (qualityCommand) => {
+        calls.push(qualityCommand.label);
+        await Promise.resolve();
+
+        return {
+          command: qualityCommand,
+          exitCode: qualityCommand.label === "review" ? 1 : 0,
+          output: qualityCommand.label === "review" ? "Review warning." : "",
+        };
+      },
+      write: () => undefined,
+    });
+
+    expect(exitCode).toBe(0);
+    expect(calls).toEqual(["first", "review", "late-blocking"]);
+  });
+
+  test("uses built-output review commands after the release gate builds once", () => {
+    const commands = selectQualityCommands(["--release"]);
+    const commandLines = commands.map((qualityCommand) =>
+      qualityCommand.args.join(" "),
+    );
+
+    expect(commandLines).toContain("--silent run check:release");
+    expect(commandLines).toContain("--silent run test:a11y:built");
+    expect(commandLines).toContain("--silent run test:perf:built");
+    expect(commandLines).not.toContain("--silent run test:a11y");
+    expect(commandLines).not.toContain("--silent run test:perf");
+  });
+
   test.serial(
     "uses default console writers for visible workflow output",
     async () => {
@@ -169,3 +275,42 @@ describe("quality runner", () => {
     ).toBe(true);
   });
 });
+
+function deferred(): {
+  promise: Promise<undefined>;
+  reject: (reason?: unknown) => void;
+  resolve: () => void;
+} {
+  let resolveDeferred = (): void => undefined;
+  let rejectDeferred: (reason?: unknown) => void = () => undefined;
+  const promise = new Promise<undefined>((resolve, reject) => {
+    resolveDeferred = () => {
+      resolve(undefined);
+    };
+    rejectDeferred = reject;
+  });
+
+  return { promise, reject: rejectDeferred, resolve: resolveDeferred };
+}
+
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_resolve, reject) => {
+        timeout = setTimeout(() => {
+          reject(new Error(`Timed out after ${timeoutMs}ms.`));
+        }, timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timeout !== undefined) {
+      clearTimeout(timeout);
+    }
+  }
+}
