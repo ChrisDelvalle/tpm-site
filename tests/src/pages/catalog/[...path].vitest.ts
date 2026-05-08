@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { siteConfig } from "../../../../src/lib/site-config";
 import CatalogPage from "../../../../src/pages/catalog/[...path].astro";
 import {
   createAstroTestContainer,
@@ -13,7 +14,7 @@ describe("catalog page", () => {
       request: new Request(`${testSiteUrl}/catalog/`),
     });
 
-    expect(view).toContain("TPM Component Catalog");
-    expect(view).toContain("https://thephilosophersmeme.com/catalog/");
+    expect(view).toContain("Platform Component Catalog");
+    expect(view).toContain(`${siteConfig.identity.url}/catalog/`);
   });
 });

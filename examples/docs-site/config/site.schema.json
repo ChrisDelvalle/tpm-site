@@ -207,7 +207,43 @@
     "homepage": {
       "default": {
         "announcementLimit": 3,
+        "discoveryLinks": [
+          {
+            "label": "Articles",
+            "route": "articles"
+          },
+          {
+            "label": "Archive",
+            "route": "allArticles"
+          },
+          {
+            "label": "Authors",
+            "route": "authors"
+          },
+          {
+            "label": "Collections",
+            "route": "collections"
+          },
+          {
+            "label": "Tags",
+            "route": "tags"
+          }
+        ],
+        "emptyText": {
+          "announcements": "Announcements will appear here.",
+          "categories": "No categories are available yet.",
+          "featured": "Featured items will appear here.",
+          "startHere": "Curated starter articles will appear here."
+        },
         "featuredCollection": "featured",
+        "labels": {
+          "announcements": "Announcements",
+          "categories": "Categories",
+          "featured": "Featured Articles",
+          "read": "Read",
+          "recent": "Recent",
+          "startHere": "Start Here"
+        },
         "recentLimit": 8,
         "startHereCollection": "start-here"
       },
@@ -219,10 +255,142 @@
           "exclusiveMinimum": 0,
           "maximum": 9007199254740991
         },
+        "discoveryLinks": {
+          "default": [
+            {
+              "label": "Articles",
+              "route": "articles"
+            },
+            {
+              "label": "Archive",
+              "route": "allArticles"
+            },
+            {
+              "label": "Authors",
+              "route": "authors"
+            },
+            {
+              "label": "Collections",
+              "route": "collections"
+            },
+            {
+              "label": "Tags",
+              "route": "tags"
+            }
+          ],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "href": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "route": {
+                "type": "string",
+                "enum": [
+                  "allArticles",
+                  "announcements",
+                  "articles",
+                  "authors",
+                  "bibliography",
+                  "categories",
+                  "collections",
+                  "feed",
+                  "home",
+                  "search",
+                  "tags"
+                ]
+              }
+            },
+            "required": ["label"],
+            "additionalProperties": false
+          }
+        },
+        "emptyText": {
+          "default": {
+            "announcements": "Announcements will appear here.",
+            "categories": "No categories are available yet.",
+            "featured": "Featured items will appear here.",
+            "startHere": "Curated starter articles will appear here."
+          },
+          "type": "object",
+          "properties": {
+            "announcements": {
+              "default": "Announcements will appear here.",
+              "type": "string",
+              "minLength": 1
+            },
+            "categories": {
+              "default": "No categories are available yet.",
+              "type": "string",
+              "minLength": 1
+            },
+            "featured": {
+              "default": "Featured items will appear here.",
+              "type": "string",
+              "minLength": 1
+            },
+            "startHere": {
+              "default": "Curated starter articles will appear here.",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
         "featuredCollection": {
           "default": "featured",
           "type": "string",
           "minLength": 1
+        },
+        "labels": {
+          "default": {
+            "announcements": "Announcements",
+            "categories": "Categories",
+            "featured": "Featured Articles",
+            "read": "Read",
+            "recent": "Recent",
+            "startHere": "Start Here"
+          },
+          "type": "object",
+          "properties": {
+            "announcements": {
+              "default": "Announcements",
+              "type": "string",
+              "minLength": 1
+            },
+            "categories": {
+              "default": "Categories",
+              "type": "string",
+              "minLength": 1
+            },
+            "featured": {
+              "default": "Featured Articles",
+              "type": "string",
+              "minLength": 1
+            },
+            "read": {
+              "default": "Read",
+              "type": "string",
+              "minLength": 1
+            },
+            "recent": {
+              "default": "Recent",
+              "type": "string",
+              "minLength": 1
+            },
+            "startHere": {
+              "default": "Start Here",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
         },
         "recentLimit": {
           "default": 8,
@@ -381,9 +549,46 @@
       "additionalProperties": false
     },
     "share": {
-      "default": {},
+      "default": {
+        "targets": [
+          "bluesky",
+          "x",
+          "threads",
+          "facebook",
+          "linkedin",
+          "reddit",
+          "hacker-news",
+          "pinterest"
+        ]
+      },
       "type": "object",
       "properties": {
+        "targets": {
+          "default": [
+            "bluesky",
+            "x",
+            "threads",
+            "facebook",
+            "linkedin",
+            "reddit",
+            "hacker-news",
+            "pinterest"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "bluesky",
+              "x",
+              "threads",
+              "facebook",
+              "linkedin",
+              "reddit",
+              "hacker-news",
+              "pinterest"
+            ]
+          }
+        },
         "threadsMention": {
           "type": "string",
           "minLength": 1

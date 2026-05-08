@@ -385,3 +385,58 @@ they are useful context. Explicitly deferred work belongs in
       markdown review, `bun --silent run check`, and
       `bun --silent run test:docs-site`, followed by production build, verify,
       and HTML validation.
+
+### Milestone 94: Platform Configurability Design
+
+- [x] Audit reusable homepage, article, share, archive, and support surfaces
+      for hard-coded assumptions that a future site owner or GUI would
+      reasonably expect to customize.
+- [x] Classify each candidate as config-now, component prop, platform default,
+      content/frontmatter, or deferred.
+- [x] Review the design for brittleness, over-configurability, schema clarity,
+      docs-site usefulness, and future GUI compatibility before implementation.
+      Documented in `docs/PLATFORM_CONFIGURABILITY_AUDIT.md`, with the roadmap
+      and platformization audit linked to the new decision record.
+
+### Milestone 95: Platform Configurability Implementation
+
+- [x] Promote the highest-value low-risk customization surfaces to validated
+      site config.
+- [x] Refactor affected homepage/share components through typed helpers rather
+      than page-level string patches.
+- [x] Update schemas, docs, fixture/docs-site config, and focused tests.
+      Implemented configurable homepage discovery links, homepage labels,
+      homepage empty-state copy, and ordered share targets. Verified with
+      focused config/home/share/site-doctor tests, docs-site and fixture-site
+      builds, `bun --silent run check`, production build, build verifier, and
+      HTML validation.
+
+### Milestone 96: Public Platform Cleanup Design
+
+- [x] Audit remaining TPM coupling in platform-owned review surfaces, docs-site
+      identity, component catalog examples, and external-instance proofs.
+- [x] Define the next cleanup boundary so platform QA assets and examples do
+      not depend on the live TPM site instance.
+- [x] Review the design for author/webmaster UX, public docs-site clarity,
+      CI cost, catalog usefulness, and future GUI compatibility before
+      implementation. Documented in `docs/PUBLIC_PLATFORM_CLEANUP.md`, with
+      roadmap and platformization audit links.
+
+### Milestone 97: Public Platform Cleanup Implementation
+
+- [x] Move component-catalog examples onto platform-owned fixture assets and
+      neutral example data.
+- [x] Rename catalog build controls and docs-site identity away from TPM
+      branding where the surface is meant to demonstrate the public platform.
+- [x] Add an external-instance catalog build proof and make platform boundary
+      checks include catalog code.
+      Implemented platform-owned catalog fixture assets, neutral catalog data,
+      `PLATFORM_COMPONENT_CATALOG`, neutral docs-site identity, catalog-aware
+      platform boundary checks, and `test:catalog:site-instance`. Verified with
+      focused catalog/boundary/package tests, `bun --silent run test:catalog`,
+      `bun --silent run test:catalog:site-instance`,
+      `bun --silent run test:docs-site`,
+      `bun --silent run test:site-instance`, stale-branding scans,
+      `bun --silent run check`, `bun --silent run build`,
+      `bun --silent run verify`, `bun --silent run validate:html`, and
+      `bun --silent run review:markdown`.

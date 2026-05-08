@@ -137,7 +137,31 @@ describe("site doctor", () => {
       message:
         'footer navigation link "Tags" points to disabled feature "tags".',
       repair:
-        "Either enable the feature or remove this link from site/config/site.json navigation.",
+        "Either enable the feature or remove this link from site/config/site.json.",
+      severity: "error",
+    });
+  });
+
+  test("reports disabled features still linked from homepage discovery", () => {
+    const config = parseSiteConfig({
+      ...validConfig,
+      features: {
+        authors: false,
+      },
+      homepage: {
+        discoveryLinks: [{ label: "Authors", route: "authors" }],
+      },
+    });
+    const issues = siteDoctorIssues({
+      config,
+      exists: () => true,
+    });
+
+    expect(issues).toContainEqual({
+      message:
+        'homepage discovery link "Authors" points to disabled feature "authors".',
+      repair:
+        "Either enable the feature or remove this link from site/config/site.json.",
       severity: "error",
     });
   });

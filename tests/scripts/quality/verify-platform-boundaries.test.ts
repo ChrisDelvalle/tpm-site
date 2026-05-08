@@ -91,4 +91,35 @@ describe("platform boundary verifier", () => {
       },
     ]);
   });
+
+  test("checks private catalog code for live site coupling", () => {
+    const result = verifyPlatformBoundaries({
+      files: [
+        ...ownedLibFiles,
+        {
+          path: "src/catalog/ComponentCatalog.astro",
+          text: '---\nimport image from "@site/assets/shared/live-site.png";\n---\n<p>Catalog</p>\n',
+        },
+        {
+          path: "src/catalog/catalog.config.ts",
+          text: 'export const flag = "TPM_COMPONENT_CATALOG";\n',
+        },
+      ],
+      rootDir: ".",
+    });
+
+    expect(result.forbiddenImports).toEqual([
+      {
+        file: "src/catalog/ComponentCatalog.astro",
+        message:
+          'Unsupported site-instance import "@site/assets/shared/live-site.png". Read site data through config/content adapters or explicit props.',
+      },
+    ]);
+    expect(result.forbiddenLiterals).toEqual([
+      {
+        file: "src/catalog/catalog.config.ts",
+        message: "Move TPM-specific reader copy into site content or config.",
+      },
+    ]);
+  });
 });

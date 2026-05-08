@@ -1103,10 +1103,10 @@ src/pages/catalog/[...path].astro
 Catalog build rules:
 
 - Normal production builds must not include the catalog.
-- A dedicated environment variable such as `TPM_COMPONENT_CATALOG=true` should
+- A dedicated environment variable such as `PLATFORM_COMPONENT_CATALOG=true` should
   enable catalog routes.
 - Use a tracked `.env.catalog` file for catalog builds with
-  `TPM_COMPONENT_CATALOG=true` and `ASTRO_TELEMETRY_DISABLED=1`.
+  `PLATFORM_COMPONENT_CATALOG=true` and `ASTRO_TELEMETRY_DISABLED=1`.
 - Catalog scripts should load `.env.catalog` with Bun's `--env-file` flag so
   they remain cross-platform.
 - Add a release verification guard that fails if `dist/catalog` appears in a

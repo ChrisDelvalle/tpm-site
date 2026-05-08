@@ -292,6 +292,13 @@ function disabledFeatureNavigationIssues(
       location: "footer navigation",
       ...link,
     })),
+    ...config.homepage.discoveryLinks.map((link) => ({
+      href:
+        link.href ??
+        (link.route === undefined ? "" : config.routes[link.route]),
+      label: link.label,
+      location: "homepage discovery",
+    })),
   ];
   const disabledFeatureRoutes = optionalFeatureRouteEntries(config).filter(
     (entry) => !entry.enabled,
@@ -308,7 +315,7 @@ function disabledFeatureNavigationIssues(
           {
             message: `${link.location} link "${link.label}" points to disabled feature "${disabledTarget.feature}".`,
             repair:
-              "Either enable the feature or remove this link from site/config/site.json navigation.",
+              "Either enable the feature or remove this link from site/config/site.json.",
             severity: "error" as const,
           },
         ];

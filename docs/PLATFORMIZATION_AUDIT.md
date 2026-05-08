@@ -103,6 +103,15 @@ The active platform module map is now maintained in
 domain ownership, site-instance import boundaries, and the current
 `platform:check` CI invariant.
 
+The active configurability audit is maintained in
+`docs/PLATFORM_CONFIGURABILITY_AUDIT.md`. It classifies hard-coded values by
+whether they should become site config, component props, platform defaults,
+content/frontmatter, or deferred customization.
+
+The active public-platform cleanup plan is maintained in
+`docs/PUBLIC_PLATFORM_CLEANUP.md`. It keeps platform-owned QA fixtures, catalog
+assets, and example-site identity separate from the live TPM instance.
+
 ## Proposed Config Model
 
 Start with TypeScript schemas in the platform and JSON-like config in the site

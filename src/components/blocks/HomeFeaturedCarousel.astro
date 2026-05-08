@@ -4,11 +4,16 @@ import { ChevronLeft, ChevronRight } from "lucide-astro";
 import IconButton from "../ui/IconButton.astro";
 
 interface Props {
+  emptyText?: string;
   itemCount: number;
   title?: string;
 }
 
-const { itemCount, title = "Featured Articles" } = Astro.props;
+const {
+  emptyText = "Featured items will appear here.",
+  itemCount,
+  title = "Featured Articles",
+} = Astro.props;
 const hasItems = itemCount > 0;
 const hasMultipleItems = itemCount > 1;
 ---
@@ -70,9 +75,7 @@ const hasMultipleItems = itemCount > 1;
         )}
       </>
     ) : (
-      <p class="text-muted-foreground m-0 text-sm">
-        Featured items will appear here.
-      </p>
+      <p class="text-muted-foreground m-0 text-sm">{emptyText}</p>
     )
   }
 </section>

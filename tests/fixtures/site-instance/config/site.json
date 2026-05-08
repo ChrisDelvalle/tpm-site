@@ -37,7 +37,31 @@
   },
   "homepage": {
     "announcementLimit": 2,
+    "discoveryLinks": [
+      {
+        "label": "Posts",
+        "route": "articles"
+      },
+      {
+        "label": "Authors",
+        "route": "authors"
+      }
+    ],
+    "emptyText": {
+      "announcements": "Fixture announcements will appear here.",
+      "categories": "Fixture categories will appear here.",
+      "featured": "Fixture featured entries will appear here.",
+      "startHere": "Fixture starter entries will appear here."
+    },
     "featuredCollection": "featured",
+    "labels": {
+      "announcements": "Updates",
+      "categories": "Topics",
+      "featured": "Fixture Featured",
+      "read": "Read",
+      "recent": "Latest",
+      "startHere": "Begin"
+    },
     "recentLimit": 4,
     "startHereCollection": "start-here"
   },

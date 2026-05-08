@@ -181,7 +181,31 @@ The current module map and enforceable boundary rules live in
 `docs/PLATFORM_MODULES.md`. New reusable modules should either fit that map or
 expand it deliberately with tests.
 
-### 8. Future GUI
+### 8. Configurability And Customization
+
+Make customization deliberate rather than incidental.
+
+- Prefer validated site config for stable site-wide editorial choices.
+- Prefer component props for local presentation choices.
+- Keep layout mechanics and third-party endpoint builders platform-owned.
+- Record deferred customization instead of adding speculative options.
+
+The current candidate audit and low-risk extraction plan live in
+`docs/PLATFORM_CONFIGURABILITY_AUDIT.md`.
+
+### 9. Public Platform Cleanup
+
+Remove remaining TPM assumptions from platform-owned review and documentation
+surfaces.
+
+- Keep live TPM instance tests where they intentionally verify the TPM site.
+- Move platform QA fixtures, catalog assets, docs-site identity, and example
+  copy away from TPM-specific branding.
+- Prove private catalog builds work against a non-TPM site instance.
+
+The current cleanup plan lives in `docs/PUBLIC_PLATFORM_CLEANUP.md`.
+
+### 10. Future GUI
 
 The GUI is intentionally deferred. It should edit the same contracts that the
 site instance already uses: JSON config, Markdown/MDX content, assets, and

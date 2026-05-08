@@ -6,6 +6,7 @@ items:
   - content-model
   - site-config
   - platform-modules
+  - configurability
 ---
 
 Starter documentation for new platform users.

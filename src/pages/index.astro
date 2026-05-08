@@ -18,17 +18,12 @@ import {
   getCategories,
   getEditorialCollections,
 } from "../lib/content";
-import { homePageViewModel } from "../lib/home";
+import { homePageViewModel, homepageDiscoveryLinks } from "../lib/home";
 import { sectionNavigationItems } from "../lib/navigation";
 import {
   announcementsIndexUrl,
-  articlesIndexUrl,
-  articlesArchiveUrl,
-  authorsIndexUrl,
-  collectionsIndexUrl,
   collectionUrl,
   SITE_DESCRIPTION,
-  tagsIndexUrl,
 } from "../lib/routes";
 import { siteConfig, titleWithSite } from "../lib/site-config";
 
@@ -68,19 +63,7 @@ const homeView = homePageViewModel({
 const { announcementItems, featuredItems, recentFeedItems, startHereItems } =
   homeView;
 const categoryItems = sectionNavigationItems(categories, "/");
-const discoveryLinks = [
-  { href: articlesIndexUrl(), label: "Articles" },
-  { href: articlesArchiveUrl(), label: "Archive" },
-  siteConfig.features.authors
-    ? { href: authorsIndexUrl(), label: "Authors" }
-    : undefined,
-  siteConfig.features.collections
-    ? { href: collectionsIndexUrl(), label: "Collections" }
-    : undefined,
-  siteConfig.features.tags
-    ? { href: tagsIndexUrl(), label: "Tags" }
-    : undefined,
-].filter((link) => link !== undefined);
+const discoveryLinks = homepageDiscoveryLinks(siteConfig);
 
 const title = titleWithSite(home.data.title);
 const description = home.data.description ?? SITE_DESCRIPTION;
@@ -89,7 +72,10 @@ const description = home.data.description ?? SITE_DESCRIPTION;
 <BaseLayout title={title} description={description} canonicalPath="/">
   <BrowsingBody width="wide" padding="snug">
     <div class="grid min-w-0 gap-1" data-home-read-lead-group>
-      <HomeDiscoveryLinksBlock links={discoveryLinks} />
+      <HomeDiscoveryLinksBlock
+        links={discoveryLinks}
+        title={siteConfig.homepage.labels.read}
+      />
       <div
         class="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)] lg:items-start"
         data-home-lead-grid
@@ -106,7 +92,11 @@ const description = home.data.description ?? SITE_DESCRIPTION;
           class="min-w-0 lg:col-start-1 lg:row-start-2"
           data-home-lead-featured
         >
-          <HomeFeaturedCarousel itemCount={featuredItems.length}>
+          <HomeFeaturedCarousel
+            itemCount={featuredItems.length}
+            title={siteConfig.homepage.labels.featured}
+            emptyText={siteConfig.homepage.emptyText.featured}
+          >
             {
               featuredItems.map((item, index) => (
                 <HomeFeaturedSlide
@@ -122,12 +112,12 @@ const description = home.data.description ?? SITE_DESCRIPTION;
         </div>
         <div class="min-w-0 lg:col-start-2 lg:row-start-1" data-home-lead-start>
           <FlatArticleList
-            title="Start Here"
+            title={siteConfig.homepage.labels.startHere}
             titleHref={siteConfig.features.collections
               ? collectionUrl(siteConfig.homepage.startHereCollection)
               : undefined}
             items={startHereItems}
-            emptyText="Curated starter articles will appear here."
+            emptyText={siteConfig.homepage.emptyText.startHere}
           />
         </div>
         <div
@@ -135,24 +125,28 @@ const description = home.data.description ?? SITE_DESCRIPTION;
           data-home-lead-announcements
         >
           <FlatArticleList
-            title="Announcements"
+            title={siteConfig.homepage.labels.announcements}
             titleHref={siteConfig.features.announcements
               ? announcementsIndexUrl()
               : undefined}
             items={announcementItems}
-            emptyText="Announcements will appear here."
+            emptyText={siteConfig.homepage.emptyText.announcements}
           />
         </div>
       </div>
     </div>
     {
       siteConfig.features.categories && (
-        <HomeCategoryOverviewBlock items={categoryItems} />
+        <HomeCategoryOverviewBlock
+          items={categoryItems}
+          title={siteConfig.homepage.labels.categories}
+          emptyText={siteConfig.homepage.emptyText.categories}
+        />
       )
     }
     <section
       class="grid min-w-0 gap-4"
-      aria-label="Recent"
+      aria-label={siteConfig.homepage.labels.recent}
       data-home-recent-feed
     >
       <ArticleList items={recentFeedItems} />

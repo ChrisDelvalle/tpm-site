@@ -8,4 +8,4 @@ tags:
 ---
 
 The docs site is now a real site instance. It exists to prove that the platform
-can serve more than one publication shape without TPM-specific assumptions.
+can serve more than one publication shape without site-specific assumptions.

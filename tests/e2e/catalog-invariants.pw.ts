@@ -37,7 +37,7 @@ if (!catalogIsBuilt) {
       });
       await page.goto("/catalog/");
       await expect(
-        page.getByRole("heading", { name: "TPM Component Catalog" }),
+        page.getByRole("heading", { name: "Platform Component Catalog" }),
       ).toBeVisible();
       await expectNoHorizontalOverflow(page);
 
@@ -210,6 +210,7 @@ if (!catalogIsBuilt) {
       ["Generated Markdown Linked Image", "bounded", "false"],
     ] as const) {
       const example = page.locator(`[data-catalog-example="${exampleTitle}"]`);
+      await example.scrollIntoViewIfNeeded();
       await expect(example).toBeVisible();
       await expect(
         example.locator(

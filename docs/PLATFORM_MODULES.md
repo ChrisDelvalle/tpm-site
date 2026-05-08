@@ -35,9 +35,9 @@ work in the wrong layer.
   modules should not import a concrete site asset.
 - TPM publication identity, URLs, handles, support links, and editorial copy
   belong in the site instance, not reusable platform code.
-- The private component catalog is a review surface, not the public platform
-  contract. It may use the active site instance as fixture data until a generic
-  catalog fixture is designed.
+- The private component catalog is a platform review surface. It must use
+  platform-owned fixture assets and neutral example data instead of depending
+  on live TPM assets or copy.
 - Route, feature, Pagefind, sitemap, HTML validation, and build verification
   expectations should derive from the same feature model.
 - Author-facing behavior should prefer defaults and validation over repeated
@@ -55,8 +55,8 @@ work in the wrong layer.
 
 This is intentionally not a full architectural proof. It is a narrow guardrail
 around the failure modes that are easiest to reintroduce while platformizing.
-When the component catalog becomes a public platform artifact, it should get a
-generic fixture and join these checks.
+Catalog source files are included in this check because the catalog now uses
+generic platform fixture data.
 
 ## Design Review
 

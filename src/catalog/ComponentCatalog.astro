@@ -78,9 +78,10 @@ import LinkButton from "../components/ui/LinkButton.astro";
 import Section from "../components/ui/Section.astro";
 import Separator from "../components/ui/Separator.astro";
 import TextLink from "../components/ui/TextLink.astro";
-import sampleDarkImage from "@site/assets/shared/2020-06-24_fossilised-bug_resized.png";
-import tallArticleImage from "@site/assets/shared/catalog-tall-article-figure.svg";
-import sampleImage from "@site/assets/shared/tpm_defaultpic.jpg";
+import articleLandscapeImage from "./assets/catalog-article-landscape.png";
+import articleTallImage from "./assets/catalog-article-tall.png";
+import sampleDarkImage from "./assets/catalog-sample-dark.svg";
+import sampleImage from "./assets/catalog-sample-light.svg";
 import { catalogMetadata } from "./catalog.config";
 import CatalogExample from "./CatalogExample.astro";
 import CatalogSection from "./CatalogSection.astro";
@@ -94,60 +95,63 @@ import { articleImagePresentation } from "../lib/article-image-policy";
 import type { BibliographyEntry as BibliographyEntryViewModel } from "../lib/bibliography";
 import { primaryNavigationItems } from "../lib/navigation";
 
+const catalogPublicationName = "Catalog Review Site";
+const catalogAuthorName = "Catalog Fixture";
+const catalogArticleSlug = "catalog-boundary-example";
+const catalogArticleTitle =
+  "A Catalog Article With a Long But Plausible Editorial Title";
+const catalogArticleUrl = `https://example.com/articles/${catalogArticleSlug}/`;
+const catalogSupportUrl = "https://example.com/support";
 const generatedImagePresentation = articleImagePresentation();
 const catalogArticleCitation = {
-  articleId: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now",
-  canonicalUrl:
-    "https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+  articleId: catalogArticleSlug,
+  canonicalUrl: catalogArticleUrl,
   formats: [
     {
       id: "bibtex",
       label: "BibTeX",
-      text: `@online{tpm-wittgensteins-most-beloved-quote-was-real-but-its-fake-now,
-  author = {Seong-Young Her},
-  title = {Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now},
-  year = {2022},
-  date = {2022-04-06},
-  organization = {The Philosopher's Meme},
-  url = {https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/},
+      text: `@online{catalog-boundary-example,
+  author = {${catalogAuthorName}},
+  title = {${catalogArticleTitle}},
+  year = {2026},
+  date = {2026-01-12},
+  organization = {${catalogPublicationName}},
+  url = {${catalogArticleUrl}},
 }`,
     },
     {
       id: "mla",
       label: "MLA",
-      text: `Her, Seong-Young. "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now." The Philosopher's Meme, 6 Apr. 2022, https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/.`,
+      text: `${catalogAuthorName}. "${catalogArticleTitle}." ${catalogPublicationName}, 12 Jan. 2026, ${catalogArticleUrl}.`,
     },
   ],
-  title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+  title: catalogArticleTitle,
 } as const;
 
 const catalogArticleShare = {
   actions: [
     {
-      copyText:
-        "https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+      copyText: catalogArticleUrl,
       id: "copy-link",
       kind: "copy",
       label: "Copy link",
     },
     {
-      href: "mailto:?subject=Wittgenstein%27s%20Most%20Beloved%20Quote%20Was%20Real%2C%20But%20It%27s%20Fake%20Now",
+      href: "mailto:?subject=A%20Catalog%20Article%20With%20a%20Long%20But%20Plausible%20Title",
       id: "email",
       kind: "email",
       label: "Email",
     },
     {
-      href: "https://twitter.com/intent/tweet?text=Wittgenstein%27s+Most+Beloved+Quote+Was+Real%2C+But+It%27s+Fake+Now&url=https%3A%2F%2Fthephilosophersmeme.com%2Farticles%2Fwittgensteins-most-beloved-quote-was-real-but-its-fake-now%2F&via=philo_meme",
+      href: "https://twitter.com/intent/tweet?text=A+Catalog+Article+With+a+Long+But+Plausible+Title&url=https%3A%2F%2Fexample.com%2Farticles%2Fcatalog-boundary-example%2F",
       id: "x",
       kind: "external",
       label: "X",
     },
   ],
-  articleUrl:
-    "https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
-  copyText:
-    "https://thephilosophersmeme.com/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
-  title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+  articleUrl: catalogArticleUrl,
+  copyText: catalogArticleUrl,
+  title: catalogArticleTitle,
 } as const;
 
 const catalogTocHeadings = [
@@ -195,7 +199,7 @@ const catalogArticleItemsWithMedia = [
   {
     ...catalogArticleItems[0],
     image: {
-      alt: "The Philosopher's Meme default preview image",
+      alt: "Catalog sample preview image",
       src: sampleImage,
     },
   },
@@ -203,7 +207,7 @@ const catalogArticleItemsWithMedia = [
   {
     ...catalogArticleItems[2],
     image: {
-      alt: "Fossilised bug preview image",
+      alt: "Catalog dark-mode preview image",
       src: sampleDarkImage,
     },
   },
@@ -223,20 +227,20 @@ const catalogBibliographyEntries = [
     id: "bibliography-baudrillard-simulacra",
     sourceArticles: [
       {
-        articleId: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now",
-        date: "April 6, 2022",
-        href: "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+        articleId: catalogArticleSlug,
+        date: "January 12, 2026",
+        href: `/articles/${catalogArticleSlug}/`,
         markerIds: ["cite-ref-baudrillard-1981"],
-        publishedAt: new Date("2022-04-06T23:58:10.000Z"),
-        title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+        publishedAt: new Date("2026-01-12T00:00:00.000Z"),
+        title: catalogArticleTitle,
       },
       {
-        articleId: "what-is-a-meme",
+        articleId: "second-catalog-article",
         date: "May 16, 2021",
-        href: "/articles/what-is-a-meme/",
+        href: "/articles/second-catalog-article/",
         markerIds: ["cite-ref-baudrillard-1981-2"],
         publishedAt: new Date("2021-05-16T00:00:00.000Z"),
-        title: "What Is A Meme?",
+        title: "Second Catalog Article",
       },
     ],
     sourceContent: [
@@ -275,12 +279,12 @@ const catalogBibliographyEntries = [
     id: "bibliography-anonymous-field-report",
     sourceArticles: [
       {
-        articleId: "homesteading-the-memeosphere",
+        articleId: "field-note-catalog-example",
         date: "April 4, 2022",
-        href: "/articles/homesteading-the-memeosphere/",
+        href: "/articles/field-note-catalog-example/",
         markerIds: ["cite-ref-field-report"],
         publishedAt: new Date("2022-04-04T00:00:00.000Z"),
-        title: "Homesteading the Memeosphere",
+        title: "Field Note Catalog Example",
       },
     ],
     sourceContent: [
@@ -475,7 +479,7 @@ if (primaryCatalogAuthor === undefined) {
           <TextLink href="/articles/">Articles</TextLink>
           <TextLink href="/about/" tone="neutral">About</TextLink>
           <LinkButton
-            href="https://patreon.com/thephilosophersmeme"
+            href={catalogSupportUrl}
             class="min-h-8 px-3 py-1.5 text-sm"
           >
             Support Us
@@ -603,9 +607,7 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/ui/LinkButton.astro"
       >
         <div class="flex flex-wrap gap-3">
-          <LinkButton href="https://patreon.com/thephilosophersmeme">
-            Support Us
-          </LinkButton>
+          <LinkButton href={catalogSupportUrl}>Support Us</LinkButton>
           <LinkButton href="/articles/" variant="outline" tone="neutral">
             Browse Articles
           </LinkButton>
@@ -747,7 +749,7 @@ if (primaryCatalogAuthor === undefined) {
           <ThemedImage
             lightImage={sampleImage}
             darkImage={sampleDarkImage}
-            alt="The Philosopher's Meme"
+            alt="Catalog sample art"
             layout="full-width"
             class="block h-auto w-full"
           />
@@ -765,14 +767,14 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/articles/ArticleHeader.astro"
       >
         <ArticleHeader
-          author="Seong-Young Her"
-          category={{ href: "/categories/history/", title: "History" }}
+          author={catalogAuthorName}
+          category={{ href: "/categories/research/", title: "Research" }}
           citation={catalogArticleCitation}
-          date={new Date("2022-04-06T23:58:10.000Z")}
-          description="A serious and good philosophical work could be written consisting entirely of fake philosophy quotes."
-          formattedDate="April 6, 2022"
+          date={new Date("2026-01-12T00:00:00.000Z")}
+          description="A generic article header fixture exercises long titles, citations, share actions, and prose rhythm."
+          formattedDate="January 12, 2026"
           share={catalogArticleShare}
-          title="Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now"
+          title={catalogArticleTitle}
         />
       </CatalogExample>
 
@@ -798,9 +800,9 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/articles/ArticleMeta.astro"
       >
         <ArticleMeta
-          author="Seong-Young Her"
-          date={new Date("2022-04-06T23:58:10.000Z")}
-          formattedDate="April 6, 2022"
+          author={catalogAuthorName}
+          date={new Date("2026-01-12T00:00:00.000Z")}
+          formattedDate="January 12, 2026"
         />
       </CatalogExample>
 
@@ -818,7 +820,7 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
-          src={tallArticleImage}
+          src={articleTallImage}
           alt="A bounded article image preview"
           caption="Default bounded article image example."
         />
@@ -830,8 +832,8 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
-          src={sampleImage}
-          alt="The Philosopher's Meme default preview image"
+          src={articleLandscapeImage}
+          alt="Catalog sample preview image"
           caption="Article image caption example."
         />
       </CatalogExample>
@@ -842,7 +844,7 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
-          src={sampleImage}
+          src={articleLandscapeImage}
           alt="A deliberately long article image description used to verify that accessible image text remains available without becoming visible layout content in the article flow."
         />
       </CatalogExample>
@@ -853,7 +855,7 @@ if (primaryCatalogAuthor === undefined) {
         componentPath="src/components/articles/ArticleImage.astro"
       >
         <ArticleImage
-          src={tallArticleImage}
+          src={articleTallImage}
           alt="A full-height loss diagram"
           caption="Natural-height article image example."
           heightPolicy="natural"
@@ -945,7 +947,7 @@ if (primaryCatalogAuthor === undefined) {
             <HoverImageCard
               image={sampleImage}
               label="inline preview"
-              alt="The Philosopher's Meme default preview image"
+              alt="Catalog sample preview image"
             />
             without leaving the paragraph flow.
           </p>
@@ -1269,14 +1271,14 @@ if (primaryCatalogAuthor === undefined) {
           <HomeHeroBlock
             lightImage={sampleImage}
             darkImage={sampleDarkImage}
-            imageAlt="The Philosopher's Meme"
-            tagline="The philosophy of memes, cyberculture, and the Internet."
+            imageAlt="Catalog homepage hero"
+            tagline="A reusable platform homepage hero with configurable calls to action."
           />
           <div class="max-w-xs">
             <HomeHeroBlock
               lightImage={sampleImage}
               darkImage={sampleDarkImage}
-              imageAlt="The Philosopher's Meme narrow preview"
+              imageAlt="Catalog homepage hero narrow preview"
               tagline="A deliberately narrow example that checks wrapping for the homepage hero tagline."
             />
           </div>
@@ -1290,12 +1292,12 @@ if (primaryCatalogAuthor === undefined) {
       >
         <HomeAnnouncementBlock
           image={sampleImage}
-          imageAlt="The Philosopher's Meme announcement artwork"
+          imageAlt="Catalog announcement artwork"
         >
           <p>
-            We've set up a <a href="https://patreon.com/thephilosophersmeme">
-              Patreon
-            </a>. Please consider supporting TPM.
+            This fixture announcement includes an <a href={catalogSupportUrl}>
+              external support link
+            </a> without depending on a live site account.
           </p>
         </HomeAnnouncementBlock>
       </CatalogExample>
@@ -1413,7 +1415,10 @@ if (primaryCatalogAuthor === undefined) {
         description="Generic page title and description."
         componentPath="src/components/pages/PageHeader.astro"
       >
-        <PageHeader title="About" description="About The Philosopher's Meme." />
+        <PageHeader
+          title="About"
+          description="About the catalog review site."
+        />
       </CatalogExample>
 
       <CatalogExample
@@ -1435,7 +1440,10 @@ if (primaryCatalogAuthor === undefined) {
         description="Composed non-article Markdown page shell."
         componentPath="src/components/pages/MarkdownPage.astro"
       >
-        <MarkdownPage title="About" description="About The Philosopher's Meme.">
+        <MarkdownPage
+          title="About"
+          description="About the catalog review site."
+        >
           <p>
             MarkdownPage keeps page copy renderable while routing and metadata
             stay in the Astro page.
@@ -1577,7 +1585,7 @@ if (primaryCatalogAuthor === undefined) {
           <ActionCluster slot="end" align="end" gap="xs">
             <TextLink href="/articles/">Articles</TextLink>
             <LinkButton
-              href="https://patreon.com/thephilosophersmeme"
+              href={catalogSupportUrl}
               class="min-h-8 px-3 py-1.5 text-sm"
             >
               Support Us

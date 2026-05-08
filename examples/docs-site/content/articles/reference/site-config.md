@@ -28,3 +28,15 @@ Disabled features should not remain visible in navigation.
 Content defaults keep author frontmatter short. Site owners can decide whether
 articles or announcements default to draft, feed visibility, homepage
 visibility, search visibility, directory visibility, or PDF generation.
+
+## Homepage
+
+Homepage settings choose the featured and starter collections, list limits,
+compact discovery links, section labels, and empty-state copy. Route-key
+discovery links follow the configured routes and feature flags.
+
+## Sharing
+
+Share settings choose the ordered third-party share targets and optional social
+attribution handles. Copy link and email are always available because they do
+not depend on a third-party platform.

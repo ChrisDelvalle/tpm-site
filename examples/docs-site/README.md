@@ -1,10 +1,10 @@
-# TPM Platform Docs Site
+# Platform Docs Site
 
 This is a real example site instance for the reusable blogging platform.
 
-It is intentionally not a TPM clone. The content, `theme.css`, navigation, and
-site config are neutral documentation-site material so platform changes are
-checked against a second consumer.
+It is intentionally not a clone of the live site. The content, `theme.css`,
+navigation, and site config are neutral documentation-site material so platform
+changes are checked against a second consumer.
 
 Run the example site locally from the repository root:
 

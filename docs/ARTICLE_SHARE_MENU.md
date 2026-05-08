@@ -139,6 +139,7 @@ Copy link:
 External share targets:
 
 - render as semantic buttons that open the configured target URL on click;
+- are ordered and enabled by `site/config/site.json` `share.targets`;
 - avoid direct social-share `href` anchors, because common privacy and content
   filters hide links to known share endpoints and can make menu items disappear;
 - do not load external scripts;

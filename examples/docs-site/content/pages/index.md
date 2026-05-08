@@ -1,8 +1,8 @@
 ---
-title: TPM Platform Docs
-description: Documentation and tutorials for the reusable TPM blogging platform.
+title: Platform Docs
+description: Documentation and tutorials for the reusable blog platform.
 hero:
-  imageAlt: TPM Platform Docs
+  imageAlt: Platform Docs
   lightImage: ../../assets/site/docs-hero.svg
 startHere:
   - quick-start

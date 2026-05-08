@@ -4,6 +4,7 @@ import {
   type EditorialCollectionEntry,
   resolvePublishableCollection,
 } from "./collections";
+import { optionalFeatureRouteEntries } from "./feature-routes";
 import {
   type PublishableEntry,
   publishableFromAnnouncement,
@@ -15,6 +16,7 @@ import {
   visiblePublishables,
 } from "./publishable";
 import type { AnnouncementEntry } from "./routes";
+import type { SiteConfig, SiteRouteKey } from "./site-config";
 
 /** Display-ready homepage featured item. */
 export interface HomeFeaturedItem extends PublishableListItem {
@@ -41,6 +43,12 @@ interface HomePageViewModel {
   featuredItems: HomeFeaturedItem[];
   recentFeedItems: PublishableListItem[];
   startHereItems: PublishableListItem[];
+}
+
+/** Display-ready homepage discovery link. */
+interface HomeDiscoveryLink {
+  href: string;
+  label: string;
 }
 
 /**
@@ -107,6 +115,34 @@ export function homePageViewModel({
   };
 }
 
+/**
+ * Resolves configured homepage discovery links against routes and feature flags.
+ *
+ * @param config Validated site config.
+ * @returns Homepage discovery links safe to render for the active feature set.
+ */
+export function homepageDiscoveryLinks(
+  config: SiteConfig,
+): HomeDiscoveryLink[] {
+  const disabledOptionalRoutes = new Set(
+    optionalFeatureRouteEntries(config)
+      .filter((entry) => !entry.enabled)
+      .map((entry) => entry.routeKey),
+  );
+
+  return config.homepage.discoveryLinks.flatMap((link) => {
+    if (link.route !== undefined) {
+      return disabledOptionalRoutes.has(link.route)
+        ? []
+        : [{ href: routeForKey(config, link.route), label: link.label }];
+    }
+
+    return link.href === undefined
+      ? []
+      : [{ href: link.href, label: link.label }];
+  });
+}
+
 function featuredItemFromResolvedItem({
   entry,
   note,
@@ -132,4 +168,42 @@ function requiredCollection(
   }
 
   return collection;
+}
+
+function routeForKey(config: SiteConfig, key: SiteRouteKey): string {
+  switch (key) {
+    case "allArticles": {
+      return config.routes.allArticles;
+    }
+    case "announcements": {
+      return config.routes.announcements;
+    }
+    case "articles": {
+      return config.routes.articles;
+    }
+    case "authors": {
+      return config.routes.authors;
+    }
+    case "bibliography": {
+      return config.routes.bibliography;
+    }
+    case "categories": {
+      return config.routes.categories;
+    }
+    case "collections": {
+      return config.routes.collections;
+    }
+    case "feed": {
+      return config.routes.feed;
+    }
+    case "home": {
+      return config.routes.home;
+    }
+    case "search": {
+      return config.routes.search;
+    }
+    case "tags": {
+      return config.routes.tags;
+    }
+  }
 }

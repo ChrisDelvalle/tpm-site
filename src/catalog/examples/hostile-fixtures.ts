@@ -7,11 +7,11 @@ export const longUnbrokenWord =
 
 /** Tag set large enough to expose wrapping and density issues. */
 export const catalogTags = [
-  "metamemetics",
+  "research",
   "philosophy",
   "history",
   "platforms",
-  "memeculture",
+  "field-notes",
   longUnbrokenWord,
 ] as const;
 
@@ -21,17 +21,17 @@ export const catalogNavigationItems = [
     articles: [
       {
         description: "A compact article example for navigation previews.",
-        href: "/articles/memes-are-not-jokes-they-are-diagram-games/",
+        href: "/articles/diagrams-are-not-decorations/",
         isCurrent: false,
-        slug: "memes-are-not-jokes-they-are-diagram-games",
-        title: "Memes Are Not Jokes: They Are Diagram Games",
+        slug: "diagrams-are-not-decorations",
+        title: "Diagrams Are Not Decorations",
       },
       {
         description: "A deliberately long title for wrapping behavior.",
-        href: "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
+        href: "/articles/catalog-boundary-example/",
         isCurrent: true,
-        slug: "wittgensteins-most-beloved-quote-was-real-but-its-fake-now",
-        title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+        slug: "catalog-boundary-example",
+        title: "A Catalog Article With a Long But Plausible Title",
       },
       {
         description: "A hostile long-word title example.",
@@ -41,12 +41,12 @@ export const catalogNavigationItems = [
         title: `One ${longUnbrokenWord} Example`,
       },
     ],
-    description: "How memes move through culture and platforms.",
-    href: "/categories/metamemetics/",
+    description: "How research notes move through a publication.",
+    href: "/categories/research/",
     isCurrent: false,
     isOpen: true,
-    slug: "metamemetics",
-    title: "Metamemetics",
+    slug: "research",
+    title: "Research",
   },
   {
     articles: [
@@ -70,28 +70,28 @@ export const catalogNavigationItems = [
 /** Article card/list data with compact, long-title, and long-word variants. */
 export const catalogArticleItems = [
   {
-    author: "Seong-Young Her",
+    author: "Catalog Fixture",
     category: {
-      href: "/categories/metamemetics/",
-      title: "Metamemetics",
+      href: "/categories/research/",
+      title: "Research",
     },
-    date: "April 6, 2022",
+    date: "January 12, 2026",
     description:
       "A compact article teaser with enough text to check wrapping and rhythm.",
-    href: "/articles/wittgensteins-most-beloved-quote-was-real-but-its-fake-now/",
-    title: "Wittgenstein's Most Beloved Quote Was Real, But It's Fake Now",
+    href: "/articles/catalog-boundary-example/",
+    title: "A Catalog Article With a Long But Plausible Editorial Title",
   },
   {
-    author: "Seong-Young Her",
+    author: "Catalog Fixture",
     category: {
-      href: "/categories/game-studies/",
-      title: "Game Studies",
+      href: "/categories/platform-notes/",
+      title: "Platform Notes",
     },
-    date: "May 16, 2021",
+    date: "January 9, 2026",
     description:
       "A second card keeps list spacing and repeated-item styling visible.",
-    href: "/articles/gamergate-as-metagaming/",
-    title: "Gamergate as Metagaming",
+    href: "/articles/catalog-spacing-example/",
+    title: "A Compact Catalog Row",
   },
   {
     author: "Catalog Fixture",

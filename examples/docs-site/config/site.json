@@ -37,17 +37,49 @@
   },
   "homepage": {
     "announcementLimit": 2,
+    "discoveryLinks": [
+      {
+        "label": "Guides",
+        "route": "articles"
+      },
+      {
+        "label": "Collections",
+        "route": "collections"
+      },
+      {
+        "label": "Reference",
+        "route": "categories"
+      },
+      {
+        "label": "Tags",
+        "route": "tags"
+      }
+    ],
+    "emptyText": {
+      "announcements": "Documentation updates will appear here.",
+      "categories": "Reference categories will appear here.",
+      "featured": "Featured documentation will appear here.",
+      "startHere": "Starter guides will appear here."
+    },
     "featuredCollection": "featured",
+    "labels": {
+      "announcements": "Updates",
+      "categories": "Reference",
+      "featured": "Featured Guides",
+      "read": "Docs",
+      "recent": "Latest",
+      "startHere": "Start Here"
+    },
     "recentLimit": 4,
     "startHereCollection": "start-here"
   },
   "identity": {
-    "description": "Documentation and tutorials for the reusable TPM blogging platform.",
+    "description": "Documentation and tutorials for the reusable blog platform.",
     "language": "en",
-    "publisherName": "TPM Platform",
+    "publisherName": "Blog Platform",
     "shortTitle": "Platform Docs",
     "timezone": "America/New_York",
-    "title": "TPM Platform Docs",
+    "title": "Platform Docs",
     "url": "https://platform.example.com"
   },
   "navigation": {
@@ -118,21 +150,22 @@
     "tags": "/tags/"
   },
   "share": {
-    "threadsMention": "@tpm_platform",
-    "xViaHandle": "tpm_platform"
+    "targets": ["bluesky", "x", "linkedin", "reddit"],
+    "threadsMention": "@blog_platform",
+    "xViaHandle": "blog_platform"
   },
   "support": {
     "block": {
       "body": "This example keeps support UI disabled while proving the config contract remains complete.",
-      "title": "Support TPM Platform"
+      "title": "Support Blog Platform"
     },
     "discord": {
-      "ariaLabel": "Join the TPM Platform community",
+      "ariaLabel": "Join the Blog Platform community",
       "href": "https://example.com/community",
       "label": "Community"
     },
     "patreon": {
-      "ariaLabel": "Sponsor the TPM Platform maintainers",
+      "ariaLabel": "Sponsor the Blog Platform maintainers",
       "compactLabel": "Sponsor",
       "href": "https://example.com/sponsor",
       "label": "Sponsor"

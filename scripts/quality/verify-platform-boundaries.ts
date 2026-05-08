@@ -27,7 +27,7 @@ export interface PlatformBoundaryVerificationResult {
 }
 
 const platformSourcePattern =
-  /^src\/(?!(?:catalog|generated|components\/ui\/assets)\/).*\.(?:astro|ts|tsx)$/u;
+  /^src\/(?!(?:generated|components\/ui\/assets)\/).*\.(?:astro|ts|tsx)$/u;
 const libFilePattern = /^src\/lib\/.*\.ts$/u;
 const bareImportSpecifierPattern = /^\s*import\s*["']([^"']+)["']/gmu;
 const dynamicImportSpecifierPattern = /\bimport\(\s*["']([^"']+)["']\s*\)/gu;
@@ -56,7 +56,8 @@ const forbiddenSiteLiteralPatterns = [
   },
   {
     message: "Move TPM-specific reader copy into site content or config.",
-    pattern: /\b(?:New to TPM|Curated TPM|TPM articles|TPM entries)\b/iu,
+    pattern:
+      /\b(?:New to TPM|Curated TPM|TPM articles|TPM entries|TPM_COMPONENT_CATALOG)\b/iu,
   },
 ] as const;
 

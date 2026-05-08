@@ -1,5 +1,5 @@
 import { SITE_TITLE } from "./routes";
-import { siteConfig } from "./site-config";
+import { siteConfig, type SiteShareTargetId } from "./site-config";
 import type { SocialPreviewImage } from "./social-images";
 
 const threadsMaxPostLength = 500;
@@ -22,15 +22,7 @@ const articleShareTargetConfig = {
 } as const;
 
 /** External public composer targets supported by the article share menu. */
-type ArticleShareExternalTargetId =
-  | "bluesky"
-  | "facebook"
-  | "hacker-news"
-  | "linkedin"
-  | "pinterest"
-  | "reddit"
-  | "threads"
-  | "x";
+type ArticleShareExternalTargetId = SiteShareTargetId;
 
 /** A normalized article share action rendered by the article share menu. */
 export type ArticleShareAction =
@@ -65,6 +57,7 @@ interface ArticleShareMenuViewModelInput {
   readonly articleUrl: string;
   readonly description?: string | undefined;
   readonly image?: SocialPreviewImage | undefined;
+  readonly targetIds?: readonly SiteShareTargetId[] | undefined;
   readonly title: string;
 }
 
@@ -77,91 +70,109 @@ interface ArticleShareTargetContext {
 
 interface ExternalShareTargetDefinition {
   readonly buildHref: (context: ArticleShareTargetContext) => string;
-  readonly id: ArticleShareExternalTargetId;
   readonly label: string;
   readonly requiresImage?: boolean;
 }
 
-const externalShareTargetDefinitions = [
-  {
-    buildHref: ({ articleUrl, title }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.bluesky, {
-        text: shareText(title, articleUrl),
-      }),
-    id: "bluesky",
-    label: "Bluesky",
-    requiresImage: false,
-  },
-  {
-    buildHref: ({ articleUrl, title }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.x, {
-        text: title,
-        url: articleUrl,
-        via: articleShareTargetConfig.attribution.xViaHandle,
-      }),
-    id: "x",
-    label: "X",
-    requiresImage: false,
-  },
-  {
-    buildHref: ({ articleUrl, title }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.threads, {
-        text: threadsShareText(title, articleUrl),
-      }),
-    id: "threads",
-    label: "Threads",
-    requiresImage: false,
-  },
-  {
-    buildHref: ({ articleUrl }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.facebook, {
-        u: articleUrl,
-      }),
-    id: "facebook",
-    label: "Facebook",
-    requiresImage: false,
-  },
-  {
-    buildHref: ({ articleUrl }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.linkedIn, {
-        url: articleUrl,
-      }),
-    id: "linkedin",
-    label: "LinkedIn",
-    requiresImage: false,
-  },
-  {
-    buildHref: ({ articleUrl, title }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.reddit, {
-        title,
-        url: articleUrl,
-      }),
-    id: "reddit",
-    label: "Reddit",
-    requiresImage: false,
-  },
-  {
-    buildHref: ({ articleUrl, title }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.hackerNews, {
-        t: title,
-        u: articleUrl,
-      }),
-    id: "hacker-news",
-    label: "Hacker News",
-    requiresImage: false,
-  },
-  {
-    buildHref: ({ articleUrl, description, image, title }) =>
-      urlWithQuery(articleShareTargetConfig.endpoints.pinterest, {
-        description: description.length === 0 ? title : description,
-        media: image?.src ?? "",
-        url: articleUrl,
-      }),
-    id: "pinterest",
-    label: "Pinterest",
-    requiresImage: true,
-  },
-] as const satisfies readonly ExternalShareTargetDefinition[];
+const externalShareTargetDefinitions = new Map<
+  SiteShareTargetId,
+  ExternalShareTargetDefinition
+>([
+  [
+    "bluesky",
+    {
+      buildHref: ({ articleUrl, title }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.bluesky, {
+          text: shareText(title, articleUrl),
+        }),
+      label: "Bluesky",
+      requiresImage: false,
+    },
+  ],
+  [
+    "facebook",
+    {
+      buildHref: ({ articleUrl }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.facebook, {
+          u: articleUrl,
+        }),
+      label: "Facebook",
+      requiresImage: false,
+    },
+  ],
+  [
+    "hacker-news",
+    {
+      buildHref: ({ articleUrl, title }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.hackerNews, {
+          t: title,
+          u: articleUrl,
+        }),
+      label: "Hacker News",
+      requiresImage: false,
+    },
+  ],
+  [
+    "linkedin",
+    {
+      buildHref: ({ articleUrl }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.linkedIn, {
+          url: articleUrl,
+        }),
+      label: "LinkedIn",
+      requiresImage: false,
+    },
+  ],
+  [
+    "pinterest",
+    {
+      buildHref: ({ articleUrl, description, image, title }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.pinterest, {
+          description: description.length === 0 ? title : description,
+          media: image?.src ?? "",
+          url: articleUrl,
+        }),
+      label: "Pinterest",
+      requiresImage: true,
+    },
+  ],
+  [
+    "reddit",
+    {
+      buildHref: ({ articleUrl, title }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.reddit, {
+          title,
+          url: articleUrl,
+        }),
+      label: "Reddit",
+      requiresImage: false,
+    },
+  ],
+  [
+    "threads",
+    {
+      buildHref: ({ articleUrl, title }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.threads, {
+          text: threadsShareText(title, articleUrl),
+        }),
+      label: "Threads",
+      requiresImage: false,
+    },
+  ],
+  [
+    "x",
+    {
+      buildHref: ({ articleUrl, title }) =>
+        urlWithQuery(articleShareTargetConfig.endpoints.x, {
+          text: title,
+          url: articleUrl,
+          via: articleShareTargetConfig.attribution.xViaHandle,
+        }),
+      label: "X",
+      requiresImage: false,
+    },
+  ],
+]);
 
 /**
  * Builds the article share menu view model from canonical article metadata.
@@ -193,14 +204,21 @@ export function articleShareMenuViewModel(
     kind: "email",
     label: "Email",
   } as const satisfies ArticleShareAction;
-  const externalActions = externalShareTargetDefinitions
-    .filter((target) => !target.requiresImage || input.image !== undefined)
-    .map((target) => ({
-      href: target.buildHref(context),
-      id: target.id,
-      kind: "external",
-      label: target.label,
-    })) satisfies readonly ArticleShareAction[];
+  const enabledTargetIds = input.targetIds ?? siteConfig.share.targets;
+  const externalActions = enabledTargetIds.flatMap((targetId) => {
+    const target = requiredShareTargetDefinition(targetId);
+
+    return target.requiresImage === true && input.image === undefined
+      ? []
+      : [
+          {
+            href: target.buildHref(context),
+            id: targetId,
+            kind: "external",
+            label: target.label,
+          },
+        ];
+  }) satisfies readonly ArticleShareAction[];
 
   return {
     actions: [copyAction, emailAction, ...externalActions],
@@ -208,6 +226,18 @@ export function articleShareMenuViewModel(
     copyText: articleUrl,
     title,
   };
+}
+
+function requiredShareTargetDefinition(
+  targetId: SiteShareTargetId,
+): ExternalShareTargetDefinition {
+  const target = externalShareTargetDefinitions.get(targetId);
+
+  if (target === undefined) {
+    throw new Error(`Unsupported article share target: ${targetId}`);
+  }
+
+  return target;
 }
 
 function emailShareHref(context: ArticleShareTargetContext): string {

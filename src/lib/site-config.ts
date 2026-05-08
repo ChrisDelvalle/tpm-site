@@ -19,6 +19,42 @@ const navigationLinkSchema = z
     label: z.string().min(1),
   })
   .strict();
+const siteRouteKeys = [
+  "allArticles",
+  "announcements",
+  "articles",
+  "authors",
+  "bibliography",
+  "categories",
+  "collections",
+  "feed",
+  "home",
+  "search",
+  "tags",
+] as const;
+export const siteShareTargetIds = [
+  "bluesky",
+  "x",
+  "threads",
+  "facebook",
+  "linkedin",
+  "reddit",
+  "hacker-news",
+  "pinterest",
+] as const;
+const siteRouteKeySchema = z.enum(siteRouteKeys);
+const siteShareTargetIdSchema = z.enum(siteShareTargetIds);
+const homepageDiscoveryLinkSchema = z
+  .object({
+    href: pathOrUrlSchema.optional(),
+    label: z.string().min(1),
+    route: siteRouteKeySchema.optional(),
+  })
+  .strict()
+  .refine((link) => (link.href === undefined) !== (link.route === undefined), {
+    message: "Expected exactly one of href or route.",
+    path: ["route"],
+  });
 const externalLinkSchema = z
   .object({
     ariaLabel: z.string().min(1).optional(),
@@ -26,9 +62,33 @@ const externalLinkSchema = z
     label: z.string().min(1),
   })
   .strict();
+const defaultHomepageLabelsConfig = {
+  announcements: "Announcements",
+  categories: "Categories",
+  featured: "Featured Articles",
+  read: "Read",
+  recent: "Recent",
+  startHere: "Start Here",
+} as const;
+const defaultHomepageEmptyTextConfig = {
+  announcements: "Announcements will appear here.",
+  categories: "No categories are available yet.",
+  featured: "Featured items will appear here.",
+  startHere: "Curated starter articles will appear here.",
+} as const;
+const defaultHomepageDiscoveryLinksConfig = [
+  { label: "Articles", route: "articles" },
+  { label: "Archive", route: "allArticles" },
+  { label: "Authors", route: "authors" },
+  { label: "Collections", route: "collections" },
+  { label: "Tags", route: "tags" },
+] as const;
 const defaultHomepageConfig = {
   announcementLimit: 3,
+  discoveryLinks: defaultHomepageDiscoveryLinksConfig,
+  emptyText: defaultHomepageEmptyTextConfig,
   featuredCollection: "featured",
+  labels: defaultHomepageLabelsConfig,
   recentLimit: 8,
   startHereCollection: "start-here",
 } as const;
@@ -71,10 +131,59 @@ const homepageConfigSchema = z
       .int()
       .positive()
       .default(defaultHomepageConfig.announcementLimit),
+    discoveryLinks: z
+      .array(homepageDiscoveryLinkSchema)
+      .default(() =>
+        defaultHomepageDiscoveryLinksConfig.map((link) => ({ ...link })),
+      ),
+    emptyText: z
+      .object({
+        announcements: z
+          .string()
+          .min(1)
+          .default(defaultHomepageEmptyTextConfig.announcements),
+        categories: z
+          .string()
+          .min(1)
+          .default(defaultHomepageEmptyTextConfig.categories),
+        featured: z
+          .string()
+          .min(1)
+          .default(defaultHomepageEmptyTextConfig.featured),
+        startHere: z
+          .string()
+          .min(1)
+          .default(defaultHomepageEmptyTextConfig.startHere),
+      })
+      .strict()
+      .default(defaultHomepageConfig.emptyText),
     featuredCollection: z
       .string()
       .min(1)
       .default(defaultHomepageConfig.featuredCollection),
+    labels: z
+      .object({
+        announcements: z
+          .string()
+          .min(1)
+          .default(defaultHomepageLabelsConfig.announcements),
+        categories: z
+          .string()
+          .min(1)
+          .default(defaultHomepageLabelsConfig.categories),
+        featured: z
+          .string()
+          .min(1)
+          .default(defaultHomepageLabelsConfig.featured),
+        read: z.string().min(1).default(defaultHomepageLabelsConfig.read),
+        recent: z.string().min(1).default(defaultHomepageLabelsConfig.recent),
+        startHere: z
+          .string()
+          .min(1)
+          .default(defaultHomepageLabelsConfig.startHere),
+      })
+      .strict()
+      .default(defaultHomepageConfig.labels),
     recentLimit: z
       .number()
       .int()
@@ -86,7 +195,17 @@ const homepageConfigSchema = z
       .default(defaultHomepageConfig.startHereCollection),
   })
   .strict()
-  .default(defaultHomepageConfig);
+  .default(() => ({
+    announcementLimit: defaultHomepageConfig.announcementLimit,
+    discoveryLinks: defaultHomepageDiscoveryLinksConfig.map((link) => ({
+      ...link,
+    })),
+    emptyText: { ...defaultHomepageEmptyTextConfig },
+    featuredCollection: defaultHomepageConfig.featuredCollection,
+    labels: { ...defaultHomepageLabelsConfig },
+    recentLimit: defaultHomepageConfig.recentLimit,
+    startHereCollection: defaultHomepageConfig.startHereCollection,
+  }));
 const featureConfigSchema = z
   .object({
     announcements: z.boolean().default(defaultFeatureConfig.announcements),
@@ -178,11 +297,19 @@ export const siteConfigSchema = z
       .strict(),
     share: z
       .object({
+        targets: z
+          .array(siteShareTargetIdSchema)
+          .refine(hasUniqueValues, {
+            message: "Expected unique share target IDs.",
+          })
+          .default(() => Array.from(siteShareTargetIds)),
         threadsMention: z.string().min(1).optional(),
         xViaHandle: z.string().min(1).optional(),
       })
       .strict()
-      .default({}),
+      .default(() => ({
+        targets: Array.from(siteShareTargetIds),
+      })),
     support: z
       .object({
         block: z
@@ -205,6 +332,9 @@ export type SiteConfig = z.infer<typeof siteConfigSchema>;
 
 /** Named route keys exposed by the validated site config. */
 export type SiteRouteKey = keyof SiteConfig["routes"];
+
+/** Supported third-party article share target IDs. */
+export type SiteShareTargetId = (typeof siteShareTargetIds)[number];
 
 /** Current site-instance configuration consumed by the Astro platform. */
 export const siteConfig = parseSiteConfig(readSiteConfigJson());
@@ -260,4 +390,8 @@ function isPathOrAbsoluteUrl(value: string): boolean {
 
 function isSitePath(value: string): boolean {
   return value.startsWith("/");
+}
+
+function hasUniqueValues(values: readonly string[]): boolean {
+  return new Set(values).size === values.length;
 }

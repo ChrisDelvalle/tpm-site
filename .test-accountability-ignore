@@ -35,6 +35,11 @@ site/public/**
 # Astro component tests that render the branded CTA buttons.
 src/components/ui/assets/**
 
+# Approved exception: Platform-owned catalog fixture images are exercised by
+# catalog render tests, browser invariants, asset-location checks, and the
+# external site-instance catalog build rather than mirrored unit tests.
+src/catalog/assets/**
+
 # Approved exception: Global CSS is exercised by browser, accessibility,
 # responsive, visual, and build checks instead of mirrored unit tests.
 src/styles/**/*.css

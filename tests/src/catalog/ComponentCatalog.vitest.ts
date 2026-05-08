@@ -8,7 +8,7 @@ describe("ComponentCatalog", () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(ComponentCatalog);
 
-    expect(view).toContain("TPM Component Catalog");
+    expect(view).toContain("Platform Component Catalog");
     expect(view).toContain("UI Primitives");
     expect(view).toContain("src/components/ui/Button.astro");
     expect(view).toContain("Media Primitives");
