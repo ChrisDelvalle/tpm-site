@@ -1,3 +1,8 @@
+import { spawnSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
 import { describe, expect, test } from "bun:test";
 
 import {
@@ -121,5 +126,40 @@ describe("platform boundary verifier", () => {
         message: "Move TPM-specific reader copy into site content or config.",
       },
     ]);
+  });
+
+  test("ignores tracked files deleted in a dirty worktree", () => {
+    const rootDir = mkdtempSync(path.join(os.tmpdir(), "platform-boundary-"));
+
+    try {
+      mkdirSync(path.join(rootDir, "src/lib"), { recursive: true });
+      writeFileSync(
+        path.join(rootDir, "src/lib/routes.ts"),
+        "export const routes = true;\n",
+      );
+      writeFileSync(
+        path.join(rootDir, "src/lib/site-config.ts"),
+        "export const config = true;\n",
+      );
+      writeFileSync(
+        path.join(rootDir, "src/lib/utils.ts"),
+        "export const utils = true;\n",
+      );
+      writeFileSync(
+        path.join(rootDir, "src/lib/deleted.ts"),
+        "export const deleted = true;\n",
+      );
+      spawnSync("git", ["init"], { cwd: rootDir });
+      spawnSync("git", ["add", "."], { cwd: rootDir });
+      rmSync(path.join(rootDir, "src/lib/deleted.ts"));
+
+      const result = verifyPlatformBoundaries({ rootDir });
+
+      expect(result.unownedLibFiles).toEqual([]);
+      expect(result.forbiddenImports).toEqual([]);
+      expect(result.forbiddenLiterals).toEqual([]);
+    } finally {
+      rmSync(rootDir, { force: true, recursive: true });
+    }
   });
 });

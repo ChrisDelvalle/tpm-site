@@ -1,5 +1,5 @@
 {
-  "description": "Reference material for the platform contracts and site instance model.",
-  "order": 1,
+  "description": "Durable contracts for commands, frontmatter, theme, modules, and customization.",
+  "order": 4,
   "title": "Reference"
 }

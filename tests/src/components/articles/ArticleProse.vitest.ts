@@ -13,6 +13,7 @@ describe("ArticleProse", () => {
     });
 
     expect(view).toContain("prose");
+    expect(view).toContain("[&#38;_pre_code]:text-white");
     expect(view).toContain("[&#38;>*:first-child]:mt-0");
     expect(view).not.toContain('type="module"');
     expect(view).toContain("Readable article copy.");

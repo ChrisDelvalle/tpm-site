@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 interface PlatformBoundaryFile {
@@ -289,10 +289,12 @@ function formatViolation(violation: PlatformBoundaryViolation): string {
 }
 
 function readRepositoryFiles(rootDir: string): PlatformBoundaryFile[] {
-  return listRepositoryFiles(rootDir).map((file) => ({
-    path: file,
-    text: readFileSync(path.join(rootDir, file), "utf8"),
-  }));
+  return listRepositoryFiles(rootDir)
+    .filter((file) => existsSync(path.join(rootDir, file)))
+    .map((file) => ({
+      path: file,
+      text: readFileSync(path.join(rootDir, file), "utf8"),
+    }));
 }
 
 function listRepositoryFiles(rootDir: string): string[] {

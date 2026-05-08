@@ -440,3 +440,33 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run check`, `bun --silent run build`,
       `bun --silent run verify`, `bun --silent run validate:html`, and
       `bun --silent run review:markdown`.
+
+### Milestone 98: Public Documentation Site Design
+
+- [x] Design the docs site as both public documentation and a working example
+      site instance.
+- [x] Define a non-monolithic information architecture that gets new users from
+      running the site to editing content and homepage config quickly.
+- [x] Specify page-level documentation conventions: focused tasks,
+      copy-pasteable config and command examples, verification commands,
+      troubleshooting notes, and paths into deeper reference.
+      Documented in `docs/PUBLIC_DOCUMENTATION_SITE.md`, with the roadmap
+      updated to treat the docs site as the public documentation experience.
+
+### Milestone 99: Public Documentation Site Implementation
+
+- [x] Add focused getting-started, authoring, configuration, operations, and
+      reference pages to the docs-site instance.
+- [x] Update docs-site homepage, collections, navigation, categories, and
+      README so the example site doubles as an organized public docs site.
+- [x] Verify the docs site, markdown, and affected platform checks before
+      marking the documentation tranche complete.
+      Implemented focused quick-start, authoring, configuration, operations,
+      and reference pages; reorganized docs-site categories and collections;
+      updated homepage copy, navigation, README, and roadmap; and made
+      `platform:check` tolerate tracked files deleted in a dirty worktree.
+      Verified with `bun --silent run test:docs-site`,
+      `bun --silent run review:markdown`,
+      `bun test tests/scripts/quality/verify-platform-boundaries.test.ts`,
+      `bun --silent run platform:check`, `bun --silent run check`, and
+      `git diff --check`.

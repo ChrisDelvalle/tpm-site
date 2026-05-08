@@ -9,27 +9,47 @@ tags:
   - reference
 ---
 
-The platform separates customization by ownership. Site-wide editorial choices
-belong in validated site config. Entry-specific choices belong in content.
-Local presentation details belong in component props. Structural behavior stays
-in platform defaults until there is a clear reason to expose it.
+Customization should have a clear owner. The platform is easier to maintain
+when site owners edit durable contracts instead of platform internals.
 
 ## Site Config
 
-Use site config for choices a webmaster expects to manage across the whole
-publication: homepage discovery links, section labels, share targets, support
-links, feature flags, routes, navigation, and content defaults.
+Use site config for stable site-wide choices a webmaster expects to manage:
+
+- homepage discovery links and section labels;
+- support and social links;
+- share targets;
+- feature flags;
+- routes and navigation;
+- content defaults.
+
+## Content And Frontmatter
+
+Use content for editorial choices tied to one entry: title, description, date,
+author, image, tags, visibility overrides, and PDF eligibility.
+
+```yaml
+---
+title: Hidden Draft
+visibility:
+  homepage: false
+  search: false
+---
+```
 
 ## Component Props
 
-Use component props when a page already has the local context. Related-article
-headings, category-specific labels, and one-off empty states should remain
-close to the component that renders them unless multiple sites need the same
-setting.
+Use component props when the page already has local context. Related-content
+headings, one-off empty states, and section-specific labels should remain close
+to the component unless they become a site-wide convention.
 
 ## Platform Defaults
 
-Keep layout mechanics, third-party share endpoint builders, PDF export
-structure, and article-card fitting behavior in the platform. These defaults
-make common sites work without forcing owners to understand implementation
-details.
+Keep layout mechanics, share endpoint builders, PDF export structure, and
+article-card fitting behavior in the platform until there is clear evidence
+that site owners need safe customization.
+
+## Deferred Customization
+
+Do not add speculative config. If a setting needs a product decision, schema
+design, or route/build redesign, document it as deferred instead.

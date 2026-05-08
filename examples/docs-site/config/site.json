@@ -39,33 +39,37 @@
     "announcementLimit": 2,
     "discoveryLinks": [
       {
-        "label": "Guides",
-        "route": "articles"
+        "href": "/articles/quick-start/",
+        "label": "Quick Start"
       },
       {
-        "label": "Collections",
-        "route": "collections"
+        "href": "/articles/create-first-article/",
+        "label": "First Article"
       },
       {
-        "label": "Reference",
-        "route": "categories"
+        "href": "/articles/customize-homepage/",
+        "label": "Homepage"
       },
       {
-        "label": "Tags",
-        "route": "tags"
+        "href": "/articles/change-theme-colors/",
+        "label": "Theme"
+      },
+      {
+        "href": "/articles/validate-site/",
+        "label": "Validate"
       }
     ],
     "emptyText": {
       "announcements": "Documentation updates will appear here.",
-      "categories": "Reference categories will appear here.",
+      "categories": "Documentation categories will appear here.",
       "featured": "Featured documentation will appear here.",
       "startHere": "Starter guides will appear here."
     },
     "featuredCollection": "featured",
     "labels": {
       "announcements": "Updates",
-      "categories": "Reference",
-      "featured": "Featured Guides",
+      "categories": "Browse",
+      "featured": "Featured",
       "read": "Docs",
       "recent": "Latest",
       "startHere": "Start Here"
@@ -85,24 +89,40 @@
   "navigation": {
     "footer": [
       {
-        "href": "/articles/",
-        "label": "Articles"
+        "href": "/articles/quick-start/",
+        "label": "Quick Start"
+      },
+      {
+        "href": "/categories/getting-started/",
+        "label": "Getting Started"
+      },
+      {
+        "href": "/categories/authoring/",
+        "label": "Authoring"
+      },
+      {
+        "href": "/categories/configuration/",
+        "label": "Configuration"
+      },
+      {
+        "href": "/categories/operations/",
+        "label": "Operations"
+      },
+      {
+        "href": "/categories/reference/",
+        "label": "Reference"
+      },
+      {
+        "href": "/articles/commands-reference/",
+        "label": "Commands"
+      },
+      {
+        "href": "/articles/troubleshooting/",
+        "label": "Troubleshooting"
       },
       {
         "href": "/articles/all/",
-        "label": "Archive"
-      },
-      {
-        "href": "/collections/",
-        "label": "Collections"
-      },
-      {
-        "href": "/announcements/",
-        "label": "Announcements"
-      },
-      {
-        "href": "/authors/",
-        "label": "Authors"
+        "label": "All Docs"
       },
       {
         "href": "/tags/",
@@ -123,12 +143,8 @@
     ],
     "primary": [
       {
-        "href": "/articles/",
-        "label": "Articles"
-      },
-      {
-        "href": "/collections/",
-        "label": "Collections"
+        "href": "/articles/quick-start/",
+        "label": "Quick Start"
       },
       {
         "href": "/about/",
@@ -150,7 +166,12 @@
     "tags": "/tags/"
   },
   "share": {
-    "targets": ["bluesky", "x", "linkedin", "reddit"],
+    "targets": [
+      "bluesky",
+      "x",
+      "linkedin",
+      "reddit"
+    ],
     "threadsMention": "@blog_platform",
     "xViaHandle": "blog_platform"
   },

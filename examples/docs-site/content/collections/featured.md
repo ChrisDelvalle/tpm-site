@@ -3,13 +3,13 @@ title: Featured
 description: Current platform documentation highlights.
 items:
   - slug: quick-start
-    note: Start here to understand the platform and site-instance split.
+    note: Run the docs site and make the first content edit.
+  - slug: create-first-article
+    note: Add Markdown content without touching platform routes.
+  - slug: customize-homepage
+    note: Put selected content on the homepage through collections and config.
   - slug: site-config
-    note: Review the config contract before customizing a new site.
-  - slug: platform-modules
-    note: Use module boundaries to keep site choices out of reusable platform code.
-  - slug: configurability
-    note: Learn which customization belongs in config, content, component props, or platform defaults.
+    note: Learn the JSON contract that future tooling can edit safely.
 ---
 
 Featured documentation for the example homepage.

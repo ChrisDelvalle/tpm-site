@@ -87,21 +87,23 @@ The first version of this contract is intentionally conservative: it validates
 the current platform surface and catches relationship mistakes, while leaving
 route pruning and theme contracts to later milestones.
 
-### 2. Example Documentation Site
+### 2. Public Documentation Example Site
 
-Add a real example site instance that also hosts platform documentation and
-tutorials.
+Add a real example site instance that also hosts public platform documentation
+and tutorials.
 
 - Use the platform to document itself.
 - Keep the example independent from TPM voice, content, branding, and support
   links.
 - Run it in CI as a second platform consumer.
 - Use it to catch TPM-specific assumptions earlier than the live site does.
+- Optimize the first-run path so users can run the site, add an article,
+  customize the homepage, change theme tokens, and validate the site quickly.
 
-The first example lives at `examples/docs-site/` and is intentionally modest:
-it exercises config, articles, announcements, authors, categories, collections,
-pages, assets, search, feeds, and PDFs without becoming a second publication to
-maintain. `bun run docs-site:dev` serves it locally, and
+The example lives at `examples/docs-site/` and is documentation-oriented: it
+exercises config, articles, announcements, authors, categories, collections,
+pages, assets, search, feeds, and PDFs while teaching the same contracts.
+`bun run docs-site:dev` serves it locally, and
 `bun run test:docs-site` validates and builds it with
 `SITE_INSTANCE_ROOT=examples/docs-site`.
 
@@ -205,7 +207,21 @@ surfaces.
 
 The current cleanup plan lives in `docs/PUBLIC_PLATFORM_CLEANUP.md`.
 
-### 10. Future GUI
+### 10. Public Documentation Site
+
+The docs-site instance should be organized as focused public documentation, not
+a fixture with a few sample pages.
+
+- Keep pages task-oriented and short.
+- Front-load commands and file paths.
+- Teach by editing real site-instance files.
+- Link from onboarding pages into deeper authoring, configuration, operations,
+  and reference material.
+
+The current documentation-site plan lives in
+`docs/PUBLIC_DOCUMENTATION_SITE.md`.
+
+### 11. Future GUI
 
 The GUI is intentionally deferred. It should edit the same contracts that the
 site instance already uses: JSON config, Markdown/MDX content, assets, and
