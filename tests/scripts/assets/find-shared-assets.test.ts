@@ -109,24 +109,24 @@ describe("shared asset finder", () => {
     const violations = sharedAssetViolations(
       new Map([
         [
-          "/repo/src/assets/articles/post/image.png",
+          "/repo/site/assets/articles/post/image.png",
           [
             {
-              assetPath: "/repo/src/assets/articles/post/image.png",
-              file: "/repo/src/content/a.md",
+              assetPath: "/repo/site/assets/articles/post/image.png",
+              file: "/repo/site/content/a.md",
               line: 1,
               value: "image.png",
             },
             {
-              assetPath: "/repo/src/assets/articles/post/image.png",
-              file: "/repo/src/content/b.md",
+              assetPath: "/repo/site/assets/articles/post/image.png",
+              file: "/repo/site/content/b.md",
               line: 2,
               value: "image.png",
             },
           ],
         ],
       ]),
-      "/repo/src/assets/shared",
+      "/repo/site/assets/shared",
     );
 
     expect(violations).toHaveLength(1);
@@ -139,7 +139,7 @@ describe("shared asset finder", () => {
         },
         "/repo",
       ),
-    ).toContain("outside src/assets/shared/");
+    ).toContain("outside site/assets/shared/");
   });
 
   test("formats success output for shared asset checks", () => {
@@ -152,22 +152,22 @@ describe("shared asset finder", () => {
         },
         "/repo",
       ),
-    ).toContain("No shared src assets found outside src/assets/shared");
+    ).toContain("No shared site assets found outside site/assets/shared");
   });
 
   test("finds markdown, quoted, and angle-bracket asset references", async () =>
     withTempRoot(async (root) => {
-      await writeText(root, "src/assets/articles/post/image.png", "image");
+      await writeText(root, "site/assets/articles/post/image.png", "image");
       await writeText(
         root,
-        "src/content/articles/post.md",
+        "site/content/articles/post.md",
         [
           "![Markdown](../../assets/articles/post/image.png)",
-          'const quoted = "src/assets/articles/post/image.png";',
-          "<src/assets/articles/post/image.png>",
-          "[Markdown angle](<src/assets/articles/post/image.png>)",
+          'const quoted = "site/assets/articles/post/image.png";',
+          "<site/assets/articles/post/image.png>",
+          "[Markdown angle](<site/assets/articles/post/image.png>)",
           "![Broken](../../assets/articles/post/image.png",
-          "![Broken angle](<src/assets/articles/post/image.png",
+          "![Broken angle](<site/assets/articles/post/image.png",
         ].join("\n"),
       );
 
@@ -181,11 +181,11 @@ describe("shared asset finder", () => {
 
   test("deduplicates repeated asset references from the same source line", async () =>
     withTempRoot(async (root) => {
-      await writeText(root, "src/assets/articles/post/image.png", "image");
+      await writeText(root, "site/assets/articles/post/image.png", "image");
       await writeText(
         root,
-        "src/content/articles/post.md",
-        '"src/assets/articles/post/image.png"; "src/assets/articles/post/image.png";',
+        "site/content/articles/post.md",
+        '"site/assets/articles/post/image.png"; "site/assets/articles/post/image.png";',
       );
 
       const references = await findAssetReferences({ rootDir: root });

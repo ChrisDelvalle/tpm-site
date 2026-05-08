@@ -1,5 +1,6 @@
 ---
 import SearchForm from "../navigation/SearchForm.astro";
+import { SITE_TITLE } from "../../lib/routes";
 
 interface Props {
   description?: string;
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const {
-  description = "Search The Philosopher's Meme archive.",
+  description = `Search ${SITE_TITLE} archive.`,
   headingId = "search-heading",
   title = "Search",
 } = Astro.props;
@@ -27,7 +28,7 @@ const {
   <div class="max-w-xl">
     <SearchForm
       inputId="search-page-input"
-      label="Search The Philosopher's Meme archive"
+      label={`Search ${SITE_TITLE} archive`}
       placeholder="Search articles"
     />
   </div>

@@ -14,5 +14,7 @@ describe("Knip config", () => {
     expect(config.ignore).toContain("dist/**");
     expect(config.ignore).toContain("coverage/**");
     expect(config.ignoreBinaries).toContain("gitleaks");
+    expect(config.ignoreDependencies).toContain("html-validate");
+    expect(config.ignoreDependencies).toContain("pagefind");
   });
 });

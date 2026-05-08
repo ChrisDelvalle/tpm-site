@@ -44,121 +44,121 @@ ordinary prose links into structured bibliography entries.
 
 ## Article Inventory
 
-| Article                                                                                                 | Status                 | One-line inventory                                                                                                                                     |
-| ------------------------------------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/content/articles/aesthetics/a-short-note-on-gondola.md`                                            | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/aesthetics/gondola-shrine.md`                                                     | `prose-links-only`     | markdown links: 1; raw URLs: 2                                                                                                                         |
-| `src/content/articles/aesthetics/kandinsky-and-loss.md`                                                 | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
-| `src/content/articles/aesthetics/memes-jokes-and-visual-puns.md`                                        | `prose-links-only`     | markdown links: 4; raw URLs: 4                                                                                                                         |
-| `src/content/articles/aesthetics/platform-content-design.md`                                            | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/aesthetics/structure-and-content-in-drake-style-templates.md`                     | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/aesthetics/the-interpretation-of-memes.md`                                        | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/aesthetics/tmnh.md`                                                               | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/aesthetics/we-can-have-retrieval-inference-synthesis.md`                          | `canonical-references` | canonical citation markers: 18; hidden tpm-bibtex blocks: 1                                                                                            |
-| `src/content/articles/game-studies/gamergate-as-metagaming.md`                                          | `canonical-references` | canonical citation markers: 12; hidden tpm-bibtex blocks: 1                                                                                            |
-| `src/content/articles/game-studies/hotline-miami-and-player-complicity.md`                              | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/game-studies/memes-are-not-jokes-they-are-diagram-games.md`                       | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/game-studies/the-memetic-bottleneck.md`                                           | `canonical-references` | canonical citation markers: 5; hidden tpm-bibtex blocks: 1; markdown links: 14; raw URLs: 25                                                           |
-| `src/content/articles/game-studies/twitch-plays-pokemon.mdx`                                            | `prose-links-only`     | markdown links: 5; raw URLs: 5                                                                                                                         |
-| `src/content/articles/game-studies/undertale-review.md`                                                 | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
-| `src/content/articles/history/2010-decade-review-part-1.md`                                             | `canonical-references` | canonical citation markers: 4; hidden tpm-bibtex blocks: 1; markdown links: 6; raw URLs: 10                                                            |
-| `src/content/articles/history/2010-decade-review-part-2.md`                                             | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 18; raw URLs: 20                                                           |
-| `src/content/articles/history/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history.md`           | `prose-links-only`     | markdown links: 4                                                                                                                                      |
-| `src/content/articles/history/concept-jjalbang.md`                                                      | `canonical-references` | hidden tpm-bibtex blocks: 1; markdown links: 1; raw URLs: 8                                                                                            |
-| `src/content/articles/history/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear.md` | `prose-links-only`     | markdown links: 6; raw URLs: 5                                                                                                                         |
-| `src/content/articles/history/facebook-groups.md`                                                       | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/history/jeremy-cahill-metamer-dismissed-for-serious-misconduct.md`                | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/history/kym-magibon.md`                                                           | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 2; raw URLs: 4                                                             |
-| `src/content/articles/history/long-boys-never-grow-up.md`                                               | `prose-links-only`     | markdown links: 19; raw URLs: 19                                                                                                                       |
-| `src/content/articles/history/misattributed-plato-quote-is-real-now.md`                                 | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/history/the-meta-ironic-era.md`                                                   | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/history/what-we-talk-about-harambe.md`                                            | `canonical-references` | canonical citation markers: 11; hidden tpm-bibtex blocks: 1; markdown links: 14; raw URLs: 34                                                          |
-| `src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md`            | `canonical-references` | canonical citation markers: 3; hidden tpm-bibtex blocks: 1; markdown links: 2; raw URLs: 3                                                             |
-| `src/content/articles/irony/bane-loss-and-phylogeny.md`                                                 | `prose-links-only`     | markdown links: 3; raw URLs: 3                                                                                                                         |
-| `src/content/articles/irony/defining-normie-casual-ironist-and-autist-in-internet-subcultures.md`       | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 6; raw URLs: 8                                                             |
-| `src/content/articles/irony/post-irony-against-meta-irony.md`                                           | `prose-links-only`     | markdown links: 10; archive links: 2; raw URLs: 10                                                                                                     |
-| `src/content/articles/irony/the-ironic-normie.md`                                                       | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
-| `src/content/articles/irony/the-quadrant-system-for-the-categorization-of-internet-memes.md`            | `prose-links-only`     | markdown links: 1                                                                                                                                      |
-| `src/content/articles/irony/the-revised-quadrant-model.md`                                              | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/irony/when-you-drink-water.md`                                                    | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/memeculture/a-short-note-on-the-death-of-pepe.md`                                 | `prose-links-only`     | markdown links: 2; raw URLs: 1                                                                                                                         |
-| `src/content/articles/memeculture/all-memes-are-from-the-future.md`                                     | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/memeculture/early-trash-dove.md`                                                  | `prose-links-only`     | markdown links: 15; archive links: 5; raw URLs: 16                                                                                                     |
-| `src/content/articles/memeculture/gme-frenzy-hints-at-the-new-stage-of-memecultures.md`                 | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
-| `src/content/articles/memeculture/homesteading-the-memeosphere.md`                                      | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 6; raw URLs: 12                                                            |
-| `src/content/articles/memeculture/moe-to-memes-otaku-to-autist.md`                                      | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/memeculture/newfriends-and-the-generation-gap.md`                                 | `canonical-references` | canonical citation markers: 2; hidden tpm-bibtex blocks: 1                                                                                             |
-| `src/content/articles/memeculture/the-new-years-memes.md`                                               | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/metamemetics/glossary-1-dot-0.md`                                                 | `prose-links-only`     | markdown links: 19                                                                                                                                     |
-| `src/content/articles/metamemetics/internetmemetics.md`                                                 | `canonical-references` | canonical citation markers: 84; hidden tpm-bibtex blocks: 1; markdown links: 28; archive links: 9; raw URLs: 80                                        |
-| `src/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`                           | `canonical-references` | canonical citation markers: 64; hidden tpm-bibtex blocks: 1; raw URLs: 52                                                                              |
-| `src/content/articles/metamemetics/vulliamy-response.md`                                                | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 4; raw URLs: 6                                                             |
-| `src/content/articles/metamemetics/what-is-a-meme.md`                                                   | `canonical-references` | canonical citation markers: 17; canonical note markers: 7; canonical note definitions: 7; hidden tpm-bibtex blocks: 1; markdown links: 1; raw URLs: 20 |
-| `src/content/articles/philosophy/a-school-of-internet-philosophy.md`                                    | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/philosophy/an-internet-koan.md`                                                   | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
-| `src/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`             | `canonical-references` | canonical citation markers: 5; hidden tpm-bibtex blocks: 1; raw URLs: 1                                                                                |
-| `src/content/articles/philosophy/postnaturalism.md`                                                     | `canonical-references` | canonical citation markers: 35; hidden tpm-bibtex blocks: 1; raw URLs: 12                                                                              |
-| `src/content/articles/politics/a-tale-of-two-healthcare-narratives.md`                                  | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 3; archive links: 4; raw URLs: 5                                           |
-| `src/content/articles/politics/joshua-citarella-astroturfing.md`                                        | `canonical-references` | canonical citation markers: 2; hidden tpm-bibtex blocks: 1; markdown links: 3; raw URLs: 6                                                             |
-| `src/content/articles/politics/on-circlejerk-part-1.md`                                                 | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/politics/on-vectoralism-and-the-meme-alliance.mdx`                                | `canonical-references` | canonical citation markers: 20; hidden tpm-bibtex blocks: 1; markdown links: 24; raw URLs: 60                                                          |
-| `src/content/articles/politics/president-parks-corruption-cult.md`                                      | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
-| `src/content/articles/politics/see-the-problem.md`                                                      | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/politics/social-media-freedom.mdx`                                                | `canonical-references` | canonical citation markers: 3; hidden tpm-bibtex blocks: 1; markdown links: 30; raw URLs: 36                                                           |
-| `src/content/articles/politics/the-post-pepe-manifesto.md`                                              | `clean`                | No reference-like content detected.                                                                                                                    |
-| `src/content/articles/politics/the-structure-of-hyperspatial-politics.md`                               | `canonical-references` | canonical citation markers: 6; hidden tpm-bibtex blocks: 1; markdown links: 15; archive links: 4; raw URLs: 28                                         |
+| Article                                                                                                  | Status                 | One-line inventory                                                                                                                                     |
+| -------------------------------------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `site/content/articles/aesthetics/a-short-note-on-gondola.md`                                            | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/aesthetics/gondola-shrine.md`                                                     | `prose-links-only`     | markdown links: 1; raw URLs: 2                                                                                                                         |
+| `site/content/articles/aesthetics/kandinsky-and-loss.md`                                                 | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
+| `site/content/articles/aesthetics/memes-jokes-and-visual-puns.md`                                        | `prose-links-only`     | markdown links: 4; raw URLs: 4                                                                                                                         |
+| `site/content/articles/aesthetics/platform-content-design.md`                                            | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/aesthetics/structure-and-content-in-drake-style-templates.md`                     | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/aesthetics/the-interpretation-of-memes.md`                                        | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/aesthetics/tmnh.md`                                                               | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/aesthetics/we-can-have-retrieval-inference-synthesis.md`                          | `canonical-references` | canonical citation markers: 18; hidden tpm-bibtex blocks: 1                                                                                            |
+| `site/content/articles/game-studies/gamergate-as-metagaming.md`                                          | `canonical-references` | canonical citation markers: 12; hidden tpm-bibtex blocks: 1                                                                                            |
+| `site/content/articles/game-studies/hotline-miami-and-player-complicity.md`                              | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/game-studies/memes-are-not-jokes-they-are-diagram-games.md`                       | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/game-studies/the-memetic-bottleneck.md`                                           | `canonical-references` | canonical citation markers: 5; hidden tpm-bibtex blocks: 1; markdown links: 14; raw URLs: 25                                                           |
+| `site/content/articles/game-studies/twitch-plays-pokemon.mdx`                                            | `prose-links-only`     | markdown links: 5; raw URLs: 5                                                                                                                         |
+| `site/content/articles/game-studies/undertale-review.md`                                                 | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
+| `site/content/articles/history/2010-decade-review-part-1.md`                                             | `canonical-references` | canonical citation markers: 4; hidden tpm-bibtex blocks: 1; markdown links: 6; raw URLs: 10                                                            |
+| `site/content/articles/history/2010-decade-review-part-2.md`                                             | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 18; raw URLs: 20                                                           |
+| `site/content/articles/history/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history.md`           | `prose-links-only`     | markdown links: 4                                                                                                                                      |
+| `site/content/articles/history/concept-jjalbang.md`                                                      | `canonical-references` | hidden tpm-bibtex blocks: 1; markdown links: 1; raw URLs: 8                                                                                            |
+| `site/content/articles/history/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear.md` | `prose-links-only`     | markdown links: 6; raw URLs: 5                                                                                                                         |
+| `site/content/articles/history/facebook-groups.md`                                                       | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/history/jeremy-cahill-metamer-dismissed-for-serious-misconduct.md`                | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/history/kym-magibon.md`                                                           | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 2; raw URLs: 4                                                             |
+| `site/content/articles/history/long-boys-never-grow-up.md`                                               | `prose-links-only`     | markdown links: 19; raw URLs: 19                                                                                                                       |
+| `site/content/articles/history/misattributed-plato-quote-is-real-now.md`                                 | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/history/the-meta-ironic-era.md`                                                   | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/history/what-we-talk-about-harambe.md`                                            | `canonical-references` | canonical citation markers: 11; hidden tpm-bibtex blocks: 1; markdown links: 14; raw URLs: 34                                                          |
+| `site/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md`            | `canonical-references` | canonical citation markers: 3; hidden tpm-bibtex blocks: 1; markdown links: 2; raw URLs: 3                                                             |
+| `site/content/articles/irony/bane-loss-and-phylogeny.md`                                                 | `prose-links-only`     | markdown links: 3; raw URLs: 3                                                                                                                         |
+| `site/content/articles/irony/defining-normie-casual-ironist-and-autist-in-internet-subcultures.md`       | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 6; raw URLs: 8                                                             |
+| `site/content/articles/irony/post-irony-against-meta-irony.md`                                           | `prose-links-only`     | markdown links: 10; archive links: 2; raw URLs: 10                                                                                                     |
+| `site/content/articles/irony/the-ironic-normie.md`                                                       | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
+| `site/content/articles/irony/the-quadrant-system-for-the-categorization-of-internet-memes.md`            | `prose-links-only`     | markdown links: 1                                                                                                                                      |
+| `site/content/articles/irony/the-revised-quadrant-model.md`                                              | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/irony/when-you-drink-water.md`                                                    | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/memeculture/a-short-note-on-the-death-of-pepe.md`                                 | `prose-links-only`     | markdown links: 2; raw URLs: 1                                                                                                                         |
+| `site/content/articles/memeculture/all-memes-are-from-the-future.md`                                     | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/memeculture/early-trash-dove.md`                                                  | `prose-links-only`     | markdown links: 15; archive links: 5; raw URLs: 16                                                                                                     |
+| `site/content/articles/memeculture/gme-frenzy-hints-at-the-new-stage-of-memecultures.md`                 | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
+| `site/content/articles/memeculture/homesteading-the-memeosphere.md`                                      | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 6; raw URLs: 12                                                            |
+| `site/content/articles/memeculture/moe-to-memes-otaku-to-autist.md`                                      | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/memeculture/newfriends-and-the-generation-gap.md`                                 | `canonical-references` | canonical citation markers: 2; hidden tpm-bibtex blocks: 1                                                                                             |
+| `site/content/articles/memeculture/the-new-years-memes.md`                                               | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/metamemetics/glossary-1-dot-0.md`                                                 | `prose-links-only`     | markdown links: 19                                                                                                                                     |
+| `site/content/articles/metamemetics/internetmemetics.md`                                                 | `canonical-references` | canonical citation markers: 84; hidden tpm-bibtex blocks: 1; markdown links: 28; archive links: 9; raw URLs: 80                                        |
+| `site/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`                           | `canonical-references` | canonical citation markers: 64; hidden tpm-bibtex blocks: 1; raw URLs: 52                                                                              |
+| `site/content/articles/metamemetics/vulliamy-response.md`                                                | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 4; raw URLs: 6                                                             |
+| `site/content/articles/metamemetics/what-is-a-meme.md`                                                   | `canonical-references` | canonical citation markers: 17; canonical note markers: 7; canonical note definitions: 7; hidden tpm-bibtex blocks: 1; markdown links: 1; raw URLs: 20 |
+| `site/content/articles/philosophy/a-school-of-internet-philosophy.md`                                    | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/philosophy/an-internet-koan.md`                                                   | `prose-links-only`     | markdown links: 2; raw URLs: 2                                                                                                                         |
+| `site/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`             | `canonical-references` | canonical citation markers: 5; hidden tpm-bibtex blocks: 1; raw URLs: 1                                                                                |
+| `site/content/articles/philosophy/postnaturalism.md`                                                     | `canonical-references` | canonical citation markers: 35; hidden tpm-bibtex blocks: 1; raw URLs: 12                                                                              |
+| `site/content/articles/politics/a-tale-of-two-healthcare-narratives.md`                                  | `canonical-references` | canonical citation markers: 1; hidden tpm-bibtex blocks: 1; markdown links: 3; archive links: 4; raw URLs: 5                                           |
+| `site/content/articles/politics/joshua-citarella-astroturfing.md`                                        | `canonical-references` | canonical citation markers: 2; hidden tpm-bibtex blocks: 1; markdown links: 3; raw URLs: 6                                                             |
+| `site/content/articles/politics/on-circlejerk-part-1.md`                                                 | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/politics/on-vectoralism-and-the-meme-alliance.mdx`                                | `canonical-references` | canonical citation markers: 20; hidden tpm-bibtex blocks: 1; markdown links: 24; raw URLs: 60                                                          |
+| `site/content/articles/politics/president-parks-corruption-cult.md`                                      | `prose-links-only`     | markdown links: 1; raw URLs: 1                                                                                                                         |
+| `site/content/articles/politics/see-the-problem.md`                                                      | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/politics/social-media-freedom.mdx`                                                | `canonical-references` | canonical citation markers: 3; hidden tpm-bibtex blocks: 1; markdown links: 30; raw URLs: 36                                                           |
+| `site/content/articles/politics/the-post-pepe-manifesto.md`                                              | `clean`                | No reference-like content detected.                                                                                                                    |
+| `site/content/articles/politics/the-structure-of-hyperspatial-politics.md`                               | `canonical-references` | canonical citation markers: 6; hidden tpm-bibtex blocks: 1; markdown links: 15; archive links: 4; raw URLs: 28                                         |
 
 ## Article Details
 
-### `src/content/articles/aesthetics/a-short-note-on-gondola.md`
+### `site/content/articles/aesthetics/a-short-note-on-gondola.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/aesthetics/gondola-shrine.md`
+### `site/content/articles/aesthetics/gondola-shrine.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 2
 
-### `src/content/articles/aesthetics/kandinsky-and-loss.md`
+### `site/content/articles/aesthetics/kandinsky-and-loss.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 2; raw URLs: 2
 
-### `src/content/articles/aesthetics/memes-jokes-and-visual-puns.md`
+### `site/content/articles/aesthetics/memes-jokes-and-visual-puns.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 4; raw URLs: 4
 
-### `src/content/articles/aesthetics/platform-content-design.md`
+### `site/content/articles/aesthetics/platform-content-design.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/aesthetics/structure-and-content-in-drake-style-templates.md`
+### `site/content/articles/aesthetics/structure-and-content-in-drake-style-templates.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/aesthetics/the-interpretation-of-memes.md`
+### `site/content/articles/aesthetics/the-interpretation-of-memes.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/aesthetics/tmnh.md`
+### `site/content/articles/aesthetics/tmnh.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/aesthetics/we-can-have-retrieval-inference-synthesis.md`
+### `site/content/articles/aesthetics/we-can-have-retrieval-inference-synthesis.md`
 
 Status: `canonical-references`
 
@@ -179,7 +179,7 @@ Footnote markers:
 - Line 28: `Inferential criticism is, in turn, identical in form to adaptationism in the philosophy of biology. Adaptationists infer causal explanations for heritable traits in an organism based on the assumption that the persistence of those traits throughout generations must have contributed to the reproductive advantage of the ancestral organisms, since they would have been selected out of existence otherwise. While not without challenges (see Lewens (2004)[^cite-lewens-t-2004-organisms-and-artifacts-design-in] for a comprehensive treatment of the debate), the success and productivity of this methodology in biology and the philosophy of biology are indisputable.`
 - Line 30: `All of this is to suggest that retrieval and inference are compatible, and that methodologies resembling the two have proven wildly successful in at least one other domain which deals with entities that can reasonably be characterised as ontologically equivalent (and equally ill-defined). Robin Haack, considering the influence of pragmatism on Wittgenstein, suggests that we could "view Wittgenstein's naturalism as standing to the pragmatists' as Kepler's descriptive work on planetory [sic] motion stands to Newton's explanatory theory of gravitation." (1982, p. 163)[^cite-haack-r-1982-wittgenstein-s-pragmatism]. Following this, I suggest that we view Wollheim's retrieval as standing to Baxandall's inference as Mendel's descriptive work on genes stands to Darwin's explanatory theory of natural selection (that each were both descriptive and explanatory is only more fitting). Wollheim mused that "if we could lay down the rules in accordance with which the historical derivations have been made, we should have a theory which not merely was comprehensive of all works of art, it would also give us some insight into their formation." (1968, p. 160)[^cite-wollheim-r-1968-art-and-its-objects]. A synthesis of retrieval and inference may provide a path towards this goal.`
 
-### `src/content/articles/game-studies/gamergate-as-metagaming.md`
+### `site/content/articles/game-studies/gamergate-as-metagaming.md`
 
 Status: `canonical-references`
 
@@ -194,19 +194,19 @@ Footnote markers:
 - Line 10: `Anonymity and fluid membership criteria allowed GamerGate to tactically embrace or disavow a broad range of participants and their actions. In tempocracies, credit and culpability are diluted through functional anonymity. The identity of the author is obfuscated either via platform design or lost in transmission as posts are reposted without context. Dedicated participants can exert outsized influence over the collective self-image of the tempocratic space by laundering their messages through these anonymising processes. Mortensen points out that "the swarm logic of GG allowed all participants to determine their own motivation. It was near impossible to keep track of the individual opinions." (2018, p. 793).[^cite-mortensen-2018] The ephemerality of content and context that characterises tempocracies extend also to identity; users with stable identities were inherently disadvantaged in this conflict.`
 - Line 12: `Chess and Shaw suggest that the "opacity and inscrutability" of academia helped "breed conspiracy and mistrust", and that GamerGate bears resemblance to "counterknowledge", which act "as a means for oppressed people to articulate fears that stem from cycles of persecution" (Chess & Shaw, 2015, pp. 214-215).[^cite-chess-shaw-2015] Yet, opacity and inscrutability are not inherently negative traits for a platform and can be useful, such as by enabling anonymity, gatekeeping against low literacy users, or encouraging free exchange (Mortensen, 2018, pp. 794-797).[^cite-mortensen-2018] Furthermore, the logic of tempocracies is not of true anonymity but of functional anonymity. Attention and engagement keep issues and identities afloat; transparency and anonymity do not sufficiently counter tempocratic obscurity, because anonymity and inaccessibility of information are not necessary conditions for tempocratic obscurity. The notion that a more accessible academe and better education for the layman would solve the problem of sociopolitical metagaming is wishful thinking too typical of academics. It takes for granted the primacy of the academic epistemology, which entails the conclusion that playing the same game better must be the solution. Yet, this is precisely the same "ideological avatar of play" (Boluk & Lemieux, 2017, ch. 1)[^cite-boluk-lemieux-2017] which blinds GamerGaters to the metaludic nature of the anti-metagame metagame. As GamerGate made clear, the players in the current version of the game of gaming culture and industry cannot escape the metagame by playing the game as it was intended to be played. The games industry is complicit with maladaptive yet profitable metagames. New games and new metagames must be designed to replace it with something better.`
 
-### `src/content/articles/game-studies/hotline-miami-and-player-complicity.md`
+### `site/content/articles/game-studies/hotline-miami-and-player-complicity.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/game-studies/memes-are-not-jokes-they-are-diagram-games.md`
+### `site/content/articles/game-studies/memes-are-not-jokes-they-are-diagram-games.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/game-studies/the-memetic-bottleneck.md`
+### `site/content/articles/game-studies/the-memetic-bottleneck.md`
 
 Status: `canonical-references`
 
@@ -220,19 +220,19 @@ Footnote markers:
 - Line 54: `As [Dan Sperber points out](http://www.dan.sperber.fr/wp-content/uploads/2000_an-objection-to-the-memetic-approach-to-culture.pdf) through an example involving a series of star shapes copied in a chain of visual Chinese whispers, most people would not be able to place memetic content in chronological order without great difficulty.[^cite-sperber-d-2000-an-objection-to-the-memetic-approach]`
 - Line 62: `Memes as characterised above are a form of what I call _non-linear sequential art_. Other examples of non-linear sequential art include any replayable games with non-linear narratives. This characterization as _non-linear_ holds despite what skeptics may say. [Amy Claussen](https://www.amyeclaussen.com/), for instance, challenges the existence of non-linear narrative in her GDC talk called ["Unpopular Opinion: All Narrative is Linear"](https://www.youtube.com/watch?v=GWmEu7Yqrb0).[^cite-claussen-a-unpopular-opinion-all-narrative-is-linear]`
 
-### `src/content/articles/game-studies/twitch-plays-pokemon.mdx`
+### `site/content/articles/game-studies/twitch-plays-pokemon.mdx`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 5; raw URLs: 5
 
-### `src/content/articles/game-studies/undertale-review.md`
+### `site/content/articles/game-studies/undertale-review.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 2; raw URLs: 2
 
-### `src/content/articles/history/2010-decade-review-part-1.md`
+### `site/content/articles/history/2010-decade-review-part-1.md`
 
 Status: `canonical-references`
 
@@ -245,7 +245,7 @@ Footnote markers:
 - Line 12: `According to [our 2015 model](https://www.youtube.com/watch?v=fRdUG9LOJGA&list=PLbRNdtOn8CjOZYsLI13poGPnDqSeZIdAW&index=6) of memetic evolution,[^cite-her-zharova-2015-six-eras-of-memetic-history] ironic memes emerged through the clash between normies and autists following the diaspora of the latter into mainstream social media. [Mariya Zharova](https://mzharova.me/research/) and I predicted that the continued spread of ironic memes would lead to the development of postironic memes as the gap between the underground and the mainstream narrowed and the tension between the two intensified. The clash was first and foremost between the anonymous and nonymous modes of engagement, but the armaments were supplied through _pseudonymous_ users on platforms such as Reddit. Pseudonymous users, with secondary identities and a mode of engagement aimed primarily at outside viewers without the underlying assumption of cultural familiarity, imported memes from underground platforms and spread them into mainstream platforms. This route of memetic import and distribution via pseudonymous platforms became established as the idiosyncratic desires of the respective platforms aligned: the channers wanted new content; the Redditors wanted gold from strangers for content that got to the front page; the captive audiences on Facebook waited for content to appear on their feed. By the latter half of the decade, the supply chain of memes turned into a cycle as Facebook memes came into their own enough for them to be imported back onto underground platforms.`
 - Line 20: `It is important to note the fact that neither the meme concept nor the Internet meme concept were essential to the development of Internet memes as a cultural technology. In every instance, the digital technology of personal computers and the Internet inevitably led to the practice of memeing, regardless of what cybermetaphysics the theoretically-minded users adopted to explain the phenomenon. This is not to make a technologically determinist claim that memes are inherent to the Internet, or inevitable. Rather, I am arguing that Internet memes are not a particularly novel phenomenon in the grand scheme of human culture. They are the result of our applying ancient techniques and practices onto a new context and object. Just as certain relics acted as vessels of _mana_ in holy rituals, memes act as the locus of mana in the post-Internet era. In fact, the function of memes as _omniritualistic_ relics has allowed users to revive the _aura_ in images a mere 85 years after Walter Benjamin proclaimed its death in "The Work of Art in the Age of Mechanical Reproduction" (1935)[^cite-benjamin-w-1935-the-work-of-art]. A meme, rather than be framed by the environment in the way that Benjamin argued is the focus of reproduced art, frames its environment by recontextualising it. True, a meme changes meaning based on its environment, just as a poster is perceived differently based on how it is framed. But more importantly, a meme brings with it its evolutionary history. The reproductive success of a meme depends on how well it performs its function as a relic: it must be a good vessel for the mana it has inherited from its past.`
 
-### `src/content/articles/history/2010-decade-review-part-2.md`
+### `site/content/articles/history/2010-decade-review-part-2.md`
 
 Status: `canonical-references`
 
@@ -255,37 +255,37 @@ Footnote markers:
 
 - Line 42: `This led to the tradition of the original poster explicitly laying out the topic, and the rules for the thread to be voluntarily policed by the thread's participants. The most elaborate and complex examples of these _makeshift contexts_ can be seen on [/qst/ - Quests](http://4chan.org/qst), in which role playing game threads are moderated by the OP who usually starts the thread by setting the scene and the ground rules and volunteering to act as the game master. The use of threads as makeshift contexts with spatial identities led to the boards becoming a collection of agar plates that different strains of memetic techniques could be developed and tested out on again and again. The [disproportionately large influence of minor platforms](https://arxiv.org/abs/1805.12512) such as 2ch or 4chan on their relatively mainstream counterparts is partly explained by this long-standing tradition of localised and temporary rules as a form of gamified memetics.[^cite-zannettou-s-2018-origins-of-memes]`
 
-### `src/content/articles/history/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history.md`
+### `site/content/articles/history/a-golden-age-of-meme-pages-and-the-microcosm-of-art-history.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 4
 
-### `src/content/articles/history/concept-jjalbang.md`
+### `site/content/articles/history/concept-jjalbang.md`
 
 Status: `canonical-references`
 
 Inventory: hidden tpm-bibtex blocks: 1; markdown links: 1; raw URLs: 8
 
-### `src/content/articles/history/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear.md`
+### `site/content/articles/history/death-of-a-meme-or-how-leo-learned-to-stop-worrying-and-love-the-bear.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 6; raw URLs: 5
 
-### `src/content/articles/history/facebook-groups.md`
+### `site/content/articles/history/facebook-groups.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/history/jeremy-cahill-metamer-dismissed-for-serious-misconduct.md`
+### `site/content/articles/history/jeremy-cahill-metamer-dismissed-for-serious-misconduct.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/history/kym-magibon.md`
+### `site/content/articles/history/kym-magibon.md`
 
 Status: `canonical-references`
 
@@ -295,25 +295,25 @@ Footnote markers:
 
 - Line 2: `[This study](https://www.youtube.com/watch?v=E7ye0O3wlws) of Magibon from 2011 argues that these videos of a girl silently staring at the camera were able to repeatedly hit over a million views because the big eyes were moe.[^cite-magibon-study-2011] The researcher traces back the trend to lonelygirl15, a Youtuber who played a fictional vlogger on her channel. It's a pretty inane insight: people thought the big eyes are cute.`
 
-### `src/content/articles/history/long-boys-never-grow-up.md`
+### `site/content/articles/history/long-boys-never-grow-up.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 19; raw URLs: 19
 
-### `src/content/articles/history/misattributed-plato-quote-is-real-now.md`
+### `site/content/articles/history/misattributed-plato-quote-is-real-now.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/history/the-meta-ironic-era.md`
+### `site/content/articles/history/the-meta-ironic-era.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/history/what-we-talk-about-harambe.md`
+### `site/content/articles/history/what-we-talk-about-harambe.md`
 
 Status: `canonical-references`
 
@@ -329,7 +329,7 @@ Footnote markers:
 - Line 38: `One constant issue that gets brought up, however, is the question of whether or not Harambe is a racist meme. Meme pages on Facebook like Lettuce Dog have [argued](https://www.facebook.com/lettucedogmemes/photos/a.765134030263853.1073741827.765127320264524/927543420689579/?type=3&theater) that not only does the meme de-centre and trivialise recent black victims of police brutality, but it also perpetuates ‘the myth of black sub-personhood through ironic memorial of a dead Gorilla’.[^cite-lettuce-dog-2016-harambe-racism] The evidence people turn to when backing this argument is the undeniable amount of racist memes made with Harambe, believing that the post-ironic Harambe that is memorialised must be intrinsically linked to his past incarnation, continuing to mock Black Lives Matter and black victims of police killings implicitly. While Harambe will inevitably signify racism through its implicit history, it also will not. The post-ironic Harambe is and is not racist in the same way it is and is not sincere. Its image doubtlessly signifies its history as a racist meme, but at the surface Harambe is being compared to icons indifferent to their race and treated as a Christ-like figure. The meme’s racist and non-racist natures are reconciled in the ambiguity of post-irony, that ‘who cares?’ attitude which defends and justifies the meme against the aforementioned arguments. It does not perpetuate injustice by its lack of taking an ethical stance, instead it promotes itself as a shared experience or cause that has overcome the notion of meaning before solidarity.`
 - Line 42: `As Harambe has become a melting pot of meaning, people’s disdain for the meme will only fuel the meme-making fire to redefine Harambe with a rebellious essence against his contenders. There is no doubt that requests to put a stop to Harambe memes can only enrich the gorilla as a signifier, spurring people to continue spreading the meme in order to troll any pleas for its end (it is how [this](http://www.independent.co.uk/life-style/gadgets-and-tech/news/harambe-memes-cincinnati-zoo-gorilla-shot-dead-rip-a7203356.html) inevitably and immediately led to [this](http://www.independent.co.uk/life-style/gadgets-and-tech/news/harambe-memes-twitter-facebook-cincinnati-zoo-hacked-deletes-social-media-accounts-a7205111.html)).[^cite-griffin-a-2016-cincinnati-zoo-harambe-memes][^cite-griffin-a-2016-cincinnati-zoo-deletes-social-media] A post-ironic nature means that the meme has already become stale in some parts of the Internet while it still flourishes in others. Harambe has become such a well-known motif that even the dead celebrity aspect has started to trail away as an unnecessary characteristic. Anything gorilla-related at this point will accomplish the same signifying purposes its antecedents had, from abstract images of apes to [dance videos of computer-animated gorillas](https://www.youtube.com/watch?v=Y8RjrYjhRBo) (some of these will drop the mourning narrative altogether and become meta-ironic memes, jokes that are structurally and narratologically subversive). While the joke appears to be so random and/or minimalist that it comes off as a parody of post-irony itself, it has definitely exposed how far the world’s embrace of post-ironic memes has come. Standard narratives will be met with disenchantment and incredulity, be it ones presented by the media or existing narratives, perceived as long-standing beliefs within the incredulous audience. Harambe memes will meet the same mortality of staleness that all previous memes have met before it, but there is no telling what this blurring of irony and sincerity will do to our perception of future world events and reality itself.`
 
-### `src/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md`
+### `site/content/articles/history/wittgensteins-most-beloved-quote-was-real-but-its-fake-now.md`
 
 Status: `canonical-references`
 
@@ -340,13 +340,13 @@ Footnote markers:
 - Line 19: `_Norman Malcolm, Ludwig Wittgenstein: A Memoir (1958 [bold emphasis my own.])_[^cite-malcolm-n-1958-ludwig-wittgenstein-a-memoir]`
 - Line 21: `The most popular phrasing, from Henry Dribble, is a (very slight) paraphrasing of Norman Malcolm's. It first appeared in 2004, in "A View from the Asylum", one of several satirical short stories written from the perspective of "Henry Dribble", a patient in an insane asylum. It was published in a collection of similar writings under the same pseudonym of Henry Dribble, titled _Philosophical Investigations from The Sanctity of the Press_.[^cite-dribble-h-2004-philosophical-investigations] The author, Jess Rosenblatt, was an "armchair philosopher" from Mercer Island, working as a manufacturing sales manager at CMF Industries at the time. In an interview about the book, [Rosenblatt said](https://www.mi-reporter.com/life/armchair-philosopher-pens-two-books/) that "academics won't promote \[Wittgenstein\] or teach his theories because they see him as destructive of all previous philosophy. You'll find more hackers who like him, I'm a philosophical hacker because I'm not in academics anymore."[^cite-hanson-c-2004-armchair-philosopher-pens-two-books]`
 
-### `src/content/articles/irony/bane-loss-and-phylogeny.md`
+### `site/content/articles/irony/bane-loss-and-phylogeny.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 3; raw URLs: 3
 
-### `src/content/articles/irony/defining-normie-casual-ironist-and-autist-in-internet-subcultures.md`
+### `site/content/articles/irony/defining-normie-casual-ironist-and-autist-in-internet-subcultures.md`
 
 Status: `canonical-references`
 
@@ -356,61 +356,61 @@ Footnote markers:
 
 - Line 2: `Attempts at typologizing subcultural demographics are not new (for a clear and interesting example, see [‘Geeks, MOPs, and sociopaths in subculture evolution’ on Meaningness](https://meaningness.com/geeks-mops-sociopaths)).[^cite-chapman-d-geeks-mops-sociopaths] But online subcultures are different from ordinary subcultures. The following is my take on doing the same for online subcultures. I do this by clarifying the definitions of three highly popular terms used on the Internet to describe different kinds of subcultural participants, and clarifying the concept of the ironist in the context of online subcultures.`
 
-### `src/content/articles/irony/post-irony-against-meta-irony.md`
+### `site/content/articles/irony/post-irony-against-meta-irony.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 10; archive links: 2; raw URLs: 10
 
-### `src/content/articles/irony/the-ironic-normie.md`
+### `site/content/articles/irony/the-ironic-normie.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 2; raw URLs: 2
 
-### `src/content/articles/irony/the-quadrant-system-for-the-categorization-of-internet-memes.md`
+### `site/content/articles/irony/the-quadrant-system-for-the-categorization-of-internet-memes.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1
 
-### `src/content/articles/irony/the-revised-quadrant-model.md`
+### `site/content/articles/irony/the-revised-quadrant-model.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/irony/when-you-drink-water.md`
+### `site/content/articles/irony/when-you-drink-water.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/memeculture/a-short-note-on-the-death-of-pepe.md`
+### `site/content/articles/memeculture/a-short-note-on-the-death-of-pepe.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 2; raw URLs: 1
 
-### `src/content/articles/memeculture/all-memes-are-from-the-future.md`
+### `site/content/articles/memeculture/all-memes-are-from-the-future.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/memeculture/early-trash-dove.md`
+### `site/content/articles/memeculture/early-trash-dove.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 15; archive links: 5; raw URLs: 16
 
-### `src/content/articles/memeculture/gme-frenzy-hints-at-the-new-stage-of-memecultures.md`
+### `site/content/articles/memeculture/gme-frenzy-hints-at-the-new-stage-of-memecultures.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 2; raw URLs: 2
 
-### `src/content/articles/memeculture/homesteading-the-memeosphere.md`
+### `site/content/articles/memeculture/homesteading-the-memeosphere.md`
 
 Status: `canonical-references`
 
@@ -420,13 +420,13 @@ Footnote markers:
 
 - Line 16: `Going further back than imageboard culture, the "hacker ownership" of memes can be seen at work, such as in memes like ["Godwin's Law"](http://www.wired.com/1994/10/godwin-if-2/) (1990)[^cite-godwin-m-1994-meme-counter-meme] and its corollaries such as "Miller's Paradox" or "Gordon's Restatement of Newman's Corollary to Godwin's Law". This mode of thinking about memes as something individuals can invent (and put their name on) was superseded alongside enthusiasm for memetic engineering, replaced by hostility against forced memes; it has since been revived with the maturation of ironic memes and memepages.`
 
-### `src/content/articles/memeculture/moe-to-memes-otaku-to-autist.md`
+### `site/content/articles/memeculture/moe-to-memes-otaku-to-autist.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/memeculture/newfriends-and-the-generation-gap.md`
+### `site/content/articles/memeculture/newfriends-and-the-generation-gap.md`
 
 Status: `canonical-references`
 
@@ -436,19 +436,19 @@ Footnote markers:
 
 - Line 4: `Dawkins's theory of memes itself began as an inquiry into the way culture is transmitted between organisms.[^cite-dawkins-r-1976-the-selfish-gene] Later theorists in the field of cultural evolution such as Cavalli-Sforza and Feldman suggest we divide them into three forms: horizontal (i.e. between individuals within the same generation), oblique (from an older generation to a younger with less direct links than parent to offspring) and vertical (i.e. from parent to offspring).[^cite-cavalli-sforza-feldman-1981-cultural-transmission] It's the whale diagram from the meme lecture.`
 
-### `src/content/articles/memeculture/the-new-years-memes.md`
+### `site/content/articles/memeculture/the-new-years-memes.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/metamemetics/glossary-1-dot-0.md`
+### `site/content/articles/metamemetics/glossary-1-dot-0.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 19
 
-### `src/content/articles/metamemetics/internetmemetics.md`
+### `site/content/articles/metamemetics/internetmemetics.md`
 
 Status: `canonical-references`
 
@@ -491,7 +491,7 @@ Footnote markers:
 - Line 153: `The memeologists' emphasis on human agency is justified. A prominent concept in folk memetics is the 'forced meme'. A forced meme is a meme which was intentionally popularized, rather than through the organic accident of many individual users participating in the parody and spread of memetic artefacts. A classic example from Dawkins is an ad jingle; the Internet subculture has “Milhouse Is Not A Meme”, a debate over whether if a picture of The Simpsons character would be considered a meme if it were posted enough times on the imageboard 4chan (Know Your Meme, 2015; Urban Dictionary, 2009)[^cite-know-your-meme-2015-milhouse-is-not-a-meme][^cite-urban-dictionary-2009-forced-meme]. The consensus that arose among the users was that “Milhouse is not a meme, but 'Milhouse is not a meme' is a meme”.`
 - Line 173: `The fatal flaw in contemporary memeology is that it has sacrificed its evolutionary and Darwinian components in favour of a typological approach to meme studies. This need not be the case if memeologists can accept that while agents are important, memeology as a study of populations as mere sums of their constituent individuals cannot account for all population-level effects by claiming that “cultural information passes along from person to person, yet gradually scales into a shared social phenomenon” (Shifman, 2013a. pp. 365-366)[^cite-shifman-l-2013a-memes-in-a-digital-world]. Populations are different entities to the individuals within (see: Sober, 1980)[^cite-sober-e-1980-evolution-population-thinking-and-essentialism] and therefore there are no grounds for the memeologist to simply assume that the fact that 1. populations are made up of individuals; 2. individual-level effects accumulate as population-level effects; and 3. the population in question is “decentralized, nonhierarchical, and user-based” (Shifman, 2013a. pg. 365)[^cite-shifman-l-2013a-memes-in-a-digital-world].`
 
-### `src/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`
+### `site/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`
 
 Status: `canonical-references`
 
@@ -531,7 +531,7 @@ Footnote markers:
 - Line 125: `Memes are trivially easy to identify if we take away the ambition to develop an unchangeable and highly reliable definition. Internet memes are cultural content online that are usually generated and spread by human users, often for their emotive content such as humour and sociopolitical resonance. The colloquial use of the term 'meme' to refer to such content began as a direct allusion to Dawkins' original meaning of the term. The most recognisable form of an Internet meme is a funny image that has been shared around many times between many users through social media. There are many exceptions to this informal definition, which can be readily captured through a more sophisticated ontology. The colloquial notion of memes has eclipsed the original meaning, but it is popularly acknowledged that Internet memes are an unusually well recognised subset of memes, including by Dawkins (in Solon, 2013)[^cite-solon-o-2013-june-20].`
 - Line 144: `During the height of research interest in memetics, Hull (in Aunger, 2000)[^cite-hull-d-2000-taking-memetics-seriously] urged memeticists to focus on crude empirical research in order to cut through the irresolvable ontological debates and make headway in the study of memes, whatever they may turn out to be. Despite the extremely prescient recommendation from Hull, memeticists failed to develop memetics into an empirical discipline. Hull himself did not contribute very much at all in terms of empirical work, but his meta-theoretical contributions about the development of science in general and his guiding criticisms about memetics remain essential. It is hardly too late to follow Hull’s suggestion to put empirical research first. No matter how tantalising the possibilities of frameworks like memetic systems theory may be, they cannot be given priority over the tedious work of collecting, sorting and analysing information about memes in the real world. Theories and ideas, like Dawkins’ genes, can live forever, but things in the real world often die out before they can be studied. Ontology can wait.`
 
-### `src/content/articles/metamemetics/vulliamy-response.md`
+### `site/content/articles/metamemetics/vulliamy-response.md`
 
 Status: `canonical-references`
 
@@ -541,7 +541,7 @@ Footnote markers:
 
 - Line 2: `In her very interesting essay for this website, ["What is a Meme?"](http://thephilosophersmeme.com/2021/11/30/what-is-a-meme/), Claudia Vulliamy critiques a definition of the concept meme that I gave in my paper ["The Anonymity of a Murmur: Internet (and Other) Memes"](https://simonevnine.files.wordpress.com/2018/12/ayy021.pdf)[^cite-evnine-s-2018-the-anonymity-of-a-murmur] and replaces it with what she argues is an improvement. I maintained that for something to be a meme it is necessary and sufficient that it be "made, as part of memographic practice, out of norms for producing things as part of that memographic practice." This is intended as a definition of a type of meme, such as Batman Slapping Robin – what Vulliamy calls a meme trend – and not of the individual things that manifest a trend or instantiate a type. Defining a meme as being constituted by norms gets at the idea that a meme is basically just some instructions that tell you to use a certain image, put a certain kind of text on it in a certain position, and so on. By "memographic practice" I mean a particular, historical phenomenon that began around the end of the 20th century on internet message boards and gradually migrated to the internet at large and even, arguably, to the non-digital world. The reference to memographic practice distinguishes memes from, say, sonnets. The sonnet is also to be identified with some instructions, instructions that prescribe number of lines, rhyme scheme, etc. But it is not a meme, in the relevant sense, since it operates in a totally different socio-cultural-historical context.`
 
-### `src/content/articles/metamemetics/what-is-a-meme.md`
+### `site/content/articles/metamemetics/what-is-a-meme.md`
 
 Status: `canonical-references`
 
@@ -574,19 +574,19 @@ Footnote markers:
 - Line 148: `There do not appear to be any online memes that do not use images and/or text. But seeing as memes span the media of text, photos, drawings and videos, no particular media format seems tied to the essence of memes. The use of images and/or text appears to be a practical limitation; memes would simply not be able to spread or be consumed and replicated as easily and anonymously if they existed in non-visual forms. There is an auditory trend in surreal, kitsch video memes of extreme bass boosting[^note-bass-boost][^cite-socialism-done-left-2020-i-don-t-deserve-you]. In these videos, which often involve intentionally tasteless and incoherent graphics, the bass boost provides a level of distortion that makes the sound quality far enough from reality and everyday voice communication for the anonymity factor to be maintained. In theory, memes in this style could exist only in sound format. However, there would probably be less room for stylistic variation and evolution in purely auditory memes.`
 - Line 172: `Morris Weitz argued that to make a closed definition of _art_, or its sub-concepts such as _opera_ or _portraiture_, 'is ludicrous since it forecloses on the very conditions of creativity in the arts' [^cite-weitz-morris-the-1956-27-35]. Memes, whether or not they are respected, are a kind of art form, and it seems more fitting than any other approach to treat the concept of memes as an open one. In the philosophy of art, a 'cluster' definition is one that employs Wittgenstein's theory of 'family resemblance', a way of describing open concepts not with jointly necessary and sufficient conditions, but with a 'network of similarities' [^cite-wittgenstein-ludwig-philosophical-1953-translated-by-e]. The things that fall under such a concept have many traits in common with each other, but there is no trait that all of them have. A may have things in common with B, and B things in common with C, but there be no one thing that is shared by A, B and C -- much like resemblance within a family, whose members share a resemblance in their features, but there is no one feature that all members have (they do not all have the same nose, for example). Proponents of the 'cluster' view suggest that art and art forms should be defined in this way, and typically provide a list of traits that count towards something is being a work of art, none of which is a necessary condition. This type of account could be applied to memes, with the properties in the cluster being as follows: comedic intent, arising from memographic practice, public shareability as part of memographic practice, anonymity, appropriation, ephemerality, digitality, use of images and/or text, and stylistic resemblance to other memes.`
 
-### `src/content/articles/philosophy/a-school-of-internet-philosophy.md`
+### `site/content/articles/philosophy/a-school-of-internet-philosophy.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/philosophy/an-internet-koan.md`
+### `site/content/articles/philosophy/an-internet-koan.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 2; raw URLs: 2
 
-### `src/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`
+### `site/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`
 
 Status: `canonical-references`
 
@@ -598,7 +598,7 @@ Footnote markers:
 - Line 112: `The two tools described above, used as part of the group assignment activity, lay the foundations for a method of mass collaboration among philosophers. Whereas collaboration at scale is effectively built into the sciences, most work in the humanities is inherently unscalable. Certain scalable activities, such as contributing to a shared library or the enrichment of metadata, are discipline-agnostic and can be readily adopted by humanists. New digital methods in the humanities are promising in their potential to make scalable what was hitherto unscalable. For instance, macroanalysis (Jockers, 2013)[^cite-jockers-2013] and distant reading allow researchers to analyse an indefinite number of texts through the use of computational methods. Whereas the conventional method of close reading would have only allowed a researcher to become deeply familiar with a few hundred texts over their entire career at most, distant reading allows the researcher to analyse hundreds of thousands of texts for patterns.`
 - Line 123: `Alfano’s use of his analysis[^cite-alfano-2018] is primarily as a supplement for close reading, such as figures of how likely it is for certain terms to appear together. There are pros and cons of using Nietzsche: while the short, numbered passages he wrote are useful to turn into visualisations (ibid., pg. 99), close reading as mere sanity check is compulsory because Nietzsche had little regard for disciplined self-consistency and frequently employed irony as part of the argument.`
 
-### `src/content/articles/philosophy/postnaturalism.md`
+### `site/content/articles/philosophy/postnaturalism.md`
 
 Status: `canonical-references`
 
@@ -629,7 +629,7 @@ Footnote markers:
 - Line 120: `Digital methods from digital humanities could be used to automate the reflexive analysis that has been the work of a minority of radical philosophers in the past. This automated reflexive analysis, based on information like emergent patterns in a philosopher’s arguments based on metadata, can provide the foundations for a positive postnaturalist programme. The resulting positive programme would resemble Haack’s crossword puzzle[^cite-heilbron-1990-comte-epistemology]. Foundations would come in the form of shared technologies, and coherence would guide the process of collective inquiry.`
 - Line 124: `Stephen Wolfram argues that the universe comprises of simple rules whose equivalents appear repetitively[^cite-wolfram-2012-new-kind-of-science]. For instance, the growth pattern of slime moulds can solve problems about using the lowest amount of energy to get from one point to another through a continuous network of cells[^cite-springer-2012-slime-mold-network]. Postnaturalist digital methods will make entire worlds accessible to philosophers as a source of useful knowledge, and reduce waste by making each exchange count for more. Philosophical incommensurability would no longer be an issue. In effect, we would be creating an automatic translation engine for philosophies.`
 
-### `src/content/articles/politics/a-tale-of-two-healthcare-narratives.md`
+### `site/content/articles/politics/a-tale-of-two-healthcare-narratives.md`
 
 Status: `canonical-references`
 
@@ -639,7 +639,7 @@ Footnote markers:
 
 - Line 2: `The author of [this article](https://archive.is/8koZz) argues that Italy is doing worse than South Korea because supply side regulation caused the Italian system to decay while the lack of regulation allowed the Korean system to expand.[^cite-archive-8kozz-healthcare-narrative] It's an obscene argument, because it sets the dichotomy as between a free market and a regulated market, when:`
 
-### `src/content/articles/politics/joshua-citarella-astroturfing.md`
+### `site/content/articles/politics/joshua-citarella-astroturfing.md`
 
 Status: `canonical-references`
 
@@ -649,13 +649,13 @@ Footnote markers:
 
 - Line 2: `Joshua Citarella getting ratiod on his own [insta post](https://www.instagram.com/p/CcdbowvuHx_) for the "How to Plant a Meme" project, in which he memed on Instagram for a year and a half to get other memers "interested in conventional forms of political organization or possibly even engage in electoral politics."[^cite-citarella-j-2022-how-to-plant-a-meme] Peculiarly, he attempted this by making memes about Mark Fisher, who had this to say about electoralism: "[Don't vote, don't encourage them](http://k-punk.abstractdynamics.org/archives/005462.html)".[^cite-fisher-m-2005-dont-vote]`
 
-### `src/content/articles/politics/on-circlejerk-part-1.md`
+### `site/content/articles/politics/on-circlejerk-part-1.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/politics/on-vectoralism-and-the-meme-alliance.mdx`
+### `site/content/articles/politics/on-vectoralism-and-the-meme-alliance.mdx`
 
 Status: `canonical-references`
 
@@ -679,19 +679,19 @@ Footnote markers:
 - Line 90: `In another sense, however, those who produce the infrastructures by which we communicate -- both physical and memetic -- are the “true” hackers who find their work torn from them by the vectoralist class. “[Steve Jobs didn’t invent the iPhone](https://youtu.be/ecLKIYbeELI?t=2333),”[^cite-stallman-r-2011-anti-gplv3-propaganda] nor did Zuckerberg create Facebook as we know it today. (The Meme Alliance’s elevation of “Zucc” to a <HoverImageLink image={articleImage14} label="panoptic Big Brother" /> is, of course, in jest.) Though the free software movement has provided the ideological groundwork for communal creation, too often high salaries, free drinks, and laundry services win over potential hacker-slackers who would have otherwise lived cheap and coded hard. As a result, an incalculable effort has been spent solidifying the market position of social-media “walled gardens.”`
 - Line 108: `The motivation is apparent. Deviant content and its concomitant communities tarnish the reputation of these platforms, decreasing competition for the space carved out for advertisements. In 2013, when 4chan’s self-serve advertising program launched, the cost per 1,000 impressions (CPM) on the site was [$0.20](https://techcrunch.com/2013/07/03/will-pay-for-lulz/);[^cite-shu-c-2013-will-pay-for-lulz] in the same year, Facebook’s desktop CPM averaged [$0.75](http://www.convinceandconvert.com/social-media-research/15-new-facebook-advertising-statistics/) and its mobile CPM an incredible [$5.31](http://www.convinceandconvert.com/social-media-research/15-new-facebook-advertising-statistics/).[^cite-baer-j-2013-facebook-advertising-statistics] There is a reason 4chan is going broke and not just because it serves an ad-blocking community: advertisements on edgy platforms are just not worth much. The Meme Alliance is [asking](http://memealliance.org/demands/) for nothing less than sovereignty -- “Facebook must allow content creators the option to turn off the unreliable automated moderation, which frequently fails to distinguish between terms-violating content and harmless content” -- but the platform cannot and will not grant it.[^cite-meme-alliance-demands]`
 
-### `src/content/articles/politics/president-parks-corruption-cult.md`
+### `site/content/articles/politics/president-parks-corruption-cult.md`
 
 Status: `prose-links-only`
 
 Inventory: markdown links: 1; raw URLs: 1
 
-### `src/content/articles/politics/see-the-problem.md`
+### `site/content/articles/politics/see-the-problem.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/politics/social-media-freedom.mdx`
+### `site/content/articles/politics/social-media-freedom.mdx`
 
 Status: `canonical-references`
 
@@ -703,13 +703,13 @@ Footnote markers:
 - Line 61: `The Twitter harassment case [R. v. Elliott, 2016 ONCJ 35](https://genderidentitywatch.files.wordpress.com/2016/01/r-v-elliott.pdf), concluded earlier this year with the dismissal of all charges, can be used in synecdochic illustration of this debate.[^cite-ontario-court-of-justice-2016-r-v-elliott]`
 - Line 121: `Benjamin Bratton, a critical theorist working at the intersection of politics and design, has said that, "[If a problem is endemic to a system, then the exponential effects of Moore's Law also amplify what's broken.](https://www.youtube.com/watch?v=Yo5cKRmJaf0&feature=youtu.be&t=341)"[^cite-bratton-b-moores-law-amplifies-whats-broken] The same is true of [Metcalfe's Law](https://en.wikipedia.org/wiki/Metcalfe%27s_law): as these social platforms grow, the ill effects of their designs are magnified alongside the good. Twitter promotes harassment and revolutions both.`
 
-### `src/content/articles/politics/the-post-pepe-manifesto.md`
+### `site/content/articles/politics/the-post-pepe-manifesto.md`
 
 Status: `clean`
 
 Inventory: No reference-like content detected.
 
-### `src/content/articles/politics/the-structure-of-hyperspatial-politics.md`
+### `site/content/articles/politics/the-structure-of-hyperspatial-politics.md`
 
 Status: `canonical-references`
 

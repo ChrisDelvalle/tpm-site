@@ -6,11 +6,16 @@ import TextLink from "../ui/TextLink.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 
 interface Props {
+  emptyText?: string;
   items: readonly SectionNavItem[];
   title?: string;
 }
 
-const { items, title = "Categories" } = Astro.props;
+const {
+  emptyText = "No categories are available yet.",
+  items,
+  title = "Categories",
+} = Astro.props;
 const railId = "home-categories-rail";
 ---
 
@@ -91,7 +96,7 @@ const railId = "home-categories-rail";
       </div>
     ) : (
       <p class="text-muted-foreground text-sm" data-home-category-empty>
-        No categories are available yet.
+        {emptyText}
       </p>
     )
   }

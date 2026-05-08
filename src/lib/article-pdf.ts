@@ -8,6 +8,7 @@ import {
   entryTitle,
 } from "./routes";
 import { absoluteUrl } from "./seo";
+import { siteConfig } from "./site-config";
 
 /** Display-ready Scholar metadata for one article page. */
 export interface ArticleScholarMetaViewModel {
@@ -95,7 +96,13 @@ export function articlePdfViewModel(
  * @returns True unless the article explicitly opts out with `pdf: false`.
  */
 export function articlePdfEnabled(article: ArticleEntry): boolean {
-  return !("pdf" in article.data) || article.data.pdf;
+  if (!siteConfig.features.pdf) {
+    return false;
+  }
+
+  return "pdf" in article.data
+    ? article.data.pdf
+    : siteConfig.contentDefaults.articles.pdf.enabled;
 }
 
 /**

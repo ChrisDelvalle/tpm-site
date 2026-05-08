@@ -4,6 +4,7 @@ import {
   type EditorialCollectionEntry,
   resolvePublishableCollection,
 } from "./collections";
+import { optionalFeatureRouteEntries } from "./feature-routes";
 import {
   type PublishableEntry,
   publishableFromAnnouncement,
@@ -15,9 +16,7 @@ import {
   visiblePublishables,
 } from "./publishable";
 import type { AnnouncementEntry } from "./routes";
-
-const FEATURED_COLLECTION_ID = "featured";
-const START_HERE_COLLECTION_ID = "start-here";
+import type { SiteConfig, SiteRouteKey } from "./site-config";
 
 /** Display-ready homepage featured item. */
 export interface HomeFeaturedItem extends PublishableListItem {
@@ -33,7 +32,9 @@ interface HomePageViewModelInput {
   announcements: readonly AnnouncementEntry[];
   archiveItems: readonly ArticleArchiveItem[];
   collections: readonly EditorialCollectionEntry[];
+  featuredCollectionId?: string;
   recentLimit?: number;
+  startHereCollectionId?: string;
 }
 
 /** Display-ready homepage view model consumed by the Astro route. */
@@ -44,6 +45,12 @@ interface HomePageViewModel {
   startHereItems: PublishableListItem[];
 }
 
+/** Display-ready homepage discovery link. */
+interface HomeDiscoveryLink {
+  href: string;
+  label: string;
+}
+
 /**
  * Builds the homepage view model from publishable entries and collections.
  *
@@ -52,7 +59,9 @@ interface HomePageViewModel {
  * @param input.announcements Published announcements.
  * @param input.archiveItems Display-ready normal article archive items.
  * @param input.collections Active editor-owned collections.
+ * @param input.featuredCollectionId Collection ID used for the featured carousel.
  * @param input.recentLimit Maximum newest normal articles shown on home.
+ * @param input.startHereCollectionId Collection ID used for the start-here list.
  * @returns Display-ready homepage lists and feature items.
  */
 export function homePageViewModel({
@@ -60,7 +69,9 @@ export function homePageViewModel({
   announcements,
   archiveItems,
   collections,
+  featuredCollectionId = "featured",
   recentLimit = 8,
+  startHereCollectionId = "start-here",
 }: HomePageViewModelInput): HomePageViewModel {
   const articlePublishables = archiveItems.map(publishableFromArticleArchive);
   const announcementPublishables = announcements.map(
@@ -70,11 +81,11 @@ export function homePageViewModel({
   const index = publishableIndex(publishables);
   const featuredCollection = requiredCollection(
     collections,
-    FEATURED_COLLECTION_ID,
+    featuredCollectionId,
   );
   const startHereCollection = requiredCollection(
     collections,
-    START_HERE_COLLECTION_ID,
+    startHereCollectionId,
   );
   const featuredItems = resolvePublishableCollection(
     featuredCollection,
@@ -104,6 +115,34 @@ export function homePageViewModel({
   };
 }
 
+/**
+ * Resolves configured homepage discovery links against routes and feature flags.
+ *
+ * @param config Validated site config.
+ * @returns Homepage discovery links safe to render for the active feature set.
+ */
+export function homepageDiscoveryLinks(
+  config: SiteConfig,
+): HomeDiscoveryLink[] {
+  const disabledOptionalRoutes = new Set(
+    optionalFeatureRouteEntries(config)
+      .filter((entry) => !entry.enabled)
+      .map((entry) => entry.routeKey),
+  );
+
+  return config.homepage.discoveryLinks.flatMap((link) => {
+    if (link.route !== undefined) {
+      return disabledOptionalRoutes.has(link.route)
+        ? []
+        : [{ href: routeForKey(config, link.route), label: link.label }];
+    }
+
+    return link.href === undefined
+      ? []
+      : [{ href: link.href, label: link.label }];
+  });
+}
+
 function featuredItemFromResolvedItem({
   entry,
   note,
@@ -129,4 +168,42 @@ function requiredCollection(
   }
 
   return collection;
+}
+
+function routeForKey(config: SiteConfig, key: SiteRouteKey): string {
+  switch (key) {
+    case "allArticles": {
+      return config.routes.allArticles;
+    }
+    case "announcements": {
+      return config.routes.announcements;
+    }
+    case "articles": {
+      return config.routes.articles;
+    }
+    case "authors": {
+      return config.routes.authors;
+    }
+    case "bibliography": {
+      return config.routes.bibliography;
+    }
+    case "categories": {
+      return config.routes.categories;
+    }
+    case "collections": {
+      return config.routes.collections;
+    }
+    case "feed": {
+      return config.routes.feed;
+    }
+    case "home": {
+      return config.routes.home;
+    }
+    case "search": {
+      return config.routes.search;
+    }
+    case "tags": {
+      return config.routes.tags;
+    }
+  }
 }

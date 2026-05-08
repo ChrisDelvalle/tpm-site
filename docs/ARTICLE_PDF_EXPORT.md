@@ -246,7 +246,7 @@ bun scripts/build/generate-article-pdfs.ts --quiet
 
 The script should:
 
-1. read published article slugs from `src/content/articles`;
+1. read published article slugs from `site/content/articles`;
 2. start a local static server for the already-generated `dist/`;
 3. open each article page with Playwright Chromium;
 4. emulate print media;

@@ -5,10 +5,11 @@ The Philosopher's Meme site into a reusable Astro blog platform that can be
 shared publicly while site-specific content, assets, and configuration live in a
 private or separate site instance.
 
-The goal is not to migrate immediately. The goal is to make the migration
-implementation-ready: identify seams, risks, config boundaries, and a practical
-sequence that keeps the current site stable while moving toward a general
-purpose blog engine.
+This audit is a planning baseline. The in-repo `site/` migration is complete:
+publication content, assets, public files, and unused assets now live under
+`site/`. Remaining platformization work should compare against the current
+`site/` directory and the full external fixture build proof, not the older
+pre-migration source-root coupling described in historical sections below.
 
 ## Recommendation
 
@@ -97,6 +98,20 @@ This keeps a future UI/admin app feasible. A UI can edit JSON-like config and
 content, run validation, and preview the generated site without understanding
 Astro internals.
 
+The active platform module map is now maintained in
+`docs/PLATFORM_MODULES.md`. That document is the source of truth for reusable
+domain ownership, site-instance import boundaries, and the current
+`platform:check` CI invariant.
+
+The active configurability audit is maintained in
+`docs/PLATFORM_CONFIGURABILITY_AUDIT.md`. It classifies hard-coded values by
+whether they should become site config, component props, platform defaults,
+content/frontmatter, or deferred customization.
+
+The active public-platform cleanup plan is maintained in
+`docs/PUBLIC_PLATFORM_CLEANUP.md`. It keeps platform-owned QA fixtures, catalog
+assets, and example-site identity separate from the live TPM instance.
+
 ## Proposed Config Model
 
 Start with TypeScript schemas in the platform and JSON-like config in the site
@@ -182,32 +197,33 @@ the semantic CSS variables the engine already uses.
 
 ## Current Coupling Audit
 
-| Area                 | Current coupling                                                                                                                                  | Platform change needed                                                                                                              | Risk   |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| Site identity        | `SITE_TITLE`, `SITE_DESCRIPTION`, `DEFAULT_SITE_URL`, page titles, RSS title, tests, README, catalog examples all name TPM.                       | Move identity into validated config and consume through a `siteConfig` adapter.                                                     | Low    |
-| Astro `site`         | `astro.config.ts` hard-codes `https://thephilosophersmeme.com`.                                                                                   | Read from site config or environment with validation before Astro config export.                                                    | Low    |
-| Content roots        | `src/content.config.ts` hard-codes `./src/content/articles`, pages, authors, and categories.                                                      | Resolve roots from `SITE_INSTANCE_ROOT` and prove Astro content loaders can read the chosen external path in build, dev, and tests. | High   |
-| Category derivation  | `categorySlug()` looks for `/src/content/articles/` in `filePath`.                                                                                | Derive category from the configured article root or from normalized entry metadata.                                                 | Medium |
-| Markdown images      | Articles use relative paths such as `../../../assets/articles/...`.                                                                               | Define an instance asset convention and prove Astro's Markdown image pipeline handles external instance assets.                     | High   |
-| MDX imports          | Some MDX files import image modules directly from `src/assets/articles/...`.                                                                      | Keep MDX as an advanced escape hatch; define engine import aliases for instance assets and components.                              | High   |
-| Site assets          | Home hero, announcement, default preview, favicon, CNAME, robots, and shared assets are mixed into `src/assets`, `public`, and component imports. | Move instance-owned assets to the site instance and route all engine imports through config or adapter helpers.                     | High   |
-| Theme                | `src/styles/global.css` hard-codes semantic tokens, fonts, radius, default light mode, and dark mode.                                             | Split engine base CSS from site theme tokens. Load instance theme variables after engine defaults.                                  | Medium |
-| Navigation           | `primaryNavigationItems()` hard-codes `Articles` and `About`; footer hard-codes labels and route mix; header assumes support.                     | Move navigation to config while preserving engine defaults and feature-gated generated links.                                       | Medium |
-| Support CTA          | `SupportLink`, `SupportBlock`, `HomeHeroBlock`, catalog examples, and tests hard-code Patreon and support copy.                                   | Move support into optional config. Components should handle absent support gracefully.                                              | Medium |
-| Home page            | `src/pages/index.astro` imports TPM-specific hero and announcement assets and composes fixed blocks.                                              | Make home composition data-driven or support a small set of configurable block layouts.                                             | High   |
-| Static pages         | `/about/` is assumed by nav, routes, tests, and content lookup.                                                                                   | Treat pages as site instance content. Navigation should refer to page slugs from config.                                            | Low    |
-| Routes               | Helpers assume `/articles/`, `/authors/`, `/categories/`, `/tags/`, `/search/`, and `/feed.xml`.                                                  | Keep defaults but centralize route config. Make pagefind, validation, and build verification read the same route model.             | Medium |
-| Legacy redirects     | `astro.config.ts` embeds TPM redirects.                                                                                                           | Move redirects to instance `redirects.json`; engine validates and passes them into Astro config.                                    | Low    |
-| Search/Pagefind      | `package.json` hard-codes Pagefind globs for current routes.                                                                                      | Generate Pagefind globs from feature and route config.                                                                              | Medium |
-| Build verification   | `scripts/build/verify-build.ts` assumes current required paths and content roots.                                                                 | Make verifier accept site instance paths and generated route expectations from config.                                              | Medium |
-| Content verification | `scripts/content/verify-content.ts` hard-codes content roots and author/category expectations.                                                    | Read paths and feature requirements from the site instance adapter.                                                                 | Medium |
-| Asset tooling        | Asset scripts assume `src/assets`, `src/assets/shared`, `src/assets/site`, and `unused-assets`.                                                   | Support configurable instance asset roots and engine asset roots separately.                                                        | Medium |
-| Package scripts      | Scripts reference route globs, content paths, and project-specific checks directly.                                                               | Keep commands stable but move path knowledge into scripts/config files.                                                             | Medium |
-| CI/deploy            | GitHub Actions checkout one repo and deploy `dist`.                                                                                               | Future private deployment workflow must checkout platform and instance repos, set `SITE_INSTANCE_ROOT`, then build.                 | Medium |
-| Tests                | Many tests assert TPM copy, URLs, category names, and exact nav labels.                                                                           | Split engine tests from instance tests. Engine tests should use fixtures; TPM tests can live in the site instance.                  | High   |
-| Component catalog    | Catalog examples include TPM assets/copy and site-specific support links.                                                                         | Use engine fixture data by default; allow site instance examples as optional catalog input.                                         | Medium |
-| Docs                 | Docs mix engine principles with TPM-specific design decisions.                                                                                    | Split public platform docs from TPM instance docs. Keep agent instructions generic plus instance overlay.                           | Medium |
-| Authoring docs       | `AUTHOR_TUTORIAL.md` points authors at current `src/content` folders.                                                                             | Move author docs into the site instance or make them parameterized around configured paths.                                         | Low    |
+| Area                 | Current coupling                                                                                                                    | Platform change needed                                                                                                  | Risk   |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
+| Site identity        | Identity values are config-backed, but some tests/docs still use TPM fixture copy.                                                  | Keep reusable engine tests fixture-driven and move TPM copy assertions toward instance tests over time.                 | Low    |
+| Astro `site`         | `astro.config.ts` reads the configured site URL.                                                                                    | Keep Astro config input validated through the site adapter.                                                             | Low    |
+| Content roots        | `src/content.config.ts` now reads resolver-backed site content roots.                                                               | Keep the external fixture build proof passing whenever routes, content schemas, or build tooling change.                | High   |
+| Category derivation  | `categorySlug()` now derives from the configured article root and keeps legacy synthetic-path fallbacks for tests.                  | Remove legacy synthetic-path fallbacks after tests no longer need them.                                                 | Medium |
+| Markdown images      | Articles use relative paths such as `../../../assets/articles/...`.                                                                 | Define an instance asset convention and prove Astro's Markdown image pipeline handles external instance assets.         | High   |
+| MDX imports          | Site MDX files import site images through `@site/assets` and platform components through `@/components`.                            | Keep MDX as an advanced escape hatch and document production external-instance limits.                                  | High   |
+| Site assets          | Home hero, announcement, default preview, favicon, CNAME, robots, and shared assets live under `site/assets` and `site/public`.     | Continue routing new site-owned assets through the site instance instead of platform modules.                           | High   |
+| Theme                | `src/styles/global.css` defines the semantic token API and base fallbacks; each site instance provides concrete `theme.css` values. | Keep new visual identity changes in site-owned theme/assets/content rather than platform CSS.                           | Low    |
+| Navigation           | Primary/footer links are config-backed, but optional feature visibility is still only partly encoded.                               | Add feature flags and use them in high-value UI seams before attempting route pruning.                                  | Medium |
+| Support CTA          | Support copy and links are config-backed, but support is still assumed present in several UI seams.                                 | Add feature flags and make reusable support surfaces render gracefully when disabled.                                   | Medium |
+| Content defaults     | Draft, visibility, and PDF defaults are currently schema/code defaults rather than webmaster-owned site defaults.                   | Add `contentDefaults` so authors only use frontmatter for exceptional entries.                                          | High   |
+| Home page            | Homepage collection IDs, limits, and hero assets are config/content-backed.                                                         | Keep the homepage as a small typed recipe; do not introduce a page builder until the config/admin model is ready.       | Medium |
+| Static pages         | `/about/` is assumed by nav, routes, tests, and content lookup.                                                                     | Treat pages as site instance content. Navigation should refer to page slugs from config.                                | Low    |
+| Routes               | Helpers assume `/articles/`, `/authors/`, `/categories/`, `/tags/`, `/search/`, and `/feed.xml`.                                    | Keep defaults but centralize route config. Make pagefind, validation, and build verification read the same route model. | Medium |
+| Legacy redirects     | TPM redirects are site-owned compatibility data.                                                                                    | Keep redirects in instance config, validate them, and pass them into Astro config.                                      | Low    |
+| Search/Pagefind      | `package.json` hard-codes Pagefind globs for current routes.                                                                        | Generate Pagefind globs from feature and route config.                                                                  | Medium |
+| Build verification   | `scripts/build/verify-build.ts` assumes current required paths and content roots.                                                   | Make verifier accept site instance paths and generated route expectations from config.                                  | Medium |
+| Content verification | `scripts/content/verify-content.ts` hard-codes content roots and author/category expectations.                                      | Read paths and feature requirements from the site instance adapter.                                                     | Medium |
+| Asset tooling        | Asset scripts now default to resolver-backed `site/assets`, `site/public`, and `site/unused-assets`.                                | Keep new asset scripts resolver-backed and avoid adding new hard-coded site roots.                                      | Medium |
+| Package scripts      | Scripts reference route globs, content paths, and project-specific checks directly.                                                 | Keep commands stable but move path knowledge into scripts/config files.                                                 | Medium |
+| CI/deploy            | GitHub Actions checkout one repo and deploy `dist`.                                                                                 | Future private deployment workflow must checkout platform and instance repos, set `SITE_INSTANCE_ROOT`, then build.     | Medium |
+| Tests                | Many tests assert TPM copy, URLs, category names, and exact nav labels.                                                             | Split engine tests from instance tests. Engine tests should use fixtures; TPM tests can live in the site instance.      | High   |
+| Component catalog    | Catalog examples include TPM assets/copy and site-specific support links.                                                           | Use engine fixture data by default; allow site instance examples as optional catalog input.                             | Medium |
+| Docs                 | Docs mix engine principles with TPM-specific design decisions.                                                                      | Split public platform docs from TPM instance docs. Keep agent instructions generic plus instance overlay.               | Medium |
+| Authoring docs       | `AUTHOR_TUTORIAL.md` points authors at current `site/content` and `site/assets` folders.                                            | Eventually move author docs into the site instance or make them parameterized around configured paths.                  | Low    |
 
 ## Components That Need Generalization
 
@@ -215,13 +231,15 @@ These components are structurally reusable but still carry site-specific
 defaults or assumptions:
 
 - `BrandLink`: default label should come from site identity.
-- `SupportLink`: should require support config or render nothing when disabled.
+- `SupportLink`: should use support config and render nothing when disabled by
+  feature config.
 - `SiteHeader`: should consume configured navigation groups and feature flags.
 - `SiteFooter`: should consume configured footer groups, publication description,
   support, RSS, tag/category/author links, and feature flags.
 - `SiteShell`: should load navigation data through a site adapter rather than
   assuming categories are always present.
-- `HomeHeroBlock`: should not hard-code TPM title or Patreon/Discord actions.
+- `HomeHeroBlock`: should not hard-code TPM title or Patreon/Discord actions,
+  and should degrade cleanly when support/social features are disabled.
 - `HomeArchiveLinksBlock`: should not assume article/category/RSS link copy.
 - `SupportBlock`: should be optional and fully config-backed.
 - `SearchResultsBlock`: should use site identity in copy from config.
@@ -502,6 +520,11 @@ site theme.css      # --background, --foreground, --primary, fonts, radius, etc.
 The future admin UI can generate `theme.css` from `theme.config.jsonc`. Do not
 block platformization on a complete theme editor.
 
+Implemented note: `src/layouts/BaseLayout.astro` imports platform base styles,
+then `@site/theme.css`, then platform print styles. This ordering keeps normal
+site branding instance-owned while letting PDF/print output enforce its
+platform academic styling.
+
 ### Home Page Composition
 
 Recommendation: avoid a page builder in the first migration.
@@ -572,3 +595,10 @@ moving production content.
 The safest next step is Phase 1: introduce validated config while files stay in
 place. That creates immediate flexibility and makes later repo splitting much
 less invasive.
+
+## Next Design Pass
+
+`docs/PLATFORM_SITE_BOUNDARY.md` is the implementation-ready follow-up for the
+in-repo refactor. It updates this audit around the newer publishable-entry,
+homepage, collection, PDF, social-preview, and share-menu systems, and defines
+the first root-level `site/` config surface before content and asset roots move.

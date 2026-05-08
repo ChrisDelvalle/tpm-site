@@ -1,6 +1,6 @@
 ---
 import type { BibliographyEntry } from "../../lib/bibliography";
-import { articlesArchiveUrl } from "../../lib/routes";
+import { articlesArchiveUrl, SITE_TITLE } from "../../lib/routes";
 import PageHeader from "../pages/PageHeader.astro";
 import BibliographyEmptyState from "./BibliographyEmptyState.astro";
 import BibliographyList from "./BibliographyList.astro";
@@ -17,7 +17,7 @@ const entryCount = entries.length;
   <div class="grid min-w-0 gap-3">
     <PageHeader
       title="Bibliography"
-      description="Sources cited by articles in The Philosopher's Meme."
+      description={`Sources cited by articles in ${SITE_TITLE}.`}
     />
     <p class="text-muted-foreground text-sm" aria-live="polite">
       {entryCount}

@@ -121,15 +121,6 @@ describe("article PDF generator", () => {
               },
             };
           },
-          createServer: async () => {
-            await Promise.resolve();
-            return {
-              close: async () => {
-                await Promise.resolve();
-              },
-              origin: "http://127.0.0.1:4321",
-            };
-          },
         },
       );
       const pdf = await PDFDocument.load(

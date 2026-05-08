@@ -1,0 +1,187 @@
+{
+  "contentDefaults": {
+    "announcements": {
+      "draft": false,
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": true
+      }
+    },
+    "articles": {
+      "draft": false,
+      "pdf": {
+        "enabled": true
+      },
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": true
+      }
+    }
+  },
+  "features": {
+    "announcements": true,
+    "authors": true,
+    "bibliography": true,
+    "categories": true,
+    "collections": true,
+    "feed": true,
+    "pdf": true,
+    "search": true,
+    "support": true,
+    "tags": true,
+    "themeToggle": true
+  },
+  "homepage": {
+    "announcementLimit": 3,
+    "discoveryLinks": [
+      {
+        "label": "Articles",
+        "route": "articles"
+      },
+      {
+        "label": "Archive",
+        "route": "allArticles"
+      },
+      {
+        "label": "Authors",
+        "route": "authors"
+      },
+      {
+        "label": "Collections",
+        "route": "collections"
+      },
+      {
+        "label": "Tags",
+        "route": "tags"
+      }
+    ],
+    "emptyText": {
+      "announcements": "Announcements will appear here.",
+      "categories": "No categories are available yet.",
+      "featured": "Featured items will appear here.",
+      "startHere": "Curated starter articles will appear here."
+    },
+    "featuredCollection": "featured",
+    "labels": {
+      "announcements": "Announcements",
+      "categories": "Categories",
+      "featured": "Featured Articles",
+      "read": "Read",
+      "recent": "Recent",
+      "startHere": "Start Here"
+    },
+    "recentLimit": 8,
+    "startHereCollection": "start-here"
+  },
+  "identity": {
+    "description": "The philosophy of memes, cyberculture, and the Internet.",
+    "language": "en",
+    "publisherName": "The Philosopher's Meme",
+    "shortTitle": "TPM",
+    "timezone": "America/New_York",
+    "title": "The Philosopher's Meme",
+    "url": "https://thephilosophersmeme.com"
+  },
+  "navigation": {
+    "footer": [
+      {
+        "href": "/articles/",
+        "label": "Articles"
+      },
+      {
+        "href": "/articles/all/",
+        "label": "Archive"
+      },
+      {
+        "href": "/collections/",
+        "label": "Collections"
+      },
+      {
+        "href": "/announcements/",
+        "label": "Announcements"
+      },
+      {
+        "href": "/collections/featured/",
+        "label": "Featured Articles"
+      },
+      {
+        "href": "/authors/",
+        "label": "Authors"
+      },
+      {
+        "href": "/tags/",
+        "label": "Tags"
+      },
+      {
+        "href": "/bibliography/",
+        "label": "Site Bibliography"
+      },
+      {
+        "href": "/about/",
+        "label": "About"
+      },
+      {
+        "href": "/feed.xml",
+        "label": "RSS"
+      }
+    ],
+    "primary": [
+      {
+        "href": "/articles/",
+        "label": "Articles"
+      },
+      {
+        "href": "/about/",
+        "label": "About"
+      }
+    ]
+  },
+  "routes": {
+    "allArticles": "/articles/all/",
+    "announcements": "/announcements/",
+    "articles": "/articles/",
+    "authors": "/authors/",
+    "bibliography": "/bibliography/",
+    "categories": "/categories/",
+    "collections": "/collections/",
+    "feed": "/feed.xml",
+    "home": "/",
+    "search": "/search/",
+    "tags": "/tags/"
+  },
+  "share": {
+    "targets": [
+      "bluesky",
+      "x",
+      "threads",
+      "facebook",
+      "linkedin",
+      "reddit",
+      "hacker-news",
+      "pinterest"
+    ],
+    "threadsMention": "@the_philosophers_meme",
+    "xViaHandle": "philo_meme"
+  },
+  "support": {
+    "block": {
+      "body": "Help keep independent research and writing going.",
+      "title": "Support The Philosopher's Meme"
+    },
+    "discord": {
+      "ariaLabel": "Join the TPM Discord",
+      "href": "https://discord.gg/8MVFRMa",
+      "label": "Join Discord"
+    },
+    "patreon": {
+      "ariaLabel": "Support The Philosopher's Meme on Patreon",
+      "compactLabel": "Patreon",
+      "href": "https://patreon.com/thephilosophersmeme",
+      "label": "Support Us"
+    }
+  }
+}

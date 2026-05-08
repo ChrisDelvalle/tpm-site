@@ -32,7 +32,7 @@ describe("article citation helpers", () => {
     } as const;
 
     expect(articleBibtexCitation(input)).toContain(
-      "@online{tpm-wittgensteins-most-beloved-quote-was-real-but-its-fake-now,",
+      "@online{site-wittgensteins-most-beloved-quote-was-real-but-its-fake-now,",
     );
     expect(articleBibtexCitation(input)).toContain(
       "  author = {Seong-Young Her},",
@@ -79,7 +79,7 @@ describe("article citation helpers", () => {
       title: "Symbols {and} 100% Meme_Tests",
     });
 
-    expect(citation).toContain("@online{tpm-symbols-things,");
+    expect(citation).toContain("@online{site-symbols-things,");
     expect(citation).toContain("  author = {A. Writer and B. Writer},");
     expect(citation).toContain(
       "  title = {Symbols \\{and\\} 100\\% Meme\\_Tests},",

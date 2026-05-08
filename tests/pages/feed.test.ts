@@ -16,7 +16,7 @@ await mock.module("astro:content", () => ({
             tags: [],
             title: "Newer Article",
           },
-          filePath: "/repo/src/content/articles/history/newer.md",
+          filePath: "/repo/site/content/articles/history/newer.md",
           id: "newer",
         },
         {
@@ -29,7 +29,7 @@ await mock.module("astro:content", () => ({
             tags: [],
             title: "Draft Article",
           },
-          filePath: "/repo/src/content/articles/history/draft.md",
+          filePath: "/repo/site/content/articles/history/draft.md",
           id: "draft",
         },
         {
@@ -42,7 +42,7 @@ await mock.module("astro:content", () => ({
             tags: [],
             title: "Older Article",
           },
-          filePath: "/repo/src/content/articles/politics/older.md",
+          filePath: "/repo/site/content/articles/politics/older.md",
           id: "older",
         },
       ];
@@ -65,6 +65,28 @@ await mock.module("astro:content", () => ({
     }
 
     return [];
+  },
+  getEntry: async (collection: string, id: string) => {
+    await Promise.resolve();
+
+    if (collection === "pages" && id === "index") {
+      return {
+        collection: "pages",
+        data: {
+          hero: {
+            lightImage: {
+              format: "png",
+              height: 630,
+              src: "/home.png",
+              width: 1200,
+            },
+          },
+        },
+        id: "index",
+      };
+    }
+
+    return undefined;
   },
 }));
 

@@ -2,7 +2,11 @@ import { spawn } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
-const defaultSrcAssetsDir = "src/assets";
+import {
+  projectRelativePath,
+  resolveSiteInstancePaths,
+} from "../../src/lib/site-instance";
+
 const defaultIgnoreFile = "scripts/image-asset-location-ignore.json";
 const imageExtensionPattern =
   /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|tiff?|webp)$/i;
@@ -52,14 +56,14 @@ export function formatImageAssetLocationReport(
   return [
     `Image asset location verification failed: ${result.violations.length} image file${
       result.violations.length === 1 ? "" : "s"
-    } found outside src/assets/.`,
+    } found outside site/assets/.`,
     "",
     "Move each file into the appropriate source asset folder:",
-    "- src/assets/articles/<article-slug>/ for one article.",
-    "- src/assets/shared/ for assets reused by multiple pages.",
-    "- src/assets/site/ for site UI, layout, and homepage assets.",
+    "- site/assets/articles/<article-slug>/ for one article.",
+    "- site/assets/shared/ for assets reused by multiple pages.",
+    "- site/assets/site/ for site UI, layout, and homepage assets.",
     "",
-    `If a file intentionally must stay outside src/assets/, add a specific path or glob to ${ignoreFile}.`,
+    `If a file intentionally must stay outside site/assets/, add a specific path or glob to ${ignoreFile}.`,
     "",
     "Files:",
     ...result.violations.map((violation) => `- ${violation}`),
@@ -109,7 +113,7 @@ export async function runImageAssetLocationCli(
   if (args.includes("--help") || args.includes("-h")) {
     console.log(`Usage: bun run assets:locations [--json] [--quiet]
 
-Require image assets to live under src/assets/.
+Require image assets to live under site/assets/.
 
 Intentional exceptions are configured in ${defaultIgnoreFile}. Dotfiles,
 dot-directories, and paths ignored by Git are skipped automatically.`);
@@ -146,7 +150,7 @@ export async function verifyImageAssetLocations({
   ignoreFile = defaultIgnoreFile,
   isGitIgnored,
   rootDir,
-  srcAssetsDir = defaultSrcAssetsDir,
+  srcAssetsDir = defaultSrcAssetsDir(rootDir),
 }: ImageAssetLocationOptions): Promise<ImageAssetLocationResult> {
   const ignorePatterns = await loadIgnorePatterns(rootDir, ignoreFile);
   const gitIgnoredPaths =
@@ -170,6 +174,13 @@ export async function verifyImageAssetLocations({
     imageCount: imageFiles.length,
     violations,
   };
+}
+
+function defaultSrcAssetsDir(rootDir: string): string {
+  return projectRelativePath(
+    resolveSiteInstancePaths({ cwd: rootDir }).assets.root,
+    rootDir,
+  );
 }
 
 function hasDotPathSegment(relativePath: string) {

@@ -7,12 +7,12 @@ import matter from "gray-matter";
 
 const publishableSources = [
   {
-    dir: path.resolve("src/content/announcements"),
+    dir: path.resolve("site/content/announcements"),
     url: (file: string) =>
       withTrailingSlash(`/announcements/${filenameStem(file)}`),
   },
   {
-    dir: path.resolve("src/content/articles"),
+    dir: path.resolve("site/content/articles"),
     url: (file: string) => withTrailingSlash(`/articles/${filenameStem(file)}`),
   },
 ] as const;

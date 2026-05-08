@@ -90,6 +90,6 @@ card. The article content should remain the visual focus in light and dark mode.
 
 ## Follow-Up Notes
 
-- If future essays outside `src/content/articles/` need article-like reading
+- If future essays outside `site/content/articles/` need article-like reading
   behavior, use `ReadingBody` with generic page components rather than copying
   `ArticleLayout`.

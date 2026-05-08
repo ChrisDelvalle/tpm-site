@@ -1,6 +1,6 @@
+import announcementImage from "@site/assets/site/r2021-03-22.png";
 import { describe, expect, test } from "vitest";
 
-import announcementImage from "../../../../src/assets/site/r2021-03-22.png";
 import HomeAnnouncementBlock from "../../../../src/components/blocks/HomeAnnouncementBlock.astro";
 import { createAstroTestContainer } from "../../../helpers/astro-container";
 

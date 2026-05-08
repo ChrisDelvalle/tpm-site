@@ -1,0 +1,190 @@
+{
+  "contentDefaults": {
+    "announcements": {
+      "draft": false,
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": true
+      }
+    },
+    "articles": {
+      "draft": false,
+      "pdf": {
+        "enabled": true
+      },
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": true
+      }
+    }
+  },
+  "features": {
+    "announcements": true,
+    "authors": true,
+    "bibliography": true,
+    "categories": true,
+    "collections": true,
+    "feed": true,
+    "pdf": true,
+    "search": true,
+    "support": false,
+    "tags": true,
+    "themeToggle": true
+  },
+  "homepage": {
+    "announcementLimit": 2,
+    "discoveryLinks": [
+      {
+        "href": "/articles/quick-start/",
+        "label": "Quick Start"
+      },
+      {
+        "href": "/articles/create-first-article/",
+        "label": "First Article"
+      },
+      {
+        "href": "/articles/customize-homepage/",
+        "label": "Homepage"
+      },
+      {
+        "href": "/articles/change-theme-colors/",
+        "label": "Theme"
+      },
+      {
+        "href": "/articles/validate-site/",
+        "label": "Validate"
+      }
+    ],
+    "emptyText": {
+      "announcements": "Documentation updates will appear here.",
+      "categories": "Documentation categories will appear here.",
+      "featured": "Featured documentation will appear here.",
+      "startHere": "Starter guides will appear here."
+    },
+    "featuredCollection": "featured",
+    "labels": {
+      "announcements": "Updates",
+      "categories": "Browse",
+      "featured": "Featured",
+      "read": "Docs",
+      "recent": "Latest",
+      "startHere": "Start Here"
+    },
+    "recentLimit": 4,
+    "startHereCollection": "start-here"
+  },
+  "identity": {
+    "description": "Documentation and tutorials for the reusable blog platform.",
+    "language": "en",
+    "publisherName": "Blog Platform",
+    "shortTitle": "Platform Docs",
+    "timezone": "America/New_York",
+    "title": "Platform Docs",
+    "url": "https://platform.example.com"
+  },
+  "navigation": {
+    "footer": [
+      {
+        "href": "/articles/quick-start/",
+        "label": "Quick Start"
+      },
+      {
+        "href": "/categories/getting-started/",
+        "label": "Getting Started"
+      },
+      {
+        "href": "/categories/authoring/",
+        "label": "Authoring"
+      },
+      {
+        "href": "/categories/configuration/",
+        "label": "Configuration"
+      },
+      {
+        "href": "/categories/operations/",
+        "label": "Operations"
+      },
+      {
+        "href": "/categories/reference/",
+        "label": "Reference"
+      },
+      {
+        "href": "/articles/commands-reference/",
+        "label": "Commands"
+      },
+      {
+        "href": "/articles/troubleshooting/",
+        "label": "Troubleshooting"
+      },
+      {
+        "href": "/articles/all/",
+        "label": "All Docs"
+      },
+      {
+        "href": "/tags/",
+        "label": "Tags"
+      },
+      {
+        "href": "/bibliography/",
+        "label": "Bibliography"
+      },
+      {
+        "href": "/about/",
+        "label": "About"
+      },
+      {
+        "href": "/feed.xml",
+        "label": "RSS"
+      }
+    ],
+    "primary": [
+      {
+        "href": "/articles/quick-start/",
+        "label": "Quick Start"
+      },
+      {
+        "href": "/about/",
+        "label": "About"
+      }
+    ]
+  },
+  "routes": {
+    "allArticles": "/articles/all/",
+    "announcements": "/announcements/",
+    "articles": "/articles/",
+    "authors": "/authors/",
+    "bibliography": "/bibliography/",
+    "categories": "/categories/",
+    "collections": "/collections/",
+    "feed": "/feed.xml",
+    "home": "/",
+    "search": "/search/",
+    "tags": "/tags/"
+  },
+  "share": {
+    "targets": ["bluesky", "x", "linkedin", "reddit"],
+    "threadsMention": "@blog_platform",
+    "xViaHandle": "blog_platform"
+  },
+  "support": {
+    "block": {
+      "body": "This example keeps support UI disabled while proving the config contract remains complete.",
+      "title": "Support Blog Platform"
+    },
+    "discord": {
+      "ariaLabel": "Join the Blog Platform community",
+      "href": "https://example.com/community",
+      "label": "Community"
+    },
+    "patreon": {
+      "ariaLabel": "Sponsor the Blog Platform maintainers",
+      "compactLabel": "Sponsor",
+      "href": "https://example.com/sponsor",
+      "label": "Sponsor"
+    }
+  }
+}

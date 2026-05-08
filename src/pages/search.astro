@@ -2,12 +2,13 @@
 import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
 import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { searchUrl } from "../lib/routes";
+import { searchUrl, SITE_TITLE } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
 ---
 
 <BaseLayout
-  title="Search | The Philosopher's Meme"
-  description="Search The Philosopher's Meme archive."
+  title={titleWithSite("Search")}
+  description={`Search ${SITE_TITLE} archive.`}
   canonicalPath={searchUrl()}
 >
   <BrowsingBody>

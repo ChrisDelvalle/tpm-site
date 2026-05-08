@@ -61,7 +61,7 @@ describe("articleArchiveItems", () => {
     const [archiveItem] = articleArchiveItems(
       [
         articleEntry({
-          filePath: "/repo/src/content/articles/missing-category/post.md",
+          filePath: "/repo/site/content/articles/missing-category/post.md",
           id: "post",
         }),
       ],

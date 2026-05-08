@@ -17,10 +17,18 @@ describe("content collection config", () => {
     expect(source).toContain("const categories = defineCollection");
     expect(source).toContain("const editorialCollections = defineCollection");
     expect(source).toContain("const pages = defineCollection");
-    expect(source).toContain('base: "./src/content/announcements"');
-    expect(source).toContain('base: "./src/content/articles"');
-    expect(source).toContain('base: "./src/content/collections"');
-    expect(source).toContain('base: "./src/content/pages"');
+    expect(source).toContain(
+      "base: projectRelativePath(siteInstance.content.announcements)",
+    );
+    expect(source).toContain(
+      "base: projectRelativePath(siteInstance.content.articles)",
+    );
+    expect(source).toContain(
+      "base: projectRelativePath(siteInstance.content.collections)",
+    );
+    expect(source).toContain(
+      "base: projectRelativePath(siteInstance.content.pages)",
+    );
     expect(source).toContain(
       'base: "./tests/fixtures/article-reference-articles"',
     );

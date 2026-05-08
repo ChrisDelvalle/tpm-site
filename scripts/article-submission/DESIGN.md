@@ -65,9 +65,9 @@ abort if unrelated changes exist.
 
 Allowed changed paths:
 
-- `src/content/articles/**`
-- `src/content/categories/**`
-- `src/assets/**`
+- `site/content/articles/**`
+- `site/content/categories/**`
+- `site/assets/**`
 
 Optional allowed paths when the tool later manages templates or generated PR
 body files:
@@ -148,8 +148,8 @@ Optional:
 Article source path:
 
 ```text
-src/content/articles/<category>/<slug>.md
-src/content/articles/<category>/<slug>.mdx
+site/content/articles/<category>/<slug>.md
+site/content/articles/<category>/<slug>.mdx
 ```
 
 Slug defaults to the input filename stem.
@@ -166,7 +166,7 @@ Slug rules:
 If the article file is already in the correct place, the tool should leave it in
 place and continue validation.
 
-If the article is inside `src/content/articles/` but in the wrong category, the
+If the article is inside `site/content/articles/` but in the wrong category, the
 tool should ask before moving it.
 
 ## Category Handling
@@ -174,13 +174,13 @@ tool should ask before moving it.
 Existing categories are defined by:
 
 ```text
-src/content/categories/*.json
+site/content/categories/*.json
 ```
 
 Article folder:
 
 ```text
-src/content/articles/<category>/
+site/content/articles/<category>/
 ```
 
 If the category does not exist, show the current categories and ask whether to
@@ -213,13 +213,13 @@ metadata.
 Default article asset path:
 
 ```text
-src/assets/articles/<slug>/
+site/assets/articles/<slug>/
 ```
 
 Shared assets should live in:
 
 ```text
-src/assets/shared/
+site/assets/shared/
 ```
 
 The tool should accept:
@@ -228,7 +228,7 @@ The tool should accept:
 - one asset file;
 - one asset directory.
 
-If assets are already under `src/assets/`, leave them in place.
+If assets are already under `site/assets/`, leave them in place.
 
 If assets are outside the repo, copy them into the target asset folder.
 
@@ -253,8 +253,8 @@ Validate:
 - `date` is valid;
 - `draft` is either absent or boolean;
 - body headings do not start with `#`;
-- image references resolve when they point into `src/assets/`;
-- frontmatter `image`, if present, points into `src/assets/`;
+- image references resolve when they point into `site/assets/`;
+- frontmatter `image`, if present, points into `site/assets/`;
 - `imageAlt` exists when frontmatter `image` exists;
 - no disallowed frontmatter fields such as `slug`, `topic`, or `category`;
 - slug is URL-safe;

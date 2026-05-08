@@ -1,4 +1,9 @@
+import path from "node:path";
+
 import type { CollectionEntry } from "astro:content";
+
+import { siteConfig, type SiteRouteKey } from "./site-config";
+import { siteInstance } from "./site-instance";
 
 /** Astro content collection entry for a published or draft article. */
 export type ArticleEntry = CollectionEntry<"articles">;
@@ -15,6 +20,9 @@ export type CategoryEntry = CollectionEntry<"categories">;
 /** Astro content collection entry for editor-owned collections. */
 export type EditorialCollectionEntry = CollectionEntry<"collections">;
 
+/** Astro content collection entry for standalone Markdown pages. */
+export type PageEntry = CollectionEntry<"pages">;
+
 /** Display-ready category data with its sorted articles. */
 export interface CategorySummary {
   articles: ArticleEntry[];
@@ -24,9 +32,9 @@ export interface CategorySummary {
   title: string;
 }
 
-export const SITE_TITLE = "The Philosopher's Meme";
-export const SITE_DESCRIPTION =
-  "The philosophy of memes, cyberculture, and the Internet.";
+export const SITE_TITLE = siteConfig.identity.title;
+export const SITE_DESCRIPTION = siteConfig.identity.description;
+export const SITE_URL = siteConfig.identity.url;
 const RESERVED_ARTICLE_SLUGS = new Set(["all"]);
 
 /**
@@ -35,7 +43,7 @@ const RESERVED_ARTICLE_SLUGS = new Set(["all"]);
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function announcementsIndexUrl(): string {
-  return withTrailingSlash("/announcements");
+  return withTrailingSlash(siteRoute("announcements"));
 }
 
 /**
@@ -88,7 +96,7 @@ export function assertUniqueAnnouncementSlugs(
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function articlesIndexUrl(): string {
-  return withTrailingSlash("/articles");
+  return withTrailingSlash(siteRoute("articles"));
 }
 
 /**
@@ -97,7 +105,7 @@ export function articlesIndexUrl(): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function articlesArchiveUrl(): string {
-  return withTrailingSlash(`${articlesIndexUrl()}all`);
+  return withTrailingSlash(siteRoute("allArticles"));
 }
 
 /**
@@ -106,7 +114,7 @@ export function articlesArchiveUrl(): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function authorsIndexUrl(): string {
-  return withTrailingSlash("/authors");
+  return withTrailingSlash(siteRoute("authors"));
 }
 
 /**
@@ -125,7 +133,7 @@ export function authorUrl(slug: string): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function bibliographyUrl(): string {
-  return withTrailingSlash("/bibliography");
+  return withTrailingSlash(siteRoute("bibliography"));
 }
 
 /**
@@ -191,13 +199,48 @@ export function authorName(entry: ArticleEntry): string {
  * @returns Category folder slug, or an empty string when no category is found.
  */
 export function categorySlug(entry: ArticleEntry): string {
-  const filePath = entry.filePath ?? "";
-  const marker = "/src/content/articles/";
-  const relativePath = filePath.includes(marker)
-    ? (filePath.split(marker)[1] ?? "")
-    : filePath.replace(/^src\/content\/articles\//, "");
+  const relativePath = articleFileRelativePath(entry.filePath ?? "");
 
   return relativePath.includes("/") ? (relativePath.split("/")[0] ?? "") : "";
+}
+
+function articleFileRelativePath(filePath: string): string {
+  if (filePath.length === 0) {
+    return "";
+  }
+
+  const normalizedFilePath = normalizeFilesystemPath(filePath);
+  const articleRoot = normalizeFilesystemPath(siteInstance.content.articles);
+  const rootPrefix = articleRoot.endsWith("/")
+    ? articleRoot
+    : `${articleRoot}/`;
+
+  if (normalizedFilePath.startsWith(rootPrefix)) {
+    return normalizedFilePath.slice(rootPrefix.length);
+  }
+
+  const projectRelativeArticleRoot = normalizeFilesystemPath(
+    path.relative(process.cwd(), siteInstance.content.articles),
+  );
+  const knownRootMarkers = [
+    `/${projectRelativeArticleRoot}/`,
+    `${projectRelativeArticleRoot}/`,
+    "/site/content/articles/",
+    "site/content/articles/",
+    "/src/content/articles/",
+    "src/content/articles/",
+  ];
+  const marker = knownRootMarkers.find((candidate) =>
+    normalizedFilePath.includes(candidate),
+  );
+
+  return marker === undefined
+    ? normalizedFilePath
+    : (normalizedFilePath.split(marker)[1] ?? "");
+}
+
+function normalizeFilesystemPath(filePath: string): string {
+  return filePath.replaceAll(path.sep, "/");
 }
 
 /**
@@ -206,7 +249,7 @@ export function categorySlug(entry: ArticleEntry): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function categoriesIndexUrl(): string {
-  return withTrailingSlash("/categories");
+  return withTrailingSlash(siteRoute("categories"));
 }
 
 /**
@@ -225,7 +268,7 @@ export function categoryUrl(slug: string): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function collectionsIndexUrl(): string {
-  return withTrailingSlash("/collections");
+  return withTrailingSlash(siteRoute("collections"));
 }
 
 /**
@@ -296,7 +339,7 @@ export function excerpt(entry: ArticleEntry): string {
  * @returns Absolute-path URL for the RSS endpoint.
  */
 export function feedUrl(): string {
-  return "/feed.xml";
+  return siteRoute("feed");
 }
 
 /**
@@ -377,7 +420,7 @@ export function pageUrl(slug: string): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function searchUrl(): string {
-  return withTrailingSlash("/search");
+  return withTrailingSlash(siteRoute("search"));
 }
 
 /**
@@ -386,7 +429,7 @@ export function searchUrl(): string {
  * @returns Absolute-path URL with the configured trailing slash.
  */
 export function tagsIndexUrl(): string {
-  return withTrailingSlash("/tags");
+  return withTrailingSlash(siteRoute("tags"));
 }
 
 /**
@@ -444,6 +487,44 @@ function imageSource(value: unknown): string | undefined {
   }
 
   return undefined;
+}
+
+function siteRoute(key: SiteRouteKey): string {
+  switch (key) {
+    case "allArticles": {
+      return siteConfig.routes.allArticles;
+    }
+    case "announcements": {
+      return siteConfig.routes.announcements;
+    }
+    case "articles": {
+      return siteConfig.routes.articles;
+    }
+    case "authors": {
+      return siteConfig.routes.authors;
+    }
+    case "bibliography": {
+      return siteConfig.routes.bibliography;
+    }
+    case "categories": {
+      return siteConfig.routes.categories;
+    }
+    case "collections": {
+      return siteConfig.routes.collections;
+    }
+    case "feed": {
+      return siteConfig.routes.feed;
+    }
+    case "home": {
+      return siteConfig.routes.home;
+    }
+    case "search": {
+      return siteConfig.routes.search;
+    }
+    case "tags": {
+      return siteConfig.routes.tags;
+    }
+  }
 }
 
 function withTrailingSlash(path: string): string {

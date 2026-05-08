@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import config from "../../astro.config";
 import { articleImagePolicyCacheKey } from "../../src/lib/article-image-policy";
+import { siteInstance } from "../../src/lib/site-instance";
 import {
   rehypeArticleImages,
   remarkArticleImageMarkers,
@@ -23,6 +24,11 @@ describe("Astro config", () => {
       prefetchAll: false,
     });
     expect(config.prerenderConflictBehavior).toBe("error");
+    expect(config.publicDir).toBe("site/public");
+    expect(config.vite?.resolve?.alias).toMatchObject({
+      "@site/assets": siteInstance.assets.root,
+      "@site/theme.css": siteInstance.theme,
+    });
   });
 
   test("keeps legacy redirects separate from article routing helpers", () => {

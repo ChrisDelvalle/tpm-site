@@ -18,12 +18,12 @@ The audit must make these things clear:
   a time.
 
 This keeps source-content changes deliberate. Tooling may scan and report
-article content, but it must not rewrite `src/content/articles/`.
+article content, but it must not rewrite `site/content/articles/`.
 
 ## Detection Model
 
 The audit script should scan every Markdown and MDX article under
-`src/content/articles/` and report these patterns per article:
+`site/content/articles/` and report these patterns per article:
 
 - canonical citation markers: `[^cite-*]`;
 - canonical note markers and definitions: `[^note-*]`;

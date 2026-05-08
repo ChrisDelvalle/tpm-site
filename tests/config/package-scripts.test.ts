@@ -14,6 +14,7 @@ const expectedScriptEntrypoints = [
   ["assets:unused", "scripts/assets/find-unused-images.ts"],
   ["build:optimize", "scripts/build/optimize-build-output.ts"],
   ["build:pdf", "scripts/build/generate-article-pdfs.ts"],
+  ["build:raw", "scripts/build/build-raw.ts"],
   ["catalog:check", "scripts/quality/verify-component-catalog.ts"],
   ["coverage:verify", "scripts/testing/verify-test-coverage.ts"],
   [
@@ -30,8 +31,14 @@ const expectedScriptEntrypoints = [
   ],
   ["payload:report", "scripts/payload/report-payload.ts"],
   ["payload:vite:experiments", "scripts/payload/run-vite-build-experiments.ts"],
+  ["platform:check", "scripts/quality/verify-platform-boundaries.ts"],
   ["quality", "scripts/quality/run-quality.ts"],
   ["quality:release", "scripts/quality/run-quality.ts"],
+  ["site:doctor", "scripts/site/site-doctor.ts"],
+  ["site:schema", "scripts/site/generate-site-config-schema.ts"],
+  ["site:schema:check", "scripts/site/generate-site-config-schema.ts"],
+  ["tags:check", "scripts/content/normalize-tags.ts"],
+  ["tags:normalize", "scripts/content/normalize-tags.ts"],
   ["test", "scripts/testing/run-tests.ts"],
   ["test:accountability", "scripts/testing/verify-test-accountability.ts"],
   [
@@ -40,6 +47,7 @@ const expectedScriptEntrypoints = [
   ],
   ["test:astro", "scripts/testing/sync-astro-test-store.ts"],
   ["test:flake", "scripts/testing/run-randomized-tests.ts"],
+  ["validate:html", "scripts/build/validate-html.ts"],
   ["verify", "scripts/build/verify-build.ts"],
   ["verify:content", "scripts/content/verify-content.ts"],
 ] as const;

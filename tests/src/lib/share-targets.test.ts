@@ -99,6 +99,23 @@ describe("article share targets", () => {
     expect(share.actions.map((action) => action.id)).not.toContain("pinterest");
   });
 
+  test("honors configured third-party share target order", () => {
+    const share = articleShareMenuViewModel({
+      articleUrl,
+      description,
+      image,
+      targetIds: ["reddit", "x"],
+      title,
+    });
+
+    expect(share.actions.map((action) => action.id)).toEqual([
+      "copy-link",
+      "email",
+      "reddit",
+      "x",
+    ]);
+  });
+
   test("builds email with the article title, URL, and site attribution", () => {
     const share = articleShareMenuViewModel({
       articleUrl,

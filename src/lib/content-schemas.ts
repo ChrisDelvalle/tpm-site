@@ -10,6 +10,21 @@ const publishableVisibilityDefaults = {
   search: true,
 } as const;
 
+/** Content visibility defaults supplied by the platform or site config. */
+interface PublishableVisibilityDefaults {
+  directory: boolean;
+  feed: boolean;
+  homepage: boolean;
+  search: boolean;
+}
+
+/** Content-type defaults supplied by the platform or site config. */
+interface PublishableContentDefaults {
+  draft: boolean;
+  pdf?: undefined | { enabled: boolean };
+  visibility: PublishableVisibilityDefaults;
+}
+
 /** Local image schema factory supplied by Astro content collections. */
 interface ImageSchemaContext {
   image: () => z.ZodType<ImageMetadata>;
@@ -20,12 +35,14 @@ interface ImageSchemaContext {
  *
  * @param context Astro image schema context.
  * @param context.image Astro local-image schema helper.
+ * @param defaults Site-owned article defaults.
  * @returns Strict article frontmatter schema.
  */
 export function articleSchema(
   context: ImageSchemaContext,
+  defaults?: PublishableContentDefaults,
 ): ReturnType<typeof createArticleSchema> {
-  return createArticleSchema(context, { includePdf: true });
+  return createArticleSchema(context, { defaults, includePdf: true });
 }
 
 /**
@@ -33,12 +50,14 @@ export function articleSchema(
  *
  * @param context Astro image schema context.
  * @param context.image Astro local-image schema helper.
+ * @param defaults Site-owned announcement defaults.
  * @returns Strict announcement frontmatter schema.
  */
 export function announcementSchema(
   context: ImageSchemaContext,
+  defaults?: PublishableContentDefaults,
 ): ReturnType<typeof createArticleSchema> {
-  return createArticleSchema(context, { includePdf: false });
+  return createArticleSchema(context, { defaults, includePdf: false });
 }
 
 /**
@@ -83,39 +102,51 @@ export function filenameStem(entry: string): string {
 /**
  * Creates the shared publishable visibility schema.
  *
+ * @param defaults Visibility defaults for omitted fields.
  * @returns Visibility schema with true defaults for every public surface.
  */
-export function publishableVisibilitySchema(): ReturnType<
-  typeof createPublishableVisibilitySchema
-> {
-  return createPublishableVisibilitySchema();
+export function publishableVisibilitySchema(
+  defaults: PublishableVisibilityDefaults = publishableVisibilityDefaults,
+): ReturnType<typeof createPublishableVisibilitySchema> {
+  return createPublishableVisibilitySchema(defaults);
 }
 
 /**
  * Creates the standalone page frontmatter schema.
  *
+ * @param context Astro image schema context.
+ * @param context.image Astro local-image schema helper.
  * @returns Strict page frontmatter schema.
  */
-export function pageSchema(): ReturnType<typeof createPageSchema> {
-  return createPageSchema();
+export function pageSchema(
+  context: ImageSchemaContext,
+): ReturnType<typeof createPageSchema> {
+  return createPageSchema(context);
 }
 
 function createArticleSchema(
   { image }: ImageSchemaContext,
-  { includePdf }: { includePdf: boolean },
+  {
+    defaults = {
+      draft: false,
+      pdf: { enabled: true },
+      visibility: publishableVisibilityDefaults,
+    },
+    includePdf,
+  }: { defaults: PublishableContentDefaults | undefined; includePdf: boolean },
 ) {
   const publishableSchemaFields = {
     author: z.string().min(1),
     date: z.coerce.date(),
     description: z.string().min(1),
-    draft: z.boolean().default(false),
+    draft: z.boolean().default(defaults.draft),
     image: image().optional(),
     imageAlt: z.string().optional(),
     legacyBanner: z.string().optional(),
     legacyPermalink: z.string().optional(),
     tags: tagListSchema(),
     title: z.string().min(1),
-    visibility: publishableVisibilitySchema(),
+    visibility: publishableVisibilitySchema(defaults.visibility),
   };
 
   return z
@@ -123,7 +154,7 @@ function createArticleSchema(
       includePdf
         ? {
             ...publishableSchemaFields,
-            pdf: z.boolean().default(true),
+            pdf: z.boolean().default(defaults.pdf?.enabled ?? true),
           }
         : publishableSchemaFields,
     )
@@ -175,16 +206,18 @@ function createAuthorSchema() {
     .strict();
 }
 
-function createPublishableVisibilitySchema() {
+function createPublishableVisibilitySchema(
+  defaults: PublishableVisibilityDefaults,
+) {
   return z
     .object({
-      directory: z.boolean().default(publishableVisibilityDefaults.directory),
-      feed: z.boolean().default(publishableVisibilityDefaults.feed),
-      homepage: z.boolean().default(publishableVisibilityDefaults.homepage),
-      search: z.boolean().default(publishableVisibilityDefaults.search),
+      directory: z.boolean().default(defaults.directory),
+      feed: z.boolean().default(defaults.feed),
+      homepage: z.boolean().default(defaults.homepage),
+      search: z.boolean().default(defaults.search),
     })
     .strict()
-    .default(publishableVisibilityDefaults);
+    .default(defaults);
 }
 
 function createEditorialCollectionSchema() {
@@ -208,11 +241,20 @@ function createEditorialCollectionSchema() {
     .strict();
 }
 
-function createPageSchema() {
+function createPageSchema({ image }: ImageSchemaContext) {
   return z
     .object({
       description: z.string().optional(),
       draft: z.boolean().optional(),
+      hero: z
+        .object({
+          darkImage: image().optional(),
+          imageAlt: z.string().min(1).optional(),
+          lightImage: image(),
+          tagline: z.string().min(1).optional(),
+        })
+        .strict()
+        .optional(),
       startHere: z.array(z.string().min(1)).default([]),
       title: z.string(),
     })

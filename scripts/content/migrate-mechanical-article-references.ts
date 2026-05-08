@@ -1,6 +1,8 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
+
 /** Options for the mechanical article-reference migration. */
 export interface MechanicalArticleReferenceMigrationOptions {
   articleDir: string;
@@ -44,8 +46,9 @@ export async function runMechanicalArticleReferenceMigrationCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
 ): Promise<number> {
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
   const result = await mechanicalArticleReferenceMigration({
-    articleDir: path.resolve(rootDir, "src/content/articles"),
+    articleDir: sitePaths.content.articles,
     rootDir,
     write: args.includes("--write"),
   });

@@ -4,20 +4,21 @@ import { getEntry, render } from "astro:content";
 import ReadingBody from "../components/layout/ReadingBody.astro";
 import MarkdownPage from "../components/pages/MarkdownPage.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { pageUrl } from "../lib/routes";
+import { pageUrl, SITE_TITLE } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
 
 const about = await getEntry("pages", "about");
 
 if (!about) {
-  throw new Error("Missing about page content at src/content/pages/about.md.");
+  throw new Error("Missing about page content at site/content/pages/about.md.");
 }
 
 const { Content } = await render(about);
-const description = about.data.description ?? "About The Philosopher's Meme.";
+const description = about.data.description ?? `About ${SITE_TITLE}.`;
 ---
 
 <BaseLayout
-  title={`${about.data.title} | The Philosopher's Meme`}
+  title={titleWithSite(about.data.title)}
   description={description}
   canonicalPath={pageUrl("about")}
 >

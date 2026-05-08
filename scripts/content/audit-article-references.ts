@@ -5,6 +5,8 @@ import matter from "gray-matter";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
+
 /** Options for the article-reference corpus audit. */
 export interface ArticleReferenceAuditOptions {
   articleDir: string;
@@ -87,8 +89,9 @@ export async function runArticleReferenceAuditCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
 ): Promise<number> {
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
   const result = await auditArticleReferences({
-    articleDir: path.resolve(rootDir, "src/content/articles"),
+    articleDir: sitePaths.content.articles,
     rootDir,
   });
 

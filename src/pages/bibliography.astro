@@ -6,7 +6,8 @@ import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { bibliographyEntriesFromArticleReferences } from "../lib/bibliography";
 import { getArticles } from "../lib/content";
-import { bibliographyUrl } from "../lib/routes";
+import { bibliographyUrl, SITE_TITLE } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
 import { articleReferencesFromFrontmatter } from "../remark-plugins/articleReferences";
 
 const articles = await getArticles();
@@ -24,8 +25,8 @@ const entries = bibliographyEntriesFromArticleReferences(articleReferences);
 ---
 
 <BaseLayout
-  title="Bibliography | The Philosopher's Meme"
-  description="Sources cited by articles in The Philosopher's Meme."
+  title={titleWithSite("Bibliography")}
+  description={`Sources cited by articles in ${SITE_TITLE}.`}
   canonicalPath={bibliographyUrl()}
 >
   <BrowsingBody>

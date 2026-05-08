@@ -12,7 +12,17 @@ const compatibleArticleMdxImports = [
     note: "Renders as ordinary inline link text in PDF; hover preview panel is print-hidden.",
   },
   {
+    importSource: "@/components/articles/HoverImageLink.astro",
+    mode: "static-link",
+    note: "Renders as ordinary inline link text in PDF; hover preview panel is print-hidden.",
+  },
+  {
     importSource: "../../../components/articles/HoverImageParagraph.astro",
+    mode: "static-link",
+    note: "Renders as ordinary paragraph text plus inline link in PDF; hover preview panel is print-hidden.",
+  },
+  {
+    importSource: "@/components/articles/HoverImageParagraph.astro",
     mode: "static-link",
     note: "Renders as ordinary paragraph text plus inline link in PDF; hover preview panel is print-hidden.",
   },

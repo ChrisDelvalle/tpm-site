@@ -8,6 +8,8 @@ import { articleListItemsFromArchive } from "../../lib/article-list";
 import { articleArchiveItems } from "../../lib/archive";
 import { getAuthorEntries, getAuthorProfiles } from "../../lib/authors";
 import { getCategories } from "../../lib/content";
+import { SITE_TITLE } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
 
 /**
  * Generates one static author route for each public author profile.
@@ -32,11 +34,11 @@ const articleItems = articleListItemsFromArchive(
 const hasProfileBody = (profile.entry.body ?? "").trim().length > 0;
 const description =
   profile.shortBio ??
-  `Articles by ${profile.displayName} in The Philosopher's Meme archive.`;
+  `Articles by ${profile.displayName} in ${SITE_TITLE} archive.`;
 ---
 
 <BaseLayout
-  title={`${profile.displayName} | The Philosopher's Meme`}
+  title={titleWithSite(profile.displayName)}
   description={description}
   canonicalPath={profile.href}
 >

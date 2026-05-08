@@ -2,7 +2,7 @@
 
 Date: 2026-05-05
 
-This audit manually reviews every article in `src/content/articles/` for
+This audit manually reviews every article in `site/content/articles/` for
 source/reference/citation sections, manual inline citations, and footnotes used
 as citations. Automated search was used only as a navigation aid; every article
 listed below was inspected directly before a decision was recorded.
@@ -19,16 +19,16 @@ bibliographic source for a claim.
 
 ## Changes Made In This Pass
 
-- `src/content/articles/history/2010-decade-review-part-2.md`: converted the
+- `site/content/articles/history/2010-decade-review-part-2.md`: converted the
   arXiv link about fringe web communities into a canonical citation with a
   hidden BibTeX entry.
-- `src/content/articles/memeculture/homesteading-the-memeosphere.md`: converted
+- `site/content/articles/memeculture/homesteading-the-memeosphere.md`: converted
   the Wired "Godwin's Law" source link into a canonical citation with a hidden
   BibTeX entry.
-- `src/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`:
+- `site/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`:
   removed a citation marker from frontmatter `description`; article
   frontmatter must remain plain metadata.
-- `src/content/articles/metamemetics/internetmemetics.md`: restored the
+- `site/content/articles/metamemetics/internetmemetics.md`: restored the
   author-owned Pepe politics appendix as visible article content and removed
   synthetic inline markers from the prose sentence that already refers readers
   to that appendix.
@@ -66,24 +66,24 @@ Known limits left intentionally unresolved:
 These are source-like mentions where the article does not provide enough
 metadata to safely create structured BibTeX without editorial judgment.
 
-- `src/content/articles/aesthetics/gondola-shrine.md`: Tao Te Ching translation,
+- `site/content/articles/aesthetics/gondola-shrine.md`: Tao Te Ching translation,
   Adorno quote, Otto Rank quote, and Shunryu Suzuki mention need source
   metadata if they should enter the bibliography.
-- `src/content/articles/aesthetics/kandinsky-and-loss.md`: Kandinsky's "Dance
+- `site/content/articles/aesthetics/kandinsky-and-loss.md`: Kandinsky's "Dance
   Curves" is source-like but lacks edition/publication metadata.
-- `src/content/articles/aesthetics/the-interpretation-of-memes.md`: the Every
+- `site/content/articles/aesthetics/the-interpretation-of-memes.md`: the Every
   Frame a Painting/Snowpiercer reference lacks source metadata.
-- `src/content/articles/memeculture/homesteading-the-memeosphere.md`: Azuma
+- `site/content/articles/memeculture/homesteading-the-memeosphere.md`: Azuma
   Hiroki's otaku database argument lacks a cited source in the article.
-- `src/content/articles/memeculture/the-new-years-memes.md`: Wimsatt's "genetic
+- `site/content/articles/memeculture/the-new-years-memes.md`: Wimsatt's "genetic
   bookkeeping argument" lacks source metadata.
-- `src/content/articles/metamemetics/internetmemetics.md`: Tim Tyler (2008)
+- `site/content/articles/metamemetics/internetmemetics.md`: Tim Tyler (2008)
   source claim lacks enough source metadata to create BibTeX safely.
-- `src/content/articles/metamemetics/what-is-a-meme.md`: the Mr Chad reference
+- `site/content/articles/metamemetics/what-is-a-meme.md`: the Mr Chad reference
   needs real source metadata; the legacy `source-source` placeholder contained
   only `^` and was removed from structured bibliography data rather than
   guessed.
-- `src/content/articles/politics/the-structure-of-hyperspatial-politics.md`:
+- `site/content/articles/politics/the-structure-of-hyperspatial-politics.md`:
   the FCC clarification claim and Tarleton Gillespie "politics of platforms"
   mention lack source metadata.
 

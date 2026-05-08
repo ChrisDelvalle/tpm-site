@@ -20,6 +20,7 @@ import {
   publishableIndex,
 } from "../../lib/publishable";
 import { collectionUrl } from "../../lib/routes";
+import { siteConfig, titleWithSite } from "../../lib/site-config";
 import { collectionStaticPaths } from "../../lib/static-paths";
 
 /**
@@ -52,11 +53,12 @@ const collectionItems = collectionDirectoryListItems(collection, publishables);
 const title =
   collection.id === "featured" ? "Featured Articles" : collection.data.title;
 const description =
-  collection.data.description ?? `Curated TPM entries in ${title}.`;
+  collection.data.description ??
+  `Curated ${siteConfig.identity.title} entries in ${title}.`;
 ---
 
 <BaseLayout
-  title={`${title} | Collections | The Philosopher's Meme`}
+  title={titleWithSite(`${title} | Collections`)}
   description={description}
   canonicalPath={collectionUrl(collection.id)}
 >

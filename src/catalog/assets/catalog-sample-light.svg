@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Catalog sample light image</title>
+  <desc id="desc">A neutral platform catalog fixture with simple editorial blocks.</desc>
+  <rect width="960" height="540" fill="#f7f5ef" />
+  <rect x="80" y="80" width="800" height="380" rx="28" fill="#ffffff" stroke="#333126" stroke-width="8" />
+  <rect x="136" y="136" width="260" height="92" rx="14" fill="#333126" />
+  <rect x="136" y="268" width="420" height="34" rx="10" fill="#706d67" />
+  <rect x="136" y="328" width="520" height="34" rx="10" fill="#706d67" />
+  <rect x="136" y="388" width="340" height="34" rx="10" fill="#706d67" />
+  <circle cx="728" cy="270" r="96" fill="#b4552f" />
+  <path d="M690 272h76M728 234v76" stroke="#ffffff" stroke-width="18" stroke-linecap="round" />
+</svg>

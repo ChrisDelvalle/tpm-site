@@ -47,7 +47,7 @@ function announcement(
       visibility: defaultPublishableVisibility,
       ...data,
     },
-    filePath: `/repo/src/content/announcements/${id}.md`,
+    filePath: `/repo/site/content/announcements/${id}.md`,
     id,
   };
 }
@@ -69,7 +69,7 @@ function article(
       visibility: defaultPublishableVisibility,
       ...data,
     },
-    filePath: `/repo/src/content/articles/history/${id}.md`,
+    filePath: `/repo/site/content/articles/history/${id}.md`,
     id,
   };
 }

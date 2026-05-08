@@ -29,8 +29,8 @@ interface ComponentCatalogStaticPath {
 
 export const catalogMetadata = {
   description:
-    "Private design-system review surface for TPM Astro and Tailwind components.",
-  title: "TPM Component Catalog",
+    "Private design-system review surface for platform Astro and Tailwind components.",
+  title: "Platform Component Catalog",
 } as const satisfies CatalogMetadata;
 
 export const catalogExampleComponentPaths = [
@@ -101,7 +101,7 @@ export const componentCatalogIgnoreList = [
  * @returns True only for the explicit string `true`.
  */
 export function isComponentCatalogEnabled(
-  value = process.env["TPM_COMPONENT_CATALOG"],
+  value = process.env["PLATFORM_COMPONENT_CATALOG"],
 ): boolean {
   return value === "true";
 }

@@ -16,7 +16,7 @@ await mock.module("astro:content", () => ({
             tags: ["meme history", "memes"],
             title: "Newer Article",
           },
-          filePath: "/repo/src/content/articles/history/newer.md",
+          filePath: "/repo/site/content/articles/history/newer.md",
           id: "newer",
         },
         {
@@ -29,7 +29,7 @@ await mock.module("astro:content", () => ({
             tags: ["meme history"],
             title: "Draft Article",
           },
-          filePath: "/repo/src/content/articles/history/draft.md",
+          filePath: "/repo/site/content/articles/history/draft.md",
           id: "draft",
         },
         {
@@ -42,7 +42,7 @@ await mock.module("astro:content", () => ({
             tags: ["meme history", "games"],
             title: "Older Article",
           },
-          filePath: "/repo/src/content/articles/politics/older.md",
+          filePath: "/repo/site/content/articles/politics/older.md",
           id: "older",
         },
         {
@@ -55,7 +55,7 @@ await mock.module("astro:content", () => ({
             tags: [],
             title: "Unlisted Category Article",
           },
-          filePath: "/repo/src/content/articles/game-studies/unlisted.md",
+          filePath: "/repo/site/content/articles/game-studies/unlisted.md",
           id: "unlisted",
         },
       ];
@@ -73,7 +73,7 @@ await mock.module("astro:content", () => ({
             tags: [],
             title: "Newest Announcement",
           },
-          filePath: "/repo/src/content/announcements/newest.md",
+          filePath: "/repo/site/content/announcements/newest.md",
           id: "newest",
         },
         {
@@ -86,7 +86,7 @@ await mock.module("astro:content", () => ({
             tags: [],
             title: "Draft Announcement",
           },
-          filePath: "/repo/src/content/announcements/draft.md",
+          filePath: "/repo/site/content/announcements/draft.md",
           id: "draft",
         },
         {
@@ -99,7 +99,7 @@ await mock.module("astro:content", () => ({
             tags: [],
             title: "Older Announcement",
           },
-          filePath: "/repo/src/content/announcements/older.md",
+          filePath: "/repo/site/content/announcements/older.md",
           id: "older",
         },
       ];
@@ -129,10 +129,40 @@ await mock.module("astro:content", () => ({
 
     return [];
   },
+  getEntry: async (collection: string, id: string) => {
+    await Promise.resolve();
+
+    if (collection === "pages" && id === "index") {
+      return {
+        collection: "pages",
+        data: {
+          description: "Home page",
+          hero: {
+            lightImage: {
+              format: "png",
+              height: 630,
+              src: "/home.png",
+              width: 1200,
+            },
+          },
+          title: "Home",
+        },
+        id: "index",
+      };
+    }
+
+    return undefined;
+  },
 }));
 
-const { getAnnouncements, getCategories, getCategory, getTag, getTags } =
-  await import("../../../src/lib/content");
+const {
+  getAnnouncements,
+  getCategories,
+  getCategory,
+  getSiteSocialFallbackImage,
+  getTag,
+  getTags,
+} = await import("../../../src/lib/content");
 
 describe("content helpers", () => {
   test("loads published announcements newest first", async () => {
@@ -142,6 +172,14 @@ describe("content helpers", () => {
       "newest",
       "older",
     ]);
+  });
+
+  test("loads the active homepage hero as the site social fallback", async () => {
+    const fallback = await getSiteSocialFallbackImage();
+
+    expect(fallback).toMatchObject({
+      src: "/home.png",
+    });
   });
 
   test("builds category summaries from metadata and article folders", async () => {

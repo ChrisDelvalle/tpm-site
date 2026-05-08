@@ -188,6 +188,63 @@ describe("content schemas", () => {
     });
   });
 
+  test("honors site-owned content-type defaults while preserving frontmatter overrides", () => {
+    const articleDefaults = {
+      draft: true,
+      pdf: { enabled: false },
+      visibility: {
+        directory: true,
+        feed: false,
+        homepage: false,
+        search: true,
+      },
+    };
+    const announcementDefaults = {
+      draft: false,
+      visibility: {
+        directory: true,
+        feed: true,
+        homepage: true,
+        search: false,
+      },
+    };
+
+    expect(
+      articleSchema({ image: imageSchema }, articleDefaults).parse({
+        author: "Author",
+        date: "2022-04-06",
+        description: "Description",
+        title: "Article Title",
+        visibility: {
+          homepage: true,
+        },
+      }),
+    ).toMatchObject({
+      draft: true,
+      pdf: false,
+      visibility: {
+        directory: true,
+        feed: false,
+        homepage: true,
+        search: true,
+      },
+    });
+    expect(
+      announcementSchema({ image: imageSchema }, announcementDefaults).parse({
+        author: "The Philosopher's Meme",
+        date: "2026-05-05",
+        description: "Announcement description",
+        tags: [],
+        title: "Announcement Title",
+      }).visibility,
+    ).toEqual({
+      directory: true,
+      feed: true,
+      homepage: true,
+      search: false,
+    });
+  });
+
   test("validates category and standalone page frontmatter", () => {
     expect(
       categorySchema().safeParse({
@@ -209,8 +266,23 @@ describe("content schemas", () => {
       }).success,
     ).toBe(false);
     expect(
-      pageSchema().safeParse({
+      pageSchema({ image: imageSchema }).safeParse({
         description: "About the site",
+        hero: {
+          darkImage: {
+            format: "png",
+            height: 360,
+            src: "/dark.png",
+            width: 960,
+          },
+          imageAlt: "Site logo",
+          lightImage: {
+            format: "png",
+            height: 360,
+            src: "/light.png",
+            width: 960,
+          },
+        },
         startHere: ["what-is-a-meme"],
         title: "About",
       }).success,

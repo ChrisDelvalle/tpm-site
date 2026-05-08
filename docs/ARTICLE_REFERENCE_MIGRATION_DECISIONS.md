@@ -50,7 +50,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to: Markdown links, raw URLs, and archive links across
-  `src/content/articles/`
+  `site/content/articles/`
 - Decision: Ordinary links remain prose links unless an article is explicitly
   edited to cite the source with a `cite-*` marker and matching `tpm-bibtex`
   entry.
@@ -69,8 +69,8 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/philosophy/an-internet-koan.md`,
-  `src/content/articles/politics/social-media-freedom.mdx`
+  `site/content/articles/philosophy/an-internet-koan.md`,
+  `site/content/articles/politics/social-media-freedom.mdx`
 - Decision: The first mechanical pass may convert only simple raw HTML
   `<a href>` links and simple HTML paragraph wrappers into equivalent Markdown.
 - Reasoning: These conversions preserve displayed text and destination while
@@ -89,7 +89,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/metamemetics/glossary-1-dot-0.md`
+  `site/content/articles/metamemetics/glossary-1-dot-0.md`
 - Decision: Raw HTML `<a name="..."></a>` anchors are not part of the
   mechanical link cleanup pass.
 - Reasoning: They are in-page structural anchors used by the article's table of
@@ -107,12 +107,12 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/game-studies/gamergate-as-metagaming.md`,
-  `src/content/articles/metamemetics/internetmemetics.md`,
-  `src/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`,
-  `src/content/articles/metamemetics/what-is-a-meme.md`,
-  `src/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`,
-  `src/content/articles/philosophy/postnaturalism.md`
+  `site/content/articles/game-studies/gamergate-as-metagaming.md`,
+  `site/content/articles/metamemetics/internetmemetics.md`,
+  `site/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`,
+  `site/content/articles/metamemetics/what-is-a-meme.md`,
+  `site/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`,
+  `site/content/articles/philosophy/postnaturalism.md`
 - Decision: Reference and bibliography sections should not be automatically
   converted into `tpm-bibtex` entries without manual review.
 - Reasoning: A visible reference-section entry may be a bibliography source,
@@ -130,8 +130,8 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/metamemetics/what-is-a-meme.md`,
-  `src/content/articles/philosophy/postnaturalism.md`
+  `site/content/articles/metamemetics/what-is-a-meme.md`,
+  `site/content/articles/philosophy/postnaturalism.md`
 - Decision: Numeric footnotes should not be mechanically renamed until each
   footnote is classified as an explanatory `note-*`, a bibliographic `cite-*`,
   or a mixed case requiring manual structure changes.
@@ -148,7 +148,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/memeculture/early-trash-dove.md`
+  `site/content/articles/memeculture/early-trash-dove.md`
 - Decision: Media/source credit lines should remain visible article content
   until reviewed.
 - Reasoning: Image credits are partly attribution and partly source context.
@@ -182,7 +182,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/metamemetics/glossary-1-dot-0.md`
+  `site/content/articles/metamemetics/glossary-1-dot-0.md`
 - Decision: Replace legacy `<a name="..."></a>` anchors with empty
   `<span id="..."></span>` anchors that preserve the historical fragment IDs.
 - Reasoning: The anchors are structural navigation targets, not reader-visible
@@ -200,7 +200,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/memeculture/early-trash-dove.md`
+  `site/content/articles/memeculture/early-trash-dove.md`
 - Decision: Keep image credits visible near the images, formatted as italic
   editorial prose rather than bibliography entries.
 - Reasoning: These lines attribute image sources, but they are not citations
@@ -218,8 +218,8 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/game-studies/gamergate-as-metagaming.md`,
-  `src/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`
+  `site/content/articles/game-studies/gamergate-as-metagaming.md`,
+  `site/content/articles/philosophy/how-to-digitally-coauthor-articles-in-philosophy-class.md`
 - Decision: Replace compact reference sections with inline `cite-*` markers
   and hidden `tpm-bibtex` entries when every listed source has a clear
   claim-level citation point in the article prose.
@@ -239,8 +239,8 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Superseded by ARD-018
 - Applies to:
-  `src/content/articles/metamemetics/internetmemetics.md`,
-  `src/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`
+  `site/content/articles/metamemetics/internetmemetics.md`,
+  `site/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`
 - Decision: Rename long standalone bibliography sections to `Source List`
   rather than converting every entry into synthetic inline citation markers.
 - Reasoning: These sections function as broad historical source inventories,
@@ -261,10 +261,10 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/aesthetics/we-can-have-retrieval-inference-synthesis.md`,
-  `src/content/articles/metamemetics/internetmemetics.md`,
-  `src/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`,
-  `src/content/articles/metamemetics/what-is-a-meme.md`
+  `site/content/articles/aesthetics/we-can-have-retrieval-inference-synthesis.md`,
+  `site/content/articles/metamemetics/internetmemetics.md`,
+  `site/content/articles/metamemetics/the-memeticists-challenge-remains-open.md`,
+  `site/content/articles/metamemetics/what-is-a-meme.md`
 - Decision: Convert visible `Reference` and `Source List` sections into hidden
   `tpm-bibtex` entries. Preserve each original source-list line in a TPM
   `citation` field, and add parsed fields such as `author`, `title`, `year`,
@@ -291,7 +291,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/metamemetics/what-is-a-meme.md`
+  `site/content/articles/metamemetics/what-is-a-meme.md`
 - Decision: Convert the article's seven numeric footnotes to descriptive
   `note-*` labels. Source markers in prose use `cite-*`, and source-list
   entries are stored in hidden `tpm-bibtex`.
@@ -311,7 +311,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/philosophy/postnaturalism.md`
+  `site/content/articles/philosophy/postnaturalism.md`
 - Decision: Convert source-only numeric footnotes to repeatable `cite-*`
   markers and replace the footnote-definition reference section with hidden
   BibTeX entries.
@@ -388,7 +388,7 @@ Use this shape for future decisions:
 
 - Date: 2026-05-05
 - Status: Accepted
-- Applies to: all files under `src/content/articles/`
+- Applies to: all files under `site/content/articles/`
 - Decision: Manually inspect every article for citation/source/reference
   sections, manual inline citations, and footnotes being used as citations
   after the automated audit missed real cases.
@@ -430,7 +430,7 @@ Use this shape for future decisions:
 - Date: 2026-05-05
 - Status: Accepted
 - Applies to:
-  `src/content/articles/metamemetics/what-is-a-meme.md`,
+  `site/content/articles/metamemetics/what-is-a-meme.md`,
   `src/lib/article-references/normalize.ts`
 - Decision: Literal BibTeX `citation` fields must contain real display text;
   placeholder-only values such as `^` are invalid structured bibliography data.

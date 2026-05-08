@@ -82,15 +82,15 @@ describe("content verification script", () => {
         const log = spyOn(console, "log").mockImplementation(() => undefined);
 
         try {
-          await writeText(root, "src/content/categories/history.json", "{}");
+          await writeText(root, "site/content/categories/history.json", "{}");
           await writeText(
             root,
-            "src/content/authors/author.md",
+            "site/content/authors/author.md",
             "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
           );
           await writeText(
             root,
-            "src/content/articles/history/published.md",
+            "site/content/articles/history/published.md",
             "---\ntitle: Published\nauthor: Author\n---\n",
           );
 
@@ -111,15 +111,15 @@ describe("content verification script", () => {
       const error = spyOn(console, "error").mockImplementation(() => undefined);
 
       try {
-        await writeText(root, "src/content/categories/Bad Name.json", "{}");
+        await writeText(root, "site/content/categories/Bad Name.json", "{}");
         await writeText(
           root,
-          "src/content/authors/author.md",
+          "site/content/authors/author.md",
           "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
         );
         await writeText(
           root,
-          "src/content/articles/Bad Category/Bad Slug.md",
+          "site/content/articles/Bad Category/Bad Slug.md",
           "---\ntitle: Bad\nauthor: Author\n---\n",
         );
 
@@ -137,32 +137,32 @@ describe("content verification script", () => {
 
   test("reports unsafe category names and duplicate article slugs", async () =>
     withTempRoot(async (root) => {
-      await writeText(root, "src/content/categories/Bad Name.json", "{}");
+      await writeText(root, "site/content/categories/Bad Name.json", "{}");
       await writeText(
         root,
-        "src/content/authors/author.md",
+        "site/content/authors/author.md",
         "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
       );
       await writeText(
         root,
-        "src/content/articles/history/same.md",
+        "site/content/articles/history/same.md",
         "---\ntitle: One\nauthor: Author\n---\n",
       );
       await writeText(
         root,
-        "src/content/articles/politics/same.md",
+        "site/content/articles/politics/same.md",
         "---\ntitle: Two\nauthor: Author\n---\n",
       );
 
       const result = await verifyContent({
-        articleDir: path.join(root, "src/content/articles"),
-        authorDir: path.join(root, "src/content/authors"),
-        categoryDir: path.join(root, "src/content/categories"),
+        articleDir: path.join(root, "site/content/articles"),
+        authorDir: path.join(root, "site/content/authors"),
+        categoryDir: path.join(root, "site/content/categories"),
         rootDir: root,
       });
 
       expect(result.issues).toContain(
-        "src/content/categories/Bad Name.json: category metadata filename is not URL-safe",
+        "site/content/categories/Bad Name.json: category metadata filename is not URL-safe",
       );
       expect(
         result.issues.some((issue) =>
@@ -173,27 +173,27 @@ describe("content verification script", () => {
 
   test("counts drafts without requiring article count edits", async () =>
     withTempRoot(async (root) => {
-      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(root, "site/content/categories/history.json", "{}");
       await writeText(
         root,
-        "src/content/authors/author.md",
+        "site/content/authors/author.md",
         "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
       );
       await writeText(
         root,
-        "src/content/articles/history/published.md",
+        "site/content/articles/history/published.md",
         "---\ntitle: Published\nauthor: Author\n---\n",
       );
       await writeText(
         root,
-        "src/content/articles/history/draft.md",
+        "site/content/articles/history/draft.md",
         "---\ntitle: Draft\nauthor: Author\ndraft: true\n---\n",
       );
 
       const result = await verifyContent({
-        articleDir: path.join(root, "src/content/articles"),
-        authorDir: path.join(root, "src/content/authors"),
-        categoryDir: path.join(root, "src/content/categories"),
+        articleDir: path.join(root, "site/content/articles"),
+        authorDir: path.join(root, "site/content/authors"),
+        categoryDir: path.join(root, "site/content/categories"),
         rootDir: root,
       });
 
@@ -225,7 +225,7 @@ describe("image asset location script", () => {
   test("returns success from the quiet command-line workflow", async () =>
     withTempRoot(async (root) => {
       await writeText(root, "scripts/image-asset-location-ignore.json", "[]");
-      await writeBytes(root, "src/assets/site/ok.png", Buffer.from("ok"));
+      await writeBytes(root, "site/assets/site/ok.png", Buffer.from("ok"));
 
       const exitCode = await runImageAssetLocationCli(["--quiet"], root);
 
@@ -244,7 +244,7 @@ describe("image asset location script", () => {
             "scripts/image-asset-location-ignore.json",
             "[]",
           );
-          await writeBytes(root, "src/assets/site/ok.png", Buffer.from("ok"));
+          await writeBytes(root, "site/assets/site/ok.png", Buffer.from("ok"));
 
           const exitCode = await runImageAssetLocationCli(["--json"], root);
 
@@ -296,7 +296,7 @@ describe("image asset location script", () => {
             "scripts/image-asset-location-ignore.json",
             "[]",
           );
-          await writeBytes(root, "src/assets/site/ok.png", Buffer.from("ok"));
+          await writeBytes(root, "site/assets/site/ok.png", Buffer.from("ok"));
 
           const exitCode = await runImageAssetLocationCli([], root);
 
@@ -320,10 +320,10 @@ describe("image asset location script", () => {
     ).toContain("Image asset location verification passed");
   });
 
-  test("reports images outside src/assets with repair guidance", async () =>
+  test("reports images outside site/assets with repair guidance", async () =>
     withTempRoot(async (root) => {
       await writeText(root, "scripts/image-asset-location-ignore.json", "[]");
-      await writeBytes(root, "src/assets/site/ok.png", Buffer.from("ok"));
+      await writeBytes(root, "site/assets/site/ok.png", Buffer.from("ok"));
       await writeBytes(root, "public/leaked.png", Buffer.from("bad"));
 
       const result = await verifyImageAssetLocations({
@@ -408,8 +408,8 @@ describe("duplicate image script", () => {
       const bytes = Buffer.from("same-image");
 
       try {
-        await writeBytes(root, "src/assets/articles/post/a.png", bytes);
-        await writeBytes(root, "unused-assets/a-copy.png", bytes);
+        await writeBytes(root, "site/assets/articles/post/a.png", bytes);
+        await writeBytes(root, "site/unused-assets/a-copy.png", bytes);
 
         const exitCode = await runDuplicateImageCli(
           ["--json", "--fail-on-duplicates"],
@@ -430,8 +430,8 @@ describe("duplicate image script", () => {
       const bytes = Buffer.from("same-image");
 
       try {
-        await writeBytes(root, "src/assets/articles/post/a.png", bytes);
-        await writeBytes(root, "unused-assets/a-copy.png", bytes);
+        await writeBytes(root, "site/assets/articles/post/a.png", bytes);
+        await writeBytes(root, "site/unused-assets/a-copy.png", bytes);
 
         const exitCode = await runDuplicateImageCli(
           ["--fail-on-duplicates"],
@@ -457,7 +457,7 @@ describe("duplicate image script", () => {
         try {
           await writeBytes(
             root,
-            "src/assets/articles/post/a.png",
+            "site/assets/articles/post/a.png",
             Buffer.from("a"),
           );
 
@@ -524,8 +524,8 @@ describe("duplicate image script", () => {
   test("finds identical images and prints review guidance", async () =>
     withTempRoot(async (root) => {
       const bytes = Buffer.from("same-image");
-      await writeBytes(root, "src/assets/articles/post/a.png", bytes);
-      await writeBytes(root, "unused-assets/a-copy.png", bytes);
+      await writeBytes(root, "site/assets/articles/post/a.png", bytes);
+      await writeBytes(root, "site/unused-assets/a-copy.png", bytes);
 
       const result = await findDuplicateImages({
         ignorePatterns: [],
@@ -544,11 +544,11 @@ describe("duplicate image script", () => {
   test("honors duplicate image ignore patterns", async () =>
     withTempRoot(async (root) => {
       const bytes = Buffer.from("same-image");
-      await writeBytes(root, "src/assets/articles/post/a.png", bytes);
-      await writeBytes(root, "unused-assets/a-copy.png", bytes);
+      await writeBytes(root, "site/assets/articles/post/a.png", bytes);
+      await writeBytes(root, "site/unused-assets/a-copy.png", bytes);
 
       const result = await findDuplicateImages({
-        ignorePatterns: ["unused-assets/**"],
+        ignorePatterns: ["site/unused-assets/**"],
         rootDir: root,
       });
 
@@ -582,7 +582,7 @@ describe("unused image script", () => {
       try {
         await writeBytes(
           root,
-          "src/assets/articles/post/unused.png",
+          "site/assets/articles/post/unused.png",
           Buffer.from("y"),
         );
 
@@ -606,7 +606,7 @@ describe("unused image script", () => {
       try {
         await writeBytes(
           root,
-          "src/assets/articles/post/unused.png",
+          "site/assets/articles/post/unused.png",
           Buffer.from("y"),
         );
 
@@ -631,7 +631,7 @@ describe("unused image script", () => {
 
         expect(exitCode).toBe(0);
         expect(String(log.mock.calls[0]?.[0])).toContain(
-          "No unused src images found",
+          "No unused site images found",
         );
       } finally {
         log.mockRestore();
@@ -702,21 +702,21 @@ describe("unused image script", () => {
       );
     }));
 
-  test("reports images in src/assets that no source file references", async () =>
+  test("reports images in site/assets that no source file references", async () =>
     withTempRoot(async (root) => {
       await writeBytes(
         root,
-        "src/assets/articles/post/used.png",
+        "site/assets/articles/post/used.png",
         Buffer.from("x"),
       );
       await writeBytes(
         root,
-        "src/assets/articles/post/unused.png",
+        "site/assets/articles/post/unused.png",
         Buffer.from("y"),
       );
       await writeText(
         root,
-        "src/content/articles/post/example.md",
+        "site/content/articles/post/example.md",
         "![Used image](../../../assets/articles/post/used.png)",
       );
 
@@ -726,10 +726,10 @@ describe("unused image script", () => {
       });
 
       expect(result.unusedImages).toEqual([
-        "src/assets/articles/post/unused.png",
+        "site/assets/articles/post/unused.png",
       ]);
       expect(formatUnusedImageReport(result)).toContain(
-        "Move it to unused-assets/",
+        "Move it to site/unused-assets/",
       );
     }));
 
@@ -737,12 +737,12 @@ describe("unused image script", () => {
     withTempRoot(async (root) => {
       await writeBytes(
         root,
-        "src/assets/articles/post/unused.png",
+        "site/assets/articles/post/unused.png",
         Buffer.from("y"),
       );
 
       const result = await findUnusedImages({
-        ignorePatterns: ["src/assets/articles/post/unused.png"],
+        ignorePatterns: ["site/assets/articles/post/unused.png"],
         rootDir: root,
       });
 
@@ -760,18 +760,18 @@ describe("shared asset script", () => {
         try {
           await writeBytes(
             root,
-            "src/assets/articles/post/shared.png",
+            "site/assets/articles/post/shared.png",
             Buffer.from("x"),
           );
           await writeText(
             root,
             "src/pages/one.astro",
-            '---\nconst img = "src/assets/articles/post/shared.png";\n---\n',
+            '---\nconst img = "site/assets/articles/post/shared.png";\n---\n',
           );
           await writeText(
             root,
             "src/pages/two.astro",
-            '---\nconst img = "src/assets/articles/post/shared.png";\n---\n',
+            '---\nconst img = "site/assets/articles/post/shared.png";\n---\n',
           );
 
           const exitCode = await runSharedAssetsCli(["--json"], root);
@@ -795,25 +795,25 @@ describe("shared asset script", () => {
         try {
           await writeBytes(
             root,
-            "src/assets/articles/post/shared.png",
+            "site/assets/articles/post/shared.png",
             Buffer.from("x"),
           );
           await writeText(
             root,
             "src/pages/one.astro",
-            '---\nconst img = "src/assets/articles/post/shared.png";\n---\n',
+            '---\nconst img = "site/assets/articles/post/shared.png";\n---\n',
           );
           await writeText(
             root,
             "src/pages/two.astro",
-            '---\nconst img = "src/assets/articles/post/shared.png";\n---\n',
+            '---\nconst img = "site/assets/articles/post/shared.png";\n---\n',
           );
 
           const exitCode = await runSharedAssetsCli([], root);
 
           expect(exitCode).toBe(1);
           expect(String(error.mock.calls[0]?.[0])).toContain(
-            "outside src/assets/shared",
+            "outside site/assets/shared",
           );
         } finally {
           error.mockRestore();
@@ -828,18 +828,18 @@ describe("shared asset script", () => {
         const log = spyOn(console, "log").mockImplementation(() => undefined);
 
         try {
-          await writeBytes(root, "src/assets/site/logo.png", Buffer.from("x"));
+          await writeBytes(root, "site/assets/site/logo.png", Buffer.from("x"));
           await writeText(
             root,
             "src/pages/index.astro",
-            '---\nconst img = "src/assets/site/logo.png";\n---\n',
+            '---\nconst img = "site/assets/site/logo.png";\n---\n',
           );
 
           const exitCode = await runSharedAssetsCli([], root);
 
           expect(exitCode).toBe(0);
           expect(String(log.mock.calls[0]?.[0])).toContain(
-            "No shared src assets found",
+            "No shared site assets found",
           );
         } finally {
           log.mockRestore();
@@ -851,18 +851,18 @@ describe("shared asset script", () => {
     withTempRoot(async (root) => {
       await writeBytes(
         root,
-        "src/assets/articles/post/shared.png",
+        "site/assets/articles/post/shared.png",
         Buffer.from("x"),
       );
       await writeText(
         root,
         "src/pages/one.astro",
-        '---\nconst img = "src/assets/articles/post/shared.png";\n---\n',
+        '---\nconst img = "site/assets/articles/post/shared.png";\n---\n',
       );
       await writeText(
         root,
         "src/pages/two.astro",
-        '---\nconst img = "src/assets/articles/post/shared.png";\n---\n',
+        '---\nconst img = "site/assets/articles/post/shared.png";\n---\n',
       );
 
       const result = await findSharedAssets({ rootDir: root });
@@ -873,16 +873,16 @@ describe("shared asset script", () => {
 
   test("allows assets referenced from multiple files when they live in shared", async () =>
     withTempRoot(async (root) => {
-      await writeBytes(root, "src/assets/shared/shared.png", Buffer.from("x"));
+      await writeBytes(root, "site/assets/shared/shared.png", Buffer.from("x"));
       await writeText(
         root,
         "src/pages/one.astro",
-        '---\nconst img = "src/assets/shared/shared.png";\n---\n',
+        '---\nconst img = "site/assets/shared/shared.png";\n---\n',
       );
       await writeText(
         root,
         "src/pages/two.astro",
-        '---\nconst img = "src/assets/shared/shared.png";\n---\n',
+        '---\nconst img = "site/assets/shared/shared.png";\n---\n',
       );
 
       const result = await findSharedAssets({ rootDir: root });

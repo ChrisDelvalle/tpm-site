@@ -26,7 +26,9 @@ const config = {
   ignoreDependencies: [
     "@typescript-eslint/parser",
     "@tailwindcss/typography",
+    "html-validate",
     "markdownlint-cli2",
+    "pagefind",
     "sort-package-json",
     "tailwindcss",
     "tw-animate-css",

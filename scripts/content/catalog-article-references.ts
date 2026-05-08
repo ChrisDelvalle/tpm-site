@@ -3,6 +3,7 @@ import path from "node:path";
 
 import matter from "gray-matter";
 
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
 import {
   type ArticleReferenceAuditArticle,
   auditArticleReferences,
@@ -76,6 +77,7 @@ export async function runArticleReferenceCatalogCli(
   args = process.argv.slice(2),
   rootDir = process.cwd(),
 ): Promise<number> {
+  const sitePaths = resolveSiteInstancePaths({ cwd: rootDir });
   const writeIndex = args.indexOf("--write");
   const outputIndex = args.indexOf("--output");
   const outputPath =
@@ -83,7 +85,7 @@ export async function runArticleReferenceCatalogCli(
       ? (args.at(outputIndex + 1) ?? defaultOutputPath)
       : defaultOutputPath;
   const catalog = await articleReferenceCatalog({
-    articleDir: path.resolve(rootDir, "src/content/articles"),
+    articleDir: sitePaths.content.articles,
     generatedDate: new Date().toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",

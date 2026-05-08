@@ -41,7 +41,7 @@ Add an `authors` content collection.
 Recommended structure:
 
 ```text
-src/content/authors/
+site/content/authors/
   seong-young-her.md
   masha-zharova.md
   anonymous.md

@@ -81,6 +81,7 @@ jobs:
         with:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
       - run: bun run build
       - run: bun run verify
       - run: bun run validate:html
@@ -125,6 +126,7 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium
       - run: bun run test:catalog
+      - run: bun run test:catalog:site-instance
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -173,6 +175,7 @@ jobs:
         with:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
       - run: bun run test:perf
       - uses: actions/upload-artifact@v4
         if: always()
@@ -264,6 +267,7 @@ jobs:
           bun-version: 1.3.12
       - uses: actions/configure-pages@v5
       - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
       - run: bun run build
       - run: bun run verify
       - run: bun run validate:html

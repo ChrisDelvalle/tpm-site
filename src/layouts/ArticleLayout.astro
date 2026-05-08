@@ -1,7 +1,6 @@
 ---
 import { getImage } from "astro:assets";
 
-import fallbackSocialPreviewImage from "../assets/shared/tpm_home_hero_light.png";
 import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
 import ArticleHeader from "../components/articles/ArticleHeader.astro";
 import ArticleProse from "../components/articles/ArticleProse.astro";
@@ -29,9 +28,15 @@ import {
 } from "../lib/authors";
 import { articleScholarMetaViewModel } from "../lib/article-pdf";
 import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
-import { getArticles, getCategory } from "../lib/content";
+import {
+  getArticles,
+  getCategory,
+  getSiteSocialFallbackImage,
+} from "../lib/content";
+import { normalizePublishableVisibility } from "../lib/publishable";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import { articleShareMenuViewModel } from "../lib/share-targets";
+import { siteConfig, titleWithSite } from "../lib/site-config";
 import { socialPreviewImageViewModel } from "../lib/social-images";
 import BaseLayout from "./BaseLayout.astro";
 
@@ -54,6 +59,7 @@ const {
   tableOfContentsHeadings = [],
 } = Astro.props;
 const articleView = articleViewModel(article);
+const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
 const socialPreviewImage = await socialPreviewImageViewModel({
   alt: articleView.imageAlt ?? articleView.title,
   fallback: fallbackSocialPreviewImage,
@@ -78,7 +84,10 @@ const articleAuthorProfiles = articleAuthors
   .map((author) => authorProfileMap.get(author.id))
   .filter((profile) => profile !== undefined);
 const category = await getCategory(articleView.categorySlug);
-const categoryHref = category ? categoryUrl(category.slug) : undefined;
+const categoryHref =
+  siteConfig.features.categories && category
+    ? categoryUrl(category.slug)
+    : undefined;
 const moreInCategory =
   category === undefined
     ? []
@@ -111,10 +120,16 @@ const scholarMeta = articleScholarMetaViewModel({
   site: Astro.site,
 });
 const pdf = scholarMeta.pdf;
+const searchable =
+  siteConfig.features.search &&
+  normalizePublishableVisibility(
+    article.data.visibility,
+    siteConfig.contentDefaults.articles.visibility,
+  ).search;
 ---
 
 <BaseLayout
-  title={`${articleView.title} | The Philosopher's Meme`}
+  title={titleWithSite(articleView.title)}
   description={articleView.description}
   canonicalPath={articleView.canonicalPath}
   image={socialPreviewImage}
@@ -141,7 +156,11 @@ const pdf = scholarMeta.pdf;
         </ContentRail>
       )
     }
-    <article class="grid w-full min-w-0 gap-6" data-pagefind-body>
+    <article
+      class="grid w-full min-w-0 gap-6"
+      data-pagefind-body={searchable ? true : undefined}
+      data-pagefind-ignore={searchable ? undefined : true}
+    >
       <ArticleHeader
         author={articleView.author}
         authors={articleAuthors}
@@ -189,7 +208,7 @@ const pdf = scholarMeta.pdf;
         </div>
         <ArticleReferences references={articleReferences} />
         {
-          article.data.tags.length > 0 && (
+          siteConfig.features.tags && article.data.tags.length > 0 && (
             <div
               class="border-border border-t pt-6"
               data-article-tags-placement

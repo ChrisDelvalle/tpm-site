@@ -1,4 +1,5 @@
-import sampleImage from "../../../../src/assets/shared/tpm_defaultpic.jpg";
+import sampleImage from "@site/assets/shared/tpm_defaultpic.jpg";
+
 import type { ArticleListItem } from "../../../../src/lib/article-list";
 
 /** Article-list fixture used by article component render tests. */

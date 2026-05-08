@@ -4,6 +4,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import astroConfig from "../../astro.config";
+import { resolveSiteInstancePaths } from "../../src/lib/site-instance";
 import {
   type BuildVerificationIssues,
   formatBuildVerificationReport,
@@ -819,9 +820,12 @@ async function runVerifyBuildGate(
   } satisfies ViteBuildGateCommand;
 
   try {
+    const sitePaths = resolveSiteInstancePaths({ cwd });
     const result = await verifyBuild({
-      articleDir: path.join(cwd, "src/content/articles"),
-      categoryDir: path.join(cwd, "src/content/categories"),
+      announcementDir: sitePaths.content.announcements,
+      articleDir: sitePaths.content.articles,
+      categoryDir: sitePaths.content.categories,
+      collectionDir: sitePaths.content.collections,
       distDir: outputDir,
       expectedRedirects: configuredStringRedirects(),
     });

@@ -52,6 +52,22 @@ describe("HomeFeaturedSlide", () => {
     expect(view).toContain("hidden");
     expect(view).not.toContain("Culture");
   });
+
+  test("uses a generic site-label fallback when a featured item has no image", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(HomeFeaturedSlide, {
+      props: {
+        fallbackLabel: "Example",
+        index: 0,
+        item: featuredItem(),
+      },
+      request: new Request(`${testSiteUrl}/`),
+    });
+
+    expect(view).toContain("data-home-featured-fallback-image");
+    expect(view).toContain("Example");
+    expect(view).not.toContain("tpm-site-symbol");
+  });
 });
 
 function featuredItem(

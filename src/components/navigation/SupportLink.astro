@@ -1,6 +1,7 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import LinkButton from "../ui/LinkButton.astro";
+import { siteConfig } from "../../lib/site-config";
 
 interface Props extends Omit<HTMLAttributes<"a">, "href"> {
   class?: string;
@@ -12,31 +13,36 @@ interface Props extends Omit<HTMLAttributes<"a">, "href"> {
 const {
   class: className,
   compactLabel,
-  href = "https://patreon.com/thephilosophersmeme",
-  label = "Support Us",
+  href = siteConfig.support.patreon.href,
+  label = siteConfig.support.patreon.label,
   ...attrs
 } = Astro.props;
 ---
 
-<LinkButton
-  {...attrs}
-  href={href}
-  size="md"
-  class:list={[className]}
-  data-support-link
->
-  {
-    compactLabel === undefined ? (
-      label
-    ) : (
-      <>
-        <span data-support-label-full class="max-[22.5625rem]:hidden">
-          {label}
-        </span>
-        <span data-support-label-compact class="hidden max-[22.5625rem]:inline">
-          {compactLabel}
-        </span>
-      </>
-    )
-  }
-</LinkButton>
+{
+  siteConfig.features.support && (
+    <LinkButton
+      {...attrs}
+      href={href}
+      size="md"
+      class:list={[className]}
+      data-support-link
+    >
+      {compactLabel === undefined ? (
+        label
+      ) : (
+        <>
+          <span data-support-label-full class="max-[22.5625rem]:hidden">
+            {label}
+          </span>
+          <span
+            data-support-label-compact
+            class="hidden max-[22.5625rem]:inline"
+          >
+            {compactLabel}
+          </span>
+        </>
+      )}
+    </LinkButton>
+  )
+}

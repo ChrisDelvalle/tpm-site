@@ -1,9 +1,12 @@
 ---
 import "../styles/global.css";
+import "@site/theme.css";
+import "../styles/print.css";
 
 import SiteShell from "../components/layout/SiteShell.astro";
 import SiteHead from "../components/seo/SiteHead.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../lib/routes";
+import { siteConfig } from "../lib/site-config";
 import type { SocialPreviewImage } from "../lib/social-images";
 
 interface Props {
@@ -24,7 +27,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang={siteConfig.identity.language} data-theme="light">
   <head>
     <script src="../scripts/theme.ts"></script>
     <meta charset="utf-8" />

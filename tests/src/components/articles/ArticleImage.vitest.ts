@@ -1,6 +1,6 @@
+import sampleImage from "@site/assets/shared/tpm_defaultpic.jpg";
 import { describe, expect, test } from "vitest";
 
-import sampleImage from "../../../../src/assets/shared/tpm_defaultpic.jpg";
 import ArticleImage from "../../../../src/components/articles/ArticleImage.astro";
 import { createAstroTestContainer } from "../../../helpers/astro-container";
 
