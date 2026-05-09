@@ -1,11 +1,17 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
+import {
+  embedFrameClassName,
+  type EmbedMediaLayout,
+} from "../../lib/embed-media";
+
 /** Public props for stable external embed wrappers. */
 interface Props extends HTMLAttributes<"figure"> {
   aspect?: "classic" | "square" | "video" | "wide";
   description?: string;
   fallbackHref?: string;
+  layout?: EmbedMediaLayout;
   title: string;
 }
 
@@ -14,6 +20,7 @@ const {
   description,
   fallbackHref,
   aspect = "video",
+  layout,
   class: className,
   ...attrs
 } = Astro.props;
@@ -24,13 +31,15 @@ const aspectClasses = {
   video: "aspect-video",
   wide: "aspect-21/9",
 } as const;
+const frameClass =
+  layout === undefined ? aspectClasses[aspect] : embedFrameClassName(layout);
 ---
 
 <figure {...attrs} class:list={["min-w-0 space-y-2", className]}>
   <div
     class:list={[
       "border-border bg-muted overflow-hidden rounded-sm border",
-      aspectClasses[aspect],
+      frameClass,
     ]}
   >
     {

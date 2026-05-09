@@ -30,6 +30,12 @@ describe("ArticleLayout", () => {
 
     expect(view).toContain(article.data.title);
     expect(view).toContain("Rendered article body.");
+    expect(view).toContain("data-article-reading-navigation");
+    expect(view).toContain('aria-label="Article reading navigation"');
+    expect(view).toContain('href="/articles/"');
+    expect(view).toContain('href="/articles/all/"');
+    expect(view).toContain('href="/collections/"');
+    expect(view).not.toContain("Read /");
     expect(view).toContain("application/ld+json");
     expect(view).toContain('name="citation_title"');
     expect(view).toContain('name="citation_author"');

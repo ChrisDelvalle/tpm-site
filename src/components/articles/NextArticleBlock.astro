@@ -1,0 +1,46 @@
+---
+import ArticleList from "./ArticleList.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+import { articlesArchiveUrl } from "../../lib/routes";
+
+interface Props {
+  headingId?: string;
+  item?: ArticleListItem | undefined;
+  label?: "Next Article" | "Previous Article";
+}
+
+const {
+  headingId = "next-article-heading",
+  item,
+  label = "Next Article",
+} = Astro.props;
+---
+
+{
+  item !== undefined && (
+    <section
+      class="grid min-w-0 gap-4"
+      aria-labelledby={headingId}
+      data-article-continuity
+    >
+      <div class="flex min-w-0 flex-wrap items-end justify-between gap-3">
+        <h2
+          id={headingId}
+          class="text-foreground m-0 min-w-0 text-xl font-semibold tracking-normal break-words"
+        >
+          {label}
+        </h2>
+        <TextLink
+          href={articlesArchiveUrl()}
+          variant="subtle"
+          tone="primary"
+          prefetch="hover"
+        >
+          View more
+        </TextLink>
+      </div>
+      <ArticleList items={[item]} />
+    </section>
+  )
+}

@@ -31,6 +31,10 @@ describe("HomeFeaturedSlide", () => {
     expect(view).toContain("Inherited article description.");
     expect(view).toContain("Optional editorial copy.");
     expect(view).toContain('data-home-featured-active="true"');
+    expect(view).toContain("data-home-featured-meta");
+    expect(view).toContain("data-home-featured-title");
+    expect(view).toContain("data-home-featured-media");
+    expect(view).toContain("md:items-start");
   });
 
   test("renders announcement features without article category metadata", async () => {
@@ -50,6 +54,7 @@ describe("HomeFeaturedSlide", () => {
     expect(view).toContain("Join the TPM Discord");
     expect(view).toContain("/announcements/join-discord/");
     expect(view).toContain("hidden");
+    expect(view).toContain("data-home-featured-meta");
     expect(view).not.toContain("Culture");
   });
 

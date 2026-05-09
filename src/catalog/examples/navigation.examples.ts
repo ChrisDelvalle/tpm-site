@@ -43,6 +43,11 @@ export const navigationCatalogExamples = [
     title: "SearchReveal",
   },
   {
+    componentPath: "src/components/navigation/ReadingNavigationLinks.astro",
+    description: "Compact one-line reading destination links.",
+    title: "ReadingNavigationLinks",
+  },
+  {
     componentPath: "src/components/navigation/SupportLink.astro",
     description: "Reusable publication support call to action.",
     title: "SupportLink",

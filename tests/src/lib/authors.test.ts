@@ -5,6 +5,7 @@ import {
   authorEntriesForByline,
   authorProfiles,
   authorSummariesForArticle,
+  hasUsefulAuthorProfileContent,
   normalizeAuthorAlias,
   unknownAuthorBylines,
 } from "../../../src/lib/authors";
@@ -90,6 +91,38 @@ describe("author helpers", () => {
       newer,
       older,
     ]);
+  });
+
+  test("detects author profiles that should render biography content", () => {
+    const emptyProfile = authorProfiles(
+      [
+        authorEntry({
+          displayName: "Seong-Young Her",
+          id: "seong-young-her",
+        }),
+      ],
+      [],
+    )[0];
+    const profileWithBio = authorProfiles(
+      [
+        authorEntry({
+          displayName: "Masha Zharova",
+          id: "masha-zharova",
+          shortBio: "Short profile.",
+        }),
+      ],
+      [],
+    )[0];
+
+    if (emptyProfile === undefined || profileWithBio === undefined) {
+      throw new Error("Expected test author profiles.");
+    }
+
+    expect(hasUsefulAuthorProfileContent(emptyProfile)).toBe(false);
+    expect(
+      hasUsefulAuthorProfileContent(emptyProfile, { hasProfileBody: true }),
+    ).toBe(true);
+    expect(hasUsefulAuthorProfileContent(profileWithBio)).toBe(true);
   });
 
   test("fails duplicate aliases across author profiles", () => {

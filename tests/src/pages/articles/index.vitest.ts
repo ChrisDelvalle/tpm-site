@@ -13,11 +13,14 @@ describe("articles index page", () => {
       request: new Request(`${testSiteUrl}/articles/`),
     });
 
-    expect(view).toContain("Browse Categories");
+    expect(view).toContain("data-articles-category-rail");
+    expect(view).toContain("data-scroll-rail-viewport");
+    expect(view).toContain('aria-label="Article categories"');
     expect(view).toContain("Latest Articles");
     expect(view).toContain("View all articles");
     expect(view).toContain("/articles/all/");
     expect(view).toContain("Metamemetics");
+    expect(view).not.toContain("Browse Categories");
     expect(view).toContain("data-pagefind-ignore");
     expect(view).toContain("<article");
   });

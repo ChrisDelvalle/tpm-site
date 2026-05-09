@@ -214,6 +214,10 @@ Introductory paragraph.
     expect(figure?.tagName).toBe("figure");
     expect(figureProperties?.["data-article-embed"]).toBe("true");
     expect(iframeProperties["data-pdf-exclude"]).toBe("true");
+    expect(JSON.stringify(figure)).toContain(
+      'data-article-embed-provider":"youtube"',
+    );
+    expect(JSON.stringify(figure)).toContain("aspect-video");
     expect(JSON.stringify(figure)).toContain("data-article-embed-fallback");
     expect(JSON.stringify(figure)).toContain(
       "https://www.youtube.com/embed/example",
@@ -248,6 +252,9 @@ Introductory paragraph.
 
     expect(figure?.tagName).toBe("figure");
     expect(figureProperties?.["data-article-embed"]).toBe("true");
+    expect(JSON.stringify(figure)).toContain(
+      'data-article-embed-provider":"youtube"',
+    );
     expect(JSON.stringify(figure)).toContain("data-article-embed-fallback");
     expect(JSON.stringify(figure)).toContain(
       "https://www.youtube.com/embed/raw",
@@ -273,8 +280,39 @@ Introductory paragraph.
     expect(html?.type).toBe("html");
     expect(html?.value).toContain("data-article-embed");
     expect(html?.value).toContain("data-article-embed-fallback");
+    expect(html?.value).toContain('data-article-embed-provider="youtube"');
     expect(html?.value).toContain("https://www.youtube.com/embed/markdown");
     expect(html?.value).toContain("Markdown video");
+  });
+
+  test("wraps SoundCloud iframes with compact audio embed layout", () => {
+    const iframe = {
+      children: [],
+      properties: {
+        height: "110",
+        src: "https://w.soundcloud.com/player/?url=https://soundcloud.com/example/track",
+        title: "SoundCloud preview",
+      },
+      tagName: "iframe",
+      type: "element" as const,
+    };
+    const tree = {
+      children: [iframe],
+      type: "root" as const,
+    };
+
+    rehypeArticleImages()(tree, { data: {} });
+
+    const [figure] = tree.children as Array<{
+      properties?: Record<string, unknown>;
+      tagName?: string;
+    }>;
+    const frame = JSON.stringify(figure);
+
+    expect(figure?.tagName).toBe("figure");
+    expect(frame).toContain('"data-article-embed-provider":"soundcloud"');
+    expect(frame).toContain("h-[110px]");
+    expect(frame).not.toContain("aspect-video");
   });
 
   test("rewrites multiline Markdown raw iframe HTML before Astro preserves it", () => {
@@ -299,6 +337,26 @@ Introductory paragraph.
     expect(html.value).toContain("data-pdf-exclude");
     expect(html.value).toContain("https://www.youtube.com/embed/multiline");
     expect(html.value).toContain("Multiline video");
+  });
+
+  test("rewrites Markdown SoundCloud iframe HTML to compact audio layout", () => {
+    const tree = remark().parse(`<iframe
+  width="100%"
+  height="110"
+  src="https://w.soundcloud.com/player/?url=https://soundcloud.com/example/track"
+  title="SoundCloud preview"
+></iframe>`);
+
+    remarkArticleImageMarkers()(tree);
+
+    const [html] = tree.children;
+    if (html?.type !== "html") {
+      throw new Error("Expected SoundCloud iframe to remain raw HTML");
+    }
+
+    expect(html.value).toContain('data-article-embed-provider="soundcloud"');
+    expect(html.value).toContain("h-[110px]");
+    expect(html.value).not.toContain("aspect-video");
   });
 });
 

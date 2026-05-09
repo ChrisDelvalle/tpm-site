@@ -1,6 +1,12 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
+import {
+  embedFrameClassName,
+  embedIframeClassName,
+  type EmbedMediaLayout,
+} from "../../lib/embed-media";
+
 type IframeAttributes = Omit<
   HTMLAttributes<"iframe">,
   "class" | "src" | "title"
@@ -10,8 +16,9 @@ type IframeAttributes = Omit<
 interface Props extends IframeAttributes {
   allowFullscreen?: boolean;
   aspect?: "classic" | "square" | "video" | "wide";
-  class?: string;
-  iframeClass?: string;
+  class?: string | undefined;
+  iframeClass?: string | undefined;
+  layout?: EmbedMediaLayout;
   src: string;
   title: string;
 }
@@ -21,6 +28,7 @@ const {
   title,
   allowFullscreen = true,
   aspect = "video",
+  layout,
   loading = "lazy",
   class: className,
   iframeClass,
@@ -33,12 +41,18 @@ const aspectClasses = {
   video: "aspect-video",
   wide: "aspect-21/9",
 } as const;
+const frameClass =
+  layout === undefined ? aspectClasses[aspect] : embedFrameClassName(layout);
+const iframeLayoutClass =
+  layout === undefined
+    ? "block size-full border-0"
+    : embedIframeClassName(layout);
 ---
 
 <div
   class:list={[
     "border-border bg-muted overflow-hidden rounded-sm border",
-    aspectClasses[aspect],
+    frameClass,
     className,
   ]}
 >
@@ -48,5 +62,5 @@ const aspectClasses = {
     title={title}
     loading={loading}
     allowfullscreen={allowFullscreen}
-    class:list={["block size-full border-0", iframeClass]}></iframe>
+    class:list={[iframeLayoutClass, iframeClass]}></iframe>
 </div>

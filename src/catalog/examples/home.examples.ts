@@ -28,7 +28,7 @@ export const homeCatalogExamples = [
   },
   {
     componentPath: "src/components/blocks/HomeCategoryOverviewBlock.astro",
-    description: "Homepage category discovery grid.",
+    description: "Homepage adapter for the shared category discovery rail.",
     title: "HomeCategoryOverviewBlock",
   },
   {

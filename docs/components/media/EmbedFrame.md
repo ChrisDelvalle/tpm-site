@@ -11,6 +11,7 @@ Source: `src/components/media/EmbedFrame.astro`
 - `aspect?: "classic" | "square" | "video" | "wide"`
 - `description?: string`
 - `fallbackHref?: string`
+- `layout?: "audio" | "video"`
 - `title: string`
 
 Public props should remain narrow and semantic. Do not add broad configuration
@@ -23,7 +24,7 @@ It should not depend on sibling internals beyond normal slot/prop composition. P
 
 ## Layout And Responsiveness
 
-The component must reserve stable space before media loads, avoid overflow beyond its containing measure, and preserve the media's semantic relationship to captions or fallbacks.
+The component must reserve stable space before media loads, avoid overflow beyond its containing measure, and preserve the media's semantic relationship to captions or fallbacks. Use provider-classified `layout` when an embed should not use a generic video aspect ratio.
 
 ## Layering And Scrolling
 
@@ -56,7 +57,7 @@ visible, and CTAs distinguishable from neutral actions.
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
-- reserves aspect-ratio space before load.
+- reserves aspect-ratio or compact audio-player space before load.
 - does not exceed its containing measure.
 
 ## Follow-Up Notes

@@ -4,10 +4,9 @@ Source: `src/components/blocks/HomeCategoryOverviewBlock.astro`
 
 ## Purpose
 
-`HomeCategoryOverviewBlock` provides homepage category discovery while staying
-inside the same comfortable content measure as the surrounding homepage
-sections. It uses a one-row horizontal rail so categories are available without
-spending a full grid block of vertical space.
+`HomeCategoryOverviewBlock` adapts the shared `CategoryRailBlock` for homepage
+category discovery while staying inside the same comfortable content measure as
+the surrounding homepage sections.
 
 ## Public Contract
 
@@ -20,10 +19,9 @@ make invalid states harder to express.
 
 ## Composition Relationships
 
-It composes `../ui/IconButton`, `../ui/TextLink`, `lucide-astro` chevrons, and
-the small `../../scripts/horizontal-scroll-rail` controller. Parent blocks
-should pass normalized props and slots rather than asking this component to
-fetch global content directly.
+It composes `./CategoryRailBlock.astro`. Parent blocks should pass normalized
+props and slots rather than asking this component to fetch global content
+directly.
 
 ## Layout And Responsiveness
 

@@ -13,7 +13,9 @@ describe("UI catalog examples", () => {
     expect(paths).toContain("src/components/ui/PatreonButton.astro");
     expect(paths).toContain("src/components/ui/YouTubeButton.astro");
     expect(paths).toContain("src/components/media/ResponsiveIframe.astro");
+    expect(paths).toContain("src/components/media/SoundCloudEmbed.astro");
     expect(paths).toContain("src/components/media/ThemedImage.astro");
+    expect(paths).toContain("src/components/media/YouTubeEmbed.astro");
     expect(new Set(paths).size).toBe(paths.length);
   });
 });

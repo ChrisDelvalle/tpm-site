@@ -1,6 +1,6 @@
 ---
 import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
-import CategoryOverviewBlock from "../../components/blocks/CategoryOverviewBlock.astro";
+import CategoryRailBlock from "../../components/blocks/CategoryRailBlock.astro";
 import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import LinkButton from "../../components/ui/LinkButton.astro";
 import TextLink from "../../components/ui/TextLink.astro";
@@ -54,11 +54,12 @@ const categoryItems = sectionNavigationItems(categories, articlesIndexUrl());
         </LinkButton>
       </div>
     </section>
-    <CategoryOverviewBlock
-      title="Browse Categories"
-      description="Find articles by subject."
-      headingLevel={2}
+    <CategoryRailBlock
+      aria-label="Article categories"
+      data-articles-category-rail
       items={categoryItems}
+      railId="articles-categories-rail"
+      title="Categories"
     />
     <ArchiveListBlock
       title="Latest Articles"

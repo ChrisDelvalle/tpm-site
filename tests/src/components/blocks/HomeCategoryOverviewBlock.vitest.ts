@@ -15,6 +15,7 @@ describe("HomeCategoryOverviewBlock", () => {
     expect(view).toContain("Metamemetics");
     expect(view).toMatch(/2\s+articles/);
     expect(view).toContain("data-home-category-overview");
+    expect(view).toContain("data-category-rail");
     expect(view).toContain("data-scroll-rail");
     expect(view).toContain("data-scroll-rail-viewport");
     expect(view).toContain("data-scroll-rail-previous");

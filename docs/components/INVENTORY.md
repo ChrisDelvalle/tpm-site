@@ -34,6 +34,7 @@ component has a matching one-pager in this directory.
 - `src/components/navigation/DiscoveryMenu.astro`
 - `src/components/navigation/MobileMenu.astro`
 - `src/components/navigation/PrimaryNav.astro`
+- `src/components/navigation/ReadingNavigationLinks.astro`
 - `src/components/navigation/SearchForm.astro`
 - `src/components/navigation/SearchReveal.astro`
 - `src/components/navigation/SectionNav.astro`
@@ -83,6 +84,7 @@ component has a matching one-pager in this directory.
 
 - `src/components/blocks/ArchiveListBlock.astro`
 - `src/components/blocks/CategoryOverviewBlock.astro`
+- `src/components/blocks/CategoryRailBlock.astro`
 - `src/components/blocks/HomeAnnouncementBlock.astro`
 - `src/components/blocks/HomeArchiveLinksBlock.astro`
 - `src/components/blocks/HomeCategoryOverviewBlock.astro`

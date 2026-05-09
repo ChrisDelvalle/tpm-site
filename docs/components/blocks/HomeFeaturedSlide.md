@@ -22,3 +22,5 @@ and link-label data.
 - Article features can render category/date metadata and description inherited
   from the article.
 - The optional Markdown body is supporting copy, not duplicated metadata.
+- Slide metadata, title, and media are anchored to fixed top positions so
+  carousel changes do not make the feature content jump vertically.
