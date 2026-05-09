@@ -1,10 +1,6 @@
 # The Philosopher's Meme
 
-Astro site for The Philosopher's Meme, migrated from the original Jekyll site.
-
-The source-of-truth article content remains in `docs/`. Astro reads a generated
-mirror in `src/content/legacy/`, which is recreated by the sync script and should
-not be edited by hand.
+Astro static site for The Philosopher's Meme.
 
 ## Requirements
 
@@ -37,7 +33,13 @@ Preview the built site locally:
 bun run preview
 ```
 
-Run the full local validation used before opening a PR:
+Build and then preview in one command:
+
+```sh
+bun run preview:fresh
+```
+
+Run the normal local validation used before opening a PR:
 
 ```sh
 bun run check
@@ -45,35 +47,89 @@ bun run build
 bun run verify
 ```
 
-Format source files:
+For a short explanation of every package script, see `PACKAGE_SCRIPTS.md`.
+
+Run the same local quality path with successful command output hidden:
 
 ```sh
-bun run format
+bun run quality
 ```
 
-## How The Content Pipeline Works
-
-Legacy Markdown stays in `docs/`.
-
-Before `dev`, `check`, and `build`, the project runs:
+Run safe automatic fixes before checking code and config:
 
 ```sh
-bun run sync:content
+bun run fix
 ```
 
-That script copies Markdown from `docs/` into `src/content/legacy/`, converts
-`.markdown` filenames to `.md`, and normalizes duplicate top-level frontmatter
-keys for Astro compatibility.
+Markdown and MDX style checks are review-only, not release blockers:
 
-Do not edit `src/content/legacy/` directly. Any changes there will be replaced
-the next time content is synced.
+```sh
+bun run review:markdown
+bun run fix:markdown
+```
+
+Asset cleanup checks are review-only. They warn about duplicate images and
+images in `src/assets/` that do not appear to be used by the site. If an unused
+image is worth keeping for possible future use, move it to `unused-assets/`.
+If a warning is intentionally wrong, add a narrow path or glob to
+`scripts/duplicate-image-ignore.json` or `scripts/unused-image-ignore.json`:
+
+```sh
+bun run review:assets
+```
+
+Run dependency audit review across all severities:
+
+```sh
+bun run audit:all
+```
+
+Run the heavier pre-release gate:
+
+```sh
+bun run check:release
+```
+
+Run the heavier pre-release gate with successful command output hidden:
+
+```sh
+bun run quality:release
+```
+
+`check:release` includes the blocking release gates: normal checks, production
+build verification, browser smoke/responsive/search tests, high-severity
+dependency audit, and secrets checks. `quality:release` also runs the
+non-blocking review signals: Markdown style, asset cleanup, accessibility,
+Lighthouse, coverage, and all-severity dependency audit. The secrets check
+expects the `gitleaks` binary to be available locally.
+
+## Content Model
+
+For a step-by-step article submission guide for non-technical authors, see
+`AUTHOR_TUTORIAL.md`.
+
+Article Markdown and MDX live in:
+
+```text
+src/content/articles/<category>/<slug>.md
+src/content/articles/<category>/<slug>.mdx
+```
+
+Static page Markdown lives in `src/content/pages/`. The about page is
+`src/content/pages/about.md`.
+
+Category display metadata lives in `src/content/categories/*.json`. Category
+metadata controls labels and ordering for category navigation; article grouping
+comes from the first folder below `src/content/articles/`.
 
 ## Adding An Article
 
-1. Pick the topic folder under `docs/`.
-2. Add a dated Markdown file using the existing naming pattern.
-3. Add frontmatter with a dated legacy permalink.
-4. Put images or other static files under `public/assets/` or `public/uploads/`.
+1. Pick a category folder under `src/content/articles/`.
+2. Add a URL-safe `.md` or `.mdx` file whose filename stem is the desired public
+   slug.
+3. Add frontmatter with `title`, `description`, `date`, and `author`.
+4. Put new article images under `src/assets/articles/<article-slug>/` unless
+   they are shared assets.
 5. Run the validation commands.
 
 Example:
@@ -81,11 +137,13 @@ Example:
 ```md
 ---
 title: "Example Article Title"
+description: "Short summary for search, feeds, and social previews."
 date: 2026-04-27
 author: "Author Name"
-parent: Meme Culture
-permalink: /2026/04/27/example-article-title/
-excerpt: "Short summary for archive pages and feeds."
+tags:
+  - memes
+image: "../../../assets/articles/example-article-title/cover.png"
+imageAlt: "Brief description of the image."
 ---
 
 Article body goes here.
@@ -97,48 +155,72 @@ The public Astro URL will be:
 /articles/example-article-title/
 ```
 
-The slug is taken from the dated `permalink` when possible. If no dated
-permalink is present, the slug is derived from the filename with the leading date
-removed.
+Use `draft: true` to keep an article unpublished. Draft articles are excluded
+from generated article routes, archives, categories, RSS, sitemap, and search.
 
-## Topic Folders
+Do not add `slug`, `topic`, or `category` frontmatter. The article slug comes
+from the filename. The category comes from the source folder.
 
-The topic navigation is based on the folder-to-topic mapping in
-`src/lib/routes.ts`.
+`legacyPermalink` and `legacyBanner` may exist on older articles as inert
+historical metadata. They do not control routing, publishing, or rendering.
 
-Current topic folders:
+## Category Folders
 
-- `docs/memeculture/` -> `/topics/meme-culture/`
-- `docs/metamemetics/` -> `/topics/metamemetics/`
-- `docs/aesthetics/` -> `/topics/aesthetics/`
-- `docs/irony/` -> `/topics/irony/`
-- `docs/game studies/` -> `/topics/game-studies/`
-- `docs/history/` -> `/topics/history/`
-- `docs/philosophy/` -> `/topics/philosophy/`
-- `docs/politics/` -> `/topics/politics/`
+Current article category folders:
 
-Topic index files such as `docs/history/history.md` are legacy source files.
-Published article pages are generated from entries with dated permalinks.
+- `src/content/articles/memeculture/` -> `/categories/memeculture/`
+- `src/content/articles/metamemetics/` -> `/categories/metamemetics/`
+- `src/content/articles/aesthetics/` -> `/categories/aesthetics/`
+- `src/content/articles/irony/` -> `/categories/irony/`
+- `src/content/articles/game-studies/` -> `/categories/game-studies/`
+- `src/content/articles/history/` -> `/categories/history/`
+- `src/content/articles/philosophy/` -> `/categories/philosophy/`
+- `src/content/articles/politics/` -> `/categories/politics/`
 
-## Images And Static Files
+If you add a new category folder, add a matching JSON file in
+`src/content/categories/` when you want a custom display title, description, or
+ordering.
 
-Files in `public/` are copied to the site root at build time.
+## Images
 
-Use root-relative paths in Markdown:
+Use `src/assets/` for project-owned images so Astro can process and validate
+them. Article-owned images should usually live under a folder matching the
+article slug:
 
-```md
-![Alt text](/assets/example/image.png)
+```text
+src/assets/articles/example-article-title/
+  diagram.png
 ```
 
-or:
+Shared article images belong in `src/assets/shared/`. Site UI and homepage
+images belong in `src/assets/site/`.
 
-```md
-![Alt text](/uploads/example.png)
+Use MDX when an article needs component-level image control:
+
+```mdx
+import { Image } from "astro:assets";
+import diagram from "../../../assets/articles/example-article-title/diagram.png";
+
+<Image src={diagram} alt="Alt text" />
 ```
 
-Legacy `{{ site.baseurl }}` references are stripped during Astro Markdown
-rendering, and legacy `/glossary/` links are rewritten to
-`/articles/glossary-1-dot-0/`.
+Do not put article, page, or site UI images in `public/` or in repository-root
+image folders. Those locations bypass Astro's image validation and processing.
+
+Use a relative source path for the frontmatter `image` field:
+
+```yaml
+image: "../../../assets/articles/example-article-title/cover.png"
+imageAlt: "Brief description of the image."
+```
+
+The slug-matching asset folder is an organization convention, not an enforced
+rule. Authors can reference any asset under `src/assets/` when an image is
+shared or belongs somewhere else.
+
+Use `public/` only for non-image files that intentionally need stable
+root-relative URLs, such as favicons, `robots.txt`, deploy host files, or
+downloads that should not be transformed.
 
 ## URLs And Redirects
 
@@ -148,13 +230,13 @@ Canonical article routes are:
 /articles/:slug/
 ```
 
-Topic pages are:
+Category pages are:
 
 ```text
-/topics/:topic/
+/categories/:category/
 ```
 
-Old dated Jekyll URLs such as:
+Historical dated URLs such as:
 
 ```text
 /2021/05/16/gamergate-as-metagaming/
@@ -168,28 +250,55 @@ outside the site, currently through Cloudflare.
 `bun run build` generates:
 
 - static Astro pages in `dist/`
+- hashed Astro-managed assets under `dist/_astro/`
 - Pagefind search index in `dist/pagefind/`
 - RSS feed at `/feed.xml`
 - sitemap output through `@astrojs/sitemap`
 
-The local dev server is for layout and content iteration. For a production-like
-search check, run `bun run build` and then `bun run preview`.
+For a production-like search check, run `bun run build` and then
+`bun run preview`.
+
+## Production Output
+
+The deployable site is the `dist/` directory produced by `bun run build`.
+
+Astro and Vite process project CSS and normal client scripts for production:
+CSS is minified and chunked, processed scripts are bundled and minified, and
+emitted project assets use hashed filenames for cacheability.
+
+Files in `public/` are copied through unchanged. Treat downloads, favicons, and
+other public files as production-ready before committing them.
+
+Pagefind search assets are generated after the Astro build and live under
+`dist/pagefind/`.
 
 ## Verification
 
 `bun run verify` checks the built `dist/` output for expected pages, assets,
-article count, Liquid artifacts, and broken internal links. It expects 60 article
-pages in the current migration.
+published article count, and broken internal links. The
+expected article count is derived from current source content, excluding
+articles marked `draft: true`.
 
 Run this before opening a PR:
 
 ```sh
-bun run check && bun run build && bun run verify
+bun run check
+bun run build
+bun run verify
 ```
 
 ## Deployment
 
-Configure the host to:
+GitHub Pages deployment is handled by `.github/workflows/ci.yml` on pushes to
+`main`. Deployment waits for the blocking quality, build verification, browser,
+and high-severity audit jobs, then publishes the generated `dist/` directory
+with GitHub Pages Actions.
+
+GitHub review also runs non-blocking Markdown, asset cleanup, accessibility,
+Lighthouse, coverage, and all-severity audit jobs. Treat those as review
+signals rather than publish blockers.
+
+Manual deployment hosts should:
 
 1. Install dependencies with `bun install`.
 2. Build with `bun run build`.
@@ -198,7 +307,7 @@ Configure the host to:
 The production site origin is configured in `astro.config.mjs`:
 
 ```js
-site: "https://thephilosophersmeme.com"
+site: "https://thephilosophersmeme.com";
 ```
 
 `public/CNAME`, `public/robots.txt`, and `public/favicon.svg` are copied into

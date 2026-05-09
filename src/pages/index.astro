@@ -1,32 +1,56 @@
 ---
+import { Image } from "astro:assets";
+
+import recentImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
+import heroImage from "../assets/site/2022-04-05_tpm-header_trnp_dm.png";
+import announcementImage from "../assets/site/r2021-03-22.png";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getArticles } from "../lib/content";
-import { articleUrl, entryDate, entryTitle, excerpt, formatDate } from "../lib/routes";
+import {
+  articleUrl,
+  entryDate,
+  entryTitle,
+  excerpt,
+  formatDate,
+} from "../lib/routes";
 
 const [latest] = await getArticles();
+const latestTitle = latest ? entryTitle(latest) : "";
 ---
 
 <BaseLayout canonicalPath="/">
   <section class="home-hero">
-    <img
-      src="/assets/images/2022-04-05_tpm-header_trnp_dm.png"
+    <Image
+      src={heroImage}
       alt="The Philosopher's Meme"
+      layout="constrained"
+      loading="eager"
+      fetchpriority="high"
     />
     <p>The philosophy of memes, cyberculture, and the Internet.</p>
     <div class="button-row">
-      <a class="button" href="https://patreon.com/thephilosophersmeme">Support Us</a>
-      <a class="button secondary" href="https://discord.gg/8MVFRMa">Join TPM Discord</a>
+      <a class="button" href="https://patreon.com/thephilosophersmeme"
+        >Support Us</a
+      >
+      <a class="button secondary" href="https://discord.gg/8MVFRMa"
+        >Join TPM Discord</a
+      >
     </div>
   </section>
 
   <section class="content-section">
     <h2>Announcements</h2>
-    <img src="/uploads/r2021-03-22.png" alt="" />
+    <Image
+      src={announcementImage}
+      alt="Announcement Image"
+      layout="constrained"
+    />
     <p>
-      We've set up a <a href="https://patreon.com/thephilosophersmeme">Patreon</a>.
-      The current priority is to fund the new
-      <a href="https://forum.memestudies.org">forum</a>. Please consider supporting
-      TPM by pledging to the Patreon.
+      We've set up a <a href="https://patreon.com/thephilosophersmeme"
+        >Patreon</a
+      >. The current priority is to fund the new
+      <a href="https://forum.memestudies.org">forum</a>. Please consider
+      supporting TPM by pledging to the Patreon.
     </p>
   </section>
 
@@ -34,9 +58,9 @@ const [latest] = await getArticles();
     latest && (
       <section class="content-section">
         <h2>Most Recent Post</h2>
-        <img src="/uploads/2020-06-24_fossilised-bug_resized.png" alt="" />
+        <Image src={recentImage} alt={latestTitle} layout="full-width" />
         <h3>
-          <a href={articleUrl(latest.id)}>{entryTitle(latest)}</a>
+          <a href={articleUrl(latest.id)}>{latestTitle}</a>
         </h3>
         <p class="archive-meta">{formatDate(entryDate(latest))}</p>
         {excerpt(latest) && <p>{excerpt(latest)}</p>}
@@ -46,8 +70,9 @@ const [latest] = await getArticles();
 
   <section class="content-section">
     <p>
-      Browse <a href="/articles/">Articles</a> and <a href="/topics/">Topics</a>
-      for the migrated archive.
+      Browse <a href="/articles/">Articles</a> and <a href="/categories/"
+        >Categories</a
+      > for the archive.
     </p>
   </section>
 </BaseLayout>

@@ -1,0 +1,16 @@
+---
+import type { ArticleEntry, CategorySummary } from "../../lib/routes";
+import { articleBlogPostingJsonLd, safeJsonLd } from "../../lib/seo";
+
+interface Props {
+  article: ArticleEntry;
+  category?: CategorySummary | undefined;
+}
+
+const { article, category } = Astro.props;
+const jsonLd = safeJsonLd(
+  articleBlogPostingJsonLd(article, category, Astro.site),
+);
+---
+
+<script is:inline type="application/ld+json" set:html={jsonLd} />

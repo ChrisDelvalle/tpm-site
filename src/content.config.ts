@@ -1,53 +1,69 @@
-import { defineCollection } from "astro:content";
+import { basename } from "node:path";
+
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { defineCollection } from "astro:content";
 
-function articleSlugFromEntry(entry: string, data: Record<string, unknown>) {
-  const permalink = typeof data.permalink === "string" ? data.permalink : "";
-  const permalinkMatch = permalink.match(/^\/?\d{4}\/\d{2}\/\d{2}\/([^/]+)\/?$/);
-
-  if (permalinkMatch) {
-    return permalinkMatch[1];
-  }
-
-  return entry
-    .replace(/\.(md|markdown)$/i, "")
-    .replace(/(^|\/)\d{4}[-_]\d{2}[-_]\d{2}[-_]/, "$1");
+function filenameStem(entry: string) {
+  return basename(entry).replace(/\.(?:md|mdx)$/i, "");
 }
 
-const legacyMarkdown = defineCollection({
+function articleSchema({ image }: { image: () => z.ZodType }) {
+  return z
+    .object({
+      author: z.string().min(1),
+      date: z.coerce.date(),
+      description: z.string().min(1),
+      draft: z.boolean().default(false),
+      image: image().optional(),
+      imageAlt: z.string().optional(),
+      legacyBanner: z.string().optional(),
+      legacyPermalink: z.string().optional(),
+      tags: z.array(z.string()).default([]),
+      title: z.string().min(1),
+    })
+    .strict();
+}
+
+const articles = defineCollection({
   loader: glob({
-    base: "./src/content/legacy",
-    pattern: "**/*.md",
-    generateId: ({ entry, data }) => articleSlugFromEntry(entry, data),
+    base: "./src/content/articles",
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry }) => filenameStem(entry),
+  }),
+  schema: articleSchema,
+});
+
+const categories = defineCollection({
+  loader: glob({
+    base: "./src/content/categories",
+    pattern: "*.json",
   }),
   schema: z
     .object({
-      title: z.any().optional(),
-      date: z.any().optional(),
-      author: z.any().optional(),
-      parent: z.any().optional(),
-      grand_parent: z.any().optional(),
-      nav_order: z.any().optional(),
-      permalink: z.any().optional(),
-      excerpt: z.any().optional(),
-      description: z.any().optional(),
-      image: z.any().optional(),
-      tags: z.any().optional(),
-      categories: z.any().optional(),
-      published: z.any().optional(),
-      status: z.any().optional(),
-      type: z.any().optional(),
-      banner: z.any().optional(),
-      fbpreview: z.any().optional(),
-      facebook: z.any().optional(),
-      meta: z.any().optional(),
-      has_children: z.any().optional(),
-      layout: z.any().optional(),
+      description: z.string().optional(),
+      order: z.number().int().nonnegative(),
+      title: z.string().min(1),
     })
-    .loose(),
+    .strict(),
+});
+
+const pages = defineCollection({
+  loader: glob({
+    base: "./src/content/pages",
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: z
+    .object({
+      description: z.string().optional(),
+      draft: z.boolean().optional(),
+      title: z.string(),
+    })
+    .strict(),
 });
 
 export const collections = {
-  legacyMarkdown,
+  articles,
+  categories,
+  pages,
 };

@@ -1,0 +1,26 @@
+{
+  "globs": ["**/*.md"],
+  "ignores": [
+    ".agents/skills/**",
+    ".astro/**",
+    ".lighthouseci/**",
+    "coverage/**",
+    "dist/**",
+    "node_modules/**",
+    "playwright-report/**",
+    "test-results/**",
+    "unused-assets/**"
+  ],
+  "config": {
+    "MD013": false,
+    "MD029": false,
+    "MD034": false,
+    "MD036": false,
+    "MD037": false,
+    "MD024": {
+      "siblings_only": true
+    },
+    "MD033": false,
+    "MD049": false
+  }
+}

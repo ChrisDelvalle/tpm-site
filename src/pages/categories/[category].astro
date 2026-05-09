@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCategories } from "../../lib/content";
+import {
+  articleUrl,
+  authorName,
+  categoryUrl,
+  entryDate,
+  entryTitle,
+  excerpt,
+  formatDate,
+} from "../../lib/routes";
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+---
+
+<BaseLayout
+  title={`${category.title} | The Philosopher's Meme`}
+  description={category.description ??
+    `Articles filed under ${category.title}.`}
+  canonicalPath={categoryUrl(category.slug)}
+>
+  <section class="page-heading">
+    <p class="eyebrow">Category</p>
+    <h1>{category.title}</h1>
+    {category.description && <p>{category.description}</p>}
+  </section>
+
+  <ol class="archive-list">
+    {
+      category.articles.map((article) => (
+        <li>
+          <a class="archive-title" href={articleUrl(article.id)}>
+            {entryTitle(article)}
+          </a>
+          <div class="archive-meta">
+            <span>{formatDate(entryDate(article))}</span>
+            <span>{authorName(article)}</span>
+          </div>
+          {excerpt(article) && <p>{excerpt(article)}</p>}
+        </li>
+      ))
+    }
+  </ol>
+</BaseLayout>

@@ -1,28 +1,30 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
+import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
+import { getCategory } from "../lib/content";
 import {
   articleUrl,
   authorName,
+  categorySlug,
+  categoryUrl,
   entryDate,
   entryTitle,
   excerpt,
   formatDate,
   imageUrl,
-  topicForEntry,
-  topicUrl,
-  type LegacyEntry,
+  type ArticleEntry,
 } from "../lib/routes";
+import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
-  article: LegacyEntry;
+  article: ArticleEntry;
 }
 
 const { article } = Astro.props;
-const topic = topicForEntry(article);
 const date = entryDate(article);
 const description = excerpt(article);
 const title = entryTitle(article);
 const canonicalPath = articleUrl(article.id);
+const category = await getCategory(categorySlug(article));
 ---
 
 <BaseLayout
@@ -30,13 +32,15 @@ const canonicalPath = articleUrl(article.id);
   description={description}
   canonicalPath={canonicalPath}
   image={imageUrl(article)}
+  imageAlt={article.data.imageAlt}
   type="article"
 >
+  <ArticleJsonLd slot="head" article={article} category={category} />
   <article class="article" data-pagefind-body>
     {
-      topic && (
-        <a class="eyebrow" href={topicUrl(topic.slug)}>
-          {topic.label}
+      category && (
+        <a class="eyebrow" href={categoryUrl(category.slug)}>
+          {category.title}
         </a>
       )
     }

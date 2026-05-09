@@ -1,0 +1,38 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "astro.config.mjs",
+    "eslint.config.js",
+    "lighthouserc.cjs",
+    "playwright.config.ts",
+    "scripts/**/*.ts",
+    "src/content.config.ts",
+    "src/pages/**/*.{astro,ts,tsx}",
+    "tests/**/*.ts"
+  ],
+  "ignore": [
+    ".astro/**",
+    ".lighthouseci/**",
+    "coverage/**",
+    "dist/**",
+    "playwright-report/**",
+    "public/**",
+    "test-results/**"
+  ],
+  "ignoreDependencies": [
+    "@tailwindcss/typography",
+    "markdownlint-cli2",
+    "sort-package-json",
+    "tailwindcss",
+    "tw-animate-css"
+  ],
+  "ignoreBinaries": ["gitleaks"],
+  "project": [
+    "astro.config.mjs",
+    "eslint.config.js",
+    "playwright.config.ts",
+    "scripts/**/*.ts",
+    "src/**/*.{astro,ts,tsx}",
+    "tests/**/*.ts"
+  ]
+}
