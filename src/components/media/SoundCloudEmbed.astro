@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import ResponsiveIframe from "./ResponsiveIframe.astro";
+import { soundCloudPlayerUrl } from "../../lib/embed-media";
+
+type IframeAttributes = Omit<
+  HTMLAttributes<"iframe">,
+  "allow" | "class" | "scrolling" | "src" | "title"
+>;
+
+/** Public props for compact SoundCloud audio player embeds. */
+interface Props extends IframeAttributes {
+  class?: string | undefined;
+  iframeClass?: string | undefined;
+  sourceUrl?: string | undefined;
+  src?: string | undefined;
+  title: string;
+}
+
+const {
+  src,
+  sourceUrl,
+  title,
+  class: className,
+  iframeClass,
+  loading = "lazy",
+  ...attrs
+} = Astro.props;
+const playerSrc =
+  src ?? (sourceUrl === undefined ? undefined : soundCloudPlayerUrl(sourceUrl));
+
+if (playerSrc === undefined || playerSrc.trim() === "") {
+  throw new Error("SoundCloudEmbed requires either src or sourceUrl.");
+}
+---
+
+<ResponsiveIframe
+  {...attrs}
+  src={playerSrc}
+  title={title}
+  layout="audio"
+  loading={loading}
+  scrolling="no"
+  allow="autoplay"
+  allowFullscreen={false}
+  class:list={[className]}
+  iframeClass={iframeClass}
+/>

@@ -12,6 +12,7 @@ Source: `src/components/media/ResponsiveIframe.astro`
 - `aspect?: "classic" | "square" | "video" | "wide"`
 - `class?: string`
 - `iframeClass?: string`
+- `layout?: "audio" | "video"`
 - `src: string`
 - `title: string`
 
@@ -25,7 +26,7 @@ It should not depend on sibling internals beyond normal slot/prop composition. P
 
 ## Layout And Responsiveness
 
-The component must reserve stable space before media loads, avoid overflow beyond its containing measure, and preserve the media's semantic relationship to captions or fallbacks.
+The component must reserve stable space before media loads, avoid overflow beyond its containing measure, and preserve the media's semantic relationship to captions or fallbacks. Use `aspect` for generic aspect-ratio frames and `layout` for provider-classified media such as compact audio embeds.
 
 ## Layering And Scrolling
 
@@ -58,7 +59,7 @@ visible, and CTAs distinguishable from neutral actions.
 - renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
 - preserves readable text and visible focus/hover states in light and dark themes.
 - handles long content without clipping or overlapping neighboring components.
-- reserves aspect-ratio space before load.
+- reserves aspect-ratio or compact audio-player space before load.
 - does not exceed its containing measure.
 
 ## Follow-Up Notes

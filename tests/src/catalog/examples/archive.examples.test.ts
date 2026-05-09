@@ -9,6 +9,7 @@ describe("archive catalog examples", () => {
     );
 
     expect(paths).toContain("src/components/blocks/ArchiveListBlock.astro");
+    expect(paths).toContain("src/components/blocks/CategoryRailBlock.astro");
     expect(paths).toContain(
       "src/components/blocks/CategoryOverviewBlock.astro",
     );

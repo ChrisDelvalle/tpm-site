@@ -23,6 +23,8 @@ describe("HomeFeaturedCarousel", () => {
     expect(view).toContain("Feature");
     expect(view).toContain("lg:grid-rows-[minmax(0,1fr)_auto]");
     expect(view).toContain("min-h-80");
+    expect(view).toContain("content-start");
+    expect(view).not.toContain("content-center");
     expect(view).not.toContain("data-home-featured-next");
   });
 
@@ -73,6 +75,8 @@ describe("HomeFeaturedSlide", () => {
     expect(view).toContain("Inherited article description.");
     expect(view).toContain("Optional editorial copy.");
     expect(view).toContain("data-[home-featured-active=false]:invisible");
+    expect(view).toContain("data-home-featured-meta");
+    expect(view).toContain("data-home-featured-title");
     expect(view).not.toContain("Join Discord");
   });
 

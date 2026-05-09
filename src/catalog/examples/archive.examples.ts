@@ -12,6 +12,11 @@ export const archiveCatalogExamples = [
     title: "ArchiveListBlock",
   },
   {
+    componentPath: "src/components/blocks/CategoryRailBlock.astro",
+    description: "Reusable one-row category rail backed by navigation data.",
+    title: "CategoryRailBlock",
+  },
+  {
     componentPath: "src/components/blocks/CategoryOverviewBlock.astro",
     description: "Reusable category overview grid backed by navigation data.",
     title: "CategoryOverviewBlock",

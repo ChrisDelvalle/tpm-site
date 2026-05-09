@@ -271,7 +271,8 @@ widget.
   Do not use margin offsets, fixed heights on Start Here, or JavaScript
   measurement to force alignment.
 - The Featured carousel should keep a stable viewport height so slide changes
-  do not resize the lead grid.
+  do not resize the lead grid, and featured metadata/title/media anchors should
+  remain top-aligned across slides with different amounts of copy.
 - Announcement, Featured, Start Here, and Recent surfaces use flat article
   treatments with separators rather than cards.
 - Categories render as one horizontal rail, never wrap into a second row,
@@ -334,6 +335,8 @@ widget.
 - Mobile order is Read, Hero, Featured, Start Here, Announcements, Categories,
   Recent without responsive order hacks.
 - The Featured carousel height does not change when the active feature changes.
+- The Featured carousel metadata, title, and media y positions do not change
+  when the active feature changes.
 - The Featured carousel previous/next buttons share the bottom control row with
   item dots.
 - The first viewport contains at least one announcement link when announcements

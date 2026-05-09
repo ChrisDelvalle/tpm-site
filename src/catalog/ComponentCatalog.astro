@@ -32,6 +32,7 @@ import ArticleTableOfContents from "../components/articles/ArticleTableOfContent
 import ArticleTags from "../components/articles/ArticleTags.astro";
 import ArchiveListBlock from "../components/blocks/ArchiveListBlock.astro";
 import CategoryOverviewBlock from "../components/blocks/CategoryOverviewBlock.astro";
+import CategoryRailBlock from "../components/blocks/CategoryRailBlock.astro";
 import HomeAnnouncementBlock from "../components/blocks/HomeAnnouncementBlock.astro";
 import HomeArchiveLinksBlock from "../components/blocks/HomeArchiveLinksBlock.astro";
 import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
@@ -39,6 +40,7 @@ import HomeFeaturedArticlesBlock from "../components/blocks/HomeFeaturedArticles
 import HomeHeroBlock from "../components/blocks/HomeHeroBlock.astro";
 import HomeLatestArticleBlock from "../components/blocks/HomeLatestArticleBlock.astro";
 import MoreInCategoryBlock from "../components/articles/MoreInCategoryBlock.astro";
+import NextArticleBlock from "../components/articles/NextArticleBlock.astro";
 import RelatedArticlesBlock from "../components/articles/RelatedArticlesBlock.astro";
 import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
 import SupportBlock from "../components/blocks/SupportBlock.astro";
@@ -49,7 +51,9 @@ import SiteFooter from "../components/layout/SiteFooter.astro";
 import SiteHeader from "../components/layout/SiteHeader.astro";
 import EmbedFrame from "../components/media/EmbedFrame.astro";
 import ResponsiveIframe from "../components/media/ResponsiveIframe.astro";
+import SoundCloudEmbed from "../components/media/SoundCloudEmbed.astro";
 import ThemedImage from "../components/media/ThemedImage.astro";
+import YouTubeEmbed from "../components/media/YouTubeEmbed.astro";
 import BrandLink from "../components/navigation/BrandLink.astro";
 import CategoryGroup from "../components/navigation/CategoryGroup.astro";
 import CategoryTree from "../components/navigation/CategoryTree.astro";
@@ -729,6 +733,28 @@ if (primaryCatalogAuthor === undefined) {
       </CatalogExample>
 
       <CatalogExample
+        title="SoundCloudEmbed"
+        description="Compact SoundCloud audio player wrapper."
+        componentPath="src/components/media/SoundCloudEmbed.astro"
+      >
+        <SoundCloudEmbed
+          sourceUrl="https://soundcloud.com/platform-blog/example-track"
+          title="Catalog SoundCloud preview"
+        />
+      </CatalogExample>
+
+      <CatalogExample
+        title="YouTubeEmbed"
+        description="Responsive YouTube video wrapper."
+        componentPath="src/components/media/YouTubeEmbed.astro"
+      >
+        <YouTubeEmbed
+          src="https://www.youtube.com/embed/example"
+          title="Catalog YouTube preview"
+        />
+      </CatalogExample>
+
+      <CatalogExample
         title="EmbedFrame"
         description="External embed wrapper with fallback source link."
         componentPath="src/components/media/EmbedFrame.astro"
@@ -1092,6 +1118,18 @@ if (primaryCatalogAuthor === undefined) {
       </CatalogExample>
 
       <CatalogExample
+        title="NextArticleBlock"
+        description="Chronological article continuation before support."
+        componentPath="src/components/articles/NextArticleBlock.astro"
+      >
+        <NextArticleBlock
+          headingId="catalog-next-article-heading"
+          item={catalogArticleItemsWithMedia[0]}
+          label="Next Article"
+        />
+      </CatalogExample>
+
+      <CatalogExample
         title="ArticleEndcap"
         description="Composed article footer with discovery and support."
         componentPath="src/components/articles/ArticleEndcap.astro"
@@ -1099,6 +1137,10 @@ if (primaryCatalogAuthor === undefined) {
         <ArticleEndcap
           categoryHref="/categories/metamemetics/"
           categoryTitle="Metamemetics"
+          continuity={{
+            item: catalogArticleItemsWithMedia[0],
+            label: "Next Article",
+          }}
           idPrefix="catalog-endcap"
           moreInCategory={catalogArticleItemsWithMedia}
           related={catalogArticleItemsWithMedia.slice(0, 1)}
@@ -1370,6 +1412,25 @@ if (primaryCatalogAuthor === undefined) {
             eyebrow="Category"
             title="A Category With A Deliberately Long Title For Wrapping"
             items={catalogArticleItemsWithMedia.slice(0, 1)}
+          />
+        </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="CategoryRailBlock"
+        description="One-row category discovery rail with scroll controls."
+        componentPath="src/components/blocks/CategoryRailBlock.astro"
+      >
+        <div class="grid gap-8">
+          <CategoryRailBlock
+            aria-label="Catalog category rail"
+            items={catalogNavigationItems}
+            railId="catalog-category-rail"
+          />
+          <CategoryRailBlock
+            emptyText="No category rail items yet."
+            items={[]}
+            railId="catalog-empty-category-rail"
           />
         </div>
       </CatalogExample>

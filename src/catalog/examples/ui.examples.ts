@@ -103,8 +103,18 @@ export const uiCatalogExamples = [
     title: "ResponsiveIframe",
   },
   {
+    componentPath: "src/components/media/SoundCloudEmbed.astro",
+    description: "Compact SoundCloud audio player wrapper.",
+    title: "SoundCloudEmbed",
+  },
+  {
     componentPath: "src/components/media/ThemedImage.astro",
     description: "Theme-aware optimized image pair for equivalent artwork.",
     title: "ThemedImage",
+  },
+  {
+    componentPath: "src/components/media/YouTubeEmbed.astro",
+    description: "YouTube video embed wrapper.",
+    title: "YouTubeEmbed",
   },
 ] as const satisfies UiCatalogExample[];

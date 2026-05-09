@@ -1,6 +1,9 @@
 ---
 import AuthorSocialLinks from "./AuthorSocialLinks.astro";
-import type { AuthorProfile } from "../../lib/authors";
+import {
+  hasUsefulAuthorProfileContent,
+  type AuthorProfile,
+} from "../../lib/authors";
 
 interface Props {
   context?: "article" | "profile";
@@ -12,12 +15,9 @@ const { context = "profile", hasProfileBody = false, profile } = Astro.props;
 const links = profile.website
   ? [{ href: profile.website, label: "Website" }, ...profile.socials]
   : profile.socials;
-const hasShortBio = profile.shortBio !== undefined;
-const hasUsefulContent =
-  hasProfileBody ||
-  hasShortBio ||
-  profile.socials.length > 0 ||
-  profile.website !== undefined;
+const hasUsefulContent = hasUsefulAuthorProfileContent(profile, {
+  hasProfileBody,
+});
 const heading =
   context === "article"
     ? `About ${profile.displayName}`

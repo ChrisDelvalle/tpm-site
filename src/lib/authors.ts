@@ -34,6 +34,27 @@ export interface AuthorProfile extends AuthorSummary {
 }
 
 /**
+ * Determines whether an author profile has enough visible content to render a
+ * biography surface.
+ *
+ * @param profile Author profile display data.
+ * @param options Optional render context.
+ * @param options.hasProfileBody Whether a long-form profile body will render.
+ * @returns True when a bio section would render useful content.
+ */
+export function hasUsefulAuthorProfileContent(
+  profile: Pick<AuthorProfile, "shortBio" | "socials" | "website">,
+  options: { hasProfileBody?: boolean } = {},
+): boolean {
+  return (
+    options.hasProfileBody === true ||
+    profile.shortBio !== undefined ||
+    profile.socials.length > 0 ||
+    profile.website !== undefined
+  );
+}
+
+/**
  * Builds display-ready author summary data.
  *
  * @param entry Author content entry.

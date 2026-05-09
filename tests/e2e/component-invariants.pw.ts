@@ -96,6 +96,87 @@ test.describe("component layout invariants", () => {
     );
   });
 
+  test("articles hub keeps category discovery in one compact horizontal rail", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 1000, width: 1440 });
+    await page.goto("/articles/");
+
+    const pageFrame = page.locator("[data-page-frame]").first();
+    const categoryRail = page.locator("[data-articles-category-rail]");
+    const viewport = categoryRail.locator("[data-scroll-rail-viewport]");
+    const latestArticles = page.getByRole("heading", {
+      exact: true,
+      name: "Latest Articles",
+    });
+    const previousCategory = categoryRail.getByRole("button", {
+      name: "Scroll categories left",
+    });
+    const nextCategory = categoryRail.getByRole("button", {
+      name: "Scroll categories right",
+    });
+    const readRailMetrics = async () =>
+      viewport.evaluate((rail) => {
+        const itemBoxes = Array.from(rail.querySelectorAll("li"), (item) => {
+          const box = item.getBoundingClientRect();
+
+          return {
+            height: box.height,
+            top: box.top,
+            width: box.width,
+            x: box.x,
+          };
+        });
+
+        return {
+          clientWidth: rail.clientWidth,
+          itemBoxes,
+          scrollLeft: rail.scrollLeft,
+          scrollWidth: rail.scrollWidth,
+        };
+      });
+
+    await expect(categoryRail).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Browse Categories" }),
+    ).toHaveCount(0);
+    await expectHorizontallyContained(categoryRail, pageFrame, {
+      inner: "articles category rail",
+      outer: "articles page frame",
+    });
+    const railBox = await visibleBoundingBox(
+      categoryRail,
+      "articles category rail",
+    );
+    expect(railBox.height).toBeLessThanOrEqual(150);
+
+    const railMetrics = await readRailMetrics();
+    expect(railMetrics.scrollWidth).toBeGreaterThan(railMetrics.clientWidth);
+    expect(railMetrics.scrollLeft).toBe(0);
+    railMetrics.itemBoxes.slice(1).forEach((box) => {
+      expect(
+        Math.abs(box.top - (railMetrics.itemBoxes[0]?.top ?? 0)),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.width - (railMetrics.itemBoxes[0]?.width ?? 0)),
+      ).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(box.height - (railMetrics.itemBoxes[0]?.height ?? 0)),
+      ).toBeLessThanOrEqual(1);
+    });
+    expect(railMetrics.itemBoxes[1]?.x).toBeGreaterThan(
+      railMetrics.itemBoxes[0]?.x ?? 0,
+    );
+    await expect(previousCategory).toBeHidden();
+    await expect(nextCategory).toBeVisible();
+    await expect(nextCategory).toBeEnabled();
+    await expectVerticallyBefore(categoryRail, latestArticles, {
+      after: "latest articles",
+      before: "articles category rail",
+    });
+    await expectNoHorizontalOverflow(page);
+  });
+
   test("homepage flat front page exposes announcements, featured, discovery, and reading paths", async ({
     page,
   }) => {
@@ -274,7 +355,30 @@ test.describe("component layout invariants", () => {
       "featured carousel controls",
     );
     expect(featuredControlsBox.y).toBeGreaterThan(featuredViewportBox.y);
+    const activeFeaturedSlide = featured.locator(
+      '[data-home-featured-slide][data-home-featured-active="true"]',
+    );
+    const featuredMetaBox = await visibleBoundingBox(
+      activeFeaturedSlide.locator("[data-home-featured-meta]"),
+      "active featured metadata",
+    );
+    const featuredTitleBox = await visibleBoundingBox(
+      activeFeaturedSlide.locator("[data-home-featured-title]"),
+      "active featured title",
+    );
+    const featuredMediaBox = await visibleBoundingBox(
+      activeFeaturedSlide.locator("[data-home-featured-media]"),
+      "active featured media",
+    );
+    const activeFeatureTitle = await activeFeaturedSlide
+      .locator("[data-home-featured-title]")
+      .textContent();
     await nextFeature.click();
+    await expect
+      .poll(async () =>
+        activeFeaturedSlide.locator("[data-home-featured-title]").textContent(),
+      )
+      .not.toBe(activeFeatureTitle);
     const featuredBoxAfterChange = await visibleBoundingBox(
       featured,
       "featured carousel after slide change",
@@ -290,6 +394,27 @@ test.describe("component layout invariants", () => {
       Math.abs(
         featuredViewportBoxAfterChange.height - featuredViewportBox.height,
       ),
+    ).toBeLessThanOrEqual(1);
+    const featuredMetaBoxAfterChange = await visibleBoundingBox(
+      activeFeaturedSlide.locator("[data-home-featured-meta]"),
+      "active featured metadata after slide change",
+    );
+    const featuredTitleBoxAfterChange = await visibleBoundingBox(
+      activeFeaturedSlide.locator("[data-home-featured-title]"),
+      "active featured title after slide change",
+    );
+    const featuredMediaBoxAfterChange = await visibleBoundingBox(
+      activeFeaturedSlide.locator("[data-home-featured-media]"),
+      "active featured media after slide change",
+    );
+    expect(
+      Math.abs(featuredMetaBoxAfterChange.y - featuredMetaBox.y),
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(featuredTitleBoxAfterChange.y - featuredTitleBox.y),
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(featuredMediaBoxAfterChange.y - featuredMediaBox.y),
     ).toBeLessThanOrEqual(1);
 
     const categoryRail = categories.locator("[data-scroll-rail-viewport]");
@@ -454,6 +579,10 @@ test.describe("component layout invariants", () => {
       'article aside[aria-label="Article support and discovery"]',
     );
     const supportBlock = endcap.locator("[data-support-block]");
+    const continuityBlock = endcap.locator("[data-article-continuity]");
+    const continuity = continuityBlock.getByRole("heading", {
+      name: /^(Next|Previous) Article$/u,
+    });
     const support = endcap.getByRole("heading", {
       name: "Support The Philosopher's Meme",
     });
@@ -476,9 +605,17 @@ test.describe("component layout invariants", () => {
     await expect(
       supportBlock.getByRole("link", { name: "Join the TPM Discord" }),
     ).toBeVisible();
-    await expectVerticallyBefore(prose, support, {
-      after: "support block",
+    await expect(continuity).toBeVisible();
+    await expect(
+      continuityBlock.getByRole("link", { name: "View more" }),
+    ).toHaveAttribute("href", "/articles/all/");
+    await expectVerticallyBefore(prose, continuityBlock, {
+      after: "article continuity block",
       before: "article prose",
+    });
+    await expectVerticallyBefore(continuityBlock, support, {
+      after: "support block",
+      before: "article continuity block",
     });
     await expectVerticallyBefore(support, moreInCategory, {
       after: "more in category",
@@ -503,6 +640,10 @@ test.describe("component layout invariants", () => {
     });
 
     const proseBox = await visibleBoundingBox(prose, "article prose");
+    const continuityBox = await visibleBoundingBox(
+      continuityBlock,
+      "article continuity block",
+    );
     const supportBox = await visibleBoundingBox(
       supportBlock,
       "article support block",
@@ -513,14 +654,19 @@ test.describe("component layout invariants", () => {
       references,
       "article references",
     );
-    const proseToSupportGap = supportBox.y - (proseBox.y + proseBox.height);
+    const proseToContinuityGap =
+      continuityBox.y - (proseBox.y + proseBox.height);
+    const continuityToSupportGap =
+      supportBox.y - (continuityBox.y + continuityBox.height);
     const endcapToNextGap = referencesBox.y - (endcapBox.y + endcapBox.height);
     const finalSurfaceBox = referencesBox;
     const finalSurfaceToTagsGap =
       tagsBox.y - (finalSurfaceBox.y + finalSurfaceBox.height);
 
-    expect(proseToSupportGap).toBeGreaterThanOrEqual(24);
-    expect(proseToSupportGap).toBeLessThanOrEqual(64);
+    expect(proseToContinuityGap).toBeGreaterThanOrEqual(24);
+    expect(proseToContinuityGap).toBeLessThanOrEqual(40);
+    expect(continuityToSupportGap).toBeGreaterThanOrEqual(24);
+    expect(continuityToSupportGap).toBeLessThanOrEqual(64);
     expect(endcapToNextGap).toBeGreaterThanOrEqual(32);
     expect(endcapToNextGap).toBeLessThanOrEqual(64);
     expect(finalSurfaceToTagsGap).toBeGreaterThanOrEqual(32);
@@ -533,6 +679,11 @@ test.describe("component layout invariants", () => {
     await page.setViewportSize({ height: 1200, width: 1280 });
     await page.goto("/articles/the-memetic-bottleneck/");
 
+    const readingNavigation = page.locator("[data-article-reading-navigation]");
+    const readingNavigationBox = await visibleBoundingBox(
+      readingNavigation,
+      "article reading navigation",
+    );
     const headerBox = await visibleBoundingBox(
       page.locator("article > header").first(),
       "article header",
@@ -544,8 +695,62 @@ test.describe("component layout invariants", () => {
     const headerToBodyGap =
       firstProseElementBox.y - (headerBox.y + headerBox.height);
 
+    await expect(
+      readingNavigation.getByRole("link", { exact: true, name: "Articles" }),
+    ).toHaveAttribute("href", "/articles/");
+    await expect(
+      readingNavigation.getByRole("link", { exact: true, name: "Archive" }),
+    ).toHaveAttribute("href", "/articles/all/");
+    await expect(readingNavigation.getByText("Read")).toHaveCount(0);
+    expect(readingNavigationBox.x).toBeLessThanOrEqual(headerBox.x + 1);
+    expect(readingNavigationBox.y).toBeLessThan(headerBox.y);
     expect(headerToBodyGap).toBeGreaterThanOrEqual(0);
     expect(headerToBodyGap).toBeLessThanOrEqual(64);
+  });
+
+  test("SoundCloud article embeds reserve compact audio space", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await page.goto("/articles/the-structure-of-hyperspatial-politics/");
+
+    const prose = page.locator("[data-article-prose]");
+    const embed = prose.locator("[data-article-embed]").first();
+    const frame = embed.locator(
+      '[data-article-embed-frame][data-article-embed-provider="soundcloud"]',
+    );
+    const firstBodyHeading = prose.getByRole("heading", {
+      name: "The Structures of Hyperspatial Politics",
+    });
+
+    await expect(frame).toBeVisible();
+    await expectHorizontallyContained(embed, prose, {
+      inner: "SoundCloud article embed",
+      outer: "article prose",
+    });
+    await expectVerticallyBefore(embed, firstBodyHeading, {
+      after: "first body heading",
+      before: "SoundCloud article embed",
+    });
+
+    const frameBox = await visibleBoundingBox(
+      frame,
+      "SoundCloud article embed frame",
+    );
+    const embedBox = await visibleBoundingBox(
+      embed,
+      "SoundCloud article embed",
+    );
+    const headingBox = await visibleBoundingBox(
+      firstBodyHeading,
+      "first body heading",
+    );
+    const embedToHeadingGap = headingBox.y - (embedBox.y + embedBox.height);
+
+    expect(frameBox.height).toBeGreaterThanOrEqual(100);
+    expect(frameBox.height).toBeLessThanOrEqual(140);
+    expect(embedToHeadingGap).toBeGreaterThanOrEqual(24);
+    expect(embedToHeadingGap).toBeLessThanOrEqual(64);
   });
 
   test("article citation menu stays in header flow and exposes selectable citations", async ({

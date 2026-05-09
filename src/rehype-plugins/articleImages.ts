@@ -2,6 +2,11 @@
 import type { Html, Image, Link, Nodes, Root, Text } from "mdast";
 
 import { articleImagePresentation } from "../lib/article-image-policy";
+import {
+  classifyEmbedMedia,
+  embedFrameClassName,
+  embedIframeClassName,
+} from "../lib/embed-media";
 
 interface HastParent {
   children: HastNode[];
@@ -300,6 +305,7 @@ function isHtmlAttributeNameChar(char: string | undefined): boolean {
 function articleEmbed(iframe: HastElement): HastElement {
   const src = stringProperty(iframe, "src");
   const title = stringProperty(iframe, "title") ?? "Embedded media";
+  const classification = classifyEmbedMedia(src);
   const fallbackChildren: HastNode[] =
     src === undefined || src.trim() === ""
       ? [{ type: "text", value: "Embedded media is unavailable in PDF." }]
@@ -322,7 +328,7 @@ function articleEmbed(iframe: HastElement): HastElement {
     ...iframe.properties,
     className: mergeClassName(
       iframe.properties?.["className"],
-      "block aspect-video w-full border-0",
+      embedIframeClassName(classification.layout),
     ),
     "data-pdf-exclude": "true",
   };
@@ -332,8 +338,12 @@ function articleEmbed(iframe: HastElement): HastElement {
       {
         children: [iframe],
         properties: {
-          className: "not-prose aspect-video overflow-hidden rounded-sm",
+          className: mergeClassName(
+            embedFrameClassName(classification.layout),
+            "overflow-hidden rounded-sm",
+          ),
           "data-article-embed-frame": "true",
+          "data-article-embed-provider": classification.provider,
           "data-pdf-exclude": "true",
         },
         tagName: "div",
@@ -786,6 +796,7 @@ function articleEmbedHtml(html: Html): Html | undefined {
 
   const attributes = rawHtmlAttributes(raw);
   const src = typeof attributes["src"] === "string" ? attributes["src"] : "";
+  const classification = classifyEmbedMedia(src);
   const title =
     typeof attributes["title"] === "string" && attributes["title"].trim() !== ""
       ? attributes["title"].trim()
@@ -797,7 +808,7 @@ function articleEmbedHtml(html: Html): Html | undefined {
 
   return {
     type: "html",
-    value: `<figure class="my-8 grid gap-2" data-article-embed="true"><div class="not-prose aspect-video overflow-hidden rounded-sm" data-article-embed-frame="true" data-pdf-exclude="true">${raw}</div><figcaption class="hidden text-sm text-muted-foreground print:block" data-article-embed-fallback="true">${fallback}</figcaption></figure>`,
+    value: `<figure class="my-8 grid gap-2" data-article-embed="true"><div class="${embedFrameClassName(classification.layout)} overflow-hidden rounded-sm" data-article-embed-frame="true" data-article-embed-provider="${classification.provider}" data-pdf-exclude="true">${raw}</div><figcaption class="hidden text-sm text-muted-foreground print:block" data-article-embed-fallback="true">${fallback}</figcaption></figure>`,
   };
 }
 

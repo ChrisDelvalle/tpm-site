@@ -45,6 +45,8 @@ enhances the static markup:
 - Controls are keyboard reachable only when enhancement is active.
 - The viewport height is owned by the carousel's layout contract, not by
   whichever slide is currently active.
+- The viewport top-aligns the active slide; slide changes must not move the
+  metadata, title, or media anchors up and down.
 - The component has an accessible name even when no visible heading is
   rendered.
 - The carousel and Announcements cell align through the parent lead grid row,

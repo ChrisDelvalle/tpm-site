@@ -108,6 +108,11 @@ export const articleCatalogExamples = [
     title: "MoreInCategoryBlock",
   },
   {
+    componentPath: "src/components/articles/NextArticleBlock.astro",
+    description: "Chronological article continuation shown before support.",
+    title: "NextArticleBlock",
+  },
+  {
     componentPath: "src/components/articles/RelatedArticlesBlock.astro",
     description: "Stable placeholder for future related-article discovery.",
     title: "RelatedArticlesBlock",

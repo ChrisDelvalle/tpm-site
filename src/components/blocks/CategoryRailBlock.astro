@@ -1,0 +1,112 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { ChevronLeft, ChevronRight } from "lucide-astro";
+
+import IconButton from "../ui/IconButton.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props extends HTMLAttributes<"section"> {
+  emptyText?: string;
+  items: readonly SectionNavItem[];
+  railId?: string;
+  title?: string;
+}
+
+const {
+  emptyText = "No categories are available yet.",
+  items,
+  railId = "category-rail",
+  title = "Categories",
+  class: className,
+  "aria-label": ariaLabel,
+  ...attrs
+} = Astro.props;
+const sectionLabel = ariaLabel ?? title;
+---
+
+<section
+  {...attrs}
+  class:list={["grid min-w-0 gap-4", className]}
+  aria-label={sectionLabel}
+  data-category-rail
+  data-scroll-rail
+>
+  {
+    items.length > 0 ? (
+      <div class="relative min-w-0">
+        <div
+          class="from-background via-background/90 pointer-events-none absolute inset-y-0 start-0 z-10 hidden items-center bg-linear-to-r to-transparent ps-1 pe-8"
+          data-scroll-rail-controls
+          data-scroll-rail-start
+          hidden
+        >
+          <IconButton
+            aria-controls={railId}
+            data-scroll-rail-previous
+            disabled
+            label="Scroll categories left"
+            size="sm"
+            variant="outline"
+            class="bg-background/95 pointer-events-auto shadow-sm"
+          >
+            <ChevronLeft class="size-4" aria-hidden="true" />
+          </IconButton>
+        </div>
+        <div
+          id={railId}
+          class="min-w-0 snap-x snap-mandatory [scrollbar-width:thin] overflow-x-auto overscroll-x-contain pb-2"
+          data-scroll-rail-viewport
+        >
+          <ul class="grid w-max min-w-full auto-cols-fr grid-flow-col gap-3">
+            {items.map((item) => (
+              <li class="border-border bg-card grid min-h-28 min-w-0 snap-start justify-items-center gap-1 rounded-sm border p-4 text-center">
+                <TextLink
+                  href={item.href}
+                  tone="neutral"
+                  class="line-clamp-2 text-center font-semibold"
+                  prefetch="hover"
+                >
+                  {item.title}
+                </TextLink>
+                {item.description && (
+                  <p class="text-muted-foreground line-clamp-2 text-sm">
+                    {item.description}
+                  </p>
+                )}
+                <p class="text-muted-foreground text-xs">
+                  {item.articles.length}{" "}
+                  {item.articles.length === 1 ? "article" : "articles"}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div
+          class="from-background via-background/90 pointer-events-none absolute inset-y-0 end-0 z-10 hidden items-center bg-linear-to-l to-transparent ps-8 pe-1"
+          data-scroll-rail-controls
+          data-scroll-rail-end
+          hidden
+        >
+          <IconButton
+            aria-controls={railId}
+            data-scroll-rail-next
+            disabled
+            label="Scroll categories right"
+            size="sm"
+            variant="outline"
+            class="bg-background/95 pointer-events-auto shadow-sm"
+          >
+            <ChevronRight class="size-4" aria-hidden="true" />
+          </IconButton>
+        </div>
+      </div>
+    ) : (
+      <p class="text-muted-foreground text-sm" data-category-rail-empty>
+        {emptyText}
+      </p>
+    )
+  }
+</section>
+
+{items.length > 0 && <script src="../../scripts/horizontal-scroll-rail.ts" />}

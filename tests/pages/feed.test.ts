@@ -48,6 +48,43 @@ await mock.module("astro:content", () => ({
       ];
     }
 
+    if (collection === "announcements") {
+      return [
+        {
+          collection: "announcements",
+          data: {
+            author: "The Philosopher's Meme",
+            date: new Date("2023-01-02T00:00:00Z"),
+            description: "Announcement",
+            draft: false,
+            tags: [],
+            title: "Feed Announcement",
+          },
+          filePath: "/repo/site/content/announcements/feed-announcement.md",
+          id: "feed-announcement",
+        },
+        {
+          collection: "announcements",
+          data: {
+            author: "The Philosopher's Meme",
+            date: new Date("2024-01-02T00:00:00Z"),
+            description: "Hidden announcement",
+            draft: false,
+            tags: [],
+            title: "Hidden Feed Announcement",
+            visibility: {
+              directory: true,
+              feed: false,
+              homepage: true,
+              search: true,
+            },
+          },
+          filePath: "/repo/site/content/announcements/hidden.md",
+          id: "hidden",
+        },
+      ];
+    }
+
     if (collection === "authors") {
       return [
         {
@@ -100,7 +137,7 @@ await mock.module("astro:assets", () => ({
 const { GET } = await import("../../src/pages/feed.xml");
 
 describe("RSS feed endpoint", () => {
-  test("renders published articles into RSS XML", async () => {
+  test("renders feed-visible published articles and announcements into RSS XML", async () => {
     const response = await GET({ site: new URL("https://example.com") });
     const text = await response.text();
 
@@ -109,5 +146,10 @@ describe("RSS feed endpoint", () => {
     expect(text).toContain("Newer Article");
     expect(text).not.toContain("Draft Article");
     expect(text).toContain("https://example.com/articles/newer/");
+    expect(text).toContain("Feed Announcement");
+    expect(text).not.toContain("Hidden Feed Announcement");
+    expect(text).toContain(
+      "https://example.com/announcements/feed-announcement/",
+    );
   });
 });

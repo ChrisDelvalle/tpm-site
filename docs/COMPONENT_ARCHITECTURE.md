@@ -210,6 +210,7 @@ src/components/
     HomeArchiveLinksBlock.astro
     SupportBlock.astro
     CategoryOverviewBlock.astro
+    CategoryRailBlock.astro
     SearchResultsBlock.astro
 
   islands/
@@ -591,11 +592,11 @@ Page components are generic content surfaces. Blocks are reusable page sections.
 - `HomeAnnouncementBlock`: announcement image and copy.
 - `HomeLatestArticleBlock`: latest article teaser.
 - `HomeFeaturedArticlesBlock`: editorial start-here or featured reading.
-- `HomeCategoryOverviewBlock`: one-row homepage category rail with scroll
-  controls.
+- `HomeCategoryOverviewBlock`: homepage adapter for the shared category rail.
 - `HomeArchiveLinksBlock`: entry points into archive/categories.
 - `SupportBlock`: reusable support CTA.
 - `CategoryOverviewBlock`: category grid or index.
+- `CategoryRailBlock`: one-row category rail with scroll controls.
 - `SearchResultsBlock`: search page result region.
 
 Blocks should be content-out: they expose slots and small props, not giant

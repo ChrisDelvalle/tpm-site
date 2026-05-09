@@ -11,6 +11,7 @@ import AuthorBioBlock from "../components/authors/AuthorBioBlock.astro";
 import ContentRail from "../components/layout/ContentRail.astro";
 import EndcapStack from "../components/layout/EndcapStack.astro";
 import ReadingBody from "../components/layout/ReadingBody.astro";
+import ReadingNavigationLinks from "../components/navigation/ReadingNavigationLinks.astro";
 import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
 import ArticleScholarMeta from "../components/seo/ArticleScholarMeta.astro";
 import type { ArticleReferenceData } from "../lib/article-references/model";
@@ -18,6 +19,10 @@ import {
   hasUsefulTableOfContents,
   type ArticleTableOfContentsHeading,
 } from "../lib/article-toc";
+import {
+  articleContinuityItem,
+  articleContinuitySelection,
+} from "../lib/article-continuity";
 import { articleListItemsFromArchive } from "../lib/article-list";
 import { articleViewModel } from "../lib/article-view";
 import { articleArchiveItems } from "../lib/archive";
@@ -25,14 +30,16 @@ import {
   authorProfiles,
   authorSummariesForArticle,
   getAuthorEntries,
+  hasUsefulAuthorProfileContent,
 } from "../lib/authors";
 import { articleScholarMetaViewModel } from "../lib/article-pdf";
 import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
 import {
   getArticles,
-  getCategory,
+  getCategories,
   getSiteSocialFallbackImage,
 } from "../lib/content";
+import { homepageDiscoveryLinks } from "../lib/home";
 import { normalizePublishableVisibility } from "../lib/publishable";
 import { categoryUrl, type ArticleEntry } from "../lib/routes";
 import { articleShareMenuViewModel } from "../lib/share-targets";
@@ -83,7 +90,13 @@ const authorProfileMap = new Map(
 const articleAuthorProfiles = articleAuthors
   .map((author) => authorProfileMap.get(author.id))
   .filter((profile) => profile !== undefined);
-const category = await getCategory(articleView.categorySlug);
+const articleAuthorProfilesWithBio = articleAuthorProfiles.filter((profile) =>
+  hasUsefulAuthorProfileContent(profile),
+);
+const categories = await getCategories();
+const category = categories.find(
+  (summary) => summary.slug === articleView.categorySlug,
+);
 const categoryHref =
   siteConfig.features.categories && category
     ? categoryUrl(category.slug)
@@ -96,9 +109,21 @@ const moreInCategory =
           category.articles
             .filter((categoryArticle) => categoryArticle.id !== article.id)
             .slice(0, 3),
-          [category],
+          categories,
           authorEntries,
         ),
+      );
+const articleContinuitySelectionResult = articleContinuitySelection(
+  article,
+  allArticles,
+);
+const articleContinuity =
+  articleContinuitySelectionResult === undefined
+    ? undefined
+    : articleContinuityItem(
+        articleContinuitySelectionResult,
+        categories,
+        authorEntries,
       );
 const citation = articleCitationMenuViewModel({
   articleId: article.id,
@@ -114,6 +139,7 @@ const share = articleShareMenuViewModel({
   image: socialPreviewImage,
   title: articleView.title,
 });
+const readingNavigationLinks = homepageDiscoveryLinks(siteConfig);
 const scholarMeta = articleScholarMetaViewModel({
   article,
   authors: articleAuthors,
@@ -161,6 +187,16 @@ const searchable =
       data-pagefind-body={searchable ? true : undefined}
       data-pagefind-ignore={searchable ? undefined : true}
     >
+      {
+        readingNavigationLinks.length > 0 && (
+          <ReadingNavigationLinks
+            aria-label="Article reading navigation"
+            data-article-reading-navigation
+            links={readingNavigationLinks}
+            showTitle={false}
+          />
+        )
+      }
       <ArticleHeader
         author={articleView.author}
         authors={articleAuthors}
@@ -193,7 +229,7 @@ const searchable =
       </div>
       <EndcapStack spacing="relaxed">
         {
-          articleAuthorProfiles.map((profile) => (
+          articleAuthorProfilesWithBio.map((profile) => (
             <div data-pdf-exclude>
               <AuthorBioBlock profile={profile} context="article" />
             </div>
@@ -203,6 +239,7 @@ const searchable =
           <ArticleEndcap
             categoryHref={categoryHref}
             categoryTitle={category?.title}
+            continuity={articleContinuity}
             moreInCategory={moreInCategory}
           />
         </div>

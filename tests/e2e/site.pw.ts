@@ -221,15 +221,16 @@ test("articles hub links category discovery and the flat article archive", async
   await expect(
     page.getByRole("heading", { exact: true, name: "Articles" }),
   ).toBeVisible();
+  await expect(page.locator("[data-articles-category-rail]")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Browse Categories" }),
-  ).toBeVisible();
+  ).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "View all articles" }),
   ).toHaveAttribute("href", "/articles/all/");
   await expect(
     page
-      .getByLabel("Browse Categories")
+      .getByLabel("Article categories")
       .getByRole("link", { exact: true, name: "Metamemetics" }),
   ).toHaveAttribute("href", "/categories/metamemetics/");
 
