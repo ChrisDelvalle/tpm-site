@@ -1,0 +1,83 @@
+---
+import FlatArticleTeaser from "./FlatArticleTeaser.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { PublishableListItem } from "../../lib/article-list";
+
+interface Props {
+  emptyText?: string;
+  headingLevel?: 2 | 3;
+  items: readonly PublishableListItem[];
+  title: string;
+  titleHref?: string | undefined;
+}
+
+const {
+  emptyText = "Items will appear here.",
+  headingLevel = 2,
+  items,
+  title,
+  titleHref,
+} = Astro.props;
+const headingId = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-heading`;
+---
+
+<section
+  class="grid min-w-0 content-start gap-4"
+  aria-labelledby={headingId}
+  data-flat-article-list
+>
+  {
+    headingLevel === 2 ? (
+      <h2
+        id={headingId}
+        class="text-foreground m-0 text-2xl font-semibold tracking-normal"
+      >
+        {titleHref === undefined ? (
+          title
+        ) : (
+          <TextLink
+            href={titleHref}
+            tone="neutral"
+            variant="nav"
+            prefetch="hover"
+            class="font-semibold"
+          >
+            {title}
+          </TextLink>
+        )}
+      </h2>
+    ) : (
+      <h3
+        id={headingId}
+        class="text-foreground m-0 text-lg font-semibold tracking-normal"
+      >
+        {titleHref === undefined ? (
+          title
+        ) : (
+          <TextLink
+            href={titleHref}
+            tone="neutral"
+            variant="nav"
+            prefetch="hover"
+            class="font-semibold"
+          >
+            {title}
+          </TextLink>
+        )}
+      </h3>
+    )
+  }
+  {
+    items.length > 0 ? (
+      <ol class="grid min-w-0">
+        {items.map((item) => (
+          <li class="border-border min-w-0 border-b py-3 first:pt-0 last:border-b-0 last:pb-0">
+            <FlatArticleTeaser item={item} />
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="text-muted-foreground m-0 text-sm">{emptyText}</p>
+    )
+  }
+</section>

@@ -48,8 +48,9 @@ Running checks locally is recommended, but maintainers can help with failures.
 
 Most articles need only:
 
-- one Markdown file in `src/content/articles/<category>/`;
-- optional images in `src/assets/articles/<article-slug>/`;
+- one Markdown file in `site/content/articles/<category>/`;
+- optional images in `site/assets/articles/<article-slug>/`;
+- optional notes or bibliography citations when the article needs them;
 - a pull request for review.
 
 Use `.md` for normal articles. Use `.mdx` only when a maintainer tells you the
@@ -128,14 +129,14 @@ Use lowercase words and hyphens in branch names.
 
 Current article category folders are:
 
-- `src/content/articles/aesthetics/`
-- `src/content/articles/game-studies/`
-- `src/content/articles/history/`
-- `src/content/articles/irony/`
-- `src/content/articles/memeculture/`
-- `src/content/articles/metamemetics/`
-- `src/content/articles/philosophy/`
-- `src/content/articles/politics/`
+- `site/content/articles/aesthetics/`
+- `site/content/articles/game-studies/`
+- `site/content/articles/history/`
+- `site/content/articles/irony/`
+- `site/content/articles/memeculture/` (`Culture`)
+- `site/content/articles/metamemetics/`
+- `site/content/articles/philosophy/`
+- `site/content/articles/politics/`
 
 Ask a maintainer before creating a new category.
 
@@ -152,8 +153,8 @@ A category needs two things:
 Example new category:
 
 ```text
-src/content/articles/media-theory/
-src/content/categories/media-theory.json
+site/content/articles/media-theory/
+site/content/categories/media-theory.json
 ```
 
 The folder name becomes the category URL:
@@ -169,10 +170,10 @@ Category folder rules:
 - keep the folder name short and readable.
 
 The metadata file must use the same name as the folder. For
-`src/content/articles/media-theory/`, create:
+`site/content/articles/media-theory/`, create:
 
 ```text
-src/content/categories/media-theory.json
+site/content/categories/media-theory.json
 ```
 
 Start with this JSON:
@@ -201,7 +202,7 @@ should go.
 After adding a category, put the article in the new folder:
 
 ```text
-src/content/articles/media-theory/my-new-article.md
+site/content/articles/media-theory/my-new-article.md
 ```
 
 ## 6. Pick The Article Slug
@@ -211,7 +212,7 @@ The filename becomes the public URL.
 Example:
 
 ```text
-src/content/articles/history/my-new-article.md
+site/content/articles/history/my-new-article.md
 ```
 
 becomes:
@@ -246,7 +247,7 @@ Create a new `.md` file in the category folder.
 Example path:
 
 ```text
-src/content/articles/history/my-new-article.md
+site/content/articles/history/my-new-article.md
 ```
 
 Start with this template:
@@ -271,7 +272,8 @@ Notes:
 - `title` is the article title shown on the page.
 - `description` should be brief and useful.
 - `date` should use `YYYY-MM-DD`.
-- `author` should be the display name.
+- `author` should match an existing author display name or alias in
+  `site/content/authors/`.
 - `tags` are optional, but useful.
 - `image` and `imageAlt` are optional, but recommended when the article has a
   preview image.
@@ -279,6 +281,11 @@ Notes:
 
 Do not add `slug`, `category`, or `topic` frontmatter. The slug comes from the
 filename. The category comes from the folder.
+
+If this is a new author, ask a maintainer before submitting. The maintainer may
+add a new file in `site/content/authors/<author-slug>.md` with the author's
+display name, type, and approved aliases. Do not invent biographies, websites,
+or social links for an author.
 
 ## 8. Write The Article Body
 
@@ -303,12 +310,142 @@ Avoid:
 # Introduction
 ```
 
-## 9. Add Images
+## 9. Add Notes And Sources
+
+Most article prose can use ordinary Markdown links. Use the special note and
+citation syntax only when you want the site to create article footnotes,
+article bibliography entries, or global bibliography entries.
+
+There are three common cases:
+
+1. **Ordinary link**: use this for context, examples, archives, or a place you
+   simply want readers to visit.
+2. **Explanatory note**: use this for a side comment that would interrupt the
+   paragraph.
+3. **Bibliography citation**: use this when a source supports a claim and
+   should appear in the article bibliography and the site-wide bibliography.
+
+### Ordinary Links
+
+Use a normal Markdown link when the link is part of the prose.
+
+```md
+For background, see the [Know Your Meme entry](https://knowyourmeme.com/).
+```
+
+Ordinary links do not appear in the bibliography. That is intentional. A link is
+not automatically a source citation.
+
+### Explanatory Notes
+
+Use a note when you want to add extra context without making the paragraph
+heavier.
+
+```md
+This meme circulated mostly in small Facebook groups.[^note-small-groups]
+
+[^note-small-groups]:
+    The exact group boundaries were fuzzy because many users
+    shared screenshots across several related groups.
+```
+
+The note label can be any short lowercase name after `note-`. Use words and
+hyphens, not spaces.
+
+Good:
+
+```md
+[^note-small-groups]
+```
+
+Avoid:
+
+```md
+[^1]
+[^Small Groups]
+```
+
+Each explanatory note should be used once. If you need to point to the same
+source several times, use a bibliography citation instead.
+
+### Bibliography Citations
+
+Use a bibliography citation when a source supports a claim.
+
+The citation has two parts:
+
+1. a short citation marker in the paragraph;
+2. a hidden BibTeX entry later in the article file.
+
+Example:
+
+````md
+Internet memes often depend on shared participatory practice.[^cite-shifman-2015]
+
+```tpm-bibtex
+@book{shifman-2015,
+  author = {Shifman, Limor},
+  title = {Memes in Digital Culture},
+  publisher = {MIT Press},
+  year = {2015},
+  url = {https://mitpress.mit.edu/9780262525435/memes-in-digital-culture/}
+}
+```
+````
+
+In the article, the citation marker will render as a bracketed number, such as
+`[1]`. The `tpm-bibtex` block will not be shown to readers. The site uses it to
+make the article bibliography and the global bibliography page.
+
+The marker and BibTeX key must match:
+
+```md
+[^cite-shifman-2015]
+```
+
+matches:
+
+```bibtex
+@book{shifman-2015,
+```
+
+Notice that the marker includes `cite-`, but the BibTeX key does not.
+
+Rules:
+
+- citation labels use lowercase words, numbers, and hyphens;
+- do not add a normal footnote definition like `[^cite-shifman-2015]: ...`;
+- put the source details inside a `tpm-bibtex` code block;
+- do not use a plain `bibtex` code block unless you intentionally want visible
+  code in the article;
+- do not add placeholder citations such as `citation = {^}` or `title = {TBD}`;
+- it is okay to cite the same source more than once with the same marker.
+
+If you use Zotero, Google Scholar, or another citation manager, copying BibTeX
+is usually the easiest starting point. It is fine if you are not sure whether
+the BibTeX is perfect. Include the best source data you have, and a maintainer
+can help clean it up.
+
+If a page number matters, write it in the sentence for now:
+
+```md
+Shifman describes this as participatory culture (p. 42).[^cite-shifman-2015]
+```
+
+There is not yet a special page-number syntax. Keeping page numbers in the prose
+is the safest current approach.
+
+If you have a long source list or appendix that is not tied to one exact
+sentence, ask a maintainer before converting it. The site can support
+bibliography-only source entries, but preserving the author's intent matters
+more than forcing every source into a new format.
+
+## 10. Add Images
 
 Put article images in a folder that matches the article slug:
 
 ```text
-src/assets/articles/my-new-article/
+site/assets/articles/my-new-article/
   cover.png
   diagram.png
 ```
@@ -329,16 +466,16 @@ imageAlt: "Short description of the cover image."
 If an image is shared by multiple articles, put it in:
 
 ```text
-src/assets/shared/
+site/assets/shared/
 ```
 
-Do not put article images in `public/`, root-level folders, `uploads/`, or
-`assets/`. Images should normally go through `src/assets/`.
+Do not put article images in `site/public/`, root-level folders, `uploads/`, or
+`assets/`. Images should normally go through `site/assets/`.
 
 Alt text should describe the image for a reader who cannot see it. Keep it
 plain and specific.
 
-## 10. Check The Site Locally
+## 11. Check The Site Locally
 
 If you can use the terminal, install dependencies once:
 
@@ -349,9 +486,7 @@ bun install
 Run the normal checks:
 
 ```sh
-bun run check
-bun run build
-bun run verify
+bun run author:check
 ```
 
 Helpful review checks:
@@ -365,11 +500,15 @@ If a check reports a formatting or linting issue, you can try the safe automatic
 fix command:
 
 ```sh
-bun run fix
+bun run author:fix
 ```
 
-Then run the checks again. `bun run fix` is meant for code and config files. If
-Markdown review asks for mechanical Markdown formatting, use this separately:
+Then run `bun run author:check` again. `bun run author:fix` only applies safe
+tag normalization. Maintainers may ask you to run broader checks such as
+`bun run check`, `bun run build`, and `bun run verify` when a change touches
+code, config, or generated-output behavior.
+
+If Markdown review asks for mechanical Markdown formatting, use this separately:
 
 ```sh
 bun run fix:markdown
@@ -386,7 +525,7 @@ bun run preview:fresh
 
 Then open the local preview URL shown in the terminal.
 
-## 11. Common Problems
+## 12. Common Problems
 
 If the check says the filename is not URL-safe, rename the article so it uses
 only lowercase letters, numbers, and hyphens.
@@ -397,13 +536,35 @@ filename. Pick a different filename.
 If the check says a category folder or category metadata filename is not
 URL-safe, rename it so it uses only lowercase letters, numbers, and hyphens.
 
-If the check says an image is outside `src/assets/`, move it into
-`src/assets/articles/<article-slug>/` or `src/assets/shared/`.
+If the check says an image is outside `site/assets/`, move it into
+`site/assets/articles/<article-slug>/` or `site/assets/shared/`.
 
 If Markdown review complains about multiple `H1` headings, change body headings
 from `#` to `##`, `##` to `###`, and so on.
 
-## 12. Save Your Changes As A Commit
+If the check says an article reference label is invalid, use `note-*` for
+explanatory notes or `cite-*` for bibliography citations. Plain numbered
+footnotes such as `[^1]` are not allowed in published articles.
+
+If the check says a citation is missing a BibTeX entry, add a matching entry to
+a `tpm-bibtex` block. For `[^cite-shifman-2015]`, the matching BibTeX entry
+starts with `@book{shifman-2015, ...}` or another BibTeX type using the same
+key.
+
+If the check says BibTeX is malformed, check for missing braces, missing commas,
+or placeholder fields. A bibliography entry needs real source text, not a
+placeholder.
+
+If the check says tags need normalization, run:
+
+```sh
+bun run author:fix
+```
+
+This can safely trim whitespace, lowercase tags, and remove duplicate tags.
+Slash-containing tags still need a manual edit.
+
+## 13. Save Your Changes As A Commit
 
 A commit is a saved snapshot of your article changes.
 
@@ -424,11 +585,11 @@ A commit is a saved snapshot of your article changes.
 ### Terminal Option
 
 ```sh
-git add src/content/articles src/assets
+git add site/content/articles site/assets
 git commit -m "Add my new article"
 ```
 
-## 13. Push Your Branch To GitHub
+## 14. Push Your Branch To GitHub
 
 Pushing uploads your branch to GitHub so maintainers can review it.
 
@@ -442,7 +603,7 @@ Click **Push origin**.
 git push -u origin article/my-new-article
 ```
 
-## 14. Open A Pull Request
+## 15. Open A Pull Request
 
 A pull request is how you ask maintainers to review and publish your article.
 
@@ -471,7 +632,7 @@ If GitHub Desktop does not show the button:
 5. Check that the compare branch is your article branch.
 6. Click **Create pull request**.
 
-## 15. Wait For Checks And Review
+## 16. Wait For Checks And Review
 
 After you open a pull request, GitHub runs automatic checks.
 
@@ -489,7 +650,7 @@ If a check fails:
 If you do not understand the failure, leave a comment on the pull request and
 ask a maintainer for help.
 
-## 16. Respond To Review Comments
+## 17. Respond To Review Comments
 
 Maintainers may leave comments or request changes.
 
@@ -502,7 +663,7 @@ If they ask for changes:
 
 Do not open a second pull request for the same article unless a maintainer asks.
 
-## 17. Pull Request Checklist
+## 18. Pull Request Checklist
 
 Before asking for review:
 
@@ -510,9 +671,15 @@ Before asking for review:
 - New categories, if any, have a matching folder and JSON metadata file.
 - The filename slug is URL-safe.
 - The frontmatter has `title`, `description`, `date`, and `author`.
-- Images live under `src/assets/`.
+- The `author` value matches an existing author profile or a maintainer has
+  added the new author metadata.
+- Images live under `site/assets/`.
 - Meaningful images have alt text.
 - Body headings start at `##`, not `#`.
+- Explanatory notes use `note-*`, not plain numbered footnotes.
+- Bibliography citations use `cite-*` markers and matching `tpm-bibtex` entries.
+- Ordinary links are intentionally left out of the bibliography unless you also
+  cite them.
 - `bun run check`, `bun run build`, and `bun run verify` pass if you can run
   local checks.
 

@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import PageHeader from "./PageHeader.astro";
+import PageProse from "./PageProse.astro";
+
+interface Props extends HTMLAttributes<"article"> {
+  description?: string | undefined;
+  title: string;
+}
+
+const { title, description, class: className, ...attrs } = Astro.props;
+---
+
+<article {...attrs} class:list={["grid gap-8", className]}>
+  <PageHeader title={title} description={description} />
+  <PageProse>
+    <slot />
+  </PageProse>
+</article>

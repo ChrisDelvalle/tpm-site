@@ -1,0 +1,45 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for constrained page and block containers. */
+interface Props extends HTMLAttributes<"div"> {
+  as?: "article" | "div" | "main" | "section";
+  gutters?: "default" | "none" | "narrow";
+  size?: "full" | "lg" | "md" | "prose" | "xl";
+}
+
+const {
+  as = "div",
+  gutters = "default",
+  size = "lg",
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const Element = as;
+const baseClasses = "mx-auto w-full min-w-0";
+const gutterClasses = {
+  default: "px-4 sm:px-6 lg:px-8",
+  narrow: "px-3 sm:px-4",
+  none: "px-0",
+} as const;
+const sizeClasses = {
+  full: "max-w-none",
+  lg: "max-w-6xl",
+  md: "max-w-4xl",
+  prose: "max-w-prose",
+  xl: "max-w-7xl",
+} as const;
+---
+
+<Element
+  {...attrs}
+  class:list={[
+    baseClasses,
+    gutterClasses[gutters],
+    sizeClasses[size],
+    className,
+  ]}
+>
+  <slot />
+</Element>

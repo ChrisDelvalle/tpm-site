@@ -1,0 +1,89 @@
+---
+import ActionCluster from "../ui/ActionCluster.astro";
+import BrandLink from "../navigation/BrandLink.astro";
+import DiscoveryMenu from "../navigation/DiscoveryMenu.astro";
+import MobileMenu from "../navigation/MobileMenu.astro";
+import PrimaryNav from "../navigation/PrimaryNav.astro";
+import PriorityInlineRow from "./PriorityInlineRow.astro";
+import SearchReveal from "../navigation/SearchReveal.astro";
+import SupportLink from "../navigation/SupportLink.astro";
+import ThemeToggle from "../navigation/ThemeToggle.astro";
+import type { PrimaryNavItem, SectionNavItem } from "../../lib/navigation";
+import { siteConfig } from "../../lib/site-config";
+
+interface Props {
+  categoryItems: readonly SectionNavItem[];
+  currentPath: string;
+  primaryItems: readonly PrimaryNavItem[];
+}
+
+const { categoryItems, currentPath, primaryItems } = Astro.props;
+const headerCategoryItems = siteConfig.features.categories ? categoryItems : [];
+const headerSupportCompactProps =
+  siteConfig.support.patreon.compactLabel === undefined
+    ? {}
+    : { compactLabel: siteConfig.support.patreon.compactLabel };
+---
+
+<header
+  data-site-header
+  class="border-border bg-background/95 sticky top-0 z-40 border-b font-sans backdrop-blur-sm"
+>
+  <div class="grid gap-2 px-2 py-3 sm:px-4 lg:px-8" data-site-header-inner>
+    <PriorityInlineRow data-site-header-primary-row gap="responsive">
+      <div slot="start" class="hidden min-w-0 md:block">
+        {
+          (siteConfig.features.search || siteConfig.features.themeToggle) && (
+            <ActionCluster align="start" gap="xs">
+              {siteConfig.features.search && <SearchReveal />}
+              {siteConfig.features.themeToggle && <ThemeToggle />}
+            </ActionCluster>
+          )
+        }
+      </div>
+      <div slot="start" class="min-w-0 md:hidden">
+        <ActionCluster align="start" gap="none">
+          <MobileMenu
+            currentPath={currentPath}
+            categoryItems={headerCategoryItems}
+            primaryItems={primaryItems}
+          />
+        </ActionCluster>
+      </div>
+
+      <BrandLink
+        slot="center"
+        class="mx-auto max-w-full max-sm:text-[clamp(0.75rem,4cqw,0.875rem)] sm:text-sm md:max-w-none md:max-lg:text-base lg:text-lg"
+      />
+
+      <ActionCluster slot="end" align="end" gap="md">
+        <div class="hidden min-w-0 items-center md:flex">
+          <PrimaryNav currentPath={currentPath} items={primaryItems} gap="md" />
+        </div>
+        {
+          siteConfig.features.support && (
+            <SupportLink
+              {...headerSupportCompactProps}
+              class="max-sm:min-h-8 max-sm:px-1 max-sm:py-1.5 max-sm:text-xs md:max-lg:min-h-9 md:max-lg:px-3 md:max-lg:py-2"
+            />
+          )
+        }
+      </ActionCluster>
+    </PriorityInlineRow>
+
+    {
+      siteConfig.features.categories && (
+        <div
+          class="hidden h-7 min-w-0 items-center justify-center md:flex"
+          data-site-header-category-row
+        >
+          <DiscoveryMenu
+            currentPath={currentPath}
+            items={headerCategoryItems}
+          />
+        </div>
+      )
+    }
+  </div>
+  <script src="../../scripts/site-header-offset.ts"></script>
+</header>

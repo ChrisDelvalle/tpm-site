@@ -1,29 +1,28 @@
 ---
+import CategoryOverviewBlock from "../../components/blocks/CategoryOverviewBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCategories } from "../../lib/content";
-import { categoryUrl } from "../../lib/routes";
+import { sectionNavigationItems } from "../../lib/navigation";
+import { categoriesIndexUrl } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
 
-const categories = await getCategories();
+const categoryItems = sectionNavigationItems(
+  await getCategories(),
+  categoriesIndexUrl(),
+);
 ---
 
 <BaseLayout
-  title="Categories | The Philosopher's Meme"
+  title={titleWithSite("Categories")}
   description="Browse articles by category."
-  canonicalPath="/categories/"
+  canonicalPath={categoriesIndexUrl()}
 >
-  <section class="page-heading">
-    <h1>Categories</h1>
-    <p>Browse the archive by subject.</p>
-  </section>
-
-  <div class="category-grid">
-    {
-      categories.map((category) => (
-        <a class="category-card" href={categoryUrl(category.slug)}>
-          <span>{category.title}</span>
-          <small>{category.articles.length} articles</small>
-        </a>
-      ))
-    }
-  </div>
+  <BrowsingBody>
+    <CategoryOverviewBlock
+      title="Categories"
+      description="Browse the archive by subject."
+      items={categoryItems}
+    />
+  </BrowsingBody>
 </BaseLayout>

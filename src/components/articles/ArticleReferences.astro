@@ -1,0 +1,29 @@
+---
+import type { ArticleReferenceData } from "../../lib/article-references/model";
+import ArticleBibliography from "./ArticleBibliography.astro";
+import ArticleFootnotes from "./ArticleFootnotes.astro";
+
+interface Props {
+  headingIdPrefix?: string;
+  references: ArticleReferenceData;
+}
+
+const { headingIdPrefix = "article-references", references } = Astro.props;
+const hasNotes = references.notes.length > 0;
+const hasCitations = references.citations.length > 0;
+---
+
+{
+  (hasNotes || hasCitations) && (
+    <div class="border-border grid gap-8 border-t pt-8" data-article-references>
+      <ArticleFootnotes
+        headingId={`${headingIdPrefix}-notes-heading`}
+        notes={references.notes}
+      />
+      <ArticleBibliography
+        citations={references.citations}
+        headingId={`${headingIdPrefix}-bibliography-heading`}
+      />
+    </div>
+  )
+}

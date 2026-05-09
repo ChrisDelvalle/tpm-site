@@ -22,6 +22,7 @@ export default defineConfig({
   ],
   reporter: process.env["CI"] === "true" ? "github" : "line",
   testDir: "./tests",
+  testMatch: "**/*.pw.ts",
   timeout: 30_000,
   use: {
     baseURL: `http://127.0.0.1:${port}`,

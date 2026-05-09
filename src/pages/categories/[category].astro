@@ -1,54 +1,44 @@
 ---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries } from "../../lib/authors";
 import { getCategories } from "../../lib/content";
-import {
-  articleUrl,
-  authorName,
-  categoryUrl,
-  entryDate,
-  entryTitle,
-  excerpt,
-  formatDate,
-} from "../../lib/routes";
+import { categoryUrl } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
+import { categoryStaticPaths } from "../../lib/static-paths";
 
+/**
+ * Generates one static category route for each public category.
+ *
+ * @returns Static route parameters and category props for Astro.
+ */
 export async function getStaticPaths() {
-  const categories = await getCategories();
-
-  return categories.map((category) => ({
-    params: { category: category.slug },
-    props: { category },
-  }));
+  return categoryStaticPaths(await getCategories());
 }
 
 const { category } = Astro.props;
+const authors = await getAuthorEntries();
+const categoryItems = articleListItemsFromArchive(
+  articleArchiveItems(category.articles, [category], authors),
+);
 ---
 
 <BaseLayout
-  title={`${category.title} | The Philosopher's Meme`}
+  title={titleWithSite(category.title)}
   description={category.description ??
     `Articles filed under ${category.title}.`}
   canonicalPath={categoryUrl(category.slug)}
 >
-  <section class="page-heading">
-    <p class="eyebrow">Category</p>
-    <h1>{category.title}</h1>
-    {category.description && <p>{category.description}</p>}
-  </section>
-
-  <ol class="archive-list">
-    {
-      category.articles.map((article) => (
-        <li>
-          <a class="archive-title" href={articleUrl(article.id)}>
-            {entryTitle(article)}
-          </a>
-          <div class="archive-meta">
-            <span>{formatDate(entryDate(article))}</span>
-            <span>{authorName(article)}</span>
-          </div>
-          {excerpt(article) && <p>{excerpt(article)}</p>}
-        </li>
-      ))
-    }
-  </ol>
+  <BrowsingBody>
+    <ArchiveListBlock
+      eyebrow="Category"
+      title={category.title}
+      description={category.description ??
+        `Articles filed under ${category.title}.`}
+      items={categoryItems}
+    />
+  </BrowsingBody>
 </BaseLayout>

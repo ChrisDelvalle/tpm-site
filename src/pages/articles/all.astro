@@ -1,0 +1,34 @@
+---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries } from "../../lib/authors";
+import { getArticles, getCategories } from "../../lib/content";
+import { articlesArchiveUrl, SITE_TITLE } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
+
+const authors = await getAuthorEntries();
+const archiveItems = articleArchiveItems(
+  await getArticles(),
+  await getCategories(),
+  authors,
+);
+const articleItems = articleListItemsFromArchive(archiveItems);
+---
+
+<BaseLayout
+  title={titleWithSite("All Articles")}
+  description={`Complete chronological article archive for ${SITE_TITLE}.`}
+  canonicalPath={articlesArchiveUrl()}
+>
+  <BrowsingBody>
+    <ArchiveListBlock
+      title="All Articles"
+      description="The complete chronological archive."
+      items={articleItems}
+      pagefindIgnore
+    />
+  </BrowsingBody>
+</BaseLayout>

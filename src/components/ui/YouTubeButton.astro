@@ -1,0 +1,42 @@
+---
+import { Image } from "astro:assets";
+import type { HTMLAttributes } from "astro/types";
+
+import youtubeLogoWhite from "./assets/youtube-logo-white.svg";
+
+/** Public props for the YouTube-branded channel link. */
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+}
+
+const {
+  href,
+  target,
+  rel,
+  class: className,
+  "aria-label": ariaLabel = "Visit YouTube",
+  ...attrs
+} = Astro.props;
+
+const safeRel = target === "_blank" && rel === undefined ? "noreferrer" : rel;
+---
+
+<a
+  {...attrs}
+  href={href}
+  target={target}
+  rel={safeRel}
+  aria-label={ariaLabel}
+  class:list={[
+    "focus-visible:outline-ring inline-flex h-9 w-32 min-w-0 shrink items-center justify-center rounded-xl border border-transparent bg-[#FF0033] px-2 py-1.5 no-underline transition-colors hover:bg-[#CC0029] focus-visible:outline-2 focus-visible:outline-offset-2",
+    className,
+  ]}
+>
+  <Image
+    src={youtubeLogoWhite}
+    alt=""
+    layout="fixed"
+    loading="eager"
+    class="h-5 w-auto max-w-full"
+  />
+</a>

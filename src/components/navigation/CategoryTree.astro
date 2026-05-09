@@ -1,0 +1,17 @@
+---
+import CategoryGroup from "./CategoryGroup.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props {
+  items: readonly SectionNavItem[];
+  label?: string;
+}
+
+const { items, label = "Categories" } = Astro.props;
+---
+
+<nav aria-label={label}>
+  <ol class="grid gap-3">
+    {items.map((item) => <CategoryGroup item={item} />)}
+  </ol>
+</nav>

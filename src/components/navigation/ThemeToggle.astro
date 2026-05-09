@@ -1,0 +1,23 @@
+---
+import { Moon, Sun } from "lucide-astro";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"button"> {
+  label?: string;
+}
+
+const { label = "Toggle dark mode", class: className, ...attrs } = Astro.props;
+---
+
+<button
+  {...attrs}
+  class:list={[
+    "theme-toggle text-muted-foreground hover:text-foreground focus-visible:outline-ring inline-flex size-9 shrink-0 items-center justify-center rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2",
+    className,
+  ]}
+  type="button"
+  aria-label={label}
+>
+  <Sun class="block size-5 dark:hidden" aria-hidden="true" />
+  <Moon class="hidden size-5 dark:block" aria-hidden="true" />
+</button>

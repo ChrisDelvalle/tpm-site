@@ -2,21 +2,37 @@
 import { render } from "astro:content";
 
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import { articleTableOfContentsHeadings } from "../../lib/article-toc";
 import { getArticles } from "../../lib/content";
+import { articleStaticPaths } from "../../lib/static-paths";
+import { articleImagesFromFrontmatter } from "../../rehype-plugins/articleImages";
+import { articleReferencesFromFrontmatter } from "../../remark-plugins/articleReferences";
 
+/**
+ * Generates one static article route for each published article.
+ *
+ * @returns Static route parameters and article props for Astro.
+ */
 export async function getStaticPaths() {
-  const articles = await getArticles();
-
-  return articles.map((article) => ({
-    params: { slug: article.id },
-    props: { article },
-  }));
+  return articleStaticPaths(await getArticles());
 }
 
 const { article } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings, remarkPluginFrontmatter } = await render(article);
+const articleImages = articleImagesFromFrontmatter(remarkPluginFrontmatter);
+const articleReferences = articleReferencesFromFrontmatter(
+  remarkPluginFrontmatter,
+);
+const tableOfContentsHeadings = articleTableOfContentsHeadings(headings, {
+  references: articleReferences,
+});
 ---
 
-<ArticleLayout article={article}>
+<ArticleLayout
+  article={article}
+  enableImageInspector={articleImages.hasInspectableImages}
+  articleReferences={articleReferences}
+  tableOfContentsHeadings={tableOfContentsHeadings}
+>
   <Content />
 </ArticleLayout>

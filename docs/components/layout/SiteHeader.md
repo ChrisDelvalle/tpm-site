@@ -1,0 +1,184 @@
+# Site Header
+
+Source: `src/components/layout/SiteHeader.astro`
+
+## Purpose
+
+`SiteHeader` owns the persistent publication header. It composes brand,
+category discovery, durable top-level navigation, search access, theme, support,
+and the constrained-width mobile menu.
+
+It implements the header contract in
+`docs/navigation/header-and-articles-hub.md`; route files should not rebuild
+header geometry.
+
+## Public Contract
+
+- `currentPath: string`
+- `categoryItems: readonly SectionNavItem[]`
+- `primaryItems: readonly PrimaryNavItem[]`
+- optional semantic props for support/search labels and hrefs only when needed
+
+Public props should remain narrow and semantic. Do not add broad configuration
+objects or boolean clusters when a named variant or a smaller component would
+make invalid states harder to express.
+
+## Composition Relationships
+
+```text
+SiteHeader
+  row 1
+    PriorityInlineRow
+      left utility cluster
+        ActionCluster
+          SearchReveal
+          ThemeToggle
+          or MobileMenu
+      centered brand
+        BrandLink
+      right navigation cluster
+        ActionCluster
+          PrimaryNav
+          SupportLink
+  row 2
+    centered category discovery
+      DiscoveryMenu
+        CategoryDropdown[]
+  MobileMenu
+```
+
+It composes local navigation data helpers, `PriorityInlineRow`,
+`ActionCluster`, `BrandLink`, `CategoryDropdown`, `PrimaryNav`,
+`SearchReveal`, `SupportLink`, `ThemeToggle`, and `MobileMenu`. Children
+should not patch header spacing or stacking from outside.
+
+## Layout And Responsiveness
+
+Desktop: two rows. Row 1 has search and theme aligned left, brand centered, and
+`Articles`, `About`, and `Support Us` aligned right. Row 2 centers category
+dropdowns. This separates utilities, identity, durable pages, and section
+discovery instead of forcing every control into one crowded row.
+
+Mobile/constrained: one row with mobile menu left, brand centered, and visible
+`Support Us` right. Search, theme, categories, `Articles`, and `About` remain
+available in `MobileMenu`; footer-only RSS stays out of the menu.
+
+The mobile primary row uses left and right intrinsic controls around a flexible
+center brand slot. The brand and support CTA may use smaller mobile typography
+and spacing, but they must not overlap. Preserve the normal desktop sizing and
+rhythm when width allows; compact only inside constrained mobile widths. The
+full `The Philosopher's Meme` brand is the visual default at supported mobile
+widths. Reclaim space from row gaps and adjacent controls before changing the
+brand label. The primary row, not the auto-sized brand item, is the query
+container for bounded mobile typography. Do not put size containment on the
+centered brand wrapper; that lets CSS Grid treat the brand's intrinsic width as
+zero and makes off-center or disappearing states representable.
+
+Tablet and wider: desktop controls return and categories appear in the second
+row. This uses the standard `md` Tailwind breakpoint so category discovery is
+not hidden too aggressively on ordinary laptop split-screen widths.
+
+The primary row uses equal flexible side tracks around the brand at every
+supported width. This makes the brand geometrically centered by construction;
+left utilities and right navigation/support must compact within their side
+tracks rather than moving the brand. If a future control cannot fit beside the
+centered brand, the header composition must change intentionally instead of
+falling back to an off-center logo.
+
+`PriorityInlineRow` owns the start/center/end spatial contract. `ActionCluster`
+owns one-line grouping for each side. `SiteHeader` decides which controls
+appear in each slot at each breakpoint. Keep that separation intact: do not
+teach the row primitive about search, support, categories, or branding, and do
+not make navigation components patch the row's grid geometry.
+
+The right-side row uses one shared spacing rhythm between `Articles`, `About`,
+and `Support Us`. Keep the `PrimaryNav` gap and the surrounding `ActionCluster`
+gap in sync so the support CTA does not look detached or crowded relative to
+the text links.
+
+At `360px` and below, the header support CTA may show the short visible label
+`Patreon` to protect the centered brand. This fallback is header-specific;
+article, homepage, footer, and other support CTAs keep their normal editorial
+labels.
+
+The desktop category row is a locked-height single line with intrinsic category
+labels and the normal editorial spacing as its default. Category labels must
+remain fully readable while the desktop row is visible; do not ellipsize labels
+such as `Philosophy` into `Philos...`.
+
+When the viewport is constrained but still within the desktop/tablet header
+mode, the category row may proportionally compact typography, chevrons, and
+spacing as one visual system. Preserve full labels and avoid CSS transforms
+that would break anchored dropdown positioning. The fallback for space that
+cannot support full labels is the mobile menu at smaller breakpoints, not
+truncation or multi-line header growth.
+
+The center of the row is flexible space, not a permanent search slot. The
+header must not depend on fragile breakpoint guesses to prevent brand,
+category, search, and support collision.
+
+## Layering And Scrolling
+
+The header is sticky chrome and owns the `--site-header-height` runtime token
+used by hash navigation, TOC scrollspy, and sticky rails. The processed
+`src/scripts/site-header-offset.ts` enhancement keeps that token aligned with
+the rendered header height across desktop/mobile rows and theme changes.
+
+Any `z-index`, sticky offset, fixed size, or scroll container in the header is
+part of this component's public design and needs an invariant test.
+
+## Interaction States
+
+Represent default, long category lists, long category names, open dropdown,
+search-open, mobile-open, hover, focus-visible, current page, and light/dark
+states in the catalog.
+
+## Accessibility Semantics
+
+Use a labeled site navigation landmark. Use links for destinations and buttons
+only for actions such as opening search or mobile navigation. Do not use ARIA
+menu patterns for ordinary navigation links. `aria-current="page"` belongs on
+the current destination link.
+
+## Content Edge Cases
+
+Test or catalog long titles, long words, dense content, empty content, missing
+optional fields, and unusual punctuation whenever this component renders user or
+author-provided content.
+
+## Theme Behavior
+
+Use semantic color tokens and Tailwind utilities. Light and dark mode must keep
+text readable, borders visible when they communicate structure, focus rings
+visible, and CTAs distinguishable from neutral actions.
+
+## Testable Invariants
+
+- renders without horizontal overflow at mobile, tablet, desktop, and wide desktop widths.
+- keeps the brand visible, untruncated, and horizontally centered in the
+  header at mobile, tablet, desktop, and wide desktop widths.
+- keeps the mobile menu trigger, brand, and support CTA visible and
+  non-overlapping at iPhone-width viewports.
+- keeps the desktop category row to one line and the header within its
+  documented height contract.
+- keeps full category labels visible while the category row is visible.
+- compacts constrained category discovery proportionally instead of compressing
+  or truncating individual labels.
+- preserves readable text and visible focus/hover states in light and dark themes.
+- handles long content without clipping or overlapping neighboring components.
+- does not create extra main/content landmarks.
+- prevents sticky/fixed chrome from covering visible content during scroll.
+- keeps direct hash targets and TOC link targets visible below the sticky
+  header.
+- category text clicks navigate to category pages while hover/focus exposes
+  preview content.
+- search opens without moving header links into overlap.
+- desktop and mobile navigation are not simultaneously exposed as competing
+  controls.
+
+## Follow-Up Notes
+
+- Do not re-create the prototype row with permanent search input, Topics, RSS,
+  theme, and support all competing for the same space.
+- RSS belongs in secondary surfaces such as footer/mobile menu unless a later
+  design explicitly promotes it.

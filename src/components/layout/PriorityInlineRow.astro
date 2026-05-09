@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for a three-part inline layout with a geometrically centered middle slot. */
+interface Props extends HTMLAttributes<"div"> {
+  gap?: "none" | "responsive" | "sm";
+}
+
+const { gap = "responsive", class: className, ...attrs } = Astro.props;
+
+const gapClasses = {
+  none: "gap-0",
+  responsive: "gap-0 sm:gap-3",
+  sm: "gap-3",
+} as const;
+---
+
+<div
+  {...attrs}
+  data-priority-inline-row
+  class:list={[
+    "@container/priority-inline grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center",
+    gapClasses[gap],
+    className,
+  ]}
+>
+  <div class="min-w-0 justify-self-start" data-priority-inline-start>
+    <slot name="start" />
+  </div>
+  <div class="justify-self-center text-center" data-priority-inline-center>
+    <slot name="center" />
+  </div>
+  <div class="min-w-0 justify-self-end" data-priority-inline-end>
+    <slot name="end" />
+  </div>
+</div>

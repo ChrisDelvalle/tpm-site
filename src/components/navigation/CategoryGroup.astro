@@ -1,0 +1,12 @@
+---
+import SectionNavItem from "./SectionNavItem.astro";
+import type { SectionNavItem as SectionNavItemData } from "../../lib/navigation";
+
+interface Props {
+  item: SectionNavItemData;
+}
+
+const { item } = Astro.props;
+---
+
+<SectionNavItem item={item} />

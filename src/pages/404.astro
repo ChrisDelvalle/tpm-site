@@ -1,15 +1,28 @@
 ---
+import PageFrame from "../components/layout/PageFrame.astro";
+import PageHeader from "../components/pages/PageHeader.astro";
+import TextLink from "../components/ui/TextLink.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { articlesIndexUrl } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
 ---
 
 <BaseLayout
-  title="Page Not Found | The Philosopher's Meme"
+  title={titleWithSite("Page Not Found")}
   description="The requested page could not be found."
   canonicalPath="/404/"
 >
-  <section class="page-heading">
-    <h1>Page Not Found</h1>
-    <p>The page you were looking for is not available at this address.</p>
-    <p><a href="/articles/">Browse the article archive</a></p>
-  </section>
+  <PageFrame size="prose">
+    <div class="grid gap-6">
+      <PageHeader
+        title="Page Not Found"
+        description="The page you were looking for is not available at this address."
+      />
+      <p>
+        <TextLink href={articlesIndexUrl()} prefetch="hover"
+          >Browse the article archive</TextLink
+        >
+      </p>
+    </div>
+  </PageFrame>
 </BaseLayout>

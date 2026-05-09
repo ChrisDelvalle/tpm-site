@@ -84,6 +84,17 @@ Run dependency audit review across all severities:
 bun run audit:all
 ```
 
+Run broad coverage review after changing scripts, helpers, browser scripts, or
+other testable code:
+
+```sh
+bun run coverage
+```
+
+Prefer meaningful behavior tests. If a remaining uncovered path is an
+unavoidable process, generated-output, or browser auto-init boundary, document
+the reason near that boundary with a `Coverage note:` comment.
+
 Run the heavier pre-release gate:
 
 ```sh
@@ -128,6 +139,7 @@ comes from the first folder below `src/content/articles/`.
 2. Add a URL-safe `.md` or `.mdx` file whose filename stem is the desired public
    slug.
 3. Add frontmatter with `title`, `description`, `date`, and `author`.
+   `author` should match an existing entry or alias in `src/content/authors/`.
 4. Put new article images under `src/assets/articles/<article-slug>/` unless
    they are shared assets.
 5. Run the validation commands.
@@ -158,6 +170,10 @@ The public Astro URL will be:
 Use `draft: true` to keep an article unpublished. Draft articles are excluded
 from generated article routes, archives, categories, RSS, sitemap, and search.
 
+If an article introduces a new author, add or request a matching author profile
+under `src/content/authors/<author-slug>.md`. Keep author metadata factual:
+display name, type, aliases, and explicitly approved public links only.
+
 Do not add `slug`, `topic`, or `category` frontmatter. The article slug comes
 from the filename. The category comes from the source folder.
 
@@ -168,7 +184,7 @@ historical metadata. They do not control routing, publishing, or rendering.
 
 Current article category folders:
 
-- `src/content/articles/memeculture/` -> `/categories/memeculture/`
+- `src/content/articles/memeculture/` -> `/categories/memeculture/` (`Culture`)
 - `src/content/articles/metamemetics/` -> `/categories/metamemetics/`
 - `src/content/articles/aesthetics/` -> `/categories/aesthetics/`
 - `src/content/articles/irony/` -> `/categories/irony/`
@@ -304,7 +320,7 @@ Manual deployment hosts should:
 2. Build with `bun run build`.
 3. Publish the `dist/` directory.
 
-The production site origin is configured in `astro.config.mjs`:
+The production site origin is configured in `astro.config.ts`:
 
 ```js
 site: "https://thephilosophersmeme.com";

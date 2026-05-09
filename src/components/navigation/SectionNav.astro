@@ -1,0 +1,26 @@
+---
+import CategoryTree from "./CategoryTree.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props {
+  heading?: string;
+  items: readonly SectionNavItem[];
+  label?: string;
+}
+
+const {
+  heading = "Categories",
+  items,
+  label = "Category navigation",
+} = Astro.props;
+---
+
+<section class="grid gap-4" aria-labelledby="section-nav-heading">
+  <h2
+    id="section-nav-heading"
+    class="text-primary text-xs font-semibold tracking-normal uppercase"
+  >
+    {heading}
+  </h2>
+  <CategoryTree items={items} label={label} />
+</section>

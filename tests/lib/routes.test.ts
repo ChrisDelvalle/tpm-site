@@ -1,15 +1,26 @@
 import { describe, expect, test } from "bun:test";
 
+import { defaultPublishableVisibility } from "../../src/lib/publishable";
 import {
   type ArticleEntry,
+  articlesArchiveUrl,
+  articlesIndexUrl,
   articleSlug,
   articleUrl,
   assertUniqueArticleSlugs,
+  authorsIndexUrl,
+  authorUrl,
+  categoriesIndexUrl,
   categorySlug,
   categoryUrl,
+  collectionsIndexUrl,
+  collectionUrl,
   decodeHtmlEntities,
+  feedUrl,
   isPublishedArticle,
   normalizeSlug,
+  pageUrl,
+  searchUrl,
 } from "../../src/lib/routes";
 
 function entry(
@@ -17,20 +28,26 @@ function entry(
   data: Record<string, unknown> = {},
   filePath = "",
 ): ArticleEntry {
+  const articleData = {
+    author: "Author",
+    date: new Date("2022-04-06T00:00:00Z"),
+    description: "Description",
+    draft: false,
+    tags: [],
+    title: "Title",
+    visibility: defaultPublishableVisibility,
+    ...data,
+  } satisfies ArticleEntry["data"];
+
   return {
     collection: "articles",
     id,
-    data: {
-      author: "Author",
-      date: new Date("2022-04-06T00:00:00Z"),
-      description: "Description",
-      draft: false,
-      tags: [],
-      title: "Title",
-      ...data,
-    },
-    filePath: filePath || `/repo/src/content/articles/history/${id}.md`,
-  } as unknown as ArticleEntry;
+    data: articleData,
+    filePath:
+      filePath === ""
+        ? `/repo/site/content/articles/history/${id}.md`
+        : filePath,
+  };
 }
 
 describe("route helpers", () => {
@@ -40,10 +57,20 @@ describe("route helpers", () => {
   });
 
   test("keeps canonical routes trailing-slashed", () => {
+    expect(articlesIndexUrl()).toBe("/articles/");
+    expect(articlesArchiveUrl()).toBe("/articles/all/");
     expect(articleUrl("gamergate-as-metagaming")).toBe(
       "/articles/gamergate-as-metagaming/",
     );
+    expect(authorsIndexUrl()).toBe("/authors/");
+    expect(authorUrl("seong-young-her")).toBe("/authors/seong-young-her/");
+    expect(categoriesIndexUrl()).toBe("/categories/");
     expect(categoryUrl("memeculture")).toBe("/categories/memeculture/");
+    expect(collectionsIndexUrl()).toBe("/collections/");
+    expect(collectionUrl("featured")).toBe("/collections/featured/");
+    expect(pageUrl("About")).toBe("/about/");
+    expect(searchUrl()).toBe("/search/");
+    expect(feedUrl()).toBe("/feed.xml");
   });
 
   test("uses collection ids directly as article slugs", () => {
@@ -70,11 +97,17 @@ describe("route helpers", () => {
     }).toThrow('Duplicate article slug "same"');
   });
 
+  test("detects article slugs reserved for static routes", () => {
+    expect(() => {
+      assertUniqueArticleSlugs([entry("all")]);
+    }).toThrow('Article slug "all" is reserved for a site route.');
+  });
+
   test("derives categories from source folders", () => {
     const politics = entry(
       "the-post-pepe-manifesto",
       {},
-      "/repo/src/content/articles/politics/the-post-pepe-manifesto.md",
+      "/repo/site/content/articles/politics/the-post-pepe-manifesto.md",
     );
 
     expect(categorySlug(politics)).toBe("politics");
@@ -82,7 +115,9 @@ describe("route helpers", () => {
 
   test("decodes known HTML entities in titles", () => {
     expect(
-      decodeHtmlEntities("Memes and Humor&#58; &quot;What is a Meme?&quot;"),
-    ).toBe('Memes and Humor: "What is a Meme?"');
+      decodeHtmlEntities(
+        "Memes and Humor&#58; &#x26; &quot;What is a Meme?&quot;",
+      ),
+    ).toBe('Memes and Humor: & "What is a Meme?"');
   });
 });

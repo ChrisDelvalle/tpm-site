@@ -1,0 +1,40 @@
+---
+import MoreInCategoryBlock from "./MoreInCategoryBlock.astro";
+import RelatedArticlesBlock from "./RelatedArticlesBlock.astro";
+import SupportBlock from "../blocks/SupportBlock.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+
+interface Props {
+  categoryHref?: string | undefined;
+  categoryTitle?: string | undefined;
+  idPrefix?: string;
+  moreInCategory?: readonly ArticleListItem[] | undefined;
+  related?: readonly ArticleListItem[] | undefined;
+}
+
+const {
+  categoryHref,
+  categoryTitle,
+  idPrefix = "article-endcap",
+  moreInCategory = [],
+  related = [],
+} = Astro.props;
+---
+
+<aside
+  class="grid w-full max-w-full min-w-0 gap-8"
+  aria-label="Article support and discovery"
+  data-pagefind-ignore
+>
+  <SupportBlock headingId={`${idPrefix}-support-heading`} />
+  <MoreInCategoryBlock
+    categoryHref={categoryHref}
+    categoryTitle={categoryTitle}
+    headingId={`${idPrefix}-more-in-category-heading`}
+    items={moreInCategory}
+  />
+  <RelatedArticlesBlock
+    headingId={`${idPrefix}-related-articles-heading`}
+    items={related}
+  />
+</aside>

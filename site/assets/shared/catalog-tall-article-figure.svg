@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="630" viewBox="0 0 360 630" role="img" aria-labelledby="title">
+  <title id="title">Tall article figure fixture</title>
+  <rect width="360" height="630" fill="#f4f0e8" />
+  <rect x="36" y="36" width="288" height="558" fill="#ffffff" stroke="#b45b34" stroke-width="8" />
+  <path d="M84 140h192M84 200h192M84 260h192M84 320h192M84 380h192M84 440h192M84 500h192" stroke="#3c382d" stroke-width="16" stroke-linecap="round" />
+</svg>

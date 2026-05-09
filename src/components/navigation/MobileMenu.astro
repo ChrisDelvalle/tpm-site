@@ -1,0 +1,57 @@
+---
+import { Menu, X } from "lucide-astro";
+
+import AnchoredPanel from "../ui/AnchoredPanel.astro";
+import AnchoredRoot from "../ui/AnchoredRoot.astro";
+import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
+import CategoryTree from "./CategoryTree.astro";
+import PrimaryNav from "./PrimaryNav.astro";
+import SearchForm from "./SearchForm.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import {
+  primaryNavigationItems,
+  type PrimaryNavItem,
+  type SectionNavItem,
+} from "../../lib/navigation";
+
+interface Props {
+  categoryItems: readonly SectionNavItem[];
+  currentPath?: string;
+  label?: string;
+  primaryItems?: readonly PrimaryNavItem[];
+}
+
+const {
+  categoryItems,
+  currentPath = "",
+  label = "Open navigation menu",
+  primaryItems = primaryNavigationItems(),
+} = Astro.props;
+---
+
+<AnchoredRoot as="details" preset="mobile-shell-panel" class="group relative">
+  <AnchoredTrigger
+    as="summary"
+    class="text-foreground hover:text-primary focus-visible:outline-ring inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 [&::-webkit-details-marker]:hidden"
+    aria-label={label}
+  >
+    <Menu class="block size-5 group-open:hidden" aria-hidden="true" />
+    <X class="hidden size-5 group-open:block" aria-hidden="true" />
+  </AnchoredTrigger>
+  <AnchoredPanel
+    class="border-border bg-background z-50 grid w-[var(--anchor-max-width,100vw)] gap-5 overflow-y-auto overscroll-contain rounded-none border-y p-4 shadow-lg"
+    style="left: var(--anchor-x, 0px); max-width: var(--anchor-max-width, 100vw);"
+    data-mobile-menu-panel
+  >
+    <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+      <SearchForm inputId="mobile-site-search" label="Mobile site search" />
+      <ThemeToggle />
+    </div>
+    <PrimaryNav
+      currentPath={currentPath}
+      items={primaryItems}
+      label="Mobile primary navigation"
+    />
+    <CategoryTree items={categoryItems} label="Mobile category navigation" />
+  </AnchoredPanel>
+</AnchoredRoot>

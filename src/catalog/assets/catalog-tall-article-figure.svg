@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 840" role="img" aria-labelledby="title desc">
+  <title id="title">Catalog tall article figure</title>
+  <desc id="desc">A tall neutral article image fixture for bounded figure previews.</desc>
+  <rect width="420" height="840" fill="#ffffff" />
+  <rect x="48" y="48" width="324" height="744" rx="28" fill="#f7f5ef" stroke="#333126" stroke-width="8" />
+  <circle cx="210" cy="168" r="54" fill="#b4552f" />
+  <rect x="108" y="272" width="204" height="28" rx="10" fill="#333126" />
+  <rect x="108" y="340" width="204" height="28" rx="10" fill="#706d67" />
+  <rect x="108" y="408" width="204" height="28" rx="10" fill="#706d67" />
+  <rect x="108" y="476" width="204" height="28" rx="10" fill="#706d67" />
+  <rect x="108" y="544" width="204" height="28" rx="10" fill="#706d67" />
+  <path d="M140 684h140M210 614v140" stroke="#b4552f" stroke-width="20" stroke-linecap="round" />
+</svg>

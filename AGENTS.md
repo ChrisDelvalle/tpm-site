@@ -63,12 +63,15 @@ to the active milestone.
 - `scripts/`: repository maintenance, verification, and quality scripts.
 - `tests/`: unit, e2e, accessibility, and performance tests.
 - `dist/`: generated build output. Do not edit by hand.
+- `CHECKLIST.md`: implementation milestone tracker.
+- `DEFERRED.md`: postponed work with reasons and resume triggers.
 - `PACKAGE_SCRIPTS.md`: brief reference for every `package.json` script.
-- `.agents/docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
-- `.agents/docs/QUALITY_TOOLING.md`: quality tooling rationale, configuration notes, and
-  release checks.
-- `.agents/docs/ASTRO_GUIDANCE.md`: expanded Astro notes.
-- `.agents/docs/TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
+- `agent-docs/DESIGN_PHILOSOPHY.md`: expanded design philosophy notes.
+- `agent-docs/COMPONENT_ARCHITECTURE.md`: target component hierarchy,
+  component responsibilities, navigation redesign direction, and migration
+  sequence.
+- `agent-docs/ASTRO_GUIDANCE.md`: expanded Astro notes.
+- `agent-docs/TAILWIND_GUIDANCE.md`: expanded Tailwind notes.
 
 ## Project-Local Skills
 
@@ -80,6 +83,13 @@ Repo-local skills live in `.agents/skills/<skill-name>/SKILL.md`.
 
 When a project-local skill matches the task, read its `SKILL.md` and follow its
 workflow before making changes.
+
+## Checklist And Deferred Work
+
+Move postponed work to `DEFERRED.md` with a concise reason and a concrete
+resume trigger. When deferred work becomes active, move it back into
+`CHECKLIST.md` before implementation begins. Do not mark deferred work complete
+in `DEFERRED.md`; completion belongs in the active checklist after verification.
 
 ## Architecture Standard
 
@@ -117,9 +127,26 @@ Every component owns its responsive behavior, spacing, wrapping, focus states,
 dark mode behavior, and accessibility semantics. Do not fix component layout
 failures with page-level CSS patches.
 
+Component files should stay view-focused and mostly declarative:
+
+- Use `const` derivations, props, slots, and typed helper calls instead of
+  mutable local state.
+- Do not put IO, filesystem access, network access, process/env reads, or
+  repository automation inside component files.
+- Avoid loops and in-place mutation in components; use `map`, `filter`,
+  `flatMap`, `reduce`, object/array spreads, or move the logic into a typed
+  helper.
+- Keep Astro components static by default. If runtime interaction is required,
+  isolate it in the smallest script, custom element, React island, or external
+  controller that satisfies the requirement.
+- Keep React component files as views over explicit props and narrowly scoped
+  interaction state. Move non-view logic into typed helpers or custom hooks.
+
 Strong UI work in this project should make good composition easy and invalid
 states hard to express:
 
+- Use type-driven design. Model data and UI state so invalid states are
+  unrepresentable wherever practical.
 - Keep pages thin and compose them from blocks, components, and primitives.
 - Give components explicit typed props, clear slots, stable variants, and
   narrow responsibilities.
@@ -258,7 +285,7 @@ src/styles/             global CSS entry and tokens
 src/env.d.ts            global app types
 src/content.config.ts   content collection config
 public/                 copied as-is to site root
-astro.config.mjs        framework config
+astro.config.ts         framework config
 dist/                   generated output
 ```
 
@@ -348,8 +375,8 @@ dynamic routes requires `getStaticPaths()`.
 Routing rules:
 
 - Keep URL construction centralized in route helpers.
-- Use trailing slashes consistently with `astro.config.mjs`.
-- Set and preserve `site` in `astro.config.mjs` for canonical URLs, sitemap,
+- Use trailing slashes consistently with `astro.config.ts`.
+- Set and preserve `site` in `astro.config.ts` for canonical URLs, sitemap,
   RSS, and `Astro.site`.
 - Know route config options before changing output behavior: `prerender`,
   `partial`, `trailingSlash`, and `build.format`.
@@ -412,7 +439,7 @@ Environment:
 - Avoid adding environment-variable requirements to the static site.
 - Do not read secrets in client-side code.
 - Never put secrets in `PUBLIC_*`.
-- `.env` is not automatically loaded in `astro.config.mjs`; use `process.env`
+- `.env` is not automatically loaded in `astro.config.ts`; use `process.env`
   or Vite `loadEnv()` when config-time env access is genuinely needed.
 - Validate required variables during build/check.
 
@@ -1103,7 +1130,19 @@ Current baseline scripts:
 - `bun run dev`: start Astro dev server.
 - `bun run check`: run content validation, Astro and tooling typechecking,
   ESLint, asset validation, package ordering, code/config Prettier check, Knip,
-  and unit tests.
+  test-accountability verification, Bun unit tests, and Astro component tests.
+- `bun run test`: run test-accountability verification, Bun unit tests, and
+  Astro component tests.
+- `bun run test:unit`: run Bun unit/script/component/page tests.
+- `bun run test:astro`: run Astro component and page tests through Vitest and
+  the Astro container API.
+- `bun run test:accountability`: verify every repository file is covered by a
+  mirrored test or documented accountability rule.
+- `bun run test:accountability:release`: run the same accountability check and
+  fail on requested-permission exceptions.
+- `bun run coverage`: run unit tests with LCOV, then report code-like files
+  that are not represented by LCOV coverage, a mirrored accountability test, or
+  an approved exception.
 - `bun run typecheck`: run Astro checks silently while failing on warnings, then
   run TypeScript tool checks.
 - `bun run quality`: run the local quality path quietly, printing only failures
@@ -1147,6 +1186,11 @@ truth.
 
 Core principles:
 
+- Use type-driven design to make invalid states unrepresentable wherever
+  practical.
+- Write defensively by making future misuse difficult: validate boundaries,
+  model finite states explicitly, isolate side effects, and prefer clear APIs
+  that prevent whole classes of bugs without speculative abstractions.
 - Prefer simple, explicit, maintainable code over clever abstractions.
 - Keep changes narrowly scoped.
 - Preserve module boundaries unless there is a clear reason to improve them.
@@ -1165,6 +1209,26 @@ Core principles:
 
 Default exports are acceptable where Astro or tool config conventions expect
 them. Prefer named exports for reusable TypeScript modules.
+
+## Documentation Policy
+
+Write useful documentation that explains purpose, correct use, constraints,
+failure modes, and non-obvious tradeoffs. Good docs should prevent misuse
+without restating obvious code.
+
+- Document every exported function, type, interface, enum, class, and public
+  component prop contract with useful JSDoc, except generated shadcn/ui
+  component files.
+- Use implementation comments only to explain intent, invariants, constraints,
+  or non-obvious tradeoffs.
+- Do not use unsafe assertions unless a documented invariant justifies them.
+- Do not leave empty or silent `catch` blocks without an explanatory comment.
+- Document dependency, security, and coverage exceptions explicitly and report
+  them during handoff.
+- Update relevant user-facing or developer-facing docs when workflows,
+  commands, public APIs, content conventions, or architecture change.
+- Use consistent project vocabulary such as article, page, category, asset,
+  public file, component, block, and island.
 
 ## Dependency And Security Policy
 
@@ -1196,33 +1260,62 @@ and CodeQL. Do not bypass security tooling to get a release check green.
 ## Testing Policy
 
 Test behavior through intended public APIs. Do not export implementation details
-only to make tests easier.
+only to make tests easier. Test-only exports require explicit user permission.
+If a test appears to need a private helper, first reconsider the module
+boundary and separate stable pure logic from side-effect-heavy edge code.
 
-Use unit tests for:
+Aim for 100% useful coverage of testable behavior. Coverage must come from
+meaningful behavior tests, not weakened runtime code, brittle assertions, or
+leaky public interfaces. A coverage exception must be explicitly justified in a
+nearby code comment, reported during handoff, and accepted by the user after
+handoff. Do not silently leave testable code uncovered.
 
-- slug generation;
-- category derivation;
-- draft filtering;
-- metadata normalization;
-- route helpers;
-- duplicate slug detection;
-- image path validation;
-- RSS/sitemap/search filtering;
+Developer checks are practical iteration gates, not permission to leave
+coverage weak. Passing `bun run check` does not prove coverage is sufficient;
+developers must still add meaningful tests for every sensible behavior path
+they touch and push coverage upward wherever practical. `bun run coverage` is a
+broad review inventory, not a release gate.
 
-Use Playwright for user-visible browser behavior:
+When a remaining uncovered path is genuinely a process boundary,
+generated-output boundary, browser auto-init guard, or similarly brittle
+integration edge, add a nearby `Coverage note:` comment explaining the reason.
+Prefer tests over notes whenever behavior can be tested cleanly.
 
-- homepage;
-- article pages;
-- article archive;
-- category pages;
-- mobile navigation;
-- theme toggle;
-- search;
-- no horizontal overflow;
-- representative responsive viewports.
+Every repository file must have explicit test accountability. Prefer mirrored
+tests for executable code, config, scripts, components, pages, schemas, and
+helpers. Files that cannot sensibly have mirrored tests must be listed in
+`.test-accountability-ignore` with a meaningful gitignore-style comment. Use
+`Requested permission:` for new or unresolved exceptions, report them during
+handoff, and remove that prefix only after the user accepts the exception.
+Release accountability must fail while requested-permission exceptions remain.
+
+Do not game coverage. Do not add import-only tests, branch-execution tests
+without meaningful assertions, broad ignores, test-only exports, weakened
+runtime code, or tests that assert mocks or implementation details instead of
+observable behavior.
+
+The broad coverage inventory should start from every code-like source file and
+only narrow through explicit approved exceptions. When adding a new executable
+source module, add focused tests or update the explicit exception with
+rationale. Astro templates should have Vitest/Astro container tests when their
+rendered output, props, slots, static paths, or integration behavior matters.
+
+Use unit tests for deterministic logic and script behavior, including slug
+generation, category derivation, draft filtering, metadata normalization, route
+helpers, duplicate slug detection, image path validation, RSS/feed output,
+content helpers, quality/verification scripts, and custom content transforms.
+
+For UI work, prefer tests that assert user-visible behavior. Use happy-dom for
+fast unit tests of DOM script behavior, such as event wiring, query parsing, and
+small browser-entry helpers. Use Vitest with Astro's container API for granular
+Astro component, layout, and page rendering tests. Use Playwright for real
+browser behavior: homepage, article pages, article archive, category pages,
+mobile navigation, theme toggle, search, no horizontal overflow, and
+representative responsive viewports. Use Playwright for full authoring flows
+once a local server and editor workflow exist.
 
 Use axe accessibility checks for representative pages. Use Lighthouse CI for
-performance, accessibility, best practices, and SEO release gates.
+performance, accessibility, best practices, and SEO review checks.
 
 ## Planning Workflow
 
@@ -1234,7 +1327,7 @@ design/tooling/project document when the intended work should be reviewable
 before code changes.
 
 Do not create planning docs for routine QA commands. Routine tooling
-expectations belong in this file and `.agents/docs/QUALITY_TOOLING.md`.
+expectations belong in this file and `PACKAGE_SCRIPTS.md`.
 
 ## Generated Files And Historical Assets
 

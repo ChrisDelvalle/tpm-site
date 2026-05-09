@@ -1,57 +1,224 @@
 ---
+import { getImage } from "astro:assets";
+
+import ArticleEndcap from "../components/articles/ArticleEndcap.astro";
+import ArticleHeader from "../components/articles/ArticleHeader.astro";
+import ArticleProse from "../components/articles/ArticleProse.astro";
+import ArticleReferences from "../components/articles/ArticleReferences.astro";
+import ArticleTableOfContents from "../components/articles/ArticleTableOfContents.astro";
+import ArticleTags from "../components/articles/ArticleTags.astro";
+import AuthorBioBlock from "../components/authors/AuthorBioBlock.astro";
+import ContentRail from "../components/layout/ContentRail.astro";
+import EndcapStack from "../components/layout/EndcapStack.astro";
+import ReadingBody from "../components/layout/ReadingBody.astro";
 import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
-import { getCategory } from "../lib/content";
+import ArticleScholarMeta from "../components/seo/ArticleScholarMeta.astro";
+import type { ArticleReferenceData } from "../lib/article-references/model";
 import {
-  articleUrl,
-  authorName,
-  categorySlug,
-  categoryUrl,
-  entryDate,
-  entryTitle,
-  excerpt,
-  formatDate,
-  imageUrl,
-  type ArticleEntry,
-} from "../lib/routes";
+  hasUsefulTableOfContents,
+  type ArticleTableOfContentsHeading,
+} from "../lib/article-toc";
+import { articleListItemsFromArchive } from "../lib/article-list";
+import { articleViewModel } from "../lib/article-view";
+import { articleArchiveItems } from "../lib/archive";
+import {
+  authorProfiles,
+  authorSummariesForArticle,
+  getAuthorEntries,
+} from "../lib/authors";
+import { articleScholarMetaViewModel } from "../lib/article-pdf";
+import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
+import {
+  getArticles,
+  getCategory,
+  getSiteSocialFallbackImage,
+} from "../lib/content";
+import { normalizePublishableVisibility } from "../lib/publishable";
+import { categoryUrl, type ArticleEntry } from "../lib/routes";
+import { articleShareMenuViewModel } from "../lib/share-targets";
+import { siteConfig, titleWithSite } from "../lib/site-config";
+import { socialPreviewImageViewModel } from "../lib/social-images";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
   article: ArticleEntry;
+  enableImageInspector?: boolean | undefined;
+  articleReferences?: ArticleReferenceData | undefined;
+  tableOfContentsHeadings?: readonly ArticleTableOfContentsHeading[];
 }
 
-const { article } = Astro.props;
-const date = entryDate(article);
-const description = excerpt(article);
-const title = entryTitle(article);
-const canonicalPath = articleUrl(article.id);
-const category = await getCategory(categorySlug(article));
+const emptyArticleReferences = {
+  citations: [],
+  notes: [],
+} as const satisfies ArticleReferenceData;
+
+const {
+  article,
+  enableImageInspector = false,
+  articleReferences = emptyArticleReferences,
+  tableOfContentsHeadings = [],
+} = Astro.props;
+const articleView = articleViewModel(article);
+const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
+const socialPreviewImage = await socialPreviewImageViewModel({
+  alt: articleView.imageAlt ?? articleView.title,
+  fallback: fallbackSocialPreviewImage,
+  optimize: getImage,
+  source: article.data.image,
+});
+const canonicalUrl = new URL(
+  articleView.canonicalPath,
+  Astro.site ?? Astro.url.origin,
+).toString();
+const showTableOfContents = hasUsefulTableOfContents(tableOfContentsHeadings);
+const authorEntries = await getAuthorEntries();
+const articleAuthors = authorSummariesForArticle(article, authorEntries);
+const allArticles = await getArticles();
+const authorProfileMap = new Map(
+  authorProfiles(authorEntries, allArticles).map((profile) => [
+    profile.id,
+    profile,
+  ]),
+);
+const articleAuthorProfiles = articleAuthors
+  .map((author) => authorProfileMap.get(author.id))
+  .filter((profile) => profile !== undefined);
+const category = await getCategory(articleView.categorySlug);
+const categoryHref =
+  siteConfig.features.categories && category
+    ? categoryUrl(category.slug)
+    : undefined;
+const moreInCategory =
+  category === undefined
+    ? []
+    : articleListItemsFromArchive(
+        articleArchiveItems(
+          category.articles
+            .filter((categoryArticle) => categoryArticle.id !== article.id)
+            .slice(0, 3),
+          [category],
+          authorEntries,
+        ),
+      );
+const citation = articleCitationMenuViewModel({
+  articleId: article.id,
+  authors: articleAuthors,
+  canonicalUrl,
+  legacyAuthor: articleView.author,
+  publishedAt: articleView.date,
+  title: articleView.title,
+});
+const share = articleShareMenuViewModel({
+  articleUrl: canonicalUrl,
+  description: articleView.description,
+  image: socialPreviewImage,
+  title: articleView.title,
+});
+const scholarMeta = articleScholarMetaViewModel({
+  article,
+  authors: articleAuthors,
+  site: Astro.site,
+});
+const pdf = scholarMeta.pdf;
+const searchable =
+  siteConfig.features.search &&
+  normalizePublishableVisibility(
+    article.data.visibility,
+    siteConfig.contentDefaults.articles.visibility,
+  ).search;
 ---
 
 <BaseLayout
-  title={`${title} | The Philosopher's Meme`}
-  description={description}
-  canonicalPath={canonicalPath}
-  image={imageUrl(article)}
-  imageAlt={article.data.imageAlt}
+  title={titleWithSite(articleView.title)}
+  description={articleView.description}
+  canonicalPath={articleView.canonicalPath}
+  image={socialPreviewImage}
   type="article"
 >
-  <ArticleJsonLd slot="head" article={article} category={category} />
-  <article class="article" data-pagefind-body>
+  <ArticleJsonLd
+    slot="head"
+    article={article}
+    authors={articleAuthors}
+    category={category}
+    image={socialPreviewImage}
+  />
+  <ArticleScholarMeta slot="head" metadata={scholarMeta} />
+  <ReadingBody>
     {
-      category && (
-        <a class="eyebrow" href={categoryUrl(category.slug)}>
-          {category.title}
-        </a>
+      showTableOfContents && (
+        <ContentRail
+          slot="toc"
+          label="Article table of contents"
+          position="left"
+          sticky="below-header"
+        >
+          <ArticleTableOfContents headings={tableOfContentsHeadings} />
+        </ContentRail>
       )
     }
-    <h1>{title}</h1>
-    <div class="article-meta">
-      <span>{authorName(article)}</span>
-      {date && <span>{formatDate(date)}</span>}
-    </div>
-    {description && <p class="lede">{description}</p>}
-    <div class="content">
-      <slot />
-    </div>
-  </article>
+    <article
+      class="grid w-full min-w-0 gap-6"
+      data-pagefind-body={searchable ? true : undefined}
+      data-pagefind-ignore={searchable ? undefined : true}
+    >
+      <ArticleHeader
+        author={articleView.author}
+        authors={articleAuthors}
+        category={category && categoryHref
+          ? { href: categoryHref, title: category.title }
+          : undefined}
+        citation={citation}
+        date={articleView.date}
+        description={articleView.description}
+        formattedDate={articleView.formattedDate}
+        pdf={pdf}
+        share={share}
+        title={articleView.title}
+      />
+      <div class="grid min-w-0 gap-1" data-article-body-flow>
+        {
+          showTableOfContents && (
+            <ArticleTableOfContents
+              headings={tableOfContentsHeadings}
+              placement="inline"
+            />
+          )
+        }
+        <ArticleProse
+          data-article-prose
+          enableImageInspector={enableImageInspector}
+        >
+          <slot />
+        </ArticleProse>
+      </div>
+      <EndcapStack spacing="relaxed">
+        {
+          articleAuthorProfiles.map((profile) => (
+            <div data-pdf-exclude>
+              <AuthorBioBlock profile={profile} context="article" />
+            </div>
+          ))
+        }
+        <div data-pdf-exclude>
+          <ArticleEndcap
+            categoryHref={categoryHref}
+            categoryTitle={category?.title}
+            moreInCategory={moreInCategory}
+          />
+        </div>
+        <ArticleReferences references={articleReferences} />
+        {
+          siteConfig.features.tags && article.data.tags.length > 0 && (
+            <div
+              class="border-border border-t pt-6"
+              data-article-tags-placement
+              data-pdf-exclude
+            >
+              <ArticleTags tags={article.data.tags} />
+            </div>
+          )
+        }
+      </EndcapStack>
+    </article>
+  </ReadingBody>
 </BaseLayout>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title">
+  <title id="title">Abstract fixture proof image</title>
+  <rect width="960" height="540" fill="#f5f1ea" />
+  <circle cx="330" cy="270" r="150" fill="#b45731" />
+  <rect x="480" y="160" width="240" height="220" rx="20" fill="#3b3a2d" />
+</svg>

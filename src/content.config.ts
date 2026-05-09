@@ -1,69 +1,98 @@
-import { basename } from "node:path";
-
 import { glob } from "astro/loaders";
-import { z } from "astro/zod";
 import { defineCollection } from "astro:content";
 
-function filenameStem(entry: string) {
-  return basename(entry).replace(/\.(?:md|mdx)$/i, "");
-}
-
-function articleSchema({ image }: { image: () => z.ZodType }) {
-  return z
-    .object({
-      author: z.string().min(1),
-      date: z.coerce.date(),
-      description: z.string().min(1),
-      draft: z.boolean().default(false),
-      image: image().optional(),
-      imageAlt: z.string().optional(),
-      legacyBanner: z.string().optional(),
-      legacyPermalink: z.string().optional(),
-      tags: z.array(z.string()).default([]),
-      title: z.string().min(1),
-    })
-    .strict();
-}
+import {
+  announcementSchema,
+  articleSchema,
+  authorSchema,
+  categorySchema,
+  editorialCollectionSchema,
+  filenameStem,
+  pageSchema,
+} from "./lib/content-schemas";
+import { siteConfig } from "./lib/site-config";
+import { projectRelativePath, siteInstance } from "./lib/site-instance";
 
 const articles = defineCollection({
   loader: glob({
-    base: "./src/content/articles",
+    base: projectRelativePath(siteInstance.content.articles),
     pattern: "**/*.{md,mdx}",
     generateId: ({ entry }) => filenameStem(entry),
   }),
-  schema: articleSchema,
+  schema: (context) =>
+    articleSchema(context, siteConfig.contentDefaults.articles),
+});
+
+const announcements = defineCollection({
+  loader: glob({
+    base: projectRelativePath(siteInstance.content.announcements),
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: (context) =>
+    announcementSchema(context, siteConfig.contentDefaults.announcements),
 });
 
 const categories = defineCollection({
   loader: glob({
-    base: "./src/content/categories",
+    base: projectRelativePath(siteInstance.content.categories),
     pattern: "*.json",
   }),
-  schema: z
-    .object({
-      description: z.string().optional(),
-      order: z.number().int().nonnegative(),
-      title: z.string().min(1),
-    })
-    .strict(),
+  schema: categorySchema(),
+});
+
+const authors = defineCollection({
+  loader: glob({
+    base: projectRelativePath(siteInstance.content.authors),
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "*.md",
+  }),
+  schema: authorSchema(),
+});
+
+const editorialCollections = defineCollection({
+  loader: glob({
+    base: projectRelativePath(siteInstance.content.collections),
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: editorialCollectionSchema(),
 });
 
 const pages = defineCollection({
   loader: glob({
-    base: "./src/content/pages",
+    base: projectRelativePath(siteInstance.content.pages),
+    generateId: ({ entry }) => filenameStem(entry),
     pattern: "**/*.{md,mdx}",
   }),
-  schema: z
-    .object({
-      description: z.string().optional(),
-      draft: z.boolean().optional(),
-      title: z.string(),
-    })
-    .strict(),
+  schema: pageSchema,
+});
+
+const articleReferenceArticleFixtures = defineCollection({
+  loader: glob({
+    base: "./tests/fixtures/article-reference-articles",
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: articleSchema,
+});
+
+const articleReferenceProofFixtures = defineCollection({
+  loader: glob({
+    base: "./tests/fixtures/article-references",
+    generateId: ({ entry }) => filenameStem(entry),
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: pageSchema,
 });
 
 export const collections = {
+  articleReferenceArticleFixtures,
+  articleReferenceProofFixtures,
+  announcements,
   articles,
+  authors,
   categories,
+  collections: editorialCollections,
   pages,
 };

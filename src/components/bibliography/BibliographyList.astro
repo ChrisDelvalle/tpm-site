@@ -1,0 +1,20 @@
+---
+import type { BibliographyEntry as BibliographyEntryViewModel } from "../../lib/bibliography";
+import BibliographyEntry from "./BibliographyEntry.astro";
+
+interface Props {
+  entries: readonly BibliographyEntryViewModel[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ol class="border-border divide-border grid min-w-0 divide-y border-y">
+  {
+    entries.map((entry) => (
+      <li class="min-w-0 py-4">
+        <BibliographyEntry entry={entry} />
+      </li>
+    ))
+  }
+</ol>

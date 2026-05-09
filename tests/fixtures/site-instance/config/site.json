@@ -1,0 +1,116 @@
+{
+  "contentDefaults": {
+    "announcements": {
+      "draft": false,
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": false
+      }
+    },
+    "articles": {
+      "draft": false,
+      "pdf": {
+        "enabled": true
+      },
+      "visibility": {
+        "directory": true,
+        "feed": true,
+        "homepage": true,
+        "search": true
+      }
+    }
+  },
+  "features": {
+    "announcements": true,
+    "authors": true,
+    "bibliography": true,
+    "categories": true,
+    "collections": true,
+    "feed": true,
+    "pdf": true,
+    "search": true,
+    "support": true,
+    "tags": true,
+    "themeToggle": true
+  },
+  "homepage": {
+    "announcementLimit": 2,
+    "discoveryLinks": [
+      {
+        "label": "Posts",
+        "route": "articles"
+      },
+      {
+        "label": "Authors",
+        "route": "authors"
+      }
+    ],
+    "emptyText": {
+      "announcements": "Fixture announcements will appear here.",
+      "categories": "Fixture categories will appear here.",
+      "featured": "Fixture featured entries will appear here.",
+      "startHere": "Fixture starter entries will appear here."
+    },
+    "featuredCollection": "featured",
+    "labels": {
+      "announcements": "Updates",
+      "categories": "Topics",
+      "featured": "Fixture Featured",
+      "read": "Read",
+      "recent": "Latest",
+      "startHere": "Begin"
+    },
+    "recentLimit": 4,
+    "startHereCollection": "start-here"
+  },
+  "identity": {
+    "description": "A small fixture site used to prove the platform can resolve an external site instance.",
+    "language": "en",
+    "title": "Example Platform Site",
+    "url": "https://example.com"
+  },
+  "navigation": {
+    "footer": [
+      {
+        "href": "/articles/",
+        "label": "Articles"
+      }
+    ],
+    "primary": [
+      {
+        "href": "/articles/",
+        "label": "Articles"
+      }
+    ]
+  },
+  "routes": {
+    "allArticles": "/articles/all/",
+    "announcements": "/announcements/",
+    "articles": "/articles/",
+    "authors": "/authors/",
+    "bibliography": "/bibliography/",
+    "categories": "/categories/",
+    "collections": "/collections/",
+    "feed": "/feed.xml",
+    "home": "/",
+    "search": "/search/",
+    "tags": "/tags/"
+  },
+  "support": {
+    "block": {
+      "body": "Support this fixture site.",
+      "title": "Support Example Platform Site"
+    },
+    "discord": {
+      "href": "https://discord.example.com",
+      "label": "Discord"
+    },
+    "patreon": {
+      "compactLabel": "Patreon",
+      "href": "https://patreon.example.com",
+      "label": "Patreon"
+    }
+  }
+}

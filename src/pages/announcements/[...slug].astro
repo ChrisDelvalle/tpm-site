@@ -1,0 +1,75 @@
+---
+import { getImage } from "astro:assets";
+import { render } from "astro:content";
+
+import ArticleHeader from "../../components/articles/ArticleHeader.astro";
+import ArticleProse from "../../components/articles/ArticleProse.astro";
+import ReadingBody from "../../components/layout/ReadingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  getAnnouncements,
+  getSiteSocialFallbackImage,
+} from "../../lib/content";
+import {
+  announcementUrl,
+  formatDate,
+  type AnnouncementEntry,
+} from "../../lib/routes";
+import { siteConfig } from "../../lib/site-config";
+import { socialPreviewImageViewModel } from "../../lib/social-images";
+import { announcementStaticPaths } from "../../lib/static-paths";
+
+/**
+ * Generates one static announcement route for each published announcement.
+ *
+ * @returns Static route parameters and announcement props for Astro.
+ */
+export async function getStaticPaths() {
+  return announcementStaticPaths(await getAnnouncements());
+}
+
+interface Props {
+  announcement: AnnouncementEntry;
+}
+
+const { announcement } = Astro.props;
+const { Content } = await render(announcement);
+const title = announcement.data.title;
+const description = announcement.data.description;
+const searchable =
+  siteConfig.features.search && announcement.data.visibility.search;
+const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
+const socialPreviewImage = await socialPreviewImageViewModel({
+  alt: announcement.data.imageAlt ?? title,
+  fallback: fallbackSocialPreviewImage,
+  optimize: getImage,
+  source: announcement.data.image,
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={announcementUrl(announcement.id)}
+  image={socialPreviewImage}
+  type="article"
+>
+  <ReadingBody>
+    <article
+      class="grid w-full min-w-0 gap-8"
+      data-pagefind-body={searchable ? true : undefined}
+      data-pagefind-ignore={searchable ? undefined : true}
+    >
+      <ArticleHeader
+        author={announcement.data.author}
+        date={announcement.data.date}
+        description={description}
+        formattedDate={formatDate(announcement.data.date)}
+        title={title}
+      />
+      <ArticleProse data-article-prose>
+        <Content />
+      </ArticleProse>
+    </article>
+  </ReadingBody>
+</BaseLayout>

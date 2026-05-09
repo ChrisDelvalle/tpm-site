@@ -1,0 +1,47 @@
+---
+import SearchForm from "../navigation/SearchForm.astro";
+import { SITE_TITLE } from "../../lib/routes";
+
+interface Props {
+  description?: string;
+  headingId?: string;
+  title?: string;
+}
+
+const {
+  description = `Search ${SITE_TITLE} archive.`,
+  headingId = "search-heading",
+  title = "Search",
+} = Astro.props;
+---
+
+<section id="search" class="grid gap-6" aria-labelledby={headingId}>
+  <header class="grid gap-3">
+    <h1
+      id={headingId}
+      class="text-foreground m-0 text-4xl font-bold tracking-normal"
+    >
+      {title}
+    </h1>
+    <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
+  </header>
+  <div class="max-w-xl">
+    <SearchForm
+      inputId="search-page-input"
+      label={`Search ${SITE_TITLE} archive`}
+      placeholder="Search articles"
+    />
+  </div>
+  <section
+    class="grid min-w-0"
+    data-search-results
+    aria-label="Search results"
+    aria-live="polite"
+  >
+  </section>
+  <noscript>
+    <p class="text-muted-foreground">
+      Search requires JavaScript. Browse the article archive instead.
+    </p>
+  </noscript>
+</section>

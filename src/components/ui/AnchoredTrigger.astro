@@ -1,0 +1,111 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props =
+  | ({ as: "a" } & HTMLAttributes<"a">)
+  | ({ as: "button" } & HTMLAttributes<"button">)
+  | ({ as: "summary" } & HTMLAttributes<"summary">)
+  | ({ as?: "span" } & HTMLAttributes<"span">);
+
+type TriggerClass = HTMLAttributes<"span">["class"];
+
+type NormalizedTrigger =
+  | {
+      readonly as: "a";
+      readonly attrs: HTMLAttributes<"a">;
+      readonly className: TriggerClass;
+    }
+  | {
+      readonly as: "button";
+      readonly attrs: HTMLAttributes<"button">;
+      readonly className: TriggerClass;
+    }
+  | {
+      readonly as: "span";
+      readonly attrs: HTMLAttributes<"span">;
+      readonly className: TriggerClass;
+    }
+  | {
+      readonly as: "summary";
+      readonly attrs: HTMLAttributes<"summary">;
+      readonly className: TriggerClass;
+    };
+
+const trigger = normalizeTrigger(Astro.props);
+
+function normalizeTrigger(props: Props): NormalizedTrigger {
+  switch (props.as) {
+    case "a": {
+      const { as, class: className, ...attrs } = props;
+      void as;
+
+      return { as: "a", attrs, className };
+    }
+
+    case "button": {
+      const { as, class: className, ...attrs } = props;
+      void as;
+
+      return { as: "button", attrs, className };
+    }
+
+    case "summary": {
+      const { as, class: className, ...attrs } = props;
+      void as;
+
+      return { as: "summary", attrs, className };
+    }
+
+    case "span":
+    case undefined: {
+      const { as, class: className, ...attrs } = props;
+      void as;
+
+      return { as: "span", attrs, className };
+    }
+  }
+
+  throw new Error("Unsupported anchored trigger element.");
+}
+---
+
+{
+  trigger.as === "a" ? (
+    <a {...trigger.attrs} data-anchor-trigger class:list={[trigger.className]}>
+      <slot />
+    </a>
+  ) : null
+}
+{
+  trigger.as === "button" ? (
+    <button
+      {...trigger.attrs}
+      data-anchor-trigger
+      class:list={[trigger.className]}
+    >
+      <slot />
+    </button>
+  ) : null
+}
+{
+  trigger.as === "summary" ? (
+    <summary
+      {...trigger.attrs}
+      data-anchor-trigger
+      class:list={[trigger.className]}
+    >
+      <slot />
+    </summary>
+  ) : null
+}
+{
+  trigger.as === "span" ? (
+    <span
+      {...trigger.attrs}
+      data-anchor-trigger
+      class:list={[trigger.className]}
+    >
+      <slot />
+    </span>
+  ) : null
+}

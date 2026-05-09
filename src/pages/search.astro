@@ -1,58 +1,18 @@
 ---
+import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
+import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { searchUrl, SITE_TITLE } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
 ---
 
 <BaseLayout
-  title="Search | The Philosopher's Meme"
-  description="Search The Philosopher's Meme archive."
-  canonicalPath="/search/"
+  title={titleWithSite("Search")}
+  description={`Search ${SITE_TITLE} archive.`}
+  canonicalPath={searchUrl()}
 >
-  <section class="page-heading">
-    <h1>Search</h1>
-  </section>
-  <div id="search"></div>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get("q") || "";
-    const container = document.querySelector("#search");
-
-    async function runSearch() {
-      if (!container) return;
-
-      const input = document.createElement("input");
-      input.type = "search";
-      input.value = query;
-      input.placeholder = "Search";
-      input.className = "search-page-input";
-      container.append(input);
-
-      const results = document.createElement("div");
-      results.className = "search-results";
-      container.append(results);
-
-      const pagefindUrl = "/pagefind/pagefind.js";
-      const pagefind = await import(/* @vite-ignore */ pagefindUrl);
-      await pagefind.options({ excerptLength: 24 });
-
-      async function search(value: string) {
-        results.replaceChildren();
-        if (!value.trim()) return;
-
-        const search = await pagefind.search(value);
-        for (const result of search.results.slice(0, 20)) {
-          const data = await result.data();
-          const item = document.createElement("a");
-          item.className = "search-result";
-          item.href = data.url;
-          item.innerHTML = `<strong>${data.meta.title}</strong><span>${data.excerpt}</span>`;
-          results.append(item);
-        }
-      }
-
-      input.addEventListener("input", () => search(input.value));
-      await search(query);
-    }
-
-    runSearch();
-  </script>
+  <BrowsingBody>
+    <SearchResultsBlock />
+  </BrowsingBody>
+  <script src="../scripts/search-page.ts"></script>
 </BaseLayout>

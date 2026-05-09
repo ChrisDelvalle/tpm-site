@@ -1,12 +1,12 @@
 ---
+import type { SocialPreviewImage } from "../../lib/social-images";
 import { absoluteUrl } from "../../lib/seo";
-import { SITE_TITLE } from "../../lib/routes";
+import { feedUrl, SITE_TITLE } from "../../lib/routes";
 
 interface Props {
   canonicalPath: string;
   description: string;
-  image?: string | undefined;
-  imageAlt?: string | undefined;
+  image?: SocialPreviewImage | undefined;
   title: string;
   type?: "website" | "article";
 }
@@ -15,13 +15,12 @@ const {
   canonicalPath,
   description,
   image,
-  imageAlt,
   title,
   type = "website",
 } = Astro.props;
 const canonicalUrl = absoluteUrl(canonicalPath, Astro.site);
 const absoluteImageUrl =
-  image === undefined ? undefined : absoluteUrl(image, Astro.site);
+  image === undefined ? undefined : absoluteUrl(image.src, Astro.site);
 ---
 
 <meta name="description" content={description} />
@@ -30,7 +29,7 @@ const absoluteImageUrl =
   rel="alternate"
   type="application/rss+xml"
   title={`${SITE_TITLE} RSS`}
-  href="/feed.xml"
+  href={feedUrl()}
 />
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:type" content={type} />
@@ -38,7 +37,10 @@ const absoluteImageUrl =
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalUrl} />
 {absoluteImageUrl && <meta property="og:image" content={absoluteImageUrl} />}
-{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+{image && <meta property="og:image:width" content={image.width.toString()} />}
+{image && <meta property="og:image:height" content={image.height.toString()} />}
+{image && <meta property="og:image:type" content={image.type} />}
+{image?.alt && <meta property="og:image:alt" content={image.alt} />}
 <meta
   name="twitter:card"
   content={absoluteImageUrl ? "summary_large_image" : "summary"}
@@ -46,5 +48,5 @@ const absoluteImageUrl =
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 {absoluteImageUrl && <meta name="twitter:image" content={absoluteImageUrl} />}
-{imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
+{image?.alt && <meta name="twitter:image:alt" content={image.alt} />}
 <title>{title}</title>

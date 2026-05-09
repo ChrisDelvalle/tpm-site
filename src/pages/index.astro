@@ -1,78 +1,155 @@
 ---
-import { Image } from "astro:assets";
+import { getEntry } from "astro:content";
 
-import recentImage from "../assets/shared/2020-06-24_fossilised-bug_resized.png";
-import heroImage from "../assets/site/2022-04-05_tpm-header_trnp_dm.png";
-import announcementImage from "../assets/site/r2021-03-22.png";
+import HomeCategoryOverviewBlock from "../components/blocks/HomeCategoryOverviewBlock.astro";
+import HomeDiscoveryLinksBlock from "../components/blocks/HomeDiscoveryLinksBlock.astro";
+import HomeFeaturedCarousel from "../components/blocks/HomeFeaturedCarousel.astro";
+import HomeFeaturedSlide from "../components/blocks/HomeFeaturedSlide.astro";
+import HomeHeroBlock from "../components/blocks/HomeHeroBlock.astro";
+import ArticleList from "../components/articles/ArticleList.astro";
+import FlatArticleList from "../components/articles/FlatArticleList.astro";
+import BrowsingBody from "../components/layout/BrowsingBody.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getArticles } from "../lib/content";
+import { articleArchiveItems } from "../lib/archive";
+import { getAuthorEntries } from "../lib/authors";
 import {
-  articleUrl,
-  entryDate,
-  entryTitle,
-  excerpt,
-  formatDate,
+  getAnnouncements,
+  getArticles,
+  getCategories,
+  getEditorialCollections,
+} from "../lib/content";
+import { homePageViewModel, homepageDiscoveryLinks } from "../lib/home";
+import { sectionNavigationItems } from "../lib/navigation";
+import {
+  announcementsIndexUrl,
+  collectionUrl,
+  SITE_DESCRIPTION,
 } from "../lib/routes";
+import { siteConfig, titleWithSite } from "../lib/site-config";
 
-const [latest] = await getArticles();
-const latestTitle = latest ? entryTitle(latest) : "";
+const home = await getEntry("pages", "index");
+
+if (!home) {
+  throw new Error("Missing home page content at site/content/pages/index.md.");
+}
+
+const hero = home.data.hero;
+
+if (!hero) {
+  throw new Error(
+    "Missing homepage hero config at site/content/pages/index.md frontmatter.",
+  );
+}
+
+const articles = await getArticles();
+const announcements = siteConfig.features.announcements
+  ? await getAnnouncements()
+  : [];
+const categories = siteConfig.features.categories ? await getCategories() : [];
+const authors = await getAuthorEntries();
+const collections = siteConfig.features.collections
+  ? await getEditorialCollections()
+  : [];
+const archiveItems = articleArchiveItems(articles, categories, authors);
+const homeView = homePageViewModel({
+  announcementLimit: siteConfig.homepage.announcementLimit,
+  announcements,
+  archiveItems,
+  collections,
+  featuredCollectionId: siteConfig.homepage.featuredCollection,
+  recentLimit: siteConfig.homepage.recentLimit,
+  startHereCollectionId: siteConfig.homepage.startHereCollection,
+});
+const { announcementItems, featuredItems, recentFeedItems, startHereItems } =
+  homeView;
+const categoryItems = sectionNavigationItems(categories, "/");
+const discoveryLinks = homepageDiscoveryLinks(siteConfig);
+
+const title = titleWithSite(home.data.title);
+const description = home.data.description ?? SITE_DESCRIPTION;
 ---
 
-<BaseLayout canonicalPath="/">
-  <section class="home-hero">
-    <Image
-      src={heroImage}
-      alt="The Philosopher's Meme"
-      layout="constrained"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <p>The philosophy of memes, cyberculture, and the Internet.</p>
-    <div class="button-row">
-      <a class="button" href="https://patreon.com/thephilosophersmeme"
-        >Support Us</a
+<BaseLayout title={title} description={description} canonicalPath="/">
+  <BrowsingBody width="wide" padding="snug">
+    <div class="grid min-w-0 gap-1" data-home-read-lead-group>
+      <HomeDiscoveryLinksBlock
+        links={discoveryLinks}
+        title={siteConfig.homepage.labels.read}
+      />
+      <div
+        class="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)] lg:items-start"
+        data-home-lead-grid
       >
-      <a class="button secondary" href="https://discord.gg/8MVFRMa"
-        >Join TPM Discord</a
-      >
+        <div class="min-w-0 lg:col-start-1 lg:row-start-1" data-home-lead-hero>
+          <HomeHeroBlock
+            lightImage={hero.lightImage}
+            darkImage={hero.darkImage ?? hero.lightImage}
+            imageAlt={hero.imageAlt ?? home.data.title}
+            tagline={hero.tagline}
+          />
+        </div>
+        <div
+          class="min-w-0 lg:col-start-1 lg:row-start-2"
+          data-home-lead-featured
+        >
+          <HomeFeaturedCarousel
+            itemCount={featuredItems.length}
+            title={siteConfig.homepage.labels.featured}
+            emptyText={siteConfig.homepage.emptyText.featured}
+          >
+            {
+              featuredItems.map((item, index) => (
+                <HomeFeaturedSlide
+                  fallbackLabel={
+                    siteConfig.identity.shortTitle ?? siteConfig.identity.title
+                  }
+                  index={index}
+                  item={item}
+                />
+              ))
+            }
+          </HomeFeaturedCarousel>
+        </div>
+        <div class="min-w-0 lg:col-start-2 lg:row-start-1" data-home-lead-start>
+          <FlatArticleList
+            title={siteConfig.homepage.labels.startHere}
+            titleHref={siteConfig.features.collections
+              ? collectionUrl(siteConfig.homepage.startHereCollection)
+              : undefined}
+            items={startHereItems}
+            emptyText={siteConfig.homepage.emptyText.startHere}
+          />
+        </div>
+        <div
+          class="min-w-0 lg:col-start-2 lg:row-start-2"
+          data-home-lead-announcements
+        >
+          <FlatArticleList
+            title={siteConfig.homepage.labels.announcements}
+            titleHref={siteConfig.features.announcements
+              ? announcementsIndexUrl()
+              : undefined}
+            items={announcementItems}
+            emptyText={siteConfig.homepage.emptyText.announcements}
+          />
+        </div>
+      </div>
     </div>
-  </section>
-
-  <section class="content-section">
-    <h2>Announcements</h2>
-    <Image
-      src={announcementImage}
-      alt="Announcement Image"
-      layout="constrained"
-    />
-    <p>
-      We've set up a <a href="https://patreon.com/thephilosophersmeme"
-        >Patreon</a
-      >. The current priority is to fund the new
-      <a href="https://forum.memestudies.org">forum</a>. Please consider
-      supporting TPM by pledging to the Patreon.
-    </p>
-  </section>
-
-  {
-    latest && (
-      <section class="content-section">
-        <h2>Most Recent Post</h2>
-        <Image src={recentImage} alt={latestTitle} layout="full-width" />
-        <h3>
-          <a href={articleUrl(latest.id)}>{latestTitle}</a>
-        </h3>
-        <p class="archive-meta">{formatDate(entryDate(latest))}</p>
-        {excerpt(latest) && <p>{excerpt(latest)}</p>}
-      </section>
-    )
-  }
-
-  <section class="content-section">
-    <p>
-      Browse <a href="/articles/">Articles</a> and <a href="/categories/"
-        >Categories</a
-      > for the archive.
-    </p>
-  </section>
+    {
+      siteConfig.features.categories && (
+        <HomeCategoryOverviewBlock
+          items={categoryItems}
+          title={siteConfig.homepage.labels.categories}
+          emptyText={siteConfig.homepage.emptyText.categories}
+        />
+      )
+    }
+    <section
+      class="grid min-w-0 gap-4"
+      aria-label={siteConfig.homepage.labels.recent}
+      data-home-recent-feed
+    >
+      <ArticleList items={recentFeedItems} />
+    </section>
+  </BrowsingBody>
 </BaseLayout>
