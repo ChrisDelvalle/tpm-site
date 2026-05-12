@@ -1,8 +1,11 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-import ResponsiveIframe from "./ResponsiveIframe.astro";
-import { soundCloudPlayerUrl } from "../../lib/embed-media";
+import {
+  embedFrameClassName,
+  embedIframeClassName,
+  soundCloudPlayerUrl,
+} from "../../lib/embed-media";
 
 type IframeAttributes = Omit<
   HTMLAttributes<"iframe">,
@@ -33,17 +36,32 @@ const playerSrc =
 if (playerSrc === undefined || playerSrc.trim() === "") {
   throw new Error("SoundCloudEmbed requires either src or sourceUrl.");
 }
+
+const displayTitle = title.trim() === "" ? playerSrc : title;
 ---
 
-<ResponsiveIframe
-  {...attrs}
-  src={playerSrc}
-  title={title}
-  layout="audio"
-  loading={loading}
-  scrolling="no"
-  allow="autoplay"
-  allowFullscreen={false}
-  class:list={[className]}
-  iframeClass={iframeClass}
-/>
+<figure data-article-embed="true" class:list={["my-8 grid gap-2", className]}>
+  <div
+    class:list={[embedFrameClassName("audio"), "overflow-hidden rounded-sm"]}
+    data-article-embed-frame="true"
+    data-article-embed-provider="soundcloud"
+    data-pdf-exclude="true"
+  >
+    <iframe
+      {...attrs}
+      src={playerSrc}
+      title={title}
+      loading={loading}
+      scrolling="no"
+      allow="autoplay"
+      allowfullscreen={false}
+      data-pdf-exclude="true"
+      class:list={[embedIframeClassName("audio"), iframeClass]}></iframe>
+  </div>
+  <figcaption
+    class="text-muted-foreground hidden text-sm print:block"
+    data-article-embed-fallback="true"
+  >
+    Embedded media: <a href={playerSrc}>{displayTitle}</a>
+  </figcaption>
+</figure>

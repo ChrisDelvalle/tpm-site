@@ -49,15 +49,12 @@ test.describe("article image invariants", () => {
     });
 
     await page.goto("/articles/early-trash-dove/");
-    const inlineImages = page.locator('blockquote p img[src*="emoji.php"]');
-    await expect(inlineImages).toHaveCount(2);
+    const emojiQuote = page.locator("blockquote p").filter({ hasText: "😂👌" });
+    await expect(emojiQuote).toBeVisible();
+    await expect(page.locator("blockquote p img")).toHaveCount(0);
     await expect(
       page.locator("blockquote p figure[data-article-image-figure]"),
     ).toHaveCount(0);
-    await expect(inlineImages.first()).not.toHaveAttribute(
-      "data-article-image",
-      "true",
-    );
     await expectNoHorizontalOverflow(page);
   });
 

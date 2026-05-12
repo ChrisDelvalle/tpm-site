@@ -116,7 +116,7 @@ describe("content verifier", () => {
       );
     }));
 
-  test("accepts standalone local image paragraphs and remote inline images", async () =>
+  test("accepts standalone local image paragraphs and remote image-file links", async () =>
     withTempRoot(async (root) => {
       await writeText(root, "src/content/categories/history.json", "{}");
       await writeText(
@@ -139,7 +139,7 @@ describe("content verifier", () => {
           "",
           "Plain prose stays plain.",
           "",
-          "Inline remote emoji ![emoji](https://example.com/emoji.png) stays prose.",
+          "Remote image-file links like [source image](https://example.com/source.png) stay as links.",
           "",
         ].join("\n"),
       );
@@ -152,6 +152,45 @@ describe("content verifier", () => {
       });
 
       expect(result.issues).toEqual([]);
+    }));
+
+  test("reports rendered remote article images", async () =>
+    withTempRoot(async (root) => {
+      await writeText(root, "src/content/categories/history.json", "{}");
+      await writeText(
+        root,
+        "src/content/authors/author.md",
+        "---\ndisplayName: Author\naliases:\n  - Author\n---\n",
+      );
+      await writeText(
+        root,
+        "src/content/articles/history/example.md",
+        [
+          "---",
+          "title: Example",
+          "author: Author",
+          "---",
+          "",
+          "Inline remote emoji ![emoji](https://example.com/emoji.png) is not local.",
+          "",
+          '<img src="https://example.com/raw.jpg" alt="Raw remote image">',
+          "",
+        ].join("\n"),
+      );
+
+      const result = await verifyContent({
+        articleDir: path.join(root, "src/content/articles"),
+        authorDir: path.join(root, "src/content/authors"),
+        categoryDir: path.join(root, "src/content/categories"),
+        rootDir: root,
+      });
+
+      expect(result.issues).toContain(
+        'src/content/articles/history/example.md:6: remote article image "https://example.com/emoji.png" must be stored locally and referenced from site/assets',
+      );
+      expect(result.issues).toContain(
+        'src/content/articles/history/example.md:8: remote article image "https://example.com/raw.jpg" must be stored locally and referenced from site/assets',
+      );
     }));
 
   test("reports local article images mixed into prose paragraphs", async () =>
