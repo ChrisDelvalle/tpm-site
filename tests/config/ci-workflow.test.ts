@@ -78,8 +78,8 @@ describe("CI workflow", () => {
 
     expect(deploy).toContain("needs:");
     expect(deploy).toContain("- build");
-    expect(deploy).toContain("oven-sh/setup-bun@v2");
-    expect(deploy).toContain("bun-version: 1.3.12");
+    expect(deploy).toContain("actions/setup-node@v4");
+    expect(deploy).toContain("node-version: 22.12.0");
     expect(deploy).toContain("actions/download-artifact@v4");
     expect(deploy).toContain("name: verified-dist");
     expect(deploy).toContain("path: dist");
@@ -91,8 +91,10 @@ describe("CI workflow", () => {
       `apiToken: ${secretExpression("CLOUDFLARE_API_TOKEN")}`,
     );
     expect(deploy).toContain("command: deploy");
+    expect(deploy).toContain("packageManager: npm");
     expect(deploy).toContain('wranglerVersion: "4"');
     expect(deploy).not.toContain("environment:");
+    expect(deploy).not.toContain("oven-sh/setup-bun@v2");
     expect(deploy).not.toContain("bun run build");
     expect(deploy).not.toContain("bun run verify");
     expect(deploy).not.toContain("bun run validate:html");
