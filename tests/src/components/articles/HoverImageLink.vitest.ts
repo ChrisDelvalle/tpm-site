@@ -1,3 +1,4 @@
+import sampleImage from "@site/assets/shared/tpm_defaultpic.jpg";
 import { describe, expect, test } from "vitest";
 
 import HoverImageLink from "../../../../src/components/articles/HoverImageLink.astro";
@@ -9,17 +10,14 @@ describe("HoverImageLink", () => {
     const view = await container.renderToString(HoverImageLink, {
       props: {
         alt: "Preview image",
-        image: {
-          height: 600,
-          src: "/assets/preview.png",
-          width: 800,
-        },
+        image: sampleImage,
         label: "preview",
       },
     });
 
     expect(view).toContain("preview");
-    expect(view).toContain("/assets/preview.png");
+    expect(view).toContain("f=webp");
+    expect(view).not.toContain(sampleImage.src);
     expect(view).toContain('data-anchor-preset="inline-hover-preview"');
     expect(view).not.toContain("client:idle");
   });

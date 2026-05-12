@@ -24,15 +24,15 @@ tags:
 legacyPermalink: 2017/06/13/the-structure-of-hyperspatial-politics/
 ---
 
-<iframe
-  width="100%"
-  height="110"
-  scrolling="no"
-  src="https://w.soundcloud.com/player/?url=https://soundcloud.com/datasubjects/preview-the-structures-of-hyperspatial-politics&color=ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false"
+import HoverImageLink from "@/components/articles/HoverImageLink.astro";
+import SoundCloudEmbed from "@/components/media/SoundCloudEmbed.astro";
+import clintonByrdImage from "@site/assets/articles/the-structure-of-hyperspatial-politics/clinton-byrd.jpg";
+import textToVoteDisinfoImage from "@site/assets/articles/the-structure-of-hyperspatial-politics/text-to-vote-disinfo.jpg";
+
+<SoundCloudEmbed
+  sourceUrl="https://soundcloud.com/datasubjects/preview-the-structures-of-hyperspatial-politics"
   title="The Structures of Hyperspatial Politics SoundCloud preview"
-  loading="lazy"
-  allow="autoplay"
-></iframe>
+/>
 
 ## The Structures of Hyperspatial Politics
 
@@ -62,7 +62,7 @@ Matthew Baggetta, an Internet theorist based in Canada, describes communication 
 
 These two components – the [exponential attention-curve](https://oilab.eu/rendering-legible-the-ephemerality-of-4chanpol/)[^cite-oilab-rendering-legible-the-ephemerality-of-4chanpol] favoring fringe content and need to act of the anonymous-mode – set the conditions for the anarcho-hacktivist collective Anonymous. Anonymous’ operations were often proposed in threads on the /b/ board. As Anonymous was a brand without a defined membership, such proposals would have to properly signal affiliation through memetic literacy while still drawing attention through vulgarity or wit to achieve a critical mass of views. When successful, users would reroute that attention to an IRC chatroom to plan the details of the action. It was like a Darwinism for activist projects where only the most hip-to-it and engaging came to fruition, with no limit on how many could be tested for fit each day.
 
-One must remember, however, that 4chan has swung to the far-right in recent years. It was a hotbed for alt-right organizing in the 2016 US presidential election, with users forming adhoc working groups in much the same way. Operations included the engineering of memetic propaganda, for example the widely spread [Clinton-Byrd](https://i.kym-cdn.com/photos/images/original/001/194/998/f38.jpg) photo or the less successful [text-to-vote disinfo](https://pyxis.nymag.com/v1/imgs/db0/ada/65d6ad889bdf1a2671825baa0b754d3a41-02-text-vote.rhorizontal.w700.jpg) campaigns, perpetual brigades of social media profiles belonging to liberal pundits and so-called cuckservatives, the creation of sockpuppet accounts to spam social media, and tactical spread of fake-news talking points.
+One must remember, however, that 4chan has swung to the far-right in recent years. It was a hotbed for alt-right organizing in the 2016 US presidential election, with users forming adhoc working groups in much the same way. Operations included the engineering of memetic propaganda, for example the widely spread <HoverImageLink image={clintonByrdImage} label="Clinton-Byrd" alt="Clinton-Byrd meme image used in 2016 election propaganda" /> photo or the less successful <HoverImageLink image={textToVoteDisinfoImage} label="text-to-vote disinfo" alt="Text-to-vote disinformation image from the 2016 election" /> campaigns, perpetual brigades of social media profiles belonging to liberal pundits and so-called cuckservatives, the creation of sockpuppet accounts to spam social media, and tactical spread of fake-news talking points.
 
 There has been a lot of discussion over whether or not Trump’s effective capture of social media, largely driven by the alt-right, played an important role in the 2016 election. Essentially: is the social web, hyperspace, hegemonic? The question seems to me irrelevant. Bar global catastrophe, the Internet’s role in establishing political consensus will continue to grow. Instead, the question is this: does 4chan’s structure breed not leftist organizing, but an activist populism? If so, does it not make the platform an important meme-machine to occupy?
 

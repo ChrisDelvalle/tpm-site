@@ -26,6 +26,11 @@ const compatibleArticleMdxImports = [
     mode: "static-link",
     note: "Renders as ordinary paragraph text plus inline link in PDF; hover preview panel is print-hidden.",
   },
+  {
+    importSource: "@/components/media/SoundCloudEmbed.astro",
+    mode: "static-link",
+    note: "Renders a print-only source link in PDF; the interactive iframe is print-hidden.",
+  },
 ] as const satisfies readonly ArticleMdxPdfCompatibility[];
 
 /** Supported article MDX component imports and their PDF fallback contracts. */

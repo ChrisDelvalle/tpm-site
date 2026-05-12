@@ -1,3 +1,4 @@
+import sampleImage from "@site/assets/shared/tpm_defaultpic.jpg";
 import { describe, expect, test } from "vitest";
 
 import HoverImageCard from "../../../../src/components/articles/HoverImageCard.astro";
@@ -9,11 +10,7 @@ describe("HoverImageCard", () => {
     const view = await container.renderToString(HoverImageCard, {
       props: {
         alt: "Screenshot of a text message conversation",
-        image: {
-          height: 600,
-          src: "/src/assets/articles/example/image.png",
-          width: 800,
-        },
+        image: sampleImage,
         label: "inline preview",
       },
     });
@@ -26,9 +23,8 @@ describe("HoverImageCard", () => {
     expect(view).toContain('aria-expanded="false"');
     expect(view).toContain("data-hover-image-trigger");
     expect(view).toContain("data-hover-image-panel");
-    expect(
-      view.match(/href="\/src\/assets\/articles\/example\/image\.png"/gu),
-    ).toHaveLength(2);
+    expect(view).toContain("f=webp");
+    expect(view).not.toContain(sampleImage.src);
     expect(view).toContain('aria-label="Open full image: inline preview"');
     expect(view).toContain('alt="Screenshot of a text message conversation"');
     expect(view).toContain("shadow-lg");
@@ -49,11 +45,7 @@ describe("HoverImageCard", () => {
     const view = await container.renderToString(HoverImageCard, {
       props: {
         expanded: true,
-        image: {
-          height: 400,
-          src: "/assets/wide.png",
-          width: 800,
-        },
+        image: sampleImage,
         label: "wide preview",
       },
     });

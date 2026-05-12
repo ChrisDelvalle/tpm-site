@@ -346,6 +346,21 @@ function validateArticleImageParagraphs(
   const lineOffset = contentLineOffset(text, parsed.content);
   const articlePath = toPosix(path.relative(rootDir, file));
 
+  remoteMarkdownImages(tree).forEach((image) => {
+    const line = image.position?.start.line;
+    const suffix = line === undefined ? "" : `:${line + lineOffset}`;
+
+    issues.push(
+      `${articlePath}${suffix}: remote article image "${image.url}" must be stored locally and referenced from site/assets`,
+    );
+  });
+
+  remoteHtmlImages(text).forEach(({ line, url }) => {
+    issues.push(
+      `${articlePath}:${line}: remote article image "${url}" must be stored locally and referenced from site/assets`,
+    );
+  });
+
   localImagesInMixedParagraphs(tree).forEach(({ image, paragraph }) => {
     const line = image.position?.start.line ?? paragraph.position?.start.line;
     const suffix = line === undefined ? "" : `:${line + lineOffset}`;
@@ -354,6 +369,49 @@ function validateArticleImageParagraphs(
       `${articlePath}${suffix}: local article image must be separated into its own paragraph; add blank lines around the image so article image tooling can render it as an inspectable figure`,
     );
   });
+}
+
+function remoteMarkdownImages(tree: Root): Image[] {
+  const images: Image[] = [];
+
+  visitImages(tree, (image) => {
+    if (isRemoteImageUrl(image.url)) {
+      images.push(image);
+    }
+  });
+
+  return images;
+}
+
+function remoteHtmlImages(text: string): Array<{ line: number; url: string }> {
+  const images: Array<{ line: number; url: string }> = [];
+  const imageStartPattern = /<img(?=[\s>])/giu;
+  const srcAttributePattern = /\ssrc\s*=\s*(["'])(https?:\/\/[^"']+)\1/iu;
+
+  for (const match of text.matchAll(imageStartPattern)) {
+    const tagStart = match.index;
+    const tagEnd = text.indexOf(">", tagStart);
+
+    if (tagEnd < 0) {
+      continue;
+    }
+
+    const srcMatch = srcAttributePattern.exec(text.slice(tagStart, tagEnd + 1));
+    const url = srcMatch?.[2];
+
+    if (url !== undefined) {
+      images.push({
+        line: lineNumberAt(text, match.index),
+        url,
+      });
+    }
+  }
+
+  return images;
+}
+
+function lineNumberAt(text: string, index: number): number {
+  return text.slice(0, index).split("\n").length;
 }
 
 function validateArticleMdxPdfImports(
@@ -455,6 +513,16 @@ function visitParagraphs(
   }
 }
 
+function visitImages(node: Nodes, callback: (image: Image) => void): void {
+  if (isImage(node)) {
+    callback(node);
+  }
+
+  if (isParentNode(node)) {
+    node.children.forEach((child) => visitImages(child, callback));
+  }
+}
+
 function isParentNode(node: Nodes): node is Nodes & { children: Nodes[] } {
   return "children" in node && Array.isArray(node.children);
 }
@@ -489,6 +557,10 @@ function isImage(node: Nodes): node is Image {
 
 function isLocalArticleImageUrl(url: string): boolean {
   return url.trim() !== "" && !/^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\/)/iu.test(url);
+}
+
+function isRemoteImageUrl(url: string): boolean {
+  return /^https?:\/\//iu.test(url.trim());
 }
 
 function validateAuthorMetadataFilename(

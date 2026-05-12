@@ -15,10 +15,17 @@ describe("article MDX PDF compatibility", () => {
       "../../../components/articles/HoverImageParagraph.astro",
       "@/components/articles/HoverImageLink.astro",
       "@/components/articles/HoverImageParagraph.astro",
+      "@/components/media/SoundCloudEmbed.astro",
     ]);
     expect(
       articleMdxPdfCompatibility.map((entry): string => entry.mode),
-    ).toEqual(["static-link", "static-link", "static-link", "static-link"]);
+    ).toEqual([
+      "static-link",
+      "static-link",
+      "static-link",
+      "static-link",
+      "static-link",
+    ]);
   });
 
   test("treats article asset imports as compatible and component imports as gated", () => {

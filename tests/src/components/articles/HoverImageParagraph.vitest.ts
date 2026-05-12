@@ -1,3 +1,4 @@
+import sampleImage from "@site/assets/shared/tpm_defaultpic.jpg";
 import { describe, expect, test } from "vitest";
 
 import HoverImageParagraph from "../../../../src/components/articles/HoverImageParagraph.astro";
@@ -9,11 +10,7 @@ describe("HoverImageParagraph", () => {
     const view = await container.renderToString(HoverImageParagraph, {
       props: {
         after: " continues the sentence.",
-        image: {
-          height: 600,
-          src: "/assets/preview.png",
-          width: 800,
-        },
+        image: sampleImage,
         label: "preview",
       },
     });
