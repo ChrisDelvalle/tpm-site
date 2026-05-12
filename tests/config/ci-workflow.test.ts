@@ -78,6 +78,8 @@ describe("CI workflow", () => {
 
     expect(deploy).toContain("needs:");
     expect(deploy).toContain("- build");
+    expect(deploy).toContain("oven-sh/setup-bun@v2");
+    expect(deploy).toContain("bun-version: 1.3.12");
     expect(deploy).toContain("actions/download-artifact@v4");
     expect(deploy).toContain("name: verified-dist");
     expect(deploy).toContain("path: dist");
