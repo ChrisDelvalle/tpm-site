@@ -1,0 +1,52 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import type { AnchoredPreset } from "../../lib/anchored-positioning";
+
+interface Props extends HTMLAttributes<"div"> {
+  as?: "details" | "div";
+  disclosure?: "hover-focus-tap";
+  preset: AnchoredPreset;
+}
+
+const {
+  as = "div",
+  class: className,
+  disclosure,
+  preset,
+  ...attrs
+} = Astro.props;
+---
+
+{
+  as === "details" ? (
+    <details
+      {...attrs}
+      data-anchor-root
+      data-anchor-preset={preset}
+      data-disclosure-root={disclosure === undefined ? undefined : ""}
+      data-disclosure-mode={disclosure}
+      class:list={[className]}
+    >
+      <slot />
+    </details>
+  ) : (
+    <div
+      {...attrs}
+      data-anchor-root
+      data-anchor-preset={preset}
+      data-disclosure-root={disclosure === undefined ? undefined : ""}
+      data-disclosure-mode={disclosure}
+      class:list={[className]}
+    >
+      <slot />
+    </div>
+  )
+}
+
+<script src="../../scripts/anchored-positioning.ts"></script>
+{
+  disclosure === undefined ? null : (
+    <script src="../../scripts/anchored-disclosure.ts" />
+  )
+}

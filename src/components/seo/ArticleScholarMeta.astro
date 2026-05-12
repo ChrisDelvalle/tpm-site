@@ -1,0 +1,25 @@
+---
+import type { ArticleScholarMetaViewModel } from "../../lib/article-pdf";
+
+interface Props {
+  metadata: ArticleScholarMetaViewModel;
+}
+
+const { metadata } = Astro.props;
+---
+
+<meta name="citation_title" content={metadata.title} />
+{
+  metadata.authors.map((author) => (
+    <meta name="citation_author" content={author} />
+  ))
+}
+<meta
+  name="citation_publication_date"
+  content={metadata.publicationDateForScholar}
+/>
+{
+  metadata.pdf && (
+    <meta name="citation_pdf_url" content={metadata.pdf.citationPdfUrl} />
+  )
+}

@@ -1,0 +1,26 @@
+---
+import TextLink from "../ui/TextLink.astro";
+import type { AuthorSummary } from "../../lib/authors";
+import { siteConfig } from "../../lib/site-config";
+
+interface Props {
+  author: AuthorSummary;
+}
+
+const { author } = Astro.props;
+---
+
+{
+  siteConfig.features.authors ? (
+    <TextLink
+      href={author.href}
+      variant="subtle"
+      tone="primary"
+      prefetch="hover"
+    >
+      {author.displayName}
+    </TextLink>
+  ) : (
+    <span>{author.displayName}</span>
+  )
+}

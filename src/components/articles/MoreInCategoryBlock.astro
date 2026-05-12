@@ -1,0 +1,48 @@
+---
+import ArticleList from "./ArticleList.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { ArticleListItem } from "../../lib/article-list";
+
+interface Props {
+  categoryHref?: string | undefined;
+  categoryTitle?: string | undefined;
+  headingId?: string;
+  items?: readonly ArticleListItem[] | undefined;
+}
+
+const {
+  categoryHref,
+  categoryTitle,
+  headingId = "more-in-category-heading",
+  items = [],
+} = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section
+      class="grid w-full max-w-full min-w-0 gap-4"
+      aria-labelledby={headingId}
+    >
+      <div class="flex min-w-0 flex-wrap items-end justify-between gap-3">
+        <h2
+          id={headingId}
+          class="text-foreground m-0 min-w-0 text-xl font-semibold tracking-normal break-words"
+        >
+          More{categoryTitle ? ` in ${categoryTitle}` : ""}
+        </h2>
+        {categoryHref && categoryTitle && (
+          <TextLink
+            href={categoryHref}
+            variant="subtle"
+            tone="primary"
+            prefetch="hover"
+          >
+            View category
+          </TextLink>
+        )}
+      </div>
+      <ArticleList items={items} />
+    </section>
+  )
+}

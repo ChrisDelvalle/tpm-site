@@ -1,0 +1,27 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import Container from "../ui/Container.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  size?: "lg" | "md" | "prose" | "xl";
+  spacing?: "lg" | "md" | "sm";
+}
+
+const { size = "lg", spacing = "md", class: className, ...attrs } = Astro.props;
+const spacingClasses = {
+  lg: "py-12 lg:py-16",
+  md: "py-8 lg:py-12",
+  sm: "py-6 lg:py-8",
+} as const;
+---
+
+<Container
+  {...attrs}
+  as="div"
+  data-page-frame
+  size={size}
+  class:list={["grid gap-8", spacingClasses[spacing], className]}
+>
+  <slot />
+</Container>

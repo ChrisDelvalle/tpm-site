@@ -1,0 +1,72 @@
+---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import CategoryRailBlock from "../../components/blocks/CategoryRailBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import LinkButton from "../../components/ui/LinkButton.astro";
+import TextLink from "../../components/ui/TextLink.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries } from "../../lib/authors";
+import { getArticles, getCategories } from "../../lib/content";
+import { sectionNavigationItems } from "../../lib/navigation";
+import {
+  articlesArchiveUrl,
+  articlesIndexUrl,
+  SITE_TITLE,
+} from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
+
+const articles = await getArticles();
+const categories = await getCategories();
+const authors = await getAuthorEntries();
+const archiveItems = articleArchiveItems(articles, categories, authors);
+const latestItems = articleListItemsFromArchive(archiveItems.slice(0, 8));
+const categoryItems = sectionNavigationItems(categories, articlesIndexUrl());
+---
+
+<BaseLayout
+  title={titleWithSite("Articles")}
+  description={`Browse ${SITE_TITLE} by category, recent writing, and full archive.`}
+  canonicalPath={articlesIndexUrl()}
+>
+  <BrowsingBody>
+    <section class="grid gap-4">
+      <header class="grid gap-3">
+        <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
+          Articles
+        </h1>
+        <p class="text-muted-foreground max-w-3xl text-lg">
+          Browse articles by category, start with recent writing, or go straight
+          to the <TextLink href={articlesArchiveUrl()} prefetch="hover"
+            >complete article archive</TextLink
+          >.
+        </p>
+      </header>
+      <div class="flex flex-wrap gap-3">
+        <LinkButton
+          href={articlesArchiveUrl()}
+          variant="outline"
+          tone="neutral"
+          prefetch="hover"
+        >
+          View all articles
+        </LinkButton>
+      </div>
+    </section>
+    <CategoryRailBlock
+      aria-label="Article categories"
+      data-articles-category-rail
+      items={categoryItems}
+      railId="articles-categories-rail"
+      title="Categories"
+    />
+    <ArchiveListBlock
+      title="Latest Articles"
+      description="Recent writing from the archive."
+      headingLevel={2}
+      items={latestItems}
+      pagefindIgnore
+    />
+  </BrowsingBody>
+</BaseLayout>

@@ -1,0 +1,93 @@
+---
+import {
+  AtSign,
+  Facebook,
+  Hash,
+  Link,
+  Linkedin,
+  Mail,
+  MessageCircle,
+  Newspaper,
+  Pin,
+  Twitter,
+} from "lucide-astro";
+
+import type { ArticleShareAction } from "../../lib/share-targets";
+
+interface Props {
+  action: ArticleShareAction;
+  copyText: string;
+  statusId: string;
+}
+
+const { action, copyText, statusId } = Astro.props;
+const itemClass =
+  "text-popover-foreground hover:bg-muted focus-visible:outline-ring grid min-h-8 w-full grid-cols-[1rem_minmax(0,1fr)] items-center gap-2 rounded-xs px-2 py-1.5 text-start text-sm font-medium tracking-normal no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2";
+const iconClass = "size-3.5";
+const externalHref =
+  action.kind === "external" ? JSON.stringify(action.href) : undefined;
+---
+
+{
+  action.kind === "copy" ? (
+    <button
+      type="button"
+      class:list={[itemClass]}
+      aria-describedby={statusId}
+      data-article-share-copy-button
+      data-article-share-copy-text={copyText}
+    >
+      <Link class:list={[iconClass]} aria-hidden="true" />
+      <span class="min-w-0">{action.label}</span>
+    </button>
+  ) : null
+}
+{
+  action.kind === "email" ? (
+    <a
+      class:list={[itemClass]}
+      href={action.href}
+      data-article-share-action={action.id}
+    >
+      <Mail class:list={[iconClass]} aria-hidden="true" />
+      <span class="min-w-0">{action.label}</span>
+    </a>
+  ) : null
+}
+{
+  action.kind === "external" ? (
+    <button
+      type="button"
+      class:list={[itemClass]}
+      data-article-share-action={action.id}
+      data-article-share-open-button
+      data-article-share-open-url={externalHref}
+    >
+      {action.id === "bluesky" && (
+        <MessageCircle class:list={[iconClass]} aria-hidden="true" />
+      )}
+      {action.id === "x" && (
+        <Twitter class:list={[iconClass]} aria-hidden="true" />
+      )}
+      {action.id === "threads" && (
+        <AtSign class:list={[iconClass]} aria-hidden="true" />
+      )}
+      {action.id === "facebook" && (
+        <Facebook class:list={[iconClass]} aria-hidden="true" />
+      )}
+      {action.id === "linkedin" && (
+        <Linkedin class:list={[iconClass]} aria-hidden="true" />
+      )}
+      {action.id === "reddit" && (
+        <Hash class:list={[iconClass]} aria-hidden="true" />
+      )}
+      {action.id === "hacker-news" && (
+        <Newspaper class:list={[iconClass]} aria-hidden="true" />
+      )}
+      {action.id === "pinterest" && (
+        <Pin class:list={[iconClass]} aria-hidden="true" />
+      )}
+      <span class="min-w-0">{action.label}</span>
+    </button>
+  ) : null
+}

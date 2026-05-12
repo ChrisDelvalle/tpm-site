@@ -1,0 +1,22 @@
+---
+import type { ArticleEntry, CategorySummary } from "../../lib/routes";
+import type { AuthorSummary } from "../../lib/authors";
+import { articleBlogPostingJsonLd, safeJsonLd } from "../../lib/seo";
+import type { SocialPreviewImage } from "../../lib/social-images";
+
+interface Props {
+  article: ArticleEntry;
+  authors?: readonly AuthorSummary[] | undefined;
+  category?: CategorySummary | undefined;
+  image?: SocialPreviewImage | undefined;
+}
+
+const { article, authors = [], category, image } = Astro.props;
+const jsonLd = safeJsonLd(
+  articleBlogPostingJsonLd(article, category, Astro.site, authors, {
+    image: image?.src,
+  }),
+);
+---
+
+<script is:inline type="application/ld+json" set:html={jsonLd} />

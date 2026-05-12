@@ -1,0 +1,73 @@
+---
+import { ChevronDown } from "lucide-astro";
+
+import AnchoredPanel from "../ui/AnchoredPanel.astro";
+import AnchoredRoot from "../ui/AnchoredRoot.astro";
+import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
+import CategoryPreviewList from "./CategoryPreviewList.astro";
+import type { SectionNavItem } from "../../lib/navigation";
+
+interface Props {
+  category: SectionNavItem;
+  currentPath?: string;
+  previewId: string;
+}
+
+const { category, currentPath = "", previewId } = Astro.props;
+const isCurrent =
+  currentPath.startsWith(category.href) ||
+  category.articles.some((article) => article.isCurrent);
+---
+
+<AnchoredRoot
+  disclosure="hover-focus-tap"
+  preset="header-dropdown"
+  class="group relative inline-flex items-center"
+  data-category-dropdown={category.slug}
+>
+  <AnchoredTrigger
+    as="a"
+    href={category.href}
+    class:list={[
+      "inline-flex items-center rounded-xs px-1 py-1 text-xs font-medium tracking-normal transition-colors lg:text-sm",
+      "focus-visible:outline-ring focus-visible:outline-2 focus-visible:outline-offset-2",
+      isCurrent
+        ? "text-primary hover:text-primary/80 pointer-fine:group-hover:text-primary/80"
+        : "text-muted-foreground hover:text-foreground pointer-fine:group-hover:text-foreground group-data-[disclosure-open=true]:text-foreground",
+    ]}
+    aria-current={isCurrent ? "page" : undefined}
+  >
+    <span>{category.title}</span>
+  </AnchoredTrigger>
+  <button
+    type="button"
+    data-category-disclosure-trigger
+    data-disclosure-trigger
+    aria-controls={previewId}
+    aria-expanded="false"
+    aria-label={`Show preview for ${category.title}`}
+    class:list={[
+      "focus-visible:outline-ring inline-flex items-center rounded-xs px-0.5 py-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2",
+      isCurrent
+        ? "text-primary hover:text-primary/80 pointer-fine:group-hover:text-primary/80"
+        : "text-muted-foreground hover:text-foreground pointer-fine:group-hover:text-foreground group-data-[disclosure-open=true]:text-foreground",
+    ]}
+  >
+    <ChevronDown
+      class="size-2.5 transition-transform group-data-[disclosure-open=true]:rotate-180 lg:size-3 pointer-fine:group-hover:rotate-180"
+      aria-hidden="true"
+    />
+  </button>
+  <AnchoredPanel
+    id={previewId}
+    class="border-border bg-popover text-popover-foreground z-50 hidden w-[min(24rem,var(--anchor-max-width,calc(100vw-2rem)))] gap-3 overflow-y-auto rounded-sm border p-4 shadow-lg group-data-[disclosure-open=true]:grid before:fixed before:inset-x-0 before:top-[calc(var(--anchor-y,0rem)-1rem)] before:h-4 before:content-[''] pointer-fine:group-hover:grid"
+    data-category-preview
+    data-disclosure-panel
+  >
+    <CategoryPreviewList
+      articles={category.articles}
+      categoryHref={category.href}
+      categoryTitle={category.title}
+    />
+  </AnchoredPanel>
+</AnchoredRoot>

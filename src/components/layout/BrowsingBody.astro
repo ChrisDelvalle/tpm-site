@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import Container from "../ui/Container.astro";
+import SectionStack from "./SectionStack.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  padding?: "normal" | "snug";
+  spacing?: "compact" | "normal" | "relaxed";
+  width?: "standard" | "wide";
+}
+
+const {
+  padding = "normal",
+  spacing = "normal",
+  width = "standard",
+  class: className,
+  ...attrs
+} = Astro.props;
+const widthSize = width === "wide" ? "lg" : "md";
+const paddingClasses = {
+  normal: "py-8 lg:py-12",
+  snug: "pt-2 pb-8 lg:pt-3 lg:pb-12",
+} as const;
+---
+
+<Container
+  {...attrs}
+  as="div"
+  data-browsing-body
+  data-page-frame
+  size={widthSize}
+  class:list={[paddingClasses[padding], className]}
+>
+  <SectionStack spacing={spacing}>
+    <slot />
+  </SectionStack>
+</Container>

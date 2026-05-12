@@ -1,0 +1,68 @@
+---
+import TextLink from "../ui/TextLink.astro";
+
+interface HomeCurrentLink {
+  description?: string | undefined;
+  href: string;
+  label: string;
+}
+
+interface Props {
+  description?: string;
+  links: readonly HomeCurrentLink[];
+  title?: string;
+}
+
+const {
+  description = "Current project, community, and support paths.",
+  links,
+  title = "What’s Current",
+} = Astro.props;
+const prefetchAttrsFor = (href: string) =>
+  href.startsWith("/") ? { prefetch: "hover" as const } : {};
+---
+
+<section
+  class="border-border bg-muted/30 grid min-w-0 content-start gap-4 rounded-sm border p-4"
+  aria-labelledby="home-current-heading"
+  data-home-current-panel
+>
+  <div class="grid gap-1">
+    <h2
+      id="home-current-heading"
+      class="text-foreground m-0 text-lg font-semibold tracking-normal"
+    >
+      {title}
+    </h2>
+    <p class="text-muted-foreground m-0 text-sm leading-6">{description}</p>
+  </div>
+  {
+    links.length > 0 ? (
+      <ul class="grid gap-3">
+        {links.map((link) => (
+          <li class="grid min-w-0 gap-1">
+            <TextLink
+              href={link.href}
+              variant="subtle"
+              tone="neutral"
+              {...prefetchAttrsFor(link.href)}
+            >
+              <span class="line-clamp-2 min-w-0 text-sm font-semibold">
+                {link.label}
+              </span>
+            </TextLink>
+            {link.description && (
+              <span class="text-muted-foreground line-clamp-2 text-xs leading-5">
+                {link.description}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-muted-foreground m-0 text-sm">
+        Current updates will appear here.
+      </p>
+    )
+  }
+</section>

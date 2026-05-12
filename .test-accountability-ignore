@@ -1,0 +1,96 @@
+# Test files are accountability artifacts for source files. They are executed by
+# Bun or Vitest and do not require their own mirrored tests.
+tests/**
+
+# The accountability policy file is parsed and validated by
+# scripts/testing/verify-test-accountability.ts on every accountability run.
+.test-accountability-ignore
+
+# Approved exception: Article, announcement, page, and editor-owned collection
+# bodies are human-authored editorial content validated by content schemas, build
+# checks, Markdown/MDX review checks, and manual editorial review rather than
+# mirrored unit tests.
+site/content/articles/**
+site/content/announcements/**
+site/content/collections/**
+site/content/pages/**
+
+# Approved exception: Category JSON files are content data validated by Astro
+# content schemas, content verification, build checks, and category-page tests.
+site/content/categories/**
+
+# Approved exception: Author Markdown files are content data validated by Astro
+# content schemas, author relationship tests, build checks, and manual profile
+# review rather than mirrored unit tests.
+site/content/authors/**
+
+# Approved exception: Static image and public assets are validated by
+# asset-location, shared-asset, duplicate-asset, unused-asset, build, and browser
+# review checks rather than mirrored unit tests.
+site/assets/**
+site/unused-assets/**
+site/public/**
+
+# Approved exception: Platform-owned vendor SVG assets are validated by the
+# Astro component tests that render the branded CTA buttons.
+src/components/ui/assets/**
+
+# Approved exception: Platform-owned catalog fixture images are exercised by
+# catalog render tests, browser invariants, asset-location checks, and the
+# external site-instance catalog build rather than mirrored unit tests.
+src/catalog/assets/**
+
+# Approved exception: Global CSS is exercised by browser, accessibility,
+# responsive, visual, and build checks instead of mirrored unit tests.
+src/styles/**/*.css
+
+# Approved exception: Project documentation, agent guidance, and local skill docs
+# are reviewed manually and through Markdown formatting/lint review.
+*.md
+.agents/**
+agent-docs/**
+scripts/article-submission/**
+
+# Approved exception: GitHub, editor, and local-tool metadata configure external
+# tools and are covered by the tools they configure, not mirrored unit tests.
+.codex/**
+.github/**
+.vscode/**
+.editorconfig
+.env
+.env.catalog
+.gitignore
+.htmlvalidate.json
+.markdownlint-cli2.jsonc
+.node-version
+.prettierignore
+components.json
+lighthouserc.json
+skills-lock.json
+
+# Approved exception: Package lockfiles and package metadata are validated by
+# Bun, package sorting, install reproducibility, and CI checks rather than
+# mirrored unit tests.
+bun.lock
+package.json
+
+# Approved exception: Tool ignore-list JSON files are exercised by their
+# corresponding script tests and intentionally maintained as data files.
+scripts/*-ignore.json
+scripts/coverage-exceptions.json
+
+# Approved exception: Site-owner config JSON and generated config schema are
+# exercised by the typed site config adapter tests, schema generator tests, Astro
+# config import tests, and release build checks.
+site/config/site.json
+site/config/redirects.json
+site/config/site.schema.json
+
+# Approved exception: Site-owner theme CSS is exercised by theme-contract tests,
+# browser checks, and release build checks rather than mirrored unit tests.
+site/theme.css
+
+# Approved exception: The example documentation site is a second site instance
+# exercised by test:docs-site and kept as author-facing documentation content,
+# config, and assets rather than mirrored source modules.
+examples/docs-site/**

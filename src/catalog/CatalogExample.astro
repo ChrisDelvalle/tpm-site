@@ -1,0 +1,54 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Public props for one curated component catalog example. */
+interface Props extends HTMLAttributes<"article"> {
+  componentPath?: string;
+  description?: string;
+  title: string;
+}
+
+const {
+  title,
+  description,
+  componentPath,
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+<article
+  {...attrs}
+  data-catalog-component={componentPath ?? title}
+  data-catalog-example={title}
+  class:list={[
+    "border-border bg-card text-card-foreground grid min-w-0 gap-4 rounded-sm border p-4",
+    className,
+  ]}
+>
+  <header class="grid min-w-0 gap-1">
+    <h3 class="text-foreground min-w-0 text-base font-semibold break-words">
+      {title}
+    </h3>
+    {
+      description ? (
+        <p class="text-muted-foreground min-w-0 text-sm break-words">
+          {description}
+        </p>
+      ) : null
+    }
+    {
+      componentPath ? (
+        <code class="text-muted-foreground block min-w-0 text-xs break-all">
+          {componentPath}
+        </code>
+      ) : null
+    }
+  </header>
+  <div
+    class="border-border bg-background min-w-0 overflow-x-auto rounded-sm border p-4"
+    data-catalog-preview
+  >
+    <slot />
+  </div>
+</article>

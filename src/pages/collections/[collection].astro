@@ -1,0 +1,73 @@
+---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries } from "../../lib/authors";
+import {
+  collectionDirectoryListItems,
+  type EditorialCollectionEntry,
+} from "../../lib/collections";
+import {
+  getAnnouncements,
+  getArticles,
+  getCategories,
+  getEditorialCollections,
+} from "../../lib/content";
+import {
+  publishableFromAnnouncement,
+  publishableFromArticleArchive,
+  publishableIndex,
+} from "../../lib/publishable";
+import { collectionUrl } from "../../lib/routes";
+import { siteConfig, titleWithSite } from "../../lib/site-config";
+import { collectionStaticPaths } from "../../lib/static-paths";
+
+/**
+ * Generates one static collection route for each active editorial collection.
+ *
+ * @returns Static route parameters and collection props for Astro.
+ */
+export async function getStaticPaths() {
+  return collectionStaticPaths(await getEditorialCollections());
+}
+
+interface Props {
+  collection: EditorialCollectionEntry;
+}
+
+const { collection } = Astro.props;
+const categories = await getCategories();
+const authors = await getAuthorEntries();
+const archiveItems = articleArchiveItems(
+  await getArticles(),
+  categories,
+  authors,
+);
+const announcements = await getAnnouncements();
+const publishables = publishableIndex([
+  ...archiveItems.map(publishableFromArticleArchive),
+  ...announcements.map(publishableFromAnnouncement),
+]);
+const collectionItems = collectionDirectoryListItems(collection, publishables);
+const title =
+  collection.id === "featured" ? "Featured Articles" : collection.data.title;
+const description =
+  collection.data.description ??
+  `Curated ${siteConfig.identity.title} entries in ${title}.`;
+---
+
+<BaseLayout
+  title={titleWithSite(`${title} | Collections`)}
+  description={description}
+  canonicalPath={collectionUrl(collection.id)}
+>
+  <BrowsingBody>
+    <ArchiveListBlock
+      eyebrow="Collection"
+      title={title}
+      description={description}
+      items={collectionItems}
+    />
+  </BrowsingBody>
+</BaseLayout>

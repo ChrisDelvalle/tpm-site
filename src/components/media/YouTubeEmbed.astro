@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import ResponsiveIframe from "./ResponsiveIframe.astro";
+
+type IframeAttributes = Omit<
+  HTMLAttributes<"iframe">,
+  "class" | "src" | "title"
+>;
+
+/** Public props for YouTube video embeds. */
+interface Props extends IframeAttributes {
+  class?: string | undefined;
+  iframeClass?: string | undefined;
+  src: string;
+  title: string;
+}
+
+const { src, title, class: className, iframeClass, ...attrs } = Astro.props;
+---
+
+<ResponsiveIframe
+  {...attrs}
+  src={src}
+  title={title}
+  layout="video"
+  class:list={[className]}
+  iframeClass={iframeClass}
+/>

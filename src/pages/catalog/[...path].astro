@@ -1,0 +1,25 @@
+---
+import ComponentCatalog from "../../catalog/ComponentCatalog.astro";
+import {
+  catalogMetadata,
+  componentCatalogStaticPaths,
+} from "../../catalog/catalog.config";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+/**
+ * Generates no catalog routes unless the private catalog environment flag is enabled.
+ *
+ * @returns Static paths for the private component catalog.
+ */
+export function getStaticPaths() {
+  return componentCatalogStaticPaths();
+}
+---
+
+<BaseLayout
+  title={catalogMetadata.title}
+  description={catalogMetadata.description}
+  canonicalPath="/catalog/"
+>
+  <ComponentCatalog />
+</BaseLayout>

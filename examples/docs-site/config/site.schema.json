@@ -1,0 +1,673 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "contentDefaults": {
+      "default": {
+        "announcements": {
+          "draft": false,
+          "visibility": {
+            "directory": true,
+            "feed": true,
+            "homepage": true,
+            "search": true
+          }
+        },
+        "articles": {
+          "draft": false,
+          "pdf": {
+            "enabled": true
+          },
+          "visibility": {
+            "directory": true,
+            "feed": true,
+            "homepage": true,
+            "search": true
+          }
+        }
+      },
+      "type": "object",
+      "properties": {
+        "announcements": {
+          "default": {
+            "draft": false,
+            "visibility": {
+              "directory": true,
+              "feed": true,
+              "homepage": true,
+              "search": true
+            }
+          },
+          "type": "object",
+          "properties": {
+            "draft": {
+              "default": false,
+              "type": "boolean"
+            },
+            "visibility": {
+              "default": {
+                "directory": true,
+                "feed": true,
+                "homepage": true,
+                "search": true
+              },
+              "type": "object",
+              "properties": {
+                "directory": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "feed": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "homepage": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "search": {
+                  "default": true,
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "articles": {
+          "default": {
+            "draft": false,
+            "pdf": {
+              "enabled": true
+            },
+            "visibility": {
+              "directory": true,
+              "feed": true,
+              "homepage": true,
+              "search": true
+            }
+          },
+          "type": "object",
+          "properties": {
+            "draft": {
+              "default": false,
+              "type": "boolean"
+            },
+            "visibility": {
+              "default": {
+                "directory": true,
+                "feed": true,
+                "homepage": true,
+                "search": true
+              },
+              "type": "object",
+              "properties": {
+                "directory": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "feed": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "homepage": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "search": {
+                  "default": true,
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            },
+            "pdf": {
+              "default": {
+                "enabled": true
+              },
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "features": {
+      "default": {
+        "announcements": true,
+        "authors": true,
+        "bibliography": true,
+        "categories": true,
+        "collections": true,
+        "feed": true,
+        "pdf": true,
+        "search": true,
+        "support": true,
+        "tags": true,
+        "themeToggle": true
+      },
+      "type": "object",
+      "properties": {
+        "announcements": {
+          "default": true,
+          "type": "boolean"
+        },
+        "authors": {
+          "default": true,
+          "type": "boolean"
+        },
+        "bibliography": {
+          "default": true,
+          "type": "boolean"
+        },
+        "categories": {
+          "default": true,
+          "type": "boolean"
+        },
+        "collections": {
+          "default": true,
+          "type": "boolean"
+        },
+        "feed": {
+          "default": true,
+          "type": "boolean"
+        },
+        "pdf": {
+          "default": true,
+          "type": "boolean"
+        },
+        "search": {
+          "default": true,
+          "type": "boolean"
+        },
+        "support": {
+          "default": true,
+          "type": "boolean"
+        },
+        "tags": {
+          "default": true,
+          "type": "boolean"
+        },
+        "themeToggle": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "homepage": {
+      "default": {
+        "announcementLimit": 3,
+        "discoveryLinks": [
+          {
+            "label": "Articles",
+            "route": "articles"
+          },
+          {
+            "label": "Archive",
+            "route": "allArticles"
+          },
+          {
+            "label": "Authors",
+            "route": "authors"
+          },
+          {
+            "label": "Collections",
+            "route": "collections"
+          },
+          {
+            "label": "Tags",
+            "route": "tags"
+          }
+        ],
+        "emptyText": {
+          "announcements": "Announcements will appear here.",
+          "categories": "No categories are available yet.",
+          "featured": "Featured items will appear here.",
+          "startHere": "Curated starter articles will appear here."
+        },
+        "featuredCollection": "featured",
+        "labels": {
+          "announcements": "Announcements",
+          "categories": "Categories",
+          "featured": "Featured Articles",
+          "read": "Read",
+          "recent": "Recent",
+          "startHere": "Start Here"
+        },
+        "recentLimit": 8,
+        "startHereCollection": "start-here"
+      },
+      "type": "object",
+      "properties": {
+        "announcementLimit": {
+          "default": 3,
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "discoveryLinks": {
+          "default": [
+            {
+              "label": "Articles",
+              "route": "articles"
+            },
+            {
+              "label": "Archive",
+              "route": "allArticles"
+            },
+            {
+              "label": "Authors",
+              "route": "authors"
+            },
+            {
+              "label": "Collections",
+              "route": "collections"
+            },
+            {
+              "label": "Tags",
+              "route": "tags"
+            }
+          ],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "href": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "route": {
+                "type": "string",
+                "enum": [
+                  "allArticles",
+                  "announcements",
+                  "articles",
+                  "authors",
+                  "bibliography",
+                  "categories",
+                  "collections",
+                  "feed",
+                  "home",
+                  "search",
+                  "tags"
+                ]
+              }
+            },
+            "required": ["label"],
+            "additionalProperties": false
+          }
+        },
+        "emptyText": {
+          "default": {
+            "announcements": "Announcements will appear here.",
+            "categories": "No categories are available yet.",
+            "featured": "Featured items will appear here.",
+            "startHere": "Curated starter articles will appear here."
+          },
+          "type": "object",
+          "properties": {
+            "announcements": {
+              "default": "Announcements will appear here.",
+              "type": "string",
+              "minLength": 1
+            },
+            "categories": {
+              "default": "No categories are available yet.",
+              "type": "string",
+              "minLength": 1
+            },
+            "featured": {
+              "default": "Featured items will appear here.",
+              "type": "string",
+              "minLength": 1
+            },
+            "startHere": {
+              "default": "Curated starter articles will appear here.",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "featuredCollection": {
+          "default": "featured",
+          "type": "string",
+          "minLength": 1
+        },
+        "labels": {
+          "default": {
+            "announcements": "Announcements",
+            "categories": "Categories",
+            "featured": "Featured Articles",
+            "read": "Read",
+            "recent": "Recent",
+            "startHere": "Start Here"
+          },
+          "type": "object",
+          "properties": {
+            "announcements": {
+              "default": "Announcements",
+              "type": "string",
+              "minLength": 1
+            },
+            "categories": {
+              "default": "Categories",
+              "type": "string",
+              "minLength": 1
+            },
+            "featured": {
+              "default": "Featured Articles",
+              "type": "string",
+              "minLength": 1
+            },
+            "read": {
+              "default": "Read",
+              "type": "string",
+              "minLength": 1
+            },
+            "recent": {
+              "default": "Recent",
+              "type": "string",
+              "minLength": 1
+            },
+            "startHere": {
+              "default": "Start Here",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "recentLimit": {
+          "default": 8,
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "startHereCollection": {
+          "default": "start-here",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string",
+          "minLength": 2
+        },
+        "publisherName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shortTitle": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["description", "language", "title", "url"],
+      "additionalProperties": false
+    },
+    "navigation": {
+      "type": "object",
+      "properties": {
+        "footer": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "href": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": ["href", "label"],
+            "additionalProperties": false
+          }
+        },
+        "primary": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "href": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": ["href", "label"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "routes": {
+      "type": "object",
+      "properties": {
+        "allArticles": {
+          "type": "string",
+          "minLength": 1
+        },
+        "announcements": {
+          "type": "string",
+          "minLength": 1
+        },
+        "articles": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authors": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bibliography": {
+          "type": "string",
+          "minLength": 1
+        },
+        "categories": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collections": {
+          "type": "string",
+          "minLength": 1
+        },
+        "feed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "home": {
+          "type": "string",
+          "minLength": 1
+        },
+        "search": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tags": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "allArticles",
+        "announcements",
+        "articles",
+        "authors",
+        "bibliography",
+        "categories",
+        "collections",
+        "feed",
+        "home",
+        "search",
+        "tags"
+      ],
+      "additionalProperties": false
+    },
+    "share": {
+      "default": {
+        "targets": [
+          "bluesky",
+          "x",
+          "threads",
+          "facebook",
+          "linkedin",
+          "reddit",
+          "hacker-news",
+          "pinterest"
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "targets": {
+          "default": [
+            "bluesky",
+            "x",
+            "threads",
+            "facebook",
+            "linkedin",
+            "reddit",
+            "hacker-news",
+            "pinterest"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "bluesky",
+              "x",
+              "threads",
+              "facebook",
+              "linkedin",
+              "reddit",
+              "hacker-news",
+              "pinterest"
+            ]
+          }
+        },
+        "threadsMention": {
+          "type": "string",
+          "minLength": 1
+        },
+        "xViaHandle": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "support": {
+      "type": "object",
+      "properties": {
+        "block": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "minLength": 1
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["body", "title"],
+          "additionalProperties": false
+        },
+        "discord": {
+          "type": "object",
+          "properties": {
+            "ariaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "href": {
+              "type": "string",
+              "format": "uri"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["href", "label"],
+          "additionalProperties": false
+        },
+        "patreon": {
+          "type": "object",
+          "properties": {
+            "ariaLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "href": {
+              "type": "string",
+              "format": "uri"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "compactLabel": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["href", "label"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["block", "discord", "patreon"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["identity", "navigation", "routes", "support"],
+  "additionalProperties": false,
+  "$id": "https://example.com/schemas/blog-site-config.schema.json",
+  "description": "Validated site-owner configuration for the reusable Astro blogging platform.",
+  "title": "Blog Platform Site Config"
+}

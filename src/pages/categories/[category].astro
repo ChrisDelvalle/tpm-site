@@ -1,0 +1,44 @@
+---
+import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { articleListItemsFromArchive } from "../../lib/article-list";
+import { articleArchiveItems } from "../../lib/archive";
+import { getAuthorEntries } from "../../lib/authors";
+import { getCategories } from "../../lib/content";
+import { categoryUrl } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
+import { categoryStaticPaths } from "../../lib/static-paths";
+
+/**
+ * Generates one static category route for each public category.
+ *
+ * @returns Static route parameters and category props for Astro.
+ */
+export async function getStaticPaths() {
+  return categoryStaticPaths(await getCategories());
+}
+
+const { category } = Astro.props;
+const authors = await getAuthorEntries();
+const categoryItems = articleListItemsFromArchive(
+  articleArchiveItems(category.articles, [category], authors),
+);
+---
+
+<BaseLayout
+  title={titleWithSite(category.title)}
+  description={category.description ??
+    `Articles filed under ${category.title}.`}
+  canonicalPath={categoryUrl(category.slug)}
+>
+  <BrowsingBody>
+    <ArchiveListBlock
+      eyebrow="Category"
+      title={category.title}
+      description={category.description ??
+        `Articles filed under ${category.title}.`}
+      items={categoryItems}
+    />
+  </BrowsingBody>
+</BaseLayout>

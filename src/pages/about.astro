@@ -1,0 +1,30 @@
+---
+import { getEntry, render } from "astro:content";
+
+import ReadingBody from "../components/layout/ReadingBody.astro";
+import MarkdownPage from "../components/pages/MarkdownPage.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { pageUrl, SITE_TITLE } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
+
+const about = await getEntry("pages", "about");
+
+if (!about) {
+  throw new Error("Missing about page content at site/content/pages/about.md.");
+}
+
+const { Content } = await render(about);
+const description = about.data.description ?? `About ${SITE_TITLE}.`;
+---
+
+<BaseLayout
+  title={titleWithSite(about.data.title)}
+  description={description}
+  canonicalPath={pageUrl("about")}
+>
+  <ReadingBody>
+    <MarkdownPage title={about.data.title} description={description}>
+      <Content />
+    </MarkdownPage>
+  </ReadingBody>
+</BaseLayout>

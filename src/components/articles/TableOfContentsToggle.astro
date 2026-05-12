@@ -1,0 +1,61 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"summary"> {
+  closedLabel?: string;
+  label?: string;
+  openLabel?: string;
+  placement?: "inline" | "rail";
+}
+
+const {
+  closedLabel = "Show Contents",
+  label = "Article table of contents",
+  openLabel = "Hide",
+  placement = "rail",
+  class: className,
+  ...attrs
+} = Astro.props;
+const placementClasses = {
+  inline:
+    "text-muted-foreground hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:outline-ring flex cursor-pointer list-none items-baseline justify-between gap-3 rounded-sm py-0.5 text-sm font-medium outline-none group-open:py-0 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-offset-2 focus-visible:outline-solid",
+  rail: "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:outline-ring flex cursor-pointer list-none items-center justify-between gap-3 rounded-sm py-2 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-offset-2 focus-visible:outline-solid",
+} as const;
+---
+
+<summary
+  {...attrs}
+  aria-label={label}
+  class:list={[
+    placementClasses[placement],
+    "marker:hidden [&::-webkit-details-marker]:hidden",
+    className,
+  ]}
+>
+  {
+    placement === "inline" ? (
+      <>
+        <span
+          class="text-foreground hidden text-2xl leading-tight font-semibold tracking-normal group-open:inline"
+          data-toc-inline-heading
+        >
+          Contents
+        </span>
+        <span class="group-open:hidden" data-toc-inline-closed-label>
+          {closedLabel}
+        </span>
+        <span
+          class="text-muted-foreground hover:text-primary hidden text-sm font-medium group-open:inline"
+          data-toc-inline-action
+        >
+          {openLabel}
+        </span>
+      </>
+    ) : (
+      <>
+        <span class="hidden group-open:inline">{openLabel}</span>
+        <span class="group-open:hidden">{closedLabel}</span>
+      </>
+    )
+  }
+</summary>

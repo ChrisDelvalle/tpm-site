@@ -1,0 +1,18 @@
+---
+import SearchResultsBlock from "../components/blocks/SearchResultsBlock.astro";
+import BrowsingBody from "../components/layout/BrowsingBody.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { searchUrl, SITE_TITLE } from "../lib/routes";
+import { titleWithSite } from "../lib/site-config";
+---
+
+<BaseLayout
+  title={titleWithSite("Search")}
+  description={`Search ${SITE_TITLE} archive.`}
+  canonicalPath={searchUrl()}
+>
+  <BrowsingBody>
+    <SearchResultsBlock />
+  </BrowsingBody>
+  <script src="../scripts/search-page.ts"></script>
+</BaseLayout>

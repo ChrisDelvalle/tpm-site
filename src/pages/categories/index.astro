@@ -1,0 +1,28 @@
+---
+import CategoryOverviewBlock from "../../components/blocks/CategoryOverviewBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCategories } from "../../lib/content";
+import { sectionNavigationItems } from "../../lib/navigation";
+import { categoriesIndexUrl } from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
+
+const categoryItems = sectionNavigationItems(
+  await getCategories(),
+  categoriesIndexUrl(),
+);
+---
+
+<BaseLayout
+  title={titleWithSite("Categories")}
+  description="Browse articles by category."
+  canonicalPath={categoriesIndexUrl()}
+>
+  <BrowsingBody>
+    <CategoryOverviewBlock
+      title="Categories"
+      description="Browse the archive by subject."
+      items={categoryItems}
+    />
+  </BrowsingBody>
+</BaseLayout>

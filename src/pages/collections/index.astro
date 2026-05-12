@@ -1,0 +1,36 @@
+---
+import TermOverviewBlock from "../../components/blocks/TermOverviewBlock.astro";
+import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getEditorialCollections } from "../../lib/content";
+import {
+  collectionsIndexUrl,
+  collectionUrl,
+  SITE_TITLE,
+} from "../../lib/routes";
+import { titleWithSite } from "../../lib/site-config";
+
+const collectionItems = (await getEditorialCollections()).map((collection) => ({
+  count: collection.data.items.length,
+  description: collection.data.description,
+  href: collectionUrl(collection.id),
+  title: collection.data.title,
+}));
+---
+
+<BaseLayout
+  title={titleWithSite("Collections")}
+  description={`Curated article and announcement collections from ${SITE_TITLE}.`}
+  canonicalPath={collectionsIndexUrl()}
+>
+  <BrowsingBody>
+    <TermOverviewBlock
+      title="Collections"
+      description={`Curated paths through ${SITE_TITLE} articles and announcements.`}
+      items={collectionItems}
+      itemNoun="entry"
+      itemNounPlural="entries"
+      emptyLabel="No collections are available yet."
+    />
+  </BrowsingBody>
+</BaseLayout>

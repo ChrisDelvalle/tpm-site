@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
+  style?: string;
+}
+
+const { class: className, style = "", ...attrs } = Astro.props;
+const anchoredStyle = [
+  "left: var(--anchor-x, 1rem);",
+  "top: var(--anchor-y, calc(var(--site-header-height, 4rem) + 0.5rem));",
+  "max-width: var(--anchor-max-width, calc(100vw - 2rem));",
+  "max-height: var(--anchor-max-height, calc(100dvh - var(--site-header-height, 4rem) - 1rem));",
+  style,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<div
+  {...attrs}
+  data-anchor-panel
+  data-floating-panel
+  class:list={["fixed", className]}
+  style={anchoredStyle}
+>
+  <slot />
+</div>

@@ -1,0 +1,380 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
+
+import { optionalFeatureRouteEntries } from "../../src/lib/feature-routes";
+import { type SiteConfig, siteConfig } from "../../src/lib/site-config";
+import {
+  projectRelativePath,
+  siteInstance,
+  type SiteInstancePaths,
+} from "../../src/lib/site-instance";
+
+type RouteKey = keyof SiteConfig["routes"];
+
+type Severity = "error" | "warning";
+
+interface SiteDoctorCliIo {
+  stderr: Pick<typeof process.stderr, "write">;
+  stdout: Pick<typeof process.stdout, "write">;
+}
+
+interface SiteDoctorOptions {
+  config?: SiteConfig | undefined;
+  exists?: ((targetPath: string) => boolean) | undefined;
+  paths?: SiteInstancePaths | undefined;
+}
+
+/** Webmaster-facing diagnostic emitted by `site:doctor`. */
+export interface SiteDoctorIssue {
+  message: string;
+  path?: string | undefined;
+  repair: string;
+  severity: Severity;
+}
+
+/**
+ * Checks site-instance configuration relationships that basic schema parsing
+ * cannot know about.
+ *
+ * @param options Site doctor dependencies.
+ * @param options.config Parsed site config.
+ * @param options.exists Filesystem existence hook.
+ * @param options.paths Site-instance filesystem paths.
+ * @returns Webmaster-facing site diagnostics.
+ */
+export function siteDoctorIssues(
+  options: SiteDoctorOptions = {},
+): SiteDoctorIssue[] {
+  const config = options.config ?? siteConfig;
+  const exists = options.exists ?? existsSync;
+  const paths = options.paths ?? siteInstance;
+
+  return [
+    ...siteInstancePathIssues(paths, config, exists),
+    ...routeShapeIssues(config),
+    ...homepageCollectionIssues(paths, config, exists),
+    ...disabledFeatureNavigationIssues(config),
+  ];
+}
+
+/**
+ * Runs the site doctor CLI.
+ *
+ * @param args CLI arguments.
+ * @param io Output writers.
+ * @returns Process exit code.
+ */
+export function runSiteDoctorCli(
+  args = Bun.argv.slice(2),
+  io: SiteDoctorCliIo = {
+    stderr: process.stderr,
+    stdout: process.stdout,
+  },
+): number {
+  if (args.includes("--help")) {
+    io.stdout.write(usage());
+
+    return 0;
+  }
+
+  const quiet = args.includes("--quiet");
+  const issues = siteDoctorIssues();
+  const errorCount = issues.filter(
+    (issue) => issue.severity === "error",
+  ).length;
+
+  if (issues.length === 0) {
+    if (!quiet) {
+      io.stdout.write("Site doctor passed.\n");
+    }
+
+    return 0;
+  }
+
+  const report = formatSiteDoctorIssues(issues);
+
+  if (!quiet || errorCount > 0) {
+    const writer = errorCount > 0 ? io.stderr : io.stdout;
+    writer.write(report);
+  }
+
+  return errorCount > 0 ? 1 : 0;
+}
+
+/**
+ * Formats site doctor diagnostics for CLI output.
+ *
+ * @param issues Diagnostics to format.
+ * @returns Human-readable report.
+ */
+export function formatSiteDoctorIssues(
+  issues: readonly SiteDoctorIssue[],
+): string {
+  const lines = issues.map((issue) => {
+    const label = issue.severity === "error" ? "Error" : "Warning";
+    const pathLabel =
+      issue.path === undefined
+        ? ""
+        : `\n   Path: ${projectRelativePath(issue.path)}`;
+
+    return `${label}: ${issue.message}${pathLabel}\n   Fix: ${issue.repair}`;
+  });
+
+  return `${lines.join("\n\n")}\n`;
+}
+
+function siteInstancePathIssues(
+  paths: SiteInstancePaths,
+  config: SiteConfig,
+  exists: (targetPath: string) => boolean,
+): SiteDoctorIssue[] {
+  const requiredPaths = [
+    { label: "site root", path: paths.root },
+    { label: "site config", path: paths.config.site },
+    { label: "site theme", path: paths.theme },
+    { label: "redirect config", path: paths.config.redirects },
+    { label: "article content directory", path: paths.content.articles },
+    { label: "page content directory", path: paths.content.pages },
+    { label: "site public directory", path: paths.public },
+    ...featureDirectoryRequirements(paths, config),
+  ];
+
+  return requiredPaths.flatMap((entry) =>
+    exists(entry.path)
+      ? []
+      : [
+          {
+            message: `Missing ${entry.label}.`,
+            path: entry.path,
+            repair:
+              "Create this file or directory in the active site instance, or update SITE_INSTANCE_ROOT to point at the intended site.",
+            severity: "error" as const,
+          },
+        ],
+  );
+}
+
+function featureDirectoryRequirements(
+  paths: SiteInstancePaths,
+  config: SiteConfig,
+) {
+  return [
+    config.features.announcements && {
+      label: "announcement content directory",
+      path: paths.content.announcements,
+    },
+    config.features.authors && {
+      label: "author content directory",
+      path: paths.content.authors,
+    },
+    config.features.categories && {
+      label: "category metadata directory",
+      path: paths.content.categories,
+    },
+    {
+      label: "collection content directory",
+      path: paths.content.collections,
+    },
+  ].filter((entry) => entry !== false);
+}
+
+function routeShapeIssues(config: SiteConfig): SiteDoctorIssue[] {
+  const routeEntries = routeEntriesForConfig(config);
+  const duplicateIssues = duplicateRouteIssues(routeEntries);
+  const shapeIssues = routeEntries.flatMap(([key, value]) => {
+    if (key === "home") {
+      return value === "/"
+        ? []
+        : [
+            {
+              message: "The home route must be `/`.",
+              repair: "Set routes.home to `/`.",
+              severity: "error" as const,
+            },
+          ];
+    }
+
+    if (key === "feed") {
+      return value.endsWith(".xml")
+        ? []
+        : [
+            {
+              message: "The feed route should point at an XML file.",
+              repair: "Set routes.feed to a path like `/feed.xml`.",
+              severity: "error" as const,
+            },
+          ];
+    }
+
+    return value.endsWith("/")
+      ? []
+      : [
+          {
+            message: `Route ${key} should be trailing-slashed.`,
+            repair: `Set routes.${key} to a path ending in /.`,
+            severity: "error" as const,
+          },
+        ];
+  });
+
+  return [...duplicateIssues, ...shapeIssues];
+}
+
+function duplicateRouteIssues(
+  routeEntries: ReadonlyArray<[RouteKey, string]>,
+): SiteDoctorIssue[] {
+  const routesByValue = new Map<string, RouteKey[]>();
+
+  for (const [key, value] of routeEntries) {
+    routesByValue.set(value, [...(routesByValue.get(value) ?? []), key]);
+  }
+
+  return Array.from(routesByValue.entries()).flatMap(([value, keys]) =>
+    keys.length > 1
+      ? [
+          {
+            message: `Routes ${keys.join(", ")} all point to ${value}.`,
+            repair:
+              "Give each configured route a distinct path so generated pages and navigation cannot collide.",
+            severity: "error" as const,
+          },
+        ]
+      : [],
+  );
+}
+
+function homepageCollectionIssues(
+  paths: SiteInstancePaths,
+  config: SiteConfig,
+  exists: (targetPath: string) => boolean,
+): SiteDoctorIssue[] {
+  const collectionIds = [
+    {
+      label: "featured collection",
+      value: config.homepage.featuredCollection,
+    },
+    {
+      label: "start-here collection",
+      value: config.homepage.startHereCollection,
+    },
+  ];
+
+  return collectionIds.flatMap(({ label, value }) => {
+    const collectionPath = collectionSourcePath(
+      paths.content.collections,
+      value,
+      exists,
+    );
+
+    return exists(collectionPath)
+      ? []
+      : [
+          {
+            message: `Homepage ${label} \`${value}\` does not exist.`,
+            path: collectionPath,
+            repair:
+              "Create the configured collection file or update the homepage collection ID in site/config/site.json.",
+            severity: "error" as const,
+          },
+        ];
+  });
+}
+
+function disabledFeatureNavigationIssues(
+  config: SiteConfig,
+): SiteDoctorIssue[] {
+  const links = [
+    ...config.navigation.primary.map((link) => ({
+      location: "primary navigation",
+      ...link,
+    })),
+    ...config.navigation.footer.map((link) => ({
+      location: "footer navigation",
+      ...link,
+    })),
+    ...config.homepage.discoveryLinks.map((link) => ({
+      href:
+        link.href ??
+        (link.route === undefined ? "" : config.routes[link.route]),
+      label: link.label,
+      location: "homepage discovery",
+    })),
+  ];
+  const disabledFeatureRoutes = optionalFeatureRouteEntries(config).filter(
+    (entry) => !entry.enabled,
+  );
+
+  return links.flatMap((link) => {
+    const disabledTarget = disabledFeatureRoutes.find(({ route }) =>
+      linkTargetsRoute(link.href, route),
+    );
+
+    return disabledTarget === undefined
+      ? []
+      : [
+          {
+            message: `${link.location} link "${link.label}" points to disabled feature "${disabledTarget.feature}".`,
+            repair:
+              "Either enable the feature or remove this link from site/config/site.json.",
+            severity: "error" as const,
+          },
+        ];
+  });
+}
+
+function routeEntriesForConfig(config: SiteConfig): Array<[RouteKey, string]> {
+  return [
+    ["allArticles", config.routes.allArticles],
+    ["announcements", config.routes.announcements],
+    ["articles", config.routes.articles],
+    ["authors", config.routes.authors],
+    ["bibliography", config.routes.bibliography],
+    ["categories", config.routes.categories],
+    ["collections", config.routes.collections],
+    ["feed", config.routes.feed],
+    ["home", config.routes.home],
+    ["search", config.routes.search],
+    ["tags", config.routes.tags],
+  ];
+}
+
+function collectionSourcePath(
+  collectionRoot: string,
+  collectionId: string,
+  exists: (targetPath: string) => boolean,
+) {
+  const stemPath = path.join(collectionRoot, collectionId);
+  const mdPath = `${stemPath}.md`;
+  const mdxPath = `${stemPath}.mdx`;
+
+  if (exists(mdPath)) {
+    return mdPath;
+  }
+
+  return mdxPath;
+}
+
+function linkTargetsRoute(href: string, route: string): boolean {
+  if (!href.startsWith("/")) {
+    return false;
+  }
+
+  if (route.endsWith(".xml")) {
+    return href === route;
+  }
+
+  return href === route || href.startsWith(route);
+}
+
+function usage(): string {
+  return [
+    "Usage: bun scripts/site/site-doctor.ts [--quiet]",
+    "",
+    "Checks site-instance config relationships that schema parsing cannot validate alone.",
+    "",
+  ].join("\n");
+}
+
+if (import.meta.main) {
+  process.exitCode = runSiteDoctorCli();
+}

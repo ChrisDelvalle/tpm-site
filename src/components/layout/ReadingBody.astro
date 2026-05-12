@@ -1,0 +1,37 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import MarginSidebarLayout from "./MarginSidebarLayout.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  spacing?: "normal" | "relaxed";
+}
+
+const { spacing = "normal", class: className, ...attrs } = Astro.props;
+const spacingClasses = {
+  normal: "py-8 lg:py-12",
+  relaxed: "py-10 lg:py-16",
+} as const;
+const hasToc = Astro.slots.has("toc");
+---
+
+<div
+  {...attrs}
+  data-reading-body
+  class:list={[
+    "w-full min-w-0 px-4 sm:px-6 lg:px-8",
+    spacingClasses[spacing],
+    className,
+  ]}
+>
+  <MarginSidebarLayout leftVisibility={hasToc ? "auto" : "never"}>
+    {
+      hasToc && (
+        <Fragment slot="left">
+          <slot name="toc" />
+        </Fragment>
+      )
+    }
+    <slot />
+  </MarginSidebarLayout>
+</div>
