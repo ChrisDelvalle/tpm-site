@@ -249,14 +249,17 @@ deploy:
       with:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        command: deploy
+        command: deploy --cwd ../..
         packageManager: npm
+        workingDirectory: .github/cloudflare-deploy
         wranglerVersion: "4"
 ```
 
 The Cloudflare deploy job consumes the already-built artifact, so it does not
 need Bun. It uses Node 22 and asks `wrangler-action` to install/run Wrangler
-with npm because Wrangler 4 requires Node 22 or newer.
+with npm because Wrangler 4 requires Node 22 or newer. The npm install is
+intentionally isolated in `.github/cloudflare-deploy` so npm installs only
+Wrangler instead of resolving the Bun-managed site toolchain.
 
 Required GitHub secrets:
 
@@ -309,6 +312,8 @@ Focused tests:
 - CI workflow test:
   - deploy job uses `cloudflare/wrangler-action@v3`;
   - deploy job sets up Node 22 and forces `packageManager: npm`;
+  - deploy job runs from `.github/cloudflare-deploy` and passes
+    `--cwd ../..` so Wrangler uses the repository-root config and `dist`;
   - deploy job consumes `verified-dist`;
   - deploy job no longer uses `actions/deploy-pages` after cutover.
 

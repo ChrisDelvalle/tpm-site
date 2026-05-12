@@ -90,11 +90,13 @@ describe("CI workflow", () => {
     expect(deploy).toContain(
       `apiToken: ${secretExpression("CLOUDFLARE_API_TOKEN")}`,
     );
-    expect(deploy).toContain("command: deploy");
+    expect(deploy).toContain("command: deploy --cwd ../..");
     expect(deploy).toContain("packageManager: npm");
+    expect(deploy).toContain("workingDirectory: .github/cloudflare-deploy");
     expect(deploy).toContain('wranglerVersion: "4"');
     expect(deploy).not.toContain("environment:");
     expect(deploy).not.toContain("oven-sh/setup-bun@v2");
+    expect(deploy).not.toContain("NPM_CONFIG_LEGACY_PEER_DEPS");
     expect(deploy).not.toContain("bun run build");
     expect(deploy).not.toContain("bun run verify");
     expect(deploy).not.toContain("bun run validate:html");
