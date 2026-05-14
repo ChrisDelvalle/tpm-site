@@ -71,8 +71,9 @@ bun run fix:markdown
 ```
 
 Asset cleanup checks are review-only. They warn about duplicate images and
-images in `src/assets/` that do not appear to be used by the site. If an unused
-image is worth keeping for possible future use, move it to `unused-assets/`.
+images in `site/assets/` that do not appear to be used by the site. If an
+unused image is worth keeping for possible future use, move it to
+`site/unused-assets/`.
 If a warning is intentionally wrong, add a narrow path or glob to
 `scripts/duplicate-image-ignore.json` or `scripts/unused-image-ignore.json`:
 
@@ -121,28 +122,41 @@ expects the `gitleaks` binary to be available locally.
 For a step-by-step article submission guide for non-technical authors, see
 `AUTHOR_TUTORIAL.md`.
 
+The reusable Astro platform lives in `src/`. The current TPM publication
+instance lives in `site/`, which is the default `SITE_INSTANCE_ROOT`. Most
+author-facing content, configuration, assets, public files, and theme overrides
+belong under `site/`.
+
 Article Markdown and MDX live in:
 
 ```text
-src/content/articles/<category>/<slug>.md
-src/content/articles/<category>/<slug>.mdx
+site/content/articles/<category>/<slug>.md
+site/content/articles/<category>/<slug>.mdx
 ```
 
-Static page Markdown lives in `src/content/pages/`. The about page is
-`src/content/pages/about.md`.
+Announcements live in `site/content/announcements/`. They use article-like
+metadata and can appear in feeds and homepage announcement slots without being
+mixed into normal article directories.
 
-Category display metadata lives in `src/content/categories/*.json`. Category
+Collections live in `site/content/collections/`. A collection defines an
+ordered or sorted list of article or announcement entries for pages such as
+Start Here and Featured.
+
+Static page Markdown lives in `site/content/pages/`. The home page entry is
+`site/content/pages/index.md`; the about page is `site/content/pages/about.md`.
+
+Category display metadata lives in `site/content/categories/*.json`. Category
 metadata controls labels and ordering for category navigation; article grouping
-comes from the first folder below `src/content/articles/`.
+comes from the first folder below `site/content/articles/`.
 
 ## Adding An Article
 
-1. Pick a category folder under `src/content/articles/`.
+1. Pick a category folder under `site/content/articles/`.
 2. Add a URL-safe `.md` or `.mdx` file whose filename stem is the desired public
    slug.
 3. Add frontmatter with `title`, `description`, `date`, and `author`.
-   `author` should match an existing entry or alias in `src/content/authors/`.
-4. Put new article images under `src/assets/articles/<article-slug>/` unless
+   `author` should match an existing entry or alias in `site/content/authors/`.
+4. Put new article images under `site/assets/articles/<article-slug>/` unless
    they are shared assets.
 5. Run the validation commands.
 
@@ -173,7 +187,7 @@ Use `draft: true` to keep an article unpublished. Draft articles are excluded
 from generated article routes, archives, categories, RSS, sitemap, and search.
 
 If an article introduces a new author, add or request a matching author profile
-under `src/content/authors/<author-slug>.md`. Keep author metadata factual:
+under `site/content/authors/<author-slug>.md`. Keep author metadata factual:
 display name, type, aliases, and explicitly approved public links only.
 
 Do not add `slug`, `topic`, or `category` frontmatter. The article slug comes
@@ -186,32 +200,33 @@ historical metadata. They do not control routing, publishing, or rendering.
 
 Current article category folders:
 
-- `src/content/articles/memeculture/` -> `/categories/memeculture/` (`Culture`)
-- `src/content/articles/metamemetics/` -> `/categories/metamemetics/`
-- `src/content/articles/aesthetics/` -> `/categories/aesthetics/`
-- `src/content/articles/irony/` -> `/categories/irony/`
-- `src/content/articles/game-studies/` -> `/categories/game-studies/`
-- `src/content/articles/history/` -> `/categories/history/`
-- `src/content/articles/philosophy/` -> `/categories/philosophy/`
-- `src/content/articles/politics/` -> `/categories/politics/`
+- `site/content/articles/memeculture/` -> `/categories/memeculture/`
+  (`Culture`)
+- `site/content/articles/metamemetics/` -> `/categories/metamemetics/`
+- `site/content/articles/aesthetics/` -> `/categories/aesthetics/`
+- `site/content/articles/irony/` -> `/categories/irony/`
+- `site/content/articles/game-studies/` -> `/categories/game-studies/`
+- `site/content/articles/history/` -> `/categories/history/`
+- `site/content/articles/philosophy/` -> `/categories/philosophy/`
+- `site/content/articles/politics/` -> `/categories/politics/`
 
 If you add a new category folder, add a matching JSON file in
-`src/content/categories/` when you want a custom display title, description, or
+`site/content/categories/` when you want a custom display title, description, or
 ordering.
 
 ## Images
 
-Use `src/assets/` for project-owned images so Astro can process and validate
+Use `site/assets/` for project-owned images so Astro can process and validate
 them. Article-owned images should usually live under a folder matching the
 article slug:
 
 ```text
-src/assets/articles/example-article-title/
+site/assets/articles/example-article-title/
   diagram.png
 ```
 
-Shared article images belong in `src/assets/shared/`. Site UI and homepage
-images belong in `src/assets/site/`.
+Shared article images belong in `site/assets/shared/`. Site UI and homepage
+images belong in `site/assets/site/`.
 
 Use MDX when an article needs component-level image control:
 
@@ -222,8 +237,9 @@ import diagram from "../../../assets/articles/example-article-title/diagram.png"
 <Image src={diagram} alt="Alt text" />
 ```
 
-Do not put article, page, or site UI images in `public/` or in repository-root
-image folders. Those locations bypass Astro's image validation and processing.
+Do not put article, page, or site UI images in `site/public/` or in
+repository-root image folders. Those locations bypass Astro's image validation
+and processing.
 
 Use a relative source path for the frontmatter `image` field:
 
@@ -233,10 +249,10 @@ imageAlt: "Brief description of the image."
 ```
 
 The slug-matching asset folder is an organization convention, not an enforced
-rule. Authors can reference any asset under `src/assets/` when an image is
+rule. Authors can reference any asset under `site/assets/` when an image is
 shared or belongs somewhere else.
 
-Use `public/` only for non-image files that intentionally need stable
+Use `site/public/` only for non-image files that intentionally need stable
 root-relative URLs, such as favicons, `robots.txt`, deploy host files, or
 downloads that should not be transformed.
 
@@ -284,8 +300,8 @@ Astro and Vite process project CSS and normal client scripts for production:
 CSS is minified and chunked, processed scripts are bundled and minified, and
 emitted project assets use hashed filenames for cacheability.
 
-Files in `public/` are copied through unchanged. Treat downloads, favicons, and
-other public files as production-ready before committing them.
+Files in `site/public/` are copied through unchanged. Treat downloads,
+favicons, and other public files as production-ready before committing them.
 
 Pagefind search assets are generated after the Astro build and live under
 `dist/pagefind/`.
@@ -307,10 +323,12 @@ bun run verify
 
 ## Deployment
 
-GitHub Pages deployment is handled by `.github/workflows/ci.yml` on pushes to
-`main`. Deployment waits for the blocking quality, build verification, browser,
-and high-severity audit jobs, then publishes the generated `dist/` directory
-with GitHub Pages Actions.
+Production deploys use Cloudflare Workers Static Assets. The Worker is
+configured in `wrangler.toml`; `bun run build:release` creates the deployable
+`dist/` output plus Cloudflare-specific generated files.
+
+`.github/workflows/ci.yml` deploys on pushes to `main` after the blocking
+quality, build, browser, catalog, and audit jobs pass.
 
 GitHub review also runs non-blocking Markdown, asset cleanup, accessibility,
 Lighthouse, coverage, and all-severity audit jobs. Treat those as review
@@ -319,8 +337,8 @@ signals rather than publish blockers.
 Manual deployment hosts should:
 
 1. Install dependencies with `bun install`.
-2. Build with `bun run build`.
-3. Publish the `dist/` directory.
+2. Run `bun run check:release`.
+3. Deploy with `bun run deploy:cloudflare`.
 
 The production site origin is configured in `astro.config.ts`:
 
@@ -328,5 +346,5 @@ The production site origin is configured in `astro.config.ts`:
 site: "https://thephilosophersmeme.com";
 ```
 
-`public/CNAME`, `public/robots.txt`, and `public/favicon.svg` are copied into
-the built site.
+`site/public/CNAME`, `site/public/robots.txt`, `site/public/favicon.svg`, and
+the touch icon files are copied into the built site.

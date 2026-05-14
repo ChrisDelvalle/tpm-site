@@ -1,34 +1,594 @@
-# TPM Site Instance
+# Editing The TPM Site
 
-This directory is the site-owner and author-facing surface for the current
-The Philosopher's Meme site.
+This folder contains the editable content and settings for The Philosopher's
+Meme website.
 
-The long-term goal is that most publication-specific choices live here while
-the reusable blogging platform handles the technical work. Future admin UI work
-should read and write the same files.
+If you mostly want to write articles, add announcements, update featured
+articles, or make small site copy changes, start here. You should not need to
+edit the technical platform code under `src/` for ordinary publishing work.
 
-Current editable areas:
+For a slower step-by-step article walkthrough, see
+[`../AUTHOR_TUTORIAL.md`](../AUTHOR_TUTORIAL.md).
 
-- `config/site.json`: site identity, canonical URL, feature switches,
-  content-type defaults, navigation, support links, and share attribution.
-- `config/site.schema.json`: generated editor and future-GUI schema for
-  `config/site.json`. Update it with `bun run site:schema`.
-- `theme.css`: site-owned semantic theme tokens for colors, fonts, radius, and
-  shadows. The platform reads these through stable CSS variables.
-- `content/`: Markdown, MDX, and JSON content collections for articles,
-  announcements, authors, categories, collections, and pages.
-- `assets/`: project-owned images and SVGs that should go through Astro's asset
-  pipeline.
-- `public/`: files copied directly to the site root, such as `favicon.svg`,
+## What You Can Edit Here
+
+- `content/articles/`: articles, grouped by category.
+- `content/announcements/`: short announcement posts.
+- `content/collections/`: curated lists such as Featured and Start Here.
+- `content/authors/`: author names, aliases, bios, and links.
+- `content/categories/`: category display names and order.
+- `content/pages/`: standalone site pages such as Home and About.
+- `assets/`: images and SVGs that should be optimized by the site build.
+- `config/site.json`: site title, navigation, homepage labels, support links,
+  share settings, feature switches, and defaults.
+- `theme.css`: site colors, fonts, radius, and visual theme tokens.
+- `public/`: files copied directly to the site root, such as favicons,
   `robots.txt`, and `CNAME`.
-- `unused-assets/`: parked historical assets that are intentionally kept out of
-  the generated site.
+- `unused-assets/`: old assets kept for reference. Do not link to files from
+  this folder in new content.
 
-Run `bun run site:doctor` after config changes to catch relationship mistakes
-such as disabled features still appearing in navigation or homepage collections
-pointing at missing files.
+## The Common Workflow
 
-Run `bun run author:check` after ordinary content or site-instance edits. It
-wraps the content, tag, asset, config, and schema checks authors and webmasters
-need most often. Run `bun run author:fix` only when tag normalization is the
-reported repair.
+Most content changes follow this pattern:
+
+1. Update your copy of the repository.
+2. Create a branch for your change.
+3. Edit files inside `site/`.
+4. Run `bun run author:check` if you can.
+5. Commit your change.
+6. Push the branch.
+7. Open a pull request for review.
+
+The repository is:
+
+```text
+https://github.com/seongyher/tpm-site
+```
+
+GitHub Desktop is the easiest tool if you are not comfortable with terminal
+commands. It can clone the repository, create a branch, commit your edits,
+push, and open a pull request.
+
+## Add A New Article
+
+Put normal articles in:
+
+```text
+site/content/articles/<category>/<article-slug>.md
+```
+
+Example:
+
+```text
+site/content/articles/history/my-new-article.md
+```
+
+This becomes:
+
+```text
+/articles/my-new-article/
+```
+
+Use `.md` for normal articles. Use `.mdx` only when the article needs a custom
+component, such as a special embed or button.
+
+Current article category folders:
+
+- `aesthetics`
+- `game-studies`
+- `history`
+- `irony`
+- `memeculture` (shown as Culture)
+- `metamemetics`
+- `philosophy`
+- `politics`
+
+Ask a maintainer before creating a new category.
+
+### Article Template
+
+Start a new article with this:
+
+```md
+---
+title: "My New Article"
+description: "A short one-sentence summary for search, feeds, and previews."
+date: 2026-04-30
+author: "Author Name"
+tags:
+  - example tag
+image: "../../../assets/articles/my-new-article/cover.png"
+imageAlt: "Short description of the cover image."
+---
+
+Article body starts here.
+```
+
+Only `title`, `description`, `date`, and `author` are required for a normal
+article. Tags and images are strongly recommended when they help readers find
+or understand the article.
+
+Do not add `slug` or `category` fields. The filename becomes the slug. The
+folder becomes the category.
+
+### Article Metadata
+
+| Field         | Meaning                                                                |
+| ------------- | ---------------------------------------------------------------------- |
+| `title`       | The article title shown on the page.                                   |
+| `description` | A short summary used in previews, search, RSS, and metadata.           |
+| `date`        | Publication date. Use `YYYY-MM-DD` unless a maintainer asks otherwise. |
+| `author`      | Must match an author name or alias in `content/authors/`.              |
+| `tags`        | Optional grouping labels. They become clickable tag pages.             |
+| `image`       | Optional preview image for article lists and social previews.          |
+| `imageAlt`    | Description of the preview image for readers who cannot see it.        |
+| `draft`       | Set `draft: true` to keep an entry unpublished.                        |
+| `pdf`         | Articles default to PDF export. Set `pdf: false` only for exceptions.  |
+| `visibility`  | Optional controls for where a published entry appears. See below.      |
+
+Tags should be lowercase, trimmed, and unique. Do not use `/` in tags.
+
+Good:
+
+```yaml
+tags:
+  - internet culture
+  - memes
+  - philosophy
+```
+
+Avoid:
+
+```yaml
+tags:
+  - Internet Culture
+  - memes/memetics
+  - memes
+  - memes
+```
+
+If tag formatting is the only problem, `bun run author:fix` can usually fix it.
+
+## Visibility, Drafts, And Exceptions
+
+By default, articles and announcements are visible everywhere they should be:
+directories, homepage surfaces, RSS, and search.
+
+Use `draft: true` when something should not be published at all.
+
+Use `visibility` only for unusual cases where a published page should exist but
+stay out of one or more automatic lists:
+
+```yaml
+visibility:
+  homepage: false
+  directory: false
+  search: false
+  feed: false
+```
+
+What each option means:
+
+- `homepage`: automatic homepage slots and homepage collections.
+- `directory`: browsing pages such as archive, category, tag, author,
+  announcement, and collection pages.
+- `search`: the site search index.
+- `feed`: the RSS feed.
+
+You can set only the values you need. Omitted values use the defaults from
+`config/site.json`.
+
+## Write The Article Body
+
+The page title is already created from frontmatter, so start body headings at
+`##`, not `#`.
+
+```md
+## Main Section
+
+Text here.
+
+### Smaller Section
+
+More text here.
+```
+
+Use normal Markdown links for ordinary links:
+
+```md
+See the [Know Your Meme entry](https://knowyourmeme.com/).
+```
+
+For footnotes, citations, and bibliography entries, use the project citation
+format documented in
+[`../docs/ARTICLE_REFERENCE_AUTHORING.md`](../docs/ARTICLE_REFERENCE_AUTHORING.md).
+The short version:
+
+- explanatory notes use `[^note-something]`;
+- source citations use `[^cite-source-key]`;
+- bibliography source data goes in a hidden `tpm-bibtex` block.
+
+Ask a maintainer if you are unsure whether something should be an ordinary link
+or a bibliography citation.
+
+## Add Images
+
+Put article-specific images in a folder matching the article slug:
+
+```text
+site/assets/articles/my-new-article/
+  cover.png
+  diagram.png
+```
+
+Use them in the article like this:
+
+```md
+![Alt text describing the image](../../../assets/articles/my-new-article/diagram.png)
+```
+
+Use a preview image in frontmatter like this:
+
+```yaml
+image: "../../../assets/articles/my-new-article/cover.png"
+imageAlt: "Short description of the cover image."
+```
+
+If an image is reused by several articles or pages, put it in:
+
+```text
+site/assets/shared/
+```
+
+Do not add new article images to `public/`, `unused-assets/`, or random folders.
+Images in `site/assets/` are checked and optimized by the site.
+
+Alt text should describe what the image communicates. Decorative logos may have
+minimal alt text or be handled by the component, but article images should
+usually have useful alt text.
+
+## Add An Announcement
+
+Announcements are article-like posts for site news, calls to action, or short
+updates. Put them in:
+
+```text
+site/content/announcements/<announcement-slug>.md
+```
+
+Example:
+
+```text
+site/content/announcements/forum-update.md
+```
+
+This becomes:
+
+```text
+/announcements/forum-update/
+```
+
+Announcement frontmatter is almost the same as article frontmatter:
+
+```md
+---
+title: "Forum Update"
+description: "A short summary of the announcement."
+date: 2026-05-01
+author: "The Philosopher's Meme"
+tags: []
+---
+
+Announcement body starts here.
+```
+
+Announcements appear on the announcements page, can appear in RSS, and the
+newest homepage-visible announcements appear on the homepage.
+
+Use `visibility` if an announcement should have a direct link but stay out of
+homepage, RSS, search, or directory lists:
+
+```yaml
+visibility:
+  homepage: false
+  directory: false
+  search: false
+  feed: false
+```
+
+Announcements do not use the article PDF setting.
+
+## Edit Featured Articles And Start Here
+
+Homepage curation is managed with collections:
+
+- `content/collections/featured.md` controls Featured Articles.
+- `content/collections/start-here.md` controls Start Here.
+
+Each collection lists article or announcement slugs in the order they should
+appear.
+
+Simple item:
+
+```yaml
+items:
+  - what-is-a-meme
+  - homesteading-the-memeosphere
+```
+
+Item with custom display note:
+
+```yaml
+items:
+  - slug: what-is-a-meme
+    note: A clear entry point into TPM's approach to memes and humor.
+```
+
+The slug is the filename without `.md` or `.mdx`. It can point to an article or
+an announcement. If a slug is misspelled, the checks will fail with a message
+naming the missing entry.
+
+The body text in a collection file is mainly editorial notes for now. The
+public collection page uses the frontmatter title, description, and item list.
+
+## Add A New Collection
+
+Collections are curated reading lists. Add a file in:
+
+```text
+site/content/collections/<collection-slug>.md
+```
+
+Example:
+
+```md
+---
+title: "Meme Theory Basics"
+description: "A short path through introductory TPM articles."
+items:
+  - what-is-a-meme
+  - memes-are-not-jokes-they-are-diagram-games
+  - homesteading-the-memeosphere
+---
+
+Internal notes about why this collection exists.
+```
+
+This creates:
+
+```text
+/collections/meme-theory-basics/
+```
+
+It also appears on:
+
+```text
+/collections/
+```
+
+Use `draft: true` in collection frontmatter if the collection is not ready to
+show publicly.
+
+## Edit Authors
+
+Author files live in:
+
+```text
+site/content/authors/
+```
+
+Example:
+
+```md
+---
+displayName: "Author Name"
+type: "person"
+aliases:
+  - "Author Name"
+shortBio: "Optional short author bio."
+website: "https://example.com"
+socials:
+  - label: "Website"
+    href: "https://example.com"
+---
+```
+
+The `author` field in articles and announcements should match either
+`displayName` or one of the `aliases`.
+
+Ask a maintainer before adding a new author profile unless you have been asked
+to do it.
+
+Allowed author `type` values:
+
+- `person`
+- `organization`
+- `collective`
+- `anonymous`
+
+## Edit Categories
+
+Categories are based on article folders. The matching display metadata lives in:
+
+```text
+site/content/categories/<category-folder>.json
+```
+
+Example:
+
+```json
+{
+  "title": "Media Theory",
+  "description": "Articles about media theory and internet culture.",
+  "order": 9
+}
+```
+
+Ask a maintainer before adding, renaming, or removing a category. Category
+changes affect URLs, navigation, archives, and old links.
+
+## Edit Home And About Pages
+
+Standalone pages live in:
+
+```text
+site/content/pages/
+```
+
+Important files:
+
+- `index.md`: homepage text and hero metadata.
+- `about.md`: about page content.
+
+You can edit ordinary Markdown body text directly. Be more careful with
+frontmatter such as hero images, because those values connect to page layout.
+
+## Edit Site Settings
+
+Most site-wide settings are in:
+
+```text
+site/config/site.json
+```
+
+Common things a webmaster might change there:
+
+- site title and description;
+- primary and footer navigation links;
+- homepage labels and limits;
+- support links;
+- share-menu targets and social handles;
+- feature switches;
+- default visibility and PDF behavior.
+
+After changing `site/config/site.json`, run:
+
+```sh
+bun run site:doctor
+```
+
+If the schema check says `site/config/site.schema.json` is stale, a maintainer
+can regenerate it with:
+
+```sh
+bun run site:schema
+```
+
+## Edit Theme
+
+Site-owned colors, fonts, radius, and shadows live in:
+
+```text
+site/theme.css
+```
+
+Small color or theme-token changes belong there. Avoid one-off styling inside
+articles. If a visual change affects layout or components, ask a maintainer.
+
+## Run Checks
+
+If you can use the terminal, install dependencies once:
+
+```sh
+bun install
+```
+
+Run the author-facing check after content edits:
+
+```sh
+bun run author:check
+```
+
+If the only issue is tag normalization, run:
+
+```sh
+bun run author:fix
+```
+
+Then run the check again:
+
+```sh
+bun run author:check
+```
+
+If you cannot run local checks, it is still okay to open a pull request. GitHub
+will run checks automatically, and maintainers can help interpret failures.
+
+## Submit A Pull Request
+
+### With GitHub Desktop
+
+1. Open the repository in GitHub Desktop.
+2. Click **Fetch origin**, then **Pull origin** if it appears.
+3. Create a new branch with a clear name, such as
+   `article/my-new-article`.
+4. Make your edits inside `site/`.
+5. Review the changed files in GitHub Desktop.
+6. Write a short commit message, such as `Add my new article`.
+7. Click **Commit**.
+8. Click **Push origin**.
+9. Click **Create Pull Request**.
+10. In GitHub, make sure the base branch is `main`, then submit the pull
+    request.
+
+### With The Terminal
+
+```sh
+git switch main
+git pull
+git switch -c article/my-new-article
+```
+
+Make your edits, then:
+
+```sh
+bun run author:check
+git add site/
+git commit -m "Add my new article"
+git push -u origin article/my-new-article
+```
+
+Then open:
+
+```text
+https://github.com/seongyher/tpm-site
+```
+
+GitHub should show a button to compare your branch and open a pull request.
+
+## Pull Request Checklist
+
+Before asking for review:
+
+- The article or announcement is in the correct folder.
+- The filename is lowercase words separated by hyphens.
+- Required frontmatter is present.
+- The author exists in `content/authors/` or a maintainer knows to add them.
+- Tags are lowercase, unique, and do not contain `/`.
+- Images live under `site/assets/`.
+- Article images have useful alt text.
+- Body headings start at `##`, not `#`.
+- Featured and Start Here slugs match real article or announcement filenames.
+- `draft: true` is used for unpublished work.
+- `visibility` is used only when a published page should be hidden from a
+  specific surface.
+- `bun run author:check` passes, if you can run it.
+
+If a check fails and you do not understand it, leave a comment on the pull
+request and ask for help. Do not open a second pull request for the same
+article unless a maintainer asks.
+
+## When To Ask A Maintainer
+
+Ask before:
+
+- creating or renaming a category;
+- adding a new author profile;
+- using MDX or importing components;
+- changing `config/site.json` feature switches or routes;
+- changing `theme.css` layout-related tokens;
+- editing `public/CNAME`, redirects, or deployment-related files;
+- moving old assets out of `unused-assets/`.
+
+Most ordinary article, announcement, image, tag, and collection edits can be
+submitted directly for review.

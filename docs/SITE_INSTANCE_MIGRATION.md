@@ -111,12 +111,12 @@ not the other way around.
   platform internals.
 - `astro:assets` still processes article images, home images, CTA brand assets,
   fallback social images, and catalog fixtures.
-- Root public files still copy to the output root.
+- `site/public/` files still copy to the output root.
 - Generated PDFs remain next to article HTML output.
 - Scripts report editor-facing paths under `site/` instead of stale
   `src/content` or `src/assets` paths.
-- `unused-assets` stays out of the build and remains subject to duplicate-image
-  review.
+- `site/unused-assets` stays out of the build and remains subject to
+  duplicate-image review.
 
 ## MDX Asset Imports
 

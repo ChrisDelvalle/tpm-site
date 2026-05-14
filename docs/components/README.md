@@ -1,9 +1,9 @@
 # Component Design One-Pagers
 
-This directory mirrors `src/components/`. Each public component or page-level
-block has a short design one-pager that documents what the component is for,
-what it may render, how it relates to parent and sibling components, and what
-must remain true when the implementation changes.
+This directory mirrors `src/components/`. Each current public component or
+page-level block has a short design one-pager that documents what the component
+is for, what it may render, how it relates to parent and sibling components,
+and what must remain true when the implementation changes.
 
 New component work should start here:
 
@@ -30,3 +30,6 @@ Mirrored folders:
 - `pages/`: non-article Markdown page surfaces.
 - `seo/`: machine-readable metadata components.
 - `ui/`: low-level primitives.
+
+Route-facing layouts live in `docs/layouts/`. Deferred component ideas without
+matching source files live in `docs/deferred/` until they become active work.

@@ -58,28 +58,31 @@ schema/env changes when editor types are stale.
 Conventional structure:
 
 ```text
+site/content/          active site-instance content collections
+site/assets/           active site-instance processed source assets
+site/public/           active site-instance files copied as-is to site root
+site/config/           active site-instance configuration
 src/pages/              file routes and endpoints
 src/components/         UI, blocks, primitives, islands
 src/layouts/            document and content shells
-src/content/            content collections
-src/assets/             processed source assets
 src/styles/             global CSS entry and tokens
 src/actions/            Astro Actions
 src/middleware.ts       request middleware
 src/env.d.ts            global app types
-src/content.config.ts   content collection config
-public/                 copied as-is to site root
+src/content.config.ts   site-instance-backed content collection config
 astro.config.ts         framework config
 dist/                   generated output
 ```
 
-Only `src/pages/` is required and reserved. Use `src/assets/` for project-owned
-assets that should be optimized, fingerprinted, or type checked. Use `public/`
-only for files that must be copied untouched, such as `favicon.svg`,
-`robots.txt`, `CNAME`, verification files, and downloads.
+Only `src/pages/` is required and reserved by Astro. This project keeps
+publication-owned content and assets in the active site instance, defaulting to
+`site/`. Use `site/assets/` for project-owned assets that should be optimized,
+fingerprinted, or type checked. Use `site/public/` only for files that must be
+copied untouched, such as `favicon.svg`, `robots.txt`, `CNAME`, verification
+files, and downloads.
 
-Do not put article/UI images, app CSS, or app JS in `public/` unless a stable
-unprocessed URL is required.
+Do not put article/UI images, app CSS, or app JS in `site/public/` unless a
+stable unprocessed URL is required.
 
 ## Astro Components
 
@@ -317,14 +320,21 @@ headers before child rendering can flush.
 
 ## Content Collections
 
-Define collections in `src/content.config.ts`:
+Define collections in `src/content.config.ts`. In this repo, collection loaders
+should resolve through the active site instance instead of hard-coding
+`src/content`:
 
 ```ts
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+import { projectRelativePath, siteInstance } from "./lib/site-instance";
+
 const articles = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/articles" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: projectRelativePath(siteInstance.content.articles),
+  }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -397,12 +407,12 @@ Sanitize full-content RSS and fix relative URLs.
 
 ## Images And Assets
 
-Use `src/assets/` for project-owned images. Public files are not optimized,
+Use `site/assets/` for project-owned images. Public files are not optimized,
 hashed, bundled, or checked. Good convention:
 
-- `src/assets/articles/<article-slug>/`
-- `src/assets/shared/`
-- `src/assets/site/`
+- `site/assets/articles/<article-slug>/`
+- `site/assets/shared/`
+- `site/assets/site/`
 
 In `.astro`, import local images or use collection `image()`. In Markdown/MDX,
 use relative paths. Remote images need configured `image.domains` or
@@ -788,7 +798,7 @@ Accessibility defaults:
 - Hydrating Astro components.
 - Importing `.astro` inside framework component files.
 - Passing functions to hydrated framework props.
-- Using `public/` for optimizable images.
+- Using `site/public/` for optimizable images.
 - Missing `alt` on `Image`/`Picture`.
 - Adding `priority` to many images.
 - Manually writing `widths`/`sizes` when `layout` should do it.
@@ -814,7 +824,7 @@ Before coding:
 1. Classify the feature: static, build-time, request-time, or browser-time.
 2. Choose the least dynamic Astro primitive.
 3. Decide whether content belongs in `src/pages`, a collection, or data file.
-4. Decide whether assets belong in `src/assets` or `public`.
+4. Decide whether assets belong in `site/assets` or `site/public`.
 5. Define metadata, draft filtering, and route helpers before rendering.
 6. Search Astro Docs MCP for exact APIs when unsure.
 
