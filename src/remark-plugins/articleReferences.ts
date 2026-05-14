@@ -298,7 +298,10 @@ function markerLinkNode(marker: ArticleReferenceMarker): MutableMdastNode {
       hProperties: {
         "aria-label": `${marker.kind === "citation" ? "Citation" : "Note"} ${marker.displayText}`,
         "data-article-reference-marker": "true",
+        "data-reference-entry-id": marker.entryId,
         "data-reference-kind": marker.kind,
+        "data-reference-label": marker.label,
+        "data-reference-order": String(marker.order),
         id: marker.id,
       },
     },

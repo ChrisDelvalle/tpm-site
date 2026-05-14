@@ -15,6 +15,7 @@ describe("ArticleReferences", () => {
       view.indexOf(">Bibliography<"),
     );
     expect(view).toContain("data-article-references");
+    expect(view).toContain("data-article-reference-preview");
     expect(view).toContain("note-context");
     expect(view).toContain("cite-baudrillard-1981");
   });
