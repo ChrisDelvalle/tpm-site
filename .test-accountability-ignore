@@ -51,6 +51,10 @@ src/styles/**/*.css
 agent-docs/**
 scripts/article-submission/**
 
+# Approved exception: Documentation image assets are supporting material for
+# Markdown docs and are reviewed with the documentation they illustrate.
+docs/site-demo.png
+
 # Approved exception: GitHub, editor, and local-tool metadata configure external
 # tools and are covered by the tools they configure, not mirrored unit tests.
 .codex/**

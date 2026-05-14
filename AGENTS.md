@@ -47,9 +47,21 @@ to the active milestone.
 
 ## Project Map
 
-- `src/content/articles/`: current source-of-truth article content.
-- `src/content/categories/`: optional category display metadata.
-- `src/content/pages/`: source-of-truth Markdown pages such as `/about/`.
+- `site/`: default TPM site instance. Publication-specific content, assets,
+  public files, theme overrides, redirects, and site config belong here.
+- `site/config/site.json`: publication configuration. Keep TPM-specific text,
+  URLs, social links, and toggles here when practical.
+- `site/theme.css`: publication theme overrides layered onto platform styles.
+- `site/content/articles/`: current source-of-truth article content.
+- `site/content/announcements/`: announcement entries that are article-like but
+  separate from the normal article directory.
+- `site/content/authors/`: author profiles and aliases.
+- `site/content/categories/`: optional category display metadata.
+- `site/content/collections/`: curated article/announcement collections.
+- `site/content/pages/`: source-of-truth Markdown pages such as `/about/`.
+- `site/assets/`: source assets that should go through Astro's asset pipeline.
+- `site/public/`: static files copied directly to build output.
+- `site/unused-assets/`: intentionally parked source assets.
 - `src/pages/`: Astro file routes and endpoints.
 - `src/layouts/`: shared document, page, and article layouts.
 - `src/components/`: reusable Astro UI, layout, navigation, article, block, and
@@ -58,8 +70,8 @@ to the active milestone.
 - `src/lib/`: content, route, metadata, validation, and domain helpers.
 - `src/styles/`: global Tailwind entry, tokens, base styles, and prose styles.
   Keep this small.
-- `src/assets/`: source assets that should go through Astro's asset pipeline.
-- `public/`: static files copied directly to build output.
+- `src/content.config.ts`: Astro content collection config that resolves the
+  active site instance.
 - `scripts/`: repository maintenance, verification, and quality scripts.
 - `tests/`: unit, e2e, accessibility, and performance tests.
 - `dist/`: generated build output. Do not edit by hand.
@@ -257,9 +269,9 @@ client JavaScript. Choose the least dynamic primitive:
 3. Small processed `<script>` or custom element.
 4. Hydrated framework island.
 
-This project is a static site deployed to GitHub Pages. Do not add SSR
-adapters, request-time routes, middleware, server islands, or Astro Actions
-unless the project explicitly stops being static.
+This project is a static site deployed to Cloudflare Workers Static Assets. Do
+not add SSR adapters, request-time routes, middleware, server islands, or Astro
+Actions unless the project explicitly stops being static.
 
 Astro frontmatter runs at build/render time. Template expressions are not
 reactive after HTML is sent. `window`, `document`, and `localStorage` belong in
@@ -276,23 +288,24 @@ newer.
 Conventional structure:
 
 ```text
+site/content/          active site-instance content collections
+site/assets/           active site-instance processed source assets
+site/public/           active site-instance files copied as-is to site root
+site/config/           active site-instance configuration
 src/pages/              file routes and endpoints
 src/components/         UI, blocks, primitives, islands
 src/layouts/            document and content shells
-src/content/            content collections
-src/assets/             processed source assets
 src/styles/             global CSS entry and tokens
 src/env.d.ts            global app types
-src/content.config.ts   content collection config
-public/                 copied as-is to site root
+src/content.config.ts   site-instance-backed content collection config
 astro.config.ts         framework config
 dist/                   generated output
 ```
 
-Only `src/pages/` is required and reserved. Use `src/assets/` for project-owned
-assets that should be optimized, fingerprinted, or type checked. Use `public/`
-only for files that must be copied untouched, such as `favicon.svg`,
-`robots.txt`, `CNAME`, verification files, and downloads.
+Only `src/pages/` is required and reserved by Astro. Use `site/assets/` for
+project-owned assets that should be optimized, fingerprinted, or type checked.
+Use `site/public/` only for files that must be copied untouched, such as
+`favicon.svg`, `robots.txt`, `CNAME`, verification files, and downloads.
 
 ## Astro Components
 
@@ -970,7 +983,7 @@ Avoid these:
 
 Article content fidelity is strict.
 
-- Do not edit files in `src/content/articles/` unless explicitly instructed.
+- Do not edit files in `site/content/articles/` unless explicitly instructed.
 - Do not rewrite article bodies unless the user explicitly asks.
 - When article edits are requested, preserve the author's wording and make only
   the precise requested change. Do not restyle prose, improve phrasing, adjust
@@ -983,16 +996,16 @@ Article content fidelity is strict.
   search indexing, or build scripts to publish a normal article.
 
 Article authors should add `.md` or `.mdx` entries under
-`src/content/articles/<category>/`, provide valid frontmatter, keep drafts
+`site/content/articles/<category>/`, provide valid frontmatter, keep drafts
 unpublished, and let routes, indexes, RSS, sitemap, search, and metadata derive
 from the collection.
 
 ## Assets, Images, And Fonts
 
 Images need explicit care. New project-owned images should default to
-`src/assets/` so Astro can process them. Article-owned images should usually be
-organized under `src/assets/articles/<article-slug>/`, shared article images
-under `src/assets/shared/`, and site UI images under `src/assets/site/`. Use
+`site/assets/` so Astro can process them. Article-owned images should usually be
+organized under `site/assets/articles/<article-slug>/`, shared article images
+under `site/assets/shared/`, and site UI images under `site/assets/site/`. Use
 relative paths for Markdown, MDX, frontmatter, and component source asset
 references.
 
@@ -1031,8 +1044,8 @@ Use Tailwind for image frames:
 - `rounded-*`
 - `overflow-hidden`
 
-Do not put article/UI images, app CSS, or app JS in `public/` unless a stable
-unprocessed URL is required. Do not add oversized uploads or meaningful
+Do not put article/UI images, app CSS, or app JS in `site/public/` unless a
+stable unprocessed URL is required. Do not add oversized uploads or meaningful
 background images when a real image element would be more performant and
 accessible.
 
@@ -1053,7 +1066,8 @@ Treat production output as the performance source of truth.
 - Built project assets should appear under hashed `_astro/` filenames when they
   are emitted as files.
 - Pagefind owns generated search assets under `dist/pagefind/`.
-- Files in `public/` are copied as-is and should already be production-ready.
+- Files in `site/public/` are copied as-is and should already be
+  production-ready.
 
 Keep reading pages static by default. Avoid adding client JavaScript to article,
 category archive, RSS, sitemap, and ordinary content pages unless the
@@ -1340,9 +1354,9 @@ Generated or disposable paths include:
 - Pagefind output under built `dist/`
 - coverage output
 
-`unused-assets/` is an intentionally tracked archive of unreferenced media. Do
-not delete, rename, or repurpose those files unless the active task explicitly
-includes that cleanup.
+`site/unused-assets/` is an intentionally tracked archive of unreferenced
+media. Do not delete, rename, or repurpose those files unless the active task
+explicitly includes that cleanup.
 
 ## Handoff Policy
 

@@ -82,7 +82,7 @@ failed strict HTML validation.
 - Run the script after Astro build and Pagefind indexing so it optimizes the
   final generated HTML.
 - Keep production output plain HTML files; do not generate `.gz` or `.br`
-  sidecars for GitHub Pages.
+  sidecars for Cloudflare Workers Static Assets.
 - Make the build fail if the minifier fails, skips an HTML file unexpectedly,
   or produces invalid output.
 - Update `bun run build`, `bun run verify`, relevant package script docs, and

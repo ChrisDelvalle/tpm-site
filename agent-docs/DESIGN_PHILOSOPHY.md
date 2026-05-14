@@ -445,7 +445,7 @@ The production build contract is:
 - Astro emits bundled project assets under `_astro/` with content-hashed
   filenames for cacheability.
 - Pagefind owns its generated search files under `dist/pagefind/`.
-- Files in `public/` are copied as static files and should be treated as
+- Files in `site/public/` are copied as static files and should be treated as
   already production-ready.
 
 The production build should:
@@ -469,8 +469,8 @@ with anything outside that path:
   optimize them.
 - Use `is:inline` only for tiny boot scripts or code that intentionally must
   appear exactly where authored.
-- Keep scripts loaded from `public/` or external URLs rare and intentionally
-  reviewed.
+- Keep scripts loaded from `site/public/` or external URLs rare and
+  intentionally reviewed.
 - Keep Pagefind enhancement isolated to search pages.
 
 Compression is a hosting concern, but the site should assume production serves:
@@ -513,14 +513,14 @@ Use Astro image tooling where possible:
 
 - Use `<Image />` or `<Picture />` for layout images and component-controlled
   images.
-- Prefer images stored in `src/assets/` where Astro can optimize them.
-- Use `src/assets/articles/<article-slug>/` by convention for article-owned
-  images, `src/assets/shared/` for images shared across articles, and
-  `src/assets/site/` for site UI images.
+- Prefer images stored in `site/assets/` where Astro can optimize them.
+- Use `site/assets/articles/<article-slug>/` by convention for article-owned
+  images, `site/assets/shared/` for images shared across articles, and
+  `site/assets/site/` for site UI images.
 - Use relative paths for source image references in Markdown, MDX,
   frontmatter, and components.
-- Avoid adding new optimizable assets directly to `public/` unless they must be
-  copied unchanged.
+- Avoid adding new optimizable assets directly to `site/public/` unless they
+  must be copied unchanged.
 - Provide useful `alt` text, or `alt=""` only for decorative images.
 - Provide stable width and height or an explicit aspect ratio.
 - Avoid cumulative layout shift.

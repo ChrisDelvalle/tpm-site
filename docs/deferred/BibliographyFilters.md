@@ -1,10 +1,10 @@
 # Bibliography Filters
 
-Source: `src/components/bibliography/BibliographyFilters.astro`
+Planned source: `src/components/bibliography/BibliographyFilters.astro`
 
 ## Purpose
 
-`BibliographyFilters` provides optional browsing controls for the global
+`BibliographyFilters` would provide optional browsing controls for the global
 bibliography page when the source list becomes large enough to need them.
 
 It must not be added as inert UI. If filters are not implemented, omit the
