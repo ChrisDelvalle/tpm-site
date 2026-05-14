@@ -12,6 +12,8 @@ describe("ArticleBibliography", () => {
     });
 
     expect(view).toContain(">Bibliography<");
+    expect(view).toContain('href="/bibliography/"');
+    expect(view).toContain("View Site Bibliography");
     expect(view).toContain('id="cite-baudrillard-1981"');
     expect(view).toContain("<ol");
     expect(view).toContain("<em");
