@@ -20,7 +20,10 @@ function hasInlineChildren(
 }
 ---
 
-<div class="grid max-w-full min-w-0 gap-3 break-words">
+<div
+  class="grid max-w-full min-w-0 gap-3 break-words"
+  data-article-reference-definition-content
+>
   {
     blocks.map((block) =>
       block.kind === "code" ? (

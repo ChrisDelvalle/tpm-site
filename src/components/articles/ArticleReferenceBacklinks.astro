@@ -26,6 +26,12 @@ const label = kind === "citation" ? "citation" : "note";
           href={`#${reference.id}`}
           class="text-muted-foreground hover:text-primary focus-visible:outline-ring inline-flex min-h-8 items-center rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
           aria-label={`Back to ${label} reference ${reference.order}`}
+          data-article-reference-backlink="true"
+          data-reference-entry-id={reference.entryId}
+          data-reference-kind={reference.kind}
+          data-reference-label={reference.label}
+          data-reference-marker-id={reference.id}
+          data-reference-order={reference.order}
         >
           <span aria-hidden="true">Back {reference.order}</span>
         </a>

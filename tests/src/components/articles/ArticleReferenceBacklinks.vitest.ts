@@ -16,6 +16,11 @@ describe("ArticleReferenceBacklinks", () => {
 
     expect(view).toContain('href="#cite-ref-baudrillard-1981"');
     expect(view).toContain('href="#cite-ref-baudrillard-1981-2"');
+    expect(view).toContain("data-article-reference-backlink");
+    expect(view).toContain(
+      'data-reference-marker-id="cite-ref-baudrillard-1981"',
+    );
+    expect(view).toContain('data-reference-entry-id="cite-baudrillard-1981"');
     expect(view).toContain("Back to citation reference 1");
     expect(view).toContain("Back to citation reference 2");
   });

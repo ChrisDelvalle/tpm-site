@@ -144,3 +144,24 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run lint:markdown`, `bun --silent run check`, focused source
       and `dist` link-pattern scans, a built article-card alt audit, and `file`
       checks for the generated icon outputs.
+
+### Milestone 111: Article Reference Hover Previews
+
+- [x] Define the progressive-enhancement design for inline citation/note
+      previews and backlink source-context previews.
+- [x] Add stable data hooks to generated reference markers, note/bibliography
+      entries, and reference backlinks without changing normal anchor
+      navigation.
+- [x] Add one delegated article-reference preview controller that reuses the
+      existing anchored positioning contract, opens only for resolvable
+      non-empty previews, stays viewport-contained, and keeps the preview UI
+      content-only so the original marker/backlink remains the navigation
+      affordance.
+- [x] Add focused component/script/e2e coverage, verify the feature, and update
+      this milestone after completion.
+      Verified with `bun test tests/src/scripts/article-reference-previews.test.ts tests/src/remark-plugins/articleReferences.test.ts tests/scripts/build/build-verifier.test.ts`,
+      `bun --silent run test:astro -- ArticleReferences ArticleReferenceBacklinks ArticleReferenceDefinitionContent ArticleBibliography ArticleFootnotes`,
+      `bun --silent run lint`, `bun --silent run typecheck`,
+      `bun --silent run format`, `bun --silent run build`,
+      `bun --silent run verify`, `bun --silent run validate:html`, and
+      `bun --silent run test:catalog -- --grep "catalog article references expose citation"`.

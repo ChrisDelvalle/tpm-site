@@ -17,6 +17,7 @@ describe("ArticleReferenceDefinitionContent", () => {
     );
 
     expect(view).toContain("<em");
+    expect(view).toContain("data-article-reference-definition-content");
     expect(view).toContain(">Simulacra</em>");
     expect(view).toContain('href="https://example.com/source"');
     expect(view).toContain("<code");

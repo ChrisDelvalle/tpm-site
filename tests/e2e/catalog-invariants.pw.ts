@@ -292,6 +292,46 @@ if (!catalogIsBuilt) {
     await expect(page).toHaveURL(/#cite-ref-baudrillard-1981$/u);
   });
 
+  test("catalog article references expose citation and backlink previews", async ({
+    page,
+  }) => {
+    await page.goto("/catalog/");
+
+    const example = page.locator(
+      '[data-catalog-component="src/components/articles/ArticleReferences.astro"]',
+    );
+    const marker = example.locator("#cite-ref-baudrillard-1981");
+    const backlink = example.locator("#cite-backref-baudrillard-1981");
+    const panel = example.locator("[data-article-reference-preview]");
+    const panelContent = panel.locator(
+      "[data-article-reference-preview-content]",
+    );
+
+    await marker.hover();
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute(
+      "data-reference-preview-source",
+      "definition",
+    );
+    await expect(panelContent).toContainText("Simulacra");
+    await expect(panel.getByText("Go to bibliography entry")).toHaveCount(0);
+    await expectHorizontallyContained(panel, page.locator("body"), {
+      inner: "article reference preview",
+      outer: "page",
+    });
+
+    await backlink.hover();
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute(
+      "data-reference-preview-source",
+      "context",
+    );
+    await expect(panelContent).toContainText(
+      "A catalog paragraph can point to an explanatory note",
+    );
+    await expect(panel.getByText("Go to source")).toHaveCount(0);
+  });
+
   test("catalog article references have sensible accessibility structure", async ({
     page,
   }) => {

@@ -26,7 +26,10 @@ Claim with context.[^note-context]
     expect(result.references.citations).toHaveLength(0);
     expect(result.references.notes[0]?.label).toBe("note-context");
     expect(result.html).toContain("data-article-reference-marker");
+    expect(result.html).toContain('data-reference-entry-id="note-context"');
     expect(result.html).toContain('data-reference-kind="note"');
+    expect(result.html).toContain('data-reference-label="note-context"');
+    expect(result.html).toContain('data-reference-order="1"');
     expect(result.html).toContain('aria-label="Note 1"');
     expect(result.html).toContain(">1</a>");
     expect(result.html).not.toContain("[1]</a>");
@@ -71,6 +74,9 @@ First claim.[^cite-baudrillard-1981] Later claim.[^cite-baudrillard-1981]
       firstDefinitionBlock.children.some((child) => child.kind === "link"),
     ).toBe(true);
     expect(result.html).toContain(">[1]</a>");
+    expect(result.html).toContain(
+      'data-reference-entry-id="cite-baudrillard-1981"',
+    );
     expect(result.html).toContain('data-reference-kind="citation"');
     expect(result.html).not.toContain("tpm-bibtex");
     expect(result.html).not.toContain("@book");
