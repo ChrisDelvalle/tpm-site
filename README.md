@@ -1,5 +1,7 @@
 # The Philosopher's Meme
 
+![[docs/site-demo.png]]
+
 Astro static site for The Philosopher's Meme.
 
 ## Requirements
