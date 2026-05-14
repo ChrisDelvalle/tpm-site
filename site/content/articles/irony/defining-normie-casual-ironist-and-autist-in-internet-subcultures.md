@@ -49,7 +49,7 @@ It is most important to consider users online in the same light. The general tre
 
 > **Blaine McCartney:** I've never really encountered the term 'ironist.' Maybe "shitposter" would be better? Or "Baiter," "Master Baiter"?
 >
-> **The Philosopher's Meme:** This is part of my ongoing attempt to define 'irony' and 'post-irony'. See also: [Post-Irony Against Meta-Irony](http://thephilosophersmeme.com/2017/03/09/post-irony-against-meta-irony/)
+> **The Philosopher's Meme:** This is part of my ongoing attempt to define 'irony' and 'post-irony'. See also: [Post-Irony Against Meta-Irony](/articles/post-irony-against-meta-irony/)
 >
 > **Pe Ter:** I thought of this concept in Richard Rorty's body of work (which I am neither stumping for, or opposing, but raising as an example of a preexisting definition and use of the term "ironist" in a different context.): [https://en.m.wikipedia.org/wiki/Ironism](https://l.facebook.com/l.php?u=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FIronism&h=ATOyjOokzKCvik4xb7XM2O4HlkH-w2Om1009XIP7Rq5UvYZNaNlZWf-RI9fnnbsg9Bw5g6LQuDrZ60HwQRk6QhF6-VS4FLdQUjWvvVXT9u7Exr3LEnhF4HTUMsHHiuRuIlRnWnwXJw)
 >

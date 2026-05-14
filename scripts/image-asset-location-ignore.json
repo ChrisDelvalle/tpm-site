@@ -1,4 +1,7 @@
 [
+  "site/public/apple-touch-icon-precomposed.png",
+  "site/public/apple-touch-icon.png",
+  "site/public/favicon.ico",
   "site/public/favicon.svg",
   "site/unused-assets/**",
   "examples/docs-site/assets/**",

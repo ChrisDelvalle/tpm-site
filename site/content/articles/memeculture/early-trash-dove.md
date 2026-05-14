@@ -20,7 +20,7 @@ tags:
 legacyPermalink: 2017/02/15/early-trash-dove/
 ---
 
-Trash Dove is a normie meme. That might very well change in the future. You can usually tell when a meme is destined to end up normie trash; you could with Dat Boi or Harambe. The tell-tale marker of a normie meme is its simplicity. There is little 'lore' or central theme that would allow for a richer development of the meme. In complex memes such as [Baneposting](http://thephilosophersmeme.com/2015/11/25/bane-loss-and-phylogeny/), complex permutations which do not result in speciation into a new meme is more feasible. In the case of simple, viral content, the most likely pathway is to be applied to a thousand Shitpostbot-style templates with no progress for the meme itself.
+Trash Dove is a normie meme. That might very well change in the future. You can usually tell when a meme is destined to end up normie trash; you could with Dat Boi or Harambe. The tell-tale marker of a normie meme is its simplicity. There is little 'lore' or central theme that would allow for a richer development of the meme. In complex memes such as [Baneposting](/articles/bane-loss-and-phylogeny/), complex permutations which do not result in speciation into a new meme is more feasible. In the case of simple, viral content, the most likely pathway is to be applied to a thousand Shitpostbot-style templates with no progress for the meme itself.
 
 ![inevitable pol.JPG](<../../../assets/articles/early-trash-dove/inevitable pol.JPG>)
 
@@ -40,7 +40,7 @@ It will be interesting to see what happens to the Trash Dove meme. The worst, pl
 
 _Image credit: [Everipedia](https://www.everipedia.com/trash-doves/) (archive: [http://archive.is/vvAPJ](http://archive.is/vvAPJ))._
 
-Originally posted to the [page](www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1914910985409185) on Feb 13 2017.
+Originally posted to the [page](https://www.facebook.com/thephilosophersmeme/photos/a.1652774414956178.1073741828.1652760244957595/1914910985409185) on Feb 13 2017.
 
 ## Selected comments from the page
 
