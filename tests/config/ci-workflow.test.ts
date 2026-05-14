@@ -58,18 +58,17 @@ describe("CI workflow", () => {
     expect(lighthouse).toContain("bun run test:perf:built");
   });
 
-  test("deploys the verified artifact instead of rebuilding on main", async () => {
+  test("does not keep a GitHub Pages deploy job after Cloudflare cutover", async () => {
     const workflow = await readCiWorkflow();
-    const deploy = jobBlock(workflow, "deploy");
 
-    expect(deploy).toContain("actions/download-artifact@v4");
-    expect(deploy).toContain("name: verified-dist");
-    expect(deploy).toContain("path: dist");
-    expect(deploy).toContain("actions/upload-pages-artifact@v3");
-    expect(deploy).toContain("actions/deploy-pages@v4");
-    expect(deploy).not.toContain("bun run build");
-    expect(deploy).not.toContain("bun run verify");
-    expect(deploy).not.toContain("bun run validate:html");
+    expect(workflow).not.toContain("\n  deploy:\n");
+    expect(workflow).not.toContain("Deploy to GitHub Pages");
+    expect(workflow).not.toContain("actions/configure-pages");
+    expect(workflow).not.toContain("actions/upload-pages-artifact");
+    expect(workflow).not.toContain("actions/deploy-pages");
+    expect(workflow).not.toContain("id-token: write");
+    expect(workflow).not.toContain("pages: write");
+    expect(workflow).not.toContain("github-pages");
   });
 
   test("deploys the verified artifact to Cloudflare Workers on main", async () => {

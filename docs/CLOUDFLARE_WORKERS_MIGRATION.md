@@ -215,9 +215,9 @@ Reasons to defer:
 
 ## CI Changes
 
-Current GitHub Actions deploys the verified `dist/` artifact to GitHub Pages.
-The Cloudflare migration reuses that same verified artifact after the build job
-generates Cloudflare deploy files into `dist/`.
+GitHub Actions deploys the verified `dist/` artifact to Cloudflare Workers
+Static Assets after the build job generates Cloudflare deploy files into
+`dist/`.
 
 Recommended deploy job shape:
 
@@ -269,7 +269,7 @@ Required GitHub secrets:
 Cloudflare recommends a scoped API token with Workers edit permissions. Do not
 store this token in the repository.
 
-Recommended CI sequencing:
+Completed cutover sequence:
 
 1. Keep GitHub Pages deploy until Cloudflare preview deploy is verified.
 2. Add a Cloudflare deploy job gated to `main` that uses repository secrets and
@@ -329,16 +329,14 @@ Manual smoke tests after deploy:
 
 ## GitHub Pages Cleanup After Cutover
 
-After Cloudflare is the production host:
+Cloudflare is now the production host. The cleanup state is:
 
-- Remove GitHub Pages deploy steps from `.github/workflows/ci.yml`.
-- Remove Pages permissions: `id-token: write`, `pages: write`.
-- Remove `actions/configure-pages`, `actions/upload-pages-artifact`, and
-  `actions/deploy-pages`.
-- Revisit `site/public/CNAME`. It is needed for GitHub Pages, but not for
-  Workers. Serving it from Cloudflare is harmless but unnecessary; removing it
-  after DNS cutover is cleaner.
-- Update docs and package script descriptions from GitHub Pages to Cloudflare
+- GitHub Pages deploy steps are removed from `.github/workflows/ci.yml`.
+- Pages permissions `id-token: write` and `pages: write` are removed.
+- `actions/configure-pages`, `actions/upload-pages-artifact`, and
+  `actions/deploy-pages` are removed.
+- `site/public/CNAME` is intentionally retained as a harmless static file.
+- Docs and package script descriptions point deployment work at Cloudflare
   Workers.
 
 ## Recommended Migration Milestones
@@ -353,15 +351,15 @@ After Cloudflare is the production host:
 
 3. **CI preview deploy**
    Add a Cloudflare deploy job that consumes `verified-dist` and deploys only
-   from `main`. Keep GitHub Pages deploy during this milestone.
+   from `main`.
 
 4. **Smoke and DNS cutover**
    Deploy, smoke test Workers routes/redirects/404s, then point the custom
    domain at the Worker.
 
 5. **GitHub Pages removal**
-   Remove Pages deploy configuration and Pages-only files after Cloudflare has
-   served production successfully.
+   Remove Pages deploy configuration after Cloudflare has served production
+   successfully.
 
 ## Risks And Guardrails
 
