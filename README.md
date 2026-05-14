@@ -1,6 +1,6 @@
 # The Philosopher's Meme
 
-![[site-demo.png]]
+![[docs/site-demo.png]]
 
 Astro static site for The Philosopher's Meme.
 
