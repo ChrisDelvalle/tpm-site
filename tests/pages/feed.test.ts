@@ -103,34 +103,10 @@ await mock.module("astro:content", () => ({
 
     return [];
   },
-  getEntry: async (collection: string, id: string) => {
+  getEntry: async () => {
     await Promise.resolve();
-
-    if (collection === "pages" && id === "index") {
-      return {
-        collection: "pages",
-        data: {
-          hero: {
-            lightImage: {
-              format: "png",
-              height: 630,
-              src: "/home.png",
-              width: 1200,
-            },
-          },
-        },
-        id: "index",
-      };
-    }
 
     return undefined;
-  },
-}));
-
-await mock.module("astro:assets", () => ({
-  getImage: async () => {
-    await Promise.resolve();
-    return { src: "/_astro/feed-preview.hash.jpg" };
   },
 }));
 
@@ -151,5 +127,12 @@ describe("RSS feed endpoint", () => {
     expect(text).toContain(
       "https://example.com/announcements/feed-announcement/",
     );
+    expect(text).toContain('xmlns:dc="http://purl.org/dc/elements/1.1/"');
+    expect(text).toContain("<dc:creator>Author</dc:creator>");
+    expect(text).toContain(
+      "<dc:creator>The Philosopher&apos;s Meme</dc:creator>",
+    );
+    expect(text).not.toContain("<author>");
+    expect(text).not.toContain("<enclosure");
   });
 });

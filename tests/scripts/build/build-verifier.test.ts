@@ -798,7 +798,7 @@ describe("build verifier helpers", () => {
       ]);
     }));
 
-  test("reports raw RSS enclosure images", async () =>
+  test("reports RSS item enclosures", async () =>
     withTempRoot(async (root) => {
       await writeText(root, "src/content/categories/history.json", "{}");
       await writeText(
@@ -828,8 +828,7 @@ describe("build verifier helpers", () => {
       });
 
       expect(result.issues.socialImageIssues).toEqual([
-        "feed.xml: enclosure type is not image/jpeg for https://thephilosophersmeme.com/_astro/raw.png",
-        "feed.xml: enclosure image must point to a generated local JPG asset",
+        "feed.xml: RSS feed must not include item enclosures; found 1",
       ]);
     }));
 

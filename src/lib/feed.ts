@@ -1,5 +1,3 @@
-import type { ImageMetadata } from "astro";
-
 import { authorDisplayNameForArticle } from "./authors";
 import { normalizePublishableVisibility } from "./publishable";
 import {
@@ -19,8 +17,6 @@ export interface PublishableFeedEntry {
   author: string;
   description: string;
   href: string;
-  image?: ImageMetadata | undefined;
-  imageAlt: string;
   kind: "announcement" | "article";
   pubDate: Date;
   title: string;
@@ -65,8 +61,6 @@ export function articleFeedEntries(
       author: authorDisplayNameForArticle(article, authors),
       description: excerpt(article),
       href: articleUrl(article.id),
-      image: article.data.image,
-      imageAlt: article.data.imageAlt ?? title,
       kind: "article",
       pubDate: entryDate(article),
       title,
@@ -90,8 +84,6 @@ export function announcementFeedEntries(
       author: announcement.data.author,
       description: announcement.data.description,
       href: announcementUrl(announcement.id),
-      image: announcement.data.image,
-      imageAlt: announcement.data.imageAlt ?? title,
       kind: "announcement",
       pubDate: announcement.data.date,
       title,
