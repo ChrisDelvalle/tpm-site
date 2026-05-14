@@ -63,6 +63,7 @@ export function articleArchiveItems(
 
   return articles.map((article) => {
     const category = categoryMap.get(categorySlug(article));
+    const title = entryTitle(article);
 
     return {
       article,
@@ -85,10 +86,10 @@ export function articleArchiveItems(
         article.data.image === undefined
           ? undefined
           : {
-              alt: article.data.imageAlt ?? "",
+              alt: article.data.imageAlt ?? title,
               src: article.data.image,
             },
-      title: entryTitle(article),
+      title,
       url: articleUrl(article.id),
     };
   });

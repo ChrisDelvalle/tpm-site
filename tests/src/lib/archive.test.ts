@@ -71,6 +71,22 @@ describe("articleArchiveItems", () => {
     expect(archiveItem?.category).toBeUndefined();
   });
 
+  test("uses article titles as preview image alt fallback", () => {
+    const article = articleEntry({
+      data: {
+        image: sampleImage,
+        title: "Article Without Custom Image Alt",
+      },
+      id: "article-without-custom-image-alt",
+    });
+    const [archiveItem] = articleArchiveItems([article], []);
+
+    expect(archiveItem?.image).toMatchObject({
+      alt: "Article Without Custom Image Alt",
+      src: sampleImage,
+    });
+  });
+
   test("adds structured author summaries when author metadata is available", () => {
     const article = articleEntry({
       data: { author: "Seong-Young Her" },

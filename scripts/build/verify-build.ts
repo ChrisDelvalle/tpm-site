@@ -649,7 +649,7 @@ export async function verifyBuild({
       toPosix(path.relative(distDir, file)) ===
         routeOutputBasePath(siteConfig.routes.feed)
     ) {
-      await inspectFeedSocialImages(distDir, file, issues);
+      await inspectFeedEnclosures(distDir, file, issues);
     }
 
     await inspectDraftLeaks(distDir, file, draftSlugs, issues);
@@ -912,52 +912,21 @@ async function inspectDraftLeaks(
   }
 }
 
-async function inspectFeedSocialImages(
+async function inspectFeedEnclosures(
   distDir: string,
   file: string,
   issues: BuildVerificationIssues,
 ): Promise<void> {
   const xml = await readFile(file, "utf8");
   const relativePath = toPosix(path.relative(distDir, file));
-  const enclosurePattern = /<enclosure\b[^>]*>/giu;
-  let match: null | RegExpExecArray;
+  const enclosureCount = Array.from(
+    xml.matchAll(/<enclosure\b[^>]*>/giu),
+  ).length;
 
-  while ((match = enclosurePattern.exec(xml)) !== null) {
-    const tag = match[0];
-    const url = htmlAttributeValue(tag, "url");
-    const type = htmlAttributeValue(tag, "type");
-
-    if (url === undefined) {
-      issues.socialImageIssues.push(`${relativePath}: enclosure missing url`);
-      continue;
-    }
-
-    if (type !== socialPreviewImageMimeType) {
-      issues.socialImageIssues.push(
-        `${relativePath}: enclosure type is not ${socialPreviewImageMimeType} for ${url}`,
-      );
-    }
-
-    const localImagePath = localGeneratedSocialImagePath(url, distDir);
-    if (localImagePath === undefined) {
-      issues.socialImageIssues.push(
-        `${relativePath}: enclosure image must point to a generated local JPG asset`,
-      );
-      continue;
-    }
-
-    try {
-      const imageStats = await stat(localImagePath);
-      if (imageStats.size > maxSocialPreviewImageBytes) {
-        issues.socialImageIssues.push(
-          `${relativePath}: enclosure image is ${imageStats.size} bytes, above the ${maxSocialPreviewImageBytes} byte budget`,
-        );
-      }
-    } catch {
-      issues.socialImageIssues.push(
-        `${relativePath}: enclosure image file is missing for ${url}`,
-      );
-    }
+  if (enclosureCount > 0) {
+    issues.socialImageIssues.push(
+      `${relativePath}: RSS feed must not include item enclosures; found ${enclosureCount}`,
+    );
   }
 }
 

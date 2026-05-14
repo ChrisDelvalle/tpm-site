@@ -10,8 +10,11 @@ describe("feed endpoint source", () => {
     expect(source).toContain("getAnnouncements");
     expect(source).toContain("getAuthorEntries");
     expect(source).toContain("publishableFeedEntries");
-    expect(source).toContain("socialPreviewImageViewModel");
-    expect(source).toContain("getImage");
+    expect(source).toContain("dc: dublinCoreNamespace");
+    expect(source).toContain("<dc:creator>");
+    expect(source).not.toContain("socialPreviewImageViewModel");
+    expect(source).not.toContain("getImage");
+    expect(source).not.toContain("<enclosure");
     expect(source).toContain("rss({");
     expect(source).toContain("link: entry.href");
   });

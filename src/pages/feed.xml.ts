@@ -1,20 +1,15 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
-import { getImage } from "astro:assets";
 
 import { getAuthorEntries } from "../lib/authors";
-import {
-  getAnnouncements,
-  getArticles,
-  getSiteSocialFallbackImage,
-} from "../lib/content";
+import { getAnnouncements, getArticles } from "../lib/content";
 import { publishableFeedEntries } from "../lib/feed";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "../lib/routes";
-import { absoluteUrl } from "../lib/seo";
 import { siteConfig } from "../lib/site-config";
-import { socialPreviewImageViewModel } from "../lib/social-images";
 
 type FeedContext = Pick<APIContext, "site">;
+
+const dublinCoreNamespace = "http://purl.org/dc/elements/1.1/";
 
 /**
  * Generates the RSS feed endpoint from published article and announcement content.
@@ -31,33 +26,29 @@ export async function GET(context: FeedContext): Promise<Response> {
         authors,
       })
     : [];
-  const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
   const site = context.site?.toString() ?? SITE_URL;
 
   return rss({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     site,
-    items: await Promise.all(
-      entries.map(async (entry) => {
-        const image = await socialPreviewImageViewModel({
-          alt: entry.imageAlt,
-          fallback: fallbackSocialPreviewImage,
-          optimize: getImage,
-          source: entry.image,
-        });
-        const absoluteImage = absoluteUrl(image.src, site);
-
-        return {
-          title: entry.title,
-          pubDate: entry.pubDate,
-          description: entry.description,
-          link: entry.href,
-          author: entry.author,
-          customData: `<enclosure url="${absoluteImage}" type="${image.type}" />`,
-        };
-      }),
-    ),
+    xmlns: {
+      dc: dublinCoreNamespace,
+    },
+    items: entries.map((entry) => ({
+      title: entry.title,
+      pubDate: entry.pubDate,
+      description: entry.description,
+      link: entry.href,
+      customData: `<dc:creator>${escapeXmlText(entry.author)}</dc:creator>`,
+    })),
     customData: "<language>en-us</language>",
   });
+}
+
+function escapeXmlText(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }
