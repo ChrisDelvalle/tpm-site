@@ -61,6 +61,22 @@ They can also point to a specific path:
 }
 ```
 
+## Empty States
+
+Each homepage panel has default empty text. Override only the copy your site
+needs to change:
+
+```json
+{
+  "homepage": {
+    "emptyText": {
+      "featured": "Featured posts will appear here.",
+      "startHere": "Starter articles will appear here."
+    }
+  }
+}
+```
+
 ## Verify
 
 ```sh

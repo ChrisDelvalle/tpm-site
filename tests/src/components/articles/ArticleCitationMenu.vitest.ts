@@ -42,7 +42,7 @@ describe("ArticleCitationMenu", () => {
     expect(view).toContain("data-article-citation-trigger");
     expect(view).toContain('popover="auto"');
     expect(view).toContain("data-article-citation-panel");
-    expect(view).toContain("[&#38;:not(:popover-open)]:hidden");
+    expect(view).toMatch(/\[(?:&|&#38;|&amp;):not\(:popover-open\)\]:hidden/);
     expect(view).toContain(
       "width: min(30rem, var(--anchor-max-width, calc(100vw - 2rem)));",
     );

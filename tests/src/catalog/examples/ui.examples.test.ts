@@ -7,10 +7,13 @@ describe("UI catalog examples", () => {
     const paths = uiCatalogExamples.map((example) => example.componentPath);
 
     expect(paths).toContain("src/components/ui/ActionCluster.astro");
+    expect(paths).toContain("src/components/ui/ActionMenuItem.astro");
+    expect(paths).toContain("src/components/ui/ActionPopover.astro");
     expect(paths).toContain("src/components/ui/Button.astro");
     expect(paths).toContain("src/components/ui/DiscordButton.astro");
     expect(paths).toContain("src/components/ui/LinkButton.astro");
     expect(paths).toContain("src/components/ui/PatreonButton.astro");
+    expect(paths).toContain("src/components/ui/ScrollRail.astro");
     expect(paths).toContain("src/components/ui/YouTubeButton.astro");
     expect(paths).toContain("src/components/media/ResponsiveIframe.astro");
     expect(paths).toContain("src/components/media/SoundCloudEmbed.astro");

@@ -51,13 +51,16 @@ Use site config for site-wide choices:
 
 - site identity and canonical URL;
 - navigation and footer links;
-- homepage labels, limits, and discovery links;
+- homepage labels, empty-state copy, limits, and discovery links;
 - feature flags;
 - support and social links;
 - share menu targets;
 - content defaults for articles and announcements.
 
 Entry-specific editorial choices belong in Markdown frontmatter instead.
+Platform code keeps the default values in a typed defaults module, then the
+single site config parser applies those defaults when a site omits optional
+fields.
 
 ## Next
 

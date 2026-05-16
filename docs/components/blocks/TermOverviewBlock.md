@@ -33,6 +33,10 @@ The tags and collections index routes adapt their summaries into this
 component. Parents fetch and normalize data; `TermOverviewBlock` only renders
 the provided terms.
 
+`TermOverviewBlock` renders each item through `TermCard`. `TermCard` owns the
+shared linked term cell, count pluralization, description placement, and
+alignment variants used by both grid and rail adapters.
+
 ## Layout And Responsiveness
 
 The block uses the browsing page measure supplied by its parent. It renders one

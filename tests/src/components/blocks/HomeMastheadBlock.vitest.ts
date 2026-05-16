@@ -18,9 +18,23 @@ describe("HomeMastheadBlock", () => {
           },
         ],
         darkImage: heroDarkImage,
+        headingTitle: "The Philosopher's Meme",
         imageAlt: "The Philosopher's Meme",
         lightImage: heroLightImage,
         startHereItems: articleItems,
+        support: {
+          discord: {
+            ariaLabel: "Join the TPM Discord",
+            href: "https://discord.gg/8MVFRMa",
+            label: "Join Discord",
+          },
+          enabled: true,
+          patreon: {
+            ariaLabel: "Support The Philosopher's Meme on Patreon",
+            href: "https://patreon.com/thephilosophersmeme",
+            label: "Support Us",
+          },
+        },
         tagline: "The philosophy of memes.",
       },
     });

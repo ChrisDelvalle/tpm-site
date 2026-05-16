@@ -1,8 +1,6 @@
 ---
 import type { ArticleCitation } from "../../lib/article-references/model";
-import { bibliographyUrl } from "../../lib/routes";
-import { siteConfig } from "../../lib/site-config";
-import TextLink from "../ui/TextLink.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
 import ArticleReferenceBacklinks from "./ArticleReferenceBacklinks.astro";
 import ArticleReferenceDefinitionContent from "./ArticleReferenceDefinitionContent.astro";
 
@@ -10,37 +8,29 @@ interface Props {
   citations: readonly ArticleCitation[];
   heading?: string;
   headingId?: string;
+  siteBibliographyHref?: string | undefined;
+  siteBibliographyLabel?: string | undefined;
 }
 
 const {
   citations,
   heading = "Bibliography",
   headingId = "article-bibliography-heading",
+  siteBibliographyHref,
+  siteBibliographyLabel,
 } = Astro.props;
-const bibliographyHref = bibliographyUrl();
 ---
 
 {
   citations.length > 0 && (
     <section class="grid gap-4" aria-labelledby={headingId}>
-      <div class="flex min-w-0 flex-wrap items-end justify-between gap-3">
-        <h2
-          id={headingId}
-          class="text-foreground m-0 min-w-0 text-2xl font-semibold tracking-normal break-words"
-        >
-          {heading}
-        </h2>
-        {siteConfig.features.bibliography && (
-          <TextLink
-            href={bibliographyHref}
-            variant="subtle"
-            tone="primary"
-            prefetch="hover"
-          >
-            View Site Bibliography
-          </TextLink>
-        )}
-      </div>
+      <SectionHeader
+        headingId={headingId}
+        title={heading}
+        size="section"
+        actionHref={siteBibliographyHref}
+        actionLabel={siteBibliographyLabel}
+      />
       <ol class="grid list-decimal gap-5 pl-6">
         {citations.map((citation) => (
           <li

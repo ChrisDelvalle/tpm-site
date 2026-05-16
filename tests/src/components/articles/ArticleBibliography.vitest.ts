@@ -8,7 +8,11 @@ describe("ArticleBibliography", () => {
   test("renders ordered citations with multiple backlinks and rich content", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(ArticleBibliography, {
-      props: { citations: articleReferenceFixture.citations },
+      props: {
+        citations: articleReferenceFixture.citations,
+        siteBibliographyHref: "/bibliography/",
+        siteBibliographyLabel: "View Site Bibliography",
+      },
     });
 
     expect(view).toContain(">Bibliography<");
@@ -21,6 +25,16 @@ describe("ArticleBibliography", () => {
     expect(view).toContain("Back to citation reference 1");
     expect(view).toContain("Back to citation reference 2");
     expect(view).not.toContain("[@Baudrillard 1981]");
+  });
+
+  test("omits the site bibliography action when no action props are provided", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArticleBibliography, {
+      props: { citations: articleReferenceFixture.citations },
+    });
+
+    expect(view).not.toContain("View Site Bibliography");
+    expect(view).not.toContain('href="/bibliography/"');
   });
 
   test("renders nothing for an empty citation array", async () => {

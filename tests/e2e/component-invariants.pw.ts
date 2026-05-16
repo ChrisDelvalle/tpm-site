@@ -198,8 +198,12 @@ test.describe("component layout invariants", () => {
     const recentFeed = page.locator("[data-home-recent-feed]");
 
     await expect(announcements.getByRole("link").first()).toBeVisible();
-    const supportCta = hero.getByRole("link", { name: "Support Us" });
-    const discordCta = hero.getByRole("link", { name: "Join Discord" });
+    const supportCta = hero.getByRole("link", {
+      name: "Support The Philosopher's Meme on Patreon",
+    });
+    const discordCta = hero.getByRole("link", {
+      name: "Join the TPM Discord",
+    });
 
     await expect(supportCta).toBeVisible();
     await expect(discordCta).toBeVisible();

@@ -18,6 +18,21 @@ describe("ArticleEndcap", () => {
         idPrefix: "test-endcap",
         moreInCategory: articleItems,
         related: articleItems.slice(0, 1),
+        support: {
+          body: "Support independent writing.",
+          discord: {
+            ariaLabel: "Join Discord",
+            href: "https://discord.gg/example",
+            label: "Discord",
+          },
+          enabled: true,
+          patreon: {
+            ariaLabel: "Support on Patreon",
+            href: "https://patreon.com/example",
+            label: "Patreon",
+          },
+          title: "Support The Philosopher's Meme",
+        },
       },
     });
 

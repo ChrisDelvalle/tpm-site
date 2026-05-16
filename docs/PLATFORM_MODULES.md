@@ -8,15 +8,38 @@ incidental TPM implementation details.
 
 ## Domain Map
 
-| Domain                      | Owns                                                                                                                                                              | Current modules                                                                                                                                                                 |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Content model               | Loading, validating, normalizing, sorting, and aggregating publishable entries and editorial metadata.                                                            | `announcements`, `archive`, `article-continuity`, `article-list`, `article-view`, `authors`, `collections`, `content`, `content-schemas`, `feed`, `home`, `publishable`, `tags` |
-| Routes and features         | URL construction, static path helpers, optional feature routes, navigation, SEO, social previews, share targets, site config, site instance paths, and redirects. | `feature-routes`, `navigation`, `routes`, `seo`, `share-targets`, `site-config`, `site-instance`, `site-redirects`, `social-images`, `static-paths`                             |
-| Article rendering           | Prose-adjacent article view helpers such as embed media layout, image policy, title fitting, and table-of-contents data.                                          | `article-image-policy`, `article-list-title-fit`, `article-toc`, `embed-media`                                                                                                  |
-| PDF and scholarly output    | Article PDF compatibility, PDF output metadata, and PDF generation inputs.                                                                                        | `article-pdf`, `article-pdf-compatibility`                                                                                                                                      |
-| References and bibliography | Canonical note/citation parsing, BibTeX parsing, generated article citations, and global bibliography data.                                                       | `article-references/*`, `bibliography`, `citations/article-citation`                                                                                                            |
-| Interaction primitives      | Browser-independent positioning/disclosure logic shared by navigation, popovers, and hover/tap surfaces.                                                          | `anchored-disclosure`, `anchored-positioning`                                                                                                                                   |
-| Shared utilities            | Small generic helpers that do not own domain behavior.                                                                                                            | `utils`                                                                                                                                                                         |
+- Content model
+  Owns loading, validating, normalizing, sorting, and aggregating publishable
+  entries and editorial metadata. Current modules: `announcements`, `archive`,
+  `article-continuity`, `article-list`, `article-page-view-model`,
+  `article-view`, `authors`, `collections`, `content`, `content-schemas`,
+  `feed`, `home`, `publishable`, and `tags`.
+- Routes and features
+  Owns URL construction, static path helpers, optional feature routes,
+  navigation, SEO, social previews, share targets, support CTAs, site config,
+  site instance paths, and redirects. Current modules: `feature-routes`,
+  `navigation`, `routes`, `seo`, `share-targets`, `site-config`,
+  `site-config-defaults`, `site-instance`, `site-redirects`, `social-images`,
+  `static-paths`, and `support`.
+- Article rendering
+  Owns prose-adjacent article view helpers such as embed media layout, image
+  policy, title fitting, and table-of-contents data. Current modules:
+  `article-image-policy`, `article-list-title-fit`, `article-toc`, and
+  `embed-media`.
+- PDF and scholarly output
+  Owns article PDF compatibility, PDF output metadata, and PDF generation
+  inputs. Current modules: `article-pdf` and `article-pdf-compatibility`.
+- References and bibliography
+  Owns canonical note/citation parsing, BibTeX parsing, generated article
+  citations, and global bibliography data. Current modules:
+  `article-references/*`, `bibliography`, and `citations/article-citation`.
+- Interaction primitives
+  Owns browser-independent positioning/disclosure logic shared by navigation,
+  popovers, and hover/tap surfaces. Current modules: `anchored-disclosure` and
+  `anchored-positioning`.
+- Shared utilities
+  Owns small generic helpers that do not own domain behavior. Current modules:
+  `html` and `utils`.
 
 When a new `src/lib` module is added, it should either fit one of these domains
 or the domain map should be expanded deliberately. A file that cannot be named

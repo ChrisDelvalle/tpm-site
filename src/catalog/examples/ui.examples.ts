@@ -12,6 +12,16 @@ export const uiCatalogExamples = [
     title: "ActionCluster",
   },
   {
+    componentPath: "src/components/ui/ActionMenuItem.astro",
+    description: "Icon plus label row for publication action menus.",
+    title: "ActionMenuItem",
+  },
+  {
+    componentPath: "src/components/ui/ActionPopover.astro",
+    description: "Article action menu surface built over anchored primitives.",
+    title: "ActionPopover",
+  },
+  {
     componentPath: "src/components/ui/AnchoredPanel.astro",
     description:
       "Fixed floating surface that consumes shared anchor CSS variables.",
@@ -36,6 +46,11 @@ export const uiCatalogExamples = [
     componentPath: "src/components/ui/Button.astro",
     description: "Native button action with tokenized variants.",
     title: "Button",
+  },
+  {
+    componentPath: "src/components/ui/BrandButton.astro",
+    description: "Shared branded external CTA frame for social platforms.",
+    title: "BrandButton",
   },
   {
     componentPath: "src/components/ui/Card.astro",
@@ -76,6 +91,18 @@ export const uiCatalogExamples = [
     componentPath: "src/components/ui/Section.astro",
     description: "Full-width content band with spacing and tone variants.",
     title: "Section",
+  },
+  {
+    componentPath: "src/components/ui/SectionHeader.astro",
+    description:
+      "Reusable section heading with optional action link and responsive wrapping.",
+    title: "SectionHeader",
+  },
+  {
+    componentPath: "src/components/ui/ScrollRail.astro",
+    description:
+      "Reusable horizontal scroll viewport with edge fades and controls.",
+    title: "ScrollRail",
   },
   {
     componentPath: "src/components/ui/Separator.astro",

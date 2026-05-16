@@ -15,36 +15,9 @@ import ReadingNavigationLinks from "../components/navigation/ReadingNavigationLi
 import ArticleJsonLd from "../components/seo/ArticleJsonLd.astro";
 import ArticleScholarMeta from "../components/seo/ArticleScholarMeta.astro";
 import type { ArticleReferenceData } from "../lib/article-references/model";
-import {
-  hasUsefulTableOfContents,
-  type ArticleTableOfContentsHeading,
-} from "../lib/article-toc";
-import {
-  articleContinuityItem,
-  articleContinuitySelection,
-} from "../lib/article-continuity";
-import { articleListItemsFromArchive } from "../lib/article-list";
-import { articleViewModel } from "../lib/article-view";
-import { articleArchiveItems } from "../lib/archive";
-import {
-  authorProfiles,
-  authorSummariesForArticle,
-  getAuthorEntries,
-  hasUsefulAuthorProfileContent,
-} from "../lib/authors";
-import { articleScholarMetaViewModel } from "../lib/article-pdf";
-import { articleCitationMenuViewModel } from "../lib/citations/article-citation";
-import {
-  getArticles,
-  getCategories,
-  getSiteSocialFallbackImage,
-} from "../lib/content";
-import { homepageDiscoveryLinks } from "../lib/home";
-import { normalizePublishableVisibility } from "../lib/publishable";
-import { categoryUrl, type ArticleEntry } from "../lib/routes";
-import { articleShareMenuViewModel } from "../lib/share-targets";
-import { siteConfig, titleWithSite } from "../lib/site-config";
-import { socialPreviewImageViewModel } from "../lib/social-images";
+import type { ArticleTableOfContentsHeading } from "../lib/article-toc";
+import { articlePageViewModel } from "../lib/article-page-view-model";
+import type { ArticleEntry } from "../lib/routes";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
@@ -65,113 +38,33 @@ const {
   articleReferences = emptyArticleReferences,
   tableOfContentsHeadings = [],
 } = Astro.props;
-const articleView = articleViewModel(article);
-const fallbackSocialPreviewImage = await getSiteSocialFallbackImage();
-const socialPreviewImage = await socialPreviewImageViewModel({
-  alt: articleView.imageAlt ?? articleView.title,
-  fallback: fallbackSocialPreviewImage,
-  optimize: getImage,
-  source: article.data.image,
-});
-const canonicalUrl = new URL(
-  articleView.canonicalPath,
-  Astro.site ?? Astro.url.origin,
-).toString();
-const showTableOfContents = hasUsefulTableOfContents(tableOfContentsHeadings);
-const authorEntries = await getAuthorEntries();
-const articleAuthors = authorSummariesForArticle(article, authorEntries);
-const allArticles = await getArticles();
-const authorProfileMap = new Map(
-  authorProfiles(authorEntries, allArticles).map((profile) => [
-    profile.id,
-    profile,
-  ]),
-);
-const articleAuthorProfiles = articleAuthors
-  .map((author) => authorProfileMap.get(author.id))
-  .filter((profile) => profile !== undefined);
-const articleAuthorProfilesWithBio = articleAuthorProfiles.filter((profile) =>
-  hasUsefulAuthorProfileContent(profile),
-);
-const categories = await getCategories();
-const category = categories.find(
-  (summary) => summary.slug === articleView.categorySlug,
-);
-const categoryHref =
-  siteConfig.features.categories && category
-    ? categoryUrl(category.slug)
-    : undefined;
-const moreInCategory =
-  category === undefined
-    ? []
-    : articleListItemsFromArchive(
-        articleArchiveItems(
-          category.articles
-            .filter((categoryArticle) => categoryArticle.id !== article.id)
-            .slice(0, 3),
-          categories,
-          authorEntries,
-        ),
-      );
-const articleContinuitySelectionResult = articleContinuitySelection(
+const page = await articlePageViewModel({
   article,
-  allArticles,
-);
-const articleContinuity =
-  articleContinuitySelectionResult === undefined
-    ? undefined
-    : articleContinuityItem(
-        articleContinuitySelectionResult,
-        categories,
-        authorEntries,
-      );
-const citation = articleCitationMenuViewModel({
-  articleId: article.id,
-  authors: articleAuthors,
-  canonicalUrl,
-  legacyAuthor: articleView.author,
-  publishedAt: articleView.date,
-  title: articleView.title,
-});
-const share = articleShareMenuViewModel({
-  articleUrl: canonicalUrl,
-  description: articleView.description,
-  image: socialPreviewImage,
-  title: articleView.title,
-});
-const readingNavigationLinks = homepageDiscoveryLinks(siteConfig);
-const scholarMeta = articleScholarMetaViewModel({
-  article,
-  authors: articleAuthors,
+  optimizeImage: getImage,
+  origin: Astro.url.origin,
   site: Astro.site,
+  tableOfContentsHeadings,
 });
-const pdf = scholarMeta.pdf;
-const searchable =
-  siteConfig.features.search &&
-  normalizePublishableVisibility(
-    article.data.visibility,
-    siteConfig.contentDefaults.articles.visibility,
-  ).search;
 ---
 
 <BaseLayout
-  title={titleWithSite(articleView.title)}
-  description={articleView.description}
-  canonicalPath={articleView.canonicalPath}
-  image={socialPreviewImage}
+  title={page.documentTitle}
+  description={page.article.description}
+  canonicalPath={page.article.canonicalPath}
+  image={page.socialPreviewImage}
   type="article"
 >
   <ArticleJsonLd
     slot="head"
     article={article}
-    authors={articleAuthors}
-    category={category}
-    image={socialPreviewImage}
+    authors={page.authors}
+    category={page.category}
+    image={page.socialPreviewImage}
   />
-  <ArticleScholarMeta slot="head" metadata={scholarMeta} />
+  <ArticleScholarMeta slot="head" metadata={page.scholarMeta} />
   <ReadingBody>
     {
-      showTableOfContents && (
+      page.showTableOfContents && (
         <ContentRail
           slot="toc"
           label="Article table of contents"
@@ -184,36 +77,37 @@ const searchable =
     }
     <article
       class="grid w-full min-w-0 gap-6"
-      data-pagefind-body={searchable ? true : undefined}
-      data-pagefind-ignore={searchable ? undefined : true}
+      data-pagefind-body={page.searchable ? true : undefined}
+      data-pagefind-ignore={page.searchable ? undefined : true}
     >
       {
-        readingNavigationLinks.length > 0 && (
+        page.readingNavigationLinks.length > 0 && (
           <ReadingNavigationLinks
             aria-label="Article reading navigation"
             data-article-reading-navigation
-            links={readingNavigationLinks}
+            links={page.readingNavigationLinks}
             showTitle={false}
           />
         )
       }
       <ArticleHeader
-        author={articleView.author}
-        authors={articleAuthors}
-        category={category && categoryHref
-          ? { href: categoryHref, title: category.title }
+        author={page.article.author}
+        authors={page.authors}
+        category={page.category && page.categoryHref
+          ? { href: page.categoryHref, title: page.category.title }
           : undefined}
-        citation={citation}
-        date={articleView.date}
-        description={articleView.description}
-        formattedDate={articleView.formattedDate}
-        pdf={pdf}
-        share={share}
-        title={articleView.title}
+        citation={page.citation}
+        date={page.article.date}
+        description={page.article.description}
+        formattedDate={page.article.formattedDate}
+        pdf={page.pdf}
+        profileLinksEnabled={page.profileLinksEnabled}
+        share={page.share}
+        title={page.article.title}
       />
       <div class="grid min-w-0 gap-1" data-article-body-flow>
         {
-          showTableOfContents && (
+          page.showTableOfContents && (
             <ArticleTableOfContents
               headings={tableOfContentsHeadings}
               placement="inline"
@@ -229,7 +123,7 @@ const searchable =
       </div>
       <EndcapStack spacing="relaxed">
         {
-          articleAuthorProfilesWithBio.map((profile) => (
+          page.authorProfilesWithBio.map((profile) => (
             <div data-pdf-exclude>
               <AuthorBioBlock profile={profile} context="article" />
             </div>
@@ -237,15 +131,20 @@ const searchable =
         }
         <div data-pdf-exclude>
           <ArticleEndcap
-            categoryHref={categoryHref}
-            categoryTitle={category?.title}
-            continuity={articleContinuity}
-            moreInCategory={moreInCategory}
+            categoryHref={page.categoryHref}
+            categoryTitle={page.category?.title}
+            continuity={page.continuity}
+            moreInCategory={page.moreInCategory}
+            support={page.support}
           />
         </div>
-        <ArticleReferences references={articleReferences} />
+        <ArticleReferences
+          references={articleReferences}
+          siteBibliographyHref={page.bibliographyAction?.href}
+          siteBibliographyLabel={page.bibliographyAction?.label}
+        />
         {
-          siteConfig.features.tags && article.data.tags.length > 0 && (
+          page.tagsVisible && (
             <div
               class="border-border border-t pt-6"
               data-article-tags-placement

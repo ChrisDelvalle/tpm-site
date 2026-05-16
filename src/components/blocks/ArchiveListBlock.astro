@@ -1,6 +1,8 @@
 ---
 import ArticleList from "../articles/ArticleList.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
 import type { ArticleListItem } from "../../lib/article-list";
+import { htmlIdFromText } from "../../lib/html";
 
 interface Props {
   description?: string | undefined;
@@ -19,27 +21,18 @@ const {
   pagefindIgnore = false,
   title,
 } = Astro.props;
+const headingId = `${htmlIdFromText(title, "archive")}-heading`;
 ---
 
-<section class="grid gap-6">
-  <header class="grid gap-3">
-    {eyebrow && <p class="text-primary text-sm font-semibold">{eyebrow}</p>}
-    {
-      headingLevel === 1 ? (
-        <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
-          {title}
-        </h1>
-      ) : (
-        <h2 class="text-foreground m-0 text-2xl font-semibold tracking-normal">
-          {title}
-        </h2>
-      )
-    }
-    {
-      description && (
-        <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
-      )
-    }
-  </header>
+<section class="grid gap-6" aria-labelledby={headingId}>
+  <SectionHeader
+    description={description}
+    eyebrow={eyebrow}
+    headingId={headingId}
+    headingLevel={headingLevel}
+    layout="stacked"
+    size={headingLevel === 1 ? "page" : "section"}
+    title={title}
+  />
   <ArticleList items={items} pagefindIgnore={pagefindIgnore} />
 </section>

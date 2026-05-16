@@ -13,6 +13,7 @@ import {
 } from "lucide-astro";
 
 import type { ArticleShareAction } from "../../lib/share-targets";
+import ActionMenuItem from "../ui/ActionMenuItem.astro";
 
 interface Props {
   action: ArticleShareAction;
@@ -21,8 +22,6 @@ interface Props {
 }
 
 const { action, copyText, statusId } = Astro.props;
-const itemClass =
-  "text-popover-foreground hover:bg-muted focus-visible:outline-ring grid min-h-8 w-full grid-cols-[1rem_minmax(0,1fr)] items-center gap-2 rounded-xs px-2 py-1.5 text-start text-sm font-medium tracking-normal no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2";
 const iconClass = "size-3.5";
 const externalHref =
   action.kind === "external" ? JSON.stringify(action.href) : undefined;
@@ -30,64 +29,64 @@ const externalHref =
 
 {
   action.kind === "copy" ? (
-    <button
-      type="button"
-      class:list={[itemClass]}
+    <ActionMenuItem
       aria-describedby={statusId}
       data-article-share-copy-button
       data-article-share-copy-text={copyText}
     >
-      <Link class:list={[iconClass]} aria-hidden="true" />
-      <span class="min-w-0">{action.label}</span>
-    </button>
+      <Link slot="icon" class:list={[iconClass]} aria-hidden="true" />
+      {action.label}
+    </ActionMenuItem>
   ) : null
 }
 {
   action.kind === "email" ? (
-    <a
-      class:list={[itemClass]}
+    <ActionMenuItem
+      as="a"
       href={action.href}
       data-article-share-action={action.id}
     >
-      <Mail class:list={[iconClass]} aria-hidden="true" />
-      <span class="min-w-0">{action.label}</span>
-    </a>
+      <Mail slot="icon" class:list={[iconClass]} aria-hidden="true" />
+      {action.label}
+    </ActionMenuItem>
   ) : null
 }
 {
   action.kind === "external" ? (
-    <button
-      type="button"
-      class:list={[itemClass]}
+    <ActionMenuItem
       data-article-share-action={action.id}
       data-article-share-open-button
       data-article-share-open-url={externalHref}
     >
-      {action.id === "bluesky" && (
-        <MessageCircle class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "message" && (
+        <MessageCircle
+          slot="icon"
+          class:list={[iconClass]}
+          aria-hidden="true"
+        />
       )}
-      {action.id === "x" && (
-        <Twitter class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "x" && (
+        <Twitter slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "threads" && (
-        <AtSign class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "at-sign" && (
+        <AtSign slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "facebook" && (
-        <Facebook class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "facebook" && (
+        <Facebook slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "linkedin" && (
-        <Linkedin class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "linkedin" && (
+        <Linkedin slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "reddit" && (
-        <Hash class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "reddit" && (
+        <Hash slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "hacker-news" && (
-        <Newspaper class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "hacker-news" && (
+        <Newspaper slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "pinterest" && (
-        <Pin class:list={[iconClass]} aria-hidden="true" />
+      {action.icon === "pinterest" && (
+        <Pin slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      <span class="min-w-0">{action.label}</span>
-    </button>
+      {action.label}
+    </ActionMenuItem>
   ) : null
 }

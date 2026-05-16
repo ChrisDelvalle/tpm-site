@@ -1,17 +1,17 @@
 ---
 import TextLink from "../ui/TextLink.astro";
 import type { AuthorSummary } from "../../lib/authors";
-import { siteConfig } from "../../lib/site-config";
 
 interface Props {
   author: AuthorSummary;
+  profileLinksEnabled?: boolean | undefined;
 }
 
-const { author } = Astro.props;
+const { author, profileLinksEnabled = true } = Astro.props;
 ---
 
 {
-  siteConfig.features.authors ? (
+  profileLinksEnabled ? (
     <TextLink
       href={author.href}
       variant="subtle"

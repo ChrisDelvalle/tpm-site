@@ -5,6 +5,7 @@ import {
   resolvePublishableCollection,
 } from "./collections";
 import { optionalFeatureRouteEntries } from "./feature-routes";
+import type { SectionNavItem } from "./navigation";
 import {
   type PublishableEntry,
   publishableFromAnnouncement,
@@ -15,8 +16,12 @@ import {
   publishableListItems,
   visiblePublishables,
 } from "./publishable";
-import type { AnnouncementEntry } from "./routes";
+import type { AnnouncementEntry, PageEntry } from "./routes";
 import type { SiteConfig, SiteRouteKey } from "./site-config";
+import {
+  type SupportActionsViewModel,
+  supportActionsViewModel,
+} from "./support";
 
 /** Display-ready homepage featured item. */
 export interface HomeFeaturedItem extends PublishableListItem {
@@ -49,6 +54,66 @@ interface HomePageViewModel {
 interface HomeDiscoveryLink {
   href: string;
   label: string;
+}
+
+/** Display-ready homepage lead list configuration. */
+interface HomeEntryListViewModel {
+  emptyText: string;
+  items: PublishableListItem[];
+  title: string;
+  titleHref?: string | undefined;
+}
+
+/** Display-ready homepage category rail configuration. */
+interface HomeCategoryRailViewModel {
+  emptyText: string;
+  items: readonly SectionNavItem[];
+  title: string;
+}
+
+/** Display-ready homepage featured carousel configuration. */
+interface HomeFeaturedCarouselViewModel {
+  emptyText: string;
+  fallbackLabel: string;
+  items: HomeFeaturedItem[];
+  title: string;
+}
+
+/** Display-ready homepage hero configuration. */
+interface HomeHeroViewModel {
+  darkImage: NonNullable<PageEntry["data"]["hero"]>["lightImage"];
+  headingTitle: string;
+  imageAlt: string;
+  lightImage: NonNullable<PageEntry["data"]["hero"]>["lightImage"];
+  support: SupportActionsViewModel;
+  tagline?: string | undefined;
+}
+
+/** Inputs required to build the full homepage route view model. */
+interface HomePageRouteViewModelInput extends HomePageViewModelInput {
+  categoryItems: readonly SectionNavItem[];
+  config: SiteConfig;
+  home: Pick<PageEntry, "data">;
+}
+
+/** Display-ready homepage route view model consumed by `src/pages/index.astro`. */
+interface HomePageRouteViewModel {
+  announcements: HomeEntryListViewModel;
+  canonicalPath: "/";
+  categories?: HomeCategoryRailViewModel | undefined;
+  description: string;
+  discovery: {
+    links: HomeDiscoveryLink[];
+    title: string;
+  };
+  featured: HomeFeaturedCarouselViewModel;
+  hero: HomeHeroViewModel;
+  recent: {
+    ariaLabel: string;
+    items: PublishableListItem[];
+  };
+  startHere: HomeEntryListViewModel;
+  title: string;
 }
 
 /**
@@ -112,6 +177,93 @@ export function homePageViewModel({
     featuredItems,
     recentFeedItems,
     startHereItems,
+  };
+}
+
+/**
+ * Builds the complete homepage route view model from config and content.
+ *
+ * @param input Homepage page entry, configured labels, and loaded content.
+ * @param input.categoryItems Display-ready category navigation items.
+ * @param input.config Validated site-owner config.
+ * @param input.home Homepage content entry.
+ * @returns Display-ready props for the homepage route blocks.
+ */
+export function homePageRouteViewModel({
+  categoryItems,
+  config,
+  home,
+  ...contentInput
+}: HomePageRouteViewModelInput): HomePageRouteViewModel {
+  const hero = home.data.hero;
+
+  if (hero === undefined) {
+    throw new Error(
+      "Missing homepage hero config at site/content/pages/index.md frontmatter.",
+    );
+  }
+
+  const viewModel = homePageViewModel({
+    ...contentInput,
+    announcementLimit: config.homepage.announcementLimit,
+    featuredCollectionId: config.homepage.featuredCollection,
+    recentLimit: config.homepage.recentLimit,
+    startHereCollectionId: config.homepage.startHereCollection,
+  });
+  const fallbackLabel = config.identity.shortTitle ?? config.identity.title;
+
+  return {
+    announcements: {
+      emptyText: config.homepage.emptyText.announcements,
+      items: viewModel.announcementItems,
+      title: config.homepage.labels.announcements,
+      titleHref: config.features.announcements
+        ? routeForKey(config, "announcements")
+        : undefined,
+    },
+    canonicalPath: "/",
+    categories: config.features.categories
+      ? {
+          emptyText: config.homepage.emptyText.categories,
+          items: categoryItems,
+          title: config.homepage.labels.categories,
+        }
+      : undefined,
+    description: home.data.description ?? config.identity.description,
+    discovery: {
+      links: homepageDiscoveryLinks(config),
+      title: config.homepage.labels.read,
+    },
+    featured: {
+      emptyText: config.homepage.emptyText.featured,
+      fallbackLabel,
+      items: viewModel.featuredItems,
+      title: config.homepage.labels.featured,
+    },
+    hero: {
+      darkImage: hero.darkImage ?? hero.lightImage,
+      headingTitle: config.identity.title,
+      imageAlt: hero.imageAlt ?? home.data.title,
+      lightImage: hero.lightImage,
+      support: supportActionsViewModel(config),
+      tagline: hero.tagline,
+    },
+    recent: {
+      ariaLabel: config.homepage.labels.recent,
+      items: viewModel.recentFeedItems,
+    },
+    startHere: {
+      emptyText: config.homepage.emptyText.startHere,
+      items: viewModel.startHereItems,
+      title: config.homepage.labels.startHere,
+      titleHref: config.features.collections
+        ? childRoute(
+            routeForKey(config, "collections"),
+            config.homepage.startHereCollection,
+          )
+        : undefined,
+    },
+    title: titleWithConfig(home.data.title, config),
   };
 }
 
@@ -206,4 +358,14 @@ function routeForKey(config: SiteConfig, key: SiteRouteKey): string {
       return config.routes.tags;
     }
   }
+}
+
+function childRoute(base: string, child: string): string {
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+
+  return `${normalizedBase}${child}/`;
+}
+
+function titleWithConfig(title: string, config: SiteConfig): string {
+  return `${title} | ${config.identity.title}`;
 }

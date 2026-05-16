@@ -1,0 +1,35 @@
+---
+import TermCard from "./TermCard.astro";
+
+interface Props {
+  count: number;
+  description?: string | undefined;
+  href: string;
+  singularLabel?: string;
+  pluralLabel?: string;
+  title: string;
+}
+
+const {
+  count,
+  description,
+  href,
+  pluralLabel,
+  singularLabel = "article",
+  title,
+} = Astro.props;
+const pluralLabelProps =
+  pluralLabel === undefined ? {} : { itemNounPlural: pluralLabel };
+---
+
+<TermCard
+  align="center"
+  count={count}
+  description={description}
+  href={href}
+  itemNoun={singularLabel}
+  {...pluralLabelProps}
+  title={title}
+  class="min-h-28 snap-start"
+  data-term-rail-card
+/>

@@ -10,7 +10,7 @@ import {
 } from "./routes";
 
 /** Display and metadata fields needed by the article layout. */
-interface ArticleViewModel {
+export interface ArticleViewModel {
   author: string;
   canonicalPath: string;
   categorySlug: string;

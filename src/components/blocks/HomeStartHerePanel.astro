@@ -1,5 +1,5 @@
 ---
-import TextLink from "../ui/TextLink.astro";
+import CompactEntryPanel from "./CompactEntryPanel.astro";
 import type { ArticleListItem } from "../../lib/article-list";
 
 interface Props {
@@ -15,47 +15,11 @@ const {
 } = Astro.props;
 ---
 
-<section
-  class="border-border bg-muted/30 grid min-w-0 content-start gap-4 rounded-sm border p-4"
-  aria-labelledby="home-start-here-heading"
+<CompactEntryPanel
+  description={description}
+  emptyText="Curated starter articles will appear here."
+  headingId="home-start-here-heading"
+  items={items}
+  title={title}
   data-home-start-here-panel
->
-  <div class="grid gap-1">
-    <h2
-      id="home-start-here-heading"
-      class="text-foreground m-0 text-lg font-semibold tracking-normal"
-    >
-      {title}
-    </h2>
-    <p class="text-muted-foreground m-0 text-sm leading-6">{description}</p>
-  </div>
-  {
-    items.length > 0 ? (
-      <ol class="grid gap-3">
-        {items.map((item) => (
-          <li class="grid min-w-0 gap-1">
-            <TextLink
-              href={item.href}
-              variant="subtle"
-              tone="neutral"
-              prefetch="hover"
-            >
-              <span class="line-clamp-2 min-w-0 text-sm font-semibold">
-                {item.title}
-              </span>
-            </TextLink>
-            {item.category && (
-              <span class="text-muted-foreground text-xs">
-                {item.category.title}
-              </span>
-            )}
-          </li>
-        ))}
-      </ol>
-    ) : (
-      <p class="text-muted-foreground m-0 text-sm">
-        Curated starter articles will appear here.
-      </p>
-    )
-  }
-</section>
+/>

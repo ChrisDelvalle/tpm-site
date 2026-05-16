@@ -1,5 +1,6 @@
 ---
 import SearchForm from "../navigation/SearchForm.astro";
+import PageHeader from "../pages/PageHeader.astro";
 import { SITE_TITLE } from "../../lib/routes";
 
 interface Props {
@@ -16,15 +17,7 @@ const {
 ---
 
 <section id="search" class="grid gap-6" aria-labelledby={headingId}>
-  <header class="grid gap-3">
-    <h1
-      id={headingId}
-      class="text-foreground m-0 text-4xl font-bold tracking-normal"
-    >
-      {title}
-    </h1>
-    <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
-  </header>
+  <PageHeader description={description} headingId={headingId} title={title} />
   <div class="max-w-xl">
     <SearchForm
       inputId="search-page-input"

@@ -73,6 +73,7 @@ const libDomainFiles = {
     "archive.ts",
     "article-continuity.ts",
     "article-list.ts",
+    "article-page-view-model.ts",
     "article-view.ts",
     "authors.ts",
     "collections.ts",
@@ -107,13 +108,15 @@ const libDomainFiles = {
     "routes.ts",
     "seo.ts",
     "share-targets.ts",
+    "site-config-defaults.ts",
     "site-config.ts",
     "site-instance.ts",
     "site-redirects.ts",
     "social-images.ts",
     "static-paths.ts",
+    "support.ts",
   ],
-  utilities: ["utils.ts"],
+  utilities: ["html.ts", "utils.ts"],
 } as const;
 
 const ownedLibFiles: ReadonlySet<string> = new Set(

@@ -1,12 +1,11 @@
 ---
 import type { ImageMetadata } from "astro";
-import { Image } from "astro:assets";
-import { Maximize2 } from "lucide-astro";
 
 import {
   articleImagePresentation,
   type ArticleImageHeightPolicy,
 } from "../../lib/article-image-policy";
+import ArticleImageFrame from "./ArticleImageFrame.astro";
 import ArticleImageInspectorScript from "./ArticleImageInspectorScript.astro";
 
 interface Props {
@@ -28,44 +27,16 @@ const inspectLabel =
   data-article-image-inspectable={presentation.isInspectable ? "true" : "false"}
   data-article-image-policy={presentation.policy}
 >
-  {
-    presentation.isInspectable ? (
-      <button
-        type="button"
-        class:list={[presentation.frameClass]}
-        data-article-image-inspect-trigger="true"
-        aria-haspopup="dialog"
-        aria-label={inspectLabel}
-      >
-        <Image
-          src={src}
-          alt={alt}
-          layout="constrained"
-          sizes={presentation.previewSizes}
-          class:list={[presentation.imageClass]}
-          data-article-image="true"
-        />
-        <span
-          class:list={[presentation.inspectionClass]}
-          data-article-image-inspect-affordance="true"
-          aria-hidden="true"
-        >
-          <Maximize2 class="size-3" aria-hidden="true" />
-        </span>
-      </button>
-    ) : (
-      <div class:list={[presentation.frameClass]}>
-        <Image
-          src={src}
-          alt={alt}
-          layout="constrained"
-          sizes={presentation.previewSizes}
-          class:list={[presentation.imageClass]}
-          data-article-image="true"
-        />
-      </div>
-    )
-  }
+  <ArticleImageFrame
+    src={src}
+    alt={alt}
+    frameClass={presentation.frameClass}
+    imageClass={presentation.imageClass}
+    inspectable={presentation.isInspectable}
+    inspectionClass={presentation.inspectionClass}
+    inspectLabel={inspectLabel}
+    previewSizes={presentation.previewSizes}
+  />
   {
     caption && (
       <figcaption class:list={[presentation.captionClass]}>

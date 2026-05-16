@@ -1,0 +1,101 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import TextLink from "./TextLink.astro";
+
+type PrefetchValue = "hover" | "load" | "tap" | "viewport" | boolean;
+
+/** Public props for section headings with optional right-side actions. */
+interface Props extends HTMLAttributes<"div"> {
+  actionAriaLabel?: string | undefined;
+  actionHref?: string | undefined;
+  actionLabel?: string | undefined;
+  description?: string | undefined;
+  eyebrow?: string | undefined;
+  headingId: string;
+  headingLevel?: 1 | 2 | 3 | 4;
+  layout?: "split" | "stacked";
+  prefetch?: PrefetchValue | undefined;
+  size?: "compact" | "page" | "section" | "subsection";
+  title: string;
+}
+
+const {
+  actionAriaLabel,
+  actionHref,
+  actionLabel,
+  description,
+  eyebrow,
+  headingId,
+  headingLevel = 2,
+  layout = "split",
+  prefetch = "hover",
+  size = "subsection",
+  title,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const HeadingTag = `h${headingLevel}` as const;
+const hasActionSlot = Astro.slots.has("action");
+const hasActionLink = actionHref !== undefined && actionLabel !== undefined;
+const hasAction = hasActionSlot || hasActionLink;
+const headingClasses = {
+  compact:
+    "text-foreground m-0 min-w-0 text-lg font-semibold tracking-normal break-words",
+  page: "text-foreground m-0 min-w-0 text-4xl font-bold tracking-normal break-words",
+  section:
+    "text-foreground m-0 min-w-0 text-2xl font-semibold tracking-normal break-words",
+  subsection:
+    "text-foreground m-0 min-w-0 text-xl font-semibold tracking-normal break-words",
+} as const;
+const descriptionClasses = {
+  compact: "text-muted-foreground m-0 max-w-3xl text-sm leading-6",
+  page: "text-muted-foreground m-0 max-w-3xl text-lg leading-7",
+  section: "text-muted-foreground m-0 max-w-3xl text-base leading-7",
+  subsection: "text-muted-foreground m-0 max-w-3xl text-sm leading-6",
+} as const;
+const rootClasses =
+  layout === "stacked"
+    ? "grid min-w-0 gap-1"
+    : "flex min-w-0 flex-wrap items-end justify-between gap-3";
+---
+
+<div {...attrs} class:list={[rootClasses, className]}>
+  <div class="grid min-w-0 gap-1">
+    {
+      eyebrow && (
+        <p class="text-primary m-0 text-sm font-semibold tracking-normal uppercase">
+          {eyebrow}
+        </p>
+      )
+    }
+    <HeadingTag id={headingId} class:list={[headingClasses[size]]}>
+      {title}
+    </HeadingTag>
+    {
+      description && (
+        <p class:list={[descriptionClasses[size]]}>{description}</p>
+      )
+    }
+  </div>
+  {
+    hasAction && (
+      <div class="shrink-0">
+        {hasActionSlot ? (
+          <slot name="action" />
+        ) : (
+          <TextLink
+            href={actionHref as string}
+            variant="subtle"
+            tone="primary"
+            prefetch={prefetch}
+            aria-label={actionAriaLabel}
+          >
+            {actionLabel}
+          </TextLink>
+        )}
+      </div>
+    )
+  }
+</div>

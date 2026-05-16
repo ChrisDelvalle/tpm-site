@@ -1,15 +1,8 @@
 ---
-import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 
-import ArticleMeta from "./ArticleMeta.astro";
-import TextLink from "../ui/TextLink.astro";
-import {
-  articleListDescriptionFitClass,
-  articleListDescriptionFitVariant,
-  articleListTitleFitClass,
-  articleListTitleFitVariant,
-} from "../../lib/article-list-title-fit";
+import ArticleCardBody from "./ArticleCardBody.astro";
+import PublishableMediaFrame from "./PublishableMediaFrame.astro";
 import type { AuthorSummary } from "../../lib/authors";
 
 interface ArticleCardCategory {
@@ -44,22 +37,10 @@ const {
   title,
 } = Astro.props;
 
-const hasDate = date !== undefined && date !== "";
-const hasKicker = category !== undefined || hasDate;
 const hasImage = image !== undefined;
 const rowGridClasses = hasImage
   ? "grid-cols-[minmax(0,1fr)_5rem] sm:grid-cols-[minmax(0,1fr)_6rem] md:grid-cols-[minmax(0,1fr)_15rem] lg:grid-cols-[minmax(0,1fr)_18rem]"
   : "grid-cols-1";
-const titleFitClass = articleListTitleFitClass(title, hasImage);
-const titleFitVariant = articleListTitleFitVariant(title, hasImage);
-const descriptionFitClass =
-  description === undefined
-    ? undefined
-    : articleListDescriptionFitClass(description, hasImage);
-const descriptionFitVariant =
-  description === undefined
-    ? undefined
-    : articleListDescriptionFitVariant(description, hasImage);
 ---
 
 <article
@@ -72,73 +53,26 @@ const descriptionFitVariant =
 >
   {
     image && (
-      <a
+      <PublishableMediaFrame
         href={href}
-        aria-label={`Read ${title}`}
+        label={`Read ${title}`}
+        image={image}
+        renderWidth={640}
+        renderHeight={360}
+        prefetch="hover"
         data-article-card-image-link
-        data-astro-prefetch="hover"
-        class="bg-muted focus-visible:outline-ring order-last block size-20 min-w-0 justify-self-end overflow-hidden rounded-xs no-underline transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 sm:size-24 md:h-40 md:w-60 lg:h-44 lg:w-72"
-      >
-        <Image
-          src={image.src}
-          alt={image.alt}
-          width={640}
-          height={360}
-          loading="lazy"
-          class="h-full w-full object-cover"
-        />
-      </a>
+        class="bg-muted focus-visible:outline-ring order-last size-20 justify-self-end transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 sm:size-24 md:h-40 md:w-60 lg:h-44 lg:w-72"
+      />
     )
   }
-  <div class="grid min-w-0 content-center gap-2 md:gap-3">
-    {
-      hasKicker && (
-        <div
-          class="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase"
-          data-article-card-kicker
-        >
-          {category && (
-            <a
-              href={category.href}
-              data-astro-prefetch="hover"
-              class="text-primary hover:text-primary/80 focus-visible:outline-ring rounded-xs no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-            >
-              {category.title}
-            </a>
-          )}
-          {category && hasDate && (
-            <span class="border-border h-4 border-l" aria-hidden="true" />
-          )}
-          {hasDate && <time>{date}</time>}
-        </div>
-      )
-    }
-    <h2
-      class:list={[
-        "text-foreground m-0 line-clamp-2 min-w-0 leading-tight font-semibold tracking-normal break-words",
-        titleFitClass,
-      ]}
-      data-article-card-title
-      data-article-card-title-fit={titleFitVariant}
-    >
-      <TextLink href={href} variant="subtle" tone="neutral" prefetch="hover">
-        {title}
-      </TextLink>
-    </h2>
-    {
-      description && (
-        <p
-          class:list={[
-            "text-muted-foreground m-0 line-clamp-3 min-w-0 break-words",
-            descriptionFitClass,
-          ]}
-          data-article-card-description
-          data-article-card-description-fit={descriptionFitVariant}
-        >
-          {description}
-        </p>
-      )
-    }
-    <ArticleMeta author={author} authors={authors} />
-  </div>
+  <ArticleCardBody
+    author={author}
+    authors={authors}
+    category={category}
+    date={date}
+    description={description}
+    hasImage={hasImage}
+    href={href}
+    title={title}
+  />
 </article>

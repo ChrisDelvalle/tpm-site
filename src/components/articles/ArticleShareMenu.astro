@@ -1,11 +1,10 @@
 ---
 import { Share2 } from "lucide-astro";
 
+import ArticleHeaderActionTrigger from "./ArticleHeaderActionTrigger.astro";
 import ArticleShareActionRow from "./ArticleShareActionRow.astro";
 import type { ArticleShareMenuViewModel } from "../../lib/share-targets";
-import AnchoredPanel from "../ui/AnchoredPanel.astro";
-import AnchoredRoot from "../ui/AnchoredRoot.astro";
-import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
+import ActionPopover from "../ui/ActionPopover.astro";
 
 interface Props {
   share: ArticleShareMenuViewModel;
@@ -19,49 +18,44 @@ const panelLabel = `Share ${share.title}`;
 const copyText = JSON.stringify(share.copyText);
 ---
 
-<AnchoredRoot
+<ActionPopover
   preset="article-action-menu"
+  popoverId={popoverId}
+  panelLabel={panelLabel}
+  panelWidth="18rem"
+  panelAttributes={{
+    "data-article-share-panel": true,
+  }}
   data-article-share-menu
   class="relative inline-flex min-w-0"
 >
-  <AnchoredTrigger
-    as="button"
-    type="button"
+  <ArticleHeaderActionTrigger
+    slot="trigger"
     popovertarget={popoverId}
-    aria-label="Share this article"
+    label="Share this article"
     data-article-share-trigger
-    class="text-muted-foreground hover:text-foreground focus-visible:outline-ring inline-flex items-center gap-1 rounded-xs text-sm leading-5 font-medium tracking-normal transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
   >
     <Share2 class="size-3.5" aria-hidden="true" />
     <span aria-hidden="true">Share</span>
-  </AnchoredTrigger>
-  <AnchoredPanel
-    id={popoverId}
-    popover="auto"
-    aria-label={panelLabel}
-    data-article-share-panel
-    class="border-border bg-popover text-popover-foreground z-50 m-0 grid w-[min(18rem,var(--anchor-max-width,calc(100vw-2rem)))] min-w-0 gap-1 overflow-y-auto rounded-sm border p-2 shadow-lg [&:not(:popover-open)]:hidden"
-    style="width: min(18rem, var(--anchor-max-width, calc(100vw - 2rem)));"
+  </ArticleHeaderActionTrigger>
+  <div class="grid min-w-0 gap-1">
+    {
+      share.actions.map((action) => (
+        <ArticleShareActionRow
+          action={action}
+          copyText={copyText}
+          statusId={statusId}
+        />
+      ))
+    }
+  </div>
+  <p
+    id={statusId}
+    class="text-muted-foreground min-w-0 px-2 text-xs empty:hidden"
+    aria-live="polite"
+    data-article-share-copy-status
   >
-    <div class="grid min-w-0 gap-1">
-      {
-        share.actions.map((action) => (
-          <ArticleShareActionRow
-            action={action}
-            copyText={copyText}
-            statusId={statusId}
-          />
-        ))
-      }
-    </div>
-    <p
-      id={statusId}
-      class="text-muted-foreground min-w-0 px-2 text-xs empty:hidden"
-      aria-live="polite"
-      data-article-share-copy-status
-    >
-    </p>
-  </AnchoredPanel>
-</AnchoredRoot>
+  </p>
+</ActionPopover>
 
 <script src="../../scripts/article-share.ts"></script>

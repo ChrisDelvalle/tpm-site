@@ -1,5 +1,6 @@
 ---
 import ArticleList from "./ArticleList.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
 import type { ArticleListItem } from "../../lib/article-list";
 
 interface Props {
@@ -13,12 +14,7 @@ const { headingId = "related-articles-heading", items = [] } = Astro.props;
 {
   items.length > 0 && (
     <section class="grid min-w-0 gap-4" aria-labelledby={headingId}>
-      <h2
-        id={headingId}
-        class="text-foreground m-0 min-w-0 text-xl font-semibold tracking-normal break-words"
-      >
-        Related Articles
-      </h2>
+      <SectionHeader headingId={headingId} title="Related Articles" />
       <ArticleList items={items} />
     </section>
   )

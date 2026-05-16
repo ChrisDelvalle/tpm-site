@@ -24,22 +24,38 @@ const articleShareTargetConfig = {
 /** External public composer targets supported by the article share menu. */
 type ArticleShareExternalTargetId = SiteShareTargetId;
 
+/** Presentation icon token for article share actions. */
+type ArticleShareIconId =
+  | "at-sign"
+  | "copy-link"
+  | "email"
+  | "facebook"
+  | "hacker-news"
+  | "linkedin"
+  | "message"
+  | "pinterest"
+  | "reddit"
+  | "x";
+
 /** A normalized article share action rendered by the article share menu. */
 export type ArticleShareAction =
   | {
       readonly copyText: string;
+      readonly icon: "copy-link";
       readonly id: "copy-link";
       readonly kind: "copy";
       readonly label: "Copy link";
     }
   | {
       readonly href: string;
+      readonly icon: "email";
       readonly id: "email";
       readonly kind: "email";
       readonly label: "Email";
     }
   | {
       readonly href: string;
+      readonly icon: ArticleShareIconId;
       readonly id: ArticleShareExternalTargetId;
       readonly kind: "external";
       readonly label: string;
@@ -70,6 +86,7 @@ interface ArticleShareTargetContext {
 
 interface ExternalShareTargetDefinition {
   readonly buildHref: (context: ArticleShareTargetContext) => string;
+  readonly icon: ArticleShareIconId;
   readonly label: string;
   readonly requiresImage?: boolean;
 }
@@ -86,6 +103,7 @@ const externalShareTargetDefinitions = new Map<
           text: shareText(title, articleUrl),
         }),
       label: "Bluesky",
+      icon: "message",
       requiresImage: false,
     },
   ],
@@ -97,6 +115,7 @@ const externalShareTargetDefinitions = new Map<
           u: articleUrl,
         }),
       label: "Facebook",
+      icon: "facebook",
       requiresImage: false,
     },
   ],
@@ -109,6 +128,7 @@ const externalShareTargetDefinitions = new Map<
           u: articleUrl,
         }),
       label: "Hacker News",
+      icon: "hacker-news",
       requiresImage: false,
     },
   ],
@@ -120,6 +140,7 @@ const externalShareTargetDefinitions = new Map<
           url: articleUrl,
         }),
       label: "LinkedIn",
+      icon: "linkedin",
       requiresImage: false,
     },
   ],
@@ -133,6 +154,7 @@ const externalShareTargetDefinitions = new Map<
           url: articleUrl,
         }),
       label: "Pinterest",
+      icon: "pinterest",
       requiresImage: true,
     },
   ],
@@ -145,6 +167,7 @@ const externalShareTargetDefinitions = new Map<
           url: articleUrl,
         }),
       label: "Reddit",
+      icon: "reddit",
       requiresImage: false,
     },
   ],
@@ -156,6 +179,7 @@ const externalShareTargetDefinitions = new Map<
           text: threadsShareText(title, articleUrl),
         }),
       label: "Threads",
+      icon: "at-sign",
       requiresImage: false,
     },
   ],
@@ -169,6 +193,7 @@ const externalShareTargetDefinitions = new Map<
           via: articleShareTargetConfig.attribution.xViaHandle,
         }),
       label: "X",
+      icon: "x",
       requiresImage: false,
     },
   ],
@@ -194,12 +219,14 @@ export function articleShareMenuViewModel(
   } satisfies ArticleShareTargetContext;
   const copyAction = {
     copyText: articleUrl,
+    icon: "copy-link",
     id: "copy-link",
     kind: "copy",
     label: "Copy link",
   } as const satisfies ArticleShareAction;
   const emailAction = {
     href: emailShareHref(context),
+    icon: "email",
     id: "email",
     kind: "email",
     label: "Email",
@@ -213,6 +240,7 @@ export function articleShareMenuViewModel(
       : [
           {
             href: target.buildHref(context),
+            icon: target.icon,
             id: targetId,
             kind: "external",
             label: target.label,

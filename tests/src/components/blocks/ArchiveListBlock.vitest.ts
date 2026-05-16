@@ -36,6 +36,20 @@ describe("ArchiveListBlock", () => {
     expect(view).toContain("History");
   });
 
+  test("keeps generated heading ids valid when titles start with digits", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(ArchiveListBlock, {
+      props: {
+        eyebrow: "Tag",
+        items: articleItems,
+        title: "4chan",
+      },
+    });
+
+    expect(view).toContain('id="archive-4chan-heading"');
+    expect(view).toContain('aria-labelledby="archive-4chan-heading"');
+  });
+
   test("can render as a subsection heading when nested below a page h1", async () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(ArchiveListBlock, {

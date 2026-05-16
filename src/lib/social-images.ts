@@ -33,7 +33,7 @@ export interface SocialPreviewImageTransform {
 }
 
 /** Minimal optimizer adapter shape needed by the social preview pipeline. */
-type SocialPreviewImageOptimizer = (
+export type SocialPreviewImageOptimizer = (
   transform: SocialPreviewImageTransform,
 ) => Promise<{ src: string }>;
 

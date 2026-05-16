@@ -10,6 +10,7 @@ describe("ArticleShareActionRow", () => {
       props: {
         action: {
           copyText: "https://example.com/articles/post/",
+          icon: "copy-link",
           id: "copy-link",
           kind: "copy",
           label: "Copy link",
@@ -22,6 +23,7 @@ describe("ArticleShareActionRow", () => {
       props: {
         action: {
           href: "mailto:?subject=Post",
+          icon: "email",
           id: "email",
           kind: "email",
           label: "Email",
@@ -34,6 +36,7 @@ describe("ArticleShareActionRow", () => {
       props: {
         action: {
           href: "https://twitter.com/intent/tweet?url=https%3A%2F%2Fexample.com",
+          icon: "x",
           id: "x",
           kind: "external",
           label: "X",

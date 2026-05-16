@@ -1,19 +1,43 @@
 ---
-interface Props {
+import type { HTMLAttributes } from "astro/types";
+
+import SectionHeader from "../ui/SectionHeader.astro";
+
+interface Props extends HTMLAttributes<"header"> {
   description?: string | undefined;
+  eyebrow?: string | undefined;
+  headingId?: string;
+  headingLevel?: 1 | 2;
   title: string;
 }
 
-const { description, title } = Astro.props;
+const {
+  description,
+  eyebrow,
+  headingId = "page-heading",
+  headingLevel = 1,
+  title,
+  class: className,
+  ...attrs
+} = Astro.props;
+const hasDescriptionSlot = Astro.slots.has("description");
 ---
 
-<header class="grid gap-3">
-  <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
-    {title}
-  </h1>
+<header {...attrs} class:list={["grid min-w-0 gap-3", className]}>
+  <SectionHeader
+    description={hasDescriptionSlot ? undefined : description}
+    eyebrow={eyebrow}
+    headingId={headingId}
+    headingLevel={headingLevel}
+    layout="stacked"
+    size={headingLevel === 1 ? "page" : "section"}
+    title={title}
+  />
   {
-    description && (
-      <p class="text-muted-foreground max-w-3xl text-lg">{description}</p>
+    hasDescriptionSlot && (
+      <p class="text-muted-foreground m-0 max-w-3xl text-lg leading-7">
+        <slot name="description" />
+      </p>
     )
   }
 </header>

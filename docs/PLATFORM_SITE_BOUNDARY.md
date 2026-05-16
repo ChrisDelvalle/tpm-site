@@ -336,10 +336,12 @@ Completed in the config-defaults tranche:
 1. Added `features` with conservative true defaults matching current TPM output.
 2. Added `contentDefaults` with current article and announcement behavior as the
    live site default.
-3. Wired content schemas, publishable normalization, PDF eligibility, feed/search
-   exposure, and the highest-value UI seams through those defaults.
-4. Proved non-TPM fixtures can customize defaults without editing platform code.
-5. Kept remaining feature-gated route pruning as an explicit later milestone.
+3. Split reusable defaults into `src/lib/site-config-defaults.ts` while keeping
+   `src/lib/site-config.ts` as the single parser/export boundary.
+4. Wired content schemas, publishable normalization, PDF eligibility,
+   feed/search exposure, and the highest-value UI seams through those defaults.
+5. Proved non-TPM fixtures can customize defaults without editing platform code.
+6. Kept remaining feature-gated route pruning as an explicit later milestone.
 
 Later milestones should handle theme-token splitting, public/private CI checkout
 orchestration, JSON Schema export, route pruning, and `site:doctor` style admin

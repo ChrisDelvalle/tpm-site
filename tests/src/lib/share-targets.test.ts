@@ -50,6 +50,18 @@ describe("article share targets", () => {
       "Hacker News",
       "Pinterest",
     ]);
+    expect(share.actions.map((action) => action.icon)).toEqual([
+      "copy-link",
+      "email",
+      "message",
+      "x",
+      "at-sign",
+      "facebook",
+      "linkedin",
+      "reddit",
+      "hacker-news",
+      "pinterest",
+    ]);
   });
 
   test("encodes platform share URLs and owned social attribution", () => {
