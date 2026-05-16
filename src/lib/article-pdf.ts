@@ -8,7 +8,7 @@ import {
   entryTitle,
 } from "./routes";
 import { absoluteUrl } from "./seo";
-import { siteConfig } from "./site-config";
+import { type SiteConfig, siteConfig } from "./site-config";
 
 /** Display-ready Scholar metadata for one article page. */
 export interface ArticleScholarMetaViewModel {
@@ -34,6 +34,7 @@ export interface ArticlePdfViewModel {
 interface ArticlePdfViewModelInput {
   article: ArticleEntry;
   authors?: readonly AuthorSummary[];
+  config?: Pick<SiteConfig, "contentDefaults" | "features"> | undefined;
   site?: string | undefined | URL;
 }
 
@@ -43,12 +44,14 @@ interface ArticlePdfViewModelInput {
  * @param input Article entry, resolved authors, and optional site origin.
  * @param input.article Article content entry.
  * @param input.authors Resolved structured author summaries.
+ * @param input.config Optional site config override for feature/default policy.
  * @param input.site Optional site origin for absolute Scholar URLs.
  * @returns Display-ready Scholar metadata for components and build checks.
  */
 export function articleScholarMetaViewModel({
   article,
   authors = [],
+  config = siteConfig,
   site,
 }: ArticlePdfViewModelInput): ArticleScholarMetaViewModel {
   const slug = articleSlug(article);
@@ -59,7 +62,7 @@ export function articleScholarMetaViewModel({
 
   return {
     authors: authorNames,
-    pdf: articlePdfEnabled(article)
+    pdf: articlePdfEnabled(article, config)
       ? {
           articleUrl: absoluteUrl(articleUrl(slug), site),
           authors: authorNames,
@@ -93,16 +96,20 @@ export function articlePdfViewModel(
  * Checks whether a published article should receive generated PDF surfaces.
  *
  * @param article Article content entry.
+ * @param config Site config with PDF feature and default policy.
  * @returns True unless the article explicitly opts out with `pdf: false`.
  */
-export function articlePdfEnabled(article: ArticleEntry): boolean {
-  if (!siteConfig.features.pdf) {
+export function articlePdfEnabled(
+  article: ArticleEntry,
+  config: Pick<SiteConfig, "contentDefaults" | "features"> = siteConfig,
+): boolean {
+  if (!config.features.pdf) {
     return false;
   }
 
   return "pdf" in article.data
     ? article.data.pdf
-    : siteConfig.contentDefaults.articles.pdf.enabled;
+    : config.contentDefaults.articles.pdf.enabled;
 }
 
 /**

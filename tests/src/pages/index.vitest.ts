@@ -22,7 +22,6 @@ describe("home page", () => {
     expect(view).toContain("Announcements");
     expect(view).toContain("Join the TPM Discord");
     expect(view).toContain("Support Us");
-    expect(view).toContain("Join Discord");
     expect(view).toContain("Start Here");
     expect(view).toContain("Read");
     expect(view).toContain("Articles");

@@ -1,7 +1,5 @@
 ---
 import type { ArticleCitation } from "../../lib/article-references/model";
-import { bibliographyUrl } from "../../lib/routes";
-import { siteConfig } from "../../lib/site-config";
 import SectionHeader from "../ui/SectionHeader.astro";
 import ArticleReferenceBacklinks from "./ArticleReferenceBacklinks.astro";
 import ArticleReferenceDefinitionContent from "./ArticleReferenceDefinitionContent.astro";
@@ -10,14 +8,17 @@ interface Props {
   citations: readonly ArticleCitation[];
   heading?: string;
   headingId?: string;
+  siteBibliographyHref?: string | undefined;
+  siteBibliographyLabel?: string | undefined;
 }
 
 const {
   citations,
   heading = "Bibliography",
   headingId = "article-bibliography-heading",
+  siteBibliographyHref,
+  siteBibliographyLabel,
 } = Astro.props;
-const bibliographyHref = bibliographyUrl();
 ---
 
 {
@@ -27,14 +28,8 @@ const bibliographyHref = bibliographyUrl();
         headingId={headingId}
         title={heading}
         size="section"
-        actionHref={
-          siteConfig.features.bibliography ? bibliographyHref : undefined
-        }
-        actionLabel={
-          siteConfig.features.bibliography
-            ? "View Site Bibliography"
-            : undefined
-        }
+        actionHref={siteBibliographyHref}
+        actionLabel={siteBibliographyLabel}
       />
       <ol class="grid list-decimal gap-5 pl-6">
         {citations.map((citation) => (

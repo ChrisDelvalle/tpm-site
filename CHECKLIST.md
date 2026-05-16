@@ -321,3 +321,52 @@ they are useful context. Explicitly deferred work belongs in
       tests, catalog example tests, `bun --silent run test:catalog`,
       `bunx playwright test tests/e2e/component-invariants.pw.ts -g "articles hub keeps category discovery|homepage flat front page|article citation menu stays in header flow"`,
       `bun --silent run check`, and `bun --silent run build`.
+
+### Milestone 124: Platform Config Boundary Design Lock
+
+- [x] Confirm reusable block/component config boundaries for the remaining
+      direct `siteConfig` imports: shell components may remain config-aware,
+      while reusable article/home blocks receive explicit props or view-models.
+- [x] Document which labels/actions are site-configured at route/view-model
+      boundaries and which fallback strings are component/catalog defaults.
+- [x] Confirm the implementation does not change public information
+      architecture, feature-flag semantics, or authoring behavior.
+      Design locked in `agent-docs/COMPONENT_REFACTOR_AUDIT.md`.
+
+### Milestone 125: Platform Config Boundary Implementation
+
+- [x] Add typed support/action view-model helpers and migrate reusable support,
+      home hero, author link, and article bibliography surfaces away from
+      direct `siteConfig` imports where practical.
+- [x] Update callers, catalog examples, and focused component tests so
+      reusable components consume explicit props from routes, layouts, or test
+      fixtures.
+- [x] Verify with focused Astro/unit checks before marking complete. Verified
+      with
+      `bun --silent test tests/src/lib/support.test.ts tests/src/lib/article-page-view-model.test.ts tests/src/lib/article-pdf.test.ts`
+      and
+      `bun --silent run test:astro -- SupportBlock HomeHeroBlock ArticleBibliography ArticleEndcap AuthorLink HomeMastheadBlock ArticleLayout ArticleMeta AuthorByline`.
+
+### Milestone 126: Article Page View Model Design Lock
+
+- [x] Confirm `ArticleLayout` remains the article page composition shell while
+      build-time data preparation moves into a typed view-model helper.
+- [x] Define the article page view-model contract for article metadata,
+      social image, authors, category, continuity, share/citation/PDF data,
+      reading navigation, references, support, tags, and search visibility.
+- [x] Confirm the extraction is behavior-preserving and does not move content
+      collection IO into visual child components.
+      Design locked in `agent-docs/COMPONENT_REFACTOR_AUDIT.md`.
+
+### Milestone 127: Article Page View Model Implementation
+
+- [x] Add a tested article page view-model helper and migrate
+      `ArticleLayout` to consume it.
+- [x] Keep existing article rendering, SEO, Scholar metadata, support,
+      references, tags, and reading navigation behavior intact.
+- [x] Run focused article tests plus the release gate, fix any issues, and
+      record verification before marking complete.
+      Verified with
+      `bun --silent run test:astro -- SupportBlock HomeHeroBlock ArticleBibliography ArticleEndcap AuthorLink HomeMastheadBlock ArticleLayout ArticleMeta AuthorByline`,
+      `bun --silent run test:e2e:built -- -g "homepage flat front page exposes announcements"`,
+      and `bun run check:release`.

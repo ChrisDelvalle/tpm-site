@@ -6,9 +6,15 @@ interface Props {
   authors?: readonly AuthorSummary[] | undefined;
   legacyAuthor?: string | undefined;
   mode?: "inline" | "stacked";
+  profileLinksEnabled?: boolean | undefined;
 }
 
-const { authors = [], legacyAuthor, mode = "inline" } = Astro.props;
+const {
+  authors = [],
+  legacyAuthor,
+  mode = "inline",
+  profileLinksEnabled = true,
+} = Astro.props;
 const hasStructuredAuthors = authors.length > 0;
 const separatorClass = mode === "stacked" ? "hidden" : "text-muted-foreground";
 ---
@@ -23,7 +29,10 @@ const separatorClass = mode === "stacked" ? "hidden" : "text-muted-foreground";
     >
       {authors.map((author, index) => (
         <Fragment>
-          <AuthorLink author={author} />
+          <AuthorLink
+            author={author}
+            profileLinksEnabled={profileLinksEnabled}
+          />
           {index < authors.length - 1 && (
             <span class:list={separatorClass}>&amp;</span>
           )}

@@ -4,16 +4,19 @@ import type { ImageMetadata } from "astro";
 import ThemedImage from "../media/ThemedImage.astro";
 import DiscordButton from "../ui/DiscordButton.astro";
 import PatreonButton from "../ui/PatreonButton.astro";
-import { siteConfig } from "../../lib/site-config";
+import type { SupportActionsViewModel } from "../../lib/support";
 
 interface Props {
   darkImage: ImageMetadata;
+  headingTitle: string;
   imageAlt: string;
   lightImage: ImageMetadata;
+  support?: SupportActionsViewModel | undefined;
   tagline?: string | undefined;
 }
 
-const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
+const { darkImage, headingTitle, imageAlt, lightImage, support, tagline } =
+  Astro.props;
 ---
 
 <section
@@ -21,7 +24,7 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
   aria-labelledby="home-hero-heading"
   data-home-hero-block
 >
-  <h1 id="home-hero-heading" class="sr-only">{siteConfig.identity.title}</h1>
+  <h1 id="home-hero-heading" class="sr-only">{headingTitle}</h1>
   <ThemedImage
     lightImage={lightImage}
     darkImage={darkImage}
@@ -40,18 +43,18 @@ const { darkImage, imageAlt, lightImage, tagline } = Astro.props;
     )
   }
   {
-    siteConfig.features.support && (
+    support?.enabled === true && (
       <div
         class="flex w-full max-w-[17rem] min-w-0 flex-nowrap justify-center gap-3"
         data-home-hero-cta-row
       >
         <PatreonButton
-          href={siteConfig.support.patreon.href}
-          aria-label={siteConfig.support.patreon.label}
+          href={support.patreon.href}
+          aria-label={support.patreon.ariaLabel}
         />
         <DiscordButton
-          href={siteConfig.support.discord.href}
-          aria-label={siteConfig.support.discord.label}
+          href={support.discord.href}
+          aria-label={support.discord.ariaLabel}
         />
       </div>
     )

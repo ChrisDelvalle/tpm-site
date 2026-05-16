@@ -73,6 +73,7 @@ const libDomainFiles = {
     "archive.ts",
     "article-continuity.ts",
     "article-list.ts",
+    "article-page-view-model.ts",
     "article-view.ts",
     "authors.ts",
     "collections.ts",
@@ -112,6 +113,7 @@ const libDomainFiles = {
     "site-redirects.ts",
     "social-images.ts",
     "static-paths.ts",
+    "support.ts",
   ],
   utilities: ["utils.ts"],
 } as const;

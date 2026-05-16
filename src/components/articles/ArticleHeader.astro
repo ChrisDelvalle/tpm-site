@@ -26,6 +26,7 @@ interface Props {
   description?: string | undefined;
   formattedDate?: string | undefined;
   pdf?: ArticlePdfViewModel | undefined;
+  profileLinksEnabled?: boolean | undefined;
   share?: ArticleShareMenuViewModel | undefined;
   title: string;
 }
@@ -39,6 +40,7 @@ const {
   description,
   formattedDate,
   pdf,
+  profileLinksEnabled = true,
   share,
   title,
 } = Astro.props;
@@ -104,6 +106,7 @@ const hasKickerRow = category !== undefined || hasHeaderActions;
       authors={authors}
       date={date}
       formattedDate={formattedDate}
+      profileLinksEnabled={profileLinksEnabled}
     />
   </div>
   {

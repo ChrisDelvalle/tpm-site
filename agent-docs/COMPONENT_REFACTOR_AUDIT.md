@@ -1264,6 +1264,43 @@ Verification:
 - `bun --silent run build`.
 - `bun --silent run validate:html`.
 
+### Active E-F Implementation Decisions
+
+Milestones E and F are platform-boundary refactors. They may make small
+internal API changes, but public layout, content hierarchy, feature-flag
+behavior, and authoring behavior should stay stable.
+
+For Milestone E:
+
+- Application shell components may keep reading `siteConfig` directly:
+  `BaseLayout`, `SiteHeader`, `SiteFooter`, and navigation-only wrappers such
+  as `SupportLink`.
+- Reusable blocks and article components should not decide global feature
+  policy themselves. They should receive explicit props or typed view-models
+  from route/layout/view-model code.
+- Support CTAs should use a shared support view-model so Patreon/Discord hrefs,
+  labels, aria labels, and the support feature flag are normalized once.
+- `ArticleBibliography` should receive the optional site-bibliography action
+  instead of importing global feature flags.
+- `AuthorLink` should receive author-profile-link enablement from byline
+  callers. This keeps the link/span decision testable without making every
+  author primitive read global config.
+
+For Milestone F:
+
+- `ArticleLayout` remains the Astro composition shell for the article page.
+  The extraction target is data preparation: canonical/social metadata,
+  authors, author bios, category discovery, continuity, citation/share/PDF
+  models, reading-navigation links, support data, tag/search visibility, and
+  bibliography action data.
+- The view model may perform build-time content collection reads because it is
+  route/layout-layer code, not a visual component.
+- Visual child components should continue receiving plain props and should not
+  gain new content collection or site-config reads as part of the extraction.
+- Existing article image, table-of-contents, reference rendering, PDF
+  generation, and header action behavior are out of scope except where props
+  need to be threaded through the new view model.
+
 ## Development Readiness Criteria
 
 Before implementing any milestone from this audit, make the milestone pass this

@@ -107,6 +107,24 @@ const catalogArticleTitle =
   "A Catalog Article With a Long But Plausible Editorial Title";
 const catalogArticleUrl = `https://example.com/articles/${catalogArticleSlug}/`;
 const catalogSupportUrl = "https://example.com/support";
+const catalogSupportActions = {
+  discord: {
+    ariaLabel: "Join the catalog Discord",
+    href: "https://example.com/discord",
+    label: "Join Discord",
+  },
+  enabled: true,
+  patreon: {
+    ariaLabel: "Support the catalog site on Patreon",
+    href: catalogSupportUrl,
+    label: "Support Us",
+  },
+} as const;
+const catalogSupportBlock = {
+  ...catalogSupportActions,
+  body: "Support independent publishing and maintenance.",
+  title: "Support The Catalog",
+} as const;
 const generatedImagePresentation = articleImagePresentation();
 const catalogArticleCitation = {
   articleId: catalogArticleSlug,
@@ -1086,7 +1104,11 @@ if (primaryCatalogAuthor === undefined) {
         description="Bibliography-only article reference apparatus."
         componentPath="src/components/articles/ArticleBibliography.astro"
       >
-        <ArticleBibliography citations={catalogReferences.citations} />
+        <ArticleBibliography
+          citations={catalogReferences.citations}
+          siteBibliographyHref="/bibliography/"
+          siteBibliographyLabel="View Site Bibliography"
+        />
       </CatalogExample>
 
       <CatalogExample
@@ -1167,6 +1189,7 @@ if (primaryCatalogAuthor === undefined) {
           idPrefix="catalog-endcap"
           moreInCategory={catalogArticleItemsWithMedia}
           related={catalogArticleItemsWithMedia.slice(0, 1)}
+          support={catalogSupportBlock}
         />
       </CatalogExample>
 
@@ -1175,7 +1198,10 @@ if (primaryCatalogAuthor === undefined) {
         description="Reusable support CTA for article endcaps and homepage sections."
         componentPath="src/components/blocks/SupportBlock.astro"
       >
-        <SupportBlock headingId="catalog-support-block-heading" />
+        <SupportBlock
+          headingId="catalog-support-block-heading"
+          support={catalogSupportBlock}
+        />
       </CatalogExample>
     </CatalogSection>
 
@@ -1238,7 +1264,7 @@ if (primaryCatalogAuthor === undefined) {
         description="Single author profile link."
         componentPath="src/components/authors/AuthorLink.astro"
       >
-        <AuthorLink author={primaryCatalogAuthor} />
+        <AuthorLink author={primaryCatalogAuthor} profileLinksEnabled />
       </CatalogExample>
 
       <CatalogExample
@@ -1336,14 +1362,18 @@ if (primaryCatalogAuthor === undefined) {
           <HomeHeroBlock
             lightImage={sampleImage}
             darkImage={sampleDarkImage}
+            headingTitle="Catalog homepage hero"
             imageAlt="Catalog homepage hero"
+            support={catalogSupportActions}
             tagline="A reusable platform homepage hero with configurable calls to action."
           />
           <div class="max-w-xs">
             <HomeHeroBlock
               lightImage={sampleImage}
               darkImage={sampleDarkImage}
+              headingTitle="Catalog narrow homepage hero"
               imageAlt="Catalog homepage hero narrow preview"
+              support={catalogSupportActions}
               tagline="A deliberately narrow example that checks wrapping for the homepage hero tagline."
             />
           </div>

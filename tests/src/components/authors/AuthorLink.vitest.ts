@@ -15,4 +15,17 @@ describe("AuthorLink", () => {
     expect(view).toContain('data-astro-prefetch="hover"');
     expect(view).toContain("Seong-Young Her");
   });
+
+  test("renders plain text when profile links are disabled upstream", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(AuthorLink, {
+      props: {
+        author: authorSummaryFixture,
+        profileLinksEnabled: false,
+      },
+    });
+
+    expect(view).not.toContain('href="/authors/seong-young-her/"');
+    expect(view).toContain("Seong-Young Her");
+  });
 });

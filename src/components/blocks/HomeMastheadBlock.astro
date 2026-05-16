@@ -5,6 +5,7 @@ import HomeCurrentPanel from "./HomeCurrentPanel.astro";
 import HomeHeroBlock from "./HomeHeroBlock.astro";
 import HomeStartHerePanel from "./HomeStartHerePanel.astro";
 import type { ArticleListItem } from "../../lib/article-list";
+import type { SupportActionsViewModel } from "../../lib/support";
 
 interface HomeCurrentLink {
   description?: string | undefined;
@@ -15,18 +16,22 @@ interface HomeCurrentLink {
 interface Props {
   currentLinks: readonly HomeCurrentLink[];
   darkImage: ImageMetadata;
+  headingTitle: string;
   imageAlt: string;
   lightImage: ImageMetadata;
   startHereItems: readonly ArticleListItem[];
+  support?: SupportActionsViewModel | undefined;
   tagline: string;
 }
 
 const {
   currentLinks,
   darkImage,
+  headingTitle,
   imageAlt,
   lightImage,
   startHereItems,
+  support,
   tagline,
 } = Astro.props;
 ---
@@ -39,7 +44,9 @@ const {
   <HomeHeroBlock
     lightImage={lightImage}
     darkImage={darkImage}
+    headingTitle={headingTitle}
     imageAlt={imageAlt}
+    support={support}
     tagline={tagline}
   />
   <HomeCurrentPanel links={currentLinks} />

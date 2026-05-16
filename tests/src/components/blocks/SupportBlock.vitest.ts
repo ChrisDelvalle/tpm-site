@@ -8,9 +8,22 @@ describe("SupportBlock", () => {
     const container = await createAstroTestContainer();
     const view = await container.renderToString(SupportBlock, {
       props: {
-        body: "Support independent writing.",
         headingId: "test-support-block",
-        title: "Support TPM",
+        support: {
+          body: "Support independent writing.",
+          discord: {
+            ariaLabel: "Join the TPM Discord",
+            href: "https://discord.gg/8MVFRMa",
+            label: "Join Discord",
+          },
+          enabled: true,
+          patreon: {
+            ariaLabel: "Support The Philosopher's Meme on Patreon",
+            href: "https://patreon.com/thephilosophersmeme",
+            label: "Support Us",
+          },
+          title: "Support TPM",
+        },
       },
     });
 
@@ -23,5 +36,30 @@ describe("SupportBlock", () => {
     expect(view).toContain("discord-logo-white");
     expect(view).toContain("w-full");
     expect(view).not.toContain("max-w-3xl");
+  });
+
+  test("renders nothing when support is disabled upstream", async () => {
+    const container = await createAstroTestContainer();
+    const view = await container.renderToString(SupportBlock, {
+      props: {
+        support: {
+          body: "Support independent writing.",
+          discord: {
+            ariaLabel: "Join Discord",
+            href: "https://discord.gg/example",
+            label: "Discord",
+          },
+          enabled: false,
+          patreon: {
+            ariaLabel: "Support on Patreon",
+            href: "https://patreon.com/example",
+            label: "Patreon",
+          },
+          title: "Support TPM",
+        },
+      },
+    });
+
+    expect(view.trim()).toBe("");
   });
 });

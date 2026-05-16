@@ -6,9 +6,16 @@ import ArticleFootnotes from "./ArticleFootnotes.astro";
 interface Props {
   headingIdPrefix?: string;
   references: ArticleReferenceData;
+  siteBibliographyHref?: string | undefined;
+  siteBibliographyLabel?: string | undefined;
 }
 
-const { headingIdPrefix = "article-references", references } = Astro.props;
+const {
+  headingIdPrefix = "article-references",
+  references,
+  siteBibliographyHref,
+  siteBibliographyLabel,
+} = Astro.props;
 const hasNotes = references.notes.length > 0;
 const hasCitations = references.citations.length > 0;
 ---
@@ -23,6 +30,8 @@ const hasCitations = references.citations.length > 0;
       <ArticleBibliography
         citations={references.citations}
         headingId={`${headingIdPrefix}-bibliography-heading`}
+        siteBibliographyHref={siteBibliographyHref}
+        siteBibliographyLabel={siteBibliographyLabel}
       />
       <div
         aria-label="Reference preview"

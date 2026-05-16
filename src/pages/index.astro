@@ -26,6 +26,7 @@ import {
   SITE_DESCRIPTION,
 } from "../lib/routes";
 import { siteConfig, titleWithSite } from "../lib/site-config";
+import { supportActionsViewModel } from "../lib/support";
 
 const home = await getEntry("pages", "index");
 
@@ -64,6 +65,7 @@ const { announcementItems, featuredItems, recentFeedItems, startHereItems } =
   homeView;
 const categoryItems = sectionNavigationItems(categories, "/");
 const discoveryLinks = homepageDiscoveryLinks(siteConfig);
+const homeSupport = supportActionsViewModel(siteConfig);
 
 const title = titleWithSite(home.data.title);
 const description = home.data.description ?? SITE_DESCRIPTION;
@@ -84,7 +86,9 @@ const description = home.data.description ?? SITE_DESCRIPTION;
           <HomeHeroBlock
             lightImage={hero.lightImage}
             darkImage={hero.darkImage ?? hero.lightImage}
+            headingTitle={siteConfig.identity.title}
             imageAlt={hero.imageAlt ?? home.data.title}
+            support={homeSupport}
             tagline={hero.tagline}
           />
         </div>
