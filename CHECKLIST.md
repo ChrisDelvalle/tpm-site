@@ -244,3 +244,80 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run typecheck`, `bun --silent run format:write`,
       `bun --silent run check`, `bun --silent run test:catalog`, and
       `bun --silent run build`.
+
+### Milestone 118: Compact Entry List Design Lock
+
+- [x] Confirm the compact publishable-entry primitive owns dense
+      thumbnail-free lists only: title link, metadata, separators, empty state,
+      long-title behavior, and prefetch consistency.
+- [x] Confirm `ArticleCard` and rich article rows stay outside this abstraction.
+- [x] Confirm minor visible standardization is allowed when it improves
+      homepage/start-here/announcement/recent-list consistency, with focused
+      catalog and homepage verification. Design locked in
+      `agent-docs/COMPONENT_REFACTOR_AUDIT.md`.
+
+### Milestone 119: Compact Entry List Primitive
+
+- [x] Add compact entry list/row primitives and migrate the current compact
+      publishable-entry lists onto them.
+- [x] Preserve or intentionally standardize homepage panel density, metadata
+      rhythm, empty states, and long-title wrapping.
+- [x] Verify with focused component/catalog checks and homepage route coverage.
+      Added `CompactEntryRow`, `CompactEntryList`, and `CompactEntryPanel`,
+      then migrated flat article lists, start-here/current panels, and recent
+      posts onto the shared primitive. Verified with focused compact-list Astro
+      tests, `bun --silent test tests/src/components/articles/compact-entry.test.ts`,
+      catalog example tests, `bun --silent run test:catalog`,
+      `bunx playwright test tests/e2e/component-invariants.pw.ts -g "articles hub keeps category discovery|homepage flat front page|article citation menu stays in header flow"`,
+      `bun --silent run check`, and `bun --silent run build`.
+
+### Milestone 120: Scroll Rail And Term Surface Design Lock
+
+- [x] Confirm the scroll rail primitive owns generic rail behavior: controls,
+      edge fades, disabled states, overflow containment, accessibility hooks,
+      data hooks, and item sizing contracts.
+- [x] Confirm category/term cards own only title/count/href/pluralization and
+      alignment.
+- [x] Confirm the homepage and Articles page category rails share the same rail
+      contract, with minor visible standardization allowed for consistency.
+      Design locked in `agent-docs/COMPONENT_REFACTOR_AUDIT.md`.
+
+### Milestone 121: Scroll Rail And Term Surface Primitives
+
+- [x] Add generic scroll rail primitives and rebuild category/term rails on
+      top of them.
+- [x] Preserve rail endpoint visibility, keyboard/click controls, touch scroll,
+      empty state behavior, and script data-hook compatibility.
+- [x] Verify with focused component/script/e2e checks and visual review targets.
+      Added `ScrollRail` and `TermRailCard`, then rebuilt category rails on the
+      shared rail/term-card contract. Verified with focused rail Astro tests,
+      `bun test tests/src/scripts/horizontal-scroll-rail.test.ts`, catalog
+      example tests, `bun --silent run test:catalog`,
+      `bunx playwright test tests/e2e/component-invariants.pw.ts -g "articles hub keeps category discovery|homepage flat front page|article citation menu stays in header flow"`,
+      `bun --silent run check`, and `bun --silent run build`.
+
+### Milestone 122: Action Menu And Popover Design Lock
+
+- [x] Confirm low-level anchored primitives stay generic while article action
+      menus own trigger/panel surface, action row sizing, icon/label alignment,
+      copy-status placement, focus behavior, and mobile width.
+- [x] Confirm citation/share business logic stays outside the primitive and
+      category dropdown/search reveal are not folded into this pass.
+- [x] Confirm minor visible standardization is allowed if it improves
+      cite/share consistency without changing behavior.
+      Design locked in `agent-docs/COMPONENT_REFACTOR_AUDIT.md`.
+
+### Milestone 123: Action Menu And Popover Primitives
+
+- [x] Add article action-menu/popover primitives over the anchored layer and
+      migrate citation/share panels onto them.
+- [x] Preserve popover target attributes, copy behavior, external share
+      opening, keyboard/focus behavior, and responsive panel containment.
+- [x] Verify with focused component/e2e/a11y-adjacent checks plus the normal
+      build/check gate.
+      Added `ActionPopover` and `ActionMenuItem`, then migrated citation/share
+      panel shells and share action rows onto them while keeping domain logic in
+      article-specific components. Verified with focused action-menu Astro
+      tests, catalog example tests, `bun --silent run test:catalog`,
+      `bunx playwright test tests/e2e/component-invariants.pw.ts -g "articles hub keeps category discovery|homepage flat front page|article citation menu stays in header flow"`,
+      `bun --silent run check`, and `bun --silent run build`.

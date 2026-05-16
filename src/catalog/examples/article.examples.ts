@@ -62,6 +62,18 @@ export const articleCatalogExamples = [
     title: "ArticleList",
   },
   {
+    componentPath: "src/components/articles/CompactEntryList.astro",
+    description:
+      "Dense publishable-entry list for curated homepage and sidebar links.",
+    title: "CompactEntryList",
+  },
+  {
+    componentPath: "src/components/articles/CompactEntryRow.astro",
+    description:
+      "One compact publishable-entry row with title, metadata, and optional description.",
+    title: "CompactEntryRow",
+  },
+  {
     componentPath: "src/components/articles/ArticleMeta.astro",
     description: "Author and machine-readable publication date metadata.",
     title: "ArticleMeta",

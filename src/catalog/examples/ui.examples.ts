@@ -12,6 +12,16 @@ export const uiCatalogExamples = [
     title: "ActionCluster",
   },
   {
+    componentPath: "src/components/ui/ActionMenuItem.astro",
+    description: "Icon plus label row for publication action menus.",
+    title: "ActionMenuItem",
+  },
+  {
+    componentPath: "src/components/ui/ActionPopover.astro",
+    description: "Article action menu surface built over anchored primitives.",
+    title: "ActionPopover",
+  },
+  {
     componentPath: "src/components/ui/AnchoredPanel.astro",
     description:
       "Fixed floating surface that consumes shared anchor CSS variables.",
@@ -87,6 +97,12 @@ export const uiCatalogExamples = [
     description:
       "Reusable section heading with optional action link and responsive wrapping.",
     title: "SectionHeader",
+  },
+  {
+    componentPath: "src/components/ui/ScrollRail.astro",
+    description:
+      "Reusable horizontal scroll viewport with edge fades and controls.",
+    title: "ScrollRail",
   },
   {
     componentPath: "src/components/ui/Separator.astro",

@@ -1,0 +1,54 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import type { AnchoredPreset } from "../../lib/anchored-positioning";
+import AnchoredPanel from "./AnchoredPanel.astro";
+import AnchoredRoot from "./AnchoredRoot.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  panelAttributes?: HTMLAttributes<"div">;
+  panelLabel: string;
+  panelWidth?: string;
+  popoverId: string;
+  preset: AnchoredPreset;
+}
+
+const {
+  panelAttributes = {},
+  panelLabel,
+  panelWidth = "18rem",
+  popoverId,
+  preset,
+  class: className,
+  ...attrs
+} = Astro.props;
+const {
+  class: panelClass,
+  style: panelStyle = "",
+  ...panelAttrs
+} = panelAttributes;
+const panelWidthStyle = `width: min(${panelWidth}, var(--anchor-max-width, calc(100vw - 2rem)));`;
+---
+
+<AnchoredRoot
+  {...attrs}
+  preset={preset}
+  class:list={["relative inline-flex min-w-0", className]}
+  data-action-popover
+>
+  <slot name="trigger" />
+  <AnchoredPanel
+    {...panelAttrs}
+    id={popoverId}
+    popover="auto"
+    aria-label={panelLabel}
+    class:list={[
+      "border-border bg-popover text-popover-foreground z-50 m-0 grid min-w-0 gap-1 overflow-y-auto rounded-sm border p-2 shadow-lg [&:not(:popover-open)]:hidden",
+      panelClass,
+    ]}
+    style={[panelWidthStyle, panelStyle].filter(Boolean).join(" ")}
+    data-action-popover-panel
+  >
+    <slot />
+  </AnchoredPanel>
+</AnchoredRoot>

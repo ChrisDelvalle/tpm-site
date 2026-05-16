@@ -27,6 +27,12 @@ export const homeCatalogExamples = [
     title: "HomeArchiveLinksBlock",
   },
   {
+    componentPath: "src/components/blocks/CompactEntryPanel.astro",
+    description:
+      "Reusable homepage panel for compact publishable-entry link lists.",
+    title: "CompactEntryPanel",
+  },
+  {
     componentPath: "src/components/blocks/HomeCategoryOverviewBlock.astro",
     description: "Homepage adapter for the shared category discovery rail.",
     title: "HomeCategoryOverviewBlock",
@@ -81,5 +87,10 @@ export const homeCatalogExamples = [
     componentPath: "src/components/blocks/HomeStartHerePanel.astro",
     description: "Curated new-reader article links for the homepage masthead.",
     title: "HomeStartHerePanel",
+  },
+  {
+    componentPath: "src/components/blocks/TermRailCard.astro",
+    description: "One reusable term card inside horizontal discovery rails.",
+    title: "TermRailCard",
   },
 ] as const satisfies HomeCatalogExample[];

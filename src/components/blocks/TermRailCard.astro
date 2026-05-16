@@ -1,0 +1,40 @@
+---
+import TextLink from "../ui/TextLink.astro";
+
+interface Props {
+  count: number;
+  description?: string | undefined;
+  href: string;
+  singularLabel?: string;
+  title: string;
+}
+
+const {
+  count,
+  description,
+  href,
+  singularLabel = "article",
+  title,
+} = Astro.props;
+const countLabel = `${count} ${count === 1 ? singularLabel : `${singularLabel}s`}`;
+---
+
+<li
+  class="border-border bg-card grid min-h-28 min-w-0 snap-start justify-items-center gap-1 rounded-sm border p-4 text-center"
+  data-term-rail-card
+>
+  <TextLink
+    href={href}
+    tone="neutral"
+    class="line-clamp-2 text-center font-semibold"
+    prefetch="hover"
+  >
+    {title}
+  </TextLink>
+  {
+    description && (
+      <p class="text-muted-foreground line-clamp-2 text-sm">{description}</p>
+    )
+  }
+  <p class="text-muted-foreground text-xs">{countLabel}</p>
+</li>

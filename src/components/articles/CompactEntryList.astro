@@ -1,0 +1,57 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import CompactEntryRow from "./CompactEntryRow.astro";
+import type { CompactEntryItem } from "./compact-entry";
+
+interface Props extends HTMLAttributes<"ol"> {
+  descriptionLines?: 1 | 2 | 3;
+  dividers?: boolean;
+  emptyText?: string;
+  items: readonly CompactEntryItem[];
+  ordered?: boolean;
+  rowTitleLevel?: 3 | 4;
+  showDescription?: boolean;
+}
+
+const {
+  descriptionLines = 2,
+  dividers = true,
+  emptyText = "Items will appear here.",
+  items,
+  ordered = true,
+  rowTitleLevel = 3,
+  showDescription = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+const ListTag = ordered ? "ol" : "ul";
+const itemClasses = dividers
+  ? "border-border min-w-0 border-b py-3 first:pt-0 last:border-b-0 last:pb-0"
+  : "min-w-0";
+---
+
+{
+  items.length > 0 ? (
+    <ListTag
+      {...attrs}
+      class:list={["grid min-w-0", !dividers && "gap-3", className]}
+      data-compact-entry-list
+    >
+      {items.map((item) => (
+        <li class:list={[itemClasses]}>
+          <CompactEntryRow
+            item={item}
+            showDescription={showDescription}
+            descriptionLines={descriptionLines}
+            titleLevel={rowTitleLevel}
+          />
+        </li>
+      ))}
+    </ListTag>
+  ) : (
+    <p class="text-muted-foreground m-0 text-sm" data-compact-entry-empty>
+      {emptyText}
+    </p>
+  )
+}

@@ -1,6 +1,5 @@
 ---
-import EntryMetaLine from "./EntryMetaLine.astro";
-import TextLink from "../ui/TextLink.astro";
+import CompactEntryRow from "./CompactEntryRow.astro";
 import type { PublishableListItem } from "../../lib/article-list";
 
 interface Props {
@@ -8,18 +7,6 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const metaParts = [item.category?.title, item.date, item.author].filter(
-  (part): part is string => part !== undefined && part !== "",
-);
 ---
 
-<article class="grid min-w-0 gap-1" data-flat-article-teaser>
-  <h3
-    class="text-foreground m-0 line-clamp-2 min-w-0 text-sm leading-6 font-semibold tracking-normal"
-  >
-    <TextLink href={item.href} variant="subtle" tone="neutral" prefetch="hover">
-      {item.title}
-    </TextLink>
-  </h3>
-  <EntryMetaLine items={metaParts} class="m-0" data-flat-article-teaser-meta />
-</article>
+<CompactEntryRow item={item} data-flat-article-teaser />

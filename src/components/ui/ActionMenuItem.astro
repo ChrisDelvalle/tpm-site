@@ -1,0 +1,55 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props =
+  | ({ as: "a"; href: string } & HTMLAttributes<"a">)
+  | ({ as?: "button" } & HTMLAttributes<"button">);
+
+type ActionMenuItem =
+  | {
+      readonly as: "a";
+      readonly attrs: HTMLAttributes<"a"> & { href: string };
+      readonly className: HTMLAttributes<"a">["class"];
+    }
+  | {
+      readonly as: "button";
+      readonly attrs: HTMLAttributes<"button">;
+      readonly className: HTMLAttributes<"button">["class"];
+    };
+
+const item = normalizeItem(Astro.props);
+const itemClass =
+  "text-popover-foreground hover:bg-muted focus-visible:outline-ring grid min-h-8 w-full grid-cols-[1rem_minmax(0,1fr)] items-center gap-2 rounded-xs px-2 py-1.5 text-start text-sm font-medium tracking-normal no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2";
+
+function normalizeItem(props: Props): ActionMenuItem {
+  if (props.as === "a") {
+    const { as, class: className, ...attrs } = props;
+    void as;
+
+    return { as: "a", attrs, className };
+  }
+
+  const { as, class: className, type = "button", ...attrs } = props;
+  void as;
+
+  return { as: "button", attrs: { ...attrs, type }, className };
+}
+---
+
+{
+  item.as === "a" ? (
+    <a {...item.attrs} class:list={[itemClass, item.className]}>
+      <slot name="icon" />
+      <span class="min-w-0">
+        <slot />
+      </span>
+    </a>
+  ) : (
+    <button {...item.attrs} class:list={[itemClass, item.className]}>
+      <slot name="icon" />
+      <span class="min-w-0">
+        <slot />
+      </span>
+    </button>
+  )
+}

@@ -1,5 +1,5 @@
 ---
-import FlatArticleTeaser from "./FlatArticleTeaser.astro";
+import CompactEntryList from "./CompactEntryList.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { PublishableListItem } from "../../lib/article-list";
 
@@ -67,17 +67,5 @@ const headingId = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-heading`;
       </h3>
     )
   }
-  {
-    items.length > 0 ? (
-      <ol class="grid min-w-0">
-        {items.map((item) => (
-          <li class="border-border min-w-0 border-b py-3 first:pt-0 last:border-b-0 last:pb-0">
-            <FlatArticleTeaser item={item} />
-          </li>
-        ))}
-      </ol>
-    ) : (
-      <p class="text-muted-foreground m-0 text-sm">{emptyText}</p>
-    )
-  }
+  {(<CompactEntryList items={items} emptyText={emptyText} />)}
 </section>

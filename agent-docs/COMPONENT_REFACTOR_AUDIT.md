@@ -1218,6 +1218,27 @@ Verification:
 - Share/cite e2e positioning and keyboard behavior.
 - A11y check for buttons, labels, focus, and popover close behavior.
 
+### Active B-D Implementation Decisions
+
+The B-D implementation batch may make small visible consistency improvements,
+but it should preserve information architecture and interaction contracts.
+
+- Compact entry primitives should serve dense publishable-entry lists without
+  thumbnails. They may standardize separator rhythm, empty-state text, and
+  title/metadata wrapping across homepage panels and flat publishable lists.
+  They should not absorb rich article-card image or description layout.
+- Scroll rail primitives should own horizontal overflow behavior, edge fades,
+  scroll controls, disabled states, accessibility hooks, and script data hooks.
+  Category or term cards should stay as small domain wrappers over label,
+  count, link, and pluralization.
+- Action menu primitives should sit above `AnchoredRoot`, `AnchoredTrigger`,
+  and `AnchoredPanel`, not replace them. Citation and share components should
+  keep their format/share-target logic while delegating panel surface and menu
+  item presentation to the shared action-menu layer.
+- Category dropdown and search reveal stay on low-level anchored primitives for
+  this pass. Article images, table of contents, header priority layout,
+  carousel internals, and broad `ArticleLayout` orchestration are out of scope.
+
 ### Milestone E: Platform Config Boundaries
 
 - Audit reusable blocks that import `siteConfig`.
