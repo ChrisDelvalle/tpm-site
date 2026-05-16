@@ -165,3 +165,82 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run format`, `bun --silent run build`,
       `bun --silent run verify`, `bun --silent run validate:html`, and
       `bun --silent run test:catalog -- --grep "catalog article references expose citation"`.
+
+### Milestone 112: Component Refactor And Consistency Audit
+
+- [x] Audit reusable components, blocks, layouts, interactive controllers, and
+      repeated Tailwind class clusters for maintainability, visual consistency,
+      accessibility, performance, and future platform configurability.
+- [x] Identify and rank silent refactor candidates, intentional consistency
+      changes, configurability pressure points, and areas to inspect critically
+      but not refactor yet.
+- [x] Document findings with concrete file-level evidence, recommended
+      milestones, implementation risk, and verification expectations before
+      any refactor implementation begins.
+      Documented in `agent-docs/COMPONENT_REFACTOR_AUDIT.md` and iterated with
+      explicit sub-component extraction policy, risky-system child extraction
+      candidates, developer handoff guidance, first-pass migration order,
+      acceptance criteria, stop conditions, and development readiness criteria.
+
+### Milestone 113: Foundation Refactor Design Lock
+
+- [x] Confirm the first implementation pass is behavior-preserving and limited
+      to reusable foundation primitives from the component refactor audit.
+- [x] Confirm the first pass excludes compact lists, rails, article images,
+      TOC, homepage recipe work, and broad `ArticleLayout` orchestration.
+- [x] Confirm implementation order, acceptance criteria, stop conditions, and
+      verification targets are specific enough for development handoff.
+      Design locked in `agent-docs/COMPONENT_REFACTOR_AUDIT.md`.
+
+### Milestone 114: Section Header Primitive
+
+- [x] Add a reusable `SectionHeader` primitive for section headings, optional
+      actions, responsive wrapping, heading ids, and focus-safe action links.
+- [x] Migrate article endcap/bibliography section headings first:
+      `NextArticleBlock`, `MoreInCategoryBlock`, `RelatedArticlesBlock`, and
+      `ArticleBibliography`.
+- [x] Verify the migration is behavior-preserving and does not import
+      `siteConfig` into the primitive. Verified with
+      `bun --silent run test:astro -- tests/src/components/ui/SectionHeader.vitest.ts tests/src/components/articles/NextArticleBlock.vitest.ts tests/src/components/articles/MoreInCategoryBlock.vitest.ts tests/src/components/articles/RelatedArticlesBlock.vitest.ts tests/src/components/articles/ArticleBibliography.vitest.ts`
+      and `bun --silent run test:catalog`.
+
+### Milestone 115: Button And Brand CTA Primitive Consolidation
+
+- [x] Extract shared button/link button variant classes without changing native
+      `button` and `a` semantics.
+- [x] Add a shared `BrandButton` frame and keep Patreon/Discord wrappers
+      brand-specific.
+- [x] Verify UI primitive tests/catalog examples still cover button semantics
+      and branded CTA rendering. Verified with
+      `bun --silent run test:astro -- tests/src/components/ui/Button.vitest.ts tests/src/components/ui/LinkButton.vitest.ts tests/src/components/ui/BrandButton.vitest.ts tests/src/components/ui/PatreonButton.vitest.ts tests/src/components/ui/DiscordButton.vitest.ts`
+      and
+      `bun --silent test tests/scripts/quality/verify-component-catalog.test.ts tests/src/catalog/examples/ui.examples.test.ts`.
+
+### Milestone 116: Article Header Action Primitives
+
+- [x] Add article action row/trigger primitives for cite/share/PDF header
+      actions without merging citation, share, or PDF domain behavior.
+- [x] Preserve popover target attributes, data hooks, link semantics, download
+      behavior, and small-width wrapping.
+- [x] Verify article header/menu tests and focused layout checks. Verified
+      with
+      `bun --silent run test:astro -- tests/src/components/articles/ArticleHeader.vitest.ts tests/src/components/articles/ArticleCitationMenu.vitest.ts tests/src/components/articles/ArticleShareMenu.vitest.ts`,
+      `bun --silent test tests/scripts/quality/verify-component-catalog.test.ts`,
+      and
+      `bunx playwright test tests/e2e/component-invariants.pw.ts -g "article citation menu stays in header flow"`.
+
+### Milestone 117: Metadata Primitive Scope Decision And Final Verification
+
+- [x] Decide whether a narrow metadata-line extraction is safe for this pass;
+      implement only if it stays behavior-preserving and does not absorb
+      `ArticleCard` fit logic.
+      Implemented the narrow `EntryMetaLine` primitive for `FlatArticleTeaser`
+      and `HomeFeaturedSlide`, leaving `ArticleCard` and `ArticleMeta` out of
+      this pass.
+- [x] Run the final foundation-refactor checks and update milestone completion
+      notes with the exact verification commands. Verified with
+      `bun --silent run test:astro -- tests/src/components/articles/EntryMetaLine.vitest.ts tests/src/components/articles/FlatArticleTeaser.vitest.ts tests/src/components/blocks/HomeFeaturedSlide.vitest.ts tests/src/components/blocks/HomeFeaturedCarousel.vitest.ts`,
+      `bun --silent test tests/scripts/quality/verify-component-catalog.test.ts tests/src/catalog/examples/article.examples.test.ts`,
+      `bun --silent run typecheck`, `bun --silent run format:write`,
+      `bun --silent run check`, `bun --silent run test:catalog`, and
+      `bun --silent run build`.

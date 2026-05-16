@@ -38,6 +38,11 @@ export const uiCatalogExamples = [
     title: "Button",
   },
   {
+    componentPath: "src/components/ui/BrandButton.astro",
+    description: "Shared branded external CTA frame for social platforms.",
+    title: "BrandButton",
+  },
+  {
     componentPath: "src/components/ui/Card.astro",
     description: "Repeated item surface for cards and list items.",
     title: "Card",
@@ -76,6 +81,12 @@ export const uiCatalogExamples = [
     componentPath: "src/components/ui/Section.astro",
     description: "Full-width content band with spacing and tone variants.",
     title: "Section",
+  },
+  {
+    componentPath: "src/components/ui/SectionHeader.astro",
+    description:
+      "Reusable section heading with optional action link and responsive wrapping.",
+    title: "SectionHeader",
   },
   {
     componentPath: "src/components/ui/Separator.astro",

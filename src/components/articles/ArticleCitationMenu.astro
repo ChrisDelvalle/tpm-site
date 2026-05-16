@@ -1,10 +1,10 @@
 ---
 import { Copy, Quote } from "lucide-astro";
 
+import ArticleHeaderActionTrigger from "./ArticleHeaderActionTrigger.astro";
 import type { ArticleCitationMenuViewModel } from "../../lib/citations/article-citation";
 import AnchoredPanel from "../ui/AnchoredPanel.astro";
 import AnchoredRoot from "../ui/AnchoredRoot.astro";
-import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
 
 interface Props {
   citation: ArticleCitationMenuViewModel;
@@ -31,17 +31,14 @@ const citationTextClass =
   data-article-citation-menu
   class="relative ml-auto inline-flex min-w-0"
 >
-  <AnchoredTrigger
-    as="button"
-    type="button"
+  <ArticleHeaderActionTrigger
     popovertarget={popoverId}
-    aria-label="Cite this article"
+    label="Cite this article"
     data-article-citation-trigger
-    class="text-muted-foreground hover:text-foreground focus-visible:outline-ring inline-flex items-center gap-1 rounded-xs text-sm leading-5 font-medium tracking-normal transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
   >
     <Quote class="size-3.5" aria-hidden="true" />
     <span aria-hidden="true">Cite</span>
-  </AnchoredTrigger>
+  </ArticleHeaderActionTrigger>
   <AnchoredPanel
     id={popoverId}
     popover="auto"

@@ -34,7 +34,7 @@ describe("ArticleShareMenu", () => {
     expect(view).toContain('popover="auto"');
     expect(view).toContain("data-article-share-panel");
     expect(view).toContain("Share What Is A Meme?");
-    expect(view).toContain("[&#38;:not(:popover-open)]:hidden");
+    expect(view).toMatch(/\[(?:&|&#38;|&amp;):not\(:popover-open\)\]:hidden/);
     expect(view).toContain("data-article-share-copy-button");
     expect(view).toContain("data-article-share-copy-text");
     expect(view).toContain("Copy link");

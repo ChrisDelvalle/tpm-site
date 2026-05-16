@@ -1,4 +1,5 @@
 ---
+import EntryMetaLine from "./EntryMetaLine.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { PublishableListItem } from "../../lib/article-list";
 
@@ -20,19 +21,5 @@ const metaParts = [item.category?.title, item.date, item.author].filter(
       {item.title}
     </TextLink>
   </h3>
-  {
-    metaParts.length > 0 && (
-      <p
-        class="text-muted-foreground m-0 flex min-w-0 flex-wrap gap-x-2 gap-y-1 text-xs"
-        data-flat-article-teaser-meta
-      >
-        {metaParts.map((part, index) => (
-          <>
-            {index > 0 && <span aria-hidden="true">/</span>}
-            <span>{part}</span>
-          </>
-        ))}
-      </p>
-    )
-  }
+  <EntryMetaLine items={metaParts} class="m-0" data-flat-article-teaser-meta />
 </article>

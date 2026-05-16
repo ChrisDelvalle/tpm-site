@@ -80,6 +80,7 @@ import IconButton from "../components/ui/IconButton.astro";
 import Input from "../components/ui/Input.astro";
 import LinkButton from "../components/ui/LinkButton.astro";
 import Section from "../components/ui/Section.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
 import Separator from "../components/ui/Separator.astro";
 import TextLink from "../components/ui/TextLink.astro";
 import articleLandscapeImage from "./assets/catalog-article-landscape.png";
@@ -616,6 +617,19 @@ if (primaryCatalogAuthor === undefined) {
             Browse Articles
           </LinkButton>
         </div>
+      </CatalogExample>
+
+      <CatalogExample
+        title="SectionHeader"
+        description="Reusable section heading with optional right-side action link."
+        componentPath="src/components/ui/SectionHeader.astro"
+      >
+        <SectionHeader
+          headingId="catalog-section-header-example"
+          title="More in Metamemetics"
+          actionHref="/categories/metamemetics/"
+          actionLabel="View category"
+        />
       </CatalogExample>
 
       <CatalogExample

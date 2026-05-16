@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { articleHeaderActionRowClasses } from "./article-header-actions";
+
+/** Internal wrapper props for article header action controls. */
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...attrs } = Astro.props;
+---
+
+<div
+  {...attrs}
+  class:list={[articleHeaderActionRowClasses, className]}
+  data-article-header-actions
+  data-pdf-exclude
+>
+  <slot />
+</div>

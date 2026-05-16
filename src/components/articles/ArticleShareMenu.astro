@@ -1,11 +1,11 @@
 ---
 import { Share2 } from "lucide-astro";
 
+import ArticleHeaderActionTrigger from "./ArticleHeaderActionTrigger.astro";
 import ArticleShareActionRow from "./ArticleShareActionRow.astro";
 import type { ArticleShareMenuViewModel } from "../../lib/share-targets";
 import AnchoredPanel from "../ui/AnchoredPanel.astro";
 import AnchoredRoot from "../ui/AnchoredRoot.astro";
-import AnchoredTrigger from "../ui/AnchoredTrigger.astro";
 
 interface Props {
   share: ArticleShareMenuViewModel;
@@ -24,17 +24,14 @@ const copyText = JSON.stringify(share.copyText);
   data-article-share-menu
   class="relative inline-flex min-w-0"
 >
-  <AnchoredTrigger
-    as="button"
-    type="button"
+  <ArticleHeaderActionTrigger
     popovertarget={popoverId}
-    aria-label="Share this article"
+    label="Share this article"
     data-article-share-trigger
-    class="text-muted-foreground hover:text-foreground focus-visible:outline-ring inline-flex items-center gap-1 rounded-xs text-sm leading-5 font-medium tracking-normal transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
   >
     <Share2 class="size-3.5" aria-hidden="true" />
     <span aria-hidden="true">Share</span>
-  </AnchoredTrigger>
+  </ArticleHeaderActionTrigger>
   <AnchoredPanel
     id={popoverId}
     popover="auto"

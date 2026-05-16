@@ -13,7 +13,7 @@ describe("PageProse", () => {
     });
 
     expect(view).toContain("prose");
-    expect(view).toContain("[&#38;_pre_code]:text-white");
+    expect(view).toMatch(/\[(?:&|&#38;|&amp;)_pre_code\]:text-white/);
     expect(view).toContain("Rendered page prose.");
   });
 });

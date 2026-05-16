@@ -47,6 +47,21 @@ export const catalogExampleComponentPaths = [
 
 export const componentCatalogIgnoreList = [
   {
+    path: "src/components/articles/ArticleHeaderActionLink.astro",
+    reason:
+      "Internal article-header action primitive covered by ArticleHeader component tests.",
+  },
+  {
+    path: "src/components/articles/ArticleHeaderActionRow.astro",
+    reason:
+      "Internal article-header action primitive covered by ArticleHeader component tests.",
+  },
+  {
+    path: "src/components/articles/ArticleHeaderActionTrigger.astro",
+    reason:
+      "Internal article-header anchored trigger covered by citation and share menu tests.",
+  },
+  {
     path: "src/components/articles/ArticleShareActionRow.astro",
     reason:
       "Internal article-share row renderer covered by ArticleShareMenu examples and component tests.",

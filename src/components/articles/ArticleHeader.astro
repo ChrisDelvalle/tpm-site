@@ -2,6 +2,8 @@
 import { Download } from "lucide-astro";
 
 import ArticleCitationMenu from "./ArticleCitationMenu.astro";
+import ArticleHeaderActionLink from "./ArticleHeaderActionLink.astro";
+import ArticleHeaderActionRow from "./ArticleHeaderActionRow.astro";
 import ArticleMeta from "./ArticleMeta.astro";
 import ArticleShareMenu from "./ArticleShareMenu.astro";
 import TextLink from "../ui/TextLink.astro";
@@ -69,28 +71,21 @@ const hasKickerRow = category !== undefined || hasHeaderActions;
           </TextLink>
         )}
         {hasHeaderActions && (
-          <div
-            class="ml-auto flex flex-wrap items-center gap-2 print:hidden"
-            data-article-header-actions
-            data-pdf-exclude
-          >
+          <ArticleHeaderActionRow>
             {citation && <ArticleCitationMenu citation={citation} />}
             {share && <ArticleShareMenu share={share} />}
             {pdf && (
-              <TextLink
+              <ArticleHeaderActionLink
                 href={pdf.pdfHref}
-                variant="nav"
-                tone="muted"
-                class="inline-flex items-center gap-1 text-sm font-medium"
-                aria-label="Save PDF"
+                label="Save PDF"
                 data-article-pdf-link
                 download
               >
                 <Download class="size-3.5" aria-hidden="true" />
                 <span aria-hidden="true">PDF</span>
-              </TextLink>
+              </ArticleHeaderActionLink>
             )}
-          </div>
+          </ArticleHeaderActionRow>
         )}
       </div>
     )

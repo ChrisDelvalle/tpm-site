@@ -67,6 +67,12 @@ export const articleCatalogExamples = [
     title: "ArticleMeta",
   },
   {
+    componentPath: "src/components/articles/EntryMetaLine.astro",
+    description:
+      "Compact metadata row with separator handling and optional linked items.",
+    title: "EntryMetaLine",
+  },
+  {
     componentPath: "src/components/articles/ArticleProse.astro",
     description: "Tailwind Typography wrapper for rendered Markdown prose.",
     title: "ArticleProse",
