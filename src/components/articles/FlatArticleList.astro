@@ -2,6 +2,7 @@
 import CompactEntryList from "./CompactEntryList.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { PublishableListItem } from "../../lib/article-list";
+import { htmlIdFromText } from "../../lib/html";
 
 interface Props {
   emptyText?: string;
@@ -18,7 +19,7 @@ const {
   title,
   titleHref,
 } = Astro.props;
-const headingId = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-heading`;
+const headingId = `${htmlIdFromText(title, "article-list")}-heading`;
 ---
 
 <section

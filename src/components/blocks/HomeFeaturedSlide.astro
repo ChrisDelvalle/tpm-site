@@ -1,7 +1,6 @@
 ---
-import { Image } from "astro:assets";
-
 import EntryMetaLine from "../articles/EntryMetaLine.astro";
+import PublishableMediaFrame from "../articles/PublishableMediaFrame.astro";
 import TextLink from "../ui/TextLink.astro";
 import type { HomeFeaturedItem } from "../../lib/home";
 
@@ -20,6 +19,10 @@ const metaParts = [item.category?.title, item.date].filter(
 const linkPrefetch = item.href.startsWith("/") ? "hover" : undefined;
 const linkPrefetchAttrs =
   linkPrefetch === undefined ? {} : { prefetch: linkPrefetch as "hover" };
+const mediaClasses = [
+  "order-first aspect-[4/3] md:order-last md:self-start",
+  item.image ? "bg-muted" : "bg-foreground text-background",
+].join(" ");
 ---
 
 <article
@@ -72,35 +75,17 @@ const linkPrefetchAttrs =
       )
     }
   </div>
-  {
-    item.image ? (
-      <a
-        href={item.href}
-        aria-label={`Read ${item.title}`}
-        data-astro-prefetch={linkPrefetch}
-        class="bg-muted order-first block aspect-[4/3] min-w-0 overflow-hidden rounded-xs no-underline md:order-last md:self-start"
-        data-home-featured-media
-      >
-        <Image
-          src={item.image.src}
-          alt={item.image.alt}
-          width={480}
-          height={360}
-          loading={isActive ? "eager" : "lazy"}
-          class="h-full w-full object-cover"
-        />
-      </a>
-    ) : (
-      <a
-        href={item.href}
-        aria-label={`Read ${item.title}`}
-        data-astro-prefetch={linkPrefetch}
-        class="bg-foreground text-background order-first flex aspect-[4/3] min-w-0 items-center justify-center overflow-hidden rounded-xs p-4 text-center text-4xl leading-none font-bold tracking-normal uppercase no-underline md:order-last md:self-start"
-        data-home-featured-media
-        data-home-featured-fallback-image
-      >
-        <span class="line-clamp-2 break-words">{fallbackLabel}</span>
-      </a>
-    )
-  }
+  <PublishableMediaFrame
+    href={item.href}
+    label={`Read ${item.title}`}
+    image={item.image}
+    fallbackLabel={fallbackLabel}
+    renderWidth={480}
+    renderHeight={360}
+    loading={isActive ? "eager" : "lazy"}
+    prefetch={linkPrefetch}
+    class:list={[mediaClasses]}
+    data-home-featured-media
+    data-home-featured-fallback-image={item.image ? undefined : true}
+  />
 </article>

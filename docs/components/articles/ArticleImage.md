@@ -27,12 +27,15 @@ images.
 MDX article
   ArticleProse
     ArticleImage
-      optimized Astro Image
-      optional inspect trigger
+      ArticleImageFrame
+        optimized Astro Image
+        optional inspect trigger
 ```
 
 `ArticleImage` calls the shared article image policy helper. It does not fetch
 content, inspect Markdown source, or choose global image assets.
+`ArticleImageFrame` owns the button/div chrome around the optimized image so
+the policy and frame rendering can be tested separately.
 
 ## Layout And Responsiveness
 

@@ -1,11 +1,12 @@
 ---
-import TextLink from "../ui/TextLink.astro";
+import TermCard from "./TermCard.astro";
 
 interface Props {
   count: number;
   description?: string | undefined;
   href: string;
   singularLabel?: string;
+  pluralLabel?: string;
   title: string;
 }
 
@@ -13,28 +14,22 @@ const {
   count,
   description,
   href,
+  pluralLabel,
   singularLabel = "article",
   title,
 } = Astro.props;
-const countLabel = `${count} ${count === 1 ? singularLabel : `${singularLabel}s`}`;
+const pluralLabelProps =
+  pluralLabel === undefined ? {} : { itemNounPlural: pluralLabel };
 ---
 
-<li
-  class="border-border bg-card grid min-h-28 min-w-0 snap-start justify-items-center gap-1 rounded-sm border p-4 text-center"
+<TermCard
+  align="center"
+  count={count}
+  description={description}
+  href={href}
+  itemNoun={singularLabel}
+  {...pluralLabelProps}
+  title={title}
+  class="min-h-28 snap-start"
   data-term-rail-card
->
-  <TextLink
-    href={href}
-    tone="neutral"
-    class="line-clamp-2 text-center font-semibold"
-    prefetch="hover"
-  >
-    {title}
-  </TextLink>
-  {
-    description && (
-      <p class="text-muted-foreground line-clamp-2 text-sm">{description}</p>
-    )
-  }
-  <p class="text-muted-foreground text-xs">{countLabel}</p>
-</li>
+/>

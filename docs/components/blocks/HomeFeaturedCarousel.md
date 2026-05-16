@@ -13,6 +13,10 @@ The component exposes an accessible label but does not render a visible
 communicates the slot; removing the heading saves vertical space and keeps the
 feature itself primary.
 
+`HomeFeaturedCarouselControls` owns the previous/next buttons and indicator
+row. The parent carousel owns the viewport, enhancement script, empty/single
+item behavior, and accessible region label.
+
 ## Intentions
 
 - Keep Featured calm and editorial, not promotional clutter.

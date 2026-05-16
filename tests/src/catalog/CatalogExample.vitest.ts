@@ -10,6 +10,7 @@ describe("CatalogExample", () => {
       props: {
         componentPath: "src/components/ui/Button.astro",
         description: "Button example.",
+        lifecycle: "platform-candidate",
         title: "Button",
       },
       slots: {
@@ -18,6 +19,8 @@ describe("CatalogExample", () => {
     });
 
     expect(view).toContain("Button example.");
+    expect(view).toContain('data-catalog-lifecycle="platform-candidate"');
+    expect(view).toContain("Platform candidate");
     expect(view).toContain("src/components/ui/Button.astro");
     expect(view).toContain(
       'data-catalog-component="src/components/ui/Button.astro"',

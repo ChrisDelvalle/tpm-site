@@ -370,3 +370,193 @@ they are useful context. Explicitly deferred work belongs in
       `bun --silent run test:astro -- SupportBlock HomeHeroBlock ArticleBibliography ArticleEndcap AuthorLink HomeMastheadBlock ArticleLayout ArticleMeta AuthorByline`,
       `bun --silent run test:e2e:built -- -g "homepage flat front page exposes announcements"`,
       and `bun run check:release`.
+
+### Milestone 128: Second-Pass Component Refactor Audit
+
+- [x] Reassess the component architecture after Milestones A-F and record what
+      the branch revealed about platform productionization, page recipes,
+      config boundaries, catalog lifecycle, and safe subcomponent extraction.
+- [x] Add second-pass implementation milestones to
+      `agent-docs/COMPONENT_REFACTOR_AUDIT.md` with concrete scope,
+      stop-conditions, and verification expectations.
+- [x] Verify documentation edits are well formed before handoff.
+
+### Milestone 129: Homepage Recipe Design Lock
+
+- [x] Define the homepage recipe/view-model contract, user-impact goals,
+      non-regression priorities, responsive invariants, and test plan.
+- [x] Confirm the first implementation keeps the current TPM homepage layout
+      while moving route-level config plumbing out of `src/pages/index.astro`.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 130: Homepage Recipe Implementation
+
+- [x] Implement the homepage route view model and keep the Astro route
+      declarative: load page content, build the view model, render blocks.
+- [x] Verify feature-disabled, missing/empty content, custom-label, and
+      support-disabled states plus homepage e2e at mobile/tablet/desktop.
+
+### Milestone 131: Browse Header And Empty-State Design Lock
+
+- [x] Define page/browse header and empty-state contracts over `SectionHeader`.
+- [x] Specify user-facing copy ownership, visible standardization allowances,
+      accessibility semantics, and responsive behavior.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 132: Browse Header And Empty-State Implementation
+
+- [x] Add or extend a page/browse header primitive over `SectionHeader`.
+- [x] Migrate articles index, archive blocks, term overview, search, authors
+      index, and plain page headers where contracts match.
+- [x] Standardize route-owned labels, descriptions, and empty states with
+      focused route/component verification.
+
+### Milestone 133: Term Surface Design Lock
+
+- [x] Define shared term summary/card/rail contracts for categories, tags,
+      collections, and future series.
+- [x] Confirm category previews/dropdowns remain category-specific and are not
+      folded into generic term primitives.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 134: Term Surface Implementation
+
+- [x] Add shared term summary/card primitives for category, tag, collection,
+      and future series browse surfaces.
+- [x] Make category rails a thin adapter over generic term rail behavior while
+      keeping category previews/dropdowns separate.
+- [x] Verify rail endpoints, long labels, zero/empty states, and category/tag/
+      collection page behavior.
+
+### Milestone 135: Rich Publishable Media Design Lock
+
+- [x] Define linked publishable media/fallback frame responsibilities,
+      performance expectations, image optimization assumptions, and fit-policy
+      non-regressions.
+- [x] Confirm `ArticleCard`, `HomeFeaturedSlide`, and rich list surfaces can
+      share media behavior without retuning title/description thresholds.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 136: Rich Publishable Media Implementation
+
+- [x] Extract a reusable media/fallback frame for linked publishable images.
+- [x] Split `ArticleCard` into media, kicker/meta, and body children only if
+      the new boundaries remain simple and preserve current fit behavior.
+- [x] Reuse the media frame in featured slides if it preserves the carousel
+      layout and no-layout-shift invariants.
+
+### Milestone 137: Component Catalog Lifecycle Design Lock
+
+- [x] Define catalog lifecycle states, catalog section ownership, deprecated
+      fixture behavior, and deletion policy.
+- [x] Confirm no catalog component is deleted unless it has obvious zero
+      present/future value; uncertain deletions are flagged for review.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 138: Component Catalog Lifecycle Implementation
+
+- [x] Add lifecycle metadata for catalog examples and catalog-only components.
+- [x] Split `ComponentCatalog.astro` into smaller domain sections or
+      data-driven example groups.
+- [x] Classify catalog-only components before deleting or preserving any
+      legacy/prototype surfaces.
+
+### Milestone 139: Config Schema And Site Owner Copy Design Lock
+
+- [x] Define production-quality config schema boundaries, site-owner copy
+      ownership, future admin-UI needs, and compatibility constraints.
+- [x] Decide whether any config JSON shape changes are justified; default to
+      preserving public config shape unless a clear quality gain exists.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 140: Config Schema And Site Owner Copy Implementation
+
+- [x] Split `site-config` schema internals by domain while preserving the
+      single parser/export API unless a design-approved migration is needed.
+- [x] Move likely site-owner copy into config/view models instead of reusable
+      components.
+- [x] Document editable config fields in terms useful for future admin UI and
+      non-technical site owners.
+
+### Milestone 141: External Action Registry Design Lock
+
+- [x] Define a general external CTA/social/share presentation boundary for
+      support CTAs, homepage social CTAs, and article share targets.
+- [x] Confirm URL-building, brand presentation, accessibility labels, and
+      configurable target lists stay in appropriate layers.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 142: External Action Registry Implementation
+
+- [x] Introduce shared action/target presentation metadata where it improves
+      developer velocity without coupling pure URL helpers to Astro views.
+- [x] Preserve existing Patreon, Discord, and share behavior while making
+      future external CTA/share additions easier.
+- [x] Verify article share menus, support blocks, and homepage CTA rows.
+
+### Milestone 143: Risk-System Refactor Program Design Lock
+
+- [x] Define per-system design/test gates for TOC, article images, header,
+      carousel, and rich article cards, including user-impact priorities,
+      performance, accessibility, SEO/machine readability, and responsive
+      invariants.
+- [x] Decide the stable child components for each risky parent system and
+      confirm no incidental policy changes are included.
+- [x] Review the design objectively and iterate until it is ready for
+      implementation.
+
+### Milestone 144: TOC Child Extraction
+
+- [x] Extract stable TOC child components only where the design lock identifies
+      concrete value.
+- [x] Preserve generated reference inclusion, numbering, sticky offsets,
+      hidden/open behavior, keyboard behavior, and mobile/sidebar placement.
+- [x] Verify with focused TOC unit/e2e coverage and visual review.
+
+### Milestone 145: Article Image Child Extraction
+
+- [x] Extract stable article image child components only where the design lock
+      identifies concrete value.
+- [x] Preserve Markdown/MDX authoring, Astro image optimization, inspector
+      behavior, PDF behavior, source-selection policy, and accessibility.
+- [x] Verify with focused article image/PDF tests and visual review.
+
+### Milestone 146: Header Child Extraction
+
+- [x] Extract stable header child components only where the design lock
+      identifies concrete value.
+- [x] Preserve logo centering, support-button shrink behavior, desktop category
+      row, mobile full-width menu, touch/keyboard behavior, and tiny-width
+      invariants.
+- [x] Verify with focused header e2e coverage and visual review.
+
+### Milestone 147: Carousel Child Extraction
+
+- [x] Extract stable carousel child components only where the design lock
+      identifies concrete value.
+- [x] Preserve fixed slide layout, controls/dots, no-layout-shift behavior,
+      accessibility, reduced-motion expectations, and image fallback behavior.
+- [x] Verify with focused homepage carousel tests and visual review.
+
+### Milestone 148: Refactor Release Verification
+
+- [x] Run focused tests for every touched milestone.
+- [x] Run `bun run check:release`, fix any issues, and record final
+      verification before handoff.
+
+### Milestone 149: Refactor Documentation Drift Audit
+
+- [x] Audit docs touched by the refactor for stale component, config, catalog,
+      and author/site-owner guidance.
+- [x] Update developer-facing docs for new primitives, config-default
+      boundaries, catalog lifecycle metadata, and remaining refactor policy.
+- [x] Update site-owner/author-facing docs where the refactor changed how
+      homepage labels, discovery links, support/social/share settings, or
+      content defaults should be understood.

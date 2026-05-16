@@ -58,32 +58,32 @@ const externalHref =
       data-article-share-open-button
       data-article-share-open-url={externalHref}
     >
-      {action.id === "bluesky" && (
+      {action.icon === "message" && (
         <MessageCircle
           slot="icon"
           class:list={[iconClass]}
           aria-hidden="true"
         />
       )}
-      {action.id === "x" && (
+      {action.icon === "x" && (
         <Twitter slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "threads" && (
+      {action.icon === "at-sign" && (
         <AtSign slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "facebook" && (
+      {action.icon === "facebook" && (
         <Facebook slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "linkedin" && (
+      {action.icon === "linkedin" && (
         <Linkedin slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "reddit" && (
+      {action.icon === "reddit" && (
         <Hash slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "hacker-news" && (
+      {action.icon === "hacker-news" && (
         <Newspaper slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
-      {action.id === "pinterest" && (
+      {action.icon === "pinterest" && (
         <Pin slot="icon" class:list={[iconClass]} aria-hidden="true" />
       )}
       {action.label}

@@ -4,6 +4,7 @@ import {
   catalogExampleComponentPaths,
   catalogMetadata,
   componentCatalogIgnoreList,
+  componentCatalogLifecycleStatuses,
   componentCatalogStaticPaths,
   isComponentCatalogEnabled,
 } from "../../../src/catalog/catalog.config";
@@ -47,6 +48,12 @@ describe("catalog config", () => {
     );
     expect(
       componentCatalogIgnoreList.every((entry) => entry.reason.length > 24),
+    ).toBe(true);
+    expect(componentCatalogLifecycleStatuses).toContain("current");
+    expect(
+      componentCatalogIgnoreList.every((entry) =>
+        componentCatalogLifecycleStatuses.includes(entry.lifecycle),
+      ),
     ).toBe(true);
   });
 

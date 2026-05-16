@@ -2,6 +2,7 @@
 import ArchiveListBlock from "../../components/blocks/ArchiveListBlock.astro";
 import CategoryRailBlock from "../../components/blocks/CategoryRailBlock.astro";
 import BrowsingBody from "../../components/layout/BrowsingBody.astro";
+import PageHeader from "../../components/pages/PageHeader.astro";
 import LinkButton from "../../components/ui/LinkButton.astro";
 import TextLink from "../../components/ui/TextLink.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -32,17 +33,14 @@ const categoryItems = sectionNavigationItems(categories, articlesIndexUrl());
 >
   <BrowsingBody>
     <section class="grid gap-4">
-      <header class="grid gap-3">
-        <h1 class="text-foreground m-0 text-4xl font-bold tracking-normal">
-          Articles
-        </h1>
-        <p class="text-muted-foreground max-w-3xl text-lg">
+      <PageHeader headingId="articles-heading" title="Articles">
+        <Fragment slot="description">
           Browse articles by category, start with recent writing, or go straight
           to the <TextLink href={articlesArchiveUrl()} prefetch="hover"
             >complete article archive</TextLink
           >.
-        </p>
-      </header>
+        </Fragment>
+      </PageHeader>
       <div class="flex flex-wrap gap-3">
         <LinkButton
           href={articlesArchiveUrl()}

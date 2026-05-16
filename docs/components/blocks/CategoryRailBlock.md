@@ -18,9 +18,9 @@ spending the vertical space of a full overview grid.
 
 ## Composition Relationships
 
-It composes `IconButton`, `TextLink`, Lucide chevrons, and the shared
-`horizontal-scroll-rail` script. `HomeCategoryOverviewBlock` is now a homepage
-adapter over this generic rail.
+It adapts category navigation data into the generic `TermRailBlock`, which in
+turn composes `ScrollRail` and `TermRailCard`. `HomeCategoryOverviewBlock` is
+now a homepage adapter over this same rail contract.
 
 ## Layout And Responsiveness
 

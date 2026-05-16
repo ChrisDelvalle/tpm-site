@@ -27,10 +27,15 @@ make invalid states harder to express.
 ```text
 ArticleList / discovery blocks
   ArticleCard
-    TextLink
-    ArticleMeta
-    optional Image
+    PublishableMediaFrame
+    ArticleCardBody
+      TextLink
+      ArticleMeta
 ```
+
+`ArticleCard` coordinates the rich row shell. `PublishableMediaFrame` owns
+linked optimized media/fallback behavior, and `ArticleCardBody` owns text,
+kicker, title/excerpt fit variants, and author metadata.
 
 `ArticleCard` should consume an already-normalized article summary. It should
 not compute category routes, author routes, publication status, image choice,

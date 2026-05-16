@@ -49,6 +49,12 @@ const headingClasses = {
   subsection:
     "text-foreground m-0 min-w-0 text-xl font-semibold tracking-normal break-words",
 } as const;
+const descriptionClasses = {
+  compact: "text-muted-foreground m-0 max-w-3xl text-sm leading-6",
+  page: "text-muted-foreground m-0 max-w-3xl text-lg leading-7",
+  section: "text-muted-foreground m-0 max-w-3xl text-base leading-7",
+  subsection: "text-muted-foreground m-0 max-w-3xl text-sm leading-6",
+} as const;
 const rootClasses =
   layout === "stacked"
     ? "grid min-w-0 gap-1"
@@ -69,9 +75,7 @@ const rootClasses =
     </HeadingTag>
     {
       description && (
-        <p class="text-muted-foreground m-0 max-w-3xl text-sm leading-6">
-          {description}
-        </p>
+        <p class:list={[descriptionClasses[size]]}>{description}</p>
       )
     }
   </div>

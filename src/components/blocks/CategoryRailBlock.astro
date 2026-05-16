@@ -1,8 +1,7 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-import TermRailCard from "./TermRailCard.astro";
-import ScrollRail from "../ui/ScrollRail.astro";
+import TermRailBlock from "./TermRailBlock.astro";
 import type { SectionNavItem } from "../../lib/navigation";
 
 interface Props extends HTMLAttributes<"section"> {
@@ -22,34 +21,24 @@ const {
   ...attrs
 } = Astro.props;
 const sectionLabel = ariaLabel ?? title;
+const termItems = items.map((item) => ({
+  count: item.articles.length,
+  description: item.description,
+  href: item.href,
+  title: item.title,
+}));
 ---
 
-<section
+<TermRailBlock
   {...attrs}
-  class:list={["grid min-w-0 gap-4", className]}
   aria-label={sectionLabel}
+  class:list={[className]}
   data-category-rail
->
-  {
-    items.length > 0 ? (
-      <ScrollRail
-        railId={railId}
-        previousLabel="Scroll categories left"
-        nextLabel="Scroll categories right"
-      >
-        {items.map((item) => (
-          <TermRailCard
-            count={item.articles.length}
-            description={item.description}
-            href={item.href}
-            title={item.title}
-          />
-        ))}
-      </ScrollRail>
-    ) : (
-      <p class="text-muted-foreground text-sm" data-category-rail-empty>
-        {emptyText}
-      </p>
-    )
-  }
-</section>
+  data-category-rail-empty={items.length === 0 ? true : undefined}
+  emptyText={emptyText}
+  items={termItems}
+  nextLabel="Scroll categories right"
+  previousLabel="Scroll categories left"
+  railId={railId}
+  title={title}
+/>

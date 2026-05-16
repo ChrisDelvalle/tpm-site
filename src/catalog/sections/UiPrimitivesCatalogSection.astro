@@ -1,0 +1,289 @@
+---
+import { Search } from "lucide-astro";
+
+import ActionCluster from "../../components/ui/ActionCluster.astro";
+import AnchoredPanel from "../../components/ui/AnchoredPanel.astro";
+import AnchoredRoot from "../../components/ui/AnchoredRoot.astro";
+import AnchoredTrigger from "../../components/ui/AnchoredTrigger.astro";
+import Badge from "../../components/ui/Badge.astro";
+import Button from "../../components/ui/Button.astro";
+import Card from "../../components/ui/Card.astro";
+import Container from "../../components/ui/Container.astro";
+import IconButton from "../../components/ui/IconButton.astro";
+import Input from "../../components/ui/Input.astro";
+import LinkButton from "../../components/ui/LinkButton.astro";
+import Section from "../../components/ui/Section.astro";
+import SectionHeader from "../../components/ui/SectionHeader.astro";
+import Separator from "../../components/ui/Separator.astro";
+import TextLink from "../../components/ui/TextLink.astro";
+import type { AnchoredPreset } from "../../lib/anchored-positioning";
+import CatalogExample from "../CatalogExample.astro";
+import CatalogSection from "../CatalogSection.astro";
+
+interface Props {
+  anchoredPresetMatrix: readonly AnchoredPreset[];
+  catalogSupportUrl: string;
+}
+
+const { anchoredPresetMatrix, catalogSupportUrl } = Astro.props;
+---
+
+<CatalogSection
+  title="UI Primitives"
+  description="Small Astro components that provide the shared visual and accessibility contracts."
+>
+  <CatalogExample
+    title="ActionCluster"
+    description="One-line cluster for action controls that must align and compact together."
+    componentPath="src/components/ui/ActionCluster.astro"
+  >
+    <ActionCluster
+      align="end"
+      gap="xs"
+      class="border-border bg-card max-w-sm rounded-sm border p-2"
+    >
+      <TextLink href="/articles/">Articles</TextLink>
+      <TextLink href="/about/" tone="neutral">About</TextLink>
+      <LinkButton href={catalogSupportUrl} class="min-h-8 px-3 py-1.5 text-sm">
+        Support Us
+      </LinkButton>
+    </ActionCluster>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Button"
+    description="Native actions with variant, size, and tone props."
+    componentPath="src/components/ui/Button.astro"
+  >
+    <div class="flex flex-wrap gap-3">
+      <Button>Primary</Button>
+      <Button variant="outline" tone="neutral">Neutral</Button>
+      <Button variant="ghost" tone="danger">Danger</Button>
+    </div>
+  </CatalogExample>
+
+  <CatalogExample
+    title="AnchoredRoot"
+    description="Anchored relationship boundary with an explicit product preset."
+    componentPath="src/components/ui/AnchoredRoot.astro"
+  >
+    <AnchoredRoot preset="header-dropdown" class="group relative inline-block">
+      <AnchoredTrigger
+        as="button"
+        type="button"
+        class="border-border bg-background text-foreground rounded-sm border px-3 py-2 text-sm"
+      >
+        Root Example
+      </AnchoredTrigger>
+      <AnchoredPanel
+        class="border-border bg-popover text-popover-foreground z-30 hidden w-64 overflow-y-auto rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block"
+      >
+        AnchoredRoot scopes the trigger and panel relationship.
+      </AnchoredPanel>
+    </AnchoredRoot>
+  </CatalogExample>
+
+  <CatalogExample
+    title="AnchoredTrigger"
+    description="Semantic trigger marker; it can render as a link, button, span, or summary."
+    componentPath="src/components/ui/AnchoredTrigger.astro"
+  >
+    <AnchoredRoot
+      preset="header-search-start"
+      class="group relative inline-block"
+    >
+      <AnchoredTrigger
+        as="button"
+        type="button"
+        class="text-primary hover:text-foreground focus-visible:ring-ring rounded-sm text-sm font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:outline-none"
+      >
+        Focus Or Hover
+      </AnchoredTrigger>
+      <AnchoredPanel
+        class="border-border bg-popover text-popover-foreground z-30 hidden w-72 rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block"
+      >
+        The trigger owns semantics; the adapter owns geometry.
+      </AnchoredPanel>
+    </AnchoredRoot>
+  </CatalogExample>
+
+  <CatalogExample
+    title="AnchoredPanel"
+    description="Floating surface with CSS-variable hooks for position and viewport-safe size limits."
+    componentPath="src/components/ui/AnchoredPanel.astro"
+  >
+    <AnchoredRoot
+      preset="inline-hover-preview"
+      class="group relative inline-block"
+    >
+      <AnchoredTrigger
+        as="a"
+        href="#anchored-panel-example"
+        class="text-primary hover:text-foreground text-sm underline underline-offset-4"
+      >
+        Inline preview trigger
+      </AnchoredTrigger>
+      <AnchoredPanel
+        id="anchored-panel-example"
+        class="border-border bg-popover text-popover-foreground z-30 hidden w-80 overflow-y-auto rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block"
+      >
+        Panels stay fixed to computed CSS variables and size themselves to
+        available viewport gutters.
+      </AnchoredPanel>
+    </AnchoredRoot>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Anchored Preset Matrix"
+    description="Canonical anchored presets for header, mobile shell, and inline preview surfaces."
+    componentPath="src/components/ui/AnchoredRoot.astro"
+  >
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        anchoredPresetMatrix.map((preset) => (
+          <AnchoredRoot
+            preset={preset}
+            class="group relative inline-block justify-self-start"
+          >
+            <AnchoredTrigger
+              as="button"
+              type="button"
+              class="border-border bg-background text-foreground rounded-sm border px-3 py-2 text-sm"
+            >
+              {preset}
+            </AnchoredTrigger>
+            <AnchoredPanel class="border-border bg-popover text-popover-foreground z-30 hidden w-72 rounded-sm border p-3 text-sm shadow-md group-focus-within:block group-hover:block">
+              Preset example: <code>{preset}</code>
+            </AnchoredPanel>
+          </AnchoredRoot>
+        ))
+      }
+    </div>
+  </CatalogExample>
+
+  <CatalogExample
+    title="LinkButton"
+    description="Navigation and support CTAs that remain links."
+    componentPath="src/components/ui/LinkButton.astro"
+  >
+    <div class="flex flex-wrap gap-3">
+      <LinkButton href={catalogSupportUrl}>Support Us</LinkButton>
+      <LinkButton href="/articles/" variant="outline" tone="neutral">
+        Browse Articles
+      </LinkButton>
+    </div>
+  </CatalogExample>
+
+  <CatalogExample
+    title="SectionHeader"
+    description="Reusable section heading with optional right-side action link."
+    componentPath="src/components/ui/SectionHeader.astro"
+  >
+    <SectionHeader
+      headingId="catalog-section-header-example"
+      title="More in Metamemetics"
+      actionHref="/categories/metamemetics/"
+      actionLabel="View category"
+    />
+  </CatalogExample>
+
+  <CatalogExample
+    title="IconButton"
+    description="Icon-only button with a required accessible label."
+    componentPath="src/components/ui/IconButton.astro"
+  >
+    <IconButton label="Search the catalog">
+      <Search size={18} aria-hidden="true" />
+    </IconButton>
+  </CatalogExample>
+
+  <CatalogExample
+    title="TextLink"
+    description="Inline and navigation links with shared focus behavior."
+    componentPath="src/components/ui/TextLink.astro"
+  >
+    <p>
+      Read the <TextLink href="/articles/all/">article archive</TextLink> or explore
+      <TextLink href="/articles/" tone="neutral">articles by category</TextLink
+      >.
+    </p>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Input"
+    description="Native input styling with invalid-state support."
+    componentPath="src/components/ui/Input.astro"
+  >
+    <div class="grid gap-2">
+      <label class="text-sm font-medium" for="catalog-search-example">
+        Search
+      </label>
+      <Input
+        id="catalog-search-example"
+        type="search"
+        name="q"
+        placeholder="Search articles"
+      />
+    </div>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Badge"
+    description="Compact labels for metadata and categories."
+    componentPath="src/components/ui/Badge.astro"
+  >
+    <div class="flex flex-wrap gap-2">
+      <Badge tone="primary">Metamemetics</Badge>
+      <Badge tone="muted" variant="outline">Draft</Badge>
+      <Badge tone="neutral" variant="solid">Featured</Badge>
+    </div>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Separator"
+    description="Decorative or semantic dividers."
+    componentPath="src/components/ui/Separator.astro"
+  >
+    <div class="grid gap-4">
+      <Separator />
+      <div class="flex h-10 items-center gap-4">
+        <span>Left</span>
+        <Separator orientation="vertical" decorative={false} />
+        <span>Right</span>
+      </div>
+    </div>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Container"
+    description="Responsive width and gutter constraints."
+    componentPath="src/components/ui/Container.astro"
+  >
+    <Container size="prose" gutters="narrow" class="bg-muted py-3">
+      Container content stays readable.
+    </Container>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Section"
+    description="Content band with spacing and tone variants."
+    componentPath="src/components/ui/Section.astro"
+  >
+    <Section tone="muted" spacing="sm" class="px-4">
+      <p>Section content uses tokenized spacing and backgrounds.</p>
+    </Section>
+  </CatalogExample>
+
+  <CatalogExample
+    title="Card"
+    description="Repeated item shell, not a page-section wrapper."
+    componentPath="src/components/ui/Card.astro"
+  >
+    <Card>
+      <h3 class="text-foreground font-semibold">Article Card Shell</h3>
+      <p class="text-muted-foreground mt-1 text-sm">
+        Cards frame repeated items with stable spacing.
+      </p>
+    </Card>
+  </CatalogExample>
+</CatalogSection>

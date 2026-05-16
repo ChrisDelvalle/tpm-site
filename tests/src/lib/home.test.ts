@@ -1,9 +1,11 @@
+import type { ImageMetadata } from "astro";
 import { describe, expect, test } from "bun:test";
 
 import type { ArticleArchiveItem } from "../../../src/lib/archive";
 import type { EditorialCollectionEntry } from "../../../src/lib/collections";
 import {
   homepageDiscoveryLinks,
+  homePageRouteViewModel,
   homePageViewModel,
 } from "../../../src/lib/home";
 import { defaultPublishableVisibility } from "../../../src/lib/publishable";
@@ -197,6 +199,109 @@ describe("homepage view model", () => {
       { href: "https://example.com/newsletter", label: "Newsletter" },
     ]);
   });
+
+  test("builds full homepage route props from site config and loaded content", () => {
+    const config = parseSiteConfig({
+      identity: {
+        description: "A configurable publication.",
+        language: "en",
+        shortTitle: "Example",
+        title: "Example Blog",
+        url: "https://example.com",
+      },
+      features: {
+        announcements: false,
+        categories: false,
+        collections: true,
+        support: false,
+      },
+      homepage: {
+        discoveryLinks: [
+          { label: "Articles", route: "articles" },
+          { label: "Announcements", route: "announcements" },
+        ],
+        featuredCollection: "front-page",
+        labels: {
+          announcements: "News",
+          categories: "Topics",
+          featured: "Spotlight",
+          read: "Browse",
+          recent: "Latest",
+          startHere: "Start",
+        },
+        startHereCollection: "starter-pack",
+      },
+      navigation: {
+        footer: [],
+        primary: [],
+      },
+      routes: {
+        allArticles: "/articles/all/",
+        announcements: "/announcements/",
+        articles: "/writing/",
+        authors: "/authors/",
+        bibliography: "/bibliography/",
+        categories: "/categories/",
+        collections: "/collections/",
+        feed: "/feed.xml",
+        home: "/",
+        search: "/search/",
+        tags: "/tags/",
+      },
+      support: {
+        block: {
+          body: "Keep publishing going.",
+          title: "Support Example Blog",
+        },
+        discord: {
+          href: "https://discord.gg/example",
+          label: "Join Discord",
+        },
+        patreon: {
+          href: "https://patreon.com/example",
+          label: "Support Us",
+        },
+      },
+    });
+
+    const viewModel = homePageRouteViewModel({
+      announcements: [announcementEntry({ id: "news" })],
+      archiveItems: [archiveItem("latest"), archiveItem("starter")],
+      categoryItems: [],
+      collections: [
+        collectionEntry("front-page", { items: ["latest"] }),
+        collectionEntry("starter-pack", { items: ["starter"] }),
+      ],
+      config,
+      home: {
+        data: {
+          hero: {
+            imageAlt: "Example mark",
+            lightImage: imageMetadata("/example.png"),
+            tagline: "A concise tagline.",
+          },
+          startHere: [],
+          title: "Home",
+        },
+      },
+    });
+
+    expect(viewModel.title).toBe("Home | Example Blog");
+    expect(viewModel.description).toBe("A configurable publication.");
+    expect(viewModel.discovery).toEqual({
+      links: [{ href: "/writing/", label: "Articles" }],
+      title: "Browse",
+    });
+    expect(viewModel.hero.headingTitle).toBe("Example Blog");
+    expect(viewModel.hero.imageAlt).toBe("Example mark");
+    expect(viewModel.hero.support.enabled).toBe(false);
+    expect(viewModel.featured.title).toBe("Spotlight");
+    expect(viewModel.featured.fallbackLabel).toBe("Example");
+    expect(viewModel.startHere.titleHref).toBe("/collections/starter-pack/");
+    expect(viewModel.announcements.titleHref).toBeUndefined();
+    expect(viewModel.categories).toBeUndefined();
+    expect(viewModel.recent.ariaLabel).toBe("Latest");
+  });
 });
 
 function archiveItem(
@@ -228,5 +333,14 @@ function collectionEntry(
       ...data,
     },
     id,
+  };
+}
+
+function imageMetadata(src: string): ImageMetadata {
+  return {
+    format: "png",
+    height: 600,
+    src,
+    width: 1200,
   };
 }

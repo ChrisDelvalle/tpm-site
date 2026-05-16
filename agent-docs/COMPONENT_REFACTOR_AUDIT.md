@@ -27,6 +27,9 @@ Evidence came from:
   public routes.
 - Comparing current implementation against the target architecture in
   `agent-docs/COMPONENT_ARCHITECTURE.md`.
+- Re-checking the codebase after Milestones A-F landed, especially the new
+  section/action primitives, compact lists, rails, action popovers, support
+  view model, and article page view model.
 
 The repeated-class scan is only a signal, not a refactor prescription. Exact
 class duplication often indicates a missing primitive, but some duplication is
@@ -54,6 +57,12 @@ The highest-value silent refactors are:
 7. Split article header actions into a small action-row/trigger layer without
    merging cite, share, and PDF domain behavior.
 
+Status after the first refactor tranche: items 1-5 and 7 are implemented.
+Item 6 is partially implemented through `EntryMetaLine`, but rich article rows,
+featured slides, and bibliography/source rows still have enough metadata and
+media policy differences to justify a second pass rather than a rushed
+unification.
+
 The highest-value non-silent or design-sensitive work is:
 
 1. Standardize section header rhythm across article endcaps, archive pages,
@@ -66,6 +75,12 @@ The highest-value non-silent or design-sensitive work is:
    components.
 4. Decide whether unused/catalog-only prototype blocks should be retired,
    replaced by current components, or kept as intentional catalog fixtures.
+
+Status after Milestones A-F: the component foundation is now strong enough for
+a second-pass platformization audit. The next work should focus less on
+individual Tailwind clusters and more on page recipes, route-level view models,
+config schema boundaries, catalog lifecycle, and rich publishable-entry media
+contracts.
 
 The highest-risk areas should not be refactored broadly yet:
 
@@ -1301,6 +1316,471 @@ For Milestone F:
   generation, and header action behavior are out of scope except where props
   need to be threaded through the new view model.
 
+## Second-Pass Findings After Milestones A-F
+
+Milestones A-F validated the direction of the original audit. Small primitives
+and typed view models reduced component coupling without turning the UI into a
+mega-component system. The main new lesson is that the highest-value refactors
+are now one layer higher: page recipes and route view models, plus one layer
+lower: narrowly named child components for rich media/list/card systems.
+
+The first tranche also revealed a practical architecture rule:
+
+```text
+Reusable UI should not read site config.
+Route/view-model code may read site config.
+Application shell code may read site config.
+```
+
+That rule held up well. It made components easier to test and made catalog
+fixtures less dependent on TPM-specific defaults. The remaining work should
+continue that direction without overcorrecting into prop plumbing for shell
+components that are intentionally global.
+
+### What The Refactor Tranches Have Achieved
+
+- `SectionHeader`, `BrandButton`, button/link variant maps, action-menu
+  primitives, compact-entry primitives, scroll-rail primitives, support view
+  models, and `articlePageViewModel` now provide real reusable seams.
+- `ArticleLayout` is still a readable Astro composition shell, but most of its
+  data preparation is now testable outside Astro rendering.
+- Homepage compact panels and article action menus now have more consistent
+  presentation and narrower domain responsibilities.
+- `homePageRouteViewModel` now moves homepage config/content assembly out of
+  `src/pages/index.astro` while keeping the current TPM homepage layout
+  explicit and static.
+- `PageHeader`, `TermCard`, `TermRailBlock`, `PublishableMediaFrame`, and
+  `ArticleCardBody` now cover the most obvious browse/header/term/rich-entry
+  extraction points without changing content policy.
+- Share actions now carry presentation metadata from the action view model, so
+  adding future share targets no longer requires the renderer to infer icons
+  from endpoint IDs.
+- The catalog has lifecycle metadata and remains a useful regression surface,
+  but `ComponentCatalog.astro` is still large enough that section-level
+  extraction remains a maintenance priority.
+
+### Current Handoff Status
+
+- Milestones G-J are implemented in code and covered by focused tests.
+- Milestone K is implemented for this pass: lifecycle metadata exists,
+  catalog-only examples are classified, and the UI primitives domain section is
+  split out of the monolithic catalog component.
+- Milestone L is implemented for this pass: default config values have moved
+  into `site-config-defaults`, preserving the public parser/export API. The
+  remaining release requirement is documentation and generated-schema
+  verification.
+- Milestone M is implemented for this pass with code-backed decisions: TOC and
+  header already have stable child boundaries, article images gained
+  `ArticleImageFrame`, carousel controls gained a dedicated child component,
+  and article-card media/body extraction is covered by Milestone J.
+- A documentation drift audit is now required before handoff because this pass
+  added new primitives, config-default boundaries, and catalog lifecycle
+  metadata that affect developer-facing docs.
+
+### Opportunities Revealed By The Changes
+
+#### 1. Homepage Recipe And Route View Model
+
+The homepage route is now the clearest remaining TPM-specific composition
+surface. It directly loads articles, announcements, categories, authors,
+collections, page content, homepage labels, limits, support actions, discovery
+links, and block placement. That is acceptable for a site-specific Astro route,
+but it is not yet a platform-quality homepage recipe.
+
+Recommended direction:
+
+- Add a `homePageRouteViewModel` or `homePageRecipeViewModel` that accepts
+  content collections plus `SiteConfig` and returns:
+  - document metadata;
+  - hero props;
+  - lead-grid slots;
+  - featured carousel props;
+  - compact panel props;
+  - category rail props;
+  - recent feed props;
+  - support/social CTA data;
+  - disabled/empty feature behavior.
+- Keep `src/pages/index.astro` as composition only. It should load the page
+  entry and call the route view model, then render blocks.
+- Do not make a fully dynamic block renderer yet. A typed view model is the
+  right intermediate step before exposing arbitrary homepage recipes to
+  non-technical site owners.
+
+Why this matters:
+
+- Future site owners can change homepage content and labels without touching
+  route code.
+- Feature flags can suppress entire blocks without leaving empty shells.
+- Homepage variants can become configuration later without rewriting every
+  block.
+
+#### 2. Browse Page Header And Section Standardization
+
+`SectionHeader` exists, but page and browse surfaces still render local header
+markup in several places:
+
+- `src/pages/articles/index.astro`
+- `src/components/blocks/ArchiveListBlock.astro`
+- `src/components/blocks/TermOverviewBlock.astro`
+- `src/components/blocks/SearchResultsBlock.astro`
+- `src/components/authors/AuthorsIndexPage.astro`
+- `src/components/authors/AuthorProfileHeader.astro`
+- `src/components/pages/PageHeader.astro`
+
+Recommended direction:
+
+- Introduce or extend a `PageIntro`/`BrowsePageHeader` layer on top of
+  `SectionHeader` for page-level `h1` plus description/action.
+- Migrate route and block headers that already match the contract.
+- Keep article headers separate. Their metadata/action row is a domain
+  contract, not a generic page intro.
+
+This can be mostly silent, but a small visible standardization of page-heading
+rhythm is likely desirable.
+
+#### 3. Generic Term Surfaces
+
+Categories, tags, collections, and future series are not the same domain model,
+but their browse surfaces share title, href, count, optional description,
+empty state, and responsive card/rail behavior. The rail pass extracted
+`ScrollRail` and `TermRailCard`, but `TermOverviewBlock` still owns its own
+card markup and category rail still has category-specific labels.
+
+Recommended direction:
+
+- Add a shared `TermCard` for grid cards.
+- Add a `TermRailBlock` or generic `TermRail` wrapper, leaving
+  `CategoryRailBlock` as a thin adapter.
+- Use one `TermSummary` view-model shape for cards/rails:
+  `title`, `href`, `count`, `countLabel`, `description`.
+- Keep category-specific article-preview dropdowns out of this abstraction.
+
+Visible standardization is acceptable here. Users should experience categories,
+tags, and collections as related browse tools.
+
+#### 4. Rich Publishable Entry Media And Article Card Subcomponents
+
+Compact entry lists are now consolidated. The remaining repeated publishable
+surface is the rich article row/card family:
+
+- `ArticleCard`
+- `HomeFeaturedSlide`
+- rich article list thumbnails;
+- featured fallback media;
+- article-card kicker/meta rows.
+
+Recommended direction:
+
+- Extract `PublishableMediaFrame` or `EntryMediaFrame` for optimized image,
+  fallback label, aspect ratio, link wrapping, object-fit, loading policy, and
+  focus behavior.
+- Extract `ArticleCardKicker` or reuse `EntryMetaLine` where the semantics are
+  still article-specific.
+- Split `ArticleCard` into small child components only after media and metadata
+  contracts are clear.
+
+Avoid changing title/description fit thresholds in this pass. Those are
+editorial tuning decisions and already have tests.
+
+#### 5. Support/Social CTA Registry
+
+`supportBlockViewModel` and brand buttons improved the immediate support
+surfaces, but the configuration still assumes a small hardcoded support model:
+Patreon and Discord are support CTAs, share targets are separate, and future
+social promotion buttons would need custom schema fields or components.
+
+Recommended direction:
+
+- Introduce a platform-level external CTA/social link model that can describe
+  branded CTAs by key, href, label, aria label, icon/asset, color token, and
+  placement.
+- Keep Patreon/Discord wrappers as convenience components for TPM.
+- Let support blocks and homepage hero CTA rows consume a generic list after
+  the brand-specific defaults are normalized.
+
+This is not needed for release, but it is important for productization. A
+general blog platform should not require a code change to add a new external
+community/support CTA.
+
+#### 6. Share Target Registry Cleanup
+
+`ArticleShareActionRow` still hardcodes the icon mapping for every share target
+while `src/lib/share-targets.ts` owns URL construction. That split is okay, but
+it means adding a new share target requires updating both the URL registry and
+the renderer.
+
+Recommended direction:
+
+- Keep URL construction in `src/lib/share-targets.ts`.
+- Add a small presentation registry for share target icon keys and labels, or
+  make the action view model include an `icon` discriminant.
+- Keep the actual Lucide imports in the Astro component to avoid putting view
+  concerns into pure URL helpers.
+
+This is a low-risk developer-velocity refactor.
+
+#### 7. Site Config Schema Boundaries And Webmaster UX
+
+`src/lib/site-config.ts` now carries identity, routes, features, homepage,
+support, share, and content defaults in one file. That is still manageable, but
+it will become a bottleneck as the platform gets more configurable.
+
+Recommended direction:
+
+- Split schema construction into domain files or at least domain helpers:
+  identity, routes, features, homepage, content defaults, support/social, and
+  share.
+- Keep a single exported `siteConfigSchema` and `parseSiteConfig` entrypoint.
+- Add docs near the schema that explain which fields are safe for
+  non-technical site owners to edit.
+- Consider a future schema-to-docs script only after the manual docs stabilize.
+
+This improves maintainability and sets up a future admin UI without changing
+runtime behavior.
+
+#### 8. Component Catalog Lifecycle And Split
+
+`src/catalog/ComponentCatalog.astro` is now over 1,700 lines. It is useful but
+too large to act as a clear design-system entrypoint. It also imports
+catalog-only components and real route components without marking which are
+current, deprecated, or fixtures.
+
+Recommended direction:
+
+- Split catalog sections into section components or data-driven example groups
+  by domain: UI, layout, navigation, article, blocks, authors, bibliography,
+  media, pages.
+- Add lifecycle metadata to examples:
+  `current`, `platform-candidate`, `deprecated-fixture`, or `route-only`.
+- Keep hostile fixtures centralized.
+- Do not delete catalog-only components until the lifecycle metadata makes the
+  intent clear.
+
+This is mostly silent but high leverage for future agents and reviewers.
+
+#### 9. Search And Browse Config Boundaries
+
+`SearchResultsBlock` still imports `SITE_TITLE` and owns search labels and
+placeholder text. Several browse routes also hardcode descriptions and empty
+states. These are small examples of page copy living below the route/config
+boundary.
+
+Recommended direction:
+
+- Pass search labels, placeholders, and descriptions from route/view-model
+  code.
+- Add config fields only for copy that a site owner is likely to change.
+- Keep component defaults for catalog examples.
+
+This should be folded into a broader browse-page standardization milestone.
+
+#### 10. Risk-System Refactor Program
+
+The original audit correctly warned against broad rewrites of article images,
+TOC, header priority layout, carousel internals, and article card fit logic.
+That advice still holds. However, the first tranche proved that small child
+extractions can work when the invariant is narrow.
+
+The second-pass policy is not to pick one risky system and ignore the rest.
+Every risky system with real refactor value should be addressed, but each
+system needs a stronger design/test gate before implementation. Higher risk
+means more explicit invariants, earlier focused tests, and tighter verification;
+it does not mean the work is permanently avoided.
+
+Safe child extractions to evaluate:
+
+- TOC: header row, hidden-state trigger, numbered-list renderer, link item.
+- Article images: inspector chrome, media action button, figure/caption shell.
+- Header: nav item renderer, mobile menu section/item renderer, support-label
+  adapter.
+- Carousel: fixed slide frame, controls/dots, featured media frame.
+- Article cards: media frame, kicker row, title/description fit helpers.
+
+Each target should get a design lock before code. The design lock must state
+whether the work is behavior-preserving, intentionally standardizing the UI, or
+intentionally changing behavior.
+
+### Quality Priorities For Risky And Design-Sensitive Refactors
+
+Risky refactors must name their user-impact priorities before implementation.
+The defaults for this project are:
+
+- Reader UX: preserve reading flow, responsive comfort, visual hierarchy, dark
+  mode, long-content behavior, touch behavior, keyboard behavior, and editorial
+  intent.
+- Author UX: preserve simple Markdown/MDX authoring and avoid adding
+  frontmatter/component burden unless it solves a real problem.
+- Webmaster UX: make configuration easier to understand, document, validate,
+  and eventually expose through a GUI.
+- Performance: preserve or improve Lighthouse scores, LCP, CLS, interaction
+  stability, static output, client-JS size, hydration boundaries, image
+  optimization, and build-output payload size.
+- Accessibility: preserve semantic HTML, focus visibility, labels, keyboard
+  access, touch access, reduced-motion behavior where relevant, and useful alt
+  text or explicit decorative image semantics.
+- SEO and machine readability: preserve canonical URLs, structured data,
+  Scholar metadata, RSS/sitemap correctness, article/PDF discoverability,
+  Pagefind indexing rules, and crawlable static HTML.
+- Maintainability: reduce repeated layout logic, keep domain rules outside
+  generic primitives, prefer typed view models, and make invalid states harder
+  to express.
+
+Every risky-system design should include:
+
+- user impact goal;
+- non-regression list;
+- performance and payload assumptions;
+- accessibility contract;
+- SEO/machine-readable contract if relevant;
+- responsive invariants at 320px, 768px, desktop, wide desktop, and dark mode;
+- pre-change or early-change test plan;
+- focused verification gate and release-gate expectations.
+
+## Second-Pass Implementation Milestones
+
+These are the recommended next milestones after A-F. They are intentionally
+larger than the first pass because the primitive foundation now exists, but
+each should still be independently verifiable.
+
+### Milestone G: Homepage Recipe And Route View Model
+
+- Design a typed homepage recipe/view-model boundary that can express the
+  current TPM homepage without making the route own config plumbing.
+- Move homepage route data assembly into `src/lib/home` or a new route view
+  model helper.
+- Keep the Astro route declarative: load content, build the view model, render
+  blocks.
+- Preserve the current layout unless a visible standardization is explicitly
+  approved.
+
+Verification:
+
+- Homepage unit tests for feature-disabled states, missing collections, empty
+  announcements, support disabled, and custom labels.
+- Homepage e2e at mobile, tablet, desktop.
+- Build and catalog checks.
+
+Status: implemented through `homePageRouteViewModel`; keep future work limited
+to recipe extensions or tests that preserve the explicit static composition.
+
+### Milestone H: Browse Page Header And Empty-State Standardization
+
+- Add or extend a page/browse header primitive over `SectionHeader`.
+- Migrate articles index, archive blocks, term overview, search, authors index,
+  and plain page headers where contracts match.
+- Pass user-facing labels/descriptions from routes or view models where
+  practical.
+- Standardize empty-state text placement and tone.
+
+Verification:
+
+- Component tests for page/browse header variants.
+- Route smoke tests for articles, tags, collections, authors, search.
+- Visual review for heading rhythm.
+
+Status: implemented through `PageHeader` and `SectionHeader` migration for the
+matching browse/header surfaces. Author profile headers remain domain-specific.
+
+### Milestone I: Term Surface Generalization
+
+- Add a shared `TermCard` for grid surfaces.
+- Generalize rail wrapper behavior enough that category rails are a thin
+  adapter over term rails.
+- Use a shared term summary shape for categories, tags, collections, and
+  future series.
+- Keep category dropdown previews and category-specific discovery behavior
+  separate.
+
+Verification:
+
+- Rail endpoint e2e remains stable.
+- Tags, categories, and collections pages render equivalent card behavior.
+- Long term labels, zero counts, and empty states are covered.
+
+Status: implemented through `TermCard`, `TermRailBlock`, and a thin
+`CategoryRailBlock` adapter. Category dropdown previews remain separate by
+design.
+
+### Milestone J: Rich Publishable Media And Article Card Split
+
+- Extract a reusable media/fallback frame for linked publishable images.
+- Split `ArticleCard` into media, kicker/meta, and body children if the new
+  boundaries remain simple.
+- Let `HomeFeaturedSlide` reuse the media/fallback frame if it preserves the
+  featured layout.
+- Do not retune title or description fit thresholds in the same milestone.
+
+Verification:
+
+- Existing article list fit tests.
+- Homepage featured carousel e2e for no layout shift.
+- Article list visual review with image, no image, long title, long
+  description.
+
+Status: implemented through `PublishableMediaFrame` and `ArticleCardBody`.
+Title and description fit thresholds were intentionally not retuned.
+
+### Milestone K: Component Catalog Lifecycle And Split
+
+- Add lifecycle metadata for catalog examples and catalog-only components.
+- Split `ComponentCatalog.astro` into smaller domain sections or data-driven
+  example groups.
+- Classify catalog-only components as current, platform-candidate,
+  deprecated-fixture, or dead-code candidate.
+- Remove only components that are explicitly confirmed dead.
+
+Verification:
+
+- Catalog route tests.
+- Catalog component tests.
+- `bun --silent run test:catalog`.
+
+Status: implemented for the first productionization pass. Lifecycle metadata
+exists, catalog-only components are classified, and the UI primitives domain
+section is split out. Further section splits are still valuable, but they are
+incremental catalog maintenance rather than a blocker for this milestone.
+
+### Milestone L: Config Schema And Site Owner Copy Boundaries
+
+- Split `site-config` schema internals by domain while preserving the public
+  parser/export.
+- Move likely site-owner copy into config/view models, not reusable
+  components.
+- Document the editable config fields for future admin UI and non-technical
+  site owners.
+- Keep shell components allowed to read normalized config directly.
+
+Verification:
+
+- Site config unit tests.
+- Minimal fixture config parse test.
+- Platform boundary check.
+
+Status: implemented for the first productionization pass. Config defaults are
+split into `site-config-defaults` and covered by tests. Public schema shape is
+preserved.
+
+### Milestone M: Risk-System Refactor Program
+
+- Design and implement the safe child extractions for every risky parent
+  system that shows concrete refactor value: TOC, article images, header,
+  carousel, and rich article cards.
+- Work one parent system at a time. Each parent system must have its own design
+  lock, test plan, implementation milestone, and verification before moving to
+  the next parent system.
+- Extract only named child components with stable invariants.
+- Do not change source-selection, breakpoint, generated-reference, feature
+  flag, SEO, PDF, or performance policy as incidental cleanup.
+
+Verification:
+
+- Existing focused e2e for each selected system.
+- Add missing tests before or during the extraction when current coverage does
+  not lock the important invariant.
+- Manual visual check at 320px, 768px, desktop, wide desktop, and dark mode
+  where relevant.
+- Release gate before handoff.
+
 ## Development Readiness Criteria
 
 Before implementing any milestone from this audit, make the milestone pass this
@@ -1325,9 +1805,9 @@ sub-component or leave it in the parent component for now.
 
 These are not blockers, but the next developer should keep them visible:
 
-- Component catalog coverage exists, but catalog-only components are not yet
-  classified as current, deprecated, or dead. Do not delete catalog-only
-  components during foundation refactors unless that is the active milestone.
+- Component catalog lifecycle metadata exists, but the catalog component is
+  still too large. Do not delete catalog-only components unless a later
+  lifecycle review explicitly marks them as dead-code candidates.
 - The repo does not yet have a separate fixture site configuration for
   platform reuse. Config-boundary refactors should avoid assuming TPM is the
   only future consumer, but they should not invent a full fixture system during
@@ -1347,9 +1827,12 @@ These are not blockers, but the next developer should keep them visible:
 
 ## Recommended Next Step
 
-Start with Milestone A only. It is low-risk and creates primitives that make the
-larger refactors safer. Avoid touching article image, TOC, header, or carousel
-internals until the foundation primitives are in place and verified.
+Finish with documentation and verification:
 
-After Milestone A, reassess whether Milestone B should be silent-only or include
-a deliberate compact-list visual consistency pass.
+1. Audit developer and site-owner docs for drift from the new primitives,
+   catalog lifecycle metadata, route view models, and config-default boundary.
+2. Regenerate/check the site config schema.
+3. Run the release gate.
+4. Treat additional catalog section splits and risky-system subcomponent
+   extraction as future incremental maintenance unless a concrete product or
+   test gap appears.

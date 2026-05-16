@@ -455,11 +455,16 @@ Common things a webmaster might change there:
 
 - site title and description;
 - primary and footer navigation links;
-- homepage labels and limits;
+- homepage labels, discovery links, empty-state text, and list limits;
 - support links;
 - share-menu targets and social handles;
 - feature switches;
 - default visibility and PDF behavior.
+
+Most omitted optional fields have safe defaults. For example, articles and
+announcements are visible in directories, search, RSS, and homepage surfaces by
+default unless their frontmatter or the site defaults say otherwise. PDFs are
+enabled by default for articles that can be rendered as PDFs.
 
 After changing `site/config/site.json`, run:
 

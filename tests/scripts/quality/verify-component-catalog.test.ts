@@ -16,6 +16,7 @@ describe("component catalog verifier", () => {
       examplePaths: [exampleComponent],
       ignoreList: [
         {
+          lifecycle: "route-only",
           path: ignoredComponent,
           reason: "SEO component has no visual catalog surface.",
         },
@@ -39,10 +40,12 @@ describe("component catalog verifier", () => {
       ],
       ignoreList: [
         {
+          lifecycle: "route-only",
           path: ignoredComponent,
           reason: "Too short",
         },
         {
+          lifecycle: "route-only",
           path: "src/components/ui/Ghost.astro",
           reason: "This ignored component no longer exists in the project.",
         },

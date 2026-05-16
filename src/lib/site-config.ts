@@ -2,7 +2,20 @@ import { readFileSync } from "node:fs";
 
 import { z } from "astro/zod";
 
+import {
+  defaultContentDefaultsConfig,
+  defaultFeatureConfig,
+  defaultHomepageConfig,
+  defaultHomepageDiscoveryLinksConfig,
+  defaultHomepageEmptyTextConfig,
+  defaultHomepageLabelsConfig,
+  defaultPublishableVisibilityConfig,
+  siteRouteKeys,
+  siteShareTargetIds,
+} from "./site-config-defaults";
 import { projectRelativePath, siteInstance } from "./site-instance";
+
+export { siteShareTargetIds } from "./site-config-defaults";
 
 const SITE_CONFIG_PATH = projectRelativePath(siteInstance.config.site);
 
@@ -19,29 +32,6 @@ const navigationLinkSchema = z
     label: z.string().min(1),
   })
   .strict();
-const siteRouteKeys = [
-  "allArticles",
-  "announcements",
-  "articles",
-  "authors",
-  "bibliography",
-  "categories",
-  "collections",
-  "feed",
-  "home",
-  "search",
-  "tags",
-] as const;
-export const siteShareTargetIds = [
-  "bluesky",
-  "x",
-  "threads",
-  "facebook",
-  "linkedin",
-  "reddit",
-  "hacker-news",
-  "pinterest",
-] as const;
 const siteRouteKeySchema = z.enum(siteRouteKeys);
 const siteShareTargetIdSchema = z.enum(siteShareTargetIds);
 const homepageDiscoveryLinkSchema = z
@@ -62,68 +52,6 @@ const externalLinkSchema = z
     label: z.string().min(1),
   })
   .strict();
-const defaultHomepageLabelsConfig = {
-  announcements: "Announcements",
-  categories: "Categories",
-  featured: "Featured Articles",
-  read: "Read",
-  recent: "Recent",
-  startHere: "Start Here",
-} as const;
-const defaultHomepageEmptyTextConfig = {
-  announcements: "Announcements will appear here.",
-  categories: "No categories are available yet.",
-  featured: "Featured items will appear here.",
-  startHere: "Curated starter articles will appear here.",
-} as const;
-const defaultHomepageDiscoveryLinksConfig = [
-  { label: "Articles", route: "articles" },
-  { label: "Archive", route: "allArticles" },
-  { label: "Authors", route: "authors" },
-  { label: "Collections", route: "collections" },
-  { label: "Tags", route: "tags" },
-] as const;
-const defaultHomepageConfig = {
-  announcementLimit: 3,
-  discoveryLinks: defaultHomepageDiscoveryLinksConfig,
-  emptyText: defaultHomepageEmptyTextConfig,
-  featuredCollection: "featured",
-  labels: defaultHomepageLabelsConfig,
-  recentLimit: 8,
-  startHereCollection: "start-here",
-} as const;
-const defaultFeatureConfig = {
-  announcements: true,
-  authors: true,
-  bibliography: true,
-  categories: true,
-  collections: true,
-  feed: true,
-  pdf: true,
-  search: true,
-  support: true,
-  tags: true,
-  themeToggle: true,
-} as const;
-const defaultPublishableVisibilityConfig = {
-  directory: true,
-  feed: true,
-  homepage: true,
-  search: true,
-} as const;
-const defaultContentDefaultsConfig = {
-  announcements: {
-    draft: false,
-    visibility: defaultPublishableVisibilityConfig,
-  },
-  articles: {
-    draft: false,
-    pdf: {
-      enabled: true,
-    },
-    visibility: defaultPublishableVisibilityConfig,
-  },
-} as const;
 const homepageConfigSchema = z
   .object({
     announcementLimit: z

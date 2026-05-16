@@ -1,10 +1,16 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
+import {
+  componentCatalogLifecycleLabels,
+  type ComponentCatalogLifecycleStatus,
+} from "./catalog.config";
+
 /** Public props for one curated component catalog example. */
 interface Props extends HTMLAttributes<"article"> {
   componentPath?: string;
   description?: string;
+  lifecycle?: ComponentCatalogLifecycleStatus;
   title: string;
 }
 
@@ -12,9 +18,11 @@ const {
   title,
   description,
   componentPath,
+  lifecycle = "current",
   class: className,
   ...attrs
 } = Astro.props;
+const lifecycleLabel = componentCatalogLifecycleLabels[lifecycle];
 ---
 
 <article
@@ -27,9 +35,17 @@ const {
   ]}
 >
   <header class="grid min-w-0 gap-1">
-    <h3 class="text-foreground min-w-0 text-base font-semibold break-words">
-      {title}
-    </h3>
+    <div class="flex min-w-0 flex-wrap items-center gap-2">
+      <h3 class="text-foreground min-w-0 text-base font-semibold break-words">
+        {title}
+      </h3>
+      <span
+        class="border-border bg-muted text-foreground rounded-xs border px-1.5 py-0.5 text-[0.6875rem] leading-none font-medium tracking-normal"
+        data-catalog-lifecycle={lifecycle}
+      >
+        {lifecycleLabel}
+      </span>
+    </div>
     {
       description ? (
         <p class="text-muted-foreground min-w-0 text-sm break-words">

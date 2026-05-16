@@ -1,0 +1,66 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import { Maximize2 } from "lucide-astro";
+
+interface Props {
+  alt: string;
+  frameClass: string;
+  imageClass: string;
+  inspectLabel: string;
+  inspectable: boolean;
+  inspectionClass: string;
+  previewSizes: string;
+  src: ImageMetadata;
+}
+
+const {
+  alt,
+  frameClass,
+  imageClass,
+  inspectable,
+  inspectionClass,
+  inspectLabel,
+  previewSizes,
+  src,
+} = Astro.props;
+---
+
+{
+  inspectable ? (
+    <button
+      type="button"
+      class:list={[frameClass]}
+      data-article-image-inspect-trigger="true"
+      aria-haspopup="dialog"
+      aria-label={inspectLabel}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        layout="constrained"
+        sizes={previewSizes}
+        class:list={[imageClass]}
+        data-article-image="true"
+      />
+      <span
+        class:list={[inspectionClass]}
+        data-article-image-inspect-affordance="true"
+        aria-hidden="true"
+      >
+        <Maximize2 class="size-3" aria-hidden="true" />
+      </span>
+    </button>
+  ) : (
+    <div class:list={[frameClass]}>
+      <Image
+        src={src}
+        alt={alt}
+        layout="constrained"
+        sizes={previewSizes}
+        class:list={[imageClass]}
+        data-article-image="true"
+      />
+    </div>
+  )
+}

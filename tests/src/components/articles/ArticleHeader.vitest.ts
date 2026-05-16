@@ -44,6 +44,7 @@ describe("ArticleHeader", () => {
             {
               copyText:
                 "https://thephilosophersmeme.com/articles/article-title/",
+              icon: "copy-link",
               id: "copy-link",
               kind: "copy",
               label: "Copy link",
